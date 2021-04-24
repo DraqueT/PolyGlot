@@ -20,7 +20,7 @@
 package org.darisadesigns.polyglotlina.CustomControls;
 
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.PGTUtil.WindowMode;
 import org.darisadesigns.polyglotlina.Screens.ScrMainMenu;
@@ -163,7 +163,7 @@ public abstract class PFrame extends JFrame implements FocusListener {
                 TimeUnit.MICROSECONDS.sleep(250);
                 super.dispose();
             } catch (IllegalStateException | InterruptedException ex) {
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
                 InfoBox.error("Closing Error", "Window failed to close: " + ex.getLocalizedMessage(), core.getRootWindow());
             }
         }

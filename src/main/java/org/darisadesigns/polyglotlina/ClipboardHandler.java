@@ -29,6 +29,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.Toolkit;
 import java.io.IOException;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 
 public final class ClipboardHandler implements ClipboardOwner {
 
@@ -49,7 +50,7 @@ public final class ClipboardHandler implements ClipboardOwner {
             Thread.sleep(PGTUtil.WINDOWS_CLIPBOARD_DELAY);
         }
         catch (InterruptedException e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
         }
         }
     }

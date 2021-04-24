@@ -22,6 +22,7 @@ package org.darisadesigns.polyglotlina;
 import TestResources.DummyCore;
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.junit.jupiter.api.Test;
@@ -62,7 +63,7 @@ public class ConWordCollectionTest {
             String resultWordVal = foundWords[0].getValue();
             assertEquals(resultWordVal, expectedValue);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }

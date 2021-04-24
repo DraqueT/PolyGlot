@@ -40,6 +40,7 @@ import org.xml.sax.InputSource;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.jsoup.Jsoup;
 
 /**
@@ -149,7 +150,7 @@ public final class WebInterface {
             regPath = regPath.replace("<img src=\"file:///", "");
             regPath = regPath.replace("\"", "");
             regPath = regPath.replace(">", "");
-            String fileName = IOHandler.getFilenameFromPath(regPath);
+            String fileName = DesktopIOHandler.getInstance().getFilenameFromPath(regPath);
             String arcPath = fileName.replaceFirst("_.*", "");
             html = html.replace("file:///" + regPath, arcPath);
         }
@@ -179,7 +180,7 @@ public final class WebInterface {
             if (token.startsWith("<")) {
                 if (token.contains("<img src=\"")) {
                     String path = token.replace("<img src=\"file:///", "").replace("\">", "");
-                    ret.add(IOHandler.getImage(path));
+                    ret.add(DesktopIOHandler.getInstance().getImage(path));
                 } else {
                     // do nothing with unrecognized elements - might be upgraded later.
                 }
@@ -213,7 +214,7 @@ public final class WebInterface {
             ret = true;
         }
         catch (IOException e) {
-            IOHandler.writeErrorLog(e, "Unable to reach: " + address);
+            DesktopIOHandler.getInstance().writeErrorLog(e, "Unable to reach: " + address);
         }
 
         return ret;
@@ -233,7 +234,7 @@ public final class WebInterface {
                 Desktop.getDesktop().browse(help);
             }
             catch (URISyntaxException e) {
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
                 InfoBox.warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
                         + url + "\n(copied to your clipboard for convenience)", null);
                 new ClipboardHandler().setClipboardContents(url);

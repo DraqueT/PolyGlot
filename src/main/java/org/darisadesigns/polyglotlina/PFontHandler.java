@@ -19,7 +19,7 @@
  */
 package org.darisadesigns.polyglotlina;
 
-import static org.darisadesigns.polyglotlina.IOHandler.isFileZipArchive;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
@@ -61,7 +61,7 @@ public class PFontHandler {
     }
 
     private static void setFontFrom(String _path, DictCore core, boolean isConFont) throws IOException, FontFormatException {
-        if (isFileZipArchive(_path)) {
+        if (core.getIOHandler().isFileZipArchive(_path)) {
             try (ZipFile zipFile = new ZipFile(_path)) {
                 ZipEntry fontEntry = isConFont
                         ? zipFile.getEntry(PGTUtil.CON_FONT_FILE_NAME)
@@ -84,7 +84,7 @@ public class PFontHandler {
                                 return;
                             }
 
-                            byte[] cachedFont = IOHandler.getByteArrayFromFile(tempFile);
+                            byte[] cachedFont = core.getIOHandler().getByteArrayFromFile(tempFile);
 
                             if (isConFont) {
                                 core.getPropertiesManager().setFontConRaw(font);
@@ -122,7 +122,7 @@ public class PFontHandler {
                 ret = ret.deriveFont(attributes);
             }
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             // do nothing here. Failure means returning null
         }
 
@@ -304,7 +304,7 @@ public class PFontHandler {
                 // IOHandler.writeErrorLog(e, path);
                 // null detected and message bubbled to user elsewhere
             } catch (IOException e) {
-                IOHandler.writeErrorLog(e, path);
+                DesktopIOHandler.getInstance().writeErrorLog(e, path);
                 // null detected and message bubbled to user elsewhere
             }
         }
@@ -342,13 +342,13 @@ public class PFontHandler {
                         fontFile = getFontFile(outputFont.getFamily());
                     }
                 } catch (Exception e) {
-                    IOHandler.writeErrorLog(e);
+                    core.getIOHandler().writeErrorLog(e);
                     writeLog += "\nerror: " + e.getLocalizedMessage();
                 }
 
                 if (fontFile != null) {
                     try (FileInputStream fontInputStream = new FileInputStream(fontFile)) {
-                        byte[] fontBytes = IOHandler.streamToByetArray(fontInputStream);
+                        byte[] fontBytes = core.getIOHandler().streamToByetArray(fontInputStream);
                         
                         if (isConFont) {
                             core.getPropertiesManager().setCachedFont(fontBytes);
@@ -382,7 +382,7 @@ public class PFontHandler {
                 out.closeEntry();
             }
         } catch (IOException e) {
-            IOHandler.writeErrorLog(e);
+            core.getIOHandler().writeErrorLog(e);
             writeLog += "\nUnable to write font to archive: " + e.getMessage();
         }
         return writeLog;

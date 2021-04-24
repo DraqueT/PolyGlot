@@ -481,7 +481,7 @@ public class EtymologyManager {
             addRelation(bufferParent, bufferChild);
             // Do NOT set these to 0. This relies on the parent buffer persisting.
         } catch (IllegalLoopException e) {
-            IOHandler.writeErrorLog(e);
+            core.getIOHandler().writeErrorLog(e);
             // do nothing. These will have been eliminated at the time of archiving.
         }
     }

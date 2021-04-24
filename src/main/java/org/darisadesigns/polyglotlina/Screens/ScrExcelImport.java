@@ -27,7 +27,7 @@ import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
 import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import java.io.File;
 import java.nio.charset.Charset;
 import javax.swing.JFileChooser;
@@ -474,17 +474,17 @@ public class ScrExcelImport extends PDialog {
                 parent.openLexicon(true);
             }
         } catch (NumberFormatException e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Import Error", "All column fields and sheet field must contain "
                     + "numeric values only:\n" + e.getLocalizedMessage(), this);
         } catch (IllegalStateException e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Import Error", "Could not import from file " + txtFileName.getText()
                     + ".\n The text encoding is not supported. Please open the import file in a "
                     + "text editor and save with encoding: " + Charset.defaultCharset().displayName(),
                     this);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Import Error", "Could not import from file " + txtFileName.getText()
                     + windowsError()
                     + ".\n Check to make certain that column mappings are correct "

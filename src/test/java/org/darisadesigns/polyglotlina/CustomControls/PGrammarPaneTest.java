@@ -25,9 +25,9 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import org.darisadesigns.polyglotlina.ClipboardHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.FormattedTextHelper;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ImageNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.junit.jupiter.api.Assumptions;
@@ -106,7 +106,7 @@ public class PGrammarPaneTest {
             pane.processKeyEvent(testEvent);
         } catch (Exception e) {
             errorMessage = e.getLocalizedMessage();
-            IOHandler.writeErrorLog(e, errorMessage);
+            DesktopIOHandler.getInstance().writeErrorLog(e, errorMessage);
             success = false;
         }
         
@@ -133,7 +133,7 @@ public class PGrammarPaneTest {
         } catch (Exception e) {
             success = false;
             errorMessage = e.getLocalizedMessage();
-            IOHandler.writeErrorLog(e, errorMessage);
+            DesktopIOHandler.getInstance().writeErrorLog(e, errorMessage);
         }
         
         assertTrue(success, errorMessage);

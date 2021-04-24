@@ -23,8 +23,8 @@ import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.WebInterface;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -175,7 +175,7 @@ public class ScrUpdateAlert extends PDialog {
                     ret.add(message);
                 }
             } catch (Exception e) {
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
                 throw new Exception("Message: " + messageId + " malformed: \n" + e.getLocalizedMessage());
             }
         }
@@ -297,7 +297,7 @@ public class ScrUpdateAlert extends PDialog {
                     uri = uri.normalize();
                     java.awt.Desktop.getDesktop().browse(uri);
                 } catch (IOException | URISyntaxException ex) {
-                    IOHandler.writeErrorLog(ex);
+                    DesktopIOHandler.getInstance().writeErrorLog(ex);
                     InfoBox.error("Browser Error", "Unable to open page: " + link, core.getRootWindow());
                 }
             });

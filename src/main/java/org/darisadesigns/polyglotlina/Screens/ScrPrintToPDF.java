@@ -26,8 +26,8 @@ import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.CustomControls.PTextPane;
 import org.darisadesigns.polyglotlina.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.io.File;
@@ -368,7 +368,7 @@ public class ScrPrintToPDF extends PDialog {
             if (Desktop.isDesktopSupported()) {
                 if (InfoBox.yesNoCancel("Print Success", "PDF successfully printed. Open file now?", this) 
                         == JOptionPane.YES_OPTION) {
-                    if (!IOHandler.openFileNativeOS(txtSavePath.getText())) {
+                    if (!DesktopIOHandler.getInstance().openFileNativeOS(txtSavePath.getText())) {
                         InfoBox.error("File Error", "Unable to open PDF at location: " + txtSavePath.getText(), core.getRootWindow());
                     }
                 }
@@ -378,7 +378,7 @@ public class ScrPrintToPDF extends PDialog {
             
             this.dispose();
         } catch (IOException e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Save Error", e.getMessage(), core.getRootWindow());
         } finally {
             setCursor(Cursor.getDefaultCursor());

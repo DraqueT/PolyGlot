@@ -31,6 +31,7 @@ import java.util.Set;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 
 /**
  *
@@ -40,7 +41,7 @@ public final class Java8Bridge {
 
     public static File getNewJavaBridgeLocation() throws IOException {
         Path tmpDirectory = Files.createTempDirectory("PolyGlot");
-        IOHandler.unzipResourceToDir(PGTUtil.JAVA8_BRIDGERESOURCE, tmpDirectory);
+        DesktopIOHandler.getInstance().unzipResourceToDir(PGTUtil.JAVA8_BRIDGERESOURCE, tmpDirectory);
         return new File(tmpDirectory + File.separator + PGTUtil.JAVA8_JAR_FOLDER + File.separator + PGTUtil.JAVA8_JAR);
     }
 
@@ -69,7 +70,7 @@ public final class Java8Bridge {
         String tmpFontFileLocation = tmpFontFile.getCanonicalPath();
         
         try {
-            IOHandler.exportFont(tmpFontFileLocation, core.getCurFileName());
+            DesktopIOHandler.getInstance().exportFont(tmpFontFileLocation, core.getCurFileName());
         } catch (IOException e) {
             tmpFontFileLocation = "";
         }
@@ -96,7 +97,7 @@ public final class Java8Bridge {
             PGTUtil.PGT_VERSION
         };
         
-        String[] results = IOHandler.runAtConsole(command, true);
+        String[] results = DesktopIOHandler.getInstance().runAtConsole(command, true);
         
         Set<String> warnings = new HashSet<>();
         
@@ -151,7 +152,7 @@ public final class Java8Bridge {
             Integer.toString(sheetNumber),
         };
         
-        String[] result = IOHandler.runAtConsole(command, false);
+        String[] result = DesktopIOHandler.getInstance().runAtConsole(command, false);
         
         if (!result[1].isEmpty() || !tmpTarget.exists()) {
             throw new IOException(result[1]);
@@ -189,7 +190,7 @@ public final class Java8Bridge {
             (separateDeclensions ? PGTUtil.TRUE : PGTUtil.FALSE) // separate declensions
         };
         
-        String[] result = IOHandler.runAtConsole(command, false);
+        String[] result = DesktopIOHandler.getInstance().runAtConsole(command, false);
         
         if (!result[1].isEmpty()) {
             throw new IOException("Unable to export to excel: " + result[1]);
@@ -231,7 +232,7 @@ public final class Java8Bridge {
      * @throws IOException 
      */
     private static void errorIfJavaUnavailableInTerminal() throws IOException {
-        if (!IOHandler.isJavaAvailableInTerminal()) {
+        if (!DesktopIOHandler.getInstance().isJavaAvailableInTerminal()) {
             throw new IOException("The Java runtime is required for this feature.\nPlease install from: www.java.com");
         }
     }

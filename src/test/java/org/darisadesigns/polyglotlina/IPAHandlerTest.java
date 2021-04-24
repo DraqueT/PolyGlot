@@ -22,6 +22,7 @@ package org.darisadesigns.polyglotlina;
 import java.awt.GraphicsEnvironment;
 import java.lang.reflect.Field;
 import java.util.Map;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Assumptions;
@@ -55,7 +56,7 @@ public class IPAHandlerTest {
             soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.UCLA_WAV_LOCATION + firstSound + PGTUtil.WAV_SUFFIX);
             soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.WIKI_WAV_LOCATION + firstSound + PGTUtil.WAV_SUFFIX);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -106,7 +107,7 @@ public class IPAHandlerTest {
 
             assertEquals(expectedResults, results);
         } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }

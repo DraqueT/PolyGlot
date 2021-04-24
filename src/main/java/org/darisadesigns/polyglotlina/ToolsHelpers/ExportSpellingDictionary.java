@@ -111,17 +111,17 @@ public class ExportSpellingDictionary {
     
     public void saveToFile(String targetLocation) throws IOException {
         String output = getCurrentStringValue();
-        IOHandler.createFileWithContents(targetLocation, output);
+        core.getIOHandler().createFileWithContents(targetLocation, output);
         
         // set wretched metadata on OSX so that MS Word will recognize it...
         if (PGTUtil.IS_OSX) {
             try {
-                IOHandler.addFileAttributeOSX(targetLocation,
+                core.getIOHandler().addFileAttributeOSX(targetLocation,
                         PGTUtil.OSX_FINDER_METADATA_NAME, 
                         PGTUtil.OSX_FINDER_INFO_VALUE_DIC_FILES,
                         true);
             } catch (Exception e) {
-                IOHandler.writeErrorLog(e);
+                core.getIOHandler().writeErrorLog(e);
                 InfoBox.warning("Metadata Error", "Problem writing metadata.", null);
             }
         }

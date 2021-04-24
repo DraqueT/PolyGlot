@@ -21,6 +21,7 @@ package org.darisadesigns.polyglotlina.Screens;
 
 import org.darisadesigns.polyglotlina.ClipboardHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.Nodes.LogoNode;
@@ -35,7 +36,6 @@ import org.darisadesigns.polyglotlina.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.CustomControls.PList;
 import org.darisadesigns.polyglotlina.CustomControls.PTable;
 import org.darisadesigns.polyglotlina.CustomControls.PTextPane;
-import org.darisadesigns.polyglotlina.IOHandler;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -180,7 +180,7 @@ public class ScrLogoDetails extends PFrame {
         try {
             latch.await();
         } catch (InterruptedException e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Form Load Error", "Unable to load Lexicon: " + e.getLocalizedMessage(), core.getRootWindow());
         }
         
@@ -476,7 +476,7 @@ public class ScrLogoDetails extends PFrame {
                 saveRads(lstLogos.getSelectedIndex());
                 populateLogoProps();
             } catch (Exception e) {
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
                 InfoBox.error("Paste Error", "Unable to paste: " + e.getLocalizedMessage(), core.getRootWindow());
             }
         } else {
@@ -848,7 +848,7 @@ public class ScrLogoDetails extends PFrame {
                 radModel.addElement(radNode);
             } catch (Exception e) {
                 // do nothing
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
             }
         }
 
@@ -914,11 +914,11 @@ public class ScrLogoDetails extends PFrame {
             saveRads(lstLogos.getSelectedIndex());
             populateLogoProps();
         } catch (IOException e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Image Load Error", "Unable to load image: " + fileName
                     + ": " + e.getMessage(), core.getRootWindow());
         } catch (NullPointerException e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Image Load Error", "Unable to read format of image: "
                     + fileName, core.getRootWindow());
         }
@@ -951,7 +951,7 @@ public class ScrLogoDetails extends PFrame {
 
             populateLogoProps();
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Logograph Error", "Unable to delete logograph: "
                     + e.getMessage(), core.getRootWindow());
         }
@@ -1040,7 +1040,7 @@ public class ScrLogoDetails extends PFrame {
         try {
             core.getLogoCollection().addNode(newNode);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Logograph Error", "Unable to create Logograph: " + e.getMessage(), core.getRootWindow());
         }
 

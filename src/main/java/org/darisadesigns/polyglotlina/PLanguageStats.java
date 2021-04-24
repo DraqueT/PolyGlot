@@ -94,7 +94,7 @@ public final class PLanguageStats {
             thread.join();
         }
         catch (InterruptedException e) {
-            IOHandler.writeErrorLog(e);
+            core.getIOHandler().writeErrorLog(e);
             InfoBox.error("Language Stat Error", "Unable to generate language statistics: " + e.getLocalizedMessage(), core.getRootWindow());
         }
 

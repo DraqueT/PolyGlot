@@ -77,7 +77,7 @@ public class CheckLanguageErrors {
             thread.join();
         }
         catch (InterruptedException e) {
-            IOHandler.writeErrorLog(e);
+            core.getIOHandler().writeErrorLog(e);
             InfoBox.error("Thread Error", "Language validation thread error: " + e.getLocalizedMessage(), core.getRootWindow());
         }
 

@@ -30,8 +30,8 @@ import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.EvolutionPair;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
@@ -363,7 +363,7 @@ public final class ScrEvolveLang extends PDialog {
                 this.dispose();
             } catch (Exception e) {
                 InfoBox.error("Evolution Error", "Problem evolving language: " + e.getLocalizedMessage(), this);
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed

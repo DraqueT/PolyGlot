@@ -39,7 +39,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
-import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 
 public final class ExampleCheckboxDropdown extends JPanel {
 
@@ -80,7 +80,7 @@ public final class ExampleCheckboxDropdown extends JPanel {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             //e.printStackTrace();
         }
         JFrame frame = new JFrame("CheckedComboBox");

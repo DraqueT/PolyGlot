@@ -20,9 +20,9 @@
 package org.darisadesigns.polyglotlina.CustomControls;
 
 import org.darisadesigns.polyglotlina.ClipboardHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.ExternalCode.GlyphVectorEditorKit;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ImageNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.awt.Graphics2D;
@@ -81,7 +81,7 @@ public class PGrammarPane extends JTextPane {
                     addImage(image);
                 }
             } catch (Exception e) {
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
                 InfoBox.error("Image Import Error", "Unable to import image: "
                         + e.getLocalizedMessage(), core.getRootWindow());
             }
@@ -151,7 +151,7 @@ public class PGrammarPane extends JTextPane {
             this.paste();
             cb.restoreClipboard();
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Rendering Error", "Tab rendering error: " 
                     + e.getLocalizedMessage(), core.getRootWindow());
         }
@@ -166,7 +166,7 @@ public class PGrammarPane extends JTextPane {
             imageReplaceSelection(" ");
             inputAttributes.removeAttributes(inputAttributes);
         } catch (IOException e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Image Insertion Error", "Unable to insert image: "
                     + e.getLocalizedMessage(), core.getRootWindow());
         }
@@ -199,7 +199,7 @@ public class PGrammarPane extends JTextPane {
                     addImage(imageNode);
                 }
             } catch (Exception e) {
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
                 InfoBox.error("Paste Error", "Unable to paste: " + e.getLocalizedMessage(), core.getRootWindow());
             }
         } else if (ClipboardHandler.isClipboardString()) {
@@ -211,7 +211,7 @@ public class PGrammarPane extends JTextPane {
                 board.setClipboardContents(clipText);
                 super.paste();
             } catch (UnsupportedFlavorException | IOException e) {
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
                 InfoBox.error("Paste Error", "Unable to paste text: " + e.getLocalizedMessage(), core.getRootWindow());
             }
         } else {
@@ -242,7 +242,7 @@ public class PGrammarPane extends JTextPane {
                     restoreComposedText();
                 }
             } catch (BadLocationException e) {
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
                 UIManager.getLookAndFeel().provideErrorFeedback(PGrammarPane.this);
             }
         }

@@ -19,8 +19,8 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.RectangularCoordinateMap;
 import org.darisadesigns.polyglotlina.WebInterface;
@@ -304,7 +304,7 @@ public final class PPanelDrawEtymology extends JPanel {
                 wordMap.addRectangle(xOffset, xOffset + charisFontMetrics.stringWidth(myNode.word.getValue()), 
                         curYDepth - textHeight, curYDepth, myNode.word);
             } catch (Exception e) {
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
                 InfoBox.error("Tooltip Generation error", "Error generating tooltip values: " 
                         + e.getLocalizedMessage(), core.getRootWindow());
             }
@@ -320,7 +320,7 @@ public final class PPanelDrawEtymology extends JPanel {
                 wordMap.addRectangle(xOffset, xOffset + conFontMetrics.stringWidth(myNode.word.getValue()), 
                         curYDepth - textHeight, curYDepth, myNode.word);
             } catch (Exception e) {
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
                 InfoBox.error("Tooltip Generation error", "Error generating tooltip values: " 
                         + e.getLocalizedMessage(), core.getRootWindow());
             }
@@ -372,7 +372,7 @@ public final class PPanelDrawEtymology extends JPanel {
                 wordMap.addRectangle(xOffset, xOffset + conFontMetrics.stringWidth(myText),
                         curYDepth - conFontMetrics.getHeight(), curYDepth, myNode.word);
             } catch (Exception e) {
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
                 InfoBox.error("Tooltip Generation error", "Error generating tooltip values: "
                         + e.getLocalizedMessage(), core.getRootWindow());
             }

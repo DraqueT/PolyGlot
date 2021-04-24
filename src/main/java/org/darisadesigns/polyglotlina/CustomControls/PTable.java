@@ -21,6 +21,7 @@ package org.darisadesigns.polyglotlina.CustomControls;
 
 import java.awt.Color;
 import java.awt.Component;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
@@ -148,7 +149,7 @@ public final class PTable extends JTable {
         } else {
             // The only time this will ever happen is if it is done manually via setting renderer to the column/cell
             InfoBox.error("Table Rendering Error", "Unable to render table cell.", null);
-            IOHandler.writeErrorLog(new Exception("Non PCellRenderer in PTable"));
+            DesktopIOHandler.getInstance().writeErrorLog(new Exception("Non PCellRenderer in PTable"));
         }
         
         return ret;
@@ -163,7 +164,7 @@ public final class PTable extends JTable {
         } else {
             // The only time this will ever happen is if it is done manually via setting editor to the column/cell
             InfoBox.error("Table Rendering Error", "Unable to render table cell.", null);
-            IOHandler.writeErrorLog(new Exception("Non PCellEditor in PTable"));
+            DesktopIOHandler.getInstance().writeErrorLog(new Exception("Non PCellEditor in PTable"));
         }
         
         return ret;

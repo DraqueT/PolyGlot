@@ -23,8 +23,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationGenRule;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationGenTransform;
@@ -59,7 +59,7 @@ public class ConjugationManagerTest {
             assertEquals(0, decMan.getDimensionalConjugationListWord(word.getId()).length);
             assertEquals(decMan.getWordConjugation(word.getId()).size(), 0);
         } catch (IOException | IllegalStateException e) {
-            IOHandler.writeErrorLog(e, "testZeroDimNoExtra");
+            DesktopIOHandler.getInstance().writeErrorLog(e, "testZeroDimNoExtra");
             fail(e);
         }
     }
@@ -79,7 +79,7 @@ public class ConjugationManagerTest {
             assertEquals(decMan.getWordConjugation(word.getId()).size(), 0);
             assertTrue(allFormsPresent(decMan, word, expectedForms));
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, "testZeroDimNoExtra");
+            DesktopIOHandler.getInstance().writeErrorLog(e, "testZeroDimNoExtra");
             fail(e);
         }
     }
@@ -101,7 +101,7 @@ public class ConjugationManagerTest {
             assertTrue(allFormsPresent(decMan, word, expectedForms));
             assertTrue(allDeprecatedFormsPresent(decMan, word, expectedDeprecated));
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, "testZeroDimNoExtra");
+            DesktopIOHandler.getInstance().writeErrorLog(e, "testZeroDimNoExtra");
             fail(e);
         }
     }
@@ -121,7 +121,7 @@ public class ConjugationManagerTest {
             assertEquals(decMan.getWordConjugation(word.getId()).size(), 0);
             assertTrue(allFormsPresent(decMan, word, expectedForms));
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, "testZeroDimNoExtra");
+            DesktopIOHandler.getInstance().writeErrorLog(e, "testZeroDimNoExtra");
             fail(e);
         }
     }
@@ -143,7 +143,7 @@ public class ConjugationManagerTest {
             assertTrue(allFormsPresent(decMan, word, expectedForms));
             assertTrue(allDeprecatedFormsPresent(decMan, word, expectedDeprecated));
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, "testZeroDimNoExtra");
+            DesktopIOHandler.getInstance().writeErrorLog(e, "testZeroDimNoExtra");
             fail(e);
         }
     }
@@ -165,7 +165,7 @@ public class ConjugationManagerTest {
             assertTrue(allFormsPresent(decMan, word, expectedForms));
             assertTrue(allDeprecatedFormsPresent(decMan, word, expectedDeprecated));
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, "testZeroDimNoExtra");
+            DesktopIOHandler.getInstance().writeErrorLog(e, "testZeroDimNoExtra");
             fail(e);
         }
     }
@@ -188,7 +188,7 @@ public class ConjugationManagerTest {
             assertTrue(allFormsPresent(decMan, word, expectedForms));
             assertTrue(allDeprecatedFormsPresent(decMan, word, expectedDeprecated));
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, "testZeroDimNoExtra");
+            DesktopIOHandler.getInstance().writeErrorLog(e, "testZeroDimNoExtra");
             fail(e);
         }
     }

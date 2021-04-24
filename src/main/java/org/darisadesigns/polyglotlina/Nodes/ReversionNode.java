@@ -19,7 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.Nodes;
 
-import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -41,17 +41,20 @@ import org.xml.sax.SAXException;
 public class ReversionNode implements Comparable<ReversionNode> {
     private final byte[] value;
     private Instant saveTime;
+    private final DictCore core;
 
-    public ReversionNode(byte[] _value) {
+    public ReversionNode(byte[] _value, DictCore _core) {
         value = _value;
         saveTime = Instant.MIN;
+        core = _core;
         
         populateTimeFromDoc();
     }
     
-    public ReversionNode(byte[] _value, Instant _saveTime) {
+    public ReversionNode(byte[] _value, Instant _saveTime, DictCore _core) {
         value = _value;
         saveTime = _saveTime;
+        core = _core;
     }
     
     /**
@@ -83,7 +86,7 @@ public class ReversionNode implements Comparable<ReversionNode> {
                 ret = Instant.MIN;
             }
         } catch (SAXException | IOException | ParserConfigurationException e) {
-            IOHandler.writeErrorLog(e);
+            core.getIOHandler().writeErrorLog(e);
             ret = Instant.MIN;
         }
         

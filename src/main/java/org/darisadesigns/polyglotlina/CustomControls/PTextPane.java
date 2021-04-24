@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.ClipboardHandler;
 import org.darisadesigns.polyglotlina.FormattedTextHelper;
@@ -104,7 +105,7 @@ public final class PTextPane extends JTextPane {
                 board.setClipboardContents(ClipboardHandler.getClipboardText());
                 super.paste();
             } catch (UnsupportedFlavorException | IOException e) {
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
                 InfoBox.error("Paste Error", "Unable to paste text: " + e.getLocalizedMessage(), core.getRootWindow());
             }
         } else if (ClipboardHandler.isClipboardImage() && !disableMedia) {
@@ -130,7 +131,7 @@ public final class PTextPane extends JTextPane {
                     addImage(imageNode);
                 }
             } catch (Exception e) {
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
                 InfoBox.error("Paste Error", "Unable to paste: " + e.getLocalizedMessage(), core.getRootWindow());
             }
         } else {
@@ -147,7 +148,7 @@ public final class PTextPane extends JTextPane {
                 super.setText(t);
             }
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Set text error", "Could not set text component: " + e.getLocalizedMessage(), core.getRootWindow());
         }
 
@@ -218,7 +219,7 @@ public final class PTextPane extends JTextPane {
                     addImage(image);
                 }
             } catch (Exception e) {
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
                 InfoBox.error("Image Import Error", "Unable to import image: "
                         + e.getLocalizedMessage(), core.getRootWindow());
             }
@@ -383,7 +384,7 @@ public final class PTextPane extends JTextPane {
                             paste();
                             cb.restoreClipboard();
                         } catch (Exception ex) {
-                            IOHandler.writeErrorLog(ex);
+                            DesktopIOHandler.getInstance().writeErrorLog(ex);
                             InfoBox.error("Character Replacement Error",
                                     "Clipboard threw error during character replacement process:"
                                     + ex.getLocalizedMessage(), core.getRootWindow());

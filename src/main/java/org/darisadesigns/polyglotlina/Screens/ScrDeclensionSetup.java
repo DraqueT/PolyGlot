@@ -58,6 +58,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.CustomControls.PTextPane;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 
 /**
  * This is the setup form for word forms (declensions/conjugations and their
@@ -89,7 +90,7 @@ public final class ScrDeclensionSetup extends PDialog {
             this.setTitle("Declensions/Conjugations for type: " + myType.getValue());
             btnClearDep.setToolTipText(btnClearDep.getToolTipText() + myType.getValue());
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Part of Speech Error",
                     "Part of Speech not found, unable to open declensions for type with id: "
                     + _typeId + " " + e.getMessage(), core.getRootWindow());
@@ -356,7 +357,7 @@ public final class ScrDeclensionSetup extends PDialog {
                 decMan.addConjugationToTemplate(myType.getId(), -1, curNode);
             });
         } catch (ClassCastException e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Error Copying Conjugations", "Unable to copy conjugations: " 
                     + e.getLocalizedMessage(), this);
         }
@@ -868,7 +869,7 @@ public final class ScrDeclensionSetup extends PDialog {
             try {
                 curDec = core.getConjugationManager().getConjugationTemplate(myType.getId(), decId);
             } catch (Exception e) {
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
                 InfoBox.error("Declension Population Error", "Unable to populate declension.\n\n"
                         + e.getMessage(), this);
                 curPopulating = populatingLocal;
@@ -960,7 +961,7 @@ public final class ScrDeclensionSetup extends PDialog {
         try {
             core.getConjugationManager().deleteConjugationFromTemplate(myType.getId(), scrToCoreDeclensions.get(curIndex));
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Declension Deletion Error", "Unable to delete Declension: "
                     + lstDeclensionList.getSelectedValue() + "\n\n" + e.getMessage(), this);
         }
@@ -1019,7 +1020,7 @@ public final class ScrDeclensionSetup extends PDialog {
                 core.getConjugationManager().updateConjugationTemplate(myType.getId(), decId, decl);
             }
         } catch (ClassCastException e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Declension Creation Error", "Unable to create Declension "
                     + txtDeclensionName.getText() + "\n\n" + e.getMessage(), this);
         }

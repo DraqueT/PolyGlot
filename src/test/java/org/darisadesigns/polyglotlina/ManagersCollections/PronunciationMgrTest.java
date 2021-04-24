@@ -24,8 +24,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.junit.jupiter.api.AfterEach;
@@ -307,7 +307,7 @@ public class PronunciationMgrTest {
                 assert(Arrays.equals(expectedResult.get(key), result.get(key)));
             }
         } catch (IOException | IllegalStateException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }

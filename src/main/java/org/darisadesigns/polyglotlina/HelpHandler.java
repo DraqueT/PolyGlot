@@ -23,6 +23,7 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 
 /**
  *
@@ -52,13 +53,13 @@ public class HelpHandler {
             }
         }
         catch (IOException e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Help File Error", "Unable to open help file.", null);
         }
     }
 
     public static void openHelpLocal() throws IOException {
-        File readmeDir = IOHandler.unzipResourceToTempLocation(PGTUtil.HELP_FILE_ARCHIVE_LOCATION);
+        File readmeDir = DesktopIOHandler.getInstance().unzipResourceToTempLocation(PGTUtil.HELP_FILE_ARCHIVE_LOCATION);
         File readmeFile = new File(readmeDir.getAbsolutePath() + File.separator + PGTUtil.HELP_FILE_NAME);
 
         if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {

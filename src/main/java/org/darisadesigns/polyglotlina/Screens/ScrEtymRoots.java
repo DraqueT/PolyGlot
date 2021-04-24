@@ -27,8 +27,8 @@ import org.darisadesigns.polyglotlina.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.CustomControls.PPanelDrawEtymology;
 import org.darisadesigns.polyglotlina.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.CustomControls.PTextPane;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.ManagersCollections.EtymologyManager;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.EtyExternalParent;
@@ -300,7 +300,7 @@ public final class ScrEtymRoots extends PDialog {
         try {
             core.getEtymologyManager().addRelation(parentId, childId);
         } catch (EtymologyManager.IllegalLoopException e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Illegal Loop: Parent not Added", e.getLocalizedMessage(), this);
         }
     }

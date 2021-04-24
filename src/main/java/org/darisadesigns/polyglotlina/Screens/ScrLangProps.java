@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
@@ -28,7 +29,6 @@ import org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager;
 import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
 import org.darisadesigns.polyglotlina.CustomControls.PFrame;
 import org.darisadesigns.polyglotlina.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.IOHandler;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
@@ -668,7 +668,7 @@ public class ScrLangProps extends PFrame {
         }
         catch (Exception e) {
             InfoBox.error("Font Refresh Failed", e.getLocalizedMessage(), this);
-            IOHandler.writeErrorLog(e, "Top level exception caught here. See prior exception.");
+            DesktopIOHandler.getInstance().writeErrorLog(e, "Top level exception caught here. See prior exception.");
         }
 
         this.setCursor(Cursor.getDefaultCursor());

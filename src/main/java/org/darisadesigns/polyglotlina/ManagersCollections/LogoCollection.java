@@ -328,7 +328,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
                 ConWord word = core.getWordCollection().getNodeById(Integer.parseInt(ids[i]));
                 addWordLogoRelation(word, relNode);
             } catch (NumberFormatException e) {
-                IOHandler.writeErrorLog(e);
+                core.getIOHandler().writeErrorLog(e);
                 loadLog += "\nLogograph load error: " + e.getLocalizedMessage();
             }
         }
@@ -350,7 +350,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
                 LogoNode curNode = it.next();
                 curNode.loadRadicalRelations(nodeMap);
             } catch (Exception e) {
-                IOHandler.writeErrorLog(e);
+                core.getIOHandler().writeErrorLog(e);
                 loadLog = e.getLocalizedMessage() + "\n";
             }
         }
@@ -372,7 +372,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
         try {
             emptyNode.setLogoGraph(ImageIO.read(getClass().getResource(PGTUtil.NOT_FOUND_IMAGE)));
         } catch (IOException e) {
-            IOHandler.writeErrorLog(e);
+            core.getIOHandler().writeErrorLog(e);
             InfoBox.error("INTERNAL ERROR", 
                     "Unable to locate missing-image image.\nThis is kind of an ironic error.", null);
         }

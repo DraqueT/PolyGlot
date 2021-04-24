@@ -20,7 +20,7 @@
 package org.darisadesigns.polyglotlina.Screens;
 
 import java.awt.GraphicsEnvironment;
-import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
@@ -62,7 +62,7 @@ public class ScrUpdateAlertTest {
 //            updateAlert.testRun();
 //            updateAlert.dispose();
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }

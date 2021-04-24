@@ -19,7 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
-import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.DictNode;
 import org.darisadesigns.polyglotlina.QuizEngine.QuizQuestion.QuestionType;
@@ -75,7 +75,7 @@ public final class PRadioButton extends JRadioButton {
                     try {
                         ret = ((ConWord)value).getPronunciation();
                     } catch (Exception e) {
-                        IOHandler.writeErrorLog(e);
+                        DesktopIOHandler.getInstance().writeErrorLog(e);
                         ret = "<ERROR>";
                     }
                     break;

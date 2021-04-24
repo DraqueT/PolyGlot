@@ -21,7 +21,9 @@ package TestResources;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.PolyGlot;
 
@@ -30,8 +32,8 @@ import org.darisadesigns.polyglotlina.PolyGlot;
  * @author draque
  */
 public class DummyCore extends DictCore {
-    private DummyCore (PolyGlot polyGlot) {
-        super(polyGlot);
+    private DummyCore (PolyGlot polyGlot, IOHandler ioHandler) {
+        super(polyGlot, ioHandler);
     }
     
     public static DummyCore newCore() {
@@ -40,7 +42,7 @@ public class DummyCore extends DictCore {
             constructor.setAccessible(true);
             PolyGlot polyGlot = (PolyGlot)constructor.newInstance(PGTUtil.TESTRESOURCES);
             
-            return new DummyCore(polyGlot);
+            return new DummyCore(polyGlot, DesktopIOHandler.getInstance());
         } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
             System.err.println("Something's gone wrong with the Dummy Core generation: " + e.getLocalizedMessage());
         }

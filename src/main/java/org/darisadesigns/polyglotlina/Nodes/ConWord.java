@@ -331,7 +331,7 @@ public class ConWord extends DictNode {
                 ret = core.getTypes().getNodeById(typeId).getValue();
             }
             catch (Exception e) {
-                IOHandler.writeErrorLog(e);
+                core.getIOHandler().writeErrorLog(e);
                 // If a type no longer exists, set the type ID to 0, then continue
                 typeId = 0;
             }
@@ -506,7 +506,7 @@ public class ConWord extends DictNode {
                 try {
                     ret = conMan.declineWord(this, fullDecId);
                 } catch (Exception e) {
-                    IOHandler.writeErrorLog(e);
+                    core.getIOHandler().writeErrorLog(e);
                 }
             }
         }

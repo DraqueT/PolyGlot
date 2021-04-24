@@ -26,8 +26,8 @@ import org.darisadesigns.polyglotlina.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.CustomControls.PToDoTree;
 import org.darisadesigns.polyglotlina.CustomControls.PToDoTreeModel;
 import org.darisadesigns.polyglotlina.CustomControls.ToDoTreeNode;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.awt.Component;
@@ -131,7 +131,7 @@ public final class ScrMainMenu extends PFrame {
             backGround = ImageIO.read(getClass().getResource(PGTUtil.MAIN_MENU_IMAGE));
             jLabel1.setFont(PGTUtil.MENU_FONT.deriveFont(45f));
         } catch (IOException e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Resource Error",
                     "Unable to load internal resource: " + e.getLocalizedMessage(),
                     core.getRootWindow());
@@ -191,7 +191,7 @@ public final class ScrMainMenu extends PFrame {
                     updateAllValues(finalCore);
                 } catch (Exception ex) {
                     InfoBox.error("Unable to load internal resource: ", finalLocation, curWindow);
-                    IOHandler.writeErrorLog(ex, "Resource read error on open.");
+                    DesktopIOHandler.getInstance().writeErrorLog(ex, "Resource read error on open.");
                 }
             });
 
@@ -213,7 +213,7 @@ public final class ScrMainMenu extends PFrame {
                 } catch (Exception ex) {
                     InfoBox.error("Swadesh Load Error",
                             "Could not load selected Swadesh List. Please make certain it is formatted correctly (newline separated)", null);
-                    IOHandler.writeErrorLog(ex, "Swadesh load error");
+                    DesktopIOHandler.getInstance().writeErrorLog(ex, "Swadesh load error");
                 }
             }
         });
@@ -226,7 +226,7 @@ public final class ScrMainMenu extends PFrame {
      */
     private void populateExampleLanguages() {
         try {
-            File exLangFolder = IOHandler.unzipResourceToTempLocation(PGTUtil.EXAMPLE_LANGUAGE_ARCHIVE_LOCATION);
+            File exLangFolder = DesktopIOHandler.getInstance().unzipResourceToTempLocation(PGTUtil.EXAMPLE_LANGUAGE_ARCHIVE_LOCATION);
             File[] files = exLangFolder.listFiles();
 
             if (files != null) {
@@ -249,7 +249,7 @@ public final class ScrMainMenu extends PFrame {
             }
         } catch (IOException e) {
             InfoBox.error("Resource Error", "Failed to load example dictionaries.", this);
-            IOHandler.writeErrorLog(e, "Failed to load example dictionaries.");
+            DesktopIOHandler.getInstance().writeErrorLog(e, "Failed to load example dictionaries.");
         }
     }
 
@@ -257,7 +257,7 @@ public final class ScrMainMenu extends PFrame {
      * Warns user if they are using a beta version (based on beta warning file)
      */
     public void warnBeta() {
-        if (IOHandler.fileExists("BETA_WARNING.txt")) {
+        if (DesktopIOHandler.getInstance().fileExists("BETA_WARNING.txt")) {
             InfoBox.warning("BETA VERSION", "You are using a beta version of PolyGlot. Please proceed with caution!", this);
         }
     }
@@ -428,12 +428,12 @@ public final class ScrMainMenu extends PFrame {
                 changeScreen(cacheLexicon, cacheLexicon.getWindow(), null);
             }
         } catch (IOException e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             core = core.getNewCore(); // don't allow partial loads
             InfoBox.error("File Read Error", "Could not read file: " + fileName
                     + "\n\n " + e.getMessage(), core.getRootWindow());
         } catch (IllegalStateException e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.warning("File Read Problems", "Problems reading file:\n"
                     + e.getLocalizedMessage(), core.getRootWindow());
         }
@@ -516,7 +516,7 @@ public final class ScrMainMenu extends PFrame {
             cleanSave = true;
         } catch (IOException | ParserConfigurationException
                 | TransformerException e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Save Error", "Unable to save to file: "
                     + curFileName + "\n\n" + e.getMessage(), core.getRootWindow());
         }
@@ -556,8 +556,8 @@ public final class ScrMainMenu extends PFrame {
         if (curFileName.isEmpty()) {
             chooser.setCurrentDirectory(core.getWorkingDirectory());
         } else {
-            chooser.setCurrentDirectory(IOHandler.getDirectoryFromPath(curFileName));
-            chooser.setSelectedFile(IOHandler.getFileFromPath(curFileName));
+            chooser.setCurrentDirectory(DesktopIOHandler.getInstance().getDirectoryFromPath(curFileName));
+            chooser.setSelectedFile(DesktopIOHandler.getInstance().getFileFromPath(curFileName));
         }
 
         String fileName;
@@ -569,7 +569,7 @@ public final class ScrMainMenu extends PFrame {
                 fileName += ".pgd";
             }
 
-            if (IOHandler.fileExists(fileName)) {
+            if (DesktopIOHandler.getInstance().fileExists(fileName)) {
                 int overWrite = InfoBox.yesNoCancel("Overwrite Dialog",
                         "Overwrite existing file? " + fileName, core.getRootWindow());
 
@@ -641,7 +641,7 @@ public final class ScrMainMenu extends PFrame {
         if (curFileName.isEmpty()) {
             chooser.setCurrentDirectory(core.getWorkingDirectory());
         } else {
-            chooser.setCurrentDirectory(IOHandler.getDirectoryFromPath(curFileName));
+            chooser.setCurrentDirectory(DesktopIOHandler.getInstance().getDirectoryFromPath(curFileName));
         }
 
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -680,7 +680,7 @@ public final class ScrMainMenu extends PFrame {
                 try {
                     ScrUpdateAlert.run(verbose, core);
                 } catch (Exception e) {
-                    IOHandler.writeErrorLog(e);
+                    DesktopIOHandler.getInstance().writeErrorLog(e);
                     if (verbose) {
                         InfoBox.error("Update Problem",
                                 "Unable to check for update:\n"
@@ -734,7 +734,7 @@ public final class ScrMainMenu extends PFrame {
                     InfoBox.info("Export Status", "Language exported to " + fileName + ".", core.getRootWindow());
                 }
             } catch (IOException e) {
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
                 InfoBox.info("Export Problem", e.getLocalizedMessage(), core.getRootWindow());
             }
         }
@@ -767,20 +767,20 @@ public final class ScrMainMenu extends PFrame {
             fileName += ".ttf";
         }
 
-        if (IOHandler.fileExists(fileName)
+        if (DesktopIOHandler.getInstance().fileExists(fileName)
                 && !InfoBox.actionConfirmation("Overwrite Confirmation", "File will be overwritten. Continue?", this)) {
             return;
         }
 
         try {
             if (exportCharis) {
-                IOHandler.exportCharisFont(fileName);
+                DesktopIOHandler.getInstance().exportCharisFont(fileName);
             } else {
-                IOHandler.exportFont(fileName, core.getCurFileName());
+                DesktopIOHandler.getInstance().exportFont(fileName, core.getCurFileName());
             }
             InfoBox.info("Export Success", "Font exported to: " + fileName, core.getRootWindow());
         } catch (IOException e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Export Error", "Unable to export font: " + e.getMessage(), core.getRootWindow());
         }
     }
@@ -792,7 +792,7 @@ public final class ScrMainMenu extends PFrame {
     }
 
     private void openHelp() throws IOException {
-        File readmeDir = IOHandler.unzipResourceToTempLocation(PGTUtil.HELP_FILE_ARCHIVE_LOCATION);
+        File readmeDir = DesktopIOHandler.getInstance().unzipResourceToTempLocation(PGTUtil.HELP_FILE_ARCHIVE_LOCATION);
         File readmeFile = new File(readmeDir.getAbsolutePath() + File.separator + PGTUtil.HELP_FILE_NAME);
 
         if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
@@ -1324,8 +1324,8 @@ public final class ScrMainMenu extends PFrame {
             chooser.setCurrentDirectory(core.getWorkingDirectory());
         } else {
             String suggestedDicFile = curFileName.replaceAll("\\.pgd", ".dic");
-            chooser.setCurrentDirectory(IOHandler.getDirectoryFromPath(curFileName));
-            chooser.setSelectedFile(IOHandler.getFileFromPath(suggestedDicFile));
+            chooser.setCurrentDirectory(DesktopIOHandler.getInstance().getDirectoryFromPath(curFileName));
+            chooser.setSelectedFile(DesktopIOHandler.getInstance().getFileFromPath(suggestedDicFile));
         }
 
         String fileName;
@@ -1337,7 +1337,7 @@ public final class ScrMainMenu extends PFrame {
                 fileName += ".dic";
             }
 
-            if (IOHandler.fileExists(fileName)) {
+            if (DesktopIOHandler.getInstance().fileExists(fileName)) {
                 int overWrite = InfoBox.yesNoCancel("Overwrite Dialog",
                         "Overwrite existing file? " + fileName, core.getRootWindow());
 
@@ -1352,7 +1352,7 @@ public final class ScrMainMenu extends PFrame {
                 InfoBox.info("Success", "File written to: " + fileName, this);
             }
             catch (IOException e) {
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
                 InfoBox.error("File Write Error", "Unable to export dictionary to: " 
                         + curFileName + "\n\n" + e.getLocalizedMessage(), this);
             }

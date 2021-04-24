@@ -26,8 +26,8 @@ import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
 import org.darisadesigns.polyglotlina.CustomControls.PFrame;
 import org.darisadesigns.polyglotlina.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.QuizEngine.Quiz;
@@ -127,7 +127,7 @@ public final class ScrQuizGenDialog extends PFrame {
 
                 ScrQuizScreen.run(genQuiz, core);
             } catch (Exception e) {
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
                 InfoBox.error("Quiz Generation Error", "Unable to generate quiz: " + e.getLocalizedMessage(), core.getRootWindow());
             }
         }

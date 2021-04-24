@@ -23,8 +23,8 @@ import java.io.IOException;
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ReversionNode;
 import javax.swing.DefaultListModel;
 
@@ -115,7 +115,7 @@ public final class ScrReversion extends PDialog {
                 InfoBox.info("Successful Reversion", "Reversion Successful!", this);
                 this.dispose();
             } catch (IOException e) {
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
                 InfoBox.error("Unable to Revert", "Unable to revert to prior version: " 
                         + e.getLocalizedMessage(), this);
             }

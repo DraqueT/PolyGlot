@@ -28,14 +28,19 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import org.darisadesigns.polyglotlina.DictCore;
 
 /**
  *
  * @author Draque
  */
 public class ImageCollection extends DictionaryCollection<ImageNode> {
-    public ImageCollection() {
+    
+    private final DictCore core;
+    
+    public ImageCollection(DictCore _core) {
         super(new ImageNode());
+        core = _core;
     }
     
     @Override
@@ -62,7 +67,7 @@ public class ImageCollection extends DictionaryCollection<ImageNode> {
     public ImageNode openNewImage(Window parent, File workingDirectory) throws Exception {
         ImageNode image = null;
         try {
-            BufferedImage buffImg = IOHandler.openImage(parent, workingDirectory);
+            BufferedImage buffImg = core.getIOHandler().openImage(parent, workingDirectory);
             
             if (buffImg != null) {
                 image = new ImageNode();
@@ -110,7 +115,7 @@ public class ImageCollection extends DictionaryCollection<ImageNode> {
         try {
             emptyImage.setImage(ImageIO.read(getClass().getResource(PGTUtil.NOT_FOUND_IMAGE)));
         } catch (IOException e) {
-            IOHandler.writeErrorLog(e);
+            core.getIOHandler().writeErrorLog(e);
             InfoBox.error("INTERNAL ERROR", 
                     "Unable to locate missing-image image.\nThis is kind of an ironic error.", null);
         }

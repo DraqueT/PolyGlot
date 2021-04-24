@@ -46,7 +46,7 @@ public class ReversionManager {
      * @param saveTime The time at which this was saved
      */
     public void addVersion(byte[] addVersion, Instant saveTime) {
-        ReversionNode reversion = new ReversionNode(addVersion, saveTime);
+        ReversionNode reversion = new ReversionNode(addVersion, saveTime, core);
         reversionList.add(0, reversion);
         
         trimReversions();
@@ -57,7 +57,7 @@ public class ReversionManager {
      * @param addVersion byte array of raw XML of language file
      */
     public void addVersionToEnd(byte[] addVersion) {
-        ReversionNode reg = new ReversionNode(addVersion);
+        ReversionNode reg = new ReversionNode(addVersion, core);
         reversionList.add(reg);
     }
 

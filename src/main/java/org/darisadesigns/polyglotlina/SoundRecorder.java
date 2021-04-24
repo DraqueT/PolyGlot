@@ -20,6 +20,7 @@
 package org.darisadesigns.polyglotlina;
 
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import java.awt.Window;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -219,7 +220,7 @@ public class SoundRecorder {
 
                 out.close();
             } catch (LineUnavailableException | IOException e) {
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
                 InfoBox.error("Recording Error", "Unable to initialize recording: " + e.getLocalizedMessage(), parentWindow);
             }
         });
@@ -347,7 +348,7 @@ public class SoundRecorder {
                 sourceLine.drain();
             } catch (LineUnavailableException | IOException | InterruptedException e) {
                 //e.printStackTrace();
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
                 InfoBox.error("Play Error", "Unable to play audio: "
                         + e.getLocalizedMessage(), parentWindow);
             }

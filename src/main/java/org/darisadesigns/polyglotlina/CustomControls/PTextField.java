@@ -20,8 +20,8 @@
 package org.darisadesigns.polyglotlina.CustomControls;
 
 import org.darisadesigns.polyglotlina.ClipboardHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.VisualStyleManager;
 import org.darisadesigns.polyglotlina.PGTUtil;
@@ -219,7 +219,7 @@ public final class PTextField extends JTextField {
                 target.paste();
                 cb.restoreClipboard();
             } catch (Exception ex) {
-                IOHandler.writeErrorLog(ex);
+                DesktopIOHandler.getInstance().writeErrorLog(ex);
                 InfoBox.error("Character Replacement Error",
                         "Clipboard threw error during character replacement process:"
                         + ex.getLocalizedMessage(), core.getRootWindow());
@@ -316,10 +316,10 @@ public final class PTextField extends JTextField {
                 super.setText(t);
             }
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Set text error", "Could not set text component: " 
                     + e.getLocalizedMessage(), core.getRootWindow());
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
         }
 
         if (isDefaultText() && !defText.isEmpty()) {

@@ -26,8 +26,8 @@ import org.darisadesigns.polyglotlina.CustomControls.PFrame;
 import org.darisadesigns.polyglotlina.CustomControls.PList;
 import org.darisadesigns.polyglotlina.CustomControls.PTableModel;
 import org.darisadesigns.polyglotlina.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.Nodes.WordClassValue;
 import org.darisadesigns.polyglotlina.Nodes.WordClass;
@@ -314,7 +314,7 @@ public final class ScrWordClasses extends PFrame {
             propId = core.getWordClassCollection().addNode(new WordClass());
             prop = (WordClass) core.getWordClassCollection().getNodeById(propId);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Property Creation Error", "Unable to create new word property: " + e.getLocalizedMessage(), core.getRootWindow());
             return;
         }
@@ -336,7 +336,7 @@ public final class ScrWordClasses extends PFrame {
         try {
             core.getWordClassCollection().deleteNodeById(prop.getId());
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Unable to Delete", "Unable to delete property: " + e.getLocalizedMessage(), core.getRootWindow());
         }
         DefaultListModel listModel = (DefaultListModel) lstProperties.getModel();
@@ -362,7 +362,7 @@ public final class ScrWordClasses extends PFrame {
         try {
             value = curProp.addValue("");
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Value Add Error", e.getLocalizedMessage(), core.getRootWindow());
             return;
         }

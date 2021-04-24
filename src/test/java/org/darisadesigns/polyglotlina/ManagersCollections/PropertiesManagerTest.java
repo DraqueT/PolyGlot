@@ -21,8 +21,8 @@ package org.darisadesigns.polyglotlina.ManagersCollections;
 
 import TestResources.DummyCore;
 import org.darisadesigns.polyglotlina.CustomControls.PAlphaMap;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
@@ -54,7 +54,7 @@ public class PropertiesManagerTest {
 
             assertEquals(expResult, result);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -70,7 +70,7 @@ public class PropertiesManagerTest {
         try {
             instance.setAlphaOrder(order);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -102,7 +102,7 @@ public class PropertiesManagerTest {
         try {
             instance.setAlphaOrder(order);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -135,7 +135,7 @@ public class PropertiesManagerTest {
         try {
             instance.setAlphaOrder(order, true);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -152,7 +152,7 @@ public class PropertiesManagerTest {
         try {
             instance.setAlphaOrder(order, true);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -185,7 +185,7 @@ public class PropertiesManagerTest {
         try {
             instance.setAlphaOrder(order, false);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -204,7 +204,7 @@ public class PropertiesManagerTest {
             String result = instance.getAlphaPlainText();
             assertEquals(expResult, result);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }

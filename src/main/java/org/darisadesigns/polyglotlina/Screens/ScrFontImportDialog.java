@@ -33,8 +33,8 @@ import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.CustomControls.PTextFieldFilter;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.PFontHandler;
 
 /**
@@ -241,7 +241,7 @@ public final class ScrFontImportDialog extends PDialog {
         } catch (IOException e) {
             InfoBox.error("IO Error", "Unable to open " + fileName + " due to: " + e.getLocalizedMessage(), core.getRootWindow());
         } catch (FontFormatException e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Font Format Error", "Unable to read " + fileName + " due to: "
                     + e.getLocalizedMessage(), this);
         }

@@ -240,14 +240,14 @@ public class PropertiesManager {
     public void setFontFromFile(String fontPath) throws IOException, FontFormatException {
         setFontCon(PFontHandler.getFontFromFile(fontPath)
                 .deriveFont(conFontStyle, (float)conFontSize), conFontStyle, (float)conFontSize);
-        cachedConFont = IOHandler.getFileByteArray(fontPath);
+        cachedConFont = core.getIOHandler().getFileByteArray(fontPath);
     }
     
     public void setLocalFontFromFile(String fontPath) throws IOException, FontFormatException {
         var font = PFontHandler.getFontFromFile(fontPath)
                 .deriveFont((float)localFontSize);
         setLocalFont(font);
-        cachedLocalFont = IOHandler.getFileByteArray(fontPath);
+        cachedLocalFont = core.getIOHandler().getFileByteArray(fontPath);
     }
 
     public void setDisableProcRegex(boolean _disableProcRegex) {
@@ -296,7 +296,7 @@ public class PropertiesManager {
             throw new Exception("PolyGlot does not currently support ttc (true type collection) caching or ligatures.");
         } else if (fontFile.exists()) {
             // set cached version
-            cachedConFont = IOHandler.getByteArrayFromFile(fontFile);
+            cachedConFont = core.getIOHandler().getByteArrayFromFile(fontFile);
             
             // load font from binary location (superior due to ligature support from binaries)
             conFont = PFontHandler.getFontFromFile(fontFile.getCanonicalPath());
@@ -868,16 +868,16 @@ public class PropertiesManager {
             if (updatedConFont != null) {
                 conFont = PFontHandler.getFontFromFile(updatedConFont.getAbsolutePath());
                 conFont = conFont.deriveFont(conFontStyle, (float)conFontSize);
-                cachedConFont = IOHandler.getByteArrayFromFile(updatedConFont);
+                cachedConFont = core.getIOHandler().getByteArrayFromFile(updatedConFont);
             }
             
             if (updatedLocalFont != null) {
                 localFont = PFontHandler.getFontFromFile(updatedLocalFont.getAbsolutePath());
                 localFont = localFont.deriveFont((float)localFontSize);
-                cachedLocalFont = IOHandler.getByteArrayFromFile(updatedLocalFont);
+                cachedLocalFont = core.getIOHandler().getByteArrayFromFile(updatedLocalFont);
             }
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
+            core.getIOHandler().writeErrorLog(e);
             throw new Exception("Unable to refresh fonts: " + e.getLocalizedMessage());
         }
     }

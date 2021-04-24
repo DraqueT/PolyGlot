@@ -21,6 +21,7 @@
 package org.darisadesigns.polyglotlina;
 
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -459,7 +460,7 @@ public final class PGTUtil {
             tmpFont = PFontHandler.getMenuFont();
         } catch (IOException e) {
             InfoBox.error("PolyGlot Load Error", "Unable to load default button font.", null);
-            IOHandler.writeErrorLog(e, "Initilization error (PGTUtil)");
+            DesktopIOHandler.getInstance().writeErrorLog(e, "Initilization error (PGTUtil)");
             tmpFont = javax.swing.UIManager.getDefaults().getFont("Label.font");
         }
         MENU_FONT = tmpFont;
@@ -468,7 +469,7 @@ public final class PGTUtil {
             tmpFont = PFontHandler.getCharisUnicodeFontInitial();
         } catch (IOException e) {
             InfoBox.error("PolyGlot Load Error", "Unable to load Charis Unicode.", null);
-            IOHandler.writeErrorLog(e, "Initilization error (PGTUtil)");
+            DesktopIOHandler.getInstance().writeErrorLog(e, "Initilization error (PGTUtil)");
             tmpFont = javax.swing.UIManager.getDefaults().getFont("Label.font");
         }
         

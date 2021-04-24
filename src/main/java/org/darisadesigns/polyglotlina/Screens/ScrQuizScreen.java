@@ -24,8 +24,8 @@ import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PFrame;
 import org.darisadesigns.polyglotlina.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.CustomControls.PRadioButton;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.QuizEngine.Quiz;
 import org.darisadesigns.polyglotlina.QuizEngine.QuizQuestion;
@@ -90,7 +90,7 @@ public final class ScrQuizScreen extends PFrame {
             setQuestion(quiz.next());
         } catch (Exception e) {
             InfoBox.error("Question Error", "Unable to move to next question: " + e.getLocalizedMessage(), this);
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
         }
     }
     
@@ -214,7 +214,7 @@ public final class ScrQuizScreen extends PFrame {
                 }
             }
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Population Error", "Problem populating question: "
                     + e.getLocalizedMessage(), core.getRootWindow());
         }

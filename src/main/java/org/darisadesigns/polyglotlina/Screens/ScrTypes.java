@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
@@ -37,7 +38,6 @@ import javax.swing.JList;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.darisadesigns.polyglotlina.CustomControls.PTextPane;
-import org.darisadesigns.polyglotlina.IOHandler;
 import java.awt.Component;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -214,7 +214,7 @@ public final class ScrTypes extends PFrame {
             lstTypes.setSelectedIndex(0);
             lstTypes.ensureIndexIsVisible(0);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Type Population Error", "Unable to populate types: "
                     + e.getLocalizedMessage(), core.getRootWindow());
         }
@@ -292,7 +292,7 @@ public final class ScrTypes extends PFrame {
         try {
             core.getTypes().insert();
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Type Creation Error", "Could not create new type: "
                     + e.getLocalizedMessage(), core.getRootWindow());
         }
@@ -323,7 +323,7 @@ public final class ScrTypes extends PFrame {
         try {
             core.getTypes().deleteNodeById(curType.getId());
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Deletion Error", "Unable to delete type." + e.getLocalizedMessage(), core.getRootWindow());
         }
         

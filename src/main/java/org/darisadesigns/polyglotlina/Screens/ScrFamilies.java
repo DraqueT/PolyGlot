@@ -28,7 +28,7 @@ import org.darisadesigns.polyglotlina.CustomControls.FamTreeNode;
 import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
 import org.darisadesigns.polyglotlina.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.CustomControls.PTree;
-import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -631,7 +631,7 @@ public final class ScrFamilies extends PFrame {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Window Error", "Unable to open families: " + e.getLocalizedMessage(), _core.getRootWindow());
         }
 
