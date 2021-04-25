@@ -25,9 +25,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationPair;
@@ -122,7 +121,7 @@ public class ExportSpellingDictionary {
                         true);
             } catch (Exception e) {
                 core.getIOHandler().writeErrorLog(e);
-                InfoBox.warning("Metadata Error", "Problem writing metadata.", null);
+                new DesktopInfoBox(null).warning("Metadata Error", "Problem writing metadata.");
             }
         }
     }

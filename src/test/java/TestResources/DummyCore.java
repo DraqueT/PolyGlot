@@ -21,9 +21,11 @@ package TestResources;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.InfoBox;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.PolyGlot;
 
@@ -32,17 +34,18 @@ import org.darisadesigns.polyglotlina.PolyGlot;
  * @author draque
  */
 public class DummyCore extends DictCore {
-    private DummyCore (PolyGlot polyGlot, IOHandler ioHandler) {
-        super(polyGlot, ioHandler);
+    private DummyCore (PolyGlot polyGlot, IOHandler ioHandler, InfoBox infoBox) {
+        super(polyGlot, ioHandler, infoBox);
     }
     
     public static DummyCore newCore() {
         try {
-            Constructor constructor = PolyGlot.class.getDeclaredConstructor(new Class[]{String.class});
+            InfoBox infoBox = new DesktopInfoBox(null);
+            Constructor constructor = PolyGlot.class.getDeclaredConstructor(new Class[]{String.class, InfoBox.class});
             constructor.setAccessible(true);
-            PolyGlot polyGlot = (PolyGlot)constructor.newInstance(PGTUtil.TESTRESOURCES);
+            PolyGlot polyGlot = (PolyGlot)constructor.newInstance(PGTUtil.TESTRESOURCES, infoBox);
             
-            return new DummyCore(polyGlot, DesktopIOHandler.getInstance());
+            return new DummyCore(polyGlot, DesktopIOHandler.getInstance(), infoBox);
         } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
             System.err.println("Something's gone wrong with the Dummy Core generation: " + e.getLocalizedMessage());
         }

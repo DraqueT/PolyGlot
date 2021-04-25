@@ -19,7 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
 import org.darisadesigns.polyglotlina.CustomControls.PDeclensionGridPanel;
 import org.darisadesigns.polyglotlina.CustomControls.PDeclensionListPanel;
@@ -97,17 +97,16 @@ public final class ScrDeclensionsGrids extends PDialog {
         ConjugationManager decMan = core.getConjugationManager();
         
         if (typeId == 0) {
-            InfoBox.info("Missing Part of Speech", 
-                    "Word must have a part of Speech set and the part of speech must have declensions defined before using this feature.", 
-                    core.getPolyGlot().getRootWindow());
+            core.getInfoBox().info("Missing Part of Speech", 
+                    "Word must have a part of Speech set and the part of speech must have declensions defined before using this feature.");
             ret = false;
         } else if ((decMan.getDimensionalConjugationListTemplate(typeId) == null
                     || decMan.getDimensionalConjugationListTemplate(typeId).length == 0)
                 && decMan.getDimensionalConjugationListWord(word.getId()).length == 0
                 && decMan.getSingletonCombinedIds(typeId).length == 0) {
-            InfoBox.info("Declensions", "No declensions for part of speech: " + word.getWordTypeDisplay()
+            core.getInfoBox().info("Declensions", "No declensions for part of speech: " + word.getWordTypeDisplay()
                     + " set. Declensions can be created per part of speech under the Part of Speech menu by clicking the "
-                            + "Declensions button.", core.getPolyGlot().getRootWindow());
+                            + "Declensions button.");
             ret = false;
         }
         
@@ -164,7 +163,7 @@ public final class ScrDeclensionsGrids extends PDialog {
         // only renders as dimensional if there are at least two dimensional declensions. Renders as list otherwise.
         if (shouldRenderDimensional()) {
             if (dimX == dimY) {
-                    InfoBox.warning("Dimension Selection", "Please select differing Row and Column values.", this);
+                    new DesktopInfoBox(this).warning("Dimension Selection", "Please select differing Row and Column values.");
             }
             else {
                 // get all partial dim ID patterns (sans X & Y dims)/feed to grid panel class
@@ -273,7 +272,7 @@ public final class ScrDeclensionsGrids extends PDialog {
             super.dispose();
         } else {
             if (!closeWithoutSave && chkAutogenOverride.isSelected()) {
-                int userChoice = InfoBox.yesNoCancel("Save Confirmation", "Save changes?", this);
+                int userChoice = new DesktopInfoBox(this).yesNoCancel("Save Confirmation", "Save changes?");
 
                 // yes = save, no = don't save, any other choice = cancel & do not exit
                 if (userChoice == JOptionPane.YES_OPTION) {

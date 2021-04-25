@@ -21,7 +21,7 @@ package org.darisadesigns.polyglotlina.Screens;
 
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.ExternalCode.JFontChooser;
 import org.darisadesigns.polyglotlina.CustomControls.PTextField;
@@ -258,15 +258,15 @@ public class ScrLangProps extends PFrame {
             boolean synced = core.getPropertiesManager().syncCachedFontCon();
 
             if (!synced) {
-                InfoBox.warning("Font Not Cached",
+                core.getInfoBox().warning("Font Not Cached",
                         "Unable to locate physical font file. If your font uses ligatures, they may not appear correctly.\n"
-                        + "To address this, please load your font manually via Tools->Import Font", core.getPolyGlot().getRootWindow());
+                        + "To address this, please load your font manually via Tools->Import Font");
             }
         }
         catch (Exception e) {
-            InfoBox.error("Font Caching Error",
+            core.getInfoBox().error("Font Caching Error",
                     "Unable to locate physical font file. If your font uses ligatures, they may not appear correctly.\n"
-                    + "To address this, please load your font manually via Tools->Import Font\n\nError: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+                    + "To address this, please load your font manually via Tools->Import Font\n\nError: " + e.getLocalizedMessage());
         }
 
         testRTLWarning();
@@ -291,9 +291,9 @@ public class ScrLangProps extends PFrame {
         if (core.getPropertiesManager().isEnforceRTL()
                 && (conFont == null
                 || conFont.getFamily().equals(stdFont.getFamily()))) {
-            InfoBox.warning("RTL Font Warning", "Enforcing RTL with default font"
+            core.getInfoBox().warning("RTL Font Warning", "Enforcing RTL with default font"
                     + " is not recommended. For best results, please set distinct"
-                    + " conlang font.", core.getPolyGlot().getRootWindow());
+                    + " conlang font.");
         }
     }
 
@@ -318,10 +318,10 @@ public class ScrLangProps extends PFrame {
     private void checkAlphaContainsRegexCharacters() {
         String test = txtAlphaOrder.getText();
         if (test.matches(".*(\\[|\\]|\\{|\\}|\\\\|\\^|\\$|\\.|\\||\\?|\\*|\\+|\\(|\\)).*")) {
-            InfoBox.warning("Character Warning", "Some of the characters defined in your alphabetic order are used \n"
+            new DesktopInfoBox(this).warning("Character Warning", "Some of the characters defined in your alphabetic order are used \n"
                     + "in regular expressions. If you are planning on autogenerating pronunciations or \n"
                     + "conjugations/declensions, please consider using alternate characters from these:\n\n"
-                    + "[ ] \\ ^ $ . | ? * + ( ) { }", this);
+                    + "[ ] \\ ^ $ . | ? * + ( ) { }");
         }
     }
 
@@ -667,7 +667,7 @@ public class ScrLangProps extends PFrame {
             txtAlphaOrder.setFont(core.getPropertiesManager().getFontCon());
         }
         catch (Exception e) {
-            InfoBox.error("Font Refresh Failed", e.getLocalizedMessage(), this);
+            new DesktopInfoBox(this).error("Font Refresh Failed", e.getLocalizedMessage());
             DesktopIOHandler.getInstance().writeErrorLog(e, "Top level exception caught here. See prior exception.");
         }
 
@@ -676,9 +676,8 @@ public class ScrLangProps extends PFrame {
 
     private void chkIgnoreCaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkIgnoreCaseActionPerformed
         if (chkIgnoreCase.isSelected()) {
-            InfoBox.warning("Ignore Case Warning",
-                    "This feature does not work with all charactrers, and can disrupt regex features. Please use with caution.",
-                    core.getPolyGlot().getRootWindow());
+            core.getInfoBox().warning("Ignore Case Warning",
+                    "This feature does not work with all charactrers, and can disrupt regex features. Please use with caution.");
         }
     }//GEN-LAST:event_chkIgnoreCaseActionPerformed
 
@@ -687,8 +686,8 @@ public class ScrLangProps extends PFrame {
         if (chkDisableProcRegex.isSelected()
                 && (core.getPronunciationMgr().isRecurse()
                 || core.getRomManager().isRecurse())) {
-            if (InfoBox.actionConfirmation("Disable Regex?", "You have recursion enabled in the Phonology section. "
-                    + "If you disable regex, this will also be disabled. Continue?", this)) {
+            if (new DesktopInfoBox(this).actionConfirmation("Disable Regex?", "You have recursion enabled in the Phonology section. "
+                    + "If you disable regex, this will also be disabled. Continue?")) {
                 core.getPronunciationMgr().setRecurse(false);
                 core.getRomManager().setRecurse(false);
             } else {

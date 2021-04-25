@@ -82,8 +82,8 @@ public class PGrammarPane extends JTextPane {
                 }
             } catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.error("Image Import Error", "Unable to import image: "
-                        + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+                core.getInfoBox().error("Image Import Error", "Unable to import image: "
+                        + e.getLocalizedMessage());
             }
         });
         cut.addActionListener((ActionEvent ae) -> {
@@ -152,8 +152,8 @@ public class PGrammarPane extends JTextPane {
             cb.restoreClipboard();
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Rendering Error", "Tab rendering error: " 
-                    + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Rendering Error", "Tab rendering error: " 
+                    + e.getLocalizedMessage());
         }
     }
 
@@ -167,8 +167,8 @@ public class PGrammarPane extends JTextPane {
             inputAttributes.removeAttributes(inputAttributes);
         } catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Image Insertion Error", "Unable to insert image: "
-                    + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Image Insertion Error", "Unable to insert image: "
+                    + e.getLocalizedMessage());
         }
     }
 
@@ -200,7 +200,7 @@ public class PGrammarPane extends JTextPane {
                 }
             } catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.error("Paste Error", "Unable to paste: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+                core.getInfoBox().error("Paste Error", "Unable to paste: " + e.getLocalizedMessage());
             }
         } else if (ClipboardHandler.isClipboardString()) {
             try {
@@ -212,7 +212,7 @@ public class PGrammarPane extends JTextPane {
                 super.paste();
             } catch (UnsupportedFlavorException | IOException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.error("Paste Error", "Unable to paste text: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+                core.getInfoBox().error("Paste Error", "Unable to paste text: " + e.getLocalizedMessage());
             }
         } else {
             super.paste();

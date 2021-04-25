@@ -19,7 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
@@ -203,9 +203,9 @@ public final class ScrEtymRoots extends PDialog {
     private void addNewExtParent(PTextField[] values) {
         if (values.length > 0) { // empty set means user clicked cancel
             if (values.length != 3) {
-                InfoBox.error("Wrong number number of values", "Wrong number of values provided to create external parent.", this);
+                new DesktopInfoBox(this).error("Wrong number number of values", "Wrong number of values provided to create external parent.");
             } else if (values[0].getText().isEmpty()) {
-                InfoBox.error("Blank word not allowed", "At minimum, a value for the external parent's word must be provided.", this);
+                new DesktopInfoBox(this).error("Blank word not allowed", "At minimum, a value for the external parent's word must be provided.");
             } else {
                 EtyExternalParent newParent = new EtyExternalParent();
                 newParent.setValue(values[0].getText());
@@ -301,7 +301,7 @@ public final class ScrEtymRoots extends PDialog {
             core.getEtymologyManager().addRelation(parentId, childId);
         } catch (EtymologyManager.IllegalLoopException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Illegal Loop: Parent not Added", e.getLocalizedMessage(), this);
+            new DesktopInfoBox(this).error("Illegal Loop: Parent not Added", e.getLocalizedMessage());
         }
     }
 

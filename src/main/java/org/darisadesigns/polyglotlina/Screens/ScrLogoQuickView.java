@@ -21,7 +21,6 @@ package org.darisadesigns.polyglotlina.Screens;
 
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.Nodes.LogoNode;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PFrame;
@@ -250,9 +249,8 @@ public final class ScrLogoQuickView extends PFrame {
     private void addLogo() {
         if (logoFinder != null && !logoFinder.isDisposed()
                 && logoFinder.getMode() == WindowMode.SINGLEVALUE) {
-            InfoBox.info("Action currently unavailable.",
-                    "Please close Logograph Details/Modification window before adding logographs.",
-                    core.getPolyGlot().getRootWindow());
+            core.getInfoBox().info("Action currently unavailable.",
+                    "Please close Logograph Details/Modification window before adding logographs.");
 
             return;
         }

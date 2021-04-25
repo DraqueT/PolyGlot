@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
@@ -78,7 +77,7 @@ public class CheckLanguageErrors {
         }
         catch (InterruptedException e) {
             core.getIOHandler().writeErrorLog(e);
-            InfoBox.error("Thread Error", "Language validation thread error: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Thread Error", "Language validation thread error: " + e.getLocalizedMessage());
         }
 
         Collections.sort(problems);
@@ -86,7 +85,7 @@ public class CheckLanguageErrors {
         if (!problems.isEmpty() && display) {
             new ScrLanguageProblemDisplay(problems, core).setVisible(true);
         } else if (display) {
-            InfoBox.info("Lexicon Check Results", "No problems found in language file!", core.getPolyGlot().getRootWindow());
+            core.getInfoBox().info("Lexicon Check Results", "No problems found in language file!");
         }
 
         return problems.toArray(new LexiconProblemNode[0]);

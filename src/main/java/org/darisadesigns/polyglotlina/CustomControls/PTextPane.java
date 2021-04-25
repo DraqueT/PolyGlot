@@ -106,7 +106,7 @@ public final class PTextPane extends JTextPane {
                 super.paste();
             } catch (UnsupportedFlavorException | IOException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.error("Paste Error", "Unable to paste text: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+                core.getInfoBox().error("Paste Error", "Unable to paste text: " + e.getLocalizedMessage());
             }
         } else if (ClipboardHandler.isClipboardImage() && !disableMedia) {
             try {
@@ -123,7 +123,7 @@ public final class PTextPane extends JTextPane {
                     bGr.drawImage(imageObject, 0, 0, null);
                     bGr.dispose();
                 } else {
-                    InfoBox.error("Paste Error", "Unable to paste image. Object is null.", null);
+                    new DesktopInfoBox(null).error("Paste Error", "Unable to paste image. Object is null.");
                 }
                 
                 if (image != null) {
@@ -132,7 +132,7 @@ public final class PTextPane extends JTextPane {
                 }
             } catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.error("Paste Error", "Unable to paste: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+                core.getInfoBox().error("Paste Error", "Unable to paste: " + e.getLocalizedMessage());
             }
         } else {
             super.paste();
@@ -149,7 +149,7 @@ public final class PTextPane extends JTextPane {
             }
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Set text error", "Could not set text component: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Set text error", "Could not set text component: " + e.getLocalizedMessage());
         }
 
         if (isDefaultText() && !defText.isBlank()) {
@@ -220,8 +220,8 @@ public final class PTextPane extends JTextPane {
                 }
             } catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.error("Image Import Error", "Unable to import image: "
-                        + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+                core.getInfoBox().error("Image Import Error", "Unable to import image: "
+                        + e.getLocalizedMessage());
             }
         });
         cut.addActionListener((ActionEvent ae) -> {
@@ -385,9 +385,9 @@ public final class PTextPane extends JTextPane {
                             cb.restoreClipboard();
                         } catch (Exception ex) {
                             DesktopIOHandler.getInstance().writeErrorLog(ex);
-                            InfoBox.error("Character Replacement Error",
+                            core.getInfoBox().error("Character Replacement Error",
                                     "Clipboard threw error during character replacement process:"
-                                    + ex.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+                                    + ex.getLocalizedMessage());
                         }
                     }
                 }

@@ -39,7 +39,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.jsoup.Jsoup;
 
@@ -235,8 +235,8 @@ public final class WebInterface {
             }
             catch (URISyntaxException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
-                        + url + "\n(copied to your clipboard for convenience)", null);
+                new DesktopInfoBox(null).warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
+                        + url + "\n(copied to your clipboard for convenience)");
                 new ClipboardHandler().setClipboardContents(url);
             }
         } else if (PGTUtil.IS_OSX) {
@@ -246,8 +246,8 @@ public final class WebInterface {
             Runtime runtime = Runtime.getRuntime();
             runtime.exec("xdg-open " + url);
         } else {
-            InfoBox.warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
-                    + url + "\n(copied to your clipboard for convenience)", null);
+            new DesktopInfoBox(null).warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
+                    + url + "\n(copied to your clipboard for convenience)");
             new ClipboardHandler().setClipboardContents(url);
         }
     }

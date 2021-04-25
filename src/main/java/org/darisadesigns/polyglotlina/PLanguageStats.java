@@ -21,7 +21,6 @@ package org.darisadesigns.polyglotlina;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import static org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection.formatCon;
 import static org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection.formatPlain;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
@@ -95,7 +94,7 @@ public final class PLanguageStats {
         }
         catch (InterruptedException e) {
             core.getIOHandler().writeErrorLog(e);
-            InfoBox.error("Language Stat Error", "Unable to generate language statistics: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Language Stat Error", "Unable to generate language statistics: " + e.getLocalizedMessage());
         }
 
         return ret[0];

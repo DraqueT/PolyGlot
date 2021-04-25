@@ -22,7 +22,7 @@ package org.darisadesigns.polyglotlina;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 
 /**
@@ -54,7 +54,7 @@ public class HelpHandler {
         }
         catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Help File Error", "Unable to open help file.", null);
+            new DesktopInfoBox(null).error("Help File Error", "Unable to open help file.");
         }
     }
 
@@ -67,8 +67,8 @@ public class HelpHandler {
         } else if (PGTUtil.IS_LINUX) {
             Desktop.getDesktop().open(readmeFile);
         } else {
-            InfoBox.warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
-                    + "http://draquet.github.io/PolyGlot/readme.html\n(copied to clipboard for convenience)", null);
+            new DesktopInfoBox(null).warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
+                    + "http://draquet.github.io/PolyGlot/readme.html\n(copied to clipboard for convenience)");
             new ClipboardHandler().setClipboardContents("http://draquet.github.io/PolyGlot/readme.html");
         }
     }

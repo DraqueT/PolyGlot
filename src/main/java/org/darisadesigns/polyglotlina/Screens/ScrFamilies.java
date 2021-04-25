@@ -21,7 +21,7 @@ package org.darisadesigns.polyglotlina.Screens;
 
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PFrame;
 import org.darisadesigns.polyglotlina.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.CustomControls.FamTreeNode;
@@ -180,7 +180,7 @@ public final class ScrFamilies extends PFrame {
             return;
         }
 
-        if (!InfoBox.deletionConfirmation(core.getPolyGlot().getRootWindow())) {
+        if (!core.getInfoBox().deletionConfirmation()) {
             return;
         }
 
@@ -213,7 +213,7 @@ public final class ScrFamilies extends PFrame {
      */
     private void removeWord() {
         if (chkInclSubFam.isSelected()) {
-            InfoBox.info("Alert", "Words may only be removed when \"Include Subfamilies\" box is unchecked.", this);
+            new DesktopInfoBox(this).info("Alert", "Words may only be removed when \"Include Subfamilies\" box is unchecked.");
             return;
         }
 
@@ -632,7 +632,7 @@ public final class ScrFamilies extends PFrame {
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Window Error", "Unable to open families: " + e.getLocalizedMessage(), _core.getPolyGlot().getRootWindow());
+            _core.getInfoBox().error("Window Error", "Unable to open families: " + e.getLocalizedMessage());
         }
 
         // set the leaf icon to be a folder, since all nodes are for containing words

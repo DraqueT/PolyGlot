@@ -23,7 +23,6 @@ import org.darisadesigns.polyglotlina.Nodes.ConjugationGenRule;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationGenTransform;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationPair;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.CustomControls.PTextField;
@@ -186,7 +185,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         }
 
         if (!ret) {
-            InfoBox.error("Unable to Close With Error", userMessage, parent);
+            core.getInfoBox().error("Unable to Close With Error", userMessage);
         }
 
         return ret;
@@ -606,7 +605,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         
         message += "\nto all word forms for this part of speech with the " + decLabel + " value of " + decDimLabel + ". Continue?";
         
-        return InfoBox.actionConfirmation("Confirm Rule Copy", message, parent);
+        return core.getInfoBox().actionConfirmation("Confirm Rule Copy", message);
     }
     
     public boolean verifyDeleteRulesToDimension(int decId, int dimId, List<ConjugationGenRule> rules) {
@@ -620,7 +619,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         
         message += "\nfrom all word forms for this part of speech with the " + decLabel + " value of " + decDimLabel + ". Continue?";
         
-        return InfoBox.actionConfirmation("Confirm Rule Copy", message, parent);
+        return core.getInfoBox().actionConfirmation("Confirm Rule Copy", message);
     }
     
     public boolean verifyBulkDeleteRule(List<ConjugationGenRule> rules) {
@@ -632,7 +631,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         
         message += "Continue?";
         
-        return InfoBox.actionConfirmation("Confirm Rule Copy", message, parent);
+        return core.getInfoBox().actionConfirmation("Confirm Rule Copy", message);
     }
     
     /**
@@ -790,7 +789,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
      * deletes currently selected rule
      */
     private void deleteRule() {
-        if (!InfoBox.deletionConfirmation(parent)) {
+        if (!core.getInfoBox().deletionConfirmation()) {
             return;
         }
 
@@ -823,7 +822,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
      * deletes currently selected transform from currently selected rule
      */
     private void deleteTransform() {
-        if (!InfoBox.deletionConfirmation(parent)) {
+        if (!core.getInfoBox().deletionConfirmation()) {
             return;
         }
 

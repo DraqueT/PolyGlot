@@ -19,7 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PFrame;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
@@ -335,7 +335,7 @@ public final class ScrIPARefChart extends PFrame {
             txtIPAChars.setText((curText.isEmpty() ? "" : curText + " ") + ipaChar);
         } catch(Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("IPA Error", e.getLocalizedMessage(), this);
+            new DesktopInfoBox(this).error("IPA Error", e.getLocalizedMessage());
         }
     }//GEN-LAST:event_lblOtherSymbolsMouseClicked
 
@@ -355,7 +355,7 @@ public final class ScrIPARefChart extends PFrame {
             txtIPAChars.setText(text);
         } catch(Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("IPA Error", e.getLocalizedMessage(), this);
+            new DesktopInfoBox(this).error("IPA Error", e.getLocalizedMessage());
         }
     }//GEN-LAST:event_lblVowelsMouseClicked
 
@@ -369,7 +369,7 @@ public final class ScrIPARefChart extends PFrame {
             txtIPAChars.setText((curText.isEmpty() || ipaChar.isEmpty() ? "" : curText + " ") + ipaChar);
         } catch(Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("IPA Error", e.getLocalizedMessage(), this);
+            new DesktopInfoBox(this).error("IPA Error", e.getLocalizedMessage());
         }
     }//GEN-LAST:event_lblPulmonicConsonantsMouseClicked
 
@@ -389,7 +389,7 @@ public final class ScrIPARefChart extends PFrame {
             txtIPAChars.setText((curText.isEmpty() ? "" : curText + " ") + ipaChar);
         } catch(Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("IPA Error", e.getLocalizedMessage(), this);
+            new DesktopInfoBox(this).error("IPA Error", e.getLocalizedMessage());
         }
     }//GEN-LAST:event_lblNonPulmonicConsonantsMouseClicked
     

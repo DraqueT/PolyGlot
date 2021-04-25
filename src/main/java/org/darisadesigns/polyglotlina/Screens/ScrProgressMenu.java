@@ -20,7 +20,7 @@
 package org.darisadesigns.polyglotlina.Screens;
 
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import javax.swing.SwingUtilities;
 
 /**
@@ -100,7 +100,7 @@ public final class ScrProgressMenu extends javax.swing.JDialog {
                     updateProcess();
                 } catch (InterruptedException e) {
                     DesktopIOHandler.getInstance().writeErrorLog(e);
-                    InfoBox.error("Progress Error", "Error in progress bar: " + e.getLocalizedMessage(), null);
+                    new DesktopInfoBox(null).error("Progress Error", "Error in progress bar: " + e.getLocalizedMessage());
                     dispose();
                 }
             }

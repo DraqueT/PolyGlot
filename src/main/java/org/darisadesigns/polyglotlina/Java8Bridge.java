@@ -30,7 +30,7 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 
 /**
@@ -118,8 +118,8 @@ public final class Java8Bridge {
         }
         
         if (!warningString.isBlank()) {
-            InfoBox.warning("PDF Print Warnings", 
-                    "The following warnings were generated in the print process:\n" + warningString, null);
+            new DesktopInfoBox(null).warning("PDF Print Warnings", 
+                    "The following warnings were generated in the print process:\n" + warningString);
         }
         
         if (!new File(target).exists()) {

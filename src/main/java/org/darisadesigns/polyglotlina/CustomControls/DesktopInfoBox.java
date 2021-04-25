@@ -33,10 +33,12 @@ import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.DEFAULT_OPTION;
 
 import javax.swing.UIManager;
+import org.darisadesigns.polyglotlina.InfoBox;
 import org.darisadesigns.polyglotlina.PGTUtil;
 
-public class InfoBox extends JFrame {
+public class DesktopInfoBox extends JFrame implements InfoBox {
 
+    private Window parent;
     private final Icon optionIcon = UIManager.getIcon("FileView.computerIcon");
     private static final PButton YES;
     private static final PButton NO;
@@ -119,42 +121,55 @@ public class InfoBox extends JFrame {
             pane.setValue(JOptionPane.CANCEL_OPTION);
         });
     }
-
-    public static void info(String title, String message, Window parent) {
-        new InfoBox().doInfo(title, message, parent);
+    
+    public DesktopInfoBox(Window _parent) {
+        super();
+        parent = _parent;
+    }
+    
+    public void setParent(Window _parent) {
+        parent = _parent;
+    }
+    
+    @Override
+    public void info(String title, String message) {
+        this.doInfo(title, message);
     }
 
-    public static void error(String title, String message, Window parent) {
-        new InfoBox().doError(title, message, parent);
+    @Override
+    public void error(String title, String message) {
+        this.doError(title, message);
     }
 
-    public static void warning(String title, String message, Window parent) {
-        new InfoBox().doWarning(title, message, parent);
+    @Override
+    public void warning(String title, String message) {
+        this.doWarning(title, message);
     }
 
-    public static Integer yesNoCancel(String title, String message, Window parent) {
-        return new InfoBox().doYesNoCancel(title, message, parent);
+    @Override
+    public Integer yesNoCancel(String title, String message) {
+        return this.doYesNoCancel(title, message);
     }
 
+    @Override
     /**
      * Displays confirmation to user for deletion of element
      *
-     * @param parent parent caller
      * @return true if chooser accepts, false otherwise
      */
-    public static boolean deletionConfirmation(Window parent) {
-        return actionConfirmation("Delete Confirmation", "Delete Entry? Cannot be undone.", parent);
+    public boolean deletionConfirmation() {
+        return this.actionConfirmation("Delete Confirmation", "Delete Entry? Cannot be undone.");
     }
     
+    @Override
     /**
      * Displays confirmation of user action
      *
      * @param title title of query message
      * @param message shown to user
-     * @param parent parent caller
      * @return true if chooser accepts, false otherwise
      */
-    public static boolean actionConfirmation(String title, String message, Window parent) {
+    public boolean actionConfirmation(String title, String message) {
         PButton[] buttons = {YES, NO};
         int option = POptionPane.internalShowOptionDialog(parent,
                 message,
@@ -168,26 +183,26 @@ public class InfoBox extends JFrame {
         return option == JOptionPane.YES_OPTION;
     }
     
+    @Override
     /**
      * Wraps JOptionPane dialog mostly for neatness/standardization
      * @param title title of query window
      * @param message message on window given to user
-     * @param parent owner of dialog
      * @return string value if input, null if cancel hit
      */
-    public static String stringInputDialog(String title, String message, Window parent) {
+    public String stringInputDialog(String title, String message) {
         return JOptionPane.showInputDialog(parent, message, title, JOptionPane.INFORMATION_MESSAGE);
     }
     
+    @Override
     /**
      * Collects double value form user.Will re-call self if non-double value given.
      * @param title title of query window
      * @param message message on window given to user
      * @param warningMessage Warning message to show if user inputs wrong value (blank for default)
-     * @param parent owner of dialog
      * @return double value if input, null if cancel hit
      */
-    public static Double doubleInputDialog(String title, String message, String warningMessage, Window parent) {
+    public Double doubleInputDialog(String title, String message, String warningMessage) {
         Double ret = null;
         
         String inputString = JOptionPane.showInputDialog(parent, message, title, JOptionPane.INFORMATION_MESSAGE);
@@ -197,15 +212,15 @@ public class InfoBox extends JFrame {
                 ret = Double.parseDouble(inputString);
             } catch (HeadlessException | NumberFormatException e) {
                 warningMessage = warningMessage.isEmpty() ? "Please input numeric value." : warningMessage;
-                warning("Incorrect Input", warningMessage, parent);
-                ret = doubleInputDialog(title, message, warningMessage, parent);
+                warning("Incorrect Input", warningMessage);
+                ret = doubleInputDialog(title, message, warningMessage);
             }
         }
         
         return ret;
     }
 
-    private Integer doYesNoCancel(String title, String message, Window parent) {
+    private Integer doYesNoCancel(String title, String message) {
         int ret;
         PButton[] option = {YES, NO, CANCEL};
 
@@ -221,7 +236,7 @@ public class InfoBox extends JFrame {
         return ret;
     }
 
-    private void doError(String title, String message, Window parent) {
+    private void doError(String title, String message) {
         if (!PGTUtil.isForceSuppressDialogs()) {
             Object[] option = {OK};        
             POptionPane.internalShowOptionDialog(parent, message, title, DEFAULT_OPTION,
@@ -229,7 +244,7 @@ public class InfoBox extends JFrame {
         }
     }
 
-    private void doWarning(String title, String message, Window parent) {
+    private void doWarning(String title, String message) {
         if (!PGTUtil.isForceSuppressDialogs()) {
             Object[] option = {OK};
             POptionPane.internalShowOptionDialog(parent, message, title, DEFAULT_OPTION,
@@ -237,7 +252,7 @@ public class InfoBox extends JFrame {
         }
     }
 
-    private void doInfo(String title, String message, Window parent) {
+    private void doInfo(String title, String message) {
         Object[] option = {OK};        
         POptionPane.internalShowOptionDialog(parent, message, title, DEFAULT_OPTION,
                          JOptionPane.INFORMATION_MESSAGE, null, option, null);

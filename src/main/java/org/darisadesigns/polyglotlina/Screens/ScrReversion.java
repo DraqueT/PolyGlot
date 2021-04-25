@@ -20,7 +20,7 @@
 package org.darisadesigns.polyglotlina.Screens;
 
 import java.io.IOException;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
@@ -108,16 +108,16 @@ public final class ScrReversion extends PDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         ReversionNode reversion = lstReversions.getSelectedValue();
         
-        if (reversion != null && InfoBox.actionConfirmation("Confirm Revert", "This action will revert to the state of "
-                + "this language " + reversion.toString() + ".\n Are you sure you would like to continue?", this)) {
+        if (reversion != null && new DesktopInfoBox(this).actionConfirmation("Confirm Revert", "This action will revert to the state of "
+                + "this language " + reversion.toString() + ".\n Are you sure you would like to continue?")) {
             try {
                 core.revertToState(reversion.getValue(), core.getCurFileName());
-                InfoBox.info("Successful Reversion", "Reversion Successful!", this);
+                new DesktopInfoBox(this).info("Successful Reversion", "Reversion Successful!");
                 this.dispose();
             } catch (IOException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.error("Unable to Revert", "Unable to revert to prior version: " 
-                        + e.getLocalizedMessage(), this);
+                new DesktopInfoBox(this).error("Unable to Revert", "Unable to revert to prior version: " 
+                        + e.getLocalizedMessage());
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed

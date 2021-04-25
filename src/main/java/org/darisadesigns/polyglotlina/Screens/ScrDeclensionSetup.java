@@ -22,7 +22,7 @@ package org.darisadesigns.polyglotlina.Screens;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationDimension;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationNode;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.CustomControls.PCellEditor;
@@ -30,7 +30,6 @@ import org.darisadesigns.polyglotlina.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.CustomControls.PList;
 import org.darisadesigns.polyglotlina.CustomControls.PTable;
 import org.darisadesigns.polyglotlina.CustomControls.PTextField;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import java.awt.Cursor;
@@ -91,9 +90,9 @@ public final class ScrDeclensionSetup extends PDialog {
             btnClearDep.setToolTipText(btnClearDep.getToolTipText() + myType.getValue());
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Part of Speech Error",
+            _core.getInfoBox().error("Part of Speech Error",
                     "Part of Speech not found, unable to open declensions for type with id: "
-                    + _typeId + " " + e.getMessage(), core.getPolyGlot().getRootWindow());
+                    + _typeId + " " + e.getMessage());
             this.dispose();
         }
 
@@ -130,9 +129,9 @@ public final class ScrDeclensionSetup extends PDialog {
 
         for (ConjugationNode curDec : decNodes) {
             if (curDec.getDimensions().isEmpty()) {
-                InfoBox.error("Illegal Declension", "Declension \'" 
+                new DesktopInfoBox(this).error("Illegal Declension", "Declension \'" 
                         + curDec.getValue() 
-                        + "\' must have at least one dimension.", this);
+                        + "\' must have at least one dimension.");
                 return false;
             }
         }
@@ -310,8 +309,8 @@ public final class ScrDeclensionSetup extends PDialog {
         
         chkNonDimensional.addActionListener((ActionEvent e) -> {
             if (chkNonDimensional.isSelected()) {
-                if (!InfoBox.actionConfirmation("Are you sure?", "Are you sure you wish to make this dimensionless?\n"
-                        + "The dimensions for this declension/conjugation will be erased permanently.", this)) {
+                if (!new DesktopInfoBox(this).actionConfirmation("Are you sure?", "Are you sure you wish to make this dimensionless?\n"
+                        + "The dimensions for this declension/conjugation will be erased permanently.")) {
                     chkNonDimensional.setSelected(false);
                 }                
             }
@@ -358,8 +357,8 @@ public final class ScrDeclensionSetup extends PDialog {
             });
         } catch (ClassCastException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Error Copying Conjugations", "Unable to copy conjugations: " 
-                    + e.getLocalizedMessage(), this);
+            new DesktopInfoBox(this).error("Error Copying Conjugations", "Unable to copy conjugations: " 
+                    + e.getLocalizedMessage());
         }
         
         saveDimension();
@@ -385,7 +384,7 @@ public final class ScrDeclensionSetup extends PDialog {
      * deletes selected dimension row, if one is selected
      */
     private void delDimension() {
-        if (!InfoBox.deletionConfirmation(this)) {
+        if (!new DesktopInfoBox(this).deletionConfirmation()) {
             return;
         }
 
@@ -505,9 +504,8 @@ public final class ScrDeclensionSetup extends PDialog {
     private boolean confirmDeprecate() {
         boolean ret = false;
 
-        if (InfoBox.yesNoCancel("Confirm action", "This action will deprecate all currently filled out \n"
-                + " declensions/conjugations (they won't be lost, but set to a deprecated\nstatus). Continue?", 
-                this) == JOptionPane.YES_OPTION) {
+        if (new DesktopInfoBox(this).yesNoCancel("Confirm action", "This action will deprecate all currently filled out \n"
+                + " declensions/conjugations (they won't be lost, but set to a deprecated\nstatus). Continue?") == JOptionPane.YES_OPTION) {
             ret = true;
         }
 
@@ -772,9 +770,9 @@ public final class ScrDeclensionSetup extends PDialog {
     }//GEN-LAST:event_btnOKActionPerformed
 
     private void btnClearDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearDepActionPerformed
-        if (InfoBox.yesNoCancel("Wipe All Deprecated Declensions?", 
+        if (new DesktopInfoBox(this).yesNoCancel("Wipe All Deprecated Declensions?", 
                 "Are you sure? This cannot be undone, and will delete the values of all deprecated declensions of the type: "
-                + myType.getValue() + ".", this) == JOptionPane.YES_OPTION) {
+                + myType.getValue() + ".") == JOptionPane.YES_OPTION) {
             core.getWordCollection().clearDeprecatedDeclensions(myType.getId());
         }
     }//GEN-LAST:event_btnClearDepActionPerformed
@@ -870,8 +868,8 @@ public final class ScrDeclensionSetup extends PDialog {
                 curDec = core.getConjugationManager().getConjugationTemplate(myType.getId(), decId);
             } catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.error("Declension Population Error", "Unable to populate declension.\n\n"
-                        + e.getMessage(), this);
+                new DesktopInfoBox(this).error("Declension Population Error", "Unable to populate declension.\n\n"
+                        + e.getMessage());
                 curPopulating = populatingLocal;
                 return;
             }
@@ -962,8 +960,8 @@ public final class ScrDeclensionSetup extends PDialog {
             core.getConjugationManager().deleteConjugationFromTemplate(myType.getId(), scrToCoreDeclensions.get(curIndex));
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Declension Deletion Error", "Unable to delete Declension: "
-                    + lstDeclensionList.getSelectedValue() + "\n\n" + e.getMessage(), this);
+            new DesktopInfoBox(this).error("Declension Deletion Error", "Unable to delete Declension: "
+                    + lstDeclensionList.getSelectedValue() + "\n\n" + e.getMessage());
         }
 
         if (curIndex > 0) {
@@ -1021,8 +1019,8 @@ public final class ScrDeclensionSetup extends PDialog {
             }
         } catch (ClassCastException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Declension Creation Error", "Unable to create Declension "
-                    + txtDeclensionName.getText() + "\n\n" + e.getMessage(), this);
+            new DesktopInfoBox(this).error("Declension Creation Error", "Unable to create Declension "
+                    + txtDeclensionName.getText() + "\n\n" + e.getMessage());
         }
 
         setIsActiveDimensions();

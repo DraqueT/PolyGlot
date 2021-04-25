@@ -21,7 +21,7 @@ package org.darisadesigns.polyglotlina.Screens;
 
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.ImportFileHelper;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
 import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
@@ -437,7 +437,7 @@ public class ScrExcelImport extends PDialog {
         File file = new File(txtFileName.getText());
 
         if (!file.exists()) {
-            InfoBox.error("File Error", "File does not exist: " + txtFileName.getText(), core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("File Error", "File does not exist: " + txtFileName.getText());
             return;
         }
         try {
@@ -467,7 +467,7 @@ public class ScrExcelImport extends PDialog {
 
             if (parent != null) {
                 parent.updateAllValues(core);
-                InfoBox.info("Success!", txtFileName.getText() + " imported successfully!", this);
+                new DesktopInfoBox(this).info("Success!", txtFileName.getText() + " imported successfully!");
 
                 // if everything has completed without error, close the window and open Lexicon
                 dispose();
@@ -475,21 +475,20 @@ public class ScrExcelImport extends PDialog {
             }
         } catch (NumberFormatException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Import Error", "All column fields and sheet field must contain "
-                    + "numeric values only:\n" + e.getLocalizedMessage(), this);
+            new DesktopInfoBox(this).error("Import Error", "All column fields and sheet field must contain "
+                    + "numeric values only:\n" + e.getLocalizedMessage());
         } catch (IllegalStateException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Import Error", "Could not import from file " + txtFileName.getText()
+            new DesktopInfoBox(this).error("Import Error", "Could not import from file " + txtFileName.getText()
                     + ".\n The text encoding is not supported. Please open the import file in a "
-                    + "text editor and save with encoding: " + Charset.defaultCharset().displayName(),
-                    this);
+                    + "text editor and save with encoding: " + Charset.defaultCharset().displayName());
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Import Error", "Could not import from file " + txtFileName.getText()
+            new DesktopInfoBox(this).error("Import Error", "Could not import from file " + txtFileName.getText()
                     + windowsError()
                     + ".\n Check to make certain that column mappings are correct "
                     + "(nothing above max cell value) and that the file is not corrupt:\n"
-                    + e.getLocalizedMessage(), this);
+                    + e.getLocalizedMessage());
         }
     }
     

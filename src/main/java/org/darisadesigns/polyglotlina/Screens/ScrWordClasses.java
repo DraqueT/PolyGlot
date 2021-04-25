@@ -18,7 +18,6 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PCellEditor;
 import org.darisadesigns.polyglotlina.CustomControls.PCellRenderer;
 import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
@@ -315,9 +314,8 @@ public final class ScrWordClasses extends PFrame {
             prop = (WordClass) core.getWordClassCollection().getNodeById(propId);
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Property Creation Error", 
-                    "Unable to create new word property: " + e.getLocalizedMessage(), 
-                    core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Property Creation Error", 
+                    "Unable to create new word property: " + e.getLocalizedMessage());
             return;
         }
 
@@ -330,8 +328,8 @@ public final class ScrWordClasses extends PFrame {
         WordClass prop = lstProperties.getSelectedValue();
         int position = lstProperties.getSelectedIndex();
 
-        if (prop == null || InfoBox.yesNoCancel("Are you sure?", "This will delete the class from all words."
-                + " Values will be irretrievably lost.", core.getPolyGlot().getRootWindow()) != JOptionPane.YES_OPTION) {
+        if (prop == null || core.getInfoBox().yesNoCancel("Are you sure?", "This will delete the class from all words."
+                + " Values will be irretrievably lost.") != JOptionPane.YES_OPTION) {
             return;
         }
 
@@ -339,9 +337,8 @@ public final class ScrWordClasses extends PFrame {
             core.getWordClassCollection().deleteNodeById(prop.getId());
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Unable to Delete", 
-                    "Unable to delete property: " + e.getLocalizedMessage(), 
-                    core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Unable to Delete", 
+                    "Unable to delete property: " + e.getLocalizedMessage());
         }
         DefaultListModel listModel = (DefaultListModel) lstProperties.getModel();
         listModel.removeElement(prop);
@@ -367,9 +364,8 @@ public final class ScrWordClasses extends PFrame {
             value = curProp.addValue("");
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Value Add Error", 
-                    e.getLocalizedMessage(), 
-                    core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Value Add Error", 
+                    e.getLocalizedMessage());
             return;
         }
 

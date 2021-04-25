@@ -3,7 +3,6 @@
  ************************************************************/
 package org.darisadesigns.polyglotlina.ExternalCode;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.DictCore;
 import java.awt.BorderLayout;
@@ -570,8 +569,8 @@ public class JFontChooser extends JComponent
             }
             catch (BadLocationException e)
             {
-                InfoBox.error("Font Selection Problem", "There was a problem with your font: "
-                        + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+                core.getInfoBox().error("Font Selection Problem", "There was a problem with your font: "
+                        + e.getLocalizedMessage());
                 //e.printStackTrace();
             }
 

@@ -21,7 +21,6 @@ package org.darisadesigns.polyglotlina.Screens;
 
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
 import org.darisadesigns.polyglotlina.CustomControls.PFrame;
@@ -215,8 +214,8 @@ public final class ScrTypes extends PFrame {
             lstTypes.ensureIndexIsVisible(0);
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Type Population Error", "Unable to populate types: "
-                    + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Type Population Error", "Unable to populate types: "
+                    + e.getLocalizedMessage());
         }
     }
 
@@ -293,8 +292,8 @@ public final class ScrTypes extends PFrame {
             core.getTypes().insert();
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Type Creation Error", "Could not create new type: "
-                    + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Type Creation Error", "Could not create new type: "
+                    + e.getLocalizedMessage());
         }
         
         populateTypes();
@@ -324,9 +323,8 @@ public final class ScrTypes extends PFrame {
             core.getTypes().deleteNodeById(curType.getId());
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Deletion Error", 
-                    "Unable to delete type." + e.getLocalizedMessage(), 
-                    core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Deletion Error", 
+                    "Unable to delete type." + e.getLocalizedMessage());
         }
         
         
@@ -400,9 +398,8 @@ public final class ScrTypes extends PFrame {
 
         if (txtName.getText().isEmpty()
                 && curType != null) {
-            InfoBox.warning("Illegal Type",
-                    "Currently selected type is illegal. Please correct or delete.", 
-                    core.getPolyGlot().getRootWindow());
+            core.getInfoBox().warning("Illegal Type",
+                    "Currently selected type is illegal. Please correct or delete.");
             ret = false;
         }
         

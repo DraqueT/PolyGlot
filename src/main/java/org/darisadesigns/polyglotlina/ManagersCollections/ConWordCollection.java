@@ -24,7 +24,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.FormattedTextHelper;
@@ -123,9 +122,8 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         String line;
         
         try (BufferedReader r = new BufferedReader(new InputStreamReader(bs, StandardCharsets.UTF_8))) {
-            if (!showPrompt || InfoBox.actionConfirmation("Import Swadesh List?", 
-                    "This will import all the words defined within this Swadesh list into your lexicon. Continue?",
-                    core.getPolyGlot().getRootWindow())) {
+            if (!showPrompt || core.getInfoBox().actionConfirmation("Import Swadesh List?", 
+                    "This will import all the words defined within this Swadesh list into your lexicon. Continue?")) {
                 for (int i = 0; (line = r.readLine()) != null; i++) {
                     if (line.startsWith("#")) {
                         continue;

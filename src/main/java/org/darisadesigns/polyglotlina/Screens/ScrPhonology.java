@@ -19,7 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PCellEditor;
 import org.darisadesigns.polyglotlina.CustomControls.PCellRenderer;
@@ -85,13 +84,13 @@ public final class ScrPhonology extends PFrame {
         saveAllValues();
         
         if (core.getRomManager().usingLookaheadsLookbacks() && !core.getRomManager().isRecurse()) {
-            InfoBox.warning("Possible Regex Issue", "It looks like your romanizations use lookahead or lookbehind patterns. "
-                    + "Please enable the recursion checkbox or these will not function correctly.", core.getPolyGlot().getRootWindow());
+            core.getInfoBox().warning("Possible Regex Issue", "It looks like your romanizations use lookahead or lookbehind patterns. "
+                    + "Please enable the recursion checkbox or these will not function correctly.");
         }
         
         if (core.getPronunciationMgr().usingLookaheadsLookbacks() && !core.getPronunciationMgr().isRecurse()) {
-            InfoBox.warning("Possible Regex Issue", "It looks like your pronunciations use lookahead or lookbehind patterns. "
-                    + "Please enable the recursion checkbox or these will not function correctly.", core.getPolyGlot().getRootWindow());
+            core.getInfoBox().warning("Possible Regex Issue", "It looks like your pronunciations use lookahead or lookbehind patterns. "
+                    + "Please enable the recursion checkbox or these will not function correctly.");
         }
         
         super.dispose();
@@ -384,9 +383,8 @@ public final class ScrPhonology extends PFrame {
                         editChar.setIgnoreListenerSilencing(false);
                         editChar.setValue(value.substring(0, 1));
                         editChar.setIgnoreListenerSilencing(true);
-                        InfoBox.warning("Single Character Only", 
-                                "Replacement characters can only be 1 character long.", 
-                                core.getPolyGlot().getRootWindow());
+                        core.getInfoBox().warning("Single Character Only", 
+                                "Replacement characters can only be 1 character long.");
                     });
                 }
             }
@@ -544,7 +542,7 @@ public final class ScrPhonology extends PFrame {
         int curRow = tblProcs.getSelectedRow();
 
         if (curRow == -1
-                || !InfoBox.deletionConfirmation(core.getPolyGlot().getRootWindow())) {
+                || !core.getInfoBox().deletionConfirmation()) {
             return;
         }
 
@@ -564,7 +562,7 @@ public final class ScrPhonology extends PFrame {
         int curRow = tblRep.getSelectedRow();
 
         if (curRow == -1
-                || !InfoBox.deletionConfirmation(core.getPolyGlot().getRootWindow())) {
+                || !core.getInfoBox().deletionConfirmation()) {
             return;
         }
 
@@ -580,7 +578,7 @@ public final class ScrPhonology extends PFrame {
         int curRow = tblRom.getSelectedRow();
 
         if (curRow == -1
-                || !InfoBox.deletionConfirmation(core.getPolyGlot().getRootWindow())) {
+                || !core.getInfoBox().deletionConfirmation()) {
             return;
         }
 

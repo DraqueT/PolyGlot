@@ -38,7 +38,7 @@ import java.util.Map;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
 
 public class ImportFileHelper {
@@ -101,7 +101,7 @@ public class ImportFileHelper {
                 || inputFile.endsWith("txt")) {
             importCSV(inputFile, format);
         } else {
-            InfoBox.warning("Unrecognized Type", "Unrecognized type. Attempting to import as CSV", null);
+            new DesktopInfoBox(null).warning("Unrecognized Type", "Unrecognized type. Attempting to import as CSV");
             importCSV(inputFile, format);
         }
     }

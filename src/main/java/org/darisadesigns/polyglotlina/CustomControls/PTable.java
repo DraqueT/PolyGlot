@@ -148,7 +148,7 @@ public final class PTable extends JTable {
             rendererController.r((PCellRenderer)renderer, row, column);
         } else {
             // The only time this will ever happen is if it is done manually via setting renderer to the column/cell
-            InfoBox.error("Table Rendering Error", "Unable to render table cell.", null);
+            new DesktopInfoBox(null).error("Table Rendering Error", "Unable to render table cell.");
             DesktopIOHandler.getInstance().writeErrorLog(new Exception("Non PCellRenderer in PTable"));
         }
         
@@ -163,7 +163,7 @@ public final class PTable extends JTable {
             editorController.e((PCellEditor)editor, row, column);
         } else {
             // The only time this will ever happen is if it is done manually via setting editor to the column/cell
-            InfoBox.error("Table Rendering Error", "Unable to render table cell.", null);
+            new DesktopInfoBox(null).error("Table Rendering Error", "Unable to render table cell.");
             DesktopIOHandler.getInstance().writeErrorLog(new Exception("Non PCellEditor in PTable"));
         }
         

@@ -19,10 +19,9 @@
  */
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.LogoNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.io.IOException;
@@ -373,8 +372,8 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
             emptyNode.setLogoGraph(ImageIO.read(getClass().getResource(PGTUtil.NOT_FOUND_IMAGE)));
         } catch (IOException e) {
             core.getIOHandler().writeErrorLog(e);
-            InfoBox.error("INTERNAL ERROR", 
-                    "Unable to locate missing-image image.\nThis is kind of an ironic error.", null);
+            new DesktopInfoBox(null).error("INTERNAL ERROR", 
+                    "Unable to locate missing-image image.\nThis is kind of an ironic error.");
         }
         
         emptyNode.setValue("LOGO NOT FOUND");

@@ -22,7 +22,7 @@ package org.darisadesigns.polyglotlina.Screens;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
@@ -155,8 +155,8 @@ public final class ScrQuickWordEntry extends PDialog {
         } catch (Exception e) {
             // user error
             // IOHandler.writeErrorLog(e);
-            InfoBox.error("Regex Error", "Unable to generate pronunciation: " 
-                    + e.getLocalizedMessage(), this);
+            new DesktopInfoBox(this).error("Regex Error", "Unable to generate pronunciation: " 
+                    + e.getLocalizedMessage());
         }
 
         if (!proc.isEmpty()) {
@@ -252,8 +252,8 @@ public final class ScrQuickWordEntry extends PDialog {
         }
 
         if (!testResults.isEmpty()) {
-            InfoBox.warning("Illegal Values", "Word contains illegal values:\n\n"
-                    + testResults, this);
+            new DesktopInfoBox(this).warning("Illegal Values", "Word contains illegal values:\n\n"
+                    + testResults);
             return;
         }
 
@@ -265,7 +265,7 @@ public final class ScrQuickWordEntry extends PDialog {
             parent.refreshWordList(wordId);
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Word Error", "Unable to insert word: " + e.getMessage(), this);
+            new DesktopInfoBox(this).error("Word Error", "Unable to insert word: " + e.getMessage());
         }
     }
 

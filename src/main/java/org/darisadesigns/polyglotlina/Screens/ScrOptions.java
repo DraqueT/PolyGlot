@@ -19,7 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
@@ -61,7 +61,7 @@ public final class ScrOptions extends PDialog {
                 } catch (NumberFormatException e) {
                     // user error
                     // IOHandler.writeErrorLog(e);
-                    InfoBox.warning("Bad Input", "Please provide an integer (number) value.", optionsParent);
+                    new DesktopInfoBox(optionsParent).warning("Bad Input", "Please provide an integer (number) value.");
                     return false;
                 }
                 return true;
@@ -99,7 +99,7 @@ public final class ScrOptions extends PDialog {
         
         if (Double.parseDouble(txtTextFontSize.getText()) > 30.0) {
             ret = false;
-            InfoBox.warning("Inlaid text size", "Text cannot be larger thant 30.0 points.", this);
+            new DesktopInfoBox(this).warning("Inlaid text size", "Text cannot be larger thant 30.0 points.");
         }
         
         return ret;
@@ -113,7 +113,8 @@ public final class ScrOptions extends PDialog {
     }
     
     private void resetOptions() {
-        if (InfoBox.actionConfirmation("Verify Options Reset", "This will reset all options, including last saved file data, screen positions, screen sizes, etc.\n\nContinue?", this)) {
+        if (new DesktopInfoBox(this).actionConfirmation("Verify Options Reset", 
+                "This will reset all options, including last saved file data, screen positions, screen sizes, etc.\n\nContinue?")) {
             core.getOptionsManager().resetOptions();
             updateAllValues(core);
         }

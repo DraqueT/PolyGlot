@@ -25,7 +25,7 @@ import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.LogoCollection;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.ManagersCollections.ImageCollection;
 import org.darisadesigns.polyglotlina.ManagersCollections.OptionsManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.ReversionManager;
@@ -303,8 +303,8 @@ public final class DesktopIOHandler implements IOHandler {
         catch (Exception e) {
             // can't write to folder, so don't bother trying to write log file...
             // IOHandler.writeErrorLog(e);
-            InfoBox.error("Permissions Error", "PolyGlot lacks permissions to write to its native folder.\n"
-                    + "Please move to a folder with full write permissions: " + e.getLocalizedMessage(), null);
+            new DesktopInfoBox(null).error("Permissions Error", "PolyGlot lacks permissions to write to its native folder.\n"
+                    + "Please move to a folder with full write permissions: " + e.getLocalizedMessage());
         }
     }
 
@@ -540,7 +540,7 @@ public final class DesktopIOHandler implements IOHandler {
             // destination, on fail, delete file and inform user by bubbling error
             try {
                 // pass null shell class because this will ultimately be discarded
-                DictCore test = new DictCore(PolyGlot.getTestShell(), this);
+                DictCore test = new DictCore(PolyGlot.getTestShell(), this, new DesktopInfoBox(null));
                 test.readFile(tmpSaveLocation.getAbsolutePath());
 
             }
@@ -560,7 +560,7 @@ public final class DesktopIOHandler implements IOHandler {
         }
 
         if (!writeLog.isEmpty()) {
-            InfoBox.warning("File Save Issues", "Problems encountered when saving file " + _fileName + writeLog, null);
+            new DesktopInfoBox(null).warning("File Save Issues", "Problems encountered when saving file " + _fileName + writeLog);
         }
     }
 

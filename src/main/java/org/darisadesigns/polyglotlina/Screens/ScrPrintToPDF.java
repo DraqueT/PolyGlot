@@ -19,7 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
@@ -330,12 +330,12 @@ public class ScrPrintToPDF extends PDialog {
 
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
         if (txtSavePath.getText().isEmpty()) {
-            InfoBox.warning("File not Specified", "Please specify a file to save to.", core.getPolyGlot().getRootWindow());
+            core.getInfoBox().warning("File not Specified", "Please specify a file to save to.");
             return;
         }
         
         if (new File(txtSavePath.getText()).exists()
-                && !InfoBox.actionConfirmation("Overwrite Confirmation", "File already exists. Overwrite?", this)) {
+                && !new DesktopInfoBox(this).actionConfirmation("Overwrite Confirmation", "File already exists. Overwrite?")) {
             return;
         }
         
@@ -347,7 +347,7 @@ public class ScrPrintToPDF extends PDialog {
                         "You have selected \"Print Etymology Trees\" with illegal loops present\n" +
                         "in your lexicon's etymology. To print the trees, this must be corrected.\n"+ 
                         "Please select Tools->Check Language to find/correct this problem.";
-                InfoBox.warning("Etymology Problem", message, this);
+                new DesktopInfoBox(this).warning("Etymology Problem", message);
             }
             
             Java8Bridge.exportPdf(txtSavePath.getText(), 
@@ -366,24 +366,22 @@ public class ScrPrintToPDF extends PDialog {
                     core);
 
             if (Desktop.isDesktopSupported()) {
-                if (InfoBox.yesNoCancel("Print Success", "PDF successfully printed. Open file now?", this) 
+                if (new DesktopInfoBox(this).yesNoCancel("Print Success", "PDF successfully printed. Open file now?") 
                         == JOptionPane.YES_OPTION) {
                     if (!DesktopIOHandler.getInstance().openFileNativeOS(txtSavePath.getText())) {
-                        InfoBox.error("File Error", 
-                                "Unable to open PDF at location: " + txtSavePath.getText(), 
-                                core.getPolyGlot().getRootWindow());
+                        core.getInfoBox().error("File Error", 
+                                "Unable to open PDF at location: " + txtSavePath.getText());
                     }
                 }
             } else {
-                InfoBox.info("Print Success", 
-                        "Successfully printed to " + txtSavePath.getText(), 
-                        core.getPolyGlot().getRootWindow());
+                core.getInfoBox().info("Print Success", 
+                        "Successfully printed to " + txtSavePath.getText());
             }
             
             this.dispose();
         } catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Save Error", e.getMessage(), core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Save Error", e.getMessage());
         } finally {
             setCursor(Cursor.getDefaultCursor());
         }

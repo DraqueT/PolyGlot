@@ -42,7 +42,7 @@ import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.DefaultEditorKit;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.ManagersCollections.OptionsManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.VisualStyleManager;
@@ -63,10 +63,12 @@ public final class PolyGlot {
     private UIDefaults uiDefaults;
     private DictCore core;
     private ScrMainMenu rootWindow;
+    private InfoBox infoBox;
 
-    private PolyGlot(String overridePath) throws Exception {
+    public PolyGlot(String overridePath, InfoBox _infoBox) throws Exception {
         overrideProgramPath = overridePath; // TODO: In the future, figure out how this might be better set. In options?
         optionsManager = new OptionsManager();
+        infoBox = _infoBox;
         DesktopIOHandler.getInstance().loadOptionsIni(optionsManager, getWorkingDirectory().getAbsolutePath());
         refreshUiDefaults();
     }
@@ -76,6 +78,7 @@ public final class PolyGlot {
      * in chunks if spaces in path
      */
     public static void main(final String[] args) {
+        DesktopInfoBox cInfoBox = new DesktopInfoBox(null);
         try {
             // must be set before accessing System to test OS (values will simply be ignored for other OSes
             if (PGTUtil.IS_OSX) {
@@ -94,7 +97,7 @@ public final class PolyGlot {
         }
         catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, "Startup Exception");
-            InfoBox.error("PolyGlot Error", "A serious error has occurred: " + e.getLocalizedMessage(), null);
+            cInfoBox.error("PolyGlot Error", "A serious error has occurred: " + e.getLocalizedMessage());
             throw e;
         }
 
@@ -105,21 +108,22 @@ public final class PolyGlot {
             try {
                 // separated due to serious nature of Throwable vs Exception
 
-                PolyGlot polyGlot = new PolyGlot("");
-                DictCore core = new DictCore(polyGlot, DesktopIOHandler.getInstance());
+                PolyGlot polyGlot = new PolyGlot("", cInfoBox);
+                DictCore core = new DictCore(polyGlot, DesktopIOHandler.getInstance(), cInfoBox);
                 
                 s = new ScrMainMenu(core);
                 polyGlot.setRootWindow(s);
                 s.checkForUpdates(false);
                 s.setVisible(true);
+                cInfoBox.setParent(s);
 
                 try {
                     DesktopIOHandler.getInstance().loadOptionsIni(polyGlot.optionsManager, polyGlot.getWorkingDirectory().getAbsolutePath());
                 }
                 catch (Exception ex) {
                     DesktopIOHandler.getInstance().writeErrorLog(ex);
-                    InfoBox.error("Options Load Error", "Unable to load options file or file corrupted:\n"
-                            + ex.getLocalizedMessage(), s);
+                    polyGlot.getInfoBox().error("Options Load Error", "Unable to load options file or file corrupted:\n"
+                            + ex.getLocalizedMessage());
                     DesktopIOHandler.getInstance().deleteIni(polyGlot.getWorkingDirectory().getAbsolutePath());
                 }
 
@@ -134,8 +138,8 @@ public final class PolyGlot {
                         if (files.size() <= 0) {
                             return;
                         } else if (files.size() > 1) {
-                            InfoBox.info("File Limit", "PolyGlot can only open a single file at once.\nOpening first selected file:"
-                                    + files.get(0).getName(), null);
+                            polyGlot.getInfoBox().info("File Limit", "PolyGlot can only open a single file at once.\nOpening first selected file:"
+                                    + files.get(0).getName());
                         }
 
                         try {
@@ -146,8 +150,8 @@ public final class PolyGlot {
                             }
                         }
                         catch (IOException | IllegalStateException ex) {
-                            InfoBox.error("File Read Error", "Unable to open file due to error:\n"
-                                    + ex.getLocalizedMessage(), null);
+                            polyGlot.getInfoBox().error("File Read Error", "Unable to open file due to error:\n"
+                                    + ex.getLocalizedMessage());
                         }
                     });
 
@@ -160,7 +164,7 @@ public final class PolyGlot {
                     });
 
                     desk.setAboutHandler((AboutEvent e) -> {
-                        ScrAbout.run(new DictCore(polyGlot, DesktopIOHandler.getInstance()));
+                        ScrAbout.run(new DictCore(polyGlot, DesktopIOHandler.getInstance(), cInfoBox));
                     });
 
                     desk.setPrintFileHandler((PrintFilesEvent e) -> {
@@ -169,7 +173,7 @@ public final class PolyGlot {
                 }
 
                 // if a recovery file exists, query user for action
-                File recovery = polyGlot.findRecoveryFile(s, core.getWorkingDirectory());
+                File recovery = polyGlot.findRecoveryFile(s, polyGlot.getWorkingDirectory());
 
                 // open file if one is provided via arguments (but only if no recovery file- that takes precedence)
                 if (args.length > 0 && recovery == null) {
@@ -188,8 +192,8 @@ public final class PolyGlot {
                     if (new File(filePath).exists()) {
                         s.setFile(filePath);
                     } else {
-                        InfoBox.warning("File Path Error", "Unable to open: " + filePath
-                                + "\nPlease retry opening this file by clicking File->Open from the menu.", null);
+                        polyGlot.getInfoBox().warning("File Path Error", "Unable to open: " + filePath
+                                + "\nPlease retry opening this file by clicking File->Open from the menu.");
                     }
                 }
 
@@ -200,22 +204,22 @@ public final class PolyGlot {
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e, "Problem with top level PolyGlot arguments.");
-                InfoBox.error("Unable to start", "Unable to open PolyGlot main frame: \n"
+                cInfoBox.error("Unable to start", "Unable to open PolyGlot main frame: \n"
                         + e.getMessage() + "\n"
-                        + "Problem with top level PolyGlot arguments.", null);
+                        + "Problem with top level PolyGlot arguments.");
             }
             catch (Exception e) { // split up for logical clarity... might want to differentiate
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.error("Unable to start", "Unable to open PolyGlot main frame: \n"
+                cInfoBox.error("Unable to start", "Unable to open PolyGlot main frame: \n"
                         + e.getMessage() + "\n"
-                        + "Please contact developer (draquemail@gmail.com) for assistance.", null);
+                        + "Please contact developer (draquemail@gmail.com) for assistance.");
 
                 if (s != null) {
                     s.dispose();
                 }
             }
             catch (Throwable t) {
-                InfoBox.error("PolyGlot Error", "A serious error has occurred: " + t.getLocalizedMessage(), null);
+                cInfoBox.error("PolyGlot Error", "A serious error has occurred: " + t.getLocalizedMessage());
                 DesktopIOHandler.getInstance().writeErrorLog(t);
                 throw t;
             }
@@ -234,8 +238,8 @@ public final class PolyGlot {
     private File findRecoveryFile(ScrMainMenu s, File workingDirectory) throws IOException {
         File recovery = DesktopIOHandler.getInstance().getTempSaveFileIfExists(workingDirectory);
         if (recovery != null) {
-            if (InfoBox.yesNoCancel("Recovery File Detected",
-                    "PolyGlot appears to have shut down mid save. Would you like to recover the file?", s) == JOptionPane.YES_OPTION) {
+            if (infoBox.yesNoCancel("Recovery File Detected",
+                    "PolyGlot appears to have shut down mid save. Would you like to recover the file?") == JOptionPane.YES_OPTION) {
                 JFileChooser chooser = new JFileChooser();
                 chooser.setDialogTitle("Recover Language To");
                 FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd");
@@ -258,23 +262,23 @@ public final class PolyGlot {
                             s.setFile(copyTo.getAbsolutePath());
                             s.openLexicon(true);
                             DesktopIOHandler.getInstance().archiveFile(recovery, core.getWorkingDirectory());
-                            InfoBox.info("Success!", "Language successfully recovered!", s);
+                            infoBox.info("Success!", "Language successfully recovered!");
                         } else {
                             throw new IOException("File not copied.");
                         }
                     }
                     catch (IOException e) {
-                        InfoBox.error("Recovery Problem", "Unable to recover file due to: "
+                        infoBox.error("Recovery Problem", "Unable to recover file due to: "
                                 + e.getLocalizedMessage()
                                 + ". Recovery file exists at location: "
                                 + recovery.toPath()
-                                + ". To attempt manual recovery, add .pgd suffix to file name and open with PolyGlot by hand.", s);
+                                + ". To attempt manual recovery, add .pgd suffix to file name and open with PolyGlot by hand.");
                     }
                 } else {
-                    InfoBox.info("Recovery Cancelled", "Recovery Cancelled. Restart PolyGlot to be prompted again.", s);
+                    infoBox.info("Recovery Cancelled", "Recovery Cancelled. Restart PolyGlot to be prompted again.");
                 }
             } else {
-                if (InfoBox.yesNoCancel("Delete Recovery File", "Archive the recovery file, then?", s) == JOptionPane.YES_OPTION) {
+                if (infoBox.yesNoCancel("Delete Recovery File", "Archive the recovery file, then?") == JOptionPane.YES_OPTION) {
                     DesktopIOHandler.getInstance().archiveFile(recovery, core.getWorkingDirectory());
                 }
 
@@ -286,7 +290,7 @@ public final class PolyGlot {
     }
 
     public DictCore getNewCore() {
-        DictCore ret = new DictCore(this, DesktopIOHandler.getInstance());
+        DictCore ret = new DictCore(this, DesktopIOHandler.getInstance(), infoBox);
         return ret;
     }
 
@@ -296,7 +300,7 @@ public final class PolyGlot {
      */
     private static void conditionalBetaSetup() {
         if (PGTUtil.IS_BETA && !PGTUtil.isInJUnitTest()) { // This requires user interaction and is not covered by the test
-            InfoBox.warning("BETA BUILD", "This is a pre-release, beta build of PolyGlot. Please use with care.\n\nBuild Date: " + PGTUtil.BUILD_DATE_TIME, null);
+            new DesktopInfoBox(null).warning("BETA BUILD", "This is a pre-release, beta build of PolyGlot. Please use with care.\n\nBuild Date: " + PGTUtil.BUILD_DATE_TIME);
         }
     }
 
@@ -421,7 +425,7 @@ public final class PolyGlot {
      * @throws java.io.IOException
      */
     public static PolyGlot getTestShell() throws IOException, Exception {
-        return new PolyGlot(Files.createTempDirectory("POLYGLOT").toFile().getAbsolutePath());
+        return new PolyGlot(Files.createTempDirectory("POLYGLOT").toFile().getAbsolutePath(), new DesktopInfoBox(null));
     }
 
     public DictCore getCore() {
@@ -430,6 +434,14 @@ public final class PolyGlot {
 
     public void setCore(DictCore _core) {
         this.core = _core;
+    }
+    
+    public InfoBox getInfoBox() {
+        return infoBox;
+    }
+
+    public void setInfoBox(InfoBox _infoBox) {
+        this.infoBox = _infoBox;
     }
     
     /**

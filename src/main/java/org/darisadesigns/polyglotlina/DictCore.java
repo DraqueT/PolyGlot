@@ -20,7 +20,6 @@
 package org.darisadesigns.polyglotlina;
 
 import java.awt.Desktop;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PAlphaMap;
 import org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
@@ -37,7 +36,6 @@ import org.darisadesigns.polyglotlina.ManagersCollections.ReversionManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.RomanizationManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.ToDoManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.WordClassCollection;
-import org.darisadesigns.polyglotlina.Screens.ScrMainMenu;
 import java.awt.FontFormatException;
 import java.io.File;
 import java.io.IOException;
@@ -74,6 +72,7 @@ public class DictCore {
     private ReversionManager reversionManager;
     private ToDoManager toDoManager;
     private final IOHandler ioHandler;
+    private final InfoBox infoBox;
     private boolean curLoading = false;
     private Instant lastSaveTime = Instant.MIN;
     private String curFileName = "";
@@ -83,11 +82,13 @@ public class DictCore {
      *
      * @param _polyGlot
      * @param _ioHandler
+     * @param _infoBox
      */
-    public DictCore(PolyGlot _polyGlot, IOHandler _ioHandler) {
+    public DictCore(PolyGlot _polyGlot, IOHandler _ioHandler, InfoBox _infoBox) {
         polyGlot = _polyGlot;
         polyGlot.setCore(this);
         ioHandler = _ioHandler;
+        infoBox = _infoBox;
         initializeDictCore();
     }
     
@@ -120,7 +121,7 @@ public class DictCore {
             PGTUtil.validateVersion();
         } catch (Exception e) {
             this.ioHandler.writeErrorLog(e);
-            InfoBox.error("CORE ERROR", "Error creating language core: " + e.getLocalizedMessage(), null);
+            this.getInfoBox().error("CORE ERROR", "Error creating language core: " + e.getLocalizedMessage());
         }
     }
     
@@ -326,13 +327,13 @@ public class DictCore {
                     } else if (PGTUtil.IS_LINUX) {
                         Desktop.getDesktop().open(report);
                     } else {
-                        InfoBox.warning("Menu Warning", "Unable to open browser. Please load manually at: \n" 
-                                + report.getAbsolutePath() + "\n (copied to clipboard for convenience)", polyGlot.getRootWindow());
+                        core.getInfoBox().warning("Menu Warning", "Unable to open browser. Please load manually at: \n" 
+                                + report.getAbsolutePath() + "\n (copied to clipboard for convenience)");
                         new ClipboardHandler().setClipboardContents(report.getAbsolutePath());
                     }
                 } catch (IOException e) {
-                    InfoBox.error("Report Build Error", "Unable to generate/display language statistics: " 
-                            + e.getLocalizedMessage(), polyGlot.getRootWindow());
+                    core.getInfoBox().error("Report Build Error", "Unable to generate/display language statistics: " 
+                            + e.getLocalizedMessage());
                     core.ioHandler.writeErrorLog(e);
                 }
             }
@@ -456,7 +457,7 @@ public class DictCore {
      * @throws java.io.IOException 
      */
     public void revertToState(byte[] revision, String fileName) throws IOException{
-        DictCore revDict = new DictCore(polyGlot, ioHandler);
+        DictCore revDict = new DictCore(polyGlot, ioHandler, infoBox);
         revDict.readFile(fileName, revision);
         
         pushUpdateWithCore(revDict);
@@ -603,6 +604,14 @@ public class DictCore {
      */
     public IOHandler getIOHandler() {
         return ioHandler;
+    }
+    
+    /**
+     * Returns DictCore IO handler
+     * @return 
+     */
+    public InfoBox getInfoBox() {
+        return infoBox;
     }
     
     /**

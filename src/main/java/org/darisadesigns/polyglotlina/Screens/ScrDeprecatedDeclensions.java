@@ -21,7 +21,6 @@ package org.darisadesigns.polyglotlina.Screens;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationNode;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
@@ -172,17 +171,15 @@ public final class ScrDeprecatedDeclensions extends PDialog {
     public void setVisible(boolean visible) {
 
         if (typeId == -1) {
-            InfoBox.info("Missing Part of Speech", 
-                    "Word must have a part of Speech set, and declensions defined before using this feature.", 
-                    core.getPolyGlot().getRootWindow());
+            core.getInfoBox().info("Missing Part of Speech", 
+                    "Word must have a part of Speech set, and declensions defined before using this feature.");
             this.dispose();
         } else if ((core.getConjugationManager().getDimensionalConjugationListTemplate(typeId) == null
                     || core.getConjugationManager().getDimensionalConjugationListTemplate(typeId).length == 0)
                 && core.getConjugationManager().getDimensionalConjugationListWord(word.getId()).length == 0) {
-            InfoBox.info("Declensions", 
+            core.getInfoBox().info("Declensions", 
                     "No declensions for part of speech: " + word.getWordTypeDisplay()
-                    + " set. Declensions can be created per part of speech under the Part of Speech menu by clicking the Declensions button.", 
-                    core.getPolyGlot().getRootWindow());
+                    + " set. Declensions can be created per part of speech under the Part of Speech menu by clicking the Declensions button.");
 
             this.dispose();
         } else {

@@ -174,7 +174,7 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
     public void setVisible(boolean visible) {
         if (firstVisible && !ignoreInitialResize) {
             if (core == null) {
-                InfoBox.error("Dict Core Null", "Dictionary core not set in new window.", null);
+                new DesktopInfoBox(null).error("Dict Core Null", "Dictionary core not set in new window.");
             }
 
             Point lastPos = core.getOptionsManager().getScreenPosition(getClass().getName());

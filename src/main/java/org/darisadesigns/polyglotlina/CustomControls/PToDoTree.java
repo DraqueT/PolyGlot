@@ -99,7 +99,7 @@ public final class PToDoTree extends JTree {
                     (ToDoTreeNode)this.getModel().getRoot()
                     : (ToDoTreeNode)clickedPath.getLastPathComponent();
             
-            String toDoLabel = InfoBox.stringInputDialog("ToDo Label", "Create ToDo Label", null);
+            String toDoLabel = new DesktopInfoBox(null).stringInputDialog("ToDo Label", "Create ToDo Label");
             
             if (toDoLabel != null && !toDoLabel.isEmpty()) {
                 ToDoTreeNode childNode = ToDoTreeNode.createToDoTreeNode(new ToDoNode(null, toDoLabel, false));
@@ -127,9 +127,8 @@ public final class PToDoTree extends JTree {
         
         renameItem.addActionListener((ActionEvent ae) -> {
             if (clickedPath != null) {
-                String toDoLabel = InfoBox.stringInputDialog("New Todo Label", 
-                                "What would you like the new label to be?", 
-                                null);
+                String toDoLabel = new DesktopInfoBox(null).stringInputDialog("New Todo Label", 
+                                "What would you like the new label to be?");
                 
                 if (toDoLabel != null && !toDoLabel.isEmpty()) {
                     ToDoTreeNode clickedNode = (ToDoTreeNode)clickedPath.getLastPathComponent();

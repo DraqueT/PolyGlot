@@ -19,7 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
 import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
@@ -96,7 +96,7 @@ public final class ScrQuizGenDialog extends PFrame {
         } catch (NumberFormatException e) {
             // user error
             // IOHandler.writeErrorLog(e);
-            InfoBox.error("Integer Value Required", "Number of questions must be an integer value.", core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Integer Value Required", "Number of questions must be an integer value.");
             return;
         }
         
@@ -113,7 +113,7 @@ public final class ScrQuizGenDialog extends PFrame {
             !chkProcQuiz.isSelected()&& 
             !chkDefQuiz.isSelected()&& 
             !chkClassQuiz.isSelected()) {
-            InfoBox.warning("Quiz Generation Problem", "Please select at least one thing to quiz on!", this);
+            new DesktopInfoBox(this).warning("Quiz Generation Problem", "Please select at least one thing to quiz on!");
         } else {
             try {
                 Quiz genQuiz = factory.generateLexicalQuiz(numQuestions, 
@@ -128,9 +128,8 @@ public final class ScrQuizGenDialog extends PFrame {
                 ScrQuizScreen.run(genQuiz, core);
             } catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.error("Quiz Generation Error", 
-                        "Unable to generate quiz: " + e.getLocalizedMessage(), 
-                        core.getPolyGlot().getRootWindow());
+                core.getInfoBox().error("Quiz Generation Error", 
+                        "Unable to generate quiz: " + e.getLocalizedMessage());
             }
         }
     }
@@ -365,7 +364,7 @@ public final class ScrQuizGenDialog extends PFrame {
         // do not allow self to be checked if no classes exist
         if (core.getWordClassCollection().getAllWordClasses().length == 0
                 && chkClassQuiz.isSelected()) {
-            InfoBox.warning("No Classes Exist", "No word classes exist.", core.getPolyGlot().getRootWindow());
+            core.getInfoBox().warning("No Classes Exist", "No word classes exist.");
             chkClassQuiz.setSelected(false);
         }            
     }//GEN-LAST:event_chkClassQuizActionPerformed
@@ -378,7 +377,7 @@ public final class ScrQuizGenDialog extends PFrame {
         // do not allow self to be checked if no PoS exist
         if (core.getTypes().getNodes().length == 0
                 && chkTypeQuiz.isSelected()) {
-            InfoBox.warning("No PoS Exist", "No parts of speech exist.", core.getPolyGlot().getRootWindow());
+            core.getInfoBox().warning("No PoS Exist", "No parts of speech exist.");
             chkTypeQuiz.setSelected(false);
         }
     }//GEN-LAST:event_chkTypeQuizActionPerformed

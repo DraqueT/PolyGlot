@@ -20,7 +20,7 @@
 
 package org.darisadesigns.polyglotlina;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -459,7 +459,7 @@ public final class PGTUtil {
         try {
             tmpFont = PFontHandler.getMenuFont();
         } catch (IOException e) {
-            InfoBox.error("PolyGlot Load Error", "Unable to load default button font.", null);
+            new DesktopInfoBox(null).error("PolyGlot Load Error", "Unable to load default button font.");
             DesktopIOHandler.getInstance().writeErrorLog(e, "Initilization error (PGTUtil)");
             tmpFont = javax.swing.UIManager.getDefaults().getFont("Label.font");
         }
@@ -468,7 +468,7 @@ public final class PGTUtil {
         try {
             tmpFont = PFontHandler.getCharisUnicodeFontInitial();
         } catch (IOException e) {
-            InfoBox.error("PolyGlot Load Error", "Unable to load Charis Unicode.", null);
+            new DesktopInfoBox(null).error("PolyGlot Load Error", "Unable to load Charis Unicode.");
             DesktopIOHandler.getInstance().writeErrorLog(e, "Initilization error (PGTUtil)");
             tmpFont = javax.swing.UIManager.getDefaults().getFont("Label.font");
         }
@@ -719,7 +719,7 @@ public final class PGTUtil {
         try(BufferedReader br = new BufferedReader(new InputStreamReader(versionUrl.openStream()))) {
             return br.readLine();
         } catch (IOException e) {
-            InfoBox.error("PolyGlot Load Error", "Unable to load version file.", null);
+            new DesktopInfoBox(null).error("PolyGlot Load Error", "Unable to load version file.");
         }
         
         return ret;

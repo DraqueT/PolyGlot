@@ -26,7 +26,6 @@ import org.darisadesigns.polyglotlina.FormattedTextHelper;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
 import org.darisadesigns.polyglotlina.CustomControls.HighlightCaret;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
 import org.darisadesigns.polyglotlina.CustomControls.PFrame;
@@ -687,7 +686,7 @@ public final class ScrGrammarGuide extends PFrame {
         } catch (NumberFormatException e) {
             // user error
             // IOHandler.writeErrorLog(e);
-            InfoBox.warning("Font Size", "Invalid size: " + txtFontSize.getText(), core.getPolyGlot().getRootWindow());
+            core.getInfoBox().warning("Font Size", "Invalid size: " + txtFontSize.getText());
             txtFontSize.setText("12");
         }
         setFont();
@@ -710,7 +709,7 @@ public final class ScrGrammarGuide extends PFrame {
             txtTimer.setFont(PFontHandler.getLcdFont().deriveFont(Font.PLAIN, 18f));
         } catch (FontFormatException | IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Font Error", "Unable to load LCD font due to: " + e.getMessage(), core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Font Error", "Unable to load LCD font due to: " + e.getMessage());
         }
 
         btnPlayPauseAudio.setText("");
@@ -760,8 +759,8 @@ public final class ScrGrammarGuide extends PFrame {
                 caretEnd++;
             } catch (BadLocationException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.warning("Font Error", "Problem setting font: "
-                        + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+                core.getInfoBox().warning("Font Error", "Problem setting font: "
+                        + e.getLocalizedMessage());
             }
         }
 
@@ -854,9 +853,9 @@ public final class ScrGrammarGuide extends PFrame {
                         cb.restoreClipboard();
                     } catch (Exception ex) {
                         DesktopIOHandler.getInstance().writeErrorLog(ex);
-                        InfoBox.error("Character Replacement Error",
+                        core.getInfoBox().error("Character Replacement Error",
                                 "Clipboard threw error during character replacement process:"
-                                + ex.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+                                + ex.getLocalizedMessage());
                     }
                 }
             }
@@ -887,8 +886,8 @@ public final class ScrGrammarGuide extends PFrame {
                 secNode.setSectionText(FormattedTextHelper.storageFormat(txtSection));
             } catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.error("Section Save Error", "Unable to save section text: "
-                        + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+                core.getInfoBox().error("Section Save Error", "Unable to save section text: "
+                        + e.getLocalizedMessage());
             }
         } else if (node instanceof GrammarChapNode) {
             GrammarChapNode chapNode = (GrammarChapNode) node;
@@ -931,7 +930,7 @@ public final class ScrGrammarGuide extends PFrame {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             soundRecorder = new SoundRecorder(this);
             soundRecorder.setButtons(btnRecordAudio, btnPlayPauseAudio, playButtonUp, playButtonDown, recordButtonUp, recordButtonDown);
-            InfoBox.error("Recorder Error", "Unable to end audio stream: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Recorder Error", "Unable to end audio stream: " + e.getLocalizedMessage());
         }
     }
 
@@ -980,16 +979,16 @@ public final class ScrGrammarGuide extends PFrame {
                 soundRecorder.setSound(secNode.getRecording());
             } catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.error("Recording Load Failure", "Unable to load recording: "
-                        + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+                core.getInfoBox().error("Recording Load Failure", "Unable to load recording: "
+                        + e.getLocalizedMessage());
             }
             try {
                 FormattedTextHelper.restoreFromString(secNode.getSectionText(),
                         txtSection, core);
             } catch (BadLocationException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.error("Section Load Error", "Unable to load section text: "
-                        + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+                core.getInfoBox().error("Section Load Error", "Unable to load section text: "
+                        + e.getLocalizedMessage());
             }
             SwingUtilities.invokeLater(() -> {
                 panSection.getVerticalScrollBar().setValue(0);
@@ -1023,8 +1022,7 @@ public final class ScrGrammarGuide extends PFrame {
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
 
         if (selection != null
-                && InfoBox.yesNoCancel("Confirmation", "Really delete? This cannot be undone.", 
-                        core.getPolyGlot().getRootWindow())
+                && core.getInfoBox().yesNoCancel("Confirmation", "Really delete? This cannot be undone.")
                         == JOptionPane.YES_OPTION) {
             if (selection instanceof GrammarSectionNode) {
                 GrammarSectionNode curNode = (GrammarSectionNode) selection;
@@ -1130,7 +1128,7 @@ public final class ScrGrammarGuide extends PFrame {
             model.reload();
             treChapList.setSelectionPath(new TreePath(model.getPathToRoot(newNode)));
         } else {
-            InfoBox.warning("Section Creation", "Select a chapter in which to create a section.", core.getPolyGlot().getRootWindow());
+            core.getInfoBox().warning("Section Creation", "Select a chapter in which to create a section.");
         }
 
         txtName.setText("");
@@ -1142,7 +1140,7 @@ public final class ScrGrammarGuide extends PFrame {
             soundRecorder.playPause();
         } catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Play Error", "Unable to play due to: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Play Error", "Unable to play due to: " + e.getLocalizedMessage());
         }
     }
 
@@ -1152,8 +1150,8 @@ public final class ScrGrammarGuide extends PFrame {
                 soundRecorder.endRecording();
             } else {
                 if (soundRecorder.getSound() != null) { // confirm overwrite of existing data
-                    if (InfoBox.yesNoCancel("Overwrite Confirmation",
-                            "Discard existing audio recording?", core.getPolyGlot().getRootWindow()) != JOptionPane.YES_OPTION) {
+                    if (core.getInfoBox().yesNoCancel("Overwrite Confirmation",
+                            "Discard existing audio recording?") != JOptionPane.YES_OPTION) {
                         return;
                     }
                 }
@@ -1162,7 +1160,7 @@ public final class ScrGrammarGuide extends PFrame {
             }
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Recording Error", "Unable to record due to: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Recording Error", "Unable to record due to: " + e.getLocalizedMessage());
         }
     }
 

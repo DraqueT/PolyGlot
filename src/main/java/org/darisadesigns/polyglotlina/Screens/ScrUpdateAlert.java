@@ -19,7 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.CustomControls.PLabel;
@@ -110,13 +109,11 @@ public class ScrUpdateAlert extends PDialog {
             if (verbose) { // if in verbose mode (user selected update) inform user they're good to go
                 // custom message if user is on a beta copy of PolyGlot
                 if (PGTUtil.IS_BETA) {
-                    InfoBox.info("Update Status", "You're up to date on a beta build branched from the most recent release candidate ("
-                            + PGTUtil.getDisplayVersion() + ")", 
-                            core.getPolyGlot().getRootWindow());
+                    core.getInfoBox().info("Update Status", "You're up to date on a beta build branched from the most recent release candidate ("
+                            + PGTUtil.getDisplayVersion() + ")");
                 } else {
-                    InfoBox.info("Update Status", "You're up to date and on the newest version: "
-                        + PGTUtil.getDisplayVersion() + ".", 
-                            core.getPolyGlot().getRootWindow());
+                    core.getInfoBox().info("Update Status", "You're up to date and on the newest version: "
+                        + PGTUtil.getDisplayVersion() + ".");
                 }
             }            
             this.setVisible(false);
@@ -300,9 +297,8 @@ public class ScrUpdateAlert extends PDialog {
                     java.awt.Desktop.getDesktop().browse(uri);
                 } catch (IOException | URISyntaxException ex) {
                     DesktopIOHandler.getInstance().writeErrorLog(ex);
-                    InfoBox.error("Browser Error", 
-                            "Unable to open page: " + link, 
-                            core.getPolyGlot().getRootWindow());
+                    core.getInfoBox().error("Browser Error", 
+                            "Unable to open page: " + link);
                 }
             });
 

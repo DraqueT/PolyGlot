@@ -27,7 +27,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.PlainDocument;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.CustomControls.PLabel;
@@ -239,11 +239,11 @@ public final class ScrFontImportDialog extends PDialog {
             core.getPolyGlot().getRootWindow().selectFirstAvailableButton();
             dispose();
         } catch (IOException e) {
-            InfoBox.error("IO Error", "Unable to open " + fileName + " due to: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("IO Error", "Unable to open " + fileName + " due to: " + e.getLocalizedMessage());
         } catch (FontFormatException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Font Format Error", "Unable to read " + fileName + " due to: "
-                    + e.getLocalizedMessage(), this);
+            new DesktopInfoBox(this).error("Font Format Error", "Unable to read " + fileName + " due to: "
+                    + e.getLocalizedMessage());
         }
     }//GEN-LAST:event_btnOkActionPerformed
 
@@ -271,7 +271,7 @@ public final class ScrFontImportDialog extends PDialog {
                 Font newFont = PFontHandler.getFontFromFile(txtFontLocation.getText());
                 txtDemoText.setFont(newFont.deriveFont(Float.parseFloat(txtFontSize.getText())));
             } catch (FontFormatException | IOException e) {
-                InfoBox.error("Font Load Error", "Unable to load font: " + e.getLocalizedMessage(), this);
+                new DesktopInfoBox(this).error("Font Load Error", "Unable to load font: " + e.getLocalizedMessage());
             }
         }
     }

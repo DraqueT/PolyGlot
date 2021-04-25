@@ -22,7 +22,7 @@ package org.darisadesigns.polyglotlina.Screens;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
 import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
@@ -304,8 +304,8 @@ public final class ScrLexicon extends PFrame {
                         }
                     } catch (Exception e) {
                         DesktopIOHandler.getInstance().writeErrorLog(e);
-                        InfoBox.error("Word Class Error", "Unable to retrieve class/value pair "
-                                + curProp.getKey() + "/" + curProp.getValue(), core.getPolyGlot().getRootWindow());
+                        core.getInfoBox().error("Word Class Error", "Unable to retrieve class/value pair "
+                                + curProp.getKey() + "/" + curProp.getValue());
                     }
                 });
 
@@ -321,8 +321,8 @@ public final class ScrLexicon extends PFrame {
                         }
                     } catch (Exception e) {
                         DesktopIOHandler.getInstance().writeErrorLog(e);
-                        InfoBox.error("Word Class Error", "Unable to retrieve class/value pair "
-                                + curProp.getKey() + "/" + curProp.getValue(), core.getPolyGlot().getRootWindow());
+                        core.getInfoBox().error("Word Class Error", "Unable to retrieve class/value pair "
+                                + curProp.getKey() + "/" + curProp.getValue());
                     }
                 });
     }
@@ -496,7 +496,7 @@ public final class ScrLexicon extends PFrame {
             latch.await();
         } catch (InterruptedException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Form Load Error", "Unable to load Lexicon: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Form Load Error", "Unable to load Lexicon: " + e.getLocalizedMessage());
         }
         
         gridTitlePane.setTooltip(new Tooltip(FILTER_LABEL));
@@ -532,8 +532,8 @@ public final class ScrLexicon extends PFrame {
             }
         } catch (Exception e) {
             // IOHandler.writeErrorLog(e);
-            InfoBox.error("Pronunciation Error", "Could not generate pronunciation: "
-                    + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Pronunciation Error", "Could not generate pronunciation: "
+                    + e.getLocalizedMessage());
         }
 
         curPopulating = localPopulating;
@@ -701,7 +701,7 @@ public final class ScrLexicon extends PFrame {
                     core.getWordCollection().filteredList(filter)));
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Filter Error", "Unable to apply filter.\n\n" + e.getMessage(), core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Filter Error", "Unable to apply filter.\n\n" + e.getMessage());
         }
 
         lstLexicon.setSelectedIndex(0);
@@ -1172,7 +1172,7 @@ public final class ScrLexicon extends PFrame {
                         curType = core.getTypes().getNodeById(curWord.getWordTypeId());
                     } catch (Exception ex) {
                         DesktopIOHandler.getInstance().writeErrorLog(ex);
-                        InfoBox.error("Type error on lookup.", ex.getMessage(), core.getPolyGlot().getRootWindow());
+                        core.getInfoBox().error("Type error on lookup.", ex.getMessage());
                     }
                     String tip = "";
                     if (enableProcGen) {
@@ -1330,7 +1330,7 @@ public final class ScrLexicon extends PFrame {
             enableProcGen = false;
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Error", "Error: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Error", "Error: " + e.getLocalizedMessage());
         }
 
         curPopulating = localPopulating;
@@ -1426,7 +1426,7 @@ public final class ScrLexicon extends PFrame {
             lstLexicon.setModel(listModel);
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Error", "Error: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Error", "Error: " + e.getLocalizedMessage());
         }
 
         curPopulating = localPopulating;
@@ -1453,7 +1453,7 @@ public final class ScrLexicon extends PFrame {
                     }
                 } catch (Exception e) {
                     DesktopIOHandler.getInstance().writeErrorLog(e);
-                    InfoBox.error("Error", "Error: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+                    core.getInfoBox().error("Error", "Error: " + e.getLocalizedMessage());
                 }
 
                 curPopulating = false;
@@ -1516,7 +1516,7 @@ public final class ScrLexicon extends PFrame {
                     saveWord.setClassValue(entry.getKey(), -1);
                 }
             } else {
-                InfoBox.error("Value Save Error", "Unknown class value type.", core.getPolyGlot().getRootWindow());
+                core.getInfoBox().error("Value Save Error", "Unknown class value type.");
             }
         });
     }
@@ -1539,8 +1539,8 @@ public final class ScrLexicon extends PFrame {
             core.getWordCollection().deleteNodeById(curWord.getId());
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Deletion Error", "Unable to delete word: "
-                    + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Deletion Error", "Unable to delete word: "
+                    + e.getLocalizedMessage());
         }
 
         gridTitlePane.setExpanded(false);
@@ -1573,8 +1573,8 @@ public final class ScrLexicon extends PFrame {
             populateProperties();
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Creation Error", "Unable to create word: "
-                    + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Creation Error", "Unable to create word: "
+                    + e.getLocalizedMessage());
         }
         curPopulating = false;
 
@@ -2012,7 +2012,7 @@ public final class ScrLexicon extends PFrame {
                 clearFilter();
             } catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.error("Filter Error", e.getLocalizedMessage(), menuParent);
+                new DesktopInfoBox(menuParent).error("Filter Error", e.getLocalizedMessage());
             }
             SwingUtilities.invokeLater(() -> {
                 this.addWord();

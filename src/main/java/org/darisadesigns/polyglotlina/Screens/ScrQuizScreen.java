@@ -19,7 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PFrame;
 import org.darisadesigns.polyglotlina.CustomControls.PLabel;
@@ -74,9 +74,8 @@ public final class ScrQuizScreen extends PFrame {
         lblQuestion.setFont(core.getPropertiesManager().getFontLocal());
 
         if (!quiz.hasNext()) {
-            InfoBox.warning("Empty Quiz", 
-                    "Quiz has no questions. Check filter\nto make sure it is not too restrictive.", 
-                    core.getPolyGlot().getRootWindow());
+            core.getInfoBox().warning("Empty Quiz", 
+                    "Quiz has no questions. Check filter\nto make sure it is not too restrictive.");
         } else {
             nextQuestion();
             jPanel3.add(lblQNode);
@@ -91,7 +90,7 @@ public final class ScrQuizScreen extends PFrame {
         try {
             setQuestion(quiz.next());
         } catch (Exception e) {
-            InfoBox.error("Question Error", "Unable to move to next question: " + e.getLocalizedMessage(), this);
+            new DesktopInfoBox(this).error("Question Error", "Unable to move to next question: " + e.getLocalizedMessage());
             DesktopIOHandler.getInstance().writeErrorLog(e);
         }
     }
@@ -105,7 +104,7 @@ public final class ScrQuizScreen extends PFrame {
         try {
             setQuestion(quiz.prev());
         } catch (Exception e) {
-            InfoBox.error("Question Error", "Unable to move to previous question: " + e.getLocalizedMessage(), this);
+            new DesktopInfoBox(this).error("Question Error", "Unable to move to previous question: " + e.getLocalizedMessage());
         }
     }
 
@@ -114,12 +113,12 @@ public final class ScrQuizScreen extends PFrame {
         int quizLen = quiz.getLength();
 
         if (numRight == quizLen) {
-            InfoBox.info("Quiz Complete", "Perfect score! " + numRight
-                    + " out of " + quizLen + " correct!", this);
+            new DesktopInfoBox(this).info("Quiz Complete", "Perfect score! " + numRight
+                    + " out of " + quizLen + " correct!");
             dispose();
         } else {
-            if (InfoBox.actionConfirmation("Quiz Complete", numRight + " out of " + quizLen + " correct. Retake?", this)) {
-                if (InfoBox.actionConfirmation("Trim Quiz?", "Quiz only on incorrectly answered questions?", this)) {
+            if (new DesktopInfoBox(this).actionConfirmation("Quiz Complete", numRight + " out of " + quizLen + " correct. Retake?")) {
+                if (new DesktopInfoBox(this).actionConfirmation("Trim Quiz?", "Quiz only on incorrectly answered questions?")) {
                     quiz.trimQuiz();
                 } else {
                     quiz.resetQuiz();
@@ -217,8 +216,8 @@ public final class ScrQuizScreen extends PFrame {
             }
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Population Error", "Problem populating question: "
-                    + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
+            core.getInfoBox().error("Population Error", "Problem populating question: "
+                    + e.getLocalizedMessage());
         }
 
         setupScreen();
@@ -289,8 +288,8 @@ public final class ScrQuizScreen extends PFrame {
                 lblAnsStat.setForeground(Color.red);
                 break;
             default:
-                InfoBox.error("Unhandled Answer Type", "Answer type "
-                        + curQuestion.getAnswered() + " is not handled.", this);
+                new DesktopInfoBox(this).error("Unhandled Answer Type", "Answer type "
+                        + curQuestion.getAnswered() + " is not handled.");
         }
 
         pnlChoices.repaint();

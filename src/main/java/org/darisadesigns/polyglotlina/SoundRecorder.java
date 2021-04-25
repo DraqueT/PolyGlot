@@ -19,7 +19,7 @@
  */
 package org.darisadesigns.polyglotlina;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import java.awt.Window;
 import java.io.ByteArrayInputStream;
@@ -221,7 +221,7 @@ public class SoundRecorder {
                 out.close();
             } catch (LineUnavailableException | IOException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.error("Recording Error", "Unable to initialize recording: " + e.getLocalizedMessage(), parentWindow);
+                new DesktopInfoBox(parentWindow).error("Recording Error", "Unable to initialize recording: " + e.getLocalizedMessage());
             }
         });
 
@@ -349,8 +349,8 @@ public class SoundRecorder {
             } catch (LineUnavailableException | IOException | InterruptedException e) {
                 //e.printStackTrace();
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.error("Play Error", "Unable to play audio: "
-                        + e.getLocalizedMessage(), parentWindow);
+                new DesktopInfoBox(parentWindow).error("Play Error", "Unable to play audio: "
+                        + e.getLocalizedMessage());
             }
 
             playPauseBut.setIcon(playUp);
@@ -470,7 +470,7 @@ public class SoundRecorder {
         } catch (IOException
                 | LineUnavailableException
                 | UnsupportedAudioFileException e) {
-            InfoBox.error("Sound Error", "Unable to play sound: " + filePath + " due to: " + e.getLocalizedMessage(), null);
+            new DesktopInfoBox(null).error("Sound Error", "Unable to play sound: " + filePath + " due to: " + e.getLocalizedMessage());
         } finally {
             if (sourceLine != null) {
                 sourceLine.drain();
