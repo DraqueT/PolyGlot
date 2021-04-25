@@ -96,7 +96,7 @@ public final class ScrQuizGenDialog extends PFrame {
         } catch (NumberFormatException e) {
             // user error
             // IOHandler.writeErrorLog(e);
-            InfoBox.error("Integer Value Required", "Number of questions must be an integer value.", core.getRootWindow());
+            InfoBox.error("Integer Value Required", "Number of questions must be an integer value.", core.getPolyGlot().getRootWindow());
             return;
         }
         
@@ -128,7 +128,9 @@ public final class ScrQuizGenDialog extends PFrame {
                 ScrQuizScreen.run(genQuiz, core);
             } catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.error("Quiz Generation Error", "Unable to generate quiz: " + e.getLocalizedMessage(), core.getRootWindow());
+                InfoBox.error("Quiz Generation Error", 
+                        "Unable to generate quiz: " + e.getLocalizedMessage(), 
+                        core.getPolyGlot().getRootWindow());
             }
         }
     }
@@ -363,7 +365,7 @@ public final class ScrQuizGenDialog extends PFrame {
         // do not allow self to be checked if no classes exist
         if (core.getWordClassCollection().getAllWordClasses().length == 0
                 && chkClassQuiz.isSelected()) {
-            InfoBox.warning("No Classes Exist", "No word classes exist.", core.getRootWindow());
+            InfoBox.warning("No Classes Exist", "No word classes exist.", core.getPolyGlot().getRootWindow());
             chkClassQuiz.setSelected(false);
         }            
     }//GEN-LAST:event_chkClassQuizActionPerformed
@@ -376,7 +378,7 @@ public final class ScrQuizGenDialog extends PFrame {
         // do not allow self to be checked if no PoS exist
         if (core.getTypes().getNodes().length == 0
                 && chkTypeQuiz.isSelected()) {
-            InfoBox.warning("No PoS Exist", "No parts of speech exist.", core.getRootWindow());
+            InfoBox.warning("No PoS Exist", "No parts of speech exist.", core.getPolyGlot().getRootWindow());
             chkTypeQuiz.setSelected(false);
         }
     }//GEN-LAST:event_chkTypeQuizActionPerformed

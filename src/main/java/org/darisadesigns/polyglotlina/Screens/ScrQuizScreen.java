@@ -74,7 +74,9 @@ public final class ScrQuizScreen extends PFrame {
         lblQuestion.setFont(core.getPropertiesManager().getFontLocal());
 
         if (!quiz.hasNext()) {
-            InfoBox.warning("Empty Quiz", "Quiz has no questions. Check filter\nto make sure it is not too restrictive.", core.getRootWindow());
+            InfoBox.warning("Empty Quiz", 
+                    "Quiz has no questions. Check filter\nto make sure it is not too restrictive.", 
+                    core.getPolyGlot().getRootWindow());
         } else {
             nextQuestion();
             jPanel3.add(lblQNode);
@@ -216,7 +218,7 @@ public final class ScrQuizScreen extends PFrame {
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Population Error", "Problem populating question: "
-                    + e.getLocalizedMessage(), core.getRootWindow());
+                    + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
         }
 
         setupScreen();

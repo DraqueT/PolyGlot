@@ -62,6 +62,7 @@ public final class PolyGlot {
     private Object clipBoard;
     private UIDefaults uiDefaults;
     private DictCore core;
+    private ScrMainMenu rootWindow;
 
     private PolyGlot(String overridePath) throws Exception {
         overrideProgramPath = overridePath; // TODO: In the future, figure out how this might be better set. In options?
@@ -106,6 +107,11 @@ public final class PolyGlot {
 
                 PolyGlot polyGlot = new PolyGlot("");
                 DictCore core = new DictCore(polyGlot, DesktopIOHandler.getInstance());
+                
+                s = new ScrMainMenu(core);
+                polyGlot.setRootWindow(s);
+                s.checkForUpdates(false);
+                s.setVisible(true);
 
                 try {
                     DesktopIOHandler.getInstance().loadOptionsIni(polyGlot.optionsManager, polyGlot.getWorkingDirectory().getAbsolutePath());
@@ -113,13 +119,9 @@ public final class PolyGlot {
                 catch (Exception ex) {
                     DesktopIOHandler.getInstance().writeErrorLog(ex);
                     InfoBox.error("Options Load Error", "Unable to load options file or file corrupted:\n"
-                            + ex.getLocalizedMessage(), core.getRootWindow());
+                            + ex.getLocalizedMessage(), s);
                     DesktopIOHandler.getInstance().deleteIni(polyGlot.getWorkingDirectory().getAbsolutePath());
                 }
-
-                s = new ScrMainMenu(core);
-                s.checkForUpdates(false);
-                s.setVisible(true);
 
                 // runs additional integration if on OSX system
                 if (PGTUtil.IS_OSX) {
@@ -138,9 +140,9 @@ public final class PolyGlot {
 
                         try {
                             // saveOrCancelTest to prevent accidental failure to save open languages
-                            if (polyGlot.getCore().getRootWindow().saveOrCancelTest()) {
+                            if (polyGlot.getRootWindow().saveOrCancelTest()) {
                                 String filePath = files.get(0).getCanonicalPath();
-                                polyGlot.getCore().getRootWindow().openFileFromPath(filePath);
+                                polyGlot.getRootWindow().openFileFromPath(filePath);
                             }
                         }
                         catch (IOException | IllegalStateException ex) {
@@ -193,7 +195,7 @@ public final class PolyGlot {
 
                 // if a language has been loaded, open Lexicon
                 if (!polyGlot.getCore().getCurFileName().isBlank()) {
-                    polyGlot.getCore().getRootWindow().openLexicon(true);
+                    polyGlot.getRootWindow().openLexicon(true);
                 }
             }
             catch (ArrayIndexOutOfBoundsException e) {
@@ -283,9 +285,8 @@ public final class PolyGlot {
         return recovery;
     }
 
-    public DictCore getNewCore(ScrMainMenu rootWindow) {
+    public DictCore getNewCore() {
         DictCore ret = new DictCore(this, DesktopIOHandler.getInstance());
-        ret.setRootWindow(rootWindow);
         return ret;
     }
 
@@ -404,6 +405,12 @@ public final class PolyGlot {
 
     public void refreshUiDefaults() {
         uiDefaults = VisualStyleManager.generateUIOverrides(optionsManager.isNightMode());
+        if (rootWindow != null) {
+            rootWindow.dispose(false);
+            rootWindow = new ScrMainMenu(core);
+            rootWindow.setVisible(true);
+            rootWindow.selectFirstAvailableButton();
+        }
     }
 
     /**
@@ -423,5 +430,22 @@ public final class PolyGlot {
 
     public void setCore(DictCore _core) {
         this.core = _core;
+    }
+    
+    /**
+     * Sets root window (the ScrMainMenu object that the user sees)
+     * @param _rootWindow 
+     */
+    public void setRootWindow(ScrMainMenu _rootWindow) {
+        rootWindow = _rootWindow;
+    }
+    
+    /**
+     * Returns root window of PolyGlot
+     *
+     * @return
+     */
+    public ScrMainMenu getRootWindow() {
+        return rootWindow;
     }
 }

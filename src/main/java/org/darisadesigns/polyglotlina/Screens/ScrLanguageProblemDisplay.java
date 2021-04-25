@@ -41,7 +41,7 @@ public class ScrLanguageProblemDisplay extends PDialog {
      */
     public ScrLanguageProblemDisplay(List<LexiconProblemNode> problems, DictCore _core) {
         super(_core);
-        main = (ScrMainMenu)core.getRootWindow();
+        main = (ScrMainMenu)core.getPolyGlot().getRootWindow();
         initComponents();
         
         DefaultListModel<LexiconProblemNode> model = new DefaultListModel<>();

@@ -86,12 +86,12 @@ public final class ScrPhonology extends PFrame {
         
         if (core.getRomManager().usingLookaheadsLookbacks() && !core.getRomManager().isRecurse()) {
             InfoBox.warning("Possible Regex Issue", "It looks like your romanizations use lookahead or lookbehind patterns. "
-                    + "Please enable the recursion checkbox or these will not function correctly.", core.getRootWindow());
+                    + "Please enable the recursion checkbox or these will not function correctly.", core.getPolyGlot().getRootWindow());
         }
         
         if (core.getPronunciationMgr().usingLookaheadsLookbacks() && !core.getPronunciationMgr().isRecurse()) {
             InfoBox.warning("Possible Regex Issue", "It looks like your pronunciations use lookahead or lookbehind patterns. "
-                    + "Please enable the recursion checkbox or these will not function correctly.", core.getRootWindow());
+                    + "Please enable the recursion checkbox or these will not function correctly.", core.getPolyGlot().getRootWindow());
         }
         
         super.dispose();
@@ -384,7 +384,9 @@ public final class ScrPhonology extends PFrame {
                         editChar.setIgnoreListenerSilencing(false);
                         editChar.setValue(value.substring(0, 1));
                         editChar.setIgnoreListenerSilencing(true);
-                        InfoBox.warning("Single Character Only", "Replacement characters can only be 1 character long.", core.getRootWindow());
+                        InfoBox.warning("Single Character Only", 
+                                "Replacement characters can only be 1 character long.", 
+                                core.getPolyGlot().getRootWindow());
                     });
                 }
             }
@@ -542,7 +544,7 @@ public final class ScrPhonology extends PFrame {
         int curRow = tblProcs.getSelectedRow();
 
         if (curRow == -1
-                || !InfoBox.deletionConfirmation(core.getRootWindow())) {
+                || !InfoBox.deletionConfirmation(core.getPolyGlot().getRootWindow())) {
             return;
         }
 
@@ -562,7 +564,7 @@ public final class ScrPhonology extends PFrame {
         int curRow = tblRep.getSelectedRow();
 
         if (curRow == -1
-                || !InfoBox.deletionConfirmation(core.getRootWindow())) {
+                || !InfoBox.deletionConfirmation(core.getPolyGlot().getRootWindow())) {
             return;
         }
 
@@ -578,7 +580,7 @@ public final class ScrPhonology extends PFrame {
         int curRow = tblRom.getSelectedRow();
 
         if (curRow == -1
-                || !InfoBox.deletionConfirmation(core.getRootWindow())) {
+                || !InfoBox.deletionConfirmation(core.getPolyGlot().getRootWindow())) {
             return;
         }
 

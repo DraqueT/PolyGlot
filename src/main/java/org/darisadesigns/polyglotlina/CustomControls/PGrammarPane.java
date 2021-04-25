@@ -83,7 +83,7 @@ public class PGrammarPane extends JTextPane {
             } catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
                 InfoBox.error("Image Import Error", "Unable to import image: "
-                        + e.getLocalizedMessage(), core.getRootWindow());
+                        + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
             }
         });
         cut.addActionListener((ActionEvent ae) -> {
@@ -153,7 +153,7 @@ public class PGrammarPane extends JTextPane {
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Rendering Error", "Tab rendering error: " 
-                    + e.getLocalizedMessage(), core.getRootWindow());
+                    + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
         }
     }
 
@@ -168,7 +168,7 @@ public class PGrammarPane extends JTextPane {
         } catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Image Insertion Error", "Unable to insert image: "
-                    + e.getLocalizedMessage(), core.getRootWindow());
+                    + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
         }
     }
 
@@ -200,7 +200,7 @@ public class PGrammarPane extends JTextPane {
                 }
             } catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.error("Paste Error", "Unable to paste: " + e.getLocalizedMessage(), core.getRootWindow());
+                InfoBox.error("Paste Error", "Unable to paste: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
             }
         } else if (ClipboardHandler.isClipboardString()) {
             try {
@@ -212,7 +212,7 @@ public class PGrammarPane extends JTextPane {
                 super.paste();
             } catch (UnsupportedFlavorException | IOException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.error("Paste Error", "Unable to paste text: " + e.getLocalizedMessage(), core.getRootWindow());
+                InfoBox.error("Paste Error", "Unable to paste text: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
             }
         } else {
             super.paste();

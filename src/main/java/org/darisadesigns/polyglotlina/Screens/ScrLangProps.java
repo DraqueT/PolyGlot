@@ -260,13 +260,13 @@ public class ScrLangProps extends PFrame {
             if (!synced) {
                 InfoBox.warning("Font Not Cached",
                         "Unable to locate physical font file. If your font uses ligatures, they may not appear correctly.\n"
-                        + "To address this, please load your font manually via Tools->Import Font", core.getRootWindow());
+                        + "To address this, please load your font manually via Tools->Import Font", core.getPolyGlot().getRootWindow());
             }
         }
         catch (Exception e) {
             InfoBox.error("Font Caching Error",
                     "Unable to locate physical font file. If your font uses ligatures, they may not appear correctly.\n"
-                    + "To address this, please load your font manually via Tools->Import Font\n\nError: " + e.getLocalizedMessage(), core.getRootWindow());
+                    + "To address this, please load your font manually via Tools->Import Font\n\nError: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
         }
 
         testRTLWarning();
@@ -293,7 +293,7 @@ public class ScrLangProps extends PFrame {
                 || conFont.getFamily().equals(stdFont.getFamily()))) {
             InfoBox.warning("RTL Font Warning", "Enforcing RTL with default font"
                     + " is not recommended. For best results, please set distinct"
-                    + " conlang font.", core.getRootWindow());
+                    + " conlang font.", core.getPolyGlot().getRootWindow());
         }
     }
 
@@ -678,7 +678,7 @@ public class ScrLangProps extends PFrame {
         if (chkIgnoreCase.isSelected()) {
             InfoBox.warning("Ignore Case Warning",
                     "This feature does not work with all charactrers, and can disrupt regex features. Please use with caution.",
-                    core.getRootWindow());
+                    core.getPolyGlot().getRootWindow());
         }
     }//GEN-LAST:event_chkIgnoreCaseActionPerformed
 

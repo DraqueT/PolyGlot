@@ -184,7 +184,7 @@ public final class ScrDeclensionGenSetup extends PDialog {
 
         if (decs.length == 0) {
             InfoBox.warning("No Declensions Exist", "Please set up some conjugations/declensions for \""
-                    + _core.getTypes().getNodeById(_typeId).getValue() + "\" before setting up automatic patterns.", _core.getRootWindow());
+                    + _core.getTypes().getNodeById(_typeId).getValue() + "\" before setting up automatic patterns.", _core.getPolyGlot().getRootWindow());
             s.dispose();
         } else {
             s.setVisible(true);

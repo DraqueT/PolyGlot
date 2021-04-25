@@ -47,8 +47,8 @@ public final class ScrReversion extends PDialog {
             revModel.addElement(curNode);
         }
         
-        if (core.getRootWindow() != null){
-            this.setLocation(core.getRootWindow().getLocation());
+        if (core.getPolyGlot().getRootWindow() != null){
+            this.setLocation(core.getPolyGlot().getRootWindow().getLocation());
         }
     }
 

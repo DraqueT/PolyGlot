@@ -99,7 +99,7 @@ public final class ScrDeclensionsGrids extends PDialog {
         if (typeId == 0) {
             InfoBox.info("Missing Part of Speech", 
                     "Word must have a part of Speech set and the part of speech must have declensions defined before using this feature.", 
-                    core.getRootWindow());
+                    core.getPolyGlot().getRootWindow());
             ret = false;
         } else if ((decMan.getDimensionalConjugationListTemplate(typeId) == null
                     || decMan.getDimensionalConjugationListTemplate(typeId).length == 0)
@@ -107,7 +107,7 @@ public final class ScrDeclensionsGrids extends PDialog {
                 && decMan.getSingletonCombinedIds(typeId).length == 0) {
             InfoBox.info("Declensions", "No declensions for part of speech: " + word.getWordTypeDisplay()
                     + " set. Declensions can be created per part of speech under the Part of Speech menu by clicking the "
-                            + "Declensions button.", core.getRootWindow());
+                            + "Declensions button.", core.getPolyGlot().getRootWindow());
             ret = false;
         }
         

@@ -315,7 +315,9 @@ public final class ScrWordClasses extends PFrame {
             prop = (WordClass) core.getWordClassCollection().getNodeById(propId);
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Property Creation Error", "Unable to create new word property: " + e.getLocalizedMessage(), core.getRootWindow());
+            InfoBox.error("Property Creation Error", 
+                    "Unable to create new word property: " + e.getLocalizedMessage(), 
+                    core.getPolyGlot().getRootWindow());
             return;
         }
 
@@ -329,7 +331,7 @@ public final class ScrWordClasses extends PFrame {
         int position = lstProperties.getSelectedIndex();
 
         if (prop == null || InfoBox.yesNoCancel("Are you sure?", "This will delete the class from all words."
-                + " Values will be irretrievably lost.", core.getRootWindow()) != JOptionPane.YES_OPTION) {
+                + " Values will be irretrievably lost.", core.getPolyGlot().getRootWindow()) != JOptionPane.YES_OPTION) {
             return;
         }
 
@@ -337,7 +339,9 @@ public final class ScrWordClasses extends PFrame {
             core.getWordClassCollection().deleteNodeById(prop.getId());
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Unable to Delete", "Unable to delete property: " + e.getLocalizedMessage(), core.getRootWindow());
+            InfoBox.error("Unable to Delete", 
+                    "Unable to delete property: " + e.getLocalizedMessage(), 
+                    core.getPolyGlot().getRootWindow());
         }
         DefaultListModel listModel = (DefaultListModel) lstProperties.getModel();
         listModel.removeElement(prop);
@@ -363,7 +367,9 @@ public final class ScrWordClasses extends PFrame {
             value = curProp.addValue("");
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Value Add Error", e.getLocalizedMessage(), core.getRootWindow());
+            InfoBox.error("Value Add Error", 
+                    e.getLocalizedMessage(), 
+                    core.getPolyGlot().getRootWindow());
             return;
         }
 

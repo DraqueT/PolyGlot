@@ -181,7 +181,8 @@ public class ScrLogoDetails extends PFrame {
             latch.await();
         } catch (InterruptedException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Form Load Error", "Unable to load Lexicon: " + e.getLocalizedMessage(), core.getRootWindow());
+            InfoBox.error("Form Load Error", "Unable to load Lexicon: " + e.getLocalizedMessage(), 
+                    core.getPolyGlot().getRootWindow());
         }
         
         gridTitlePane.setTooltip(new Tooltip(FILTER_LABEL));
@@ -477,11 +478,11 @@ public class ScrLogoDetails extends PFrame {
                 populateLogoProps();
             } catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.error("Paste Error", "Unable to paste: " + e.getLocalizedMessage(), core.getRootWindow());
+                InfoBox.error("Paste Error", "Unable to paste: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
             }
         } else {
             InfoBox.warning("Image Format Incompatibility",
-                    "The contents of the clipboard is not an image, or is an unrecognized format", core.getRootWindow());
+                    "The contents of the clipboard is not an image, or is an unrecognized format", core.getPolyGlot().getRootWindow());
         }
     }
 
@@ -508,7 +509,8 @@ public class ScrLogoDetails extends PFrame {
             java.awt.EventQueue.invokeLater(() -> {
                 curPopulating = true;
                 txtStrokes.setText("");
-                InfoBox.info("Type mismatch", "Please enter only numeric values into strokes field.", core.getRootWindow());
+                InfoBox.info("Type mismatch", "Please enter only numeric values into strokes field.", 
+                        core.getPolyGlot().getRootWindow());
                 curPopulating = false;
             });
         }
@@ -749,7 +751,8 @@ public class ScrLogoDetails extends PFrame {
                 java.awt.EventQueue.invokeLater(() -> {
                     curPopulating = true;
                     fltStrokes.setText("");
-                    InfoBox.info("Type mismatch", "Strokes field compatible with integer values only", core.getRootWindow());
+                    InfoBox.info("Type mismatch", "Strokes field compatible with integer values only", 
+                            core.getPolyGlot().getRootWindow());
                     curPopulating = false;
                 });
 
@@ -916,11 +919,11 @@ public class ScrLogoDetails extends PFrame {
         } catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Image Load Error", "Unable to load image: " + fileName
-                    + ": " + e.getMessage(), core.getRootWindow());
+                    + ": " + e.getMessage(), core.getPolyGlot().getRootWindow());
         } catch (NullPointerException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Image Load Error", "Unable to read format of image: "
-                    + fileName, core.getRootWindow());
+                    + fileName, core.getPolyGlot().getRootWindow());
         }
     }
 
@@ -934,7 +937,7 @@ public class ScrLogoDetails extends PFrame {
             return;
         }
 
-        if (!InfoBox.deletionConfirmation(core.getRootWindow())) {
+        if (!InfoBox.deletionConfirmation(core.getPolyGlot().getRootWindow())) {
             return;
         }
 
@@ -953,7 +956,7 @@ public class ScrLogoDetails extends PFrame {
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Logograph Error", "Unable to delete logograph: "
-                    + e.getMessage(), core.getRootWindow());
+                    + e.getMessage(), core.getPolyGlot().getRootWindow());
         }
     }
 
@@ -1041,7 +1044,9 @@ public class ScrLogoDetails extends PFrame {
             core.getLogoCollection().addNode(newNode);
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Logograph Error", "Unable to create Logograph: " + e.getMessage(), core.getRootWindow());
+            InfoBox.error("Logograph Error", 
+                    "Unable to create Logograph: " + e.getMessage(), 
+                    core.getPolyGlot().getRootWindow());
         }
 
         populateLogographs();

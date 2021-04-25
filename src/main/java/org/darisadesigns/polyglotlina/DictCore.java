@@ -73,8 +73,7 @@ public class DictCore {
     private EtymologyManager etymologyManager;
     private ReversionManager reversionManager;
     private ToDoManager toDoManager;
-    private IOHandler ioHandler;
-    private ScrMainMenu rootWindow;
+    private final IOHandler ioHandler;
     private boolean curLoading = false;
     private Instant lastSaveTime = Instant.MIN;
     private String curFileName = "";
@@ -93,7 +92,7 @@ public class DictCore {
     }
     
     public DictCore getNewCore() {
-        return polyGlot.getNewCore(rootWindow);
+        return polyGlot.getNewCore();
     }
     
     private void initializeDictCore() {
@@ -117,7 +116,6 @@ public class DictCore {
 
             wordCollection.setAlphaOrder(alphaOrder);
             logoCollection.setAlphaOrder(alphaOrder);
-            rootWindow = null;
             
             PGTUtil.validateVersion();
         } catch (Exception e) {
@@ -131,10 +129,6 @@ public class DictCore {
      */
     public void refreshMainMenu() {
         polyGlot.refreshUiDefaults();
-        rootWindow.dispose(false);
-        rootWindow = new ScrMainMenu(this);
-        rootWindow.setVisible(true);
-        rootWindow.selectFirstAvailableButton();
     }
     
     public UIDefaults getUiDefaults() {
@@ -163,13 +157,13 @@ public class DictCore {
                 ? "Local Lang"
                 : propertiesManager.getLocalLangName();
     }
-
+    
     /**
-     * Sets root window (the ScrMainMenu object that the user sees)
-     * @param _rootWindow 
+     * Gets PolyGlot object
+     * @return
      */
-    public void setRootWindow(ScrMainMenu _rootWindow) {
-        rootWindow = _rootWindow;
+    public PolyGlot getPolyGlot() {
+        return polyGlot;
     }
 
     /**
@@ -227,7 +221,7 @@ public class DictCore {
      * Pushes save signal to main interface menu
      */
     public void coreOpen() {
-        rootWindow.open();
+        polyGlot.getRootWindow().open();
     }
 
     /**
@@ -236,7 +230,7 @@ public class DictCore {
      * @param performTest whether to prompt user to save
      */
     public void coreNew(boolean performTest) {
-        rootWindow.newFile(performTest);
+        polyGlot.getRootWindow().newFile(performTest);
     }
 
     /**
@@ -264,18 +258,9 @@ public class DictCore {
         }
 
         // null root window indicates that this is a virtual dict core used for library analysis
-        if (rootWindow != null) {
-            rootWindow.updateAllValues(_core);
+        if (polyGlot.getRootWindow() != null) {
+            polyGlot.getRootWindow().updateAllValues(_core);
         }
-    }
-
-    /**
-     * Returns root window of PolyGlot
-     *
-     * @return
-     */
-    public ScrMainMenu getRootWindow() {
-        return rootWindow;
     }
 
     /**
@@ -342,12 +327,12 @@ public class DictCore {
                         Desktop.getDesktop().open(report);
                     } else {
                         InfoBox.warning("Menu Warning", "Unable to open browser. Please load manually at: \n" 
-                                + report.getAbsolutePath() + "\n (copied to clipboard for convenience)", rootWindow);
+                                + report.getAbsolutePath() + "\n (copied to clipboard for convenience)", polyGlot.getRootWindow());
                         new ClipboardHandler().setClipboardContents(report.getAbsolutePath());
                     }
                 } catch (IOException e) {
                     InfoBox.error("Report Build Error", "Unable to generate/display language statistics: " 
-                            + e.getLocalizedMessage(), rootWindow);
+                            + e.getLocalizedMessage(), polyGlot.getRootWindow());
                     core.ioHandler.writeErrorLog(e);
                 }
             }
@@ -459,7 +444,7 @@ public class DictCore {
         }
         
         // do not run in headless environments...
-        if (rootWindow != null) {
+        if (polyGlot.getRootWindow() != null) {
             refreshMainMenu();
         }
     }
@@ -472,7 +457,6 @@ public class DictCore {
      */
     public void revertToState(byte[] revision, String fileName) throws IOException{
         DictCore revDict = new DictCore(polyGlot, ioHandler);
-        revDict.setRootWindow(rootWindow);
         revDict.readFile(fileName, revision);
         
         pushUpdateWithCore(revDict);

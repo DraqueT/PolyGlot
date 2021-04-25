@@ -216,7 +216,7 @@ public final class ScrTypes extends PFrame {
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Type Population Error", "Unable to populate types: "
-                    + e.getLocalizedMessage(), core.getRootWindow());
+                    + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
         }
     }
 
@@ -294,7 +294,7 @@ public final class ScrTypes extends PFrame {
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Type Creation Error", "Could not create new type: "
-                    + e.getLocalizedMessage(), core.getRootWindow());
+                    + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
         }
         
         populateTypes();
@@ -324,7 +324,9 @@ public final class ScrTypes extends PFrame {
             core.getTypes().deleteNodeById(curType.getId());
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Deletion Error", "Unable to delete type." + e.getLocalizedMessage(), core.getRootWindow());
+            InfoBox.error("Deletion Error", 
+                    "Unable to delete type." + e.getLocalizedMessage(), 
+                    core.getPolyGlot().getRootWindow());
         }
         
         
@@ -399,7 +401,8 @@ public final class ScrTypes extends PFrame {
         if (txtName.getText().isEmpty()
                 && curType != null) {
             InfoBox.warning("Illegal Type",
-                    "Currently selected type is illegal. Please correct or delete.", core.getRootWindow());
+                    "Currently selected type is illegal. Please correct or delete.", 
+                    core.getPolyGlot().getRootWindow());
             ret = false;
         }
         
@@ -653,7 +656,7 @@ public final class ScrTypes extends PFrame {
 
         Window window = ScrDeclensionGenSetup.run(core, curNode.getId());
         
-        core.getRootWindow().setVisible(false);
+        core.getPolyGlot().getRootWindow().setVisible(false);
         window.addWindowListener(new WindowListener() {
                     @Override
                     public void windowOpened(WindowEvent e) {
@@ -665,7 +668,7 @@ public final class ScrTypes extends PFrame {
 
                     @Override
                     public void windowClosed(WindowEvent e) {
-                        core.getRootWindow().setVisible(true);
+                        core.getPolyGlot().getRootWindow().setVisible(true);
                     }
 
                     @Override

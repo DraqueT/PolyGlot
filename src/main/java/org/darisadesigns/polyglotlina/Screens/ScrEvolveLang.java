@@ -352,7 +352,7 @@ public final class ScrEvolveLang extends PDialog {
                             cmbTransformOptions.getItemAt(cmbTransformOptions.getSelectedIndex()),
                             regex, 
                             replace)));
-                    core.getRootWindow().updateAllValues(core);
+                    core.getPolyGlot().getRootWindow().updateAllValues(core);
                 }
                 
                 if (rdoConjpatterns.isSelected() || rdoBoth.isSelected()) {

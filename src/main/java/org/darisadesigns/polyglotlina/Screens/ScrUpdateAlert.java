@@ -111,10 +111,12 @@ public class ScrUpdateAlert extends PDialog {
                 // custom message if user is on a beta copy of PolyGlot
                 if (PGTUtil.IS_BETA) {
                     InfoBox.info("Update Status", "You're up to date on a beta build branched from the most recent release candidate ("
-                            + PGTUtil.getDisplayVersion() + ")", core.getRootWindow());
+                            + PGTUtil.getDisplayVersion() + ")", 
+                            core.getPolyGlot().getRootWindow());
                 } else {
                     InfoBox.info("Update Status", "You're up to date and on the newest version: "
-                        + PGTUtil.getDisplayVersion() + ".", core.getRootWindow());
+                        + PGTUtil.getDisplayVersion() + ".", 
+                            core.getPolyGlot().getRootWindow());
                 }
             }            
             this.setVisible(false);
@@ -298,7 +300,9 @@ public class ScrUpdateAlert extends PDialog {
                     java.awt.Desktop.getDesktop().browse(uri);
                 } catch (IOException | URISyntaxException ex) {
                     DesktopIOHandler.getInstance().writeErrorLog(ex);
-                    InfoBox.error("Browser Error", "Unable to open page: " + link, core.getRootWindow());
+                    InfoBox.error("Browser Error", 
+                            "Unable to open page: " + link, 
+                            core.getPolyGlot().getRootWindow());
                 }
             });
 

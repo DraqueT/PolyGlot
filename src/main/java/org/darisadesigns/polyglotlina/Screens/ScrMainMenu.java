@@ -121,7 +121,6 @@ public final class ScrMainMenu extends PFrame {
 
         initComponents();
 
-        core.setRootWindow(this);
         toDoTree = new PToDoTree(nightMode, menuFontSize);
         cacheLexicon = ScrLexicon.run(core, this);
 
@@ -134,7 +133,7 @@ public final class ScrMainMenu extends PFrame {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Resource Error",
                     "Unable to load internal resource: " + e.getLocalizedMessage(),
-                    core.getRootWindow());
+                    core.getPolyGlot().getRootWindow());
         }
 
         updateAllValues(core);
@@ -346,7 +345,7 @@ public final class ScrMainMenu extends PFrame {
             } catch (IOException e) {
                 // save error likely due to inability to write to disk, disable logging
                 // IOHandler.writeErrorLog(e);
-                InfoBox.warning("INI Save Error", e.getLocalizedMessage(), core.getRootWindow());
+                InfoBox.warning("INI Save Error", e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
             }
 
             System.exit(0);
@@ -380,7 +379,7 @@ public final class ScrMainMenu extends PFrame {
                 || javaVersion.startsWith("1.6")) {
             InfoBox.error("Please Upgrade Java", "Java " + javaVersion
                     + " must be upgraded to run PolyGlot. Version 1.7 or higher is required.\n\n"
-                    + "Please upgrade at https://java.com/en/download/.", core.getRootWindow());
+                    + "Please upgrade at https://java.com/en/download/.", core.getPolyGlot().getRootWindow());
             System.exit(0);
         }
     }
@@ -431,11 +430,11 @@ public final class ScrMainMenu extends PFrame {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             core = core.getNewCore(); // don't allow partial loads
             InfoBox.error("File Read Error", "Could not read file: " + fileName
-                    + "\n\n " + e.getMessage(), core.getRootWindow());
+                    + "\n\n " + e.getMessage(), core.getPolyGlot().getRootWindow());
         } catch (IllegalStateException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.warning("File Read Problems", "Problems reading file:\n"
-                    + e.getLocalizedMessage(), core.getRootWindow());
+                    + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
         }
 
         genTitle();
@@ -452,7 +451,7 @@ public final class ScrMainMenu extends PFrame {
 
         if (core != null && !core.isLanguageEmpty()) {
             int saveFirst = InfoBox.yesNoCancel("Save First?",
-                    "Save current language before performing action?", core.getRootWindow());
+                    "Save current language before performing action?", core.getPolyGlot().getRootWindow());
 
             if (saveFirst == JOptionPane.YES_OPTION) {
                 boolean saved = saveFile();
@@ -518,14 +517,14 @@ public final class ScrMainMenu extends PFrame {
                 | TransformerException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Save Error", "Unable to save to file: "
-                    + curFileName + "\n\n" + e.getMessage(), core.getRootWindow());
+                    + curFileName + "\n\n" + e.getMessage(), core.getPolyGlot().getRootWindow());
         }
 
         setCursor(Cursor.getDefaultCursor());
 
         if (cleanSave) {
             InfoBox.info("Success", "Language saved to: "
-                    + curFileName + ".", core.getRootWindow());
+                    + curFileName + ".", core.getPolyGlot().getRootWindow());
         }
 
         return cleanSave;
@@ -571,7 +570,7 @@ public final class ScrMainMenu extends PFrame {
 
             if (DesktopIOHandler.getInstance().fileExists(fileName)) {
                 int overWrite = InfoBox.yesNoCancel("Overwrite Dialog",
-                        "Overwrite existing file? " + fileName, core.getRootWindow());
+                        "Overwrite existing file? " + fileName, core.getPolyGlot().getRootWindow());
 
                 if (overWrite == JOptionPane.NO_OPTION) {
                     ret = saveFileAsDialog();
@@ -684,7 +683,7 @@ public final class ScrMainMenu extends PFrame {
                     if (verbose) {
                         InfoBox.error("Update Problem",
                                 "Unable to check for update:\n"
-                                + e.getLocalizedMessage(), core.getRootWindow());
+                                + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
                     }
                 }
             }
@@ -723,7 +722,7 @@ public final class ScrMainMenu extends PFrame {
                 Java8Bridge.exportExcelDict(fileName, core,
                         InfoBox.actionConfirmation("Excel Export",
                                 "Export all declensions? (Separates parts of speech into individual tabs)",
-                                core.getRootWindow()));
+                                core.getPolyGlot().getRootWindow()));
 
                 // only prompt user to open if Desktop supported
                 if (Desktop.isDesktopSupported()) {
@@ -731,11 +730,11 @@ public final class ScrMainMenu extends PFrame {
                         Desktop.getDesktop().open(new File(fileName));
                     }
                 } else {
-                    InfoBox.info("Export Status", "Language exported to " + fileName + ".", core.getRootWindow());
+                    InfoBox.info("Export Status", "Language exported to " + fileName + ".", core.getPolyGlot().getRootWindow());
                 }
             } catch (IOException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.info("Export Problem", e.getLocalizedMessage(), core.getRootWindow());
+                InfoBox.info("Export Problem", e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
             }
         }
     }
@@ -778,10 +777,10 @@ public final class ScrMainMenu extends PFrame {
             } else {
                 DesktopIOHandler.getInstance().exportFont(fileName, core.getCurFileName());
             }
-            InfoBox.info("Export Success", "Font exported to: " + fileName, core.getRootWindow());
+            InfoBox.info("Export Success", "Font exported to: " + fileName, core.getPolyGlot().getRootWindow());
         } catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Export Error", "Unable to export font: " + e.getMessage(), core.getRootWindow());
+            InfoBox.error("Export Error", "Unable to export font: " + e.getMessage(), core.getPolyGlot().getRootWindow());
         }
     }
 
@@ -818,7 +817,7 @@ public final class ScrMainMenu extends PFrame {
         } else {
             InfoBox.warning("Open Lexicon",
                     "Please open the Lexicon and select a word to use this feature.",
-                    core.getRootWindow());
+                    core.getPolyGlot().getRootWindow());
         }
     }
 
@@ -838,7 +837,7 @@ public final class ScrMainMenu extends PFrame {
         } else {
             InfoBox.warning("Open Lexicon",
                     "Please open the Lexicon and select a word to use this feature.",
-                    core.getRootWindow());
+                    core.getPolyGlot().getRootWindow());
         }
 
         return ret;
@@ -908,7 +907,7 @@ public final class ScrMainMenu extends PFrame {
                         InfoBox.info("Just human...", "Yes it can. You're not a kukun.", null);
                     } else if (lastChars.toLowerCase().endsWith("who's draque")
                             || lastChars.toLowerCase().endsWith("who is draque")) {
-                        ScrEasterEgg.run(core.getRootWindow());
+                        ScrEasterEgg.run(core.getPolyGlot().getRootWindow());
                     } else if (lastChars.endsWith("uuddlrlrba")) {
                         InfoBox.info("コナミコマンド", "30の命を与えます。", null);
                     }
@@ -1339,7 +1338,7 @@ public final class ScrMainMenu extends PFrame {
 
             if (DesktopIOHandler.getInstance().fileExists(fileName)) {
                 int overWrite = InfoBox.yesNoCancel("Overwrite Dialog",
-                        "Overwrite existing file? " + fileName, core.getRootWindow());
+                        "Overwrite existing file? " + fileName, core.getPolyGlot().getRootWindow());
 
                 if (overWrite != JOptionPane.YES_OPTION) {
                     return;
@@ -2005,7 +2004,8 @@ public final class ScrMainMenu extends PFrame {
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         if (InfoBox.yesNoCancel("Continue Operation?", "The statistics report can"
                 + " take a long time to complete, depending on the complexity\n"
-                + "of your conlang. Continue?", core.getRootWindow()) == JOptionPane.YES_OPTION) {
+                + "of your conlang. Continue?", 
+                core.getPolyGlot().getRootWindow()) == JOptionPane.YES_OPTION) {
 
             if (!WebInterface.isInternetConnected()) {
                 InfoBox.warning("No Net Connection", "No network connection detected. Google generated graphs will not be rendered.", this);

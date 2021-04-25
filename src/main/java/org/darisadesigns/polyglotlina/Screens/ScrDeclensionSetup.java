@@ -93,7 +93,7 @@ public final class ScrDeclensionSetup extends PDialog {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             InfoBox.error("Part of Speech Error",
                     "Part of Speech not found, unable to open declensions for type with id: "
-                    + _typeId + " " + e.getMessage(), core.getRootWindow());
+                    + _typeId + " " + e.getMessage(), core.getPolyGlot().getRootWindow());
             this.dispose();
         }
 

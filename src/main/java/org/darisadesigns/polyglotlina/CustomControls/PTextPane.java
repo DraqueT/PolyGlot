@@ -106,7 +106,7 @@ public final class PTextPane extends JTextPane {
                 super.paste();
             } catch (UnsupportedFlavorException | IOException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.error("Paste Error", "Unable to paste text: " + e.getLocalizedMessage(), core.getRootWindow());
+                InfoBox.error("Paste Error", "Unable to paste text: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
             }
         } else if (ClipboardHandler.isClipboardImage() && !disableMedia) {
             try {
@@ -132,7 +132,7 @@ public final class PTextPane extends JTextPane {
                 }
             } catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                InfoBox.error("Paste Error", "Unable to paste: " + e.getLocalizedMessage(), core.getRootWindow());
+                InfoBox.error("Paste Error", "Unable to paste: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
             }
         } else {
             super.paste();
@@ -149,7 +149,7 @@ public final class PTextPane extends JTextPane {
             }
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Set text error", "Could not set text component: " + e.getLocalizedMessage(), core.getRootWindow());
+            InfoBox.error("Set text error", "Could not set text component: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
         }
 
         if (isDefaultText() && !defText.isBlank()) {
@@ -221,7 +221,7 @@ public final class PTextPane extends JTextPane {
             } catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
                 InfoBox.error("Image Import Error", "Unable to import image: "
-                        + e.getLocalizedMessage(), core.getRootWindow());
+                        + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
             }
         });
         cut.addActionListener((ActionEvent ae) -> {
@@ -387,7 +387,7 @@ public final class PTextPane extends JTextPane {
                             DesktopIOHandler.getInstance().writeErrorLog(ex);
                             InfoBox.error("Character Replacement Error",
                                     "Clipboard threw error during character replacement process:"
-                                    + ex.getLocalizedMessage(), core.getRootWindow());
+                                    + ex.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
                         }
                     }
                 }

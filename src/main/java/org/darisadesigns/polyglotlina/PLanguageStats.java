@@ -79,8 +79,8 @@ public final class PLanguageStats {
             progress.setVisible(true);
 
             // unnessecary to test UI positioning here (and no root window in tests)
-            if (core.getRootWindow() != null) {
-                progress.setLocation(core.getRootWindow().getLocation());
+            if (core.getPolyGlot().getRootWindow() != null) {
+                progress.setLocation(core.getPolyGlot().getRootWindow().getLocation());
             }
 
             Thread thread = new Thread() {
@@ -95,7 +95,7 @@ public final class PLanguageStats {
         }
         catch (InterruptedException e) {
             core.getIOHandler().writeErrorLog(e);
-            InfoBox.error("Language Stat Error", "Unable to generate language statistics: " + e.getLocalizedMessage(), core.getRootWindow());
+            InfoBox.error("Language Stat Error", "Unable to generate language statistics: " + e.getLocalizedMessage(), core.getPolyGlot().getRootWindow());
         }
 
         return ret[0];

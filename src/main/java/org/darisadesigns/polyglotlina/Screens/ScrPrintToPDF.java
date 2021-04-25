@@ -330,7 +330,7 @@ public class ScrPrintToPDF extends PDialog {
 
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
         if (txtSavePath.getText().isEmpty()) {
-            InfoBox.warning("File not Specified", "Please specify a file to save to.", core.getRootWindow());
+            InfoBox.warning("File not Specified", "Please specify a file to save to.", core.getPolyGlot().getRootWindow());
             return;
         }
         
@@ -369,17 +369,21 @@ public class ScrPrintToPDF extends PDialog {
                 if (InfoBox.yesNoCancel("Print Success", "PDF successfully printed. Open file now?", this) 
                         == JOptionPane.YES_OPTION) {
                     if (!DesktopIOHandler.getInstance().openFileNativeOS(txtSavePath.getText())) {
-                        InfoBox.error("File Error", "Unable to open PDF at location: " + txtSavePath.getText(), core.getRootWindow());
+                        InfoBox.error("File Error", 
+                                "Unable to open PDF at location: " + txtSavePath.getText(), 
+                                core.getPolyGlot().getRootWindow());
                     }
                 }
             } else {
-                InfoBox.info("Print Success", "Successfully printed to " + txtSavePath.getText(), core.getRootWindow());
+                InfoBox.info("Print Success", 
+                        "Successfully printed to " + txtSavePath.getText(), 
+                        core.getPolyGlot().getRootWindow());
             }
             
             this.dispose();
         } catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            InfoBox.error("Save Error", e.getMessage(), core.getRootWindow());
+            InfoBox.error("Save Error", e.getMessage(), core.getPolyGlot().getRootWindow());
         } finally {
             setCursor(Cursor.getDefaultCursor());
         }
@@ -408,7 +412,7 @@ public class ScrPrintToPDF extends PDialog {
      * @param _core Dictionary Core
      */
     public static void run(final DictCore _core) {
-        _core.getRootWindow().saveAllValues();
+        _core.getPolyGlot().getRootWindow().saveAllValues();
         java.awt.EventQueue.invokeLater(() -> {
             new ScrPrintToPDF(_core).setVisible(true);
         });
