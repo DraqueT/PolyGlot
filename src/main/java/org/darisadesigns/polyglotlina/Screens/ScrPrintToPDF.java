@@ -330,7 +330,7 @@ public class ScrPrintToPDF extends PDialog {
 
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
         if (txtSavePath.getText().isEmpty()) {
-            core.getInfoBox().warning("File not Specified", "Please specify a file to save to.");
+            core.getOSHandler().getInfoBox().warning("File not Specified", "Please specify a file to save to.");
             return;
         }
         
@@ -369,19 +369,19 @@ public class ScrPrintToPDF extends PDialog {
                 if (new DesktopInfoBox(this).yesNoCancel("Print Success", "PDF successfully printed. Open file now?") 
                         == JOptionPane.YES_OPTION) {
                     if (!DesktopIOHandler.getInstance().openFileNativeOS(txtSavePath.getText())) {
-                        core.getInfoBox().error("File Error", 
+                        core.getOSHandler().getInfoBox().error("File Error", 
                                 "Unable to open PDF at location: " + txtSavePath.getText());
                     }
                 }
             } else {
-                core.getInfoBox().info("Print Success", 
+                core.getOSHandler().getInfoBox().info("Print Success", 
                         "Successfully printed to " + txtSavePath.getText());
             }
             
             this.dispose();
         } catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getInfoBox().error("Save Error", e.getMessage());
+            core.getOSHandler().getInfoBox().error("Save Error", e.getMessage());
         } finally {
             setCursor(Cursor.getDefaultCursor());
         }

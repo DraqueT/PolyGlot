@@ -23,7 +23,7 @@ import java.awt.Window;
 
 /**
  *
- * @author edga_
+ * @author pe1uca
  */
 public interface InfoBox {
 

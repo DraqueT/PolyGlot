@@ -437,7 +437,7 @@ public class ScrExcelImport extends PDialog {
         File file = new File(txtFileName.getText());
 
         if (!file.exists()) {
-            core.getInfoBox().error("File Error", "File does not exist: " + txtFileName.getText());
+            core.getOSHandler().getInfoBox().error("File Error", "File does not exist: " + txtFileName.getText());
             return;
         }
         try {

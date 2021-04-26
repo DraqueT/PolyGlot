@@ -90,7 +90,7 @@ public final class ScrDeclensionSetup extends PDialog {
             btnClearDep.setToolTipText(btnClearDep.getToolTipText() + myType.getValue());
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            _core.getInfoBox().error("Part of Speech Error",
+            _core.getOSHandler().getInfoBox().error("Part of Speech Error",
                     "Part of Speech not found, unable to open declensions for type with id: "
                     + _typeId + " " + e.getMessage());
             this.dispose();

@@ -66,7 +66,7 @@ public class ImageCollection extends DictionaryCollection<ImageNode> {
     public ImageNode openNewImage(Window parent, File workingDirectory) throws Exception {
         ImageNode image = null;
         try {
-            BufferedImage buffImg = core.getIOHandler().openImage(parent, workingDirectory);
+            BufferedImage buffImg = core.getOSHandler().getIOHandler().openImage(parent, workingDirectory);
             
             if (buffImg != null) {
                 image = new ImageNode();
@@ -114,7 +114,7 @@ public class ImageCollection extends DictionaryCollection<ImageNode> {
         try {
             emptyImage.setImage(ImageIO.read(getClass().getResource(PGTUtil.NOT_FOUND_IMAGE)));
         } catch (IOException e) {
-            core.getIOHandler().writeErrorLog(e);
+            core.getOSHandler().getIOHandler().writeErrorLog(e);
             new DesktopInfoBox(null).error("INTERNAL ERROR", 
                     "Unable to locate missing-image image.\nThis is kind of an ironic error.");
         }

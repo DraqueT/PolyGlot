@@ -686,7 +686,7 @@ public final class ScrGrammarGuide extends PFrame {
         } catch (NumberFormatException e) {
             // user error
             // IOHandler.writeErrorLog(e);
-            core.getInfoBox().warning("Font Size", "Invalid size: " + txtFontSize.getText());
+            core.getOSHandler().getInfoBox().warning("Font Size", "Invalid size: " + txtFontSize.getText());
             txtFontSize.setText("12");
         }
         setFont();
@@ -709,7 +709,7 @@ public final class ScrGrammarGuide extends PFrame {
             txtTimer.setFont(PFontHandler.getLcdFont().deriveFont(Font.PLAIN, 18f));
         } catch (FontFormatException | IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getInfoBox().error("Font Error", "Unable to load LCD font due to: " + e.getMessage());
+            core.getOSHandler().getInfoBox().error("Font Error", "Unable to load LCD font due to: " + e.getMessage());
         }
 
         btnPlayPauseAudio.setText("");
@@ -759,7 +759,7 @@ public final class ScrGrammarGuide extends PFrame {
                 caretEnd++;
             } catch (BadLocationException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                core.getInfoBox().warning("Font Error", "Problem setting font: "
+                core.getOSHandler().getInfoBox().warning("Font Error", "Problem setting font: "
                         + e.getLocalizedMessage());
             }
         }
@@ -853,7 +853,7 @@ public final class ScrGrammarGuide extends PFrame {
                         cb.restoreClipboard();
                     } catch (Exception ex) {
                         DesktopIOHandler.getInstance().writeErrorLog(ex);
-                        core.getInfoBox().error("Character Replacement Error",
+                        core.getOSHandler().getInfoBox().error("Character Replacement Error",
                                 "Clipboard threw error during character replacement process:"
                                 + ex.getLocalizedMessage());
                     }
@@ -886,7 +886,7 @@ public final class ScrGrammarGuide extends PFrame {
                 secNode.setSectionText(FormattedTextHelper.storageFormat(txtSection));
             } catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                core.getInfoBox().error("Section Save Error", "Unable to save section text: "
+                core.getOSHandler().getInfoBox().error("Section Save Error", "Unable to save section text: "
                         + e.getLocalizedMessage());
             }
         } else if (node instanceof GrammarChapNode) {
@@ -930,7 +930,7 @@ public final class ScrGrammarGuide extends PFrame {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             soundRecorder = new SoundRecorder(this);
             soundRecorder.setButtons(btnRecordAudio, btnPlayPauseAudio, playButtonUp, playButtonDown, recordButtonUp, recordButtonDown);
-            core.getInfoBox().error("Recorder Error", "Unable to end audio stream: " + e.getLocalizedMessage());
+            core.getOSHandler().getInfoBox().error("Recorder Error", "Unable to end audio stream: " + e.getLocalizedMessage());
         }
     }
 
@@ -979,7 +979,7 @@ public final class ScrGrammarGuide extends PFrame {
                 soundRecorder.setSound(secNode.getRecording());
             } catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                core.getInfoBox().error("Recording Load Failure", "Unable to load recording: "
+                core.getOSHandler().getInfoBox().error("Recording Load Failure", "Unable to load recording: "
                         + e.getLocalizedMessage());
             }
             try {
@@ -987,7 +987,7 @@ public final class ScrGrammarGuide extends PFrame {
                         txtSection, core);
             } catch (BadLocationException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                core.getInfoBox().error("Section Load Error", "Unable to load section text: "
+                core.getOSHandler().getInfoBox().error("Section Load Error", "Unable to load section text: "
                         + e.getLocalizedMessage());
             }
             SwingUtilities.invokeLater(() -> {
@@ -1022,7 +1022,7 @@ public final class ScrGrammarGuide extends PFrame {
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
 
         if (selection != null
-                && core.getInfoBox().yesNoCancel("Confirmation", "Really delete? This cannot be undone.")
+                && core.getOSHandler().getInfoBox().yesNoCancel("Confirmation", "Really delete? This cannot be undone.")
                         == JOptionPane.YES_OPTION) {
             if (selection instanceof GrammarSectionNode) {
                 GrammarSectionNode curNode = (GrammarSectionNode) selection;
@@ -1128,7 +1128,7 @@ public final class ScrGrammarGuide extends PFrame {
             model.reload();
             treChapList.setSelectionPath(new TreePath(model.getPathToRoot(newNode)));
         } else {
-            core.getInfoBox().warning("Section Creation", "Select a chapter in which to create a section.");
+            core.getOSHandler().getInfoBox().warning("Section Creation", "Select a chapter in which to create a section.");
         }
 
         txtName.setText("");
@@ -1140,7 +1140,7 @@ public final class ScrGrammarGuide extends PFrame {
             soundRecorder.playPause();
         } catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getInfoBox().error("Play Error", "Unable to play due to: " + e.getLocalizedMessage());
+            core.getOSHandler().getInfoBox().error("Play Error", "Unable to play due to: " + e.getLocalizedMessage());
         }
     }
 
@@ -1150,7 +1150,7 @@ public final class ScrGrammarGuide extends PFrame {
                 soundRecorder.endRecording();
             } else {
                 if (soundRecorder.getSound() != null) { // confirm overwrite of existing data
-                    if (core.getInfoBox().yesNoCancel("Overwrite Confirmation",
+                    if (core.getOSHandler().getInfoBox().yesNoCancel("Overwrite Confirmation",
                             "Discard existing audio recording?") != JOptionPane.YES_OPTION) {
                         return;
                     }
@@ -1160,7 +1160,7 @@ public final class ScrGrammarGuide extends PFrame {
             }
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getInfoBox().error("Recording Error", "Unable to record due to: " + e.getLocalizedMessage());
+            core.getOSHandler().getInfoBox().error("Recording Error", "Unable to record due to: " + e.getLocalizedMessage());
         }
     }
 

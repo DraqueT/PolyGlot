@@ -220,7 +220,7 @@ public final class PTextField extends JTextField {
                 cb.restoreClipboard();
             } catch (Exception ex) {
                 DesktopIOHandler.getInstance().writeErrorLog(ex);
-                core.getInfoBox().error("Character Replacement Error",
+                core.getOSHandler().getInfoBox().error("Character Replacement Error",
                         "Clipboard threw error during character replacement process:"
                         + ex.getLocalizedMessage());
             }
@@ -281,7 +281,7 @@ public final class PTextField extends JTextField {
             }
             skipRepaint = false;
         } catch (Exception e) {
-            core.getInfoBox().error("Repaint error", "Could not repaint component: " + e.getLocalizedMessage());
+            core.getOSHandler().getInfoBox().error("Repaint error", "Could not repaint component: " + e.getLocalizedMessage());
             skipRepaint = false;
         }
 
@@ -317,7 +317,7 @@ public final class PTextField extends JTextField {
             }
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getInfoBox().error("Set text error", "Could not set text component: " 
+            core.getOSHandler().getInfoBox().error("Set text error", "Could not set text component: " 
                     + e.getLocalizedMessage());
             DesktopIOHandler.getInstance().writeErrorLog(e);
         }

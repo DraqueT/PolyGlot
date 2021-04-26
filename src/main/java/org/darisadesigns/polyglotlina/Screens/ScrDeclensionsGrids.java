@@ -97,14 +97,14 @@ public final class ScrDeclensionsGrids extends PDialog {
         ConjugationManager decMan = core.getConjugationManager();
         
         if (typeId == 0) {
-            core.getInfoBox().info("Missing Part of Speech", 
+            core.getOSHandler().getInfoBox().info("Missing Part of Speech", 
                     "Word must have a part of Speech set and the part of speech must have declensions defined before using this feature.");
             ret = false;
         } else if ((decMan.getDimensionalConjugationListTemplate(typeId) == null
                     || decMan.getDimensionalConjugationListTemplate(typeId).length == 0)
                 && decMan.getDimensionalConjugationListWord(word.getId()).length == 0
                 && decMan.getSingletonCombinedIds(typeId).length == 0) {
-            core.getInfoBox().info("Declensions", "No declensions for part of speech: " + word.getWordTypeDisplay()
+            core.getOSHandler().getInfoBox().info("Declensions", "No declensions for part of speech: " + word.getWordTypeDisplay()
                     + " set. Declensions can be created per part of speech under the Part of Speech menu by clicking the "
                             + "Declensions button.");
             ret = false;

@@ -569,7 +569,7 @@ public class JFontChooser extends JComponent
             }
             catch (BadLocationException e)
             {
-                core.getInfoBox().error("Font Selection Problem", "There was a problem with your font: "
+                core.getOSHandler().getInfoBox().error("Font Selection Problem", "There was a problem with your font: "
                         + e.getLocalizedMessage());
                 //e.printStackTrace();
             }

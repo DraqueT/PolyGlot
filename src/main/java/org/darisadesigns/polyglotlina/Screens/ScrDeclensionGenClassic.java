@@ -185,7 +185,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         }
 
         if (!ret) {
-            core.getInfoBox().error("Unable to Close With Error", userMessage);
+            core.getOSHandler().getInfoBox().error("Unable to Close With Error", userMessage);
         }
 
         return ret;
@@ -605,7 +605,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         
         message += "\nto all word forms for this part of speech with the " + decLabel + " value of " + decDimLabel + ". Continue?";
         
-        return core.getInfoBox().actionConfirmation("Confirm Rule Copy", message);
+        return core.getOSHandler().getInfoBox().actionConfirmation("Confirm Rule Copy", message);
     }
     
     public boolean verifyDeleteRulesToDimension(int decId, int dimId, List<ConjugationGenRule> rules) {
@@ -619,7 +619,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         
         message += "\nfrom all word forms for this part of speech with the " + decLabel + " value of " + decDimLabel + ". Continue?";
         
-        return core.getInfoBox().actionConfirmation("Confirm Rule Copy", message);
+        return core.getOSHandler().getInfoBox().actionConfirmation("Confirm Rule Copy", message);
     }
     
     public boolean verifyBulkDeleteRule(List<ConjugationGenRule> rules) {
@@ -631,7 +631,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         
         message += "Continue?";
         
-        return core.getInfoBox().actionConfirmation("Confirm Rule Copy", message);
+        return core.getOSHandler().getInfoBox().actionConfirmation("Confirm Rule Copy", message);
     }
     
     /**
@@ -789,7 +789,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
      * deletes currently selected rule
      */
     private void deleteRule() {
-        if (!core.getInfoBox().deletionConfirmation()) {
+        if (!core.getOSHandler().getInfoBox().deletionConfirmation()) {
             return;
         }
 
@@ -822,7 +822,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
      * deletes currently selected transform from currently selected rule
      */
     private void deleteTransform() {
-        if (!core.getInfoBox().deletionConfirmation()) {
+        if (!core.getOSHandler().getInfoBox().deletionConfirmation()) {
             return;
         }
 

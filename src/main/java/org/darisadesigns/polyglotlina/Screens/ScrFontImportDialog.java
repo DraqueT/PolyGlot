@@ -239,7 +239,7 @@ public final class ScrFontImportDialog extends PDialog {
             core.getPolyGlot().getRootWindow().selectFirstAvailableButton();
             dispose();
         } catch (IOException e) {
-            core.getInfoBox().error("IO Error", "Unable to open " + fileName + " due to: " + e.getLocalizedMessage());
+            core.getOSHandler().getInfoBox().error("IO Error", "Unable to open " + fileName + " due to: " + e.getLocalizedMessage());
         } catch (FontFormatException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             new DesktopInfoBox(this).error("Font Format Error", "Unable to read " + fileName + " due to: "

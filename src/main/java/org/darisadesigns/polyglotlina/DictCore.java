@@ -71,8 +71,7 @@ public class DictCore {
     private EtymologyManager etymologyManager;
     private ReversionManager reversionManager;
     private ToDoManager toDoManager;
-    private final IOHandler ioHandler;
-    private final InfoBox infoBox;
+    private final OSHandler osHandler;
     private boolean curLoading = false;
     private Instant lastSaveTime = Instant.MIN;
     private String curFileName = "";
@@ -81,14 +80,12 @@ public class DictCore {
      * Language core initialization
      *
      * @param _polyGlot
-     * @param _ioHandler
-     * @param _infoBox
+     * @param _osHandler
      */
-    public DictCore(PolyGlot _polyGlot, IOHandler _ioHandler, InfoBox _infoBox) {
+    public DictCore(PolyGlot _polyGlot, OSHandler _osHandler) {
         polyGlot = _polyGlot;
         polyGlot.setCore(this);
-        ioHandler = _ioHandler;
-        infoBox = _infoBox;
+        osHandler = _osHandler;
         initializeDictCore();
     }
     
@@ -120,8 +117,8 @@ public class DictCore {
             
             PGTUtil.validateVersion();
         } catch (Exception e) {
-            this.ioHandler.writeErrorLog(e);
-            this.getInfoBox().error("CORE ERROR", "Error creating language core: " + e.getLocalizedMessage());
+            this.osHandler.getIOHandler().writeErrorLog(e);
+            this.osHandler.getInfoBox().error("CORE ERROR", "Error creating language core: " + e.getLocalizedMessage());
         }
     }
     
@@ -320,21 +317,21 @@ public class DictCore {
                 String reportContents = PLanguageStats.buildWordReport(core);
                 
                 try {
-                    File report = core.ioHandler.createTmpFileWithContents(reportContents, ".html");
+                    File report = core.osHandler.getIOHandler().createTmpFileWithContents(reportContents, ".html");
 
                     if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                         Desktop.getDesktop().browse(report.toURI());
                     } else if (PGTUtil.IS_LINUX) {
                         Desktop.getDesktop().open(report);
                     } else {
-                        core.getInfoBox().warning("Menu Warning", "Unable to open browser. Please load manually at: \n" 
+                        core.getOSHandler().getInfoBox().warning("Menu Warning", "Unable to open browser. Please load manually at: \n" 
                                 + report.getAbsolutePath() + "\n (copied to clipboard for convenience)");
                         new ClipboardHandler().setClipboardContents(report.getAbsolutePath());
                     }
                 } catch (IOException e) {
-                    core.getInfoBox().error("Report Build Error", "Unable to generate/display language statistics: " 
+                    core.getOSHandler().getInfoBox().error("Report Build Error", "Unable to generate/display language statistics: " 
                             + e.getLocalizedMessage());
-                    core.ioHandler.writeErrorLog(e);
+                    core.osHandler.getIOHandler().writeErrorLog(e);
                 }
             }
         }.start();
@@ -366,18 +363,18 @@ public class DictCore {
         String warningLog = "";
 
         // test file exists
-        if (!this.ioHandler.fileExists(_fileName)) {
+        if (!this.osHandler.getIOHandler().fileExists(_fileName)) {
             throw new IOException("File " + _fileName + " does not exist.");
         }
         
         // inform user if file is not an archive
-        if (!this.ioHandler.isFileZipArchive(_fileName)) {
+        if (!this.osHandler.getIOHandler().isFileZipArchive(_fileName)) {
             throw new IOException("File " + _fileName + " is not a valid PolyGlot archive.");
         }
 
         // load image assets first to allow referencing as dictionary loads
         try {
-            this.ioHandler.loadImageAssets(imageCollection, _fileName);
+            this.osHandler.getIOHandler().loadImageAssets(imageCollection, _fileName);
         } catch (Exception e) {
             throw new IOException("Image loading error: " + e.getLocalizedMessage(), e);
         }
@@ -385,7 +382,7 @@ public class DictCore {
         try {
             PFontHandler.setFontFrom(_fileName, this);
         } catch (IOException | FontFormatException e) {
-            this.ioHandler.writeErrorLog(e);
+            this.osHandler.getIOHandler().writeErrorLog(e);
             warningLog += e.getLocalizedMessage() + "\n";
         }
         
@@ -393,11 +390,11 @@ public class DictCore {
             CustHandler handler;
             // if override XML value, load from that, otherwise pull from file
             if (overrideXML == null) {
-                handler = this.ioHandler.getHandlerFromFile(_fileName, this);
-                this.ioHandler.parseHandler(_fileName, handler);
+                handler = this.osHandler.getIOHandler().getHandlerFromFile(_fileName, this);
+                this.osHandler.getIOHandler().parseHandler(_fileName, handler);
             } else {
-                handler = this.ioHandler.getHandlerFromByteArray(overrideXML, this);
-                this.ioHandler.parseHandlerByteArray(overrideXML, handler);
+                handler = this.osHandler.getIOHandler().getHandlerFromByteArray(overrideXML, this);
+                this.osHandler.getIOHandler().parseHandlerByteArray(overrideXML, handler);
             }
             
             errorLog += handler.getErrorLog();
@@ -407,30 +404,30 @@ public class DictCore {
         }
 
         try {
-            this.ioHandler.loadGrammarSounds(_fileName, grammarManager);
+            this.osHandler.getIOHandler().loadGrammarSounds(_fileName, grammarManager);
         } catch (Exception e) {
-            this.ioHandler.writeErrorLog(e);
+            this.osHandler.getIOHandler().writeErrorLog(e);
             warningLog += e.getLocalizedMessage() + "\n";
         }
 
         try {
             logoCollection.loadRadicalRelations();
         } catch (Exception e) {
-            this.ioHandler.writeErrorLog(e);
+            this.osHandler.getIOHandler().writeErrorLog(e);
             warningLog += e.getLocalizedMessage() + "\n";
         }
 
         try {
-            this.ioHandler.loadLogographs(logoCollection, _fileName);
+            this.osHandler.getIOHandler().loadLogographs(logoCollection, _fileName);
         } catch (Exception e) {
-            this.ioHandler.writeErrorLog(e);
+            this.osHandler.getIOHandler().writeErrorLog(e);
             warningLog += e.getLocalizedMessage() + "\n";
         }
         
         try {
-            this.ioHandler.loadReversionStates(reversionManager, _fileName);
+            this.osHandler.getIOHandler().loadReversionStates(reversionManager, _fileName);
         } catch (IOException e) {
-            this.ioHandler.writeErrorLog(e);
+            this.osHandler.getIOHandler().writeErrorLog(e);
             warningLog += e.getLocalizedMessage() + "\n";
         }
 
@@ -457,7 +454,7 @@ public class DictCore {
      * @throws java.io.IOException 
      */
     public void revertToState(byte[] revision, String fileName) throws IOException{
-        DictCore revDict = new DictCore(polyGlot, ioHandler, infoBox);
+        DictCore revDict = new DictCore(polyGlot, this.osHandler);
         revDict.readFile(fileName, revision);
         
         pushUpdateWithCore(revDict);
@@ -472,13 +469,13 @@ public class DictCore {
         String errorLog;
         
         try {
-            CustHandler handler = this.ioHandler.getHandlerFromByteArray(reversion, this);
-            this.ioHandler.parseHandlerByteArray(reversion, handler);
+            CustHandler handler = this.osHandler.getIOHandler().getHandlerFromByteArray(reversion, this);
+            this.osHandler.getIOHandler().parseHandlerByteArray(reversion, handler);
 
             errorLog = handler.getErrorLog();
             // errorLog += handler.getWarningLog(); // warnings may be disregarded here
         } catch (IOException | ParserConfigurationException | SAXException e) {
-            this.ioHandler.writeErrorLog(e);
+            this.osHandler.getIOHandler().writeErrorLog(e);
             errorLog = e.getLocalizedMessage();
         }
         
@@ -527,7 +524,7 @@ public class DictCore {
         rootElement.appendChild(famManager.writeToSaveXML(doc));
 
         // have IOHandler write constructed document to file
-        this.ioHandler.writeFile(_fileName, doc, this, polyGlot.getWorkingDirectory(), newSaveTime);
+        this.osHandler.getIOHandler().writeFile(_fileName, doc, this, polyGlot.getWorkingDirectory(), newSaveTime);
         
         lastSaveTime = newSaveTime;
     }
@@ -599,19 +596,11 @@ public class DictCore {
     }
     
     /**
-     * Returns DictCore IO handler
+     * Returns DictCore OS handler
      * @return 
      */
-    public IOHandler getIOHandler() {
-        return ioHandler;
-    }
-    
-    /**
-     * Returns DictCore IO handler
-     * @return 
-     */
-    public InfoBox getInfoBox() {
-        return infoBox;
+    public OSHandler getOSHandler() {
+        return this.osHandler;
     }
     
     /**

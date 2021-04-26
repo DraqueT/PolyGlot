@@ -180,7 +180,7 @@ public final class ScrFamilies extends PFrame {
             return;
         }
 
-        if (!core.getInfoBox().deletionConfirmation()) {
+        if (!core.getOSHandler().getInfoBox().deletionConfirmation()) {
             return;
         }
 
@@ -632,7 +632,7 @@ public final class ScrFamilies extends PFrame {
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            _core.getInfoBox().error("Window Error", "Unable to open families: " + e.getLocalizedMessage());
+            _core.getOSHandler().getInfoBox().error("Window Error", "Unable to open families: " + e.getLocalizedMessage());
         }
 
         // set the leaf icon to be a folder, since all nodes are for containing words

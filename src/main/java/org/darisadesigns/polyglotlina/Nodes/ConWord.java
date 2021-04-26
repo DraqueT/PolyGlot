@@ -20,7 +20,6 @@
 package org.darisadesigns.polyglotlina.Nodes;
 
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.WebInterface;
@@ -331,7 +330,7 @@ public class ConWord extends DictNode {
                 ret = core.getTypes().getNodeById(typeId).getValue();
             }
             catch (Exception e) {
-                core.getIOHandler().writeErrorLog(e);
+                core.getOSHandler().getIOHandler().writeErrorLog(e);
                 // If a type no longer exists, set the type ID to 0, then continue
                 typeId = 0;
             }
@@ -506,7 +505,7 @@ public class ConWord extends DictNode {
                 try {
                     ret = conMan.declineWord(this, fullDecId);
                 } catch (Exception e) {
-                    core.getIOHandler().writeErrorLog(e);
+                    core.getOSHandler().getIOHandler().writeErrorLog(e);
                 }
             }
         }

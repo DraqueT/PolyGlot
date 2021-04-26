@@ -214,7 +214,7 @@ public final class ScrTypes extends PFrame {
             lstTypes.ensureIndexIsVisible(0);
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getInfoBox().error("Type Population Error", "Unable to populate types: "
+            core.getOSHandler().getInfoBox().error("Type Population Error", "Unable to populate types: "
                     + e.getLocalizedMessage());
         }
     }
@@ -292,7 +292,7 @@ public final class ScrTypes extends PFrame {
             core.getTypes().insert();
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getInfoBox().error("Type Creation Error", "Could not create new type: "
+            core.getOSHandler().getInfoBox().error("Type Creation Error", "Could not create new type: "
                     + e.getLocalizedMessage());
         }
         
@@ -323,7 +323,7 @@ public final class ScrTypes extends PFrame {
             core.getTypes().deleteNodeById(curType.getId());
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getInfoBox().error("Deletion Error", 
+            core.getOSHandler().getInfoBox().error("Deletion Error", 
                     "Unable to delete type." + e.getLocalizedMessage());
         }
         
@@ -398,7 +398,7 @@ public final class ScrTypes extends PFrame {
 
         if (txtName.getText().isEmpty()
                 && curType != null) {
-            core.getInfoBox().warning("Illegal Type",
+            core.getOSHandler().getInfoBox().warning("Illegal Type",
                     "Currently selected type is illegal. Please correct or delete.");
             ret = false;
         }

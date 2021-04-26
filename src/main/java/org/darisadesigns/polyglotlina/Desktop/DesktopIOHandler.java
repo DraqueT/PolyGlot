@@ -540,7 +540,9 @@ public final class DesktopIOHandler implements IOHandler {
             // destination, on fail, delete file and inform user by bubbling error
             try {
                 // pass null shell class because this will ultimately be discarded
-                DictCore test = new DictCore(PolyGlot.getTestShell(), this, new DesktopInfoBox(null));
+                DesktopHelpHandler helpHandler = new DesktopHelpHandler();
+                var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), new DesktopInfoBox(null), helpHandler);
+                DictCore test = new DictCore(PolyGlot.getTestShell(), osHandler);
                 test.readFile(tmpSaveLocation.getAbsolutePath());
 
             }

@@ -180,7 +180,7 @@ public class ScrLogoDetails extends PFrame {
             latch.await();
         } catch (InterruptedException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getInfoBox().error("Form Load Error", "Unable to load Lexicon: " + e.getLocalizedMessage());
+            core.getOSHandler().getInfoBox().error("Form Load Error", "Unable to load Lexicon: " + e.getLocalizedMessage());
         }
         
         gridTitlePane.setTooltip(new Tooltip(FILTER_LABEL));
@@ -476,10 +476,10 @@ public class ScrLogoDetails extends PFrame {
                 populateLogoProps();
             } catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                core.getInfoBox().error("Paste Error", "Unable to paste: " + e.getLocalizedMessage());
+                core.getOSHandler().getInfoBox().error("Paste Error", "Unable to paste: " + e.getLocalizedMessage());
             }
         } else {
-            core.getInfoBox().warning("Image Format Incompatibility",
+            core.getOSHandler().getInfoBox().warning("Image Format Incompatibility",
                     "The contents of the clipboard is not an image, or is an unrecognized format");
         }
     }
@@ -507,7 +507,7 @@ public class ScrLogoDetails extends PFrame {
             java.awt.EventQueue.invokeLater(() -> {
                 curPopulating = true;
                 txtStrokes.setText("");
-                core.getInfoBox().info("Type mismatch", "Please enter only numeric values into strokes field.");
+                core.getOSHandler().getInfoBox().info("Type mismatch", "Please enter only numeric values into strokes field.");
                 curPopulating = false;
             });
         }
@@ -748,7 +748,7 @@ public class ScrLogoDetails extends PFrame {
                 java.awt.EventQueue.invokeLater(() -> {
                     curPopulating = true;
                     fltStrokes.setText("");
-                    core.getInfoBox().info("Type mismatch", "Strokes field compatible with integer values only");
+                    core.getOSHandler().getInfoBox().info("Type mismatch", "Strokes field compatible with integer values only");
                     curPopulating = false;
                 });
 
@@ -914,11 +914,11 @@ public class ScrLogoDetails extends PFrame {
             populateLogoProps();
         } catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getInfoBox().error("Image Load Error", "Unable to load image: " + fileName
+            core.getOSHandler().getInfoBox().error("Image Load Error", "Unable to load image: " + fileName
                     + ": " + e.getMessage());
         } catch (NullPointerException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getInfoBox().error("Image Load Error", "Unable to read format of image: "
+            core.getOSHandler().getInfoBox().error("Image Load Error", "Unable to read format of image: "
                     + fileName);
         }
     }
@@ -933,7 +933,7 @@ public class ScrLogoDetails extends PFrame {
             return;
         }
 
-        if (!core.getInfoBox().deletionConfirmation()) {
+        if (!core.getOSHandler().getInfoBox().deletionConfirmation()) {
             return;
         }
 
@@ -951,7 +951,7 @@ public class ScrLogoDetails extends PFrame {
             populateLogoProps();
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getInfoBox().error("Logograph Error", "Unable to delete logograph: "
+            core.getOSHandler().getInfoBox().error("Logograph Error", "Unable to delete logograph: "
                     + e.getMessage());
         }
     }
@@ -1040,7 +1040,7 @@ public class ScrLogoDetails extends PFrame {
             core.getLogoCollection().addNode(newNode);
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getInfoBox().error("Logograph Error", 
+            core.getOSHandler().getInfoBox().error("Logograph Error", 
                     "Unable to create Logograph: " + e.getMessage());
         }
 

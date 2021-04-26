@@ -164,7 +164,7 @@ public abstract class PFrame extends JFrame implements FocusListener {
                 super.dispose();
             } catch (IllegalStateException | InterruptedException ex) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                core.getInfoBox().error("Closing Error", "Window failed to close: " + ex.getLocalizedMessage());
+                core.getOSHandler().getInfoBox().error("Closing Error", "Window failed to close: " + ex.getLocalizedMessage());
             }
         }
     }

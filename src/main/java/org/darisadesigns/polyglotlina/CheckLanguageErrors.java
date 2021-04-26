@@ -76,8 +76,8 @@ public class CheckLanguageErrors {
             thread.join();
         }
         catch (InterruptedException e) {
-            core.getIOHandler().writeErrorLog(e);
-            core.getInfoBox().error("Thread Error", "Language validation thread error: " + e.getLocalizedMessage());
+            core.getOSHandler().getIOHandler().writeErrorLog(e);
+            core.getOSHandler().getInfoBox().error("Thread Error", "Language validation thread error: " + e.getLocalizedMessage());
         }
 
         Collections.sort(problems);
@@ -85,7 +85,7 @@ public class CheckLanguageErrors {
         if (!problems.isEmpty() && display) {
             new ScrLanguageProblemDisplay(problems, core).setVisible(true);
         } else if (display) {
-            core.getInfoBox().info("Lexicon Check Results", "No problems found in language file!");
+            core.getOSHandler().getInfoBox().info("Lexicon Check Results", "No problems found in language file!");
         }
 
         return problems.toArray(new LexiconProblemNode[0]);

@@ -84,12 +84,12 @@ public final class ScrPhonology extends PFrame {
         saveAllValues();
         
         if (core.getRomManager().usingLookaheadsLookbacks() && !core.getRomManager().isRecurse()) {
-            core.getInfoBox().warning("Possible Regex Issue", "It looks like your romanizations use lookahead or lookbehind patterns. "
+            core.getOSHandler().getInfoBox().warning("Possible Regex Issue", "It looks like your romanizations use lookahead or lookbehind patterns. "
                     + "Please enable the recursion checkbox or these will not function correctly.");
         }
         
         if (core.getPronunciationMgr().usingLookaheadsLookbacks() && !core.getPronunciationMgr().isRecurse()) {
-            core.getInfoBox().warning("Possible Regex Issue", "It looks like your pronunciations use lookahead or lookbehind patterns. "
+            core.getOSHandler().getInfoBox().warning("Possible Regex Issue", "It looks like your pronunciations use lookahead or lookbehind patterns. "
                     + "Please enable the recursion checkbox or these will not function correctly.");
         }
         
@@ -383,7 +383,7 @@ public final class ScrPhonology extends PFrame {
                         editChar.setIgnoreListenerSilencing(false);
                         editChar.setValue(value.substring(0, 1));
                         editChar.setIgnoreListenerSilencing(true);
-                        core.getInfoBox().warning("Single Character Only", 
+                        core.getOSHandler().getInfoBox().warning("Single Character Only", 
                                 "Replacement characters can only be 1 character long.");
                     });
                 }
@@ -542,7 +542,7 @@ public final class ScrPhonology extends PFrame {
         int curRow = tblProcs.getSelectedRow();
 
         if (curRow == -1
-                || !core.getInfoBox().deletionConfirmation()) {
+                || !core.getOSHandler().getInfoBox().deletionConfirmation()) {
             return;
         }
 
@@ -562,7 +562,7 @@ public final class ScrPhonology extends PFrame {
         int curRow = tblRep.getSelectedRow();
 
         if (curRow == -1
-                || !core.getInfoBox().deletionConfirmation()) {
+                || !core.getOSHandler().getInfoBox().deletionConfirmation()) {
             return;
         }
 
@@ -578,7 +578,7 @@ public final class ScrPhonology extends PFrame {
         int curRow = tblRom.getSelectedRow();
 
         if (curRow == -1
-                || !core.getInfoBox().deletionConfirmation()) {
+                || !core.getOSHandler().getInfoBox().deletionConfirmation()) {
             return;
         }
 

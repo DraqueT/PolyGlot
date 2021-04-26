@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -19,26 +19,25 @@
  */
 package org.darisadesigns.polyglotlina;
 
-import java.io.IOException;
-
 /**
  *
- * @author draque
+ * @author pe1uca
  */
-public interface HelpHandler {
+public abstract class OSHandler {
     
-    public static String LEXICON_HELP = "BASIC_FUNCTIONALITY";
-    public static String PARTSOFSPEECH_HELP = "-_Word_Types";
-    public static String LEXICALCLASSES_HELP = "CLASSES";
-    public static String GRAMMAR_HELP = "LODENKUR_-_an_example_language";
-    public static String LOGOGRAPHS_HELP = "LOGOGRAPHIC_DICTIONARY";
-    public static String PHONOLOGY_HELP = "PHONOLOGY";
-    public static String LANGPROPERTIES_HELP = "-_Language_Properties";
-    public static String QUIZGENERATOR_HELP = "QUIZ";
-
-    public void openHelp();
-
-    public void openHelpToLocation(String location);
-
-    public void openHelpLocal() throws IOException;
+    private final IOHandler ioHandler;
+    private final InfoBox infoBox;
+    private final HelpHandler helpHandler;
+    
+    public OSHandler(IOHandler _ioHandler, InfoBox _infoBox, HelpHandler _helpHandler) {
+        ioHandler = _ioHandler;
+        infoBox = _infoBox;
+        helpHandler =_helpHandler;
+    }
+    
+    public IOHandler getIOHandler() { return this.ioHandler; }
+    
+    public InfoBox getInfoBox() { return this.infoBox; }
+    
+    public HelpHandler getHelpHandler() { return this.helpHandler; }
 }

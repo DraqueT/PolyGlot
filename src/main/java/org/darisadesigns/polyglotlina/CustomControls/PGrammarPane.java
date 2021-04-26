@@ -82,7 +82,7 @@ public class PGrammarPane extends JTextPane {
                 }
             } catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                core.getInfoBox().error("Image Import Error", "Unable to import image: "
+                core.getOSHandler().getInfoBox().error("Image Import Error", "Unable to import image: "
                         + e.getLocalizedMessage());
             }
         });
@@ -152,7 +152,7 @@ public class PGrammarPane extends JTextPane {
             cb.restoreClipboard();
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getInfoBox().error("Rendering Error", "Tab rendering error: " 
+            core.getOSHandler().getInfoBox().error("Rendering Error", "Tab rendering error: " 
                     + e.getLocalizedMessage());
         }
     }
@@ -167,7 +167,7 @@ public class PGrammarPane extends JTextPane {
             inputAttributes.removeAttributes(inputAttributes);
         } catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getInfoBox().error("Image Insertion Error", "Unable to insert image: "
+            core.getOSHandler().getInfoBox().error("Image Insertion Error", "Unable to insert image: "
                     + e.getLocalizedMessage());
         }
     }
@@ -200,7 +200,7 @@ public class PGrammarPane extends JTextPane {
                 }
             } catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                core.getInfoBox().error("Paste Error", "Unable to paste: " + e.getLocalizedMessage());
+                core.getOSHandler().getInfoBox().error("Paste Error", "Unable to paste: " + e.getLocalizedMessage());
             }
         } else if (ClipboardHandler.isClipboardString()) {
             try {
@@ -212,7 +212,7 @@ public class PGrammarPane extends JTextPane {
                 super.paste();
             } catch (UnsupportedFlavorException | IOException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                core.getInfoBox().error("Paste Error", "Unable to paste text: " + e.getLocalizedMessage());
+                core.getOSHandler().getInfoBox().error("Paste Error", "Unable to paste text: " + e.getLocalizedMessage());
             }
         } else {
             super.paste();

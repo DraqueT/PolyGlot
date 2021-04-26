@@ -22,30 +22,34 @@ package TestResources;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.DesktopHelpHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopOSHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.InfoBox;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.PolyGlot;
+import org.darisadesigns.polyglotlina.OSHandler;
 
 /**
  * Allows for testing which requires a DictCore without exposing PolyGlot object
  * @author draque
  */
 public class DummyCore extends DictCore {
-    private DummyCore (PolyGlot polyGlot, IOHandler ioHandler, InfoBox infoBox) {
-        super(polyGlot, ioHandler, infoBox);
+    private DummyCore (PolyGlot polyGlot, OSHandler osHandler) {
+        super(polyGlot, osHandler);
     }
     
     public static DummyCore newCore() {
         try {
             InfoBox infoBox = new DesktopInfoBox(null);
-            Constructor constructor = PolyGlot.class.getDeclaredConstructor(new Class[]{String.class, InfoBox.class});
+            DesktopHelpHandler helpHandler = new DesktopHelpHandler();
+            DesktopOSHandler osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), infoBox, helpHandler);
+            Constructor constructor = PolyGlot.class.getDeclaredConstructor(new Class[]{String.class, DesktopOSHandler.class});
             constructor.setAccessible(true);
-            PolyGlot polyGlot = (PolyGlot)constructor.newInstance(PGTUtil.TESTRESOURCES, infoBox);
+            PolyGlot polyGlot = (PolyGlot)constructor.newInstance(PGTUtil.TESTRESOURCES, osHandler);
             
-            return new DummyCore(polyGlot, DesktopIOHandler.getInstance(), infoBox);
+            return new DummyCore(polyGlot, osHandler);
         } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
             System.err.println("Something's gone wrong with the Dummy Core generation: " + e.getLocalizedMessage());
         }

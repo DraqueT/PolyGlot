@@ -61,7 +61,7 @@ public class PFontHandler {
     }
 
     private static void setFontFrom(String _path, DictCore core, boolean isConFont) throws IOException, FontFormatException {
-        if (core.getIOHandler().isFileZipArchive(_path)) {
+        if (core.getOSHandler().getIOHandler().isFileZipArchive(_path)) {
             try (ZipFile zipFile = new ZipFile(_path)) {
                 ZipEntry fontEntry = isConFont
                         ? zipFile.getEntry(PGTUtil.CON_FONT_FILE_NAME)
@@ -84,7 +84,7 @@ public class PFontHandler {
                                 return;
                             }
 
-                            byte[] cachedFont = core.getIOHandler().getByteArrayFromFile(tempFile);
+                            byte[] cachedFont = core.getOSHandler().getIOHandler().getByteArrayFromFile(tempFile);
 
                             if (isConFont) {
                                 core.getPropertiesManager().setFontConRaw(font);
@@ -342,13 +342,13 @@ public class PFontHandler {
                         fontFile = getFontFile(outputFont.getFamily());
                     }
                 } catch (Exception e) {
-                    core.getIOHandler().writeErrorLog(e);
+                    core.getOSHandler().getIOHandler().writeErrorLog(e);
                     writeLog += "\nerror: " + e.getLocalizedMessage();
                 }
 
                 if (fontFile != null) {
                     try (FileInputStream fontInputStream = new FileInputStream(fontFile)) {
-                        byte[] fontBytes = core.getIOHandler().streamToByetArray(fontInputStream);
+                        byte[] fontBytes = core.getOSHandler().getIOHandler().streamToByetArray(fontInputStream);
                         
                         if (isConFont) {
                             core.getPropertiesManager().setCachedFont(fontBytes);
@@ -382,7 +382,7 @@ public class PFontHandler {
                 out.closeEntry();
             }
         } catch (IOException e) {
-            core.getIOHandler().writeErrorLog(e);
+            core.getOSHandler().getIOHandler().writeErrorLog(e);
             writeLog += "\nUnable to write font to archive: " + e.getMessage();
         }
         return writeLog;

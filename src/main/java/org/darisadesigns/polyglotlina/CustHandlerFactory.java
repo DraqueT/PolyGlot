@@ -521,7 +521,7 @@ public final class CustHandlerFactory {
                     try {
                         curWord.setDefinition(WebInterface.unarchiveHTML(curWord.getDefinition(), core));
                     } catch (Exception e) {
-                        core.getIOHandler().writeErrorLog(e);
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nWord image load error: " + e.getLocalizedMessage();
                     }
                     
@@ -540,7 +540,7 @@ public final class CustHandlerFactory {
                     try {
                         node.setNotes(WebInterface.unarchiveHTML(node.getNotes(), core));
                     } catch (Exception e) {
-                        core.getIOHandler().writeErrorLog(e);
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nProblem loading part of speech note image: " + e.getLocalizedMessage();
                     }
                     bwordClassNotes = false;
@@ -582,7 +582,7 @@ public final class CustHandlerFactory {
                     try {
                         conjugationMgr.setBufferDecNotes(WebInterface.unarchiveHTML(conjugationMgr.getBufferDecNotes(), core));
                     } catch (Exception e) {
-                        core.getIOHandler().writeErrorLog(e);
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nProblem loading declension notes image: " + e.getLocalizedMessage();
                     }
                     bDecNotes = false;
@@ -625,7 +625,7 @@ public final class CustHandlerFactory {
                     try {
                         node.setNotes(WebInterface.unarchiveHTML(node.getNotes(), core));
                     } catch (Exception e) {
-                        core.getIOHandler().writeErrorLog(e);
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nProblem loading family note image: " + e.getLocalizedMessage();
                     }
                     bfamNotes = false;
@@ -668,7 +668,7 @@ public final class CustHandlerFactory {
                     try {
                         node.setNotes(WebInterface.unarchiveHTML(node.getNotes(), core));
                     } catch (Exception e) {
-                        core.getIOHandler().writeErrorLog(e);
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nProblem loading logograph note image: " + e.getLocalizedMessage();
                     }
                     blogoNotes = false;
@@ -688,7 +688,7 @@ public final class CustHandlerFactory {
                     try {
                         core.getLogoCollection().insert();
                     } catch (Exception e) {
-                        core.getIOHandler().writeErrorLog(e);
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nLogograph load error: " + e.getLocalizedMessage();
                     }
                     core.getLogoCollection().clear();
@@ -716,7 +716,7 @@ public final class CustHandlerFactory {
                     try {
                         core.getWordClassCollection().insert();
                     } catch (Exception e) {
-                        core.getIOHandler().writeErrorLog(e);
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nWord class load error: " + e.getLocalizedMessage();
                     }
                 } else if (qName.equalsIgnoreCase(PGTUtil.CLASS_ID_XID)) {
@@ -731,7 +731,7 @@ public final class CustHandlerFactory {
                     try {
                         core.getWordClassCollection().getBuffer().insert();
                     } catch (Exception e) {
-                        core.getIOHandler().writeErrorLog(e);
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nWord class load error: " + e.getLocalizedMessage();
                     }
                     bclassValueNode = false;
@@ -845,7 +845,7 @@ public final class CustHandlerFactory {
                     try {
                         propertiesManager.setFontCon(new String(ch, start, length));
                     } catch (Exception e) {
-                        core.getIOHandler().writeErrorLog(e);
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nFont load error: " + e.getLocalizedMessage();
                     }
                     bfontcon = false;
@@ -874,7 +874,7 @@ public final class CustHandlerFactory {
                         bufferWord.setPronunciation(bufferWord.getPronunciation()
                                 + new String(ch, start, length));
                     } catch (Exception e) {
-                        core.getIOHandler().writeErrorLog(e);
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
                         // Don't bother raising an exception. This is regenerated
                         // each time the word is accessed if the error pops
                         // users will be informed at that more obvious point.
@@ -993,7 +993,7 @@ public final class CustHandlerFactory {
                         famMgr.getBuffer().addWord(core.getWordCollection().getNodeById(
                                 Integer.parseInt(new String(ch, start, length))));
                     } catch (NumberFormatException e) {
-                        core.getIOHandler().writeErrorLog(e);
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nFamily load error: " + e.getLocalizedMessage();
                     }
                     bfamWord = false;
@@ -1040,7 +1040,7 @@ public final class CustHandlerFactory {
                     try {
                         core.getLogoCollection().getBufferNode().setStrokes(Integer.parseInt(new String(ch, start, length)));
                     } catch (NumberFormatException e) {
-                        core.getIOHandler().writeErrorLog(e);
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nLogograph load error: " + e.getLocalizedMessage();
                     }
                 } else if (blogoNotes) {
@@ -1061,14 +1061,14 @@ public final class CustHandlerFactory {
                     try {
                         core.getLogoCollection().getBufferNode().setId(Integer.parseInt(new String(ch, start, length)));
                     } catch (NumberFormatException e) {
-                        core.getIOHandler().writeErrorLog(e);
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nLogograph load error: " + e.getLocalizedMessage();
                     }
                 } else if (blogoWordRelation) {
                     try {
                         core.getLogoCollection().loadLogoRelations(new String(ch, start, length));
                     } catch (Exception e) {
-                        core.getIOHandler().writeErrorLog(e);
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nLogograph relation load error: " + e.getLocalizedMessage();
                     }
                 } else if (bgrammarChapName) {
@@ -1116,7 +1116,7 @@ public final class CustHandlerFactory {
                     try {
                         core.getPropertiesManager().setKerningSpace(Double.parseDouble(new String(ch, start, length)));
                     } catch (NumberFormatException e) {
-                        core.getIOHandler().writeErrorLog(e);
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nProblem loading kerning value: " + e.getLocalizedMessage();
                     }
                 } else if (bprocRecurse) {

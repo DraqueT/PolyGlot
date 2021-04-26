@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -17,28 +17,20 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package org.darisadesigns.polyglotlina;
+package org.darisadesigns.polyglotlina.Desktop;
 
-import java.io.IOException;
+import org.darisadesigns.polyglotlina.HelpHandler;
+import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.InfoBox;
+import org.darisadesigns.polyglotlina.OSHandler;
 
 /**
  *
- * @author draque
+ * @author pe1uca
  */
-public interface HelpHandler {
+public class DesktopOSHandler extends OSHandler {
     
-    public static String LEXICON_HELP = "BASIC_FUNCTIONALITY";
-    public static String PARTSOFSPEECH_HELP = "-_Word_Types";
-    public static String LEXICALCLASSES_HELP = "CLASSES";
-    public static String GRAMMAR_HELP = "LODENKUR_-_an_example_language";
-    public static String LOGOGRAPHS_HELP = "LOGOGRAPHIC_DICTIONARY";
-    public static String PHONOLOGY_HELP = "PHONOLOGY";
-    public static String LANGPROPERTIES_HELP = "-_Language_Properties";
-    public static String QUIZGENERATOR_HELP = "QUIZ";
-
-    public void openHelp();
-
-    public void openHelpToLocation(String location);
-
-    public void openHelpLocal() throws IOException;
+    public DesktopOSHandler(IOHandler _ioHandler, InfoBox _infoBox, HelpHandler _helpHandler) {
+        super(_ioHandler, _infoBox, _helpHandler);
+    }
 }

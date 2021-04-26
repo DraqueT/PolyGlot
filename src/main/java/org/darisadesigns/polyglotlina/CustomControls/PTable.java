@@ -28,7 +28,6 @@ import java.awt.event.MouseEvent;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**

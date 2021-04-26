@@ -109,10 +109,10 @@ public class ScrUpdateAlert extends PDialog {
             if (verbose) { // if in verbose mode (user selected update) inform user they're good to go
                 // custom message if user is on a beta copy of PolyGlot
                 if (PGTUtil.IS_BETA) {
-                    core.getInfoBox().info("Update Status", "You're up to date on a beta build branched from the most recent release candidate ("
+                    core.getOSHandler().getInfoBox().info("Update Status", "You're up to date on a beta build branched from the most recent release candidate ("
                             + PGTUtil.getDisplayVersion() + ")");
                 } else {
-                    core.getInfoBox().info("Update Status", "You're up to date and on the newest version: "
+                    core.getOSHandler().getInfoBox().info("Update Status", "You're up to date and on the newest version: "
                         + PGTUtil.getDisplayVersion() + ".");
                 }
             }            
@@ -297,7 +297,7 @@ public class ScrUpdateAlert extends PDialog {
                     java.awt.Desktop.getDesktop().browse(uri);
                 } catch (IOException | URISyntaxException ex) {
                     DesktopIOHandler.getInstance().writeErrorLog(ex);
-                    core.getInfoBox().error("Browser Error", 
+                    core.getOSHandler().getInfoBox().error("Browser Error", 
                             "Unable to open page: " + link);
                 }
             });

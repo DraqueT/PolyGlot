@@ -258,13 +258,13 @@ public class ScrLangProps extends PFrame {
             boolean synced = core.getPropertiesManager().syncCachedFontCon();
 
             if (!synced) {
-                core.getInfoBox().warning("Font Not Cached",
+                core.getOSHandler().getInfoBox().warning("Font Not Cached",
                         "Unable to locate physical font file. If your font uses ligatures, they may not appear correctly.\n"
                         + "To address this, please load your font manually via Tools->Import Font");
             }
         }
         catch (Exception e) {
-            core.getInfoBox().error("Font Caching Error",
+            core.getOSHandler().getInfoBox().error("Font Caching Error",
                     "Unable to locate physical font file. If your font uses ligatures, they may not appear correctly.\n"
                     + "To address this, please load your font manually via Tools->Import Font\n\nError: " + e.getLocalizedMessage());
         }
@@ -291,7 +291,7 @@ public class ScrLangProps extends PFrame {
         if (core.getPropertiesManager().isEnforceRTL()
                 && (conFont == null
                 || conFont.getFamily().equals(stdFont.getFamily()))) {
-            core.getInfoBox().warning("RTL Font Warning", "Enforcing RTL with default font"
+            core.getOSHandler().getInfoBox().warning("RTL Font Warning", "Enforcing RTL with default font"
                     + " is not recommended. For best results, please set distinct"
                     + " conlang font.");
         }
@@ -676,7 +676,7 @@ public class ScrLangProps extends PFrame {
 
     private void chkIgnoreCaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkIgnoreCaseActionPerformed
         if (chkIgnoreCase.isSelected()) {
-            core.getInfoBox().warning("Ignore Case Warning",
+            core.getOSHandler().getInfoBox().warning("Ignore Case Warning",
                     "This feature does not work with all charactrers, and can disrupt regex features. Please use with caution.");
         }
     }//GEN-LAST:event_chkIgnoreCaseActionPerformed

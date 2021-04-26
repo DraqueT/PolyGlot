@@ -93,8 +93,8 @@ public final class PLanguageStats {
             thread.join();
         }
         catch (InterruptedException e) {
-            core.getIOHandler().writeErrorLog(e);
-            core.getInfoBox().error("Language Stat Error", "Unable to generate language statistics: " + e.getLocalizedMessage());
+            core.getOSHandler().getIOHandler().writeErrorLog(e);
+            core.getOSHandler().getInfoBox().error("Language Stat Error", "Unable to generate language statistics: " + e.getLocalizedMessage());
         }
 
         return ret[0];

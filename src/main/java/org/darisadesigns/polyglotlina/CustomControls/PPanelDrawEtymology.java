@@ -305,7 +305,7 @@ public final class PPanelDrawEtymology extends JPanel {
                         curYDepth - textHeight, curYDepth, myNode.word);
             } catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                core.getInfoBox().error("Tooltip Generation error", "Error generating tooltip values: " 
+                core.getOSHandler().getInfoBox().error("Tooltip Generation error", "Error generating tooltip values: " 
                         + e.getLocalizedMessage());
             }
             
@@ -321,7 +321,7 @@ public final class PPanelDrawEtymology extends JPanel {
                         curYDepth - textHeight, curYDepth, myNode.word);
             } catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                core.getInfoBox().error("Tooltip Generation error", "Error generating tooltip values: " 
+                core.getOSHandler().getInfoBox().error("Tooltip Generation error", "Error generating tooltip values: " 
                         + e.getLocalizedMessage());
             }
             
@@ -373,7 +373,7 @@ public final class PPanelDrawEtymology extends JPanel {
                         curYDepth - conFontMetrics.getHeight(), curYDepth, myNode.word);
             } catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                core.getInfoBox().error("Tooltip Generation error", "Error generating tooltip values: "
+                core.getOSHandler().getInfoBox().error("Tooltip Generation error", "Error generating tooltip values: "
                         + e.getLocalizedMessage());
             }
 

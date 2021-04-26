@@ -86,7 +86,7 @@ public class ReversionNode implements Comparable<ReversionNode> {
                 ret = Instant.MIN;
             }
         } catch (SAXException | IOException | ParserConfigurationException e) {
-            core.getIOHandler().writeErrorLog(e);
+            core.getOSHandler().getIOHandler().writeErrorLog(e);
             ret = Instant.MIN;
         }
         

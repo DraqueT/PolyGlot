@@ -122,7 +122,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         String line;
         
         try (BufferedReader r = new BufferedReader(new InputStreamReader(bs, StandardCharsets.UTF_8))) {
-            if (!showPrompt || core.getInfoBox().actionConfirmation("Import Swadesh List?", 
+            if (!showPrompt || core.getOSHandler().getInfoBox().actionConfirmation("Import Swadesh List?", 
                     "This will import all the words defined within this Swadesh list into your lexicon. Continue?")) {
                 for (int i = 0; (line = r.readLine()) != null; i++) {
                     if (line.startsWith("#")) {

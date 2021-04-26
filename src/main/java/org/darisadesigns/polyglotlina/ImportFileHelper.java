@@ -352,7 +352,7 @@ public class ImportFileHelper {
             }
         }
 
-        core.getIOHandler().writeErrorLog(lastException);
+        core.getOSHandler().getIOHandler().writeErrorLog(lastException);
         throw lastException;
     }
 
@@ -409,7 +409,7 @@ public class ImportFileHelper {
             }
         }
         catch (NumberFormatException e) {
-            core.getIOHandler().writeErrorLog(e);
+            core.getOSHandler().getIOHandler().writeErrorLog(e);
             throw new Exception("non-integer value in field.");
         }
 
