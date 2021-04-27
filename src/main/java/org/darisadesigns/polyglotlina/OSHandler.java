@@ -19,6 +19,10 @@
  */
 package org.darisadesigns.polyglotlina;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+
 /**
  *
  * @author pe1uca
@@ -40,4 +44,24 @@ public abstract class OSHandler {
     public InfoBox getInfoBox() { return this.infoBox; }
     
     public HelpHandler getHelpHandler() { return this.helpHandler; }
+    
+    public void openLanguageReport(String reportContents) {
+        try {
+            File report = ioHandler.createTmpFileWithContents(reportContents, ".html");
+
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                Desktop.getDesktop().browse(report.toURI());
+            } else if (PGTUtil.IS_LINUX) {
+                Desktop.getDesktop().open(report);
+            } else {
+                infoBox.warning("Menu Warning", "Unable to open browser. Please load manually at: \n" 
+                        + report.getAbsolutePath() + "\n (copied to clipboard for convenience)");
+                new ClipboardHandler().setClipboardContents(report.getAbsolutePath());
+            }
+        } catch (IOException e) {
+            infoBox.error("Report Build Error", "Unable to generate/display language statistics: " 
+                    + e.getLocalizedMessage());
+            ioHandler.writeErrorLog(e);
+        }
+    }
 }

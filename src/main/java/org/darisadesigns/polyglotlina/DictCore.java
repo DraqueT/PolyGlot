@@ -19,7 +19,6 @@
  */
 package org.darisadesigns.polyglotlina;
 
-import java.awt.Desktop;
 import org.darisadesigns.polyglotlina.CustomControls.PAlphaMap;
 import org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
@@ -316,23 +315,7 @@ public class DictCore {
             public void run() {
                 String reportContents = PLanguageStats.buildWordReport(core);
                 
-                try {
-                    File report = core.osHandler.getIOHandler().createTmpFileWithContents(reportContents, ".html");
-
-                    if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-                        Desktop.getDesktop().browse(report.toURI());
-                    } else if (PGTUtil.IS_LINUX) {
-                        Desktop.getDesktop().open(report);
-                    } else {
-                        core.getOSHandler().getInfoBox().warning("Menu Warning", "Unable to open browser. Please load manually at: \n" 
-                                + report.getAbsolutePath() + "\n (copied to clipboard for convenience)");
-                        new ClipboardHandler().setClipboardContents(report.getAbsolutePath());
-                    }
-                } catch (IOException e) {
-                    core.getOSHandler().getInfoBox().error("Report Build Error", "Unable to generate/display language statistics: " 
-                            + e.getLocalizedMessage());
-                    core.osHandler.getIOHandler().writeErrorLog(e);
-                }
+                core.getOSHandler().openLanguageReport(reportContents);
             }
         }.start();
     }
