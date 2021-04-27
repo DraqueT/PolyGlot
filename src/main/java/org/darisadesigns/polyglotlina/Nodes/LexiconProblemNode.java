@@ -35,10 +35,10 @@ public class LexiconProblemNode implements Comparable<LexiconProblemNode>{
         problemType = _problemType;
         
         switch (_problemType) {
-            case ConWord-> shortDescription = _problemWord.getValue();
-            case PoS-> shortDescription = "Part of Speech: " + _problemWord.getValue();
-            case Phonology-> shortDescription = "Phonology Problem";
-            default-> shortDescription = "UNDEFINED VALUE";
+            case ConWord: shortDescription = _problemWord.getValue(); break;
+            case PoS: shortDescription = "Part of Speech: " + _problemWord.getValue(); break;
+            case Phonology: shortDescription = "Phonology Problem"; break;
+            default: shortDescription = "UNDEFINED VALUE";
         }
     }
     
