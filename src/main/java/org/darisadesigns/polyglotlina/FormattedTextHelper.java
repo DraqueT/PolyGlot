@@ -35,6 +35,7 @@ import javax.swing.text.Element;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
+import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 
 /**
  * This is a helper class, which deals with formatted text in Java
@@ -71,7 +72,7 @@ public final class FormattedTextHelper {
                 
         while (!remaining.isEmpty()) {
             String nextNode = getNextNode(remaining);
-            Font conFont = core.getPropertiesManager().getFontCon();
+            Font conFont = ((PropertiesManager)core.getPropertiesManager()).getFontCon();
             
             remaining = remaining.substring(nextNode.length());
             
@@ -137,7 +138,7 @@ public final class FormattedTextHelper {
                 
         while (!remaining.isEmpty()) {
             String nextNode = getNextNode(remaining);
-            conFont.awtFont = core.getPropertiesManager().getFontCon();
+            conFont.awtFont = ((PropertiesManager)core.getPropertiesManager()).getFontCon();
             
             remaining = remaining.substring(nextNode.length());
             
@@ -155,8 +156,8 @@ public final class FormattedTextHelper {
                 }
                 
                 if (!nextNode.isEmpty()){
-                    conFont.awtFont = font.equals(core.getPropertiesManager().getFontCon().getFamily()) ? 
-                            core.getPropertiesManager().getFontCon() : new JLabel().getFont();
+                    conFont.awtFont = font.equals(core.getPropertiesManager().getFontConFamily()) ? 
+                            ((PropertiesManager)core.getPropertiesManager()).getFontCon() : new JLabel().getFont();
                     Entry<String, PFontInfo> temp = new SecEntry<>(nextNode, conFont);
                     ret.add(temp);
                     conFont = new PFontInfo();

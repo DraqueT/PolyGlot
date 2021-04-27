@@ -21,8 +21,8 @@ package org.darisadesigns.polyglotlina.CustomControls;
 
 import org.darisadesigns.polyglotlina.ClipboardHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
+import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.VisualStyleManager;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.awt.Color;
@@ -87,9 +87,9 @@ public final class PTextField extends JTextField {
         setupLook();
         
         if (overrideFont || !defText.isBlank()) {
-            setFont(core.getPropertiesManager().getFontLocal().deriveFont((float) core.getOptionsManager().getMenuFontSize()));
+            setFont(((PropertiesManager)core.getPropertiesManager()).getFontLocal().deriveFont((float) core.getOptionsManager().getMenuFontSize()));
         } else {
-            setFont(core.getPropertiesManager().getFontCon());
+            setFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
         }
     }
     
@@ -271,7 +271,7 @@ public final class PTextField extends JTextField {
         //setupLook();
 
         try {
-            PropertiesManager propMan = core.getPropertiesManager();
+            PropertiesManager propMan = ((PropertiesManager)core.getPropertiesManager());
             skipRepaint = true;
             if (propMan != null
                     && !curSetText
@@ -324,11 +324,11 @@ public final class PTextField extends JTextField {
 
         if (isDefaultText() && !defText.isEmpty()) {
             float menuFontSize = (float)core.getOptionsManager().getMenuFontSize();
-            setFont(core.getPropertiesManager().getFontLocal().deriveFont(menuFontSize));
+            setFont(((PropertiesManager)core.getPropertiesManager()).getFontLocal().deriveFont(menuFontSize));
             setForeground(Color.lightGray);
         } else {
             if (!overrideFont) {
-                setFont(core.getPropertiesManager().getFontCon());
+                setFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
             }
             setForeground(Color.black);
         }

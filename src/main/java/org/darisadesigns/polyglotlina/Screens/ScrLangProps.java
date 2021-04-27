@@ -20,12 +20,12 @@
 package org.darisadesigns.polyglotlina.Screens;
 
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
+import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.ExternalCode.JFontChooser;
 import org.darisadesigns.polyglotlina.CustomControls.PTextField;
-import org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager;
 import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
 import org.darisadesigns.polyglotlina.CustomControls.PFrame;
 import org.darisadesigns.polyglotlina.CustomControls.PLabel;
@@ -67,7 +67,7 @@ public class ScrLangProps extends PFrame {
         populateProperties();
         setAlphaLegal();
 
-        txtAlphaOrder.setFont(core.getPropertiesManager().getFontCon());
+        txtAlphaOrder.setFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
 
         txtKerning.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -185,7 +185,7 @@ public class ScrLangProps extends PFrame {
 
     @Override
     public void saveAllValues() {
-        PropertiesManager propMan = core.getPropertiesManager();
+        var propMan = ((PropertiesManager)core.getPropertiesManager());
         propMan.setDisableProcRegex(chkDisableProcRegex.isSelected());
         propMan.setIgnoreCase(chkIgnoreCase.isSelected());
         propMan.setLangName(txtLangName.getText());
@@ -209,7 +209,7 @@ public class ScrLangProps extends PFrame {
     }
 
     private void populateProperties() {
-        PropertiesManager propMan = core.getPropertiesManager();
+        var propMan = ((PropertiesManager)core.getPropertiesManager());
 
         txtLangName.setText(propMan.getLangName());
         txtFont.setText(propMan.getFontCon().getFamily());
@@ -249,13 +249,13 @@ public class ScrLangProps extends PFrame {
     }
 
     private void setConFont(Font _font, int fontStyle, int fontSize) {
-        core.getPropertiesManager().setFontCon(_font, fontStyle, fontSize);
-        Font conFont = core.getPropertiesManager().getFontCon();
+        ((PropertiesManager)core.getPropertiesManager()).setFontCon(_font, fontStyle, fontSize);
+        Font conFont = ((PropertiesManager)core.getPropertiesManager()).getFontCon();
         txtAlphaOrder.setFont(conFont);
         txtFont.setText(conFont.getFamily());
 
         try {
-            boolean synced = core.getPropertiesManager().syncCachedFontCon();
+            boolean synced = ((PropertiesManager)core.getPropertiesManager()).syncCachedFontCon();
 
             if (!synced) {
                 core.getOSHandler().getInfoBox().warning("Font Not Cached",
@@ -275,7 +275,7 @@ public class ScrLangProps extends PFrame {
     private void setLocalFont(Font localFont) {
         if (localFont != null) {
 
-            core.getPropertiesManager().setLocalFont(localFont, localFont.getSize2D());
+            ((PropertiesManager)core.getPropertiesManager()).setLocalFont(localFont, localFont.getSize2D());
 
             txtLocalFont.setText(localFont.getFamily());
         }
@@ -285,7 +285,7 @@ public class ScrLangProps extends PFrame {
      * Displays warning to user if RTL is enforced and confont is standard
      */
     private void testRTLWarning() {
-        Font conFont = core.getPropertiesManager().getFontCon();
+        Font conFont = ((PropertiesManager)core.getPropertiesManager()).getFontCon();
         Font stdFont = (new JTextField()).getFont();
 
         if (core.getPropertiesManager().isEnforceRTL()
@@ -664,7 +664,7 @@ public class ScrLangProps extends PFrame {
         try {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             core.getPropertiesManager().refreshFonts();
-            txtAlphaOrder.setFont(core.getPropertiesManager().getFontCon());
+            txtAlphaOrder.setFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
         }
         catch (Exception e) {
             new DesktopInfoBox(this).error("Font Refresh Failed", e.getLocalizedMessage());

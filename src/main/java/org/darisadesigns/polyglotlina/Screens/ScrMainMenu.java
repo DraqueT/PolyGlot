@@ -34,6 +34,7 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.FontFormatException;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
@@ -83,9 +84,11 @@ import org.darisadesigns.polyglotlina.CheckLanguageErrors;
 import org.darisadesigns.polyglotlina.ClipboardHandler;
 import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.Desktop.DesktopHelpHandler;
+import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.HelpHandler;
 import org.darisadesigns.polyglotlina.Java8Bridge;
 import org.darisadesigns.polyglotlina.ManagersCollections.OptionsManager;
+import org.darisadesigns.polyglotlina.PFontHandler;
 import org.darisadesigns.polyglotlina.ToolsHelpers.ExportSpellingDictionary;
 import org.darisadesigns.polyglotlina.WebInterface;
 
@@ -420,6 +423,12 @@ public final class ScrMainMenu extends PFrame {
 
         try {
             core.readFile(fileName);
+            try {
+                PFontHandler.setFontFrom(fileName, core);
+            } catch (IOException | FontFormatException e) {
+                core.getOSHandler().getIOHandler().writeErrorLog(e);
+                throw new IllegalStateException(e.getLocalizedMessage());
+            }
 
             if (curWindow == null) {
                 saveAllValues();
@@ -2012,7 +2021,7 @@ public final class ScrMainMenu extends PFrame {
 
             // test whether con-font family is installed on computer
             GraphicsEnvironment g = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            String conFontFamily = core.getPropertiesManager().getFontCon().getFamily();
+            String conFontFamily = ((PropertiesManager)core.getPropertiesManager()).getFontCon().getFamily();
             if (!Arrays.asList(g.getAvailableFontFamilyNames()).contains(conFontFamily)) {
                 // prompt user to install font (either Charis or their chosen con-font) if not currently on system
                 new DesktopInfoBox(this).warning("Font Not Installed",

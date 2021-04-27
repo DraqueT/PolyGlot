@@ -34,6 +34,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box.Filler;
 import javax.swing.JPanel;
+import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.Nodes.WordClass;
 
 /**
@@ -63,7 +64,7 @@ public class PClassCheckboxPanel extends JPanel {
         includeAll = _includeAll;
         nightMode = core.getOptionsManager().isNightMode();
         fontSize = core.getOptionsManager().getMenuFontSize();
-        checkBoxFont = core.getPropertiesManager().getFontLocal();
+        checkBoxFont = ((PropertiesManager)core.getPropertiesManager()).getFontLocal();
         this.init(core);
     }
     

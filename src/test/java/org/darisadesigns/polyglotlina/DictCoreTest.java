@@ -20,6 +20,7 @@
 package org.darisadesigns.polyglotlina;
 
 import TestResources.DummyCore;
+import java.awt.FontFormatException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -107,8 +108,20 @@ public class DictCoreTest {
             Path targetPath = Files.createTempFile("POLYGLOT", "pgt");
             
             origin.readFile(PGTUtil.TESTRESOURCES + "test_equality.pgd");
+            try {
+                PFontHandler.setFontFrom(PGTUtil.TESTRESOURCES + "test_equality.pgd", origin);
+            } catch (IOException | FontFormatException e) {
+                origin.getOSHandler().getIOHandler().writeErrorLog(e);
+                throw new IllegalStateException(e.getLocalizedMessage());
+            }
             origin.writeFile(targetPath.toString());
             target.readFile(targetPath.toString());
+            try {
+                PFontHandler.setFontFrom(targetPath.toString(), target);
+            } catch (IOException | FontFormatException e) {
+                target.getOSHandler().getIOHandler().writeErrorLog(e);
+                throw new IllegalStateException(e.getLocalizedMessage());
+            }
             
             assertEquals(origin, target, "Languge archive saving inconsistenies detected.");
         } catch (IOException | IllegalStateException | ParserConfigurationException | TransformerException e) {

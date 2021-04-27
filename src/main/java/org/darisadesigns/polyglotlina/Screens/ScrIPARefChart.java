@@ -32,6 +32,7 @@ import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.util.Map;
 import javax.swing.JComponent;
+import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
@@ -61,7 +62,7 @@ public final class ScrIPARefChart extends PFrame {
      */
     private void setupToolTips() {
         lblVowels.setToolTipText(" ");
-        ((PLabel)lblVowels).setToolTipOverrideFont(core.getPropertiesManager().getFontCon());
+        ((PLabel)lblVowels).setToolTipOverrideFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
         ((PLabel)lblVowels).setToolTipAction((e) -> {
             String ret = "";
             
@@ -80,7 +81,7 @@ public final class ScrIPARefChart extends PFrame {
         });
         
         lblNonPulmonicConsonants.setToolTipText(" ");
-        ((PLabel)lblNonPulmonicConsonants).setToolTipOverrideFont(core.getPropertiesManager().getFontCon());
+        ((PLabel)lblNonPulmonicConsonants).setToolTipOverrideFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
         ((PLabel)lblNonPulmonicConsonants).setToolTipAction((e) -> {
             String ret = "";
             
@@ -99,7 +100,7 @@ public final class ScrIPARefChart extends PFrame {
         });
         
         lblOtherSymbols.setToolTipText(" ");
-        ((PLabel)lblOtherSymbols).setToolTipOverrideFont(core.getPropertiesManager().getFontCon());
+        ((PLabel)lblOtherSymbols).setToolTipOverrideFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
         ((PLabel)lblOtherSymbols).setToolTipAction((e) -> {
             String ret = "";
             
@@ -118,7 +119,7 @@ public final class ScrIPARefChart extends PFrame {
         });
         
         lblPulmonicConsonants.setToolTipText(" ");
-        ((PLabel)lblPulmonicConsonants).setToolTipOverrideFont(core.getPropertiesManager().getFontCon());
+        ((PLabel)lblPulmonicConsonants).setToolTipOverrideFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
         ((PLabel)lblPulmonicConsonants).setToolTipAction((e) -> {
             String ret = "";
             
@@ -155,7 +156,7 @@ public final class ScrIPARefChart extends PFrame {
         jPanel4 = new javax.swing.JPanel();
         lblOtherSymbols = new PLabel("",0);
         txtIPAChars = new javax.swing.JTextField();
-        cmbIpaLibSelect = new PComboBox<IPALibrary>(core.getPropertiesManager().getFontMenu());
+        cmbIpaLibSelect = new PComboBox<IPALibrary>(((PropertiesManager)core.getPropertiesManager()).getFontMenu());
         lblHover = new PLabel("Hover over an IPA character to display which characters in your language express it.", core.getOptionsManager().getMenuFontSize());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);

@@ -115,7 +115,7 @@
                 <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lstCombinedDecValueChanged"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PList(core.getPropertiesManager().getFontLocal(), menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PList(((PropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize)"/>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Object&gt;"/>
               </AuxValues>
             </Component>
@@ -224,7 +224,7 @@
                     <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lstRulesValueChanged"/>
                   </Events>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PList(core.getPropertiesManager().getFontLocal(), menuFontSize)"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PList(((PropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize)"/>
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;org.darisadesigns.polyglotlina.Nodes.ConjugationGenRule&gt;"/>
                   </AuxValues>
                 </Component>
@@ -285,7 +285,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMoveRuleUpActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize);&#xa;btnMoveRuleUp.setFont(core.getPropertiesManager().getFontMenu())&#xa;"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize); btnMoveRuleUp.setFont(((PropertiesManager)core.getPropertiesManager()).getFontMenu()) "/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="btnMoveRuleDown">
@@ -297,7 +297,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMoveRuleDownActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize);&#xa;btnMoveRuleDown.setFont(core.getPropertiesManager().getFontMenu())"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize); btnMoveRuleDown.setFont(((PropertiesManager)core.getPropertiesManager()).getFontMenu())"/>
               </AuxValues>
             </Component>
             <Container class="javax.swing.JPanel" name="jPanel3">
@@ -445,7 +445,7 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMoveTransformUpActionPerformed"/>
                   </Events>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize);&#xa;btnMoveTransformUp.setFont(core.getPropertiesManager().getFontMenu())"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize); btnMoveTransformUp.setFont(((PropertiesManager)core.getPropertiesManager()).getFontMenu())"/>
                   </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnMoveTransformDown">
@@ -457,7 +457,7 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMoveTransformDownActionPerformed"/>
                   </Events>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize);&#xa;btnMoveTransformDown.setFont(core.getPropertiesManager().getFontMenu())"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize); btnMoveTransformDown.setFont(((PropertiesManager)core.getPropertiesManager()).getFontMenu())"/>
                   </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnDeleteTransform">

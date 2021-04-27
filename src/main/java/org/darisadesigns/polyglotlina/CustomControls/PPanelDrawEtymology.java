@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.Nodes.EtyExternalParent;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 
@@ -228,9 +229,9 @@ public final class PPanelDrawEtymology extends JPanel {
         myWordPosition.children.clear();
         myWordPosition.parents.clear();
         conFontMetrics = g.getFontMetrics(
-                core.getPropertiesManager().getFontCon());
+                ((PropertiesManager)core.getPropertiesManager()).getFontCon());
         charisFontMetrics = g.getFontMetrics(
-                core.getPropertiesManager().getFontLocal());
+                ((PropertiesManager)core.getPropertiesManager()).getFontLocal());
         curYDepth = conFontMetrics.getHeight();
 
         buildEtTree();
@@ -288,7 +289,7 @@ public final class PPanelDrawEtymology extends JPanel {
         if (myNode.isExternal) {
             textHeight = charisFontMetrics.getHeight();
             
-            g.setFont(core.getPropertiesManager().getFontLocal());
+            g.setFont(((PropertiesManager)core.getPropertiesManager()).getFontLocal());
             String extWordOrigin = ((EtyExternalParent)myNode.word).getExternalLanguage();
             if (!extWordOrigin.isEmpty()) {
                 g.setColor(Color.gray);
@@ -311,7 +312,7 @@ public final class PPanelDrawEtymology extends JPanel {
             
             curYDepth += textHeight;
         } else {
-            g.setFont(core.getPropertiesManager().getFontCon());
+            g.setFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
             g.drawString(myNode.word.getValue(), xOffset, curYDepth);
             textHeight = conFontMetrics.getHeight();
             myLineHeight = curYDepth - (textHeight / 3);
@@ -365,7 +366,7 @@ public final class PPanelDrawEtymology extends JPanel {
         if (firstEntry) {
             startYDepth = yParentEnd;
         } else {
-            g.setFont(core.getPropertiesManager().getFontCon());
+            g.setFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
             g.drawString(myNode.word.getValue(), xOffset, curYDepth);
 
             try {

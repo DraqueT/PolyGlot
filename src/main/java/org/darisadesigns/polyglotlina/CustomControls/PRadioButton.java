@@ -24,6 +24,7 @@ import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.DictNode;
 import org.darisadesigns.polyglotlina.QuizEngine.QuizQuestion.QuestionType;
 import javax.swing.JRadioButton;
+import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
 
@@ -95,7 +96,7 @@ public final class PRadioButton extends JRadioButton {
      */
     public void setType(QuestionType _type) {
         if (_type == QuestionType.ConEquiv) {
-            this.setFont(core.getPropertiesManager().getFontCon());
+            this.setFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
         } else {
             this.setFont(PGTUtil.CHARIS_UNICODE.deriveFont((float)core.getOptionsManager().getMenuFontSize()));
         }

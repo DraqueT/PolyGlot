@@ -35,7 +35,6 @@ import org.darisadesigns.polyglotlina.ManagersCollections.ReversionManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.RomanizationManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.ToDoManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.WordClassCollection;
-import java.awt.FontFormatException;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
@@ -45,6 +44,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -81,23 +81,24 @@ public class DictCore {
      * @param _polyGlot
      * @param _osHandler
      */
-    public DictCore(PolyGlot _polyGlot, OSHandler _osHandler) {
+    public DictCore(PolyGlot _polyGlot, PropertiesManager _propertiesManager, OSHandler _osHandler) {
         polyGlot = _polyGlot;
         polyGlot.setCore(this);
         osHandler = _osHandler;
-        initializeDictCore();
+        initializeDictCore(_propertiesManager);
     }
     
     public DictCore getNewCore() {
         return polyGlot.getNewCore();
     }
     
-    private void initializeDictCore() {
+    private void initializeDictCore(PropertiesManager _propertiesManager) {
         try {
             wordCollection = new ConWordCollection(this);
             typeCollection = new TypeCollection(this);
             conjugationMgr = new ConjugationManager(this);
-            propertiesManager = new PropertiesManager(this);
+            propertiesManager = _propertiesManager;
+            propertiesManager.setDictCore(this);
             pronuncMgr = new PronunciationMgr(this);
             romMgr = new RomanizationManager(this);
             famManager = new FamilyManager(this);
@@ -361,13 +362,6 @@ public class DictCore {
         } catch (Exception e) {
             throw new IOException("Image loading error: " + e.getLocalizedMessage(), e);
         }
-
-        try {
-            PFontHandler.setFontFrom(_fileName, this);
-        } catch (IOException | FontFormatException e) {
-            this.osHandler.getIOHandler().writeErrorLog(e);
-            warningLog += e.getLocalizedMessage() + "\n";
-        }
         
         try {
             CustHandler handler;
@@ -437,7 +431,7 @@ public class DictCore {
      * @throws java.io.IOException 
      */
     public void revertToState(byte[] revision, String fileName) throws IOException{
-        DictCore revDict = new DictCore(polyGlot, this.osHandler);
+        DictCore revDict = new DictCore(polyGlot, this.propertiesManager, this.osHandler);
         revDict.readFile(fileName, revision);
         
         pushUpdateWithCore(revDict);

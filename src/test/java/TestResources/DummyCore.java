@@ -25,6 +25,7 @@ import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.DesktopHelpHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopOSHandler;
+import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.InfoBox;
 import org.darisadesigns.polyglotlina.PGTUtil;
@@ -36,8 +37,8 @@ import org.darisadesigns.polyglotlina.OSHandler;
  * @author draque
  */
 public class DummyCore extends DictCore {
-    private DummyCore (PolyGlot polyGlot, OSHandler osHandler) {
-        super(polyGlot, osHandler);
+    private DummyCore (PolyGlot polyGlot, PropertiesManager propsManager, OSHandler osHandler) {
+        super(polyGlot, propsManager, osHandler);
     }
     
     public static DummyCore newCore() {
@@ -48,8 +49,9 @@ public class DummyCore extends DictCore {
             Constructor constructor = PolyGlot.class.getDeclaredConstructor(new Class[]{String.class, DesktopOSHandler.class});
             constructor.setAccessible(true);
             PolyGlot polyGlot = (PolyGlot)constructor.newInstance(PGTUtil.TESTRESOURCES, osHandler);
+            PropertiesManager propsManager = new PropertiesManager();
             
-            return new DummyCore(polyGlot, osHandler);
+            return new DummyCore(polyGlot, propsManager, osHandler);
         } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
             System.err.println("Something's gone wrong with the Dummy Core generation: " + e.getLocalizedMessage());
         }

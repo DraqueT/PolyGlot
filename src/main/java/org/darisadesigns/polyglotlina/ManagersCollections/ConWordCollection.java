@@ -817,7 +817,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
      * @return text in plain tag
      */
     public static String formatPlain(String toPlain, DictCore core) {
-        String defaultFont = "face=\"" + core.getPropertiesManager().getFontLocal().getFamily() + "\"";
+        String defaultFont = "face=\"" + core.getPropertiesManager().getFontLocalFamily() + "\"";
         return "<font " + defaultFont + ">" + toPlain + "</font>";
     }
 
@@ -830,7 +830,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
      */
     public static String formatCon(String toCon, DictCore core) {
         // TODO: This is very bad. Strip this out at the same time that the language stats tool is rewritten. Use css style.
-        String defaultFont = "face=\"" + core.getPropertiesManager().getFontCon().getFamily() + "\"";
+        String defaultFont = "face=\"" + core.getPropertiesManager().getFontConFamily() + "\"";
         return "<font " + defaultFont + ">" + toCon + "</font>";
     }
 

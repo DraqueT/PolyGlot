@@ -516,13 +516,13 @@ public final class DesktopIOHandler implements IOHandler {
                     out.closeEntry();
 
                     writeLog += PFontHandler.writeFont(out,
-                            core.getPropertiesManager().getFontCon(),
+                            ((PropertiesManager)core.getPropertiesManager()).getFontCon(),
                             core.getPropertiesManager().getCachedFont(),
                             core,
                             true);
 
                     writeLog += PFontHandler.writeFont(out,
-                            core.getPropertiesManager().getFontLocal(),
+                            ((PropertiesManager)core.getPropertiesManager()).getFontLocal(),
                             core.getPropertiesManager().getCachedLocalFont(),
                             core,
                             false);
@@ -542,7 +542,7 @@ public final class DesktopIOHandler implements IOHandler {
                 // pass null shell class because this will ultimately be discarded
                 DesktopHelpHandler helpHandler = new DesktopHelpHandler();
                 var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), new DesktopInfoBox(null), helpHandler);
-                DictCore test = new DictCore(PolyGlot.getTestShell(), osHandler);
+                DictCore test = new DictCore(PolyGlot.getTestShell(), new PropertiesManager(), osHandler);
                 test.readFile(tmpSaveLocation.getAbsolutePath());
 
             }

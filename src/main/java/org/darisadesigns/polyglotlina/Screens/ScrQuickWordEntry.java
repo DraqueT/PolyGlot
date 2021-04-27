@@ -44,6 +44,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
@@ -118,7 +119,7 @@ public final class ScrQuickWordEntry extends PDialog {
             }
         };
 
-        txtConWord.setFont(core.getPropertiesManager().getFontCon());
+        txtConWord.setFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
         txtConWord.addKeyListener(enterListener);
         txtConWord.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -320,7 +321,7 @@ public final class ScrQuickWordEntry extends PDialog {
                 pnlClasses.add(textField, gbc);
                 classComboMap.put(curProp.getId(), textField); // dropbox mapped to related class ID.
             } else {
-                final PComboBox<Object> classBox = new PComboBox<>(core.getPropertiesManager().getFontMenu());
+                final PComboBox<Object> classBox = new PComboBox<>(((PropertiesManager)core.getPropertiesManager()).getFontMenu());
                 DefaultComboBoxModel<Object> comboModel = new DefaultComboBoxModel<>();
                 classBox.setModel(comboModel);
                 comboModel.addElement("-- " + curProp.getValue() + " --");
@@ -366,13 +367,13 @@ public final class ScrQuickWordEntry extends PDialog {
         }
         if (propList.length == 0) {
             // must include at least one item (even a dummy) to resize for some reason
-            PComboBox blank = new PComboBox(core.getPropertiesManager().getFontMenu());
+            PComboBox blank = new PComboBox(((PropertiesManager)core.getPropertiesManager()).getFontMenu());
             blank.setEnabled(false);
             pnlClasses.add(blank, gbc);
             pnlClasses.setPreferredSize(new Dimension(9999, 0));
         } else {
             pnlClasses.setMaximumSize(new Dimension(99999, 99999));
-            pnlClasses.setPreferredSize(new Dimension(9999, propList.length * new PComboBox(core.getPropertiesManager().getFontMenu()).getPreferredSize().height));
+            pnlClasses.setPreferredSize(new Dimension(9999, propList.length * new PComboBox(((PropertiesManager)core.getPropertiesManager()).getFontMenu()).getPreferredSize().height));
         }
 
         pnlClasses.repaint();
@@ -396,7 +397,7 @@ public final class ScrQuickWordEntry extends PDialog {
         jPanel2 = new javax.swing.JPanel();
         txtConWord = new PTextField(core, false, "-- " + core.conLabel() + " word --");
         txtLocalWord = new PTextField(core, true, "-- " + core.localLabel() + " word --");
-        cmbType = new PComboBox(core.getPropertiesManager().getFontMenu());
+        cmbType = new PComboBox(((PropertiesManager)core.getPropertiesManager()).getFontMenu());
         txtProc = new PTextField(core, true, "-- Pronunciation --");
         pnlClasses = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();

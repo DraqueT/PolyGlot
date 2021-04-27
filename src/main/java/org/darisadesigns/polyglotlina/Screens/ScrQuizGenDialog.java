@@ -35,6 +35,7 @@ import org.darisadesigns.polyglotlina.QuizEngine.QuizFactory;
 import java.awt.Component;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
+import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 
 /**
  *
@@ -59,14 +60,15 @@ public final class ScrQuizGenDialog extends PFrame {
     }
     
     private void setupScreen() {
+        var propMan = ((PropertiesManager)core.getPropertiesManager());
         chkLocalQuiz.setText(core.localLabel() + " Equivalent");
         chkConlangQuiz.setText(core.conLabel() + " Equivalent");
-        chkClassQuiz.setFont(core.getPropertiesManager().getFontLocal());
-        chkConlangQuiz.setFont(core.getPropertiesManager().getFontLocal());
-        chkDefQuiz.setFont(core.getPropertiesManager().getFontLocal());
-        chkLocalQuiz.setFont(core.getPropertiesManager().getFontLocal());
-        chkProcQuiz.setFont(core.getPropertiesManager().getFontLocal());
-        chkTypeQuiz.setFont(core.getPropertiesManager().getFontLocal());
+        chkClassQuiz.setFont(propMan.getFontLocal());
+        chkConlangQuiz.setFont(propMan.getFontLocal());
+        chkDefQuiz.setFont(propMan.getFontLocal());
+        chkLocalQuiz.setFont(propMan.getFontLocal());
+        chkProcQuiz.setFont(propMan.getFontLocal());
+        chkTypeQuiz.setFont(propMan.getFontLocal());
         
         ((PTextField)txtFilterConWord).setDefaultValue("-- " + core.conLabel() + " Filter --");
         ((PTextField)txtFilterConWord).setDefault();
@@ -155,7 +157,7 @@ public final class ScrQuizGenDialog extends PFrame {
         jPanel2 = new javax.swing.JPanel();
         txtFilterConWord = new PTextField(core, false, "-- " + core.conLabel() + " Filter --");
         txtFilterLocalWord = new PTextField(core, true, "-- " + core.localLabel() + " Filter --");
-        cmbFilterType = new PComboBox(core.getPropertiesManager().getFontMenu());
+        cmbFilterType = new PComboBox(((PropertiesManager)core.getPropertiesManager()).getFontMenu());
         txtFilterProc = new PTextField(core, true, "-- Pronunciation Filter --");
         btnClearFilter = new PButton(nightMode, menuFontSize);
         jLabel1 = new PLabel("", menuFontSize);

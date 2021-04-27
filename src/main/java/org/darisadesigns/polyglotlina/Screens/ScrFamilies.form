@@ -77,7 +77,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTree(core.getPropertiesManager().getFontLocal(), menuFontSize, nightMode)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTree(((PropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize, nightMode)"/>
           </AuxValues>
         </Component>
       </SubComponents>

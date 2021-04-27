@@ -93,7 +93,7 @@ public final class PTable extends JTable {
             
             // only set new value if not already overridden elsewhere
             if (!(ret instanceof PCellRenderer)) {
-                boolean conFont = this.getFont().getFamily().equals(core.getPropertiesManager().getFontCon().getFamily());
+                boolean conFont = this.getFont().getFamily().equals(core.getPropertiesManager().getFontLocalFamily());
                 ret = new PCellRenderer(conFont, core);
                 this.prepareRenderer(ret, row, column);
             }
@@ -111,7 +111,7 @@ public final class PTable extends JTable {
             
             // only set new value if not already overridden elsewhere
             if (!(ret instanceof PCellEditor)) {
-                boolean conFont = this.getFont().getFamily().equals(core.getPropertiesManager().getFontCon().getFamily());
+                boolean conFont = this.getFont().getFamily().equals(core.getPropertiesManager().getFontConFamily());
                 ret = new PCellEditor(conFont, core);
                 this.prepareEditor(ret, row, column);
             }

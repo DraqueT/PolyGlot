@@ -46,6 +46,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Position;
+import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 
 /**
  * The <code>JFontChooser</code> class is a swing component 
@@ -741,7 +742,7 @@ public class JFontChooser extends JComponent
             label.setHorizontalTextPosition(JLabel.LEFT);
             label.setLabelFor(getFontFamilyTextField());
             label.setDisplayedMnemonic('F');
-            label.setFont(core.getPropertiesManager().getFontMenu());
+            label.setFont(((PropertiesManager)core.getPropertiesManager()).getFontMenu());
 
             fontNamePanel.add(label, BorderLayout.NORTH);
             fontNamePanel.add(p, BorderLayout.CENTER);
@@ -776,7 +777,7 @@ public class JFontChooser extends JComponent
             label.setHorizontalTextPosition(JLabel.LEFT);
             label.setLabelFor(getFontStyleTextField());
             label.setDisplayedMnemonic('Y');
-            label.setFont(core.getPropertiesManager().getFontMenu());
+            label.setFont(((PropertiesManager)core.getPropertiesManager()).getFontMenu());
 
             fontStylePanel.add(label, BorderLayout.NORTH);
             fontStylePanel.add(p, BorderLayout.CENTER);
@@ -810,7 +811,7 @@ public class JFontChooser extends JComponent
             label.setHorizontalTextPosition(JLabel.LEFT);
             label.setLabelFor(getFontSizeTextField());
             label.setDisplayedMnemonic('S');
-            label.setFont(core.getPropertiesManager().getFontMenu());
+            label.setFont(((PropertiesManager)core.getPropertiesManager()).getFontMenu());
 
             fontSizePanel.add(label, BorderLayout.NORTH);
             fontSizePanel.add(p, BorderLayout.CENTER);
@@ -823,7 +824,8 @@ public class JFontChooser extends JComponent
         if (samplePanel == null)
         {
             Border titledBorder = BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), ("Sample"), 0, 0, core.getPropertiesManager().getFontMenu());
+                BorderFactory.createEtchedBorder(), ("Sample"), 0, 0, 
+                ((PropertiesManager)core.getPropertiesManager()).getFontMenu());
             Border empty = BorderFactory.createEmptyBorder(5, 10, 10, 10);
             Border border = BorderFactory.createCompoundBorder(titledBorder, empty);
 

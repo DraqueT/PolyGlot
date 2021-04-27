@@ -58,6 +58,7 @@ import javax.swing.table.TableColumn;
 import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.CustomControls.PTextPane;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
+import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 
 /**
  * This is the setup form for word forms (declensions/conjugations and their
@@ -523,7 +524,7 @@ public final class ScrDeclensionSetup extends PDialog {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new PLabel("", menuFontSize);
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstDeclensionList = new PList(core.getPropertiesManager().getFontLocal(), menuFontSize);
+        lstDeclensionList = new PList(((PropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
         jPanel2 = new javax.swing.JPanel();
         txtDeclensionName = new PTextField(core, true, "-- Name --");//PTextField(core, true, "-- Name --");
         jLabel3 = new PLabel("", menuFontSize);

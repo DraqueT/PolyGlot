@@ -34,6 +34,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.csv.CSVFormat;
 import org.darisadesigns.polyglotlina.CustomControls.PRadioButton;
+import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.ImportFileHelper.DuplicateOption;
 import org.darisadesigns.polyglotlina.PGTUtil;
 
@@ -100,11 +101,11 @@ public class ScrExcelImport extends PDialog {
         jLabel11 = new PLabel("", menuFontSize);
         txtExcelSheet = new javax.swing.JTextField();
         jLabel10 = new PLabel("", menuFontSize);
-        cmbPreferences = new PComboBox<Delimiter>(core.getPropertiesManager().getFontMenu());
+        cmbPreferences = new PComboBox<Delimiter>(((PropertiesManager)core.getPropertiesManager()).getFontMenu());
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
         jLabel12 = new PLabel("", menuFontSize);
-        cmbQuoteChar = new PComboBox<>(core.getPropertiesManager().getFontMenu());
+        cmbQuoteChar = new PComboBox<>(((PropertiesManager)core.getPropertiesManager()).getFontMenu());
         btnImport = new PButton(nightMode, menuFontSize);
         btnCancel = new PButton(nightMode, menuFontSize);
         jPanel2 = new javax.swing.JPanel();

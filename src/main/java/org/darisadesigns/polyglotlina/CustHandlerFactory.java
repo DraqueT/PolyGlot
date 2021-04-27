@@ -843,7 +843,8 @@ public final class CustHandlerFactory {
                     bwordoverAutoDec = false;
                 } else if (bfontcon && core.getPropertiesManager().getCachedFont() == null) {
                     try {
-                        propertiesManager.setFontCon(new String(ch, start, length));
+                        ((org.darisadesigns.polyglotlina.Desktop.PropertiesManager)propertiesManager)
+                                .setFontCon(new String(ch, start, length));
                     } catch (Exception e) {
                         core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nFont load error: " + e.getLocalizedMessage();

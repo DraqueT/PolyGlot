@@ -38,6 +38,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
+import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 
 /**
  * Split out from IOHandler due to large portion devoted to handling fonts
@@ -87,10 +88,10 @@ public class PFontHandler {
                             byte[] cachedFont = core.getOSHandler().getIOHandler().getByteArrayFromFile(tempFile);
 
                             if (isConFont) {
-                                core.getPropertiesManager().setFontConRaw(font);
+                                ((PropertiesManager)core.getPropertiesManager()).setFontConRaw(font);
                                 core.getPropertiesManager().setCachedFont(cachedFont);
                             } else {
-                                core.getPropertiesManager().setLocalFont(font);
+                                ((PropertiesManager)core.getPropertiesManager()).setLocalFont(font);
                                 core.getPropertiesManager().setCachedLocalFont(cachedFont);
                             }
                         } catch (FontFormatException e) {

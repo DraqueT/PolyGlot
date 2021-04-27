@@ -47,6 +47,7 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
+import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
@@ -179,7 +180,7 @@ public final class ScrLogoQuickView extends PFrame {
      * Sets up fonts based on core properties
      */
     private void setupFonts() {
-        Font font = core.getPropertiesManager().getFontCon();
+        Font font = ((PropertiesManager)core.getPropertiesManager()).getFontCon();
 
         if (font == null) {
             return;
@@ -294,7 +295,7 @@ public final class ScrLogoQuickView extends PFrame {
 
         lblLogoPic = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstLogos = new PList(core.getPropertiesManager().getFontCon());
+        lstLogos = new PList(((PropertiesManager)core.getPropertiesManager()).getFontCon());
         btnAdd = new PAddRemoveButton("+");
         btnDel = new PAddRemoveButton("-");
         btnOK = new PButton(nightMode, menuFontSize);

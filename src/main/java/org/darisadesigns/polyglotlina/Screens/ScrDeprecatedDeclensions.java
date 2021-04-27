@@ -38,6 +38,7 @@ import java.util.Set;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 
 /**
  *
@@ -149,7 +150,7 @@ public final class ScrDeprecatedDeclensions extends PDialog {
         
         final ScrDeprecatedDeclensions s = new ScrDeprecatedDeclensions(_core, _word);
         s.word = _word;
-        s.conFont = _core.getPropertiesManager().getFontCon();
+        s.conFont = ((PropertiesManager)_core.getPropertiesManager()).getFontCon();
         if (wordType == null) {
             s.typeId = -1;
         } else {

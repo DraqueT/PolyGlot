@@ -39,6 +39,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableCellEditor;
+import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 
 /**
  *
@@ -70,8 +71,8 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
         useConFont = _useConFont;
         double preSize = core.getPropertiesManager().getFontSize();
         
-        Font defFont = useConFont ? core.getPropertiesManager().getFontCon()
-                : core.getPropertiesManager().getFontLocal();
+        Font defFont = useConFont ? ((PropertiesManager)core.getPropertiesManager()).getFontCon()
+                : ((PropertiesManager)core.getPropertiesManager()).getFontLocal();
         double fontSize = useConFont ? 
                 preSize :
                 core.getOptionsManager().getMenuFontSize();

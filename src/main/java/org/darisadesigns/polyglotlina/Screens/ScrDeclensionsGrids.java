@@ -41,6 +41,7 @@ import org.darisadesigns.polyglotlina.CustomControls.PDeclensionPanelInterface;
 import java.awt.Window;
 import javax.swing.JOptionPane;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 
 /**
  *
@@ -301,8 +302,8 @@ public final class ScrDeclensionsGrids extends PDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        cmbDimX = new PComboBox(core.getPropertiesManager().getFontMenu());
-        cmbDimY = new PComboBox(core.getPropertiesManager().getFontMenu());
+        cmbDimX = new PComboBox(((PropertiesManager)core.getPropertiesManager()).getFontMenu());
+        cmbDimY = new PComboBox(((PropertiesManager)core.getPropertiesManager()).getFontMenu());
         pnlTabDeclensions = new javax.swing.JTabbedPane();
         chkAutogenOverride = new javax.swing.JCheckBox();
         btnOk = new PButton(nightMode, menuFontSize);

@@ -125,7 +125,7 @@ public final class PLanguageStats {
         charStatBar.setLeftYAxisLabel("Starting With");
         charStatBar.setRightYAxisLabel("Overall Count");
         charStatBar.setLabels(new String[]{"Words Starting With", "Overall Count"});
-        charStatBar.setConFontName(core.getPropertiesManager().getFontCon().getFamily());
+        charStatBar.setConFontName(core.getPropertiesManager().getFontConFamily());
         for (String character : alphabet) {
             double starting = 0.0;
             double count = 0.0;
@@ -154,7 +154,7 @@ public final class PLanguageStats {
         ret += charStatBar.getBuildHTML();
 
         ret += "    </script>\n"
-                + "  <body style=\"font-family:" + core.getPropertiesManager().getFontLocal().getFamily() + ";\">\n"
+                + "  <body style=\"font-family:" + core.getPropertiesManager().getFontLocalFamily() + ";\">\n"
                 + "    <center>---LANGUAGE STAT REPORT---</center><br><br>";
 
         ret += formatPlain("Count of words in conlang lexicon: " + wordList.length + "<br><br>", core);

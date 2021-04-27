@@ -31,6 +31,7 @@ import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
+import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.EvolutionPair;
@@ -114,14 +115,12 @@ public final class ScrEvolveLang extends PDialog {
         jLabel1 = new PLabel("", core.getOptionsManager().getMenuFontSize());
         txtConWordFilter = new PTextField(core, false, "ConWord Filter");
         txtLocalWordFilter = new PTextField(core, true, core.getPropertiesManager().getLocalLangName() + " Filter");
-        cmbPoS = new PComboBox<TypeNode>(
-            core.getPropertiesManager().getFontLocal(),
-            "-- Part of Speech --");
+        cmbPoS = new PComboBox<TypeNode>( ((PropertiesManager)core.getPropertiesManager()).getFontLocal(), "-- Part of Speech --");
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new PLabel("", core.getOptionsManager().getMenuFontSize());
         sldApplyTo = new javax.swing.JSlider();
         lblApplyTo = new PLabel("", core.getOptionsManager().getMenuFontSize());
-        cmbTransformOptions = new PComboBox<>(core.getPropertiesManager().getFontMenu());
+        cmbTransformOptions = new PComboBox<>(((PropertiesManager)core.getPropertiesManager()).getFontMenu());
         rdoLexicon = new javax.swing.JRadioButton();
         rdoConjpatterns = new javax.swing.JRadioButton();
         rdoBoth = new javax.swing.JRadioButton();
