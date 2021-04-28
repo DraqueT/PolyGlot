@@ -19,9 +19,9 @@
  */
 package org.darisadesigns.polyglotlina;
 
-import java.awt.Desktop;
 import java.io.File;
-import java.io.IOException;
+import java.util.List;
+import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 
 /**
  *
@@ -31,9 +31,9 @@ public abstract class OSHandler {
     
     protected String overrideProgramPath = "";
     
-    private final IOHandler ioHandler;
-    private final InfoBox infoBox;
-    private final HelpHandler helpHandler;
+    protected final IOHandler ioHandler;
+    protected final InfoBox infoBox;
+    protected final HelpHandler helpHandler;
     
     public OSHandler(IOHandler _ioHandler, InfoBox _infoBox, HelpHandler _helpHandler) {
         ioHandler = _ioHandler;
@@ -43,29 +43,13 @@ public abstract class OSHandler {
     
     public abstract File getWorkingDirectory();
     
+    public abstract void openLanguageProblemDisplay(List<LexiconProblemNode> problems, DictCore _core);
+    
     public IOHandler getIOHandler() { return this.ioHandler; }
     
     public InfoBox getInfoBox() { return this.infoBox; }
     
     public HelpHandler getHelpHandler() { return this.helpHandler; }
     
-    public void openLanguageReport(String reportContents) {
-        try {
-            File report = ioHandler.createTmpFileWithContents(reportContents, ".html");
-
-            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-                Desktop.getDesktop().browse(report.toURI());
-            } else if (PGTUtil.IS_LINUX) {
-                Desktop.getDesktop().open(report);
-            } else {
-                infoBox.warning("Menu Warning", "Unable to open browser. Please load manually at: \n" 
-                        + report.getAbsolutePath() + "\n (copied to clipboard for convenience)");
-                new ClipboardHandler().setClipboardContents(report.getAbsolutePath());
-            }
-        } catch (IOException e) {
-            infoBox.error("Report Build Error", "Unable to generate/display language statistics: " 
-                    + e.getLocalizedMessage());
-            ioHandler.writeErrorLog(e);
-        }
-    }
+    public abstract void openLanguageReport(String reportContents);
 }

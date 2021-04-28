@@ -32,7 +32,6 @@ import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode.ProblemType;
 import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
-import org.darisadesigns.polyglotlina.Screens.ScrLanguageProblemDisplay;
 
 /**
  * This checks a given language file for correctable errors
@@ -83,7 +82,7 @@ public class CheckLanguageErrors {
         Collections.sort(problems);
 
         if (!problems.isEmpty() && display) {
-            new ScrLanguageProblemDisplay(problems, core).setVisible(true);
+            core.getOSHandler().openLanguageProblemDisplay(problems, core);
         } else if (display) {
             core.getOSHandler().getInfoBox().info("Lexicon Check Results", "No problems found in language file!");
         }
