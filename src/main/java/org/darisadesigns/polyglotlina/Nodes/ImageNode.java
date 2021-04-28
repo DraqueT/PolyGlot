@@ -19,11 +19,10 @@
  */
 package org.darisadesigns.polyglotlina.Nodes;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import javax.imageio.ImageIO;
+import java.util.Arrays;
+import org.darisadesigns.polyglotlina.DictCore;
 
 /**
  *
@@ -31,14 +30,20 @@ import javax.imageio.ImageIO;
  */
 public class ImageNode extends DictNode {
 
-    private BufferedImage image = null;
+    private DictCore core;
+    private byte[] imageBytes = null;
     private File tmpFile = null;
-
+    
+    public ImageNode(DictCore _core) {
+        super();
+        core = _core;
+    }
+    
     /**
-     * @param _image the image to set
+     * @param _imageBytes the image bytes to set
      */
-    public void setImage(BufferedImage _image) {
-        image = _image;
+    public void setImageBytes(byte[] _imageBytes) {
+        imageBytes = _imageBytes;
     }
 
     /**
@@ -49,7 +54,7 @@ public class ImageNode extends DictNode {
      * @throws java.io.IOException on file read error, or image not initialized
      */
     public String getImagePath() throws IOException {
-        if (image == null) {
+        if (imageBytes == null) {
             throw new IOException("Image not instantiated. Cannot generate path.");
         }
 
@@ -59,8 +64,8 @@ public class ImageNode extends DictNode {
 
         // create tmp file if none exists
         if (tmpFile == null || !tmpFile.exists()) {
-            tmpFile = File.createTempFile(id + "_polyGlotImage", ".png");
-            ImageIO.write(image, "PNG", new FileOutputStream(tmpFile));
+            tmpFile = core.getOSHandler().getIOHandler()
+                    .createTmpFileFromImageBytes(imageBytes, id + "_polyGlotImage");
         }
 
         return tmpFile.getAbsolutePath();
@@ -82,15 +87,15 @@ public class ImageNode extends DictNode {
         }
         ImageNode tmpNode = (ImageNode) _node;
 
-        image = tmpNode.image;
+        imageBytes = tmpNode.imageBytes;
         id = tmpNode.getId();
     }
-
+    
     /**
-     * @return the image
+     * @return the image bytes
      */
-    public BufferedImage getImage() {
-        return image;
+    public byte[] getImageBytes() {
+        return imageBytes;
     }
 
     @Override
@@ -102,7 +107,7 @@ public class ImageNode extends DictNode {
         } else if (comp instanceof ImageNode) {
             ImageNode c = (ImageNode) comp;
 
-            ret = (image == null && image == null) || bufferedImagesEqual(image, c.image);
+            ret = (imageBytes == null) || Arrays.equals(imageBytes, c.imageBytes);
             ret = ret && value.equals(c.value);
         }
 
@@ -112,24 +117,5 @@ public class ImageNode extends DictNode {
     @Override
     public int hashCode() {
         return super.hashCode();
-    }
-
-    // compares two buffered images
-    private boolean bufferedImagesEqual(BufferedImage img1, BufferedImage img2) {
-        boolean ret = true;
-
-        if (img1.getWidth() == img2.getWidth() && img1.getHeight() == img2.getHeight()) {
-            for (int x = 0; x < img1.getWidth() && ret; x++) {
-                for (int y = 0; y < img1.getHeight() && ret; y++) {
-                    if (img1.getRGB(x, y) != img2.getRGB(x, y)) {
-                        ret = false;
-                    }
-                }
-            }
-        } else {
-            ret = false;
-        }
-
-        return ret;
     }
 }

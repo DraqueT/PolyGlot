@@ -22,11 +22,7 @@ package org.darisadesigns.polyglotlina.ManagersCollections;
 import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Nodes.ImageNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
-import java.awt.Window;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
 import org.darisadesigns.polyglotlina.DictCore;
 
 /**
@@ -38,13 +34,13 @@ public class ImageCollection extends DictionaryCollection<ImageNode> {
     private final DictCore core;
     
     public ImageCollection(DictCore _core) {
-        super(new ImageNode());
+        super(new ImageNode(_core));
         core = _core;
     }
     
     @Override
     public void clear() {
-        bufferNode = new ImageNode();
+        bufferNode = new ImageNode(core);
     }
     
     /**
@@ -53,30 +49,6 @@ public class ImageCollection extends DictionaryCollection<ImageNode> {
      */
     public ImageNode[] getAllImages() {
         return nodeMap.values().toArray(new ImageNode[0]);
-    }
-    
-    /**
-     * Pulls in new image from user selected file
-     * Returns null if user cancels process
-     * @param parent parent form
-     * @param workingDirectory
-     * @return ImageNode inserted into collection with populated image
-     * @throws IOException on file read error
-     */
-    public ImageNode openNewImage(Window parent, File workingDirectory) throws Exception {
-        ImageNode image = null;
-        try {
-            BufferedImage buffImg = core.getOSHandler().getIOHandler().openImage(parent, workingDirectory);
-            
-            if (buffImg != null) {
-                image = new ImageNode();
-                image.setImage(buffImg);
-                insert(image);
-            }
-        } catch (IOException e) {
-            throw new IOException("Problem loading image: " + e.getLocalizedMessage(), e);
-        }
-        return image;
     }
     
     /**
@@ -89,30 +61,20 @@ public class ImageCollection extends DictionaryCollection<ImageNode> {
     public void insert(Integer _id) throws Exception {
         super.insert(_id, bufferNode);
 
-        bufferNode = new ImageNode();
+        bufferNode = new ImageNode(core);
     }
     
-    /**
-     * Takes a buffered image, and returns a node containing it, having inserted
-     * the node with ID to persist on save
-     * @param _image Image to get node of.
-     * @return populated Image node
-     * @throws java.lang.Exception
-     */
-    public ImageNode getFromBufferedImage(BufferedImage _image) throws Exception {
-        ImageNode ret = new ImageNode();
-        ret.setImage(_image);
-        this.insert(ret);
-        
-        return ret;
+    @Override
+    public Integer insert(ImageNode _buffer) throws Exception {
+        return super.insert(_buffer);
     }
 
     @Override
     public ImageNode notFoundNode() {
-        ImageNode emptyImage = new ImageNode();
+        ImageNode emptyImage = new ImageNode(core);
         
         try {
-            emptyImage.setImage(ImageIO.read(getClass().getResource(PGTUtil.NOT_FOUND_IMAGE)));
+            emptyImage.setImageBytes(core.getOSHandler().getIOHandler().loadImageBytes(PGTUtil.NOT_FOUND_IMAGE));
         } catch (IOException e) {
             core.getOSHandler().getIOHandler().writeErrorLog(e);
             new DesktopInfoBox(null).error("INTERNAL ERROR", 

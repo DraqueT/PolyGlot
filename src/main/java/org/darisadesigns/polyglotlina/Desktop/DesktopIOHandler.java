@@ -139,6 +139,18 @@ public final class DesktopIOHandler implements IOHandler {
         return ret;
     }
     
+    public File createTmpFileFromImageBytes(byte[] imageBytes, String fileName) throws IOException {
+        File tmpFile = File.createTempFile(fileName, ".png");
+        ByteArrayInputStream stream = new ByteArrayInputStream(imageBytes);
+        BufferedImage img = ImageIO.read(stream);
+        ImageIO.write(
+                img, 
+                "PNG", 
+                new FileOutputStream(tmpFile)
+        );
+        return tmpFile;
+    }
+    
     public File createFileWithContents(String path, String contents) throws IOException {
         File ret = new File(path);
         
@@ -741,8 +753,9 @@ public final class DesktopIOHandler implements IOHandler {
                     try {
                         out.putNextEntry(new ZipEntry(PGTUtil.IMAGES_SAVE_PATH
                                 + curNode.getId() + ".png"));
-
-                        ImageIO.write(curNode.getImage(), "png", out);
+                        
+                        BufferedImage write = ImageIO.read(new ByteArrayInputStream(curNode.getImageBytes()));
+                        ImageIO.write(write, "png", out);
 
                         out.closeEntry();
                     }
@@ -806,9 +819,11 @@ public final class DesktopIOHandler implements IOHandler {
                             .replace(PGTUtil.IMAGES_SAVE_PATH, "");
                     int imageId = Integer.parseInt(name);
                     img = ImageIO.read(imageStream);
-                    ImageNode imageNode = new ImageNode();
+                    ImageNode imageNode = new ImageNode(PolyGlot.getPolyGlot().getCore());
                     imageNode.setId(imageId);
-                    imageNode.setImage(img);
+                    imageNode.setImageBytes(
+                        DesktopIOHandler.getInstance().loadImageBytesFromImage(img)
+                    );
                     imageCollection.getBuffer().setEqual(imageNode);
                     imageCollection.insert(imageId);
                 }
@@ -1403,6 +1418,31 @@ public final class DesktopIOHandler implements IOHandler {
         return Arrays.copyOfRange(ret, 0, cleanCount);
     }
     
+    /**
+     * Pulls in new image from user selected file
+     * Returns null if user cancels process
+     * @param parent parent form
+     * @param workingDirectory
+     * @return ImageNode inserted into collection with populated image
+     * @throws IOException on file read error
+     */
+    public ImageNode openNewImage(Window parent, File workingDirectory) throws Exception {
+        ImageNode image = null;
+        try {
+            DictCore core = PolyGlot.getPolyGlot().getCore();
+            BufferedImage buffImg = openImage(parent, workingDirectory);
+            
+            if (buffImg != null) {
+                image = new ImageNode(core);
+                image.setImageBytes(loadImageBytesFromImage(buffImg));
+                core.getImageCollection().insert(image);
+            }
+        } catch (IOException e) {
+            throw new IOException("Problem loading image: " + e.getLocalizedMessage(), e);
+        }
+        return image;
+    }
+    
     @Override
     public byte[] loadImageBytes(String path) throws IOException {
         ImageIcon loadBlank = new ImageIcon(getClass().getResource(path));
@@ -1433,11 +1473,27 @@ public final class DesktopIOHandler implements IOHandler {
     
     public byte[] loadImageBytesFromImage(Image img) throws IOException {
         BufferedImage image = PGTUtil.toBufferedImage(img);
-        
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write( image, "jpg", baos );
+        ImageIO.write( image, "png", baos );
         baos.flush();
         return baos.toByteArray();
+    }
+    
+    /**
+     * Takes a buffered image, and returns a node containing it, having inserted
+     * the node with ID to persist on save
+     * @param _image Image to get node of.
+     * @return populated Image node
+     * @throws java.lang.Exception
+     */
+    public ImageNode getFromBufferedImage(BufferedImage _image) throws Exception {
+        DictCore core = PolyGlot.getPolyGlot().getCore();
+        ImageNode ret = new ImageNode(core);
+        ret.setImageBytes(loadImageBytesFromImage(_image));
+        core.getImageCollection().insert(ret);
+        
+        return ret;
     }
     
     public static DesktopIOHandler getInstance() {

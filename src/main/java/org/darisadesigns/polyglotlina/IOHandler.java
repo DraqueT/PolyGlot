@@ -65,6 +65,8 @@ public interface IOHandler {
      */
     public File createTmpFileWithContents(String contents, String extension) throws IOException;
     
+    public File createTmpFileFromImageBytes(byte[] imageBytes, String fileName) throws IOException;
+    
     public File createFileWithContents(String path, String contents) throws IOException;
 
     public byte[] getByteArrayFromFile(File file) throws IOException;

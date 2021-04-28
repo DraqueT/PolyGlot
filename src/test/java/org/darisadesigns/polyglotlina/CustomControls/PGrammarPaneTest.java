@@ -122,8 +122,8 @@ public class PGrammarPaneTest {
         
         try {
             BufferedImage imageBuff = ImageIO.read(PGrammarPaneTest.class.getResource(PGTUtil.MAIN_MENU_IMAGE));
-            ImageNode image = new ImageNode();
-            image.setImage(imageBuff);
+            ImageNode image = new ImageNode(core);
+            image.setImageBytes(DesktopIOHandler.getInstance().loadImageBytesFromImage(imageBuff));
 
             pane.addImage(image);
             

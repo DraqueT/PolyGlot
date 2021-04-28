@@ -74,7 +74,7 @@ public class PGrammarPane extends JTextPane {
         insertImage.setToolTipText("Insert Image into Text");
         insertImage.addActionListener((ActionEvent ae) -> {
             try {
-                ImageNode image = core.getImageCollection()
+                ImageNode image = DesktopIOHandler.getInstance()
                         .openNewImage((Window) parentPane.getTopLevelAncestor(), core.getWorkingDirectory());
                 if (image != null) {
                     // null node means user cancelled process
@@ -195,7 +195,7 @@ public class PGrammarPane extends JTextPane {
                         bGr.drawImage(imageObject, 0, 0, null);
                         bGr.dispose();
                     }
-                    ImageNode imageNode = core.getImageCollection().getFromBufferedImage(image);
+                    ImageNode imageNode = DesktopIOHandler.getInstance().getFromBufferedImage(image);
                     addImage(imageNode);
                 }
             } catch (Exception e) {
