@@ -47,6 +47,7 @@ import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Position;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**
  * The <code>JFontChooser</code> class is a swing component 
@@ -666,8 +667,8 @@ public class JFontChooser extends JComponent
 
     protected JDialog createDialog(Component parent)
     {
-        double menuFontSize = core.getOptionsManager().getMenuFontSize();
-        boolean nightMode = core.getOptionsManager().isNightMode();
+        double menuFontSize = PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();
+        boolean nightMode = PolyGlot.getPolyGlot().getOptionsManager().isNightMode();
         Frame frame = parent instanceof Frame ? (Frame) parent
             : (Frame) SwingUtilities.getAncestorOfClass(Frame.class, parent);
         JDialog dialog = new JDialog(frame, ("Select Font"), true);

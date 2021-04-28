@@ -37,6 +37,7 @@ import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PFontHandler;
+import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**
  *
@@ -237,7 +238,7 @@ public final class ScrFontImportDialog extends PDialog {
                 propertiesManager.setLocalFontSize(size);
             }
             
-            core.getPolyGlot().getRootWindow().selectFirstAvailableButton();
+            PolyGlot.getPolyGlot().getRootWindow().selectFirstAvailableButton();
             dispose();
         } catch (IOException e) {
             core.getOSHandler().getInfoBox().error("IO Error", "Unable to open " + fileName + " due to: " + e.getLocalizedMessage());

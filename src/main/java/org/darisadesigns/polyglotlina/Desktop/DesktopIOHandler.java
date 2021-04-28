@@ -542,7 +542,8 @@ public final class DesktopIOHandler implements IOHandler {
                 // pass null shell class because this will ultimately be discarded
                 DesktopHelpHandler helpHandler = new DesktopHelpHandler();
                 var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), new DesktopInfoBox(null), helpHandler);
-                DictCore test = new DictCore(PolyGlot.getTestShell(), new PropertiesManager(), osHandler);
+                DictCore test = new DictCore(new PropertiesManager(), osHandler);
+                PolyGlot testShell = PolyGlot.getTestShell(test);
                 test.readFile(tmpSaveLocation.getAbsolutePath());
 
             }

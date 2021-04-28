@@ -44,6 +44,7 @@ import javax.swing.JComponent;
 import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**
  *
@@ -654,7 +655,7 @@ public final class ScrTypes extends PFrame {
 
         Window window = ScrDeclensionGenSetup.run(core, curNode.getId());
         
-        core.getPolyGlot().getRootWindow().setVisible(false);
+        PolyGlot.getPolyGlot().getRootWindow().setVisible(false);
         window.addWindowListener(new WindowListener() {
                     @Override
                     public void windowOpened(WindowEvent e) {
@@ -666,7 +667,7 @@ public final class ScrTypes extends PFrame {
 
                     @Override
                     public void windowClosed(WindowEvent e) {
-                        core.getPolyGlot().getRootWindow().setVisible(true);
+                        PolyGlot.getPolyGlot().getRootWindow().setVisible(true);
                     }
 
                     @Override

@@ -31,6 +31,7 @@ import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.text.PlainDocument;
+import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**
  *
@@ -87,7 +88,7 @@ public final class ScrOptions extends PDialog {
             
             // only refresh if font size changed or night mode setting switched
             if (fontSizeOriginal != fontSize|| nightModeOriginal != chkNightMode.isSelected()) {
-                core.refreshMainMenu();
+                PolyGlot.getPolyGlot().refreshUiDefaults();
             }
             
             super.dispose();
@@ -242,7 +243,7 @@ public final class ScrOptions extends PDialog {
     private void btnResetOptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetOptionsActionPerformed
         resetOptions();
         super.dispose();
-        core.refreshMainMenu();
+        PolyGlot.getPolyGlot().refreshUiDefaults();
     }//GEN-LAST:event_btnResetOptionsActionPerformed
 
     @Override

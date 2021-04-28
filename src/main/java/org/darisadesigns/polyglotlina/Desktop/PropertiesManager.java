@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.PolyGlot;
 import org.darisadesigns.polyglotlina.PFontHandler;
 import org.darisadesigns.polyglotlina.PGTUtil;
 
@@ -50,7 +51,7 @@ public class PropertiesManager extends
      * @return
      */
     public Font getFontMenu() {
-        return PGTUtil.CHARIS_UNICODE.deriveFont(Font.PLAIN, (float)core.getOptionsManager().getMenuFontSize());
+        return PGTUtil.CHARIS_UNICODE.deriveFont(Font.PLAIN, (float)PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
     }
     
     public Font getFontLocal() {
@@ -89,7 +90,7 @@ public class PropertiesManager extends
             java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(conFont);
             ret = javafx.scene.text.Font.font(conFont.getFamily(), conFontSize);
         } else { // last default to menu standard
-            ret = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), core.getOptionsManager().getMenuFontSize());
+            ret = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
         }
 
         return ret;
@@ -109,7 +110,7 @@ public class PropertiesManager extends
             java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(localFont);
             ret = javafx.scene.text.Font.font(localFont.getFamily(), conFontSize);
         } else { // last default to menu standard
-            ret = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), core.getOptionsManager().getMenuFontSize());
+            ret = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
         }
 
         return ret;
@@ -203,7 +204,7 @@ public class PropertiesManager extends
         }
         
         return retFont == null ? 
-                PGTUtil.CHARIS_UNICODE.deriveFont((float)core.getOptionsManager().getMenuFontSize()) : 
+                PGTUtil.CHARIS_UNICODE.deriveFont((float)PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize()) : 
                 retFont.deriveFont(conFontStyle, (float)conFontSize);
     }
 

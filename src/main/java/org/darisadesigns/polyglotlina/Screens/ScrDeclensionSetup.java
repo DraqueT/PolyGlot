@@ -59,6 +59,7 @@ import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.CustomControls.PTextPane;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**
  * This is the setup form for word forms (declensions/conjugations and their
@@ -334,11 +335,11 @@ public final class ScrDeclensionSetup extends PDialog {
             declensionTemplates.add(copyNode);
         }
 
-        core.setClipBoard(declensionTemplates);
+        PolyGlot.getPolyGlot().setClipBoard(declensionTemplates);
     }
 
     private void pasteConjFromClipboard() {
-        Object fromClipBoard = core.getClipBoard();
+        Object fromClipBoard = PolyGlot.getPolyGlot().getClipBoard();
         
         // only paste if appropriate type from clipboard
         if (!(fromClipBoard instanceof ArrayList)

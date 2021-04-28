@@ -36,6 +36,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.darisadesigns.polyglotlina.Java8Bridge;
+import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**
  *
@@ -410,7 +411,7 @@ public class ScrPrintToPDF extends PDialog {
      * @param _core Dictionary Core
      */
     public static void run(final DictCore _core) {
-        _core.getPolyGlot().getRootWindow().saveAllValues();
+        PolyGlot.getPolyGlot().getRootWindow().saveAllValues();
         java.awt.EventQueue.invokeLater(() -> {
             new ScrPrintToPDF(_core).setVisible(true);
         });

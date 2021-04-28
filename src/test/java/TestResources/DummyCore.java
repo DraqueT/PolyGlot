@@ -37,8 +37,8 @@ import org.darisadesigns.polyglotlina.OSHandler;
  * @author draque
  */
 public class DummyCore extends DictCore {
-    private DummyCore (PolyGlot polyGlot, PropertiesManager propsManager, OSHandler osHandler) {
-        super(polyGlot, propsManager, osHandler);
+    private DummyCore (PropertiesManager propsManager, OSHandler osHandler) {
+        super(propsManager, osHandler);
     }
     
     public static DummyCore newCore() {
@@ -46,12 +46,15 @@ public class DummyCore extends DictCore {
             InfoBox infoBox = new DesktopInfoBox(null);
             DesktopHelpHandler helpHandler = new DesktopHelpHandler();
             DesktopOSHandler osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), infoBox, helpHandler);
-            Constructor constructor = PolyGlot.class.getDeclaredConstructor(new Class[]{String.class, DesktopOSHandler.class});
+            Constructor constructor = PolyGlot.class.getDeclaredConstructor(new Class[]{String.class, DictCore.class, DesktopOSHandler.class});
             constructor.setAccessible(true);
-            PolyGlot polyGlot = (PolyGlot)constructor.newInstance(PGTUtil.TESTRESOURCES, osHandler);
             PropertiesManager propsManager = new PropertiesManager();
+            DummyCore core = new DummyCore(propsManager, osHandler);
+            // Is this now really needed to be constructed?
+            // Some screens use new PolyGlot static instance
+            PolyGlot polyGlot = (PolyGlot)constructor.newInstance(PGTUtil.TESTRESOURCES, (DictCore)core, osHandler);
             
-            return new DummyCore(polyGlot, propsManager, osHandler);
+            return core;
         } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
             System.err.println("Something's gone wrong with the Dummy Core generation: " + e.getLocalizedMessage());
         }

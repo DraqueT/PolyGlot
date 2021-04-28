@@ -37,6 +37,7 @@ import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.EvolutionPair;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.PolyGlot;
 import org.darisadesigns.polyglotlina.RegexTools.ReplaceOptions;
 
 /**
@@ -354,7 +355,7 @@ public final class ScrEvolveLang extends PDialog {
                             cmbTransformOptions.getItemAt(cmbTransformOptions.getSelectedIndex()),
                             regex, 
                             replace)));
-                    core.getPolyGlot().getRootWindow().updateAllValues(core);
+                    PolyGlot.getPolyGlot().getRootWindow().updateAllValues(core);
                 }
                 
                 if (rdoConjpatterns.isSelected() || rdoBoth.isSelected()) {

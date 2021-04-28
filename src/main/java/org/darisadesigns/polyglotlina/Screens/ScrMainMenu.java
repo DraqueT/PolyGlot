@@ -89,6 +89,7 @@ import org.darisadesigns.polyglotlina.HelpHandler;
 import org.darisadesigns.polyglotlina.Java8Bridge;
 import org.darisadesigns.polyglotlina.ManagersCollections.OptionsManager;
 import org.darisadesigns.polyglotlina.PFontHandler;
+import org.darisadesigns.polyglotlina.PolyGlot;
 import org.darisadesigns.polyglotlina.ToolsHelpers.ExportSpellingDictionary;
 import org.darisadesigns.polyglotlina.WebInterface;
 
@@ -344,7 +345,7 @@ public final class ScrMainMenu extends PFrame {
             
 
             try {
-                core.saveOptionsIni();
+                PolyGlot.getPolyGlot().saveOptionsIni();
             } catch (IOException e) {
                 // save error likely due to inability to write to disk, disable logging
                 // IOHandler.writeErrorLog(e);
@@ -419,7 +420,7 @@ public final class ScrMainMenu extends PFrame {
     }
 
     public void setFile(String fileName) {
-        core = core.getNewCore();
+        core = PolyGlot.getPolyGlot().getNewCore();
 
         try {
             core.readFile(fileName);
@@ -437,7 +438,7 @@ public final class ScrMainMenu extends PFrame {
             }
         } catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            core = core.getNewCore(); // don't allow partial loads
+            core = PolyGlot.getPolyGlot().getNewCore(); // don't allow partial loads
             core.getOSHandler().getInfoBox().error("File Read Error", "Could not read file: " + fileName
                     + "\n\n " + e.getMessage());
         } catch (IllegalStateException e) {
@@ -606,8 +607,8 @@ public final class ScrMainMenu extends PFrame {
             return;
         }
 
-        core = core.getNewCore();
-        core.refreshMainMenu();
+        core = PolyGlot.getPolyGlot().getNewCore();
+        PolyGlot.getPolyGlot().refreshUiDefaults();
 
         genTitle();
 
@@ -914,7 +915,7 @@ public final class ScrMainMenu extends PFrame {
                         new DesktopInfoBox(null).info("Just human...", "Yes it can. You're not a kukun.");
                     } else if (lastChars.toLowerCase().endsWith("who's draque")
                             || lastChars.toLowerCase().endsWith("who is draque")) {
-                        ScrEasterEgg.run(core.getPolyGlot().getRootWindow());
+                        ScrEasterEgg.run(PolyGlot.getPolyGlot().getRootWindow());
                     } else if (lastChars.endsWith("uuddlrlrba")) {
                         new DesktopInfoBox(null).info("コナミコマンド", "30の命を与えます。");
                     }
@@ -1242,12 +1243,12 @@ public final class ScrMainMenu extends PFrame {
         this.rootPane.add(accelSave);
 
         accelNew.addActionListener((java.awt.event.ActionEvent evt) -> {
-            core.coreNew(true);
+            this.newFile(true);
         });
         this.rootPane.add(accelNew);
 
         accelOpen.addActionListener((java.awt.event.ActionEvent evt) -> {
-            core.coreOpen();
+            this.open();
         });
         this.rootPane.add(accelOpen);
 

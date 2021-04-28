@@ -69,6 +69,8 @@ public final class PLanguageStats {
      * @return
      */
     public static String buildWordReport(DictCore core) {
+        // TODO: get this function out of core!
+        // Uses ScrProgressMenu and core.getPolyGlot()
         final String[] ret = new String[1]; // using array so I can set value in a thread...
         ret[0] = "";
 
@@ -78,9 +80,10 @@ public final class PLanguageStats {
             progress.setVisible(true);
 
             // unnessecary to test UI positioning here (and no root window in tests)
-            if (core.getPolyGlot().getRootWindow() != null) {
-                progress.setLocation(core.getPolyGlot().getRootWindow().getLocation());
-            }
+            // TODO: send signal to application
+//            if (core.getPolyGlot().getRootWindow() != null) {
+//                progress.setLocation(core.getPolyGlot().getRootWindow().getLocation());
+//            }
 
             Thread thread = new Thread() {
                 @Override

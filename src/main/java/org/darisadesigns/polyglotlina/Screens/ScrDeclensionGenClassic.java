@@ -65,6 +65,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**
  *
@@ -669,14 +670,14 @@ public final class ScrDeclensionGenClassic extends PDialog {
      */
     private void copyRuleToClipboard() {
         this.saveTransPairs(lstRules.getSelectedIndex());
-        core.setClipBoard(getSelectedRules());
+        PolyGlot.getPolyGlot().setClipBoard(getSelectedRules());
     }
 
     /**
      * If rule exists on clipboard, copy to current rule list (with appropriate changes to type made, if necessary)
      */
     private void pasteRuleFromClipboard() {
-        Object fromClipBoard = core.getClipBoard();
+        Object fromClipBoard = PolyGlot.getPolyGlot().getClipBoard();
         ConjugationPair curPair = (ConjugationPair) lstCombinedDec.getSelectedValue();
 
         if (!(fromClipBoard instanceof ArrayList)

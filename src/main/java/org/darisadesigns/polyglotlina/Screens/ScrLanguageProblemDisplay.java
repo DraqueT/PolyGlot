@@ -27,6 +27,7 @@ import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode.*;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**
  *
@@ -42,7 +43,7 @@ public class ScrLanguageProblemDisplay extends PDialog {
      */
     public ScrLanguageProblemDisplay(List<LexiconProblemNode> problems, DictCore _core) {
         super(_core);
-        main = (ScrMainMenu)core.getPolyGlot().getRootWindow();
+        main = (ScrMainMenu)PolyGlot.getPolyGlot().getRootWindow();
         initComponents();
         
         DefaultListModel<LexiconProblemNode> model = new DefaultListModel<>();

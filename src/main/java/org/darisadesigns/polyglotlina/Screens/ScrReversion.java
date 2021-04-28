@@ -27,6 +27,7 @@ import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ReversionNode;
 import javax.swing.DefaultListModel;
+import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**
  *
@@ -47,8 +48,8 @@ public final class ScrReversion extends PDialog {
             revModel.addElement(curNode);
         }
         
-        if (core.getPolyGlot().getRootWindow() != null){
-            this.setLocation(core.getPolyGlot().getRootWindow().getLocation());
+        if (PolyGlot.getPolyGlot().getRootWindow() != null){
+            this.setLocation(PolyGlot.getPolyGlot().getRootWindow().getLocation());
         }
     }
 

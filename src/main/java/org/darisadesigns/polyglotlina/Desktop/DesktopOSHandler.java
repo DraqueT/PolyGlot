@@ -19,10 +19,12 @@
  */
 package org.darisadesigns.polyglotlina.Desktop;
 
+import java.io.File;
 import org.darisadesigns.polyglotlina.HelpHandler;
 import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.InfoBox;
 import org.darisadesigns.polyglotlina.OSHandler;
+import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
  *
@@ -32,5 +34,16 @@ public class DesktopOSHandler extends OSHandler {
     
     public DesktopOSHandler(IOHandler _ioHandler, InfoBox _infoBox, HelpHandler _helpHandler) {
         super(_ioHandler, _infoBox, _helpHandler);
+    }
+    
+    public void setWorkingDirectory(String cwd) {
+        overrideProgramPath = cwd;
+    }
+    
+    @Override
+    public File getWorkingDirectory() {
+        return overrideProgramPath != null || overrideProgramPath.isEmpty()
+                ? PGTUtil.getDefaultDirectory()
+                : new File(overrideProgramPath);
     }
 }

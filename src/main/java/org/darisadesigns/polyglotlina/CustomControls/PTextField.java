@@ -45,6 +45,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
 import javax.swing.text.JTextComponent;
+import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**
  *
@@ -108,7 +109,7 @@ public final class PTextField extends JTextField {
             setBackground(Color.black);
         }
         
-        this.putClientProperty("Nimbus.Overrides", core.getUiDefaults());
+        this.putClientProperty("Nimbus.Overrides", PolyGlot.getPolyGlot().getUiDefaults());
     }
     
     @Override

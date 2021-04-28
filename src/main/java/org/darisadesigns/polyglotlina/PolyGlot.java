@@ -60,19 +60,18 @@ import org.darisadesigns.polyglotlina.Screens.ScrMainMenu;
  */
 public final class PolyGlot {
 
-    private final OptionsManager optionsManager;
-    private final String overrideProgramPath;
+    private static PolyGlot polyGlot;
     private Object clipBoard;
     private UIDefaults uiDefaults;
     private DictCore core;
     private ScrMainMenu rootWindow;
     private DesktopOSHandler osHandler;
 
-    public PolyGlot(String overridePath, DesktopOSHandler _osHandler) throws Exception {
-        overrideProgramPath = overridePath; // TODO: In the future, figure out how this might be better set. In options?
-        optionsManager = new OptionsManager();
+    private PolyGlot(String overridePath, DictCore _core, DesktopOSHandler _osHandler) throws Exception {
+        PolyGlot.polyGlot = this;
+        core = _core;
         osHandler = _osHandler;
-        DesktopIOHandler.getInstance().loadOptionsIni(optionsManager, getWorkingDirectory().getAbsolutePath());
+        osHandler.setWorkingDirectory(overridePath); // TODO: In the future, figure out how this might be better set. In options?
         refreshUiDefaults();
     }
 
@@ -113,8 +112,8 @@ public final class PolyGlot {
                 DesktopHelpHandler helpHandler = new DesktopHelpHandler();
                 var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), cInfoBox, helpHandler);
 
-                PolyGlot polyGlot = new PolyGlot("", osHandler);
-                DictCore core = new DictCore(polyGlot, new PropertiesManager(), osHandler);
+                DictCore core = new DictCore(new PropertiesManager(), osHandler);
+                new PolyGlot("", core, osHandler);
                 
                 s = new ScrMainMenu(core);
                 polyGlot.setRootWindow(s);
@@ -123,7 +122,7 @@ public final class PolyGlot {
                 cInfoBox.setParent(s);
 
                 try {
-                    DesktopIOHandler.getInstance().loadOptionsIni(polyGlot.optionsManager, polyGlot.getWorkingDirectory().getAbsolutePath());
+                    DesktopIOHandler.getInstance().loadOptionsIni(core.getOptionsManager(), polyGlot.getWorkingDirectory().getAbsolutePath());
                 }
                 catch (Exception ex) {
                     DesktopIOHandler.getInstance().writeErrorLog(ex);
@@ -171,7 +170,9 @@ public final class PolyGlot {
                     });
 
                     desk.setAboutHandler((AboutEvent e) -> {
-                        ScrAbout.run(new DictCore(polyGlot, new PropertiesManager(), osHandler));
+                        DictCore _core = new DictCore(new PropertiesManager(), osHandler);
+                        polyGlot.setCore(_core);
+                        ScrAbout.run(_core);
                     });
 
                     desk.setPrintFileHandler((PrintFilesEvent e) -> {
@@ -298,8 +299,8 @@ public final class PolyGlot {
     }
 
     public DictCore getNewCore() {
-        DictCore ret = new DictCore(this, new PropertiesManager(), this.getOSHandler());
-        return ret;
+        this.core = new DictCore(new PropertiesManager(), this.getOSHandler());
+        return this.core;
     }
 
     /**
@@ -376,21 +377,19 @@ public final class PolyGlot {
      * @return current working directory
      */
     public File getWorkingDirectory() {
-        return overrideProgramPath.isEmpty()
-                ? PGTUtil.getDefaultDirectory()
-                : new File(overrideProgramPath);
+        return core.getOSHandler().getWorkingDirectory();
     }
-
-    public String getOverrideProgramPath() {
-        return overrideProgramPath;
+    
+    public static PolyGlot getPolyGlot() {
+        return PolyGlot.polyGlot;
     }
 
     public OptionsManager getOptionsManager() {
-        return optionsManager;
+        return core.getOptionsManager();
     }
 
     public void saveOptionsIni() throws IOException {
-        DesktopIOHandler.getInstance().writeOptionsIni(getWorkingDirectory().getAbsolutePath(), optionsManager);
+        DesktopIOHandler.getInstance().writeOptionsIni(getWorkingDirectory().getAbsolutePath(), core.getOptionsManager());
     }
 
     /**
@@ -416,7 +415,7 @@ public final class PolyGlot {
     }
 
     public void refreshUiDefaults() {
-        uiDefaults = VisualStyleManager.generateUIOverrides(optionsManager.isNightMode());
+        uiDefaults = VisualStyleManager.generateUIOverrides(core.getOptionsManager().isNightMode());
         if (rootWindow != null) {
             rootWindow.dispose(false);
             rootWindow = new ScrMainMenu(core);
@@ -429,12 +428,13 @@ public final class PolyGlot {
      * Creates and returns testing shell to be used in file veracity tests
      * (IOHandler writing of files)
      *
+     * @param _core
      * @return
      * @throws java.io.IOException
      */
-    public static PolyGlot getTestShell() throws IOException, Exception {
+    public static PolyGlot getTestShell(DictCore _core) throws IOException, Exception {
         var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), new DesktopInfoBox(null), new DesktopHelpHandler());
-        return new PolyGlot(Files.createTempDirectory("POLYGLOT").toFile().getAbsolutePath(), osHandler);
+        return new PolyGlot(Files.createTempDirectory("POLYGLOT").toFile().getAbsolutePath(), _core, osHandler);
     }
 
     public DictCore getCore() {

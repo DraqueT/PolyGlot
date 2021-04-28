@@ -39,7 +39,6 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Objects;
-import javax.swing.UIDefaults;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -54,7 +53,6 @@ import org.xml.sax.SAXException;
  */
 public class DictCore {
 
-    private final PolyGlot polyGlot;
     private ConWordCollection wordCollection;
     private TypeCollection typeCollection;
     private ConjugationManager conjugationMgr;
@@ -69,6 +67,7 @@ public class DictCore {
     private EtymologyManager etymologyManager;
     private ReversionManager reversionManager;
     private ToDoManager toDoManager;
+    private OptionsManager optionsManager;
     private final OSHandler osHandler;
     private boolean curLoading = false;
     private Instant lastSaveTime = Instant.MIN;
@@ -77,18 +76,12 @@ public class DictCore {
     /**
      * Language core initialization
      *
-     * @param _polyGlot
+     * @param _propertiesManager
      * @param _osHandler
      */
-    public DictCore(PolyGlot _polyGlot, PropertiesManager _propertiesManager, OSHandler _osHandler) {
-        polyGlot = _polyGlot;
-        polyGlot.setCore(this);
+    public DictCore(PropertiesManager _propertiesManager, OSHandler _osHandler) {
         osHandler = _osHandler;
         initializeDictCore(_propertiesManager);
-    }
-    
-    public DictCore getNewCore() {
-        return polyGlot.getNewCore();
     }
     
     private void initializeDictCore(PropertiesManager _propertiesManager) {
@@ -108,6 +101,8 @@ public class DictCore {
             etymologyManager = new EtymologyManager(this);
             reversionManager = new ReversionManager(this);
             toDoManager = new ToDoManager();
+            optionsManager = new OptionsManager();
+            this.osHandler.getIOHandler().loadOptionsIni(optionsManager, getWorkingDirectory().getAbsolutePath());
 
             PAlphaMap<String, Integer> alphaOrder = propertiesManager.getAlphaOrder();
 
@@ -121,17 +116,6 @@ public class DictCore {
         }
     }
     
-    /**
-     * Reloads main menu (force refresh of visual elements)
-     */
-    public void refreshMainMenu() {
-        polyGlot.refreshUiDefaults();
-    }
-    
-    public UIDefaults getUiDefaults() {
-        return polyGlot.getUiDefaults();
-    }
-
     /**
      * Gets conlang name or CONLANG. Put on core because it's used a lot.
      *
@@ -156,19 +140,11 @@ public class DictCore {
     }
     
     /**
-     * Gets PolyGlot object
-     * @return
-     */
-    public PolyGlot getPolyGlot() {
-        return polyGlot;
-    }
-
-    /**
      * Gets options manager
      * @return 
      */
     public OptionsManager getOptionsManager() {
-        return polyGlot.getOptionsManager();
+        return this.optionsManager;
     }
 
     /**
@@ -197,40 +173,6 @@ public class DictCore {
     }
 
     /**
-     * Clipboard can be used to hold any object
-     *
-     * @param c object to hold
-     */
-    public void setClipBoard(Object c) {
-        polyGlot.setClipBoard(c);
-    }
-
-    /**
-     * Retrieves object held in clipboard, even if null, regardless of type
-     *
-     * @return contents of clipboard
-     */
-    public Object getClipBoard() {
-        return polyGlot.getClipBoard();
-    }
-
-    /**
-     * Pushes save signal to main interface menu
-     */
-    public void coreOpen() {
-        polyGlot.getRootWindow().open();
-    }
-
-    /**
-     * Pushes save signal to main interface menu
-     *
-     * @param performTest whether to prompt user to save
-     */
-    public void coreNew(boolean performTest) {
-        polyGlot.getRootWindow().newFile(performTest);
-    }
-
-    /**
      * Pushes signal to all forms to update their values from the core. Cascades
      * through windows and their children.
      */
@@ -255,9 +197,10 @@ public class DictCore {
         }
 
         // null root window indicates that this is a virtual dict core used for library analysis
-        if (polyGlot.getRootWindow() != null) {
-            polyGlot.getRootWindow().updateAllValues(_core);
-        }
+        // TODO: replace with signal?
+//        if (polyGlot.getRootWindow() != null) {
+//            polyGlot.getRootWindow().updateAllValues(_core);
+//        }
     }
 
     /**
@@ -418,9 +361,10 @@ public class DictCore {
         }
         
         // do not run in headless environments...
-        if (polyGlot.getRootWindow() != null) {
-            refreshMainMenu();
-        }
+        // TODO: replace with signal?
+//        if (polyGlot.getRootWindow() != null) {
+//            refreshMainMenu();
+//        }
     }
     
     /**
@@ -430,7 +374,7 @@ public class DictCore {
      * @throws java.io.IOException 
      */
     public void revertToState(byte[] revision, String fileName) throws IOException{
-        DictCore revDict = new DictCore(polyGlot, this.propertiesManager, this.osHandler);
+        DictCore revDict = new DictCore(this.propertiesManager, this.osHandler);
         revDict.readFile(fileName, revision);
         
         pushUpdateWithCore(revDict);
@@ -500,7 +444,7 @@ public class DictCore {
         rootElement.appendChild(famManager.writeToSaveXML(doc));
 
         // have IOHandler write constructed document to file
-        this.osHandler.getIOHandler().writeFile(_fileName, doc, this, polyGlot.getWorkingDirectory(), newSaveTime);
+        this.osHandler.getIOHandler().writeFile(_fileName, doc, this, this.getWorkingDirectory(), newSaveTime);
         
         lastSaveTime = newSaveTime;
     }
@@ -595,12 +539,8 @@ public class DictCore {
         lastSaveTime = _lastSaveTime;
     }
     
-    public void saveOptionsIni() throws IOException {
-        polyGlot.saveOptionsIni();
-    }
-    
     public File getWorkingDirectory() {
-        return polyGlot.getWorkingDirectory();
+        return this.osHandler.getWorkingDirectory();
     }
     
     public void setCurFileName(String _curFileName) {

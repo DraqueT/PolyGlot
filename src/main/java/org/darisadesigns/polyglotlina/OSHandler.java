@@ -29,6 +29,8 @@ import java.io.IOException;
  */
 public abstract class OSHandler {
     
+    protected String overrideProgramPath = "";
+    
     private final IOHandler ioHandler;
     private final InfoBox infoBox;
     private final HelpHandler helpHandler;
@@ -38,6 +40,8 @@ public abstract class OSHandler {
         infoBox = _infoBox;
         helpHandler =_helpHandler;
     }
+    
+    public abstract File getWorkingDirectory();
     
     public IOHandler getIOHandler() { return this.ioHandler; }
     
