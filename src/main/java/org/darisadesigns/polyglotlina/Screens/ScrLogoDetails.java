@@ -471,7 +471,7 @@ public class ScrLogoDetails extends PFrame {
                 }
 
                 Image image = ClipboardHandler.getClipboardImage();
-                curNode.setLogoGraph(image);
+                curNode.setLogoBytes(DesktopIOHandler.getInstance().loadImageBytesFromImage(image));
                 saveReadings(lstLogos.getSelectedIndex());
                 saveRads(lstLogos.getSelectedIndex());
                 populateLogoProps();
@@ -824,8 +824,9 @@ public class ScrLogoDetails extends PFrame {
             tblReadings.setModel(new DefaultTableModel(new Object[]{"Readings"}, 0));
             lstRelWords.setModel(new DefaultListModel<>());
             chkIsRad.setSelected(false);
-            lblLogo.setIcon(new ImageIcon(new LogoNode().getLogoGraph().getScaledInstance(
-                    lblLogo.getWidth(), lblLogo.getHeight(), Image.SCALE_SMOOTH)));
+            ImageIcon icon = new ImageIcon(new LogoNode(core).getLogoBytes());
+            icon.getImage().getScaledInstance(lblLogo.getWidth(), lblLogo.getHeight(), Image.SCALE_SMOOTH);
+            lblLogo.setIcon(icon);
             populateRelatedWords();
             setEnableControls(false);
 
@@ -872,8 +873,9 @@ public class ScrLogoDetails extends PFrame {
         tblReadings.setModel(procModel);
 
         // set logograph picture
-        lblLogo.setIcon(new ImageIcon(curNode.getLogoGraph().getScaledInstance(
-                lblLogo.getWidth(), lblLogo.getHeight(), Image.SCALE_SMOOTH)));
+        ImageIcon icon = new ImageIcon(curNode.getLogoBytes());
+        icon.getImage().getScaledInstance(lblLogo.getWidth(), lblLogo.getHeight(), Image.SCALE_SMOOTH);
+        lblLogo.setIcon(icon);
 
         populateRelatedWords();
         setEnableControls(true);
@@ -907,9 +909,8 @@ public class ScrLogoDetails extends PFrame {
         }
 
         try {
-            BufferedImage img = ImageIO.read(new File(fileName));
             LogoNode curNode = (LogoNode) lstLogos.getSelectedValue();
-            curNode.setLogoGraph(img);
+            curNode.setLogoBytes(DesktopIOHandler.getInstance().loadImageBytes(fileName));
             saveReadings(lstLogos.getSelectedIndex());
             saveRads(lstLogos.getSelectedIndex());
             populateLogoProps();
@@ -1026,7 +1027,7 @@ public class ScrLogoDetails extends PFrame {
     }
 
     private void addLogo() {
-        LogoNode newNode = new LogoNode();
+        LogoNode newNode = new LogoNode(core);
         newNode.setValue("");
 
         curPopulating = true;

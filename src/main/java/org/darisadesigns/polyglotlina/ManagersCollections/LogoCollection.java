@@ -19,7 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
-import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.LogoNode;
@@ -32,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import javax.imageio.ImageIO;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -46,7 +44,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
     private final DictCore core;
     
     public LogoCollection(DictCore _core) {
-        super(new LogoNode());
+        super(new LogoNode(_core));
         
         wordToLogo = new HashMap<>();
         logoToWord = new HashMap<>();
@@ -296,7 +294,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
     public Integer insert() throws Exception {
         int ret = insert(bufferNode.getId(), bufferNode);
         
-        bufferNode = new LogoNode();
+        bufferNode = new LogoNode(core);
         
         return ret;
     }
@@ -361,18 +359,18 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
     
     @Override
     public void clear() {
-        bufferNode = new LogoNode();
+        bufferNode = new LogoNode(core);
     }
 
     @Override
     public LogoNode notFoundNode() {
-        LogoNode emptyNode = new LogoNode();
+        LogoNode emptyNode = new LogoNode(core);
         
         try {
-            emptyNode.setLogoGraph(ImageIO.read(getClass().getResource(PGTUtil.NOT_FOUND_IMAGE)));
+            emptyNode.setLogoBytes(core.getOSHandler().getIOHandler().loadImageBytes(PGTUtil.NOT_FOUND_IMAGE));
         } catch (IOException e) {
             core.getOSHandler().getIOHandler().writeErrorLog(e);
-            new DesktopInfoBox(null).error("INTERNAL ERROR", 
+            core.getOSHandler().getInfoBox().error("INTERNAL ERROR", 
                     "Unable to locate missing-image image.\nThis is kind of an ironic error.");
         }
         

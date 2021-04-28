@@ -38,6 +38,11 @@ import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -213,11 +218,16 @@ public final class ScrLogoQuickView extends PFrame {
                 LogoNode selected = lstLogos.getSelectedValue();
                 
                 if (selected != null) {
-                    BufferedImage imgLogo = PGTUtil.toBufferedImage(selected.getLogoGraph());
+                    try {
+                        BufferedImage imgLogo = ImageIO.read(new ByteArrayInputStream(selected.getLogoBytes()));
                     lblLogoPic.setIcon(new ImageIcon(imgLogo.getScaledInstance(lblLogoPic.getWidth(), 
                             lblLogoPic.getHeight(), 
                             Image.SCALE_SMOOTH)));
                     lblLogoPic.setMinimumSize(new Dimension(1, 1));
+                }
+                    catch (IOException ex) {
+                        // TODO: show error
+                    }
                 }
             }
 
@@ -307,7 +317,7 @@ public final class ScrLogoQuickView extends PFrame {
         lstLogos.setModel(new javax.swing.AbstractListModel<LogoNode>() {
             // set up this way as an artifact of netbeans being annoying...
             public int getSize() { return 1; }
-            public LogoNode getElementAt(int i) { return new LogoNode(); }
+            public LogoNode getElementAt(int i) { return new LogoNode(core); }
         });
         lstLogos.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -391,8 +401,9 @@ public final class ScrLogoQuickView extends PFrame {
             return;
         }
 
-        lblLogoPic.setIcon(new ImageIcon(curNode.getLogoGraph().getScaledInstance(
-                lblLogoPic.getWidth() - 4, lblLogoPic.getHeight() - 4, Image.SCALE_SMOOTH)));
+        ImageIcon icon = new ImageIcon(new LogoNode(core).getLogoBytes());
+            icon.getImage().getScaledInstance(lblLogoPic.getWidth() - 4, lblLogoPic.getHeight() - 4, Image.SCALE_SMOOTH);
+        lblLogoPic.setIcon(icon);
     }//GEN-LAST:event_lstLogosValueChanged
 
     private void btnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelActionPerformed

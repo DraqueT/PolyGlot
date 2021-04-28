@@ -377,4 +377,6 @@ public interface IOHandler {
      * @return
      */
     public byte[] clearCarrigeReturns(byte[] filthyWithWindows);
+    
+    public byte[] loadImageBytes(String path) throws IOException;
 }

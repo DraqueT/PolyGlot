@@ -33,6 +33,8 @@ import org.darisadesigns.polyglotlina.Nodes.ImageNode;
 import org.darisadesigns.polyglotlina.Nodes.ReversionNode;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Window;
 import java.awt.image.BufferedImage;
@@ -76,6 +78,7 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
@@ -99,7 +102,7 @@ import org.xml.sax.SAXException;
  */
 public final class DesktopIOHandler implements IOHandler {
     
-    private static IOHandler ioHandler;
+    private static DesktopIOHandler ioHandler;
 
     /**
      * Opens and returns image from URL given (can be file path)
@@ -674,7 +677,7 @@ public final class DesktopIOHandler implements IOHandler {
                         out.putNextEntry(new ZipEntry(PGTUtil.LOGOGRAPH_SAVE_PATH
                                 + curNode.getId() + ".png"));
 
-                        BufferedImage write = PGTUtil.toBufferedImage(curNode.getLogoGraph());
+                        BufferedImage write = ImageIO.read(new ByteArrayInputStream(curNode.getLogoBytes()));
                         ImageIO.write(write, "png", out);
 
                         out.closeEntry();
@@ -828,11 +831,11 @@ public final class DesktopIOHandler implements IOHandler {
                 ZipEntry imgEntry = zipFile.getEntry(PGTUtil.LOGOGRAPH_SAVE_PATH
                         + curNode.getId() + ".png");
 
-                BufferedImage img;
+                byte[] img;
                 try (InputStream imageStream = zipFile.getInputStream(imgEntry)) {
-                    img = ImageIO.read(imageStream);
+                    img = this.loadImageBytesFromStream(imageStream);
                 }
-                curNode.setLogoGraph(img);
+                curNode.setLogoBytes(img);
             }
         }
     }
@@ -1400,7 +1403,44 @@ public final class DesktopIOHandler implements IOHandler {
         return Arrays.copyOfRange(ret, 0, cleanCount);
     }
     
-    public static IOHandler getInstance() {
+    @Override
+    public byte[] loadImageBytes(String path) throws IOException {
+        ImageIcon loadBlank = new ImageIcon(getClass().getResource(path));
+        BufferedImage image = new BufferedImage(
+                loadBlank.getIconWidth(),
+                loadBlank.getIconHeight(),
+                BufferedImage.TYPE_INT_RGB);
+
+        Graphics g = image.createGraphics();
+
+        loadBlank.paintIcon(null, g, 0, 0);
+        g.dispose();
+        
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write( image, "jpg", baos );
+        baos.flush();
+        return baos.toByteArray();
+    }
+    
+    public byte[] loadImageBytesFromStream(InputStream stream) throws IOException {
+        BufferedImage image = ImageIO.read(stream);
+        
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write( image, "jpg", baos );
+        baos.flush();
+        return baos.toByteArray();
+    }
+    
+    public byte[] loadImageBytesFromImage(Image img) throws IOException {
+        BufferedImage image = PGTUtil.toBufferedImage(img);
+        
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write( image, "jpg", baos );
+        baos.flush();
+        return baos.toByteArray();
+    }
+    
+    public static DesktopIOHandler getInstance() {
         if (ioHandler == null) {
             ioHandler = new DesktopIOHandler();
         }
