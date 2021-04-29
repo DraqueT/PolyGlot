@@ -25,6 +25,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
  * This keeps track of reversion versions of a language and handles their interaction/rollbacks with the larger
@@ -34,6 +35,7 @@ import java.util.List;
 public class ReversionManager {
     private List<ReversionNode> reversionList = new ArrayList<>();
     private final DictCore core;
+    private int maxReversionCount = PGTUtil.DEFAULT_MAX_ROLLBACK_NUM;
     
     public ReversionManager(DictCore _core) {
         core = _core;
@@ -67,14 +69,23 @@ public class ReversionManager {
     }
     
     public int getMaxReversionsCount() {
-        return core.getOptionsManager().getMaxReversionCount();
+        return maxReversionCount;
+    }
+    
+    public void setMaxReversionCount(int maxRollbackVersions) {
+        setMaxReversionCount(maxRollbackVersions, false);
+    }
+    
+    public void setMaxReversionCount(int maxRollbackVersions, boolean trimRevisions) {
+        this.maxReversionCount = maxRollbackVersions;
+        if(trimRevisions) trimReversions();
     }
     
     /**
      * Trims reversions down to the max number allowed in the options
      */
     public void trimReversions() {
-        int maxVersions = core.getOptionsManager().getMaxReversionCount();
+        int maxVersions = maxReversionCount;
         
         if (reversionList.size() > maxVersions && maxVersions != 0) {
             reversionList = reversionList.subList(0, maxVersions);

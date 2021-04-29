@@ -73,7 +73,7 @@ public final class ScrOptions extends PDialog {
     @Override
     public void dispose() {
         if (testWarnClose()) {
-            OptionsManager options = core.getOptionsManager();
+            OptionsManager options = PolyGlot.getPolyGlot().getOptionsManager();
             
             double fontSize = Double.parseDouble(txtTextFontSize.getText());
             double fontSizeOriginal = options.getMenuFontSize();
@@ -84,7 +84,7 @@ public final class ScrOptions extends PDialog {
             options.setAnimateWindows(chkResize.isSelected());
             options.setNightMode(chkNightMode.isSelected());
             options.setMenuFontSize(fontSize);
-            options.setMaxReversionCount(maxReversion, core);
+            options.setMaxReversionCount(maxReversion);
             
             // only refresh if font size changed or night mode setting switched
             if (fontSizeOriginal != fontSize|| nightModeOriginal != chkNightMode.isSelected()) {
@@ -116,7 +116,7 @@ public final class ScrOptions extends PDialog {
     private void resetOptions() {
         if (new DesktopInfoBox(this).actionConfirmation("Verify Options Reset", 
                 "This will reset all options, including last saved file data, screen positions, screen sizes, etc.\n\nContinue?")) {
-            core.getOptionsManager().resetOptions();
+            PolyGlot.getPolyGlot().getOptionsManager().resetOptions();
             updateAllValues(core);
         }
     }
@@ -248,7 +248,7 @@ public final class ScrOptions extends PDialog {
 
     @Override
     public void updateAllValues(DictCore _core) {
-        OptionsManager mgr = core.getOptionsManager();
+        OptionsManager mgr = PolyGlot.getPolyGlot().getOptionsManager();
         
         chkResize.setSelected(mgr.isAnimateWindows());
         chkNightMode.setSelected(mgr.isNightMode());

@@ -22,6 +22,7 @@ package org.darisadesigns.polyglotlina.ManagersCollections;
 import TestResources.DummyCore;
 import java.time.Instant;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.PolyGlot;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,7 +45,7 @@ public class ReversionManagerTest {
         int expectedCount = 1;
         
         DictCore core = DummyCore.newCore();
-        core.getOptionsManager().setMaxReversionCount(10, core);
+        core.getReversionManager().setMaxReversionCount(10);
         ReversionManager revMan = core.getReversionManager();
         
         byte[] dummyRev = {1,2,3,4};
@@ -52,7 +53,7 @@ public class ReversionManagerTest {
         revMan.addVersion(dummyRev, Instant.now());
         revMan.addVersion(dummyRev, Instant.now());
         revMan.addVersion(dummyRev, Instant.now());
-        core.getOptionsManager().setMaxReversionCount(1, core);
+        core.getReversionManager().setMaxReversionCount(1, true);
         
         int result = revMan.getReversionList().length;
         

@@ -156,7 +156,7 @@ public final class ScrMainMenu extends PFrame {
     }
     
     private void setupForm() {
-        if (core.getOptionsManager().isMaximized()) {
+        if (PolyGlot.getPolyGlot().getOptionsManager().isMaximized()) {
             setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         }
     }
@@ -331,7 +331,7 @@ public final class ScrMainMenu extends PFrame {
         super.dispose();
 
         if (doExit) { // skip saving options if not exiting program...
-            OptionsManager opMan = core.getOptionsManager();
+            OptionsManager opMan = PolyGlot.getPolyGlot().getOptionsManager();
             
             // Note: this only applies to Windows - Mac OS requires reflection or implementing mac only class on form classes (no)
             boolean isMaximized = (this.getExtendedState() & JFrame.MAXIMIZED_BOTH) == JFrame.MAXIMIZED_BOTH;
@@ -393,7 +393,7 @@ public final class ScrMainMenu extends PFrame {
      */
     private void populateRecentOpened() {
         mnuRecents.removeAll();
-        String[] lastFiles = core.getOptionsManager().getLastFiles();
+        String[] lastFiles = PolyGlot.getPolyGlot().getOptionsManager().getLastFiles();
         DefaultListModel<RecentFile> mdlRecentOpened = new DefaultListModel<>();
         lstRecentOpened.setModel(mdlRecentOpened);
 
@@ -497,7 +497,7 @@ public final class ScrMainMenu extends PFrame {
         if (curFileName.isEmpty()) {
             ret = false;
         } else {
-            core.getOptionsManager().pushRecentFile(curFileName);
+            PolyGlot.getPolyGlot().getOptionsManager().pushRecentFile(curFileName);
             populateRecentOpened();
             saveAllValues();
             genTitle();
@@ -672,7 +672,7 @@ public final class ScrMainMenu extends PFrame {
      */
     public void openFileFromPath(String path) {
         setFile(path);
-        core.getOptionsManager().pushRecentFile(path);
+        PolyGlot.getPolyGlot().getOptionsManager().pushRecentFile(path);
         populateRecentOpened();
         updateAllChildValues(core);
     }
@@ -863,7 +863,7 @@ public final class ScrMainMenu extends PFrame {
     }
 
     private void setupToDo() {
-        int toDoPosition = core.getOptionsManager().getToDoBarPosition();
+        int toDoPosition = PolyGlot.getPolyGlot().getOptionsManager().getToDoBarPosition();
 
         javax.swing.JScrollPane jScrollPane = new javax.swing.JScrollPane();
         toDoTree = new PToDoTree(nightMode, menuFontSize);
@@ -968,8 +968,8 @@ public final class ScrMainMenu extends PFrame {
         }
 
         // only resize if animation is enabled and the window isn't maximized
-        if (core.getOptionsManager().isAnimateWindows() && getFrameState() != Frame.MAXIMIZED_BOTH) {
-            Dimension dim = core.getOptionsManager().getScreenSize(newScreen.getClass().getName());
+        if (PolyGlot.getPolyGlot().getOptionsManager().isAnimateWindows() && getFrameState() != Frame.MAXIMIZED_BOTH) {
+            Dimension dim = PolyGlot.getPolyGlot().getOptionsManager().getScreenSize(newScreen.getClass().getName());
 
             if (dim == null) {
                 dim = newScreen.getPreferredSize();

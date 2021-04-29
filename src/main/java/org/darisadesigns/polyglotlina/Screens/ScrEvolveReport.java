@@ -28,6 +28,7 @@ import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.EvolutionPair;
 import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**
  *
@@ -102,7 +103,7 @@ public class ScrEvolveReport extends PDialog {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tblReport = new PTable(core);
-        jLabel1 = new PLabel("Original and evolved lexical forms:", core.getOptionsManager().getMenuFontSize());
+        jLabel1 = new PLabel("Original and evolved lexical forms:", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Evolution Report");

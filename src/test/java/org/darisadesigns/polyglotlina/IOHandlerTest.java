@@ -205,10 +205,10 @@ public class IOHandlerTest {
 
             // create test core to set values in...
             DictCore core = DummyCore.newCore();
-            OptionsManager opt = core.getOptionsManager();
+            OptionsManager opt = PolyGlot.getPolyGlot().getOptionsManager();
 
             opt.setAnimateWindows(animatedExpected);
-            opt.setMaxReversionCount(reversionCountExpected, core);
+            opt.setMaxReversionCount(reversionCountExpected);
             opt.setMenuFontSize(menuFontExpected);
             opt.setNightMode(nightModeExpected);
             opt.setScreenPosition(testScreenName, expectedScreenPosition);
@@ -222,7 +222,7 @@ public class IOHandlerTest {
 
             // create new core to load saved values into...
             core = DummyCore.newCore();
-            opt = core.getOptionsManager();
+            opt = PolyGlot.getPolyGlot().getOptionsManager();
             
             // relaod saved values...
             DesktopIOHandler.getInstance().loadOptionsIni(opt, core.getWorkingDirectory().getAbsolutePath());

@@ -33,6 +33,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import javax.swing.JDialog;
+import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**
  * superclass for JDialog windows in PolyGlot. Includes setup instructions for
@@ -52,16 +53,16 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
        
     public PDialog(DictCore _core) {
         core = _core;
-        menuFontSize = core.getOptionsManager().getMenuFontSize();
-        nightMode = core.getOptionsManager().isNightMode();
+        menuFontSize = PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();
+        nightMode = PolyGlot.getPolyGlot().getOptionsManager().isNightMode();
         this.setupOS();
     }
     
     public PDialog(DictCore _core, boolean _firstVisible) {
         core = _core;
         firstVisible = _firstVisible;
-        menuFontSize = core.getOptionsManager().getMenuFontSize();
-        nightMode = core.getOptionsManager().isNightMode();
+        menuFontSize = PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();
+        nightMode = PolyGlot.getPolyGlot().getOptionsManager().isNightMode();
         this.setupOS();
     }
     
@@ -89,10 +90,10 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
     @Override
     public void dispose() {
         if (!isDisposed) {
-            core.getOptionsManager().setScreenPosition(getClass().getName(),
+            PolyGlot.getPolyGlot().getOptionsManager().setScreenPosition(getClass().getName(),
                 this.getLocation());
             if (this.isResizable()) { // do not save size of non-resizable windows
-                core.getOptionsManager().setScreenSize(getClass().getName(),
+                PolyGlot.getPolyGlot().getOptionsManager().setScreenSize(getClass().getName(),
                     this.getSize());
             }
         }
@@ -177,12 +178,12 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
                 new DesktopInfoBox(null).error("Dict Core Null", "Dictionary core not set in new window.");
             }
 
-            Point lastPos = core.getOptionsManager().getScreenPosition(getClass().getName());
+            Point lastPos = PolyGlot.getPolyGlot().getOptionsManager().getScreenPosition(getClass().getName());
             if (lastPos != null) {
                 setLocation(lastPos);
             }
 
-            Dimension lastDim = core.getOptionsManager().getScreenSize(getClass().getName());
+            Dimension lastDim = PolyGlot.getPolyGlot().getOptionsManager().getScreenSize(getClass().getName());
             if (lastDim != null) {
                 setSize(lastDim);
             }

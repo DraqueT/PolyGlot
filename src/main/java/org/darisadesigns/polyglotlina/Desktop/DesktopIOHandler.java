@@ -426,7 +426,7 @@ public final class DesktopIOHandler implements IOHandler {
                         opMan.setNightMode(bothVal[1].equals(PGTUtil.TRUE));
                         break;
                     case PGTUtil.OPTIONS_REVERSIONS_COUNT:
-                        opMan.setMaxReversionCount(Integer.parseInt(bothVal[1]), null);
+                        opMan.setMaxReversionCount(Integer.parseInt(bothVal[1]));
                         break;
                     case PGTUtil.OPTIONS_TODO_DIV_LOCATION:
                         opMan.setToDoBarPosition(Integer.parseInt(bothVal[1]));

@@ -88,14 +88,14 @@ public final class PTextField extends JTextField {
         setupLook();
         
         if (overrideFont || !defText.isBlank()) {
-            setFont(((PropertiesManager)core.getPropertiesManager()).getFontLocal().deriveFont((float) core.getOptionsManager().getMenuFontSize()));
+            setFont(((PropertiesManager)core.getPropertiesManager()).getFontLocal().deriveFont((float) PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize()));
         } else {
             setFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
         }
     }
     
     public void setupLook() {
-        boolean nightMode = core.getOptionsManager().isNightMode();
+        boolean nightMode = PolyGlot.getPolyGlot().getOptionsManager().isNightMode();
         
         if (this.isEnabled()) {
             if (isDefaultText()) {
@@ -324,7 +324,7 @@ public final class PTextField extends JTextField {
         }
 
         if (isDefaultText() && !defText.isEmpty()) {
-            float menuFontSize = (float)core.getOptionsManager().getMenuFontSize();
+            float menuFontSize = (float)PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();
             setFont(((PropertiesManager)core.getPropertiesManager()).getFontLocal().deriveFont(menuFontSize));
             setForeground(Color.lightGray);
         } else {

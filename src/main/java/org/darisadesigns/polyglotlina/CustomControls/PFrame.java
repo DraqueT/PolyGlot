@@ -45,6 +45,7 @@ import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**
  * superclass for JFrame windows in PolyGlot. Includes setup instructions for
@@ -66,8 +67,8 @@ public abstract class PFrame extends JFrame implements FocusListener {
 
     protected PFrame(DictCore _core) {
         core = _core;
-        menuFontSize = core.getOptionsManager().getMenuFontSize();
-        nightMode = core.getOptionsManager().isNightMode();
+        menuFontSize = PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();
+        nightMode = PolyGlot.getPolyGlot().getOptionsManager().isNightMode();
         this.addWindowStateListener(this::setWindowState);
         this.setupOS();
     }
@@ -75,8 +76,8 @@ public abstract class PFrame extends JFrame implements FocusListener {
     protected PFrame(DictCore _core, WindowMode _mode) {
         core = _core;
         mode = _mode;
-        menuFontSize = core.getOptionsManager().getMenuFontSize();
-        nightMode = core.getOptionsManager().isNightMode();
+        menuFontSize = PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();
+        nightMode = PolyGlot.getPolyGlot().getOptionsManager().isNightMode();
         this.addWindowStateListener(this::setWindowState);
         this.setupOS();
     }
@@ -146,10 +147,10 @@ public abstract class PFrame extends JFrame implements FocusListener {
     @Override
     public void dispose() {
         if (!isDisposed) {
-            core.getOptionsManager().setScreenPosition(getClass().getName(),
+            PolyGlot.getPolyGlot().getOptionsManager().setScreenPosition(getClass().getName(),
                     this.getLocation());
             if (this.isResizable()) { // do not save size of non-resizable windows
-                core.getOptionsManager().setScreenSize(getClass().getName(),
+                PolyGlot.getPolyGlot().getOptionsManager().setScreenSize(getClass().getName(),
                         this.getSize());
             }
         }
@@ -276,14 +277,14 @@ public abstract class PFrame extends JFrame implements FocusListener {
         // only run setup stuff the initial visibility setting
         if (firstVisible) {
             if (core != null) {
-                Point lastPos = core.getOptionsManager().getScreenPosition(getClass().getName());
+                Point lastPos = PolyGlot.getPolyGlot().getOptionsManager().getScreenPosition(getClass().getName());
                 if (lastPos != null) {
                     setLocation(lastPos);
                 } else if (!ignoreCenter) {
                     this.setLocationRelativeTo(null);
                 }
 
-                Dimension lastDim = core.getOptionsManager().getScreenSize(getClass().getName());
+                Dimension lastDim = PolyGlot.getPolyGlot().getOptionsManager().getScreenSize(getClass().getName());
                 if (lastDim != null) {
                     setSize(lastDim);
                 }

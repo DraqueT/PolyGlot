@@ -36,6 +36,7 @@ import javax.swing.Box.Filler;
 import javax.swing.JPanel;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.Nodes.WordClass;
+import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**
  *
@@ -62,8 +63,8 @@ public class PClassCheckboxPanel extends JPanel {
     public PClassCheckboxPanel(DictCore core, TypeNode _type, boolean _includeAll) {
         type = _type;
         includeAll = _includeAll;
-        nightMode = core.getOptionsManager().isNightMode();
-        fontSize = core.getOptionsManager().getMenuFontSize();
+        nightMode = PolyGlot.getPolyGlot().getOptionsManager().isNightMode();
+        fontSize = PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();
         checkBoxFont = ((PropertiesManager)core.getPropertiesManager()).getFontLocal();
         this.init(core);
     }
@@ -85,7 +86,7 @@ public class PClassCheckboxPanel extends JPanel {
             gbc.gridy = 0;
             gbc.anchor = GridBagConstraints.NORTH;
 
-            PLabel label = new PLabel("Match by Class Value", core.getOptionsManager().getMenuFontSize());
+            PLabel label = new PLabel("Match by Class Value", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
             label.setSize(30, 20);
             label.setVerticalAlignment(javax.swing.SwingConstants.TOP);
             label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

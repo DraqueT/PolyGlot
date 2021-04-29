@@ -495,7 +495,7 @@
             <Property name="text" type="java.lang.String" value="Duplicate Handling"/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;Duplicate Handling&quot;, core.getOptionsManager().getMenuFontSize())"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;Duplicate Handling&quot;, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize())"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JRadioButton" name="rdoImpAll">
@@ -508,7 +508,7 @@
             <Property name="toolTipText" type="java.lang.String" value="Import all values, regardless of duplicates found."/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PRadioButton(core,&#xa;    core.getOptionsManager().isNightMode())"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PRadioButton(core,&#xa;    PolyGlot.getPolyGlot().getOptionsManager().isNightMode())"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JRadioButton" name="rdoIgnrDups">
@@ -520,7 +520,7 @@
             <Property name="toolTipText" type="java.lang.String" value="If duplicates exist in the import file, they will be ignored."/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PRadioButton(core,&#xa;    core.getOptionsManager().isNightMode())"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PRadioButton(core,&#xa;    PolyGlot.getPolyGlot().getOptionsManager().isNightMode())"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JRadioButton" name="rdoOverwDups">
@@ -532,7 +532,7 @@
             <Property name="toolTipText" type="java.lang.String" value="If duplicates are found, existing values will be overwritten."/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PRadioButton(core,&#xa;    core.getOptionsManager().isNightMode())"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PRadioButton(core,&#xa;    PolyGlot.getPolyGlot().getOptionsManager().isNightMode())"/>
           </AuxValues>
         </Component>
       </SubComponents>

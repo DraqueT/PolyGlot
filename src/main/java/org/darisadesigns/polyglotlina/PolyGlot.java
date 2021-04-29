@@ -66,12 +66,15 @@ public final class PolyGlot {
     private DictCore core;
     private ScrMainMenu rootWindow;
     private DesktopOSHandler osHandler;
+    private OptionsManager optionsManager;
 
-    private PolyGlot(String overridePath, DictCore _core, DesktopOSHandler _osHandler) throws Exception {
+    public PolyGlot(String overridePath, DictCore _core, DesktopOSHandler _osHandler) throws Exception {
         PolyGlot.polyGlot = this;
         core = _core;
         osHandler = _osHandler;
         osHandler.setWorkingDirectory(overridePath); // TODO: In the future, figure out how this might be better set. In options?
+        optionsManager = new OptionsManager(core);
+        osHandler.getIOHandler().loadOptionsIni(optionsManager, getWorkingDirectory().getAbsolutePath());
         refreshUiDefaults();
     }
 
@@ -122,7 +125,9 @@ public final class PolyGlot {
                 cInfoBox.setParent(s);
 
                 try {
-                    DesktopIOHandler.getInstance().loadOptionsIni(core.getOptionsManager(), polyGlot.getWorkingDirectory().getAbsolutePath());
+                    DesktopIOHandler.getInstance()
+                            .loadOptionsIni(PolyGlot.polyGlot.optionsManager, 
+                                    polyGlot.getWorkingDirectory().getAbsolutePath());
                 }
                 catch (Exception ex) {
                     DesktopIOHandler.getInstance().writeErrorLog(ex);
@@ -385,11 +390,11 @@ public final class PolyGlot {
     }
 
     public OptionsManager getOptionsManager() {
-        return core.getOptionsManager();
+        return optionsManager;
     }
 
     public void saveOptionsIni() throws IOException {
-        DesktopIOHandler.getInstance().writeOptionsIni(getWorkingDirectory().getAbsolutePath(), core.getOptionsManager());
+        DesktopIOHandler.getInstance().writeOptionsIni(getWorkingDirectory().getAbsolutePath(), optionsManager);
     }
 
     /**
@@ -415,7 +420,7 @@ public final class PolyGlot {
     }
 
     public void refreshUiDefaults() {
-        uiDefaults = VisualStyleManager.generateUIOverrides(core.getOptionsManager().isNightMode());
+        uiDefaults = VisualStyleManager.generateUIOverrides(optionsManager.isNightMode());
         if (rootWindow != null) {
             rootWindow.dispose(false);
             rootWindow = new ScrMainMenu(core);

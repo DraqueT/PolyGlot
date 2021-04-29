@@ -24,6 +24,7 @@ import org.darisadesigns.polyglotlina.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.PolyGlot;
 import org.darisadesigns.polyglotlina.WebInterface;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -349,7 +350,7 @@ public class ScrUpdateAlert extends PDialog {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
-        txtVersion = new PLabel("", core.getOptionsManager().getMenuFontSize());
+        txtVersion = new PLabel("", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);

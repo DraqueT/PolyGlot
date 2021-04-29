@@ -27,6 +27,7 @@ import javax.swing.JRadioButton;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**
  * 
@@ -41,7 +42,7 @@ public final class PRadioButton extends JRadioButton {
     public PRadioButton(DictCore _core, boolean _nightMode) { // nightmode left for future enhancements
         nightMode = _nightMode;
         core = _core;
-        this.setFont(PGTUtil.MENU_FONT.deriveFont((float)core.getOptionsManager().getMenuFontSize()));
+        this.setFont(PGTUtil.MENU_FONT.deriveFont((float)PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize()));
     }
     
     /**
@@ -98,7 +99,7 @@ public final class PRadioButton extends JRadioButton {
         if (_type == QuestionType.ConEquiv) {
             this.setFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
         } else {
-            this.setFont(PGTUtil.CHARIS_UNICODE.deriveFont((float)core.getOptionsManager().getMenuFontSize()));
+            this.setFont(PGTUtil.CHARIS_UNICODE.deriveFont((float)PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize()));
         }
         
         this.type = _type;

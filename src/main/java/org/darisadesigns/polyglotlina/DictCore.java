@@ -67,7 +67,6 @@ public class DictCore {
     private EtymologyManager etymologyManager;
     private ReversionManager reversionManager;
     private ToDoManager toDoManager;
-    private OptionsManager optionsManager;
     private final OSHandler osHandler;
     private boolean curLoading = false;
     private Instant lastSaveTime = Instant.MIN;
@@ -101,8 +100,6 @@ public class DictCore {
             etymologyManager = new EtymologyManager(this);
             reversionManager = new ReversionManager(this);
             toDoManager = new ToDoManager();
-            optionsManager = new OptionsManager();
-            this.osHandler.getIOHandler().loadOptionsIni(optionsManager, getWorkingDirectory().getAbsolutePath());
 
             PAlphaMap<String, Integer> alphaOrder = propertiesManager.getAlphaOrder();
 
@@ -137,14 +134,6 @@ public class DictCore {
         return propertiesManager.getLocalLangName().isEmpty()
                 ? "Local Lang"
                 : propertiesManager.getLocalLangName();
-    }
-    
-    /**
-     * Gets options manager
-     * @return 
-     */
-    public OptionsManager getOptionsManager() {
-        return this.optionsManager;
     }
 
     /**

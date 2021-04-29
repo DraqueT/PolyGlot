@@ -34,6 +34,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableCellRenderer;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**
  *
@@ -125,7 +126,7 @@ public final class PCellRenderer implements TableCellRenderer {
                 ((PropertiesManager)core.getPropertiesManager()).getFontLocal();
         fontSize = useConFont ? 
                 preSize :
-                core.getOptionsManager().getMenuFontSize();
+                PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();
         
         myFont = PGTUtil.addFontAttribute(TextAttribute.SIZE, (float)fontSize, selectedFont);
     }

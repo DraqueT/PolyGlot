@@ -46,10 +46,11 @@ public class OptionsManager {
     private boolean maximized = false;
     private final List<String> screensUp = new ArrayList<>();
     private Double menuFontSize = 0.0;
-    private int maxReversionCount = PGTUtil.DEFAULT_MAX_ROLLBACK_NUM;
     private int toDoBarPosition = -1;
+    private DictCore core;
 
-    public OptionsManager() {
+    public OptionsManager(DictCore _core) {
+        core = _core;
     }
     
     /**
@@ -63,7 +64,7 @@ public class OptionsManager {
         screenSize.clear();
         screensUp.clear();
         menuFontSize = 0.0;
-        maxReversionCount = PGTUtil.DEFAULT_MAX_ROLLBACK_NUM;
+        core.getReversionManager().setMaxReversionCount(PGTUtil.DEFAULT_MAX_ROLLBACK_NUM);
         toDoBarPosition = -1;
     }
     
@@ -254,15 +255,11 @@ public class OptionsManager {
     }
 
     public int getMaxReversionCount() {
-        return maxReversionCount;
+        return core.getReversionManager().getMaxReversionsCount();
     }
 
-    public void setMaxReversionCount(int maxRollbackVersions, DictCore core) {
-        this.maxReversionCount = maxRollbackVersions;
-        
-        if (core != null) {
-            core.getReversionManager().trimReversions();
-        }
+    public void setMaxReversionCount(int maxRollbackVersions) {
+        core.getReversionManager().setMaxReversionCount(maxRollbackVersions, true);
     }
 
     public int getToDoBarPosition() {

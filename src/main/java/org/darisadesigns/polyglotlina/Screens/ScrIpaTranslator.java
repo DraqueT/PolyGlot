@@ -26,6 +26,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.darisadesigns.polyglotlina.CustomControls.PTextPane;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**
  *
@@ -65,7 +66,7 @@ public final class ScrIpaTranslator extends PDialog {
     }
     
     private void setupForm() {
-        int divider = core.getOptionsManager().getDividerPosition(this.getClass().getName());
+        int divider = PolyGlot.getPolyGlot().getOptionsManager().getDividerPosition(this.getClass().getName());
         ((PTextPane)txtSource).setDisableMedia(true);
         
         if (divider > -1) {
@@ -75,7 +76,7 @@ public final class ScrIpaTranslator extends PDialog {
     
     @Override
     public void dispose() {
-        core.getOptionsManager().setDividerPosition(getClass().getName(), jSplitPane1.getDividerLocation());
+        PolyGlot.getPolyGlot().getOptionsManager().setDividerPosition(getClass().getName(), jSplitPane1.getDividerLocation());
         super.dispose();
     }
     

@@ -37,6 +37,7 @@ import org.darisadesigns.polyglotlina.CustomControls.PRadioButton;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.ImportFileHelper.DuplicateOption;
 import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**
  *
@@ -109,13 +110,13 @@ public class ScrExcelImport extends PDialog {
         btnImport = new PButton(nightMode, menuFontSize);
         btnCancel = new PButton(nightMode, menuFontSize);
         jPanel2 = new javax.swing.JPanel();
-        jLabel13 = new PLabel("Duplicate Handling", core.getOptionsManager().getMenuFontSize());
+        jLabel13 = new PLabel("Duplicate Handling", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
         rdoImpAll = new PRadioButton(core,
-            core.getOptionsManager().isNightMode());
+            PolyGlot.getPolyGlot().getOptionsManager().isNightMode());
         rdoIgnrDups = new PRadioButton(core,
-            core.getOptionsManager().isNightMode());
+            PolyGlot.getPolyGlot().getOptionsManager().isNightMode());
         rdoOverwDups = new PRadioButton(core,
-            core.getOptionsManager().isNightMode());
+            PolyGlot.getPolyGlot().getOptionsManager().isNightMode());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Import From External Format");

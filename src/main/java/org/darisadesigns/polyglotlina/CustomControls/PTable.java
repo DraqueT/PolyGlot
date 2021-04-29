@@ -29,6 +29,7 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**
  *
@@ -49,7 +50,7 @@ public final class PTable extends JTable {
         disabledRend.setBackground(Color.darkGray);
 
         if (core != null) {
-            Font font = PGTUtil.MENU_FONT.deriveFont((float) core.getOptionsManager().getMenuFontSize());
+            Font font = PGTUtil.MENU_FONT.deriveFont((float) PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
             this.getTableHeader().setFont(font);
         }
     }

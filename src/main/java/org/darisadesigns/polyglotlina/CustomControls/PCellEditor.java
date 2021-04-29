@@ -40,6 +40,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableCellEditor;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**
  *
@@ -75,7 +76,7 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
                 : ((PropertiesManager)core.getPropertiesManager()).getFontLocal();
         double fontSize = useConFont ? 
                 preSize :
-                core.getOptionsManager().getMenuFontSize();
+                PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();
 
         myFont = PGTUtil.addFontAttribute(TextAttribute.SIZE, (float)fontSize, defFont);
         component.setFont(myFont);

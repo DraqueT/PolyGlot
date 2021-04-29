@@ -34,6 +34,7 @@ import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationGenRule;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationGenTransform;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationPair;
+import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**
  *
@@ -61,7 +62,7 @@ public class ScrDeclensionGenSimple extends PDialog {
     }
     
     private void setupForm() {
-        int divider = core.getOptionsManager().getDividerPosition(this.getClass().getName());
+        int divider = PolyGlot.getPolyGlot().getOptionsManager().getDividerPosition(this.getClass().getName());
         
         if (divider > -1) {
             jSplitPane1.setDividerLocation(divider);
@@ -182,7 +183,7 @@ public class ScrDeclensionGenSimple extends PDialog {
     @Override
     public void dispose() {
         saveRule();
-        core.getOptionsManager().setDividerPosition(getClass().getName(), jSplitPane1.getDividerLocation());
+        PolyGlot.getPolyGlot().getOptionsManager().setDividerPosition(getClass().getName(), jSplitPane1.getDividerLocation());
     }
 
     @Override

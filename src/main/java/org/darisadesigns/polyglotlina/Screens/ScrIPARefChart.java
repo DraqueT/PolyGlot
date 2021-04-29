@@ -34,6 +34,7 @@ import java.util.Map;
 import javax.swing.JComponent;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**
  *
@@ -157,7 +158,7 @@ public final class ScrIPARefChart extends PFrame {
         lblOtherSymbols = new PLabel("",0);
         txtIPAChars = new javax.swing.JTextField();
         cmbIpaLibSelect = new PComboBox<IPALibrary>(((PropertiesManager)core.getPropertiesManager()).getFontMenu());
-        lblHover = new PLabel("Hover over an IPA character to display which characters in your language express it.", core.getOptionsManager().getMenuFontSize());
+        lblHover = new PLabel("Hover over an IPA character to display which characters in your language express it.", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("IPA Pronunciation/Character Guide");
