@@ -21,10 +21,9 @@ package org.darisadesigns.polyglotlina.CustomControls;
 
 import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
 import org.darisadesigns.polyglotlina.PGTUtil;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Objects;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.MutableTreeNode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -36,13 +35,14 @@ import org.w3c.dom.Element;
  * 
  * @author draque
  */
-public class GrammarChapNode extends DefaultMutableTreeNode {
+public class GrammarChapNode extends TreeNode {
 
     private String name = "";
     private GrammarSectionNode buffer;
     private final GrammarManager parentManager;
 
     public GrammarChapNode(GrammarManager _parentManager) {
+        super(null);
         parentManager = _parentManager;
         buffer = new GrammarSectionNode(parentManager);
     }
@@ -68,7 +68,7 @@ public class GrammarChapNode extends DefaultMutableTreeNode {
     /**
      * Overridden to prevent unwanted removals
      */
-    public void remove(MutableTreeNode node) {
+    public void remove(TreeNode node) {
         // do nothing (preserves tree)
     }
 
@@ -76,7 +76,7 @@ public class GrammarChapNode extends DefaultMutableTreeNode {
      * Actual removal code
      * @param node node to remove
      */
-    public void doRemove(MutableTreeNode node) {
+    public void doRemove(TreeNode node) {
         super.remove(node);
         
         if (parentManager != null && node instanceof GrammarChapNode) {
@@ -84,7 +84,7 @@ public class GrammarChapNode extends DefaultMutableTreeNode {
         }
     }
     
-    public void doInsert(MutableTreeNode node, int index) {
+    public void doInsert(TreeNode node, int index) {
         super.insert(node, index);
         
         if (parentManager != null && node instanceof GrammarChapNode) {
@@ -96,8 +96,8 @@ public class GrammarChapNode extends DefaultMutableTreeNode {
     private Enumeration internalChildren(String filter) {
         Enumeration ret;
         if (filter.isEmpty() || children == null) {
-            ret = super.children();
-        } else if (children.elementAt(0) instanceof GrammarSectionNode) {
+            ret = Collections.enumeration(super.children);
+        } else if (children.get(0) instanceof GrammarSectionNode) {
             java.util.Vector<GrammarSectionNode> v = new java.util.Vector<>();
 
             for (Object curObject : children.toArray()) {
@@ -109,7 +109,7 @@ public class GrammarChapNode extends DefaultMutableTreeNode {
             }
 
             ret = v.elements();
-        } else if (children.elementAt(0) instanceof GrammarChapNode) {
+        } else if (children.get(0) instanceof GrammarChapNode) {
             java.util.Vector<GrammarChapNode> v = new java.util.Vector<>();
             
             for (GrammarChapNode curNode : (GrammarChapNode[]) children.toArray()) {
@@ -166,8 +166,8 @@ public class GrammarChapNode extends DefaultMutableTreeNode {
             
             chapElement = doc.createElement(PGTUtil.GRAMMAR_SECTIONS_LIST_XID);
             
-            for (int i = 0; i < this.getChildCount(); i++) {
-                GrammarSectionNode curSec = (GrammarSectionNode)this.getChildAt(i);                
+            for (int i = 0; i < this.children.size(); i++) {
+                GrammarSectionNode curSec = (GrammarSectionNode)this.children.get(i);                
                 curSec.writeXML(doc, chapElement);
             }
             

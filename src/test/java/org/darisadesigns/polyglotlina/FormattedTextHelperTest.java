@@ -130,7 +130,7 @@ public class FormattedTextHelperTest {
         System.out.println("FormattedTextHelperTest.testGetSectionTextFontSpecific");
         GrammarChapNode chap = core.getGrammarManager().getChapters()[0];
         
-        String sectionText = ((GrammarSectionNode)chap.getFirstChild()).getSectionText();
+        String sectionText = ((GrammarSectionNode)chap.children.get(0)).getSectionText();
         List<Entry<String, PFontInfo>> results = FormattedTextHelper.getSectionTextFontSpecific(sectionText, core);
         Entry<String, PFontInfo> title = results.get(0);
         Entry<String, PFontInfo> lodenkurExample = results.get(6);
@@ -163,7 +163,7 @@ public class FormattedTextHelperTest {
         System.out.println("FormattedTextHelperTest.testStorageFormat");
         PGrammarPane pane = new PGrammarPane(core);
         GrammarChapNode chap = core.getGrammarManager().getChapters()[0];
-        String sectionText = ((GrammarSectionNode)chap.getChildAt(1)).getSectionText();
+        String sectionText = ((GrammarSectionNode)chap.children.get(1)).getSectionText();
         
         try {
             FormattedTextHelper.restoreFromString(sectionText, pane, core);

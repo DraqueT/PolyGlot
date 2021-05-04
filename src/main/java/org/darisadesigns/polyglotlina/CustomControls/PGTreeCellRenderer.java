@@ -36,9 +36,9 @@ public class PGTreeCellRenderer extends DefaultTreeCellRenderer {
 
     @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean _selected, boolean expanded, boolean leaf, int row, boolean _hasFocus) {
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+        Object node = ((DefaultMutableTreeNode) value).getUserObject();
 
-        setText(value.toString());
+        setText(node.toString());
 
         if (node instanceof GrammarChapNode
                 && expanded) {

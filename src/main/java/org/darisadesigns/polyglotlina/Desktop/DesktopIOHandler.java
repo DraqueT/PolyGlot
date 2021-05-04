@@ -941,7 +941,7 @@ public final class DesktopIOHandler implements IOHandler {
         try (ZipFile zipFile = new ZipFile(fileName)) {
             for (GrammarChapNode curChap : grammarManager.getChapters()) {
                 for (int i = 0; i < curChap.getChildCount(); i++) {
-                    GrammarSectionNode curNode = (GrammarSectionNode) curChap.getChildAt(i);
+                    GrammarSectionNode curNode = (GrammarSectionNode) curChap.children.get(i);
 
                     if (curNode.getRecordingId() == -1) {
                         continue;
