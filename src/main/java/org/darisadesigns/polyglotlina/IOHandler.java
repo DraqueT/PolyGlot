@@ -22,10 +22,7 @@ package org.darisadesigns.polyglotlina;
 import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.LogoCollection;
 import org.darisadesigns.polyglotlina.ManagersCollections.ImageCollection;
-import org.darisadesigns.polyglotlina.ManagersCollections.OptionsManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.ReversionManager;
-import java.awt.Window;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -43,15 +40,6 @@ import org.xml.sax.SAXException;
  * @author draque
  */
 public interface IOHandler {
-
-    /**
-     * Opens and returns image from URL given (can be file path)
-     *
-     * @param filePath path of image
-     * @return BufferedImage
-     * @throws IOException in IO
-     */
-    public BufferedImage getImage(String filePath) throws IOException;
 
     /**
      * Creates and returns a temporary file with the contents specified. File
@@ -111,17 +99,6 @@ public interface IOHandler {
     public CustHandler getHandlerFromByteArray(byte[] byteArray, DictCore _core) throws IOException;
 
     /**
-     * Opens an image via GUI and returns as buffered image Returns null if user
-     * cancels.
-     *
-     * @param parent parent window of operation
-     * @param workingDirectory
-     * @return buffered image selected by user
-     * @throws IOException on file read error
-     */
-    public BufferedImage openImage(Window parent, File workingDirectory) throws IOException;
-
-    /**
      * returns name of file sans path
      *
      * @param fullPath full path to file
@@ -135,16 +112,6 @@ public interface IOHandler {
      * @param workingDirectory
      */
     public void deleteIni(String workingDirectory);
-
-    /**
-     * Loads all option data from ini file, if none, ignore.One will be created
-     * on exit.
-     *
-     * @param opMan
-     * @param workingDirectory
-     * @throws IOException on failure to open existing file
-     */
-    public void loadOptionsIni(OptionsManager opMan, String workingDirectory) throws Exception;
 
     /**
      * Given handler class, parses XML document within file (archive or not)
@@ -259,15 +226,6 @@ public interface IOHandler {
      * @throws Exception on sound load errors
      */
     void loadGrammarSounds(String fileName, GrammarManager grammarManager) throws Exception;
-
-    /**
-     * Saves ini file with polyglot options
-     *
-     * @param workingDirectory
-     * @param opMan
-     * @throws IOException on failure or lack of permission to write
-     */
-    public void writeOptionsIni(String workingDirectory, OptionsManager opMan) throws IOException;
 
     /**
      * Opens an arbitrary file via the local OS's default. If unable to open for

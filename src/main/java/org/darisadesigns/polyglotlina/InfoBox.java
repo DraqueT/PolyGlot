@@ -19,8 +19,6 @@
  */
 package org.darisadesigns.polyglotlina;
 
-import java.awt.Window;
-
 /**
  *
  * @author pe1uca

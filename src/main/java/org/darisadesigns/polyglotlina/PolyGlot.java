@@ -74,7 +74,7 @@ public final class PolyGlot {
         osHandler = _osHandler;
         osHandler.setWorkingDirectory(overridePath); // TODO: In the future, figure out how this might be better set. In options?
         optionsManager = new OptionsManager(core);
-        osHandler.getIOHandler().loadOptionsIni(optionsManager, getWorkingDirectory().getAbsolutePath());
+        ((DesktopIOHandler)osHandler.getIOHandler()).loadOptionsIni(optionsManager, getWorkingDirectory().getAbsolutePath());
         refreshUiDefaults();
     }
 
