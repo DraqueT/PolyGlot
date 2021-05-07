@@ -232,7 +232,7 @@ public class ConWord extends DictNode {
             ret = value.equals(c.value);
             ret = ret && localWord.equals(c.localWord);
             ret = ret && typeId == c.typeId;
-            ret = ret && WebInterface.archiveHTML(definition).equals(WebInterface.archiveHTML(c.definition));
+            ret = ret && WebInterface.archiveHTML(definition, core).equals(WebInterface.archiveHTML(c.definition, core));
             ret = ret && pronunciation.equals(c.pronunciation);
             ret = ret && etymNotes.equals(c.etymNotes);
             ret = ret && procOverride == c.procOverride;
@@ -545,7 +545,7 @@ public class ConWord extends DictNode {
         }
 
         wordValue = doc.createElement(PGTUtil.WORD_DEF_XID);
-        wordValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.definition)));
+        wordValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.definition, core)));
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.WORD_PROCOVERRIDE_XID);

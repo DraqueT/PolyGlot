@@ -24,7 +24,7 @@ import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.ManagersCollections.VisualStyleManager;
-import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;

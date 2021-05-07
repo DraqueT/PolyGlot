@@ -24,7 +24,7 @@ import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.ClipboardHandler;
 import org.darisadesigns.polyglotlina.FormattedTextHelper;
 import org.darisadesigns.polyglotlina.Nodes.ImageNode;
-import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.WebInterface;
 import java.awt.Color;
 import java.awt.Graphics2D;

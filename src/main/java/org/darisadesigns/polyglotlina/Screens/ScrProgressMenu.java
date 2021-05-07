@@ -21,13 +21,14 @@ package org.darisadesigns.polyglotlina.Screens;
 
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.PLanguageStats.PLanguageStatsProgress;
 import javax.swing.SwingUtilities;
 
 /**
  *
  * @author draque
  */
-public final class ScrProgressMenu extends javax.swing.JDialog {
+public final class ScrProgressMenu extends javax.swing.JDialog implements PLanguageStatsProgress {
 
     private final int taskLength;
     private int progress;

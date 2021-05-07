@@ -843,8 +843,7 @@ public final class CustHandlerFactory {
                     bwordoverAutoDec = false;
                 } else if (bfontcon && core.getPropertiesManager().getCachedFont() == null) {
                     try {
-                        ((org.darisadesigns.polyglotlina.Desktop.PropertiesManager)propertiesManager)
-                                .setFontCon(new String(ch, start, length));
+                        propertiesManager.setFontCon(new String(ch, start, length));
                     } catch (Exception e) {
                         core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nFont load error: " + e.getLocalizedMessage();
@@ -861,7 +860,7 @@ public final class CustHandlerFactory {
                 } else if (bwordClassPattern) {
                     TypeNode bufferType = core.getTypes().getBufferType();
                     bufferType.setPattern(bufferType.getPattern()
-                            + new String(ch, start, length));
+                            + new String(ch, start, length), core);
                 } else if (bwordClassGloss) {
                     TypeNode bufferType = core.getTypes().getBufferType();
                     bufferType.setGloss(bufferType.getGloss()

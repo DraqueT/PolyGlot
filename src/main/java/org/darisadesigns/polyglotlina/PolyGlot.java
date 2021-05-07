@@ -46,6 +46,7 @@ import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.DesktopHelpHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopOSHandler;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.OptionsManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.VisualStyleManager;
@@ -115,7 +116,7 @@ public final class PolyGlot {
                 DesktopHelpHandler helpHandler = new DesktopHelpHandler();
                 var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), cInfoBox, helpHandler);
 
-                DictCore core = new DictCore(new PropertiesManager(), osHandler);
+                DictCore core = new DictCore(new PropertiesManager(), osHandler, new PGTUtil());
                 new PolyGlot("", core, osHandler);
                 
                 s = new ScrMainMenu(core);
@@ -175,7 +176,7 @@ public final class PolyGlot {
                     });
 
                     desk.setAboutHandler((AboutEvent e) -> {
-                        DictCore _core = new DictCore(new PropertiesManager(), osHandler);
+                        DictCore _core = new DictCore(new PropertiesManager(), osHandler, new PGTUtil());
                         polyGlot.setCore(_core);
                         ScrAbout.run(_core);
                     });
@@ -304,7 +305,7 @@ public final class PolyGlot {
     }
 
     public DictCore getNewCore() {
-        this.core = new DictCore(new PropertiesManager(), this.getOSHandler());
+        this.core = new DictCore(new PropertiesManager(), this.getOSHandler(), new PGTUtil());
         return this.core;
     }
 

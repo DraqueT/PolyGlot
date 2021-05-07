@@ -26,7 +26,7 @@ import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.ClipboardHandler;
 import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
 import org.darisadesigns.polyglotlina.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.IPAHandler;
+import org.darisadesigns.polyglotlina.Desktop.IPAHandler;
 import org.darisadesigns.polyglotlina.IPAHandler.IPALibrary;
 import java.awt.Component;
 import java.awt.event.MouseEvent;

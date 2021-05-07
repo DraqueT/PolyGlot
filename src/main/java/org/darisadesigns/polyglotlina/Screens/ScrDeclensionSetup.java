@@ -330,7 +330,7 @@ public final class ScrDeclensionSetup extends PDialog {
             ConjugationNode curNodeToCopy = core.getConjugationManager().getConjugationTemplate(myType.getId(), 
                     scrToCoreDeclensions.get(i));
             
-            ConjugationNode copyNode = new ConjugationNode(-1);
+            ConjugationNode copyNode = new ConjugationNode(-1, core.getConjugationManager());
             copyNode.setEqual(curNodeToCopy);
             declensionTemplates.add(copyNode);
         }
@@ -353,7 +353,7 @@ public final class ScrDeclensionSetup extends PDialog {
         
         try {
             conjNodes.forEach((curNode)->{
-                ConjugationNode copyNode = new ConjugationNode(-1);
+                ConjugationNode copyNode = new ConjugationNode(-1, core.getConjugationManager());
                 copyNode.setEqual(curNode);
                 decMan.addConjugationToTemplate(myType.getId(), -1, curNode);
             });
@@ -844,7 +844,7 @@ public final class ScrDeclensionSetup extends PDialog {
     }
 
     private void populateDeclensionProps() {
-        ConjugationNode curDec = new ConjugationNode(-1);
+        ConjugationNode curDec = new ConjugationNode(-1, core.getConjugationManager());
         int decIndex = lstDeclensionList.getSelectedIndex();
 
         // keep local settings from stomping on higher level population
@@ -1008,7 +1008,7 @@ public final class ScrDeclensionSetup extends PDialog {
 
                 scrToCoreDeclensions.put(decIndex, decl.getId());
             } else {
-                decl = new ConjugationNode(-1);
+                decl = new ConjugationNode(-1, core.getConjugationManager());
                 ConjugationNode oldDecl = core.getConjugationManager().getConjugation(myType.getId(), decId);
 
                 decl.setEqual(oldDecl);

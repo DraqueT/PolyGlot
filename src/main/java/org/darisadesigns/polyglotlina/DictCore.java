@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina;
 
+import org.darisadesigns.polyglotlina.PLanguageStats.PLanguageStatsProgress;
 import org.darisadesigns.polyglotlina.CustomControls.PAlphaMap;
 import org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
@@ -52,6 +53,7 @@ import org.xml.sax.SAXException;
  */
 public class DictCore {
 
+    private PGTUtil pgtUtil;
     private ConWordCollection wordCollection;
     private TypeCollection typeCollection;
     private ConjugationManager conjugationMgr;
@@ -76,9 +78,11 @@ public class DictCore {
      *
      * @param _propertiesManager
      * @param _osHandler
+     * @param _util
      */
-    public DictCore(PropertiesManager _propertiesManager, OSHandler _osHandler) {
+    public DictCore(PropertiesManager _propertiesManager, OSHandler _osHandler, PGTUtil _util) {
         osHandler = _osHandler;
+        pgtUtil = _util;
         initializeDictCore(_propertiesManager);
     }
     
@@ -93,7 +97,7 @@ public class DictCore {
             romMgr = new RomanizationManager(this);
             famManager = new FamilyManager(this);
             logoCollection = new LogoCollection(this);
-            grammarManager = new GrammarManager();
+            grammarManager = new GrammarManager(this);
             wordClassCollection = new WordClassCollection(this);
             imageCollection = new ImageCollection(this);
             etymologyManager = new EtymologyManager(this);
@@ -237,14 +241,16 @@ public class DictCore {
     /**
      * Builds a report on the conlang. Potentially very computationally
      * expensive.
+     * 
+     * @param progress
      */
-    public void buildLanguageReport() {
+    public void buildLanguageReport(PLanguageStatsProgress progress) {
         final DictCore core = this;
         
         new Thread() {
             @Override
             public void run() {
-                String reportContents = PLanguageStats.buildWordReport(core);
+                String reportContents = PLanguageStats.buildWordReport(core, progress);
                 
                 core.getOSHandler().openLanguageReport(reportContents);
             }
@@ -362,7 +368,7 @@ public class DictCore {
      * @throws java.io.IOException 
      */
     public void revertToState(byte[] revision, String fileName) throws IOException{
-        DictCore revDict = new DictCore(this.propertiesManager, this.osHandler);
+        DictCore revDict = new DictCore(this.propertiesManager, this.osHandler, this.pgtUtil);
         revDict.readFile(fileName, revision);
         
         pushUpdateWithCore(revDict);
@@ -509,6 +515,10 @@ public class DictCore {
      */
     public OSHandler getOSHandler() {
         return this.osHandler;
+    }
+    
+    public PGTUtil getPGTUtil() {
+        return this.pgtUtil;
     }
     
     /**

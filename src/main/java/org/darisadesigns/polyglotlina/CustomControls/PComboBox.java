@@ -19,7 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
-import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;

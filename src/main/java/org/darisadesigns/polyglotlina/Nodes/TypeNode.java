@@ -20,6 +20,7 @@
 package org.darisadesigns.polyglotlina.Nodes;
 
 import java.util.Objects;
+import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.WebInterface;
 import org.w3c.dom.Document;
@@ -31,14 +32,16 @@ import org.w3c.dom.Element;
  */
 public class TypeNode extends DictNode {
 
+    private DictCore core;
     private String notes = "";
     private String regexPattern = "";
     private String gloss = "";
     private boolean procMandatory = false;
     private boolean defMandatory = false;
 
-    public void setPattern(String _regexPattern) {
+    public void setPattern(String _regexPattern, DictCore _core) {
         regexPattern = _regexPattern;
+        core = _core;
     }
 
     public String getPattern() {
@@ -144,7 +147,7 @@ public class TypeNode extends DictNode {
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.POS_NOTES_XID);
-        wordValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.notes)));
+        wordValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.notes, core)));
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.POS_DEF_MAN_XID);

@@ -26,10 +26,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PolyGlot;
 import org.darisadesigns.polyglotlina.PFontHandler;
-import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
  *
@@ -171,6 +169,7 @@ public class PropertiesManager extends
      * @param _fontFamily 
      * @throws java.lang.Exception if unable to load font 
      */
+    @Override
     public void setFontCon(String _fontFamily) throws Exception {
         try {
             Font newFont = PFontHandler.loadFontFromOSFileFolder(_fontFamily);

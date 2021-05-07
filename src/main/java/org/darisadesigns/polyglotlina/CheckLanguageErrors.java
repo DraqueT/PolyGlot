@@ -102,7 +102,7 @@ public class CheckLanguageErrors {
                 problemDescription = "Pronunciation text: \"" + node.getPronunciation() + "\" is illegal regex insertion.";
             }
             
-            if (!problemDescription.isBlank()) {
+            if (!core.getPGTUtil().isBlank(problemDescription)) {
                 problems.add(new LexiconProblemNode(node, problemDescription, ProblemType.Phonology));
             }
         }
@@ -118,7 +118,7 @@ public class CheckLanguageErrors {
                 problemDescription = "Romanization value: \"" + node.getValue() + "\" is illegal regex insertion.";
             }
             
-            if (!problemDescription.isBlank()) {
+            if (!core.getPGTUtil().isBlank(problemDescription)) {
                 problems.add(new LexiconProblemNode(node, problemDescription, ProblemType.Phonology));
             }
         }
@@ -151,7 +151,7 @@ public class CheckLanguageErrors {
                     }
                 }
 
-                if (!problemDescription.isBlank()) {
+                if (!core.getPGTUtil().isBlank(problemDescription)) {
                     problems.add(new LexiconProblemNode(pos,
                             problemDescription,
                             ProblemType.PoS));

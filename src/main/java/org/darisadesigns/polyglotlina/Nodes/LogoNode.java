@@ -43,10 +43,12 @@ public class LogoNode extends DictNode {
     private boolean isRadical = false;
     private String tmpRads = "";
     private String tmpReadingBuffer = "";
+    private DictCore core;
     protected List<LogoNode> radicals = new ArrayList<>();
     protected List<String> readings = new ArrayList<>();
 
     public LogoNode(DictCore _core) {
+        core = _core;
         try {
             logoBytes = _core.getOSHandler().getIOHandler().loadImageBytes(PGTUtil.EMPTY_LOGO_IMAGE);
         }
@@ -289,7 +291,7 @@ public class LogoNode extends DictNode {
         logoElement.appendChild(node);
 
         node = doc.createElement(PGTUtil.LOGO_NOTES_XID);
-        node.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.notes)));
+        node.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.notes, core)));
         logoElement.appendChild(node);
 
         node = doc.createElement(PGTUtil.LOGO_RADICAL_LIST_XID);

@@ -38,6 +38,22 @@ import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
  * @author draque
  */
 public final class Java8Bridge {
+    
+    private static File java8BridgeLocation = null;
+    
+    /**
+     * Gets Java8 bridge class location. Caches value.
+     *
+     * @return
+     * @throws java.io.IOException
+     */
+    public static File getJava8BridgeLocation() throws IOException {
+        if (java8BridgeLocation == null || !java8BridgeLocation.exists()) {
+            java8BridgeLocation = Java8Bridge.getNewJavaBridgeLocation();
+        }
+
+        return java8BridgeLocation;
+    }
 
     public static File getNewJavaBridgeLocation() throws IOException {
         Path tmpDirectory = Files.createTempDirectory("PolyGlot");
@@ -62,7 +78,7 @@ public final class Java8Bridge {
         
         errorIfJavaUnavailableInTerminal();
         
-        File bridge = PGTUtil.getJava8BridgeLocation();
+        File bridge = Java8Bridge.getJava8BridgeLocation();
         File tmpLangFile = createTmpLangFile(core);
         File tmpFontFile = File.createTempFile("PolyGlotFont", ".ttf", core.getWorkingDirectory());
         tmpFontFile.deleteOnExit();
@@ -139,7 +155,7 @@ public final class Java8Bridge {
         
         errorIfJavaUnavailableInTerminal();
         
-        File bridge = PGTUtil.getJava8BridgeLocation();
+        File bridge = Java8Bridge.getJava8BridgeLocation();
         File tmpTarget = File.createTempFile("PolyGlotTmp", ".csv");
         
         String[] command = {
@@ -177,7 +193,7 @@ public final class Java8Bridge {
         
         errorIfJavaUnavailableInTerminal();
         
-        File bridge = PGTUtil.getJava8BridgeLocation();
+        File bridge = Java8Bridge.getJava8BridgeLocation();
         File tmpLangFile = createTmpLangFile(core);
         
         String[] command = {

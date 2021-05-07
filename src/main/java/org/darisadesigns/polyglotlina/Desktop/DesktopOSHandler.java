@@ -22,12 +22,17 @@ package org.darisadesigns.polyglotlina.Desktop;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
+import org.apache.commons.csv.CSVFormat;
 import org.darisadesigns.polyglotlina.ClipboardHandler;
+import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.HelpHandler;
 import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.InfoBox;
+import org.darisadesigns.polyglotlina.Java8Bridge;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 import org.darisadesigns.polyglotlina.OSHandler;
 import org.darisadesigns.polyglotlina.PGTUtil;
@@ -77,6 +82,38 @@ public class DesktopOSHandler extends OSHandler {
             infoBox.error("Report Build Error", "Unable to generate/display language statistics: " 
                     + e.getLocalizedMessage());
             ioHandler.writeErrorLog(e);
+        }
+    }
+    
+    /**
+     * Tell the OS to open a browser and go to a given web address.(distinct
+     * behavior in Linux due to lack of certain features)
+     *
+     * @param url
+     * @throws java.io.IOException
+     */
+    public static void browseToLocation(String url) throws IOException {
+        if (PGTUtil.IS_WINDOWS) {
+            try {
+                URI help = new URI(url);
+                Desktop.getDesktop().browse(help);
+            }
+            catch (URISyntaxException e) {
+                DesktopIOHandler.getInstance().writeErrorLog(e);
+                new DesktopInfoBox(null).warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
+                        + url + "\n(copied to your clipboard for convenience)");
+                new ClipboardHandler().setClipboardContents(url);
+            }
+        } else if (PGTUtil.IS_OSX) {
+            Runtime runtime = Runtime.getRuntime();
+            runtime.exec("open " + url);
+        } else if (PGTUtil.IS_LINUX) {
+            Runtime runtime = Runtime.getRuntime();
+            runtime.exec("xdg-open " + url);
+        } else {
+            new DesktopInfoBox(null).warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
+                    + url + "\n(copied to your clipboard for convenience)");
+            new ClipboardHandler().setClipboardContents(url);
         }
     }
 }

@@ -27,7 +27,7 @@ import org.darisadesigns.polyglotlina.Nodes.LogoNode;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PFrame;
 import org.darisadesigns.polyglotlina.CustomControls.PTextField;
-import org.darisadesigns.polyglotlina.PGTUtil.WindowMode;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil.WindowMode;
 import org.darisadesigns.polyglotlina.CustomControls.PCellEditor;
 import org.darisadesigns.polyglotlina.CustomControls.PCellRenderer;
 import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;

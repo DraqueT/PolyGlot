@@ -200,7 +200,7 @@ public final class ScrDeprecatedDeclensions extends PDialog {
 
         saveSet.stream().filter((entry) -> !entry.getValue().getText().trim().isEmpty())
         .forEach((entry) -> {
-            ConjugationNode saveNode = new ConjugationNode(-1);
+            ConjugationNode saveNode = new ConjugationNode(-1, core.getConjugationManager());
             String curId = entry.getKey();
 
             saveNode.setValue(entry.getValue().getText().trim());

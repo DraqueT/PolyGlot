@@ -25,7 +25,7 @@ import org.darisadesigns.polyglotlina.Nodes.LogoNode;
 import org.darisadesigns.polyglotlina.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.CustomControls.PFrame;
 import org.darisadesigns.polyglotlina.CustomControls.PList;
-import org.darisadesigns.polyglotlina.PGTUtil.WindowMode;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil.WindowMode;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;

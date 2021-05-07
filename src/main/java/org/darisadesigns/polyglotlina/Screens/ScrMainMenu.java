@@ -29,7 +29,7 @@ import org.darisadesigns.polyglotlina.CustomControls.ToDoTreeNode;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
-import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Desktop;
@@ -2017,8 +2017,22 @@ public final class ScrMainMenu extends PFrame {
             if (!WebInterface.isInternetConnected()) {
                 new DesktopInfoBox(this).warning("No Net Connection", "No network connection detected. Google generated graphs will not be rendered.");
             }
+            
+            try {
+                int wordCount = core.getWordCollection().getWordCount();
+                ScrProgressMenu progress = ScrProgressMenu.createScrProgressMenu("Generating Language Stats", wordCount + 5, true, true);
+                progress.setVisible(true);
 
-            core.buildLanguageReport();
+                if (PolyGlot.getPolyGlot().getRootWindow() != null) {
+                    progress.setLocation(PolyGlot.getPolyGlot().getRootWindow().getLocation());
+                }
+
+                core.buildLanguageReport(progress);
+            }
+            catch (InterruptedException e) {
+                core.getOSHandler().getIOHandler().writeErrorLog(e);
+                core.getOSHandler().getInfoBox().error("Language Stat Error", "Unable to generate language statistics: " + e.getLocalizedMessage());
+            }
 
             // test whether con-font family is installed on computer
             GraphicsEnvironment g = GraphicsEnvironment.getLocalGraphicsEnvironment();

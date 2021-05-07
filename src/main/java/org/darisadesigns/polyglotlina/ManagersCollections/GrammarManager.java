@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import org.darisadesigns.polyglotlina.DictCore;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -40,8 +41,10 @@ public class GrammarManager {
     private final List<GrammarChapNode> chapters;
     private final Map<Integer, byte[]> soundMap;
     private GrammarChapNode buffer;
+    public DictCore core;
     
-    public GrammarManager() {
+    public GrammarManager(DictCore _core) {
+        core = _core;
         soundMap = new HashMap<>();
         chapters = new ArrayList<>();
         buffer = new GrammarChapNode(this);

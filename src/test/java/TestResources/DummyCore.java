@@ -28,7 +28,7 @@ import org.darisadesigns.polyglotlina.Desktop.DesktopOSHandler;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.InfoBox;
-import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.PolyGlot;
 import org.darisadesigns.polyglotlina.OSHandler;
 
@@ -38,7 +38,7 @@ import org.darisadesigns.polyglotlina.OSHandler;
  */
 public class DummyCore extends DictCore {
     private DummyCore (PropertiesManager propsManager, OSHandler osHandler) {
-        super(propsManager, osHandler);
+        super(propsManager, osHandler, new PGTUtil());
     }
     
     public static DummyCore newCore() {
@@ -52,10 +52,13 @@ public class DummyCore extends DictCore {
             DummyCore core = new DummyCore(propsManager, osHandler);
             // Is this now really needed to be constructed?
             // Some screens use new PolyGlot static instance
-            PolyGlot polyGlot = (PolyGlot)constructor.newInstance(PGTUtil.TESTRESOURCES, (DictCore)core, osHandler);
+            PolyGlot polyGlot = new PolyGlot(PGTUtil.TESTRESOURCES, (DictCore)core, osHandler);
             
             return core;
         } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
+            System.err.println("Something's gone wrong with the Dummy Core generation: " + e.getLocalizedMessage());
+        }
+        catch (Exception e) {
             System.err.println("Something's gone wrong with the Dummy Core generation: " + e.getLocalizedMessage());
         }
         

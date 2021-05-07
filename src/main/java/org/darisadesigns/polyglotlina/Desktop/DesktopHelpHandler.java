@@ -43,7 +43,7 @@ public class DesktopHelpHandler implements HelpHandler {
     public void openHelpToLocation(String location) {
         try {
             if (WebInterface.isInternetConnected()) {
-                WebInterface.browseToLocation(PGTUtil.HELP_FILE_URL + "#" + location);
+                DesktopOSHandler.browseToLocation(PGTUtil.HELP_FILE_URL + "#" + location);
             } else {
                 openHelpLocal();
             }

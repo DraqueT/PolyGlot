@@ -269,7 +269,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         boolean ret = false;
         
         // don't bother checking blanks
-        if (conWord.isBlank()) {
+        if (core.getPGTUtil().isBlank(conWord)) {
             ret = false;
         } else {
             for (ConWord word : this.nodeMap.values()) {
@@ -293,7 +293,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         boolean ret = false;
         
         // don't bother checking blanks
-        if (local.isBlank()) {
+        if (core.getPGTUtil().isBlank(local)) {
             ret = true;
         } else {
             for (ConWord word : this.nodeMap.values()) {
@@ -474,7 +474,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
                     
                     String newValue = word.getValue();
                     
-                    if (newValue.isBlank()) {
+                    if (core.getPGTUtil().isBlank(newValue)) {
                         throw new Exception("Evolved word form is blank.");
                     }
                     

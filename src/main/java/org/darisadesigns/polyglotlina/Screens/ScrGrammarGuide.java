@@ -22,7 +22,7 @@ package org.darisadesigns.polyglotlina.Screens;
 import org.darisadesigns.polyglotlina.ClipboardHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.FormattedTextHelper;
+import org.darisadesigns.polyglotlina.Desktop.FormattedTextHelper;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
 import org.darisadesigns.polyglotlina.CustomControls.HighlightCaret;
@@ -72,7 +72,7 @@ import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.CustomControls.TreeNode;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
-import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**

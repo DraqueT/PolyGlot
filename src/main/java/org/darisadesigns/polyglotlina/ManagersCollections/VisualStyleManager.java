@@ -19,7 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
-import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;

@@ -191,6 +191,14 @@ public abstract class PropertiesManager {
     public boolean isIgnoreCase() {
         return ignoreCase;
     }
+    
+    /**
+     * Tries to load font from OS file, defaults to pulling from Font if unable
+     * (pulling from Font disables ligatures)
+     * @param _fontFamily 
+     * @throws java.lang.Exception if unable to load font 
+     */
+    public abstract void setFontCon(String _fontFamily) throws Exception;
 
     /**
      * @return the fontStyle

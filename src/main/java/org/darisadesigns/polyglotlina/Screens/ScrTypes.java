@@ -43,7 +43,7 @@ import java.awt.event.WindowListener;
 import javax.swing.JComponent;
 import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
-import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.PolyGlot;
 
 /**
@@ -269,7 +269,7 @@ public final class ScrTypes extends PFrame {
             saveNode.setNotes(((PTextPane) txtNotes).isDefaultText()
                     ? "" : txtNotes.getText());
             saveNode.setPattern(((PTextField) txtTypePattern).isDefaultText()
-                    ? "" : txtTypePattern.getText());
+                    ? "" : txtTypePattern.getText(), core);
             saveNode.setGloss(((PTextField) txtGloss).isDefaultText()
                     ? "" : txtGloss.getText());
             saveNode.setDefMandatory(chkDefMand.isSelected());

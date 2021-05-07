@@ -252,7 +252,7 @@ public final class ScrDeclensionsGrids extends PDialog {
                 PDeclensionPanelInterface comp = (PDeclensionPanelInterface)pnlTabDeclensions.getComponentAt(i);
                 
                 for (Entry<String, String> entry : comp.getAllDecValues().entrySet()) {
-                    ConjugationNode saveNode = new ConjugationNode(-1);
+                    ConjugationNode saveNode = new ConjugationNode(-1, core.getConjugationManager());
 
                     saveNode.setValue(entry.getValue().trim());
                     saveNode.setCombinedDimId(entry.getKey());

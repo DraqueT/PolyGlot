@@ -19,7 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
-import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import javax.swing.border.Border;
 import java.awt.Cursor;
 import java.awt.Dimension;

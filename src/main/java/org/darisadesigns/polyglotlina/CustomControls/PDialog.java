@@ -21,8 +21,8 @@
 package org.darisadesigns.polyglotlina.CustomControls;
 
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.PGTUtil;
-import org.darisadesigns.polyglotlina.PGTUtil.WindowMode;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil.WindowMode;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;

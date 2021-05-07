@@ -19,7 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
-import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Nodes.ImageNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.io.IOException;
@@ -77,7 +76,7 @@ public class ImageCollection extends DictionaryCollection<ImageNode> {
             emptyImage.setImageBytes(core.getOSHandler().getIOHandler().loadImageBytes(PGTUtil.NOT_FOUND_IMAGE));
         } catch (IOException e) {
             core.getOSHandler().getIOHandler().writeErrorLog(e);
-            new DesktopInfoBox(null).error("INTERNAL ERROR", 
+            core.getOSHandler().getInfoBox().error("INTERNAL ERROR", 
                     "Unable to locate missing-image image.\nThis is kind of an ironic error.");
         }
         
