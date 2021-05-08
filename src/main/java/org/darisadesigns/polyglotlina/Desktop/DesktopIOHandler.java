@@ -556,7 +556,8 @@ public final class DesktopIOHandler implements IOHandler {
             try {
                 // pass null shell class because this will ultimately be discarded
                 DesktopHelpHandler helpHandler = new DesktopHelpHandler();
-                var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), new DesktopInfoBox(null), helpHandler);
+                PFontHandler fontHandler = new PFontHandler();
+                var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), new DesktopInfoBox(null), helpHandler, fontHandler);
                 DictCore test = new DictCore(new PropertiesManager(), osHandler, new PGTUtil());
                 PolyGlot testShell = PolyGlot.getTestShell(test);
                 test.readFile(tmpSaveLocation.getAbsolutePath());
@@ -688,7 +689,7 @@ public final class DesktopIOHandler implements IOHandler {
                     try {
                         out.putNextEntry(new ZipEntry(PGTUtil.LOGOGRAPH_SAVE_PATH
                                 + curNode.getId() + ".png"));
-
+                        
                         BufferedImage write = ImageIO.read(new ByteArrayInputStream(curNode.getLogoBytes()));
                         ImageIO.write(write, "png", out);
 
@@ -843,6 +844,9 @@ public final class DesktopIOHandler implements IOHandler {
             String fileName) throws Exception {
         try (ZipFile zipFile = new ZipFile(fileName)) {
             for (LogoNode curNode : logoCollection.getAllLogos()) {
+                if (curNode.getLogoBytes() != null &&
+                        curNode.getLogoBytes().length != 0)
+                    continue;
                 ZipEntry imgEntry = zipFile.getEntry(PGTUtil.LOGOGRAPH_SAVE_PATH
                         + curNode.getId() + ".png");
 

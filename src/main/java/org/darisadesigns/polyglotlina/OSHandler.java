@@ -34,11 +34,13 @@ public abstract class OSHandler {
     protected final IOHandler ioHandler;
     protected final InfoBox infoBox;
     protected final HelpHandler helpHandler;
+    protected final PFontHandler fontHandler;
     
-    public OSHandler(IOHandler _ioHandler, InfoBox _infoBox, HelpHandler _helpHandler) {
+    public OSHandler(IOHandler _ioHandler, InfoBox _infoBox, HelpHandler _helpHandler, PFontHandler _fontHandler) {
         ioHandler = _ioHandler;
         infoBox = _infoBox;
         helpHandler =_helpHandler;
+        fontHandler = _fontHandler;
     }
     
     public abstract File getWorkingDirectory();

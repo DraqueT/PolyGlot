@@ -46,6 +46,7 @@ import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.DesktopHelpHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopOSHandler;
+import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.OptionsManager;
@@ -114,7 +115,8 @@ public final class PolyGlot {
             try {
                 // separated due to serious nature of Throwable vs Exception
                 DesktopHelpHandler helpHandler = new DesktopHelpHandler();
-                var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), cInfoBox, helpHandler);
+                PFontHandler fontHandler = new PFontHandler();
+                var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), cInfoBox, helpHandler, fontHandler);
 
                 DictCore core = new DictCore(new PropertiesManager(), osHandler, new PGTUtil());
                 new PolyGlot("", core, osHandler);
@@ -439,7 +441,12 @@ public final class PolyGlot {
      * @throws java.io.IOException
      */
     public static PolyGlot getTestShell(DictCore _core) throws IOException, Exception {
-        var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), new DesktopInfoBox(null), new DesktopHelpHandler());
+        var osHandler = new DesktopOSHandler(
+                DesktopIOHandler.getInstance(), 
+                new DesktopInfoBox(null), 
+                new DesktopHelpHandler(),
+                new PFontHandler()
+        );
         return new PolyGlot(Files.createTempDirectory("POLYGLOT").toFile().getAbsolutePath(), _core, osHandler);
     }
 

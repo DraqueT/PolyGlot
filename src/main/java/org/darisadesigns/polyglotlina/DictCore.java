@@ -300,6 +300,13 @@ public class DictCore {
         }
         
         try {
+            this.osHandler.fontHandler.setFontFrom(_fileName, this);
+        } catch (Exception e) {
+            this.osHandler.getIOHandler().writeErrorLog(e);
+            warningLog += e.getLocalizedMessage() + "\n";
+        }
+        
+        try {
             CustHandler handler;
             // if override XML value, load from that, otherwise pull from file
             if (overrideXML == null) {

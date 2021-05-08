@@ -25,6 +25,7 @@ import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.DesktopHelpHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopOSHandler;
+import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.InfoBox;
@@ -45,7 +46,8 @@ public class DummyCore extends DictCore {
         try {
             InfoBox infoBox = new DesktopInfoBox(null);
             DesktopHelpHandler helpHandler = new DesktopHelpHandler();
-            DesktopOSHandler osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), infoBox, helpHandler);
+            PFontHandler fontHandler = new PFontHandler();
+            DesktopOSHandler osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), infoBox, helpHandler, fontHandler);
             Constructor constructor = PolyGlot.class.getDeclaredConstructor(new Class[]{String.class, DictCore.class, DesktopOSHandler.class});
             constructor.setAccessible(true);
             PropertiesManager propsManager = new PropertiesManager();

@@ -25,14 +25,12 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import org.apache.commons.csv.CSVFormat;
 import org.darisadesigns.polyglotlina.ClipboardHandler;
 import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.HelpHandler;
 import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.InfoBox;
-import org.darisadesigns.polyglotlina.Java8Bridge;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 import org.darisadesigns.polyglotlina.OSHandler;
 import org.darisadesigns.polyglotlina.PGTUtil;
@@ -44,8 +42,8 @@ import org.darisadesigns.polyglotlina.Screens.ScrLanguageProblemDisplay;
  */
 public class DesktopOSHandler extends OSHandler {
     
-    public DesktopOSHandler(IOHandler _ioHandler, InfoBox _infoBox, HelpHandler _helpHandler) {
-        super(_ioHandler, _infoBox, _helpHandler);
+    public DesktopOSHandler(IOHandler _ioHandler, InfoBox _infoBox, HelpHandler _helpHandler, org.darisadesigns.polyglotlina.PFontHandler _fontHandler) {
+        super(_ioHandler, _infoBox, _helpHandler, _fontHandler);
     }
     
     public void setWorkingDirectory(String cwd) {

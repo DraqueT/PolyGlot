@@ -424,12 +424,6 @@ public final class ScrMainMenu extends PFrame {
 
         try {
             core.readFile(fileName);
-            try {
-                PFontHandler.setFontFrom(fileName, core);
-            } catch (IOException | FontFormatException e) {
-                core.getOSHandler().getIOHandler().writeErrorLog(e);
-                throw new IllegalStateException(e.getLocalizedMessage());
-            }
 
             if (curWindow == null) {
                 saveAllValues();
