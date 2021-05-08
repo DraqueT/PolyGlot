@@ -19,11 +19,11 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
-import org.darisadesigns.polyglotlina.CustomControls.PDeclensionGridPanel;
-import org.darisadesigns.polyglotlina.CustomControls.PDeclensionListPanel;
-import org.darisadesigns.polyglotlina.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PComboBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDeclensionGridPanel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDeclensionListPanel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
@@ -37,10 +37,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.swing.DefaultComboBoxModel;
-import org.darisadesigns.polyglotlina.CustomControls.PDeclensionPanelInterface;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDeclensionPanelInterface;
 import java.awt.Window;
 import javax.swing.JOptionPane;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 
 /**

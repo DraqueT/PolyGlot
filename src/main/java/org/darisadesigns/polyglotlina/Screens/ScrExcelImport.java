@@ -20,24 +20,24 @@
 package org.darisadesigns.polyglotlina.Screens;
 
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.ImportFileHelper;
-import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
-import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
-import org.darisadesigns.polyglotlina.CustomControls.PDialog;
-import org.darisadesigns.polyglotlina.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.ImportFileHelper;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PComboBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import java.io.File;
 import java.nio.charset.Charset;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.csv.CSVFormat;
-import org.darisadesigns.polyglotlina.CustomControls.PRadioButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PRadioButton;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
-import org.darisadesigns.polyglotlina.ImportFileHelper.DuplicateOption;
+import org.darisadesigns.polyglotlina.Desktop.ImportFileHelper.DuplicateOption;
 import org.darisadesigns.polyglotlina.PGTUtil;
-import org.darisadesigns.polyglotlina.PolyGlot;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *

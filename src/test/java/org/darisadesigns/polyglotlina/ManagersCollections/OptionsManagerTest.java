@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.OptionsManager;
 import TestResources.DummyCore;
 import java.awt.Dimension;
 import java.awt.Point;

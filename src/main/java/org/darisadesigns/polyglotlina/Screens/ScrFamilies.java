@@ -21,13 +21,13 @@ package org.darisadesigns.polyglotlina.Screens;
 
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PFrame;
-import org.darisadesigns.polyglotlina.CustomControls.PTextField;
-import org.darisadesigns.polyglotlina.CustomControls.FamTreeNode;
-import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
-import org.darisadesigns.polyglotlina.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.CustomControls.PTree;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.FamTreeNode;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTree;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import java.awt.Component;
 import java.awt.Toolkit;
@@ -49,8 +49,8 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
-import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
-import org.darisadesigns.polyglotlina.CustomControls.PTextPane;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 
 /**

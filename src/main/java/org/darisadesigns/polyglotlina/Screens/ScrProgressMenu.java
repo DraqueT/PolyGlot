@@ -20,7 +20,7 @@
 package org.darisadesigns.polyglotlina.Screens;
 
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
-import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.PLanguageStats.PLanguageStatsProgress;
 import javax.swing.SwingUtilities;
 

@@ -19,7 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.Desktop;
 
-import org.darisadesigns.polyglotlina.CustomControls.PGrammarPane;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PGrammarPane;
 import org.darisadesigns.polyglotlina.Nodes.ImageNode;
 import java.awt.Color;
 import java.awt.Font;
@@ -36,7 +36,6 @@ import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.PFontInfo;
 
 /**
  * This is a helper class, which deals with formatted text in Java

@@ -20,7 +20,6 @@
 package org.darisadesigns.polyglotlina.Desktop;
 
 import java.awt.Window;
-import org.darisadesigns.polyglotlina.SoundRecorder;
 
 /**
  *

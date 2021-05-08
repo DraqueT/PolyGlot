@@ -19,15 +19,15 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.PDialog;
-import org.darisadesigns.polyglotlina.CustomControls.PList;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PList;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode.*;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
-import org.darisadesigns.polyglotlina.PolyGlot;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *

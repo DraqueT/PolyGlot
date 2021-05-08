@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina;
 
+import org.darisadesigns.polyglotlina.Desktop.SoundRecorder;
 import java.awt.GraphicsEnvironment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;

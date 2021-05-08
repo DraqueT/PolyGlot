@@ -22,14 +22,14 @@ package org.darisadesigns.polyglotlina.Screens;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationDimension;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationNode;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.CustomControls.PDialog;
-import org.darisadesigns.polyglotlina.CustomControls.PCellEditor;
-import org.darisadesigns.polyglotlina.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.CustomControls.PList;
-import org.darisadesigns.polyglotlina.CustomControls.PTable;
-import org.darisadesigns.polyglotlina.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellEditor;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PList;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTable;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import java.awt.Cursor;
@@ -55,11 +55,11 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
-import org.darisadesigns.polyglotlina.CustomControls.PTextPane;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
-import org.darisadesigns.polyglotlina.PolyGlot;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  * This is the setup form for word forms (declensions/conjugations and their

@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina;
 
+import org.darisadesigns.polyglotlina.Desktop.PFontInfo;
 import TestResources.DummyCore;
 import java.awt.Color;
 import java.awt.GraphicsEnvironment;
@@ -30,7 +31,7 @@ import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
-import org.darisadesigns.polyglotlina.CustomControls.PGrammarPane;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PGrammarPane;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.FormattedTextHelper;
 import static org.junit.jupiter.api.Assertions.*;

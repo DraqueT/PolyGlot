@@ -21,14 +21,14 @@ package org.darisadesigns.polyglotlina.Screens;
 
 import java.awt.Color;
 import javax.swing.table.DefaultTableModel;
-import org.darisadesigns.polyglotlina.CustomControls.PDialog;
-import org.darisadesigns.polyglotlina.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.CustomControls.PTable;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTable;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.EvolutionPair;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
-import org.darisadesigns.polyglotlina.PolyGlot;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *

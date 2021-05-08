@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina;
 
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import TestResources.DummyCore;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -35,7 +36,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
-import org.darisadesigns.polyglotlina.ManagersCollections.OptionsManager;
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.OptionsManager;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;

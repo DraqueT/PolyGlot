@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina;
 
+import org.darisadesigns.polyglotlina.Desktop.ImportFileHelper;
 import TestResources.DummyCore;
 import java.util.List;
 import java.util.Map;

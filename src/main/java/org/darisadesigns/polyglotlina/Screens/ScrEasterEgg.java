@@ -19,7 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.PFrame;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
 import javax.swing.ImageIcon;
 import org.darisadesigns.polyglotlina.PGTUtil;
 

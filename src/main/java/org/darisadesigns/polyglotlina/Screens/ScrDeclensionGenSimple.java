@@ -23,18 +23,18 @@ import java.awt.Component;
 import javax.swing.DefaultListModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
-import org.darisadesigns.polyglotlina.CustomControls.PDialog;
-import org.darisadesigns.polyglotlina.CustomControls.PList;
-import org.darisadesigns.polyglotlina.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PList;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationGenRule;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationGenTransform;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationPair;
-import org.darisadesigns.polyglotlina.PolyGlot;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *

@@ -21,7 +21,7 @@ package TestResources;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.DesktopHelpHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopOSHandler;
@@ -30,7 +30,7 @@ import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.InfoBox;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
-import org.darisadesigns.polyglotlina.PolyGlot;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.OSHandler;
 
 /**

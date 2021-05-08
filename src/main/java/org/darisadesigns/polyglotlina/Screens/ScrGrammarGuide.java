@@ -19,24 +19,24 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.ClipboardHandler;
+import org.darisadesigns.polyglotlina.Desktop.ClipboardHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Desktop.FormattedTextHelper;
 import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
-import org.darisadesigns.polyglotlina.CustomControls.HighlightCaret;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
-import org.darisadesigns.polyglotlina.CustomControls.PFrame;
-import org.darisadesigns.polyglotlina.CustomControls.PGDocument;
-import org.darisadesigns.polyglotlina.CustomControls.PGrammarPane;
-import org.darisadesigns.polyglotlina.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.HighlightCaret;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PComboBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PGDocument;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PGrammarPane;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.ExternalCode.GlyphVectorPainter;
-import org.darisadesigns.polyglotlina.CustomControls.PTree;
-import org.darisadesigns.polyglotlina.SoundRecorder;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTree;
+import org.darisadesigns.polyglotlina.Desktop.SoundRecorder;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -68,12 +68,12 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.CustomControls.TreeNode;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
-import org.darisadesigns.polyglotlina.PolyGlot;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  * This form displays and allows editing of a chapter/section style grammar text

@@ -19,22 +19,22 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.ClipboardHandler;
+import org.darisadesigns.polyglotlina.Desktop.ClipboardHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.LogoNode;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.CustomControls.PFrame;
-import org.darisadesigns.polyglotlina.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil.WindowMode;
-import org.darisadesigns.polyglotlina.CustomControls.PCellEditor;
-import org.darisadesigns.polyglotlina.CustomControls.PCellRenderer;
-import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
-import org.darisadesigns.polyglotlina.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.CustomControls.PList;
-import org.darisadesigns.polyglotlina.CustomControls.PTable;
-import org.darisadesigns.polyglotlina.CustomControls.PTextPane;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellEditor;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellRenderer;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PList;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTable;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -82,10 +82,10 @@ import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
-import org.darisadesigns.polyglotlina.PolyGlot;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *

@@ -3,7 +3,7 @@
  ************************************************************/
 package org.darisadesigns.polyglotlina.ExternalCode;
 
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.DictCore;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -47,7 +47,7 @@ import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Position;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
-import org.darisadesigns.polyglotlina.PolyGlot;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  * The <code>JFontChooser</code> class is a swing component 

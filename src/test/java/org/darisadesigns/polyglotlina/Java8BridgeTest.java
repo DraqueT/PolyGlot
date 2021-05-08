@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina;
 
+import org.darisadesigns.polyglotlina.Desktop.Java8Bridge;
 import TestResources.DummyCore;
 import java.io.BufferedReader;
 import java.io.File;

@@ -19,13 +19,13 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.CustomControls.PFrame;
-import org.darisadesigns.polyglotlina.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.CustomControls.PToDoTree;
-import org.darisadesigns.polyglotlina.CustomControls.PToDoTreeModel;
-import org.darisadesigns.polyglotlina.CustomControls.ToDoTreeNode;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PToDoTree;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PToDoTreeModel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.ToDoTreeNode;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
@@ -81,15 +81,15 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.darisadesigns.polyglotlina.CheckLanguageErrors;
-import org.darisadesigns.polyglotlina.ClipboardHandler;
-import org.darisadesigns.polyglotlina.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.ClipboardHandler;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.Desktop.DesktopHelpHandler;
 import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.HelpHandler;
-import org.darisadesigns.polyglotlina.Java8Bridge;
-import org.darisadesigns.polyglotlina.ManagersCollections.OptionsManager;
+import org.darisadesigns.polyglotlina.Desktop.Java8Bridge;
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.OptionsManager;
 import org.darisadesigns.polyglotlina.PFontHandler;
-import org.darisadesigns.polyglotlina.PolyGlot;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.ToolsHelpers.ExportSpellingDictionary;
 import org.darisadesigns.polyglotlina.WebInterface;
 

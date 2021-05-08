@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina;
 
+import org.darisadesigns.polyglotlina.Desktop.SoundRecorder;
 import java.awt.GraphicsEnvironment;
 import java.lang.reflect.Field;
 import java.util.Map;

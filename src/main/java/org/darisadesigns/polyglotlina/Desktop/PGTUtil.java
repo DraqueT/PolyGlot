@@ -33,7 +33,7 @@ import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.SwingWorker;
-import org.darisadesigns.polyglotlina.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 
 /**
  *
