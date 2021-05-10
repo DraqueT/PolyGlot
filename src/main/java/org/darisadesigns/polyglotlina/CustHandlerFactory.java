@@ -95,6 +95,7 @@ public final class CustHandlerFactory {
     private static CustHandler get075orHigherHandler(final DictCore core, final int versionHierarchy) {
         return new CustHandler() {
 
+            private StringBuilder stringBuilder;
             PronunciationNode proBuffer;
             PronunciationNode romBuffer;
             String charRepCharBuffer = "";
@@ -225,6 +226,8 @@ public final class CustHandlerFactory {
 
             @Override
             public void startElement(String uri, String localName, String qName, Attributes attributes) {
+                stringBuilder = new StringBuilder();
+
                 if (qName.equalsIgnoreCase(PGTUtil.DICTIONARY_SAVE_DATE)) {
                     blastSave = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_XID)) {
@@ -509,6 +512,10 @@ public final class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_RULEOVERRIDE_XID)) {
                     bwordRuleOverride = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_CLASS_AND_VALUE_XID)) {
+                    String[] classValIds = stringBuilder.toString().split(",");
+                    int classId = Integer.parseInt(classValIds[0]);
+                    int valId = Integer.parseInt(classValIds[1]);
+                    core.getWordCollection().getBufferWord().setClassValue(classId, valId);
                     bclassVal = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_CLASS_TEXT_VAL_XID)){
                     core.getWordCollection().getBufferWord().setClassTextValue(ruleIdBuffer, ruleValBuffer);
@@ -820,10 +827,7 @@ public final class CustHandlerFactory {
                             .setRulesOverride(new String(ch, start, length).equals(PGTUtil.TRUE));
                     bwordRuleOverride = false;
                 } else if (bclassVal) {
-                    String[] classValIds = new String(ch, start, length).split(",");
-                    int classId = Integer.parseInt(classValIds[0]);
-                    int valId = Integer.parseInt(classValIds[1]);
-                    core.getWordCollection().getBufferWord().setClassValue(classId, valId);
+                    stringBuilder.append(new String(ch, start, length));
                 } else if (bwordClassTextVal) {
                     if (ruleIdBuffer == 0) {
                         String[] classValIds = new String(ch, start, length).split(",");
