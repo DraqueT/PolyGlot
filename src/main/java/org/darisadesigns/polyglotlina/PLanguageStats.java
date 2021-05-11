@@ -69,8 +69,6 @@ public final class PLanguageStats {
      * @return
      */
     public static String buildWordReport(DictCore core, PLanguageStatsProgress _progress) {
-        // TODO: get this function out of core!
-        // Uses ScrProgressMenu and core.getPolyGlot()
         final String[] ret = new String[1]; // using array so I can set value in a thread...
         ret[0] = "";
 

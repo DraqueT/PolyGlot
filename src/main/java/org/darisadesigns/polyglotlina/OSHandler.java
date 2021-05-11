@@ -36,6 +36,9 @@ public abstract class OSHandler {
     protected final HelpHandler helpHandler;
     protected final PFontHandler fontHandler;
     
+    protected CoreUpdatedListener coreUpdatedListener = null;
+    protected FileReadListener fileReadListener = null;
+    
     public OSHandler(IOHandler _ioHandler, InfoBox _infoBox, HelpHandler _helpHandler, PFontHandler _fontHandler) {
         ioHandler = _ioHandler;
         infoBox = _infoBox;
@@ -53,5 +56,29 @@ public abstract class OSHandler {
     
     public HelpHandler getHelpHandler() { return this.helpHandler; }
     
+    public void setCoreUpdatedListener(CoreUpdatedListener listener) {
+        this.coreUpdatedListener = listener;
+    }
+    
+    public CoreUpdatedListener getCoreUpdatedListener() {
+        return this.coreUpdatedListener;
+    }
+    
+    public void setFileReadListener(FileReadListener listener) {
+        this.fileReadListener = listener;
+    }
+    
+    public FileReadListener getFileReadListener() {
+        return this.fileReadListener;
+    }
+    
     public abstract void openLanguageReport(String reportContents);
+    
+    public interface CoreUpdatedListener {
+        void coreUpdated(DictCore core);
+    }
+    
+    public interface FileReadListener {
+        void fileRead(DictCore core);
+    }
 }

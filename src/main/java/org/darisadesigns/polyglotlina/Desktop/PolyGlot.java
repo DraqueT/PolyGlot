@@ -46,6 +46,8 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.OptionsManager;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.VisualStyleManager;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.OSHandler.CoreUpdatedListener;
+import org.darisadesigns.polyglotlina.OSHandler.FileReadListener;
 import org.darisadesigns.polyglotlina.Screens.ScrAbout;
 import org.darisadesigns.polyglotlina.Screens.ScrMainMenu;
 
@@ -64,8 +66,10 @@ public final class PolyGlot {
     private ScrMainMenu rootWindow;
     private DesktopOSHandler osHandler;
     private OptionsManager optionsManager;
+    private CoreUpdatedListener coreUpdatedListener;
+    private FileReadListener fileReadListener;
 
-    public PolyGlot(String overridePath, DictCore _core, DesktopOSHandler _osHandler) throws Exception {
+    private PolyGlot(String overridePath, DictCore _core, DesktopOSHandler _osHandler) throws Exception {
         PolyGlot.polyGlot = this;
         core = _core;
         osHandler = _osHandler;
@@ -121,6 +125,17 @@ public final class PolyGlot {
                 s.checkForUpdates(false);
                 s.setVisible(true);
                 cInfoBox.setParent(s);
+                
+                polyGlot.coreUpdatedListener = (DictCore _core) -> {
+                    polyGlot.getRootWindow().updateAllValues(_core);
+                    System.err.println("Core updated listener");
+                };
+                polyGlot.fileReadListener = (DictCore _core) -> {
+                    polyGlot.refreshUiDefaults();
+                    System.err.println("File read listener");
+                };
+                osHandler.setCoreUpdatedListener(polyGlot.coreUpdatedListener);
+                osHandler.setFileReadListener(polyGlot.fileReadListener);
 
                 try {
                     DesktopIOHandler.getInstance()

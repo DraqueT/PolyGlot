@@ -35,6 +35,8 @@ import org.darisadesigns.polyglotlina.ManagersCollections.ReversionManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.RomanizationManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.ToDoManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.WordClassCollection;
+import org.darisadesigns.polyglotlina.OSHandler.CoreUpdatedListener;
+import org.darisadesigns.polyglotlina.OSHandler.FileReadListener;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
@@ -188,11 +190,10 @@ public class DictCore {
             }
         }
 
-        // null root window indicates that this is a virtual dict core used for library analysis
-        // TODO: replace with signal?
-//        if (polyGlot.getRootWindow() != null) {
-//            polyGlot.getRootWindow().updateAllValues(_core);
-//        }
+        CoreUpdatedListener listener = _core.getOSHandler().getCoreUpdatedListener();
+        if(null != listener) {
+            listener.coreUpdated(_core);
+        }
     }
 
     /**
@@ -360,12 +361,11 @@ public class DictCore {
         if (!warningLog.trim().isEmpty()) {
             throw new IllegalStateException(warningLog);
         }
-        
-        // do not run in headless environments...
-        // TODO: replace with signal?
-//        if (polyGlot.getRootWindow() != null) {
-//            refreshMainMenu();
-//        }
+
+        FileReadListener listener = this.getOSHandler().getFileReadListener();
+        if (null != listener) {
+            listener.fileRead(this);
+        }
     }
     
     /**
