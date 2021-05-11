@@ -26,7 +26,7 @@ import org.darisadesigns.polyglotlina.Desktop.DesktopHelpHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopOSHandler;
 import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.InfoBox;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
@@ -38,7 +38,7 @@ import org.darisadesigns.polyglotlina.OSHandler;
  * @author draque
  */
 public class DummyCore extends DictCore {
-    private DummyCore (PropertiesManager propsManager, OSHandler osHandler) {
+    private DummyCore (DesktopPropertiesManager propsManager, OSHandler osHandler) {
         super(propsManager, osHandler, new PGTUtil());
     }
     
@@ -50,7 +50,7 @@ public class DummyCore extends DictCore {
             DesktopOSHandler osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), infoBox, helpHandler, fontHandler);
             Constructor constructor = PolyGlot.class.getDeclaredConstructor(new Class[]{String.class, DictCore.class, DesktopOSHandler.class});
             constructor.setAccessible(true);
-            PropertiesManager propsManager = new PropertiesManager();
+            DesktopPropertiesManager propsManager = new DesktopPropertiesManager();
             DummyCore core = new DummyCore(propsManager, osHandler);
             // Is this now really needed to be constructed?
             // Some screens use new PolyGlot static instance

@@ -24,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTable;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.EvolutionPair;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
@@ -48,7 +48,7 @@ public class ScrEvolveReport extends PDialog {
         
         reportModel = new DefaultTableModel(new String[]{"Notes", "Origin", "Evolution"}, 0);
         tblReport.setModel(reportModel);
-        tblReport.setFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
+        tblReport.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         
         for (EvolutionPair pair : pairs) {
             String notes = pair.issueDescription.isBlank() ? pair.notes : "Value reverted: " + "error-" + pair.issueDescription;

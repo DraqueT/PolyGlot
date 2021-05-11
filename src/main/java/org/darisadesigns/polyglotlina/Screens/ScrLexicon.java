@@ -21,7 +21,7 @@ package org.darisadesigns.polyglotlina.Screens;
 
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
@@ -242,8 +242,8 @@ public final class ScrLexicon extends PFrame {
             ConWord curWord = getCurrentWord();
             saveValuesTo(curWord);
             Font listFont = core.getPropertiesManager().isUseLocalWordLex() ?
-                    ((PropertiesManager)core.getPropertiesManager()).getFontLocal() :
-                    ((PropertiesManager)core.getPropertiesManager()).getFontCon();
+                    ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal() :
+                    ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
             lstLexicon.setFont(listFont);
             setupComboBoxesSwing();
             curPopulating = localPopulating;
@@ -418,7 +418,7 @@ public final class ScrLexicon extends PFrame {
                 pnlClasses.add(classText, gbc);
                 classPropMap.put(curProp.getId(), classText); // text box mapped to related class ID.
             } else {
-                final JComboBox<Object> classBox = new PComboBox<>(((PropertiesManager)core.getPropertiesManager()).getFontLocal());
+                final JComboBox<Object> classBox = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
                 DefaultComboBoxModel<Object> comboModel = new DefaultComboBoxModel<>();
                 classBox.setModel(comboModel);
                 comboModel.addElement("-- " + curProp.getValue() + " --");
@@ -879,8 +879,8 @@ public final class ScrLexicon extends PFrame {
      */
     private TitledPane createSearchPanel() {
         GridPane grid = new GridPane();
-        javafx.scene.text.Font font = ((PropertiesManager)core.getPropertiesManager()).getFXLocalFont();
-        javafx.scene.text.Font conFont = ((PropertiesManager)core.getPropertiesManager()).getFXConFont();
+        javafx.scene.text.Font font = ((DesktopPropertiesManager)core.getPropertiesManager()).getFXLocalFont();
+        javafx.scene.text.Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFXConFont();
         
         gridTitlePane = new TitledPane();
         gridTitlePane.setFont(font);
@@ -918,7 +918,7 @@ public final class ScrLexicon extends PFrame {
                         boolean empty) {
                     super.updateItem(item, empty);
                     if (item instanceof ConWord || item instanceof ConWordDisplay) {
-                        setFont(((PropertiesManager)core.getPropertiesManager()).getFXConFont());
+                        setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFXConFont());
                         setText(item.toString());
                     } else if (item instanceof EtyExternalParent) {
                         setFont(font);
@@ -976,7 +976,7 @@ public final class ScrLexicon extends PFrame {
      * fxProcess, so no latch logic necessary.
      */
     private void clearFilterInternal() {
-        Font localFont = ((PropertiesManager)core.getPropertiesManager()).getFontLocal();
+        Font localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
         txtConSrc.setText("");
         txtLocalSrc.setText("");
         txtProcSrc.setText("");
@@ -1220,13 +1220,13 @@ public final class ScrLexicon extends PFrame {
         cmbRootSrc.addEventHandler(EventType.ROOT, (Event evt) -> {
             if (cmbRootSrc.getValue() instanceof ConWord || cmbRootSrc.getValue() instanceof ConWordDisplay) {
                 cmbRootSrc.setStyle("-fx-font: "
-                        + ((PropertiesManager)core.getPropertiesManager())
+                        + ((DesktopPropertiesManager)core.getPropertiesManager())
                                 .getFontCon().getSize()
                         + "px \""
-                        + ((PropertiesManager)core.getPropertiesManager()).getFontCon()
+                        + ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon()
                                 .getFamily() + "\";");
             } else {
-                Font localFont = ((PropertiesManager)core.getPropertiesManager()).getFontLocal();
+                Font localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
                 cmbRootSrc.setStyle("-fx-font: "
                         + localFont.getSize() + "px \""
                         + localFont.getFamily() + "\";");
@@ -1666,7 +1666,7 @@ public final class ScrLexicon extends PFrame {
         jPanel3 = new javax.swing.JPanel();
         txtConWord = new PTextField(core, false, "-- ConWord --");
         txtLocalWord = new PTextField(core, true, "-- " + core.localLabel() + " Word --");
-        cmbType = new PComboBox(((PropertiesManager)core.getPropertiesManager()).getFontLocal());
+        cmbType = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
         txtProc = new PTextField(core, true, "-- Pronunciation --");
         chkProcOverride = new PCheckBox(nightMode, menuFontSize);
         chkRuleOverride = new PCheckBox(nightMode, menuFontSize);
@@ -1680,7 +1680,7 @@ public final class ScrLexicon extends PFrame {
         btnEtymology = new PButton(nightMode, menuFontSize);
         jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        lstLexicon = new PListLexicon(((PropertiesManager)core.getPropertiesManager()).getFontCon());
+        lstLexicon = new PListLexicon(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         btnAddWord = new PAddRemoveButton("+");
         btnDelWord = new PAddRemoveButton("-");
         jButton1 = new PButton(nightMode, menuFontSize);

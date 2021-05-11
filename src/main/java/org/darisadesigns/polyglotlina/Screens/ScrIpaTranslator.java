@@ -25,7 +25,7 @@ import org.darisadesigns.polyglotlina.ManagersCollections.PronunciationMgr;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
@@ -43,7 +43,7 @@ public final class ScrIpaTranslator extends PDialog {
         
         initComponents();
         
-        txtTarget.setFont(((PropertiesManager)core.getPropertiesManager()).getFontLocal());
+        txtTarget.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
         
         txtSource.getDocument().addDocumentListener(new DocumentListener(){
             @Override

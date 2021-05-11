@@ -64,7 +64,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
@@ -203,7 +203,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
      */
     private void setObjectProperties() {
         if (!core.getPropertiesManager().isOverrideRegexFont()) {
-            Font setFont = ((PropertiesManager)core.getPropertiesManager()).getFontCon();
+            Font setFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
             txtRuleRegex.setFont(setFont);
         }
     }
@@ -956,16 +956,16 @@ public final class ScrDeclensionGenClassic extends PDialog {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new PLabel("", menuFontSize);
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstCombinedDec = new PList(((PropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
+        lstCombinedDec = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new PLabel("", menuFontSize);
         jScrollPane2 = new javax.swing.JScrollPane();
-        lstRules = new PList(((PropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
+        lstRules = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
         btnAddRule = new PAddRemoveButton("+");
         btnDeleteRule = new PAddRemoveButton("-");
         chkDisableWordform = new PCheckBox(nightMode, menuFontSize);
-        btnMoveRuleUp = new PButton(nightMode, menuFontSize); btnMoveRuleUp.setFont(((PropertiesManager)core.getPropertiesManager()).getFontMenu()) ;
-        btnMoveRuleDown = new PButton(nightMode, menuFontSize); btnMoveRuleDown.setFont(((PropertiesManager)core.getPropertiesManager()).getFontMenu());
+        btnMoveRuleUp = new PButton(nightMode, menuFontSize); btnMoveRuleUp.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu()) ;
+        btnMoveRuleDown = new PButton(nightMode, menuFontSize); btnMoveRuleDown.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         jPanel3 = new javax.swing.JPanel();
         txtRuleName = new PTextField(core, true, "-- Name --");
         txtRuleRegex = new PTextField(core,
@@ -975,8 +975,8 @@ public final class ScrDeclensionGenClassic extends PDialog {
         sclTransforms = new javax.swing.JScrollPane();
         tblTransforms = new PTable(core);
         btnAddTransform = new PAddRemoveButton("+");
-        btnMoveTransformUp = new PButton(nightMode, menuFontSize); btnMoveTransformUp.setFont(((PropertiesManager)core.getPropertiesManager()).getFontMenu());
-        btnMoveTransformDown = new PButton(nightMode, menuFontSize); btnMoveTransformDown.setFont(((PropertiesManager)core.getPropertiesManager()).getFontMenu());
+        btnMoveTransformUp = new PButton(nightMode, menuFontSize); btnMoveTransformUp.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
+        btnMoveTransformDown = new PButton(nightMode, menuFontSize); btnMoveTransformDown.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         btnDeleteTransform = new PAddRemoveButton("-");
         pnlApplyClasses = new PClassCheckboxPanel(core, core.getTypes().getNodeById(typeId), true);
 

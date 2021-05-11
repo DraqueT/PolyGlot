@@ -379,7 +379,7 @@
             <Property name="toolTipText" type="java.lang.String" value="Set the delimiter to comma, semicolon, or tab (only matters for CSV imports)"/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox&lt;Delimiter&gt;(((PropertiesManager)core.getPropertiesManager()).getFontMenu())"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox&lt;Delimiter&gt;(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu())"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Delimiter&gt;"/>
           </AuxValues>
         </Component>
@@ -415,7 +415,7 @@
             <Property name="toolTipText" type="java.lang.String" value="If you are using quote encapsulation in your CSV, select the character here."/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox&lt;&gt;(((PropertiesManager)core.getPropertiesManager()).getFontMenu())"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox&lt;&gt;(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu())"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;QuoteOptions&gt;"/>
           </AuxValues>
         </Component>

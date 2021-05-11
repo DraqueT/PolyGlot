@@ -43,7 +43,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
@@ -75,7 +75,7 @@ public final class ScrEtymRoots extends PDialog {
         this.setModal(true);
         setupParentsPanels();
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        lblWord.setFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
+        lblWord.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         setupDrawPanel();
         setupForm();
         txtNotes.setText(word.getEtymNotes());
@@ -241,7 +241,7 @@ public final class ScrEtymRoots extends PDialog {
             // this field holds the text from a parent value
             textField.setEditable(false);
             textField.setText(core.getWordCollection().getNodeById(parentId).getValue());
-            textField.setFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
+            textField.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
             textField.setMaximumSize(new Dimension(9999, textField.getPreferredSize().height));
             textField.setMinimumSize(new Dimension(1, textField.getPreferredSize().height));
             textField.setToolTipText("Parent word");
@@ -266,9 +266,9 @@ public final class ScrEtymRoots extends PDialog {
         }
 
         //create new dropdown for potential additional parent to be added
-        final PComboBox<Object> newParentBox = new PComboBox<>(((PropertiesManager)core.getPropertiesManager()).getFontMenu());
+        final PComboBox<Object> newParentBox = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         newParentBox.setToolTipText("Add new parent to word here.");
-        newParentBox.setFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
+        newParentBox.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         DefaultComboBoxModel<Object> comboModel = new DefaultComboBoxModel<>();
         newParentBox.setModel(comboModel);
         newParentBox.setMaximumSize(new Dimension(99999, newParentBox.getPreferredSize().height));

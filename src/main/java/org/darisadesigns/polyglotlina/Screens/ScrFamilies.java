@@ -51,7 +51,7 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 
 /**
  *
@@ -104,7 +104,7 @@ public final class ScrFamilies extends PFrame {
         treFam.setModel(newModel);
         treFam.setRootVisible(false);
         lstWords.setModel(new DefaultListModel<>());
-        lstWords.setFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
+        lstWords.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
     }
     
     @Override
@@ -430,7 +430,7 @@ public final class ScrFamilies extends PFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        treFam = new PTree(((PropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize, nightMode);
+        treFam = new PTree(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize, nightMode);
         jPanel1 = new javax.swing.JPanel();
         chkInclSubFam = new PCheckBox(nightMode, menuFontSize);
         jScrollPane3 = new javax.swing.JScrollPane();

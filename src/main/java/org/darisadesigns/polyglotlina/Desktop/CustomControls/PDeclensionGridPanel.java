@@ -40,7 +40,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import org.apache.commons.lang3.StringUtils;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 
 /**
  * This represents a dimensional grid pane for the representation of word forms.
@@ -229,7 +229,7 @@ public final class PDeclensionGridPanel extends JPanel implements PDeclensionPan
     }
     
     private void setupRowHeight() {
-        FontMetrics fm = this.getFontMetrics(((PropertiesManager)core.getPropertiesManager()).getFontCon());
+        FontMetrics fm = this.getFontMetrics(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         int rowHeight = fm.getHeight() + 2;
         int numRows = table.getRowCount();
         

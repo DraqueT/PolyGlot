@@ -41,7 +41,7 @@ import java.util.Objects;
 import javax.swing.JComponent;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Nodes.DictNode;
 
 /**
@@ -72,7 +72,7 @@ public final class ScrQuizScreen extends PFrame {
         lblQNode.setResize(true);
         lblQNode.setMinimumSize(new Dimension(1, 1));
         jPanel3.setLayout(new BorderLayout());
-        lblQuestion.setFont(((PropertiesManager)core.getPropertiesManager()).getFontLocal());
+        lblQuestion.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
 
         if (!quiz.hasNext()) {
             core.getOSHandler().getInfoBox().warning("Empty Quiz", 
@@ -149,13 +149,13 @@ public final class ScrQuizScreen extends PFrame {
                 case Def:
                 case Classes: {
                     ConWord sourceWord = (ConWord) question.getSource();
-                    lblQNode.setFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
+                    lblQNode.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
                     lblQNode.setText(sourceWord.getValue());
                     break;
                 }
                 case ConEquiv: {
                     ConWord sourceWord = (ConWord) question.getSource();
-                    lblQNode.setFont(((PropertiesManager)core.getPropertiesManager()).getFontLocal());
+                    lblQNode.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
                     lblQNode.setText(sourceWord.getLocalWord());
                     break;
                 }
@@ -179,9 +179,9 @@ public final class ScrQuizScreen extends PFrame {
                 choice.setType(question.getType());
                 
                 if (question.getType() == QuizQuestion.QuestionType.ConEquiv) {
-                    choice.setFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
+                    choice.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
                 } else {
-                    choice.setFont(((PropertiesManager)core.getPropertiesManager()).getFontLocal());
+                    choice.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
                 }
 
                 // on button selection, record user choice and right/wrong status

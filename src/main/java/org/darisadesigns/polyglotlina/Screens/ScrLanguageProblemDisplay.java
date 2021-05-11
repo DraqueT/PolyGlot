@@ -26,7 +26,7 @@ import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode.*;
 import java.util.List;
 import javax.swing.DefaultListModel;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
@@ -67,7 +67,7 @@ public class ScrLanguageProblemDisplay extends PDialog {
 
         jSplitPane1 = new javax.swing.JSplitPane();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new PList(((PropertiesManager)core.getPropertiesManager()).getFontCon());
+        jList1 = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jTextField1 = new javax.swing.JTextField();

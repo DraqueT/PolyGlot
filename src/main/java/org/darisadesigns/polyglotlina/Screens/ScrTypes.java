@@ -42,7 +42,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.JComponent;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
@@ -433,7 +433,7 @@ public final class ScrTypes extends PFrame {
         txtNotes = new PTextPane(core, true, "-- Notes --");
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstTypes = new PList(((PropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
+        lstTypes = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
         btnAddType = new PAddRemoveButton("+");
         btnDelType = new PAddRemoveButton("-");
 

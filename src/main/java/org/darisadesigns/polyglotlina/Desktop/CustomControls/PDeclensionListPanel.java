@@ -37,7 +37,7 @@ import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 
 /**
  *
@@ -108,7 +108,7 @@ public final class PDeclensionListPanel extends JPanel implements PDeclensionPan
     }
     
     private void setupRowHeight() {
-        FontMetrics fm = this.getFontMetrics(((PropertiesManager)core.getPropertiesManager()).getFontCon());
+        FontMetrics fm = this.getFontMetrics(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         int rowHeight = fm.getHeight() + 2;
         int numRows = table.getRowCount();
         

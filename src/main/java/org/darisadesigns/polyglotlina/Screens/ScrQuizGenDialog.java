@@ -35,7 +35,7 @@ import org.darisadesigns.polyglotlina.QuizEngine.QuizFactory;
 import java.awt.Component;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 
 /**
  *
@@ -60,7 +60,7 @@ public final class ScrQuizGenDialog extends PFrame {
     }
     
     private void setupScreen() {
-        var propMan = ((PropertiesManager)core.getPropertiesManager());
+        var propMan = ((DesktopPropertiesManager)core.getPropertiesManager());
         chkLocalQuiz.setText(core.localLabel() + " Equivalent");
         chkConlangQuiz.setText(core.conLabel() + " Equivalent");
         chkClassQuiz.setFont(propMan.getFontLocal());
@@ -157,7 +157,7 @@ public final class ScrQuizGenDialog extends PFrame {
         jPanel2 = new javax.swing.JPanel();
         txtFilterConWord = new PTextField(core, false, "-- " + core.conLabel() + " Filter --");
         txtFilterLocalWord = new PTextField(core, true, "-- " + core.localLabel() + " Filter --");
-        cmbFilterType = new PComboBox(((PropertiesManager)core.getPropertiesManager()).getFontMenu());
+        cmbFilterType = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         txtFilterProc = new PTextField(core, true, "-- Pronunciation Filter --");
         btnClearFilter = new PButton(nightMode, menuFontSize);
         jLabel1 = new PLabel("", menuFontSize);

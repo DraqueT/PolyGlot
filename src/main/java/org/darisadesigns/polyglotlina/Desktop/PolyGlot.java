@@ -43,12 +43,6 @@ import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.DefaultEditorKit;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
-import org.darisadesigns.polyglotlina.Desktop.DesktopHelpHandler;
-import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
-import org.darisadesigns.polyglotlina.Desktop.DesktopOSHandler;
-import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
-import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.OptionsManager;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.VisualStyleManager;
 import org.darisadesigns.polyglotlina.DictCore;
@@ -119,7 +113,7 @@ public final class PolyGlot {
                 PFontHandler fontHandler = new PFontHandler();
                 var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), cInfoBox, helpHandler, fontHandler);
 
-                DictCore core = new DictCore(new PropertiesManager(), osHandler, new PGTUtil());
+                DictCore core = new DictCore(new DesktopPropertiesManager(), osHandler, new PGTUtil());
                 new PolyGlot("", core, osHandler);
                 
                 s = new ScrMainMenu(core);
@@ -179,7 +173,7 @@ public final class PolyGlot {
                     });
 
                     desk.setAboutHandler((AboutEvent e) -> {
-                        DictCore _core = new DictCore(new PropertiesManager(), osHandler, new PGTUtil());
+                        DictCore _core = new DictCore(new DesktopPropertiesManager(), osHandler, new PGTUtil());
                         polyGlot.setCore(_core);
                         ScrAbout.run(_core);
                     });
@@ -308,7 +302,7 @@ public final class PolyGlot {
     }
 
     public DictCore getNewCore() {
-        this.core = new DictCore(new PropertiesManager(), this.getOSHandler(), new PGTUtil());
+        this.core = new DictCore(new DesktopPropertiesManager(), this.getOSHandler(), new PGTUtil());
         return this.core;
     }
 

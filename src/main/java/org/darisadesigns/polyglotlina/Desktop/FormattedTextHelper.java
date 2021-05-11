@@ -72,7 +72,7 @@ public final class FormattedTextHelper extends org.darisadesigns.polyglotlina.Fo
                 
         while (!remaining.isEmpty()) {
             String nextNode = getNextNode(remaining);
-            Font conFont = ((PropertiesManager)core.getPropertiesManager()).getFontCon();
+            Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
             
             remaining = remaining.substring(nextNode.length());
             
@@ -138,7 +138,7 @@ public final class FormattedTextHelper extends org.darisadesigns.polyglotlina.Fo
                 
         while (!remaining.isEmpty()) {
             String nextNode = getNextNode(remaining);
-            conFont.awtFont = ((PropertiesManager)core.getPropertiesManager()).getFontCon();
+            conFont.awtFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
             
             remaining = remaining.substring(nextNode.length());
             
@@ -157,7 +157,7 @@ public final class FormattedTextHelper extends org.darisadesigns.polyglotlina.Fo
                 
                 if (!nextNode.isEmpty()){
                     conFont.awtFont = font.equals(core.getPropertiesManager().getFontConFamily()) ? 
-                            ((PropertiesManager)core.getPropertiesManager()).getFontCon() : new JLabel().getFont();
+                            ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon() : new JLabel().getFont();
                     Entry<String, PFontInfo> temp = new SecEntry<>(nextNode, conFont);
                     ret.add(temp);
                     conFont = new PFontInfo();

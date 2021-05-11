@@ -34,7 +34,7 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextFieldFilter;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
@@ -227,7 +227,7 @@ public final class ScrFontImportDialog extends PDialog {
         String fileName = txtFontLocation.getText();
 
         try {
-            var propertiesManager = ((PropertiesManager)core.getPropertiesManager());
+            var propertiesManager = ((DesktopPropertiesManager)core.getPropertiesManager());
             var size = Double.valueOf(txtFontSize.getText());
             
             if (rdoConlang.isSelected()) {

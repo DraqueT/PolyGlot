@@ -34,7 +34,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box.Filler;
 import javax.swing.JPanel;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Nodes.WordClass;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
@@ -65,7 +65,7 @@ public class PClassCheckboxPanel extends JPanel {
         includeAll = _includeAll;
         nightMode = PolyGlot.getPolyGlot().getOptionsManager().isNightMode();
         fontSize = PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();
-        checkBoxFont = ((PropertiesManager)core.getPropertiesManager()).getFontLocal();
+        checkBoxFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
         this.init(core);
     }
     

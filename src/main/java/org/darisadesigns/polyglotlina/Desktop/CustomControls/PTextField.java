@@ -21,7 +21,7 @@ package org.darisadesigns.polyglotlina.Desktop.CustomControls;
 
 import org.darisadesigns.polyglotlina.Desktop.ClipboardHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.VisualStyleManager;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
@@ -88,9 +88,9 @@ public final class PTextField extends JTextField {
         setupLook();
         
         if (overrideFont || !defText.isBlank()) {
-            setFont(((PropertiesManager)core.getPropertiesManager()).getFontLocal().deriveFont((float) PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize()));
+            setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal().deriveFont((float) PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize()));
         } else {
-            setFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
+            setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         }
     }
     
@@ -272,7 +272,7 @@ public final class PTextField extends JTextField {
         //setupLook();
 
         try {
-            PropertiesManager propMan = ((PropertiesManager)core.getPropertiesManager());
+            DesktopPropertiesManager propMan = ((DesktopPropertiesManager)core.getPropertiesManager());
             skipRepaint = true;
             if (propMan != null
                     && !curSetText
@@ -325,11 +325,11 @@ public final class PTextField extends JTextField {
 
         if (isDefaultText() && !defText.isEmpty()) {
             float menuFontSize = (float)PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();
-            setFont(((PropertiesManager)core.getPropertiesManager()).getFontLocal().deriveFont(menuFontSize));
+            setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal().deriveFont(menuFontSize));
             setForeground(Color.lightGray);
         } else {
             if (!overrideFont) {
-                setFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
+                setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
             }
             setForeground(Color.black);
         }

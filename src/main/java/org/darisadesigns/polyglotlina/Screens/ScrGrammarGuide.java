@@ -70,7 +70,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.CustomControls.TreeNode;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
@@ -156,7 +156,7 @@ public final class ScrGrammarGuide extends PFrame {
     private void initFontDrop() {
         cmbFonts.removeAllItems();
         cmbFonts.addItem(core.localLabel() + " Font");
-        cmbFonts.addItem(((PropertiesManager)core.getPropertiesManager()).getFontCon().getName());
+        cmbFonts.addItem(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon().getName());
     }
     
     private void setupChapTreeModel() {
@@ -263,9 +263,9 @@ public final class ScrGrammarGuide extends PFrame {
         txtName = new PTextField(core, true, "-- Name --");
         jPanel3 = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
-        cmbFonts = new PComboBox(((PropertiesManager)core.getPropertiesManager()).getFontLocal());
+        cmbFonts = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
         txtFontSize = new javax.swing.JTextField();
-        cmbFontColor = new PComboBox(((PropertiesManager)core.getPropertiesManager()).getFontMenu());
+        cmbFontColor = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         btnApply = new PButton(nightMode, menuFontSize);
         panSection = new javax.swing.JScrollPane();
         txtSection = new PGrammarPane(core);
@@ -278,7 +278,7 @@ public final class ScrGrammarGuide extends PFrame {
         txtTimer = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        treChapList = new PTree(((PropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize, nightMode);
+        treChapList = new PTree(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize, nightMode);
         txtSearch = new PTextField(core, true, "-- Search --");
         jLabel1 = new PLabel("", menuFontSize);
         btnAddSection = new PAddRemoveButton("+");
@@ -704,7 +704,7 @@ public final class ScrGrammarGuide extends PFrame {
         treChapList.requestFocus();
         soundRecorder.setTimer(txtTimer);
         soundRecorder.setSlider(sldSoundPosition);
-        txtSection.setDocument(new PGDocument(((PropertiesManager)core.getPropertiesManager()).getFontCon()));
+        txtSection.setDocument(new PGDocument(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon()));
         treChapList.setRootVisible(false);
         txtTimer.setText(defTime);
         txtSection.addStyle("default", null); // default style makes word wrap active
@@ -732,8 +732,8 @@ public final class ScrGrammarGuide extends PFrame {
      * Sets input font/font of selected text
      */
     private void setFont() {
-        Font natFont = ((PropertiesManager)core.getPropertiesManager()).getFontLocal();
-        Font conFont = ((PropertiesManager)core.getPropertiesManager()).getFontCon();
+        Font natFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
+        Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
         SimpleAttributeSet aset = new SimpleAttributeSet();
 
         // natlang font is always 0, conlang font always 1
@@ -847,7 +847,7 @@ public final class ScrGrammarGuide extends PFrame {
                 // only run replacement logic if currently set to Conlang font
                 // replacement logic at form level because this text editor can handle multiple fonts simultaneously
                 if (!repString.isEmpty()
-                        && cmbFonts.getSelectedItem().equals(((PropertiesManager)core.getPropertiesManager()).getFontCon().getName())) {
+                        && cmbFonts.getSelectedItem().equals(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon().getName())) {
                     try {
                         e.consume();
                         ClipboardHandler cb = new ClipboardHandler();

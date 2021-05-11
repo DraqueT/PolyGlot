@@ -39,7 +39,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableCellEditor;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
@@ -72,8 +72,8 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
         useConFont = _useConFont;
         double preSize = core.getPropertiesManager().getFontSize();
         
-        Font defFont = useConFont ? ((PropertiesManager)core.getPropertiesManager()).getFontCon()
-                : ((PropertiesManager)core.getPropertiesManager()).getFontLocal();
+        Font defFont = useConFont ? ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon()
+                : ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
         double fontSize = useConFont ? 
                 preSize :
                 PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();

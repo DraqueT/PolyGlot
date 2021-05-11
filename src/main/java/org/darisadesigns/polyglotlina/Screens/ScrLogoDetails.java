@@ -83,7 +83,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
@@ -199,7 +199,7 @@ public class ScrLogoDetails extends PFrame {
     private TitledPane createSearchPanel() {
         GridPane grid = new GridPane();
         javafx.scene.text.Font font = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
-        javafx.scene.text.Font conFont = ((PropertiesManager)core.getPropertiesManager()).getFXConFont();
+        javafx.scene.text.Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFXConFont();
         
         gridTitlePane = new TitledPane();
         gridTitlePane.setFont(font);
@@ -324,7 +324,7 @@ public class ScrLogoDetails extends PFrame {
      * Sets up fonts based on core properties
      */
     private void setupFonts() {
-        Font font = ((PropertiesManager)core.getPropertiesManager()).getFontCon();
+        Font font = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
 
         if (font == null) {
             return;
@@ -1069,14 +1069,14 @@ public class ScrLogoDetails extends PFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel6 = new PLabel("", menuFontSize);
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstLogos = new PList(((PropertiesManager)core.getPropertiesManager()).getFontCon());
+        lstLogos = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         jPanel2 = new javax.swing.JPanel();
         lblLogo = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        lstRelWords = new PList(((PropertiesManager)core.getPropertiesManager()).getFontCon());
+        lstRelWords = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         jLabel8 = new PLabel("", menuFontSize);
         jScrollPane4 = new javax.swing.JScrollPane();
-        lstRadicals = new PList(((PropertiesManager)core.getPropertiesManager()).getFontCon());
+        lstRadicals = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         jLabel10 = new PLabel("", menuFontSize);
         btnAddReading = new PAddRemoveButton("+");
         btnDelReading = new PAddRemoveButton("-");

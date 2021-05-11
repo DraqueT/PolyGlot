@@ -41,7 +41,7 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDeclensionPanelInt
 import java.awt.Window;
 import javax.swing.JOptionPane;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 
 /**
  *
@@ -302,8 +302,8 @@ public final class ScrDeclensionsGrids extends PDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        cmbDimX = new PComboBox(((PropertiesManager)core.getPropertiesManager()).getFontMenu());
-        cmbDimY = new PComboBox(((PropertiesManager)core.getPropertiesManager()).getFontMenu());
+        cmbDimX = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
+        cmbDimY = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         pnlTabDeclensions = new javax.swing.JTabbedPane();
         chkAutogenOverride = new javax.swing.JCheckBox();
         btnOk = new PButton(nightMode, menuFontSize);
@@ -357,7 +357,7 @@ public final class ScrDeclensionsGrids extends PDialog {
             .addComponent(pnlTabDeclensions)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(chkAutogenOverride)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 102, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnDeprecated)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCancel)
@@ -421,8 +421,8 @@ public final class ScrDeclensionsGrids extends PDialog {
     private javax.swing.JButton btnDeprecated;
     private javax.swing.JButton btnOk;
     private javax.swing.JCheckBox chkAutogenOverride;
-    private javax.swing.JComboBox<ConjugationNode> cmbDimX;
-    private javax.swing.JComboBox<ConjugationNode> cmbDimY;
+    private javax.swing.JComboBox<org.darisadesigns.polyglotlina.Nodes.ConjugationNode> cmbDimX;
+    private javax.swing.JComboBox<org.darisadesigns.polyglotlina.Nodes.ConjugationNode> cmbDimY;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTabbedPane pnlTabDeclensions;

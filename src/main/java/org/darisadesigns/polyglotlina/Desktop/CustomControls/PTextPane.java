@@ -44,7 +44,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextPane;
 import javax.swing.SwingWorker;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
@@ -86,10 +86,10 @@ public final class PTextPane extends JTextPane {
      */
     public void setFontFromCore() {
         if (overrideFont) {
-            setFont(((PropertiesManager)core.getPropertiesManager()).getFontLocal()
+            setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal()
                     .deriveFont((float)PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize()));
         } else {
-            setFont(((PropertiesManager)core.getPropertiesManager()).getFontCon());
+            setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         }
     }
     

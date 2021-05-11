@@ -24,7 +24,7 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellEditor;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellRenderer;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
 import java.awt.Color;
@@ -114,7 +114,7 @@ public final class ScrPhonology extends PFrame {
     }
 
     private void setupButtons() {
-        Font charis = ((PropertiesManager)core.getPropertiesManager()).getFontLocal();
+        Font charis = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
         btnDownProc.setFont(charis);
         btnDownRom.setFont(charis);
         btnUpProc.setFont(charis);
@@ -483,7 +483,7 @@ public final class ScrPhonology extends PFrame {
 
         boolean localPopulating = curPopulating;
         curPopulating = true;
-        var propMan = ((PropertiesManager)core.getPropertiesManager());
+        var propMan = ((DesktopPropertiesManager)core.getPropertiesManager());
 
         if (tblRep.getCellEditor() != null && tblRep.getSelectedRow() != -1 && tblRep.getRowCount() > 0) {
             tblRep.getCellEditor().stopCellEditing();

@@ -28,7 +28,7 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PList;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationGenRule;
@@ -215,7 +215,7 @@ public class ScrDeclensionGenSimple extends PDialog {
         chkDisableForm = new PCheckBox(nightMode, menuFontSize);
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstCombinedDec = new PList(((PropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
+        lstCombinedDec = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -393,7 +393,7 @@ public class ScrDeclensionGenSimple extends PDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JList<ConjugationPair> lstCombinedDec;
+    private javax.swing.JList<org.darisadesigns.polyglotlina.Nodes.ConjugationPair> lstCombinedDec;
     private javax.swing.JTextField txtRegex;
     private javax.swing.JTextField txtReplace;
     // End of variables declaration//GEN-END:variables

@@ -33,7 +33,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableCellRenderer;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
@@ -122,8 +122,8 @@ public final class PCellRenderer implements TableCellRenderer {
         double preSize = core.getPropertiesManager().getFontSize();
         
         Font selectedFont = useConFont ? 
-                ((PropertiesManager)core.getPropertiesManager()).getFontCon() : 
-                ((PropertiesManager)core.getPropertiesManager()).getFontLocal();
+                ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon() : 
+                ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
         fontSize = useConFont ? 
                 preSize :
                 PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();

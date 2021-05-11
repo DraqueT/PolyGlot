@@ -58,7 +58,7 @@ import javax.swing.table.TableColumn;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
@@ -525,7 +525,7 @@ public final class ScrDeclensionSetup extends PDialog {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new PLabel("", menuFontSize);
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstDeclensionList = new PList(((PropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
+        lstDeclensionList = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
         jPanel2 = new javax.swing.JPanel();
         txtDeclensionName = new PTextField(core, true, "-- Name --");//PTextField(core, true, "-- Name --");
         jLabel3 = new PLabel("", menuFontSize);

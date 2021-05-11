@@ -49,7 +49,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableColumn;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
-import org.darisadesigns.polyglotlina.Desktop.PropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 
 /**
  *
@@ -182,7 +182,7 @@ public final class ScrWordClasses extends PFrame {
             final int typeId = curNode.getId();
             final PCheckBox checkType = new PCheckBox(nightMode, menuFontSize);
             
-            checkType.setFont(((PropertiesManager)core.getPropertiesManager()).getFontLocal());
+            checkType.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
             checkType.setText(curNode.getValue());
             checkType.addItemListener(new ItemListener() {
                 final PCheckBox thisBox = checkType;
@@ -408,7 +408,7 @@ public final class ScrWordClasses extends PFrame {
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstProperties = new PList(((PropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
+        lstProperties = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
         btnAddProp = new PAddRemoveButton("+");
         btnDelProp = new PAddRemoveButton("-");
         jPanel1 = new javax.swing.JPanel();

@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.Desktop;
 
+import org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.font.TextAttribute;
@@ -31,12 +32,12 @@ import java.util.Arrays;
  *
  * @author edga_
  */
-public class PropertiesManager extends
-        org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager {
+public class DesktopPropertiesManager extends
+        PropertiesManager {
     private Font conFont = null;
     private Font localFont = PGTUtil.CHARIS_UNICODE;
     
-    public PropertiesManager() {
+    public DesktopPropertiesManager() {
         super();
         this.conFontStyle = Font.PLAIN;
     }
@@ -321,8 +322,8 @@ public class PropertiesManager extends
         
         if (this == comp) {
             ret = true;
-        } else if (comp instanceof PropertiesManager) {
-            PropertiesManager prop = (PropertiesManager) comp;
+        } else if (comp instanceof DesktopPropertiesManager) {
+            DesktopPropertiesManager prop = (DesktopPropertiesManager) comp;
             ret = ((conFont == null) && (prop.conFont == null)) || conFont.equals(prop.conFont);
             ret = ret && conFontStyle.equals(prop.conFontStyle);
             ret = ret && conFontSize == prop.conFontSize;
