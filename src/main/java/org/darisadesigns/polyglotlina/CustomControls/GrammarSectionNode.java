@@ -106,7 +106,8 @@ public class GrammarSectionNode extends TreeNode {
         } else if (comp instanceof GrammarSectionNode) {
             GrammarSectionNode compSec = (GrammarSectionNode)comp;
             
-            ret = WebInterface.archiveHTML(sectionText, manager.core).equals(WebInterface.archiveHTML(compSec.sectionText, manager.core));
+            ret = WebInterface.archiveHTML(sectionText, manager.getCore())
+                    .equals(WebInterface.archiveHTML(compSec.sectionText, manager.getCore()));
             ret = ret && name.equals(compSec.name);
             ret = ret && recordingId == compSec.recordingId;
         }

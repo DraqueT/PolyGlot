@@ -41,7 +41,7 @@ public class GrammarManager {
     private final List<GrammarChapNode> chapters;
     private final Map<Integer, byte[]> soundMap;
     private GrammarChapNode buffer;
-    public DictCore core;
+    private final DictCore core;
     
     public GrammarManager(DictCore _core) {
         core = _core;
@@ -157,6 +157,10 @@ public class GrammarManager {
      */
     public GrammarSectionNode getNewSection() {
         return new GrammarSectionNode(this);
+    }
+    
+    public DictCore getCore() {
+        return this.core;
     }
     
     /**
