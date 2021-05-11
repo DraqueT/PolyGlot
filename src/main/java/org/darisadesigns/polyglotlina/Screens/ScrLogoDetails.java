@@ -910,8 +910,9 @@ public class ScrLogoDetails extends PFrame {
         }
 
         try {
+            BufferedImage img = ImageIO.read(new File(fileName));
             LogoNode curNode = (LogoNode) lstLogos.getSelectedValue();
-            curNode.setLogoBytes(DesktopIOHandler.getInstance().loadImageBytes(fileName));
+            curNode.setLogoBytes(DesktopIOHandler.getInstance().loadImageBytesFromImage(img));
             saveReadings(lstLogos.getSelectedIndex());
             saveRads(lstLogos.getSelectedIndex());
             populateLogoProps();

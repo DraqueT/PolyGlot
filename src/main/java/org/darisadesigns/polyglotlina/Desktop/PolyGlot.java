@@ -128,11 +128,9 @@ public final class PolyGlot {
                 
                 polyGlot.coreUpdatedListener = (DictCore _core) -> {
                     polyGlot.getRootWindow().updateAllValues(_core);
-                    System.err.println("Core updated listener");
                 };
                 polyGlot.fileReadListener = (DictCore _core) -> {
                     polyGlot.refreshUiDefaults();
-                    System.err.println("File read listener");
                 };
                 osHandler.setCoreUpdatedListener(polyGlot.coreUpdatedListener);
                 osHandler.setFileReadListener(polyGlot.fileReadListener);
