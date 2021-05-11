@@ -32,6 +32,7 @@ import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.InfoBox;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 import org.darisadesigns.polyglotlina.OSHandler;
+import org.darisadesigns.polyglotlina.PFontHandler;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.Screens.ScrLanguageProblemDisplay;
 
@@ -41,7 +42,7 @@ import org.darisadesigns.polyglotlina.Screens.ScrLanguageProblemDisplay;
  */
 public class DesktopOSHandler extends OSHandler {
     
-    public DesktopOSHandler(IOHandler _ioHandler, InfoBox _infoBox, HelpHandler _helpHandler, org.darisadesigns.polyglotlina.PFontHandler _fontHandler) {
+    public DesktopOSHandler(IOHandler _ioHandler, InfoBox _infoBox, HelpHandler _helpHandler, PFontHandler _fontHandler) {
         super(_ioHandler, _infoBox, _helpHandler, _fontHandler);
     }
     
