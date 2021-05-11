@@ -69,7 +69,7 @@ public final class PolyGlot {
     private CoreUpdatedListener coreUpdatedListener;
     private FileReadListener fileReadListener;
 
-    private PolyGlot(String overridePath, DictCore _core, DesktopOSHandler _osHandler) throws Exception {
+    public PolyGlot(String overridePath, DictCore _core, DesktopOSHandler _osHandler) throws Exception {
         PolyGlot.polyGlot = this;
         core = _core;
         osHandler = _osHandler;
