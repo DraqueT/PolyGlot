@@ -87,10 +87,10 @@ public class PFontHandler extends org.darisadesigns.polyglotlina.PFontHandler {
                             byte[] cachedFont = core.getOSHandler().getIOHandler().getByteArrayFromFile(tempFile);
 
                             if (isConFont) {
-                                ((PropertiesManager)core.getPropertiesManager()).setFontConRaw(font);
+                                ((DesktopPropertiesManager)core.getPropertiesManager()).setFontConRaw(font);
                                 core.getPropertiesManager().setCachedFont(cachedFont);
                             } else {
-                                ((PropertiesManager)core.getPropertiesManager()).setLocalFont(font);
+                                ((DesktopPropertiesManager)core.getPropertiesManager()).setLocalFont(font);
                                 core.getPropertiesManager().setCachedLocalFont(cachedFont);
                             }
                         } catch (FontFormatException e) {
