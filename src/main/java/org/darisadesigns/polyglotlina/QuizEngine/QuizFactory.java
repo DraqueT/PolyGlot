@@ -28,7 +28,6 @@ import org.darisadesigns.polyglotlina.Nodes.WordClass;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -142,18 +141,15 @@ public class QuizFactory {
             question.setSource(curWord);
 
             switch (questionType) {
-                case Local:
-                case Proc:
-                case Def:
-                case ConEquiv:
+                case Local, Proc, Def, ConEquiv -> {
                     core.getWordCollection().getRandomNodes(numChoices - 1, curWord.getId()).forEach((node) -> {
                         question.addChoice(node);
                     });
                     question.addChoice(curWord);
                     question.setAnswer(curWord);
                     question.setSource(curWord);
-                    break;
-                case PoS:
+                }
+                case PoS -> {
                     core.getTypes().getRandomNodes(numChoices - 1, curWord.getWordTypeId()).forEach((node) -> {
                         question.addChoice(node);
                     });
@@ -161,12 +157,50 @@ public class QuizFactory {
                     question.addChoice(typeAnswer);
                     question.setAnswer(typeAnswer);
                     question.setSource(curWord);
-                    break;
-                case Classes:
-                    int curId = 0;
+                }
+                case Classes -> {
+                    final var noClass = "No Class";
+                    var curId = 0;
+                    var skipChoices = 1; // allows for additional choices to be subtracted
+                    
+                    // create correct answer
+                    var valAnswer = new WordClassValue();
+                    var propIt = curWord.getClassValues().iterator();
+
+                    while (propIt.hasNext()) {
+                        Entry<Integer, Integer> curEntry = propIt.next();
+                        WordClass curProp = (WordClass) core.getWordClassCollection().getNodeById(curEntry.getKey());
+                        WordClassValue curVal = curProp.getValueById(curEntry.getValue());
+
+                        if (!valAnswer.getValue().isEmpty()) {
+                            valAnswer.setValue(valAnswer.getValue() + ", ");
+                        }
+
+                        valAnswer.setValue(valAnswer.getValue() + curVal.getValue());
+                    }
+                    valAnswer.setId(0);
+                    
+                    // handle case of words with no class
+                    if (valAnswer.getValue().isEmpty()) {
+                        valAnswer.setValue(noClass);
+                    } else if (new Random(System.nanoTime()).nextBoolean()) {
+                        // randomly decide whether or not to add "no class" choice if word DOES have class
+                        curId++;
+                        skipChoices++;
+                        var noClassAnswer = new WordClassValue();
+                        noClassAnswer.setValue(noClass);
+                        noClassAnswer.setId(curId);
+                        question.addChoice(noClassAnswer);
+                    }
+
+                    question.addChoice(valAnswer);
+                    
+                    
+                    
+                    // create incorrect answers
                     for (List<PEntry<Integer, Integer>> curCombo
                             : core.getWordClassCollection()
-                                    .getRandomPropertyCombinations(numChoices - 1, curWord)) {
+                                    .getRandomPropertyCombinations(numChoices - skipChoices, curWord)) {
                         curId++;
                         WordClassValue choiceNode = new WordClassValue();
 
@@ -182,36 +216,17 @@ public class QuizFactory {
                         }
 
                         choiceNode.setId(curId);
-                        question.addChoice(choiceNode);
-                    }
-
-                    WordClassValue valAnswer = new WordClassValue();
-                    Iterator<Entry<Integer, Integer>> propIt = curWord.getClassValues().iterator();
-
-                    while (propIt.hasNext()) {
-                        Entry<Integer, Integer> curEntry = propIt.next();
-                        WordClass curProp = (WordClass) core.getWordClassCollection().getNodeById(curEntry.getKey());
-                        WordClassValue curVal = curProp.getValueById(curEntry.getValue());
-
-                        if (!valAnswer.getValue().isEmpty()) {
-                            valAnswer.setValue(valAnswer.getValue() + ", ");
+                        
+                        // never add a copy of the correct answer
+                        if (!choiceNode.equals(valAnswer)) {
+                            question.addChoice(choiceNode);
                         }
-
-                        valAnswer.setValue(valAnswer.getValue() + curVal.getValue());
                     }
-                    valAnswer.setId(0);
-
-                    // handle case of words with no class
-                    if (valAnswer.getValue().isEmpty()) {
-                        valAnswer.setValue("No Class");
-                    }
-
-                    question.addChoice(valAnswer);
+                    
                     question.setAnswer(valAnswer);
                     question.setSource(curWord);
-                    break;
-                default:
-                    throw new Exception("Unhandled question type.");
+                }
+                default -> throw new Exception("Unhandled question type.");
             }
 
             ret.addNode(question);
