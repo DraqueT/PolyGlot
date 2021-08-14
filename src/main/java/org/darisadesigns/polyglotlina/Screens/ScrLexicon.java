@@ -247,10 +247,6 @@ public final class ScrLexicon extends PFrame {
             curPopulating = localPopulating;
             forceUpdate = false;
             populateProperties();
-            ((PTextField) txtConWord).setCore(_core);
-            ((PTextField)txtLocalWord).setCore(_core);
-            ((PTextField)txtProc).setCore(_core);
-            ((PTextPane)txtDefinition).setCore(_core);
             
             // ensures multiple logograph screens can't be open at once
             btnLogographs.setEnabled(btnLogoShouldEnable());

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -50,7 +50,7 @@ import javax.swing.text.JTextComponent;
  *
  * @author draque
  */
-public final class PTextField extends JTextField {
+public final class PTextField extends JTextField implements CoreUpdateSubscriptionInterface {
 
     private DictCore core;
     private boolean skipRepaint = false;
@@ -77,7 +77,7 @@ public final class PTextField extends JTextField {
         }
         pVis.addChangeListener(new PScrollRepainter());
 
-        core = _core;
+        setCore(_core);
         defText = _defText;
         overrideFont = _overrideFont;
         setupListeners();
@@ -87,7 +87,7 @@ public final class PTextField extends JTextField {
         setupLook();
         
         if (overrideFont || !defText.isBlank()) {
-            setFont(core.getPropertiesManager().getFontLocal().deriveFont((float) core.getOptionsManager().getMenuFontSize()));
+            setFont(core.getPropertiesManager().getFontLocal());
         } else {
             setFont(core.getPropertiesManager().getFontCon());
         }
@@ -116,7 +116,12 @@ public final class PTextField extends JTextField {
         super.setBackground(b);
     }
 
+    @Override
     public void setCore(DictCore _core) {
+        if (core != _core && _core != null) {
+            _core.subscribe(this);
+        }
+        
         core = _core;
     }
 
@@ -238,6 +243,15 @@ public final class PTextField extends JTextField {
         if (worker == null || worker.isDone()) {
             worker = PGTUtil.getFlashWorker(this, _flashColor, isBack);
             worker.execute();
+        }
+    }
+
+    @Override
+    public void updateFromCore() {
+        if (overrideFont) {
+            this.setFont(core.getPropertiesManager().getFontLocal());
+        } else {
+            this.setFont(core.getPropertiesManager().getFontCon());
         }
     }
 

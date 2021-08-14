@@ -150,7 +150,7 @@ public class PropertiesManager {
     }
     
     public Font getFontLocal(double size) {
-        return localFont.deriveFont(Font.PLAIN, (float)size);
+        return localFont.deriveFont(localFont.getStyle(), (float)size);
     }
     
     public void setLocalFont(Font _localFont) {
@@ -169,6 +169,10 @@ public class PropertiesManager {
     
     public void setLocalFontSize(double size) {
         localFontSize = size;
+    }
+    
+    public double getLocalFontSize() {
+        return localFontSize;
     }
     
     /**
