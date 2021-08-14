@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -66,8 +66,6 @@ public class ScrLangProps extends PFrame {
         initComponents();
         populateProperties();
         setAlphaLegal();
-
-        txtAlphaOrder.setFont(core.getPropertiesManager().getFontCon());
 
         txtKerning.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -251,7 +249,6 @@ public class ScrLangProps extends PFrame {
     private void setConFont(Font _font, int fontStyle, int fontSize) {
         core.getPropertiesManager().setFontCon(_font, fontStyle, fontSize);
         Font conFont = core.getPropertiesManager().getFontCon();
-        txtAlphaOrder.setFont(conFont);
         txtFont.setText(conFont.getFamily());
 
         try {
@@ -270,14 +267,14 @@ public class ScrLangProps extends PFrame {
         }
 
         testRTLWarning();
+        core.pushUpdate();
     }
 
     private void setLocalFont(Font localFont) {
         if (localFont != null) {
-
             core.getPropertiesManager().setLocalFont(localFont, localFont.getSize2D());
-
             txtLocalFont.setText(localFont.getFamily());
+            core.pushUpdate();
         }
     }
 
@@ -664,7 +661,6 @@ public class ScrLangProps extends PFrame {
         try {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             core.getPropertiesManager().refreshFonts();
-            txtAlphaOrder.setFont(core.getPropertiesManager().getFontCon());
         }
         catch (Exception e) {
             InfoBox.error("Font Refresh Failed", e.getLocalizedMessage(), this);

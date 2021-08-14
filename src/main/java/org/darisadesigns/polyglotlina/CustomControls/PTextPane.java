@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -49,7 +49,7 @@ import javax.swing.SwingWorker;
  *
  * @author draque
  */
-public final class PTextPane extends JTextPane {
+public final class PTextPane extends JTextPane implements CoreUpdateSubscriptionInterface {
 
     private SwingWorker worker = null;
     private final String defText;
@@ -58,7 +58,7 @@ public final class PTextPane extends JTextPane {
     private final boolean overrideFont;
 
     public PTextPane(DictCore _core, boolean _overrideFont, String _defText) {
-        core = _core;
+        setCore(_core);
         defText = _defText;
         overrideFont = _overrideFont;
         this.setContentType("text/html");
@@ -66,7 +66,6 @@ public final class PTextPane extends JTextPane {
 
         setupListeners();
         setText(defText);
-        setFontFromCore();
         
         this.setEditorKit(new PHTMLEditorKit());
     }
@@ -84,8 +83,7 @@ public final class PTextPane extends JTextPane {
      */
     public void setFontFromCore() {
         if (overrideFont) {
-            setFont(core.getPropertiesManager().getFontLocal()
-                    .deriveFont((float)core.getOptionsManager().getMenuFontSize()));
+            setFont(core.getPropertiesManager().getFontLocal());
         } else {
             setFont(core.getPropertiesManager().getFontCon());
         }
@@ -267,7 +265,12 @@ public final class PTextPane extends JTextPane {
         });
     }
     
+    @Override
     public void setCore(DictCore _core) {
+        if (core != _core && _core != null) {
+            _core.subscribe(this);
+        }
+        
         core = _core;
         setFontFromCore();
     }
@@ -457,5 +460,10 @@ public final class PTextPane extends JTextPane {
      */
     private String getSuperText() {
         return super.getText().replaceAll(PGTUtil.RTL_CHARACTER, "").replaceAll(PGTUtil.LTR_MARKER, "");
+    }
+
+    @Override
+    public void updateFromCore() {
+        setFontFromCore();
     }
 }
