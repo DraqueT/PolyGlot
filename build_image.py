@@ -43,6 +43,7 @@ LIN_INS_NAME = 'PolyGlot-Ins-Lin.deb'
 # OSX BUILD CONSTANTS
 OSX_INS_NAME = 'PolyGlot-Ins-Osx.dmg'
 SIGN_IDENTITY = '' # set in main for timing reasons
+DISTRIB_IDENTITY = '' # set in main for timing reasons
 
 
 ###############################
@@ -73,6 +74,7 @@ def main(args):
     global POLYGLOT_BUILD
     global JAVA_HOME
     global SIGN_IDENTITY
+    global DISTRIB_IDENTITY
     global IS_RELEASE
     global JAR_W_DEP
     global JAR_WO_DEP
@@ -101,6 +103,15 @@ def main(args):
     if '-mac-sign-identity' in args:
         command_index = args.index('-mac-sign-identity')
         SIGN_IDENTITY = args[command_index + 1]
+        
+        # remove args after consuming
+        del args[command_index + 1]
+        del args[command_index]
+
+    # allows specifying code signing for mac distribution
+    if '-mac-distrib-cert' in args:
+        command_index = args.index('-mac-distrib-cert')
+        DISTRIB_IDENTITY = args[command_index + 1]
         
         # remove args after consuming
         del args[command_index + 1]
@@ -328,8 +339,8 @@ def distOsx():
     if(path.exists('PolyGlot.app/Contents/runtime/Contents/MacOS/libjli.dylib')):
         os.remove('PolyGlot.app/Contents/runtime/Contents/MacOS/libjli.dylib')
 
-    if SIGN_IDENTITY:
-        print('Code signing app image...')
+    if SIGN_IDENTITY and not DISTRIB_IDENTITY: # only sign with dev identity
+        print('Code signing app image with developer certificate...')
         command = ('codesign ' +
             '--force ' + # Overwrite existing signature
             '--timestamp ' + # Embed secure timestamps
@@ -339,17 +350,42 @@ def distOsx():
             'PolyGlot.app')
 
         os.system(command)
+    elif not DISTRIB_IDENTITY:
+        print('No code signing identity specified, app image will not be signed as developer')
+
+    if DISTRIB_IDENTITY:
+        print('Code signing app image with distribution certificate...')
+        command = ('codesign ' +
+            '--force ' + # Overwrite existing signature
+            '--timestamp ' + # Embed secure timestamps
+            '--options runtime ' + # Enable hardened runtime
+            '--entitlements packaging_files/mac/entitlements.plist ' + # Add entitlements
+            '--sign "' + DISTRIB_IDENTITY + '" ' +
+            'PolyGlot.app')
+
+        os.system(command)
     else:
-        print('No code signing identity specified, app image will not be signed')
+        print('No distribution signing identity specified, app image will not be signed for distribution')
+
+    POLYGLOT_DMG = 'PolyGlot-' + POLYGLOT_VERSION + '.dmg'
 
     if distutils.spawn.find_executable('dmgbuild'):
         print('Creating distribution package...')
         command = ('dmgbuild ' +
-            '-s packaging_files/mac/dmg_settings.py ' +
-            'PolyGlot ' +
-            'PolyGlot-' + POLYGLOT_VERSION + '.dmg')
+            '-s packaging_files/mac/dmg_settings.py PolyGlot ' + POLYGLOT_DMG)
 
         os.system(command)
+
+        if DISTRIB_IDENTITY:
+            print('Code signing dmg installer image with distribution certificate...')
+            command = ('codesign ' +
+                '--timestamp ' + # Embed secure timestamps
+                '--entitlements packaging_files/mac/entitlements.plist ' + # Add entitlements
+                '--sign "' + DISTRIB_IDENTITY + '" ' + POLYGLOT_DMG)
+
+            os.system(command)
+        else:
+            print('No distribution signing identity specified, dmg installer will not be signed for distribution')
 
         if copyDestination != "":
             copyInstaller('PolyGlot-' + POLYGLOT_VERSION + '.dmg')
