@@ -2,13 +2,13 @@ If you're looking to work on PolyGlot independently or to contribute, here's how
 
 	-----------                         BASIC DEVELOPMENT SETUP				-----------
 
-1) Download Open JDK 14 (or higher)
+1) Download Open JDK 17 (or higher)
 	- Copy to appropriate directory
 	- add environment variables (JAVA_HOME and bin directory to path)
 2) Install Maven
         - Copy to appropriate directory
         - add environment variable (MAVEN_HOME)
-3) Download/install Netbeans 11.2 or newer (non-optional)
+3) Download/install Netbeans 12 or newer
 	- remember to set the jdk path as appropriate on install if asked (might not auto-populate)
 4) Install git (not strictly necessary, but command line git is more powerful than the UI based stuff you can do in Netbeans)
 5) Clone PolyGlot from the git repo (https://github.com/DraqueT/PolyGlot.git)
