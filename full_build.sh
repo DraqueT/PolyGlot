@@ -126,14 +126,17 @@ if [ "$#" -eq 0 ] || [ "$1" == "$CONST_OSX" ] || [ "$1" == "$CONST_RELEASE" ]; t
     git pull
     
     # Apple signature must be provided. Must have xcode installed and pull in from keychain.
+    # Python3 must be brew installed if not present (not included on macs by default)
     if [ "$BUILD_STEP" == "" ] ; then
-        python build_image.py \
+        python3 build_image.py \
             -copyDestination "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas" \
-            -mac-sign-identity "Apple Development: draquemail@gmail.com (A3YEXQ2CB4)"
+            -mac-sign-identity "Apple Development: Draque Thompson (A3YEXQ2CB4)" #\ #DISABLED FOR NOW
+            #-mac-distrib-cert "Apple Distribution: Draque Thompson (HS2SXD98BV)"
     else
-        python build_image.py \
+        python3 build_image.py \
             "$BUILD_STEP" -copyDestination "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas" \
-            -mac-sign-identity "Apple Development: draquemail@gmail.com (A3YEXQ2CB4)"
+            -mac-sign-identity "Apple Development: Draque Thompson (A3YEXQ2CB4)" #\ #DISABLED FOR NOW
+            #-mac-distrib-cert "Apple Distribution: Draque Thompson (HS2SXD98BV)"
     fi
     echo "OSX build process complete."
     

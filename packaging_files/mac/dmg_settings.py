@@ -38,5 +38,5 @@ window_rect = ((100, 100), (660, 400))
 icon_size = 160
 
 # .. License configuration .....................................................
-
-license = { 'licenses': { 'en_US': 'LICENSE.TXT' } }
+# Turn this back on once the UNFLATTEN issue is corrected...
+#license = { 'licenses': { 'en_US': 'LICENSE.TXT' } }
