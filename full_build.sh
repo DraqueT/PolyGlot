@@ -130,7 +130,8 @@ if [ "$#" -eq 0 ] || [ "$1" == "$CONST_OSX" ] || [ "$1" == "$CONST_RELEASE" ]; t
     if [ "$BUILD_STEP" == "" ] ; then
         python3 build_image.py \
             -copyDestination "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas" \
-            -mac-sign-identity "Apple Development: Draque Thompson (A3YEXQ2CB4)" #\ #DISABLED FOR NOW
+            -mac-sign-identity "Apple Development: Draque Thompson (A3YEXQ2CB4)" \
+            -java-home-o "/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home" #\ #DISABLED FOR NOW
             #-mac-distrib-cert "Apple Distribution: Draque Thompson (HS2SXD98BV)"
     else
         python3 build_image.py \
