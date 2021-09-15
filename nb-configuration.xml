@@ -6,6 +6,10 @@ The configuration is intended to be shared among all the users of project and
 therefore it is assumed to be part of version control checkout.
 Without this configuration present, some functionality in the IDE may be limited or fail altogether.
 -->
+    <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+        <word>Swadesh</word>
+        <word>tooltiptext</word>
+    </spellchecker-wordlist>
     <properties xmlns="http://www.netbeans.org/ns/maven-properties-data/1">
         <!--
 Properties that influence various parts of the IDE, especially code formatting and the like. 
@@ -17,9 +21,6 @@ Any value defined here will override the pom.xml file value but is only applicab
         <netbeans.hint.licensePath>${project.basedir}/licenseheader.txt</netbeans.hint.licensePath>
         <netbeans.checkstyle.format>true</netbeans.checkstyle.format>
         <org-netbeans-modules-javascript2-requirejs.enabled>true</org-netbeans-modules-javascript2-requirejs.enabled>
+        <netbeans.hint.jdkPlatform>JDK_17</netbeans.hint.jdkPlatform>
     </properties>
-    <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
-        <word>Swadesh</word>
-        <word>tooltiptext</word>
-    </spellchecker-wordlist>
 </project-shared-configuration>
