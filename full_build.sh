@@ -175,17 +175,17 @@ fi
 # Announce any build failures...
 if [ -f "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas/Windows_BUILD_FAILED" ] &&  [ $WIN_BUILD_TIME != 0 ]; then
     echo -e "\x1B[41mWindows build failed.\x1B[0m"
-else
+elif [ $WIN_BUILD_TIME != 0 ]; then
     echo -e "\x1B[32mWindows build success.\x1B[0m"
 fi
 if [ -f "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas/Linux_BUILD_FAILED" ] && [ $LIN_BUILD_TIME != 0 ]; then
     echo -e "\x1B[41mLinux build failed.\x1B[0m"
-else
+elif [ $LIN_BUILD_TIME != 0 ]; then
     echo -e "\x1B[32mLinux build success.\x1B[0m"
 fi
 if [ -f "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas/Darwin_BUILD_FAILED" ] && [ $OSX_BUILD_TIME != 0 ]; then
     echo -e "\x1B[41mOSX build failed.\x1B[0m"
-else
+elif [ $OSX_BUILD_TIME != 0 ]; then
     echo -e "\x1B[32mOSX build success.\x1B[0m"
 fi
 echo "Full build process complete!"
