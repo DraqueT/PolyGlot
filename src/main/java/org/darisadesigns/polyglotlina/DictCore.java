@@ -60,7 +60,6 @@ import org.xml.sax.SAXException;
  * @author draque
  */
 public class DictCore {
-
     private final PolyGlot polyGlot;
     private ConWordCollection wordCollection;
     private TypeCollection typeCollection;
@@ -115,7 +114,7 @@ public class DictCore {
             toDoManager = new ToDoManager();
 
             PAlphaMap<String, Integer> alphaOrder = propertiesManager.getAlphaOrder();
-            subscribers = new ArrayList<CoreUpdateSubscriptionInterface>();
+            subscribers = new ArrayList<>();
 
             wordCollection.setAlphaOrder(alphaOrder);
             logoCollection.setAlphaOrder(alphaOrder);
@@ -141,6 +140,13 @@ public class DictCore {
     
     public UIDefaults getUiDefaults() {
         return polyGlot.getUiDefaults();
+    }
+    
+    /**
+     * To be run on exit for cleanup purposes
+     */
+    public void exitCleanup() {
+        polyGlot.exitCleanup();
     }
 
     /**
@@ -707,8 +713,7 @@ public class DictCore {
     public boolean equals(Object comp) {
         boolean ret = false;
 
-        if (comp instanceof DictCore) {
-            DictCore compCore = (DictCore)comp;
+        if (comp instanceof DictCore compCore) {
             
             ret = wordCollection.equals(compCore.wordCollection);
             ret = ret && typeCollection.equals(compCore.typeCollection);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -67,6 +67,8 @@ public final class PGTUtil {
     public static final String BUILD_DATE_TIME_LOCATION = "/assets/org/DarisaDesigns/buildDate";
     public static final String[] SWADESH_LISTS = {"Original_Swadesh", "Modern_Swadesh"};
     public static final int WINDOWS_CLIPBOARD_DELAY = 15;
+    public static final int SECONDS_BETWEEN_AUTO_SAVES = 300000; // 5 minutes in microsecnds
+    public static final String AUTO_SAVE_FILE_NAME = ".pgtAutoSave.bak";
 
     // properties on words
     public static final String LEXICON_XID = "lexicon";
@@ -373,7 +375,8 @@ public final class PGTUtil {
     public static final int CHECKBOX_ROUNDING = 3;
 
     // UI Elements to set on OSX (copy/paste/cut)
-    public static final String[] INPUT_MAPS = {"Button.focusInputMap",
+    public static final String[] INPUT_MAPS = {
+        "Button.focusInputMap",
         "CheckBox.focusInputMap",
         "ComboBox.ancestorInputMap",
         "EditorPane.focusInputMap",
@@ -398,7 +401,8 @@ public final class PGTUtil {
         "TextField.focusInputMap",
         "TextPane.focusInputMap",
         "ToggleButton.focusInputMap",
-        "Tree.focusInputMap"};
+        "Tree.focusInputMap"
+    };
 
     // images and icons that only need to be loaded once
     public static final ImageIcon ADD_BUTTON_ICON;
@@ -691,8 +695,8 @@ public final class PGTUtil {
     public static BufferedImage toBufferedImage(Image img) {
         BufferedImage ret = null;
         
-        if (img instanceof BufferedImage) {
-            ret = (BufferedImage) img;
+        if (img instanceof BufferedImage bufferedImage) {
+            ret = bufferedImage;
         } else if (img != null) {
             // Create a buffered image with transparency
             ret = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);

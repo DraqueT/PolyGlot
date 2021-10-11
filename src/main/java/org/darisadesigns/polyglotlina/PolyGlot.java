@@ -42,6 +42,8 @@ import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.DefaultEditorKit;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.ManagersCollections.OptionsManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.VisualStyleManager;
@@ -61,10 +63,12 @@ public final class PolyGlot {
     private Object clipBoard;
     private UIDefaults uiDefaults;
     private DictCore core;
+    private final File autoSaveFile;
 
     private PolyGlot(String overridePath) throws Exception {
         overrideProgramPath = overridePath; // TODO: In the future, figure out how this might be better set. In options?
         optionsManager = new OptionsManager();
+        autoSaveFile = this.getAutoSaveFile();
         IOHandler.loadOptionsIni(optionsManager, getWorkingDirectory().getAbsolutePath());
         refreshUiDefaults();
     }
@@ -101,9 +105,8 @@ public final class PolyGlot {
 
             // catch all top level application killing throwables (and bubble up directly to ensure reasonable behavior)
             try {
-                // separated due to serious nature of Throwable vs Exception
-
-                PolyGlot polyGlot = new PolyGlot("");
+                // separated due to nature of Throwable vs Exception
+                final PolyGlot polyGlot = new PolyGlot("");
                 DictCore core = new DictCore(polyGlot);
 
                 try {
@@ -166,16 +169,17 @@ public final class PolyGlot {
                 }
 
                 // if a recovery file exists, query user for action
-                File recovery = polyGlot.findRecoveryFile(s, core.getWorkingDirectory());
+                boolean recoveredFile = polyGlot.handleFileRecoveries(s, core.getWorkingDirectory());
 
                 // open file if one is provided via arguments (but only if no recovery file- that takes precedence)
-                if (args.length > 0 && recovery == null) {
+                if (args.length > 0 && recoveredFile == false) {
                     String filePath = "";
 
                     // file paths with spaces in their names are broken into multiple arguments. This is a best guess. (multiple spaces could exist)
                     // TODO: Remove once this is fixed in Java
                     for (String pathChunk : args) {
                         filePath += " " + pathChunk;
+                        InfoBox.info("hi", filePath, null);
                     }
 
                     filePath = filePath.trim();
@@ -194,14 +198,15 @@ public final class PolyGlot {
                 if (!polyGlot.getCore().getCurFileName().isBlank()) {
                     polyGlot.getCore().getRootWindow().openLexicon(true);
                 }
-            }
-            catch (ArrayIndexOutOfBoundsException e) {
+                
+                // only begin autosave loop once checks for rrecovery files are complete
+                polyGlot.autoSave();
+            } catch (ArrayIndexOutOfBoundsException e) {
                 IOHandler.writeErrorLog(e, "Problem with top level PolyGlot arguments.");
                 InfoBox.error("Unable to start", "Unable to open PolyGlot main frame: \n"
                         + e.getMessage() + "\n"
                         + "Problem with top level PolyGlot arguments.", null);
-            }
-            catch (Exception e) { // split up for logical clarity... might want to differentiate
+            } catch (Exception e) { // split up for logical clarity... might want to differentiate
                 IOHandler.writeErrorLog(e);
                 InfoBox.error("Unable to start", "Unable to open PolyGlot main frame: \n"
                         + e.getMessage() + "\n"
@@ -210,8 +215,7 @@ public final class PolyGlot {
                 if (s != null) {
                     s.dispose();
                 }
-            }
-            catch (Throwable t) {
+            } catch (Throwable t) {
                 InfoBox.error("PolyGlot Error", "A serious error has occurred: " + t.getLocalizedMessage(), null);
                 IOHandler.writeErrorLog(t);
                 throw t;
@@ -220,19 +224,24 @@ public final class PolyGlot {
     }
 
     /**
-     * Seeks recovery file, queries user what to do with it, and returns value
-     * as appropriate
+     * Seeks recovery file or autosave file, queries user what to do with it, 
+     * and returns true if a recovery was made
      *
      * @param s
      * @param workingDirectory
      * @return
      * @throws IOException
      */
-    private File findRecoveryFile(ScrMainMenu s, File workingDirectory) throws IOException {
+    private boolean handleFileRecoveries(ScrMainMenu s, File workingDirectory) throws IOException {
         File recovery = IOHandler.getTempSaveFileIfExists(workingDirectory);
-        if (recovery != null) {
+        
+        if (recovery == null) {
+            recovery = this.autoSaveFile;
+        }
+        
+        if (recovery != null && recovery.exists()) {
             if (InfoBox.yesNoCancel("Recovery File Detected",
-                    "PolyGlot appears to have shut down mid save. Would you like to recover the file?", s) == JOptionPane.YES_OPTION) {
+                    "PolyGlot appears to have shut down incorrectly. Would you like to recover the latest stable autosave?", s) == JOptionPane.YES_OPTION) {
                 JFileChooser chooser = new JFileChooser();
                 chooser.setDialogTitle("Recover Language To");
                 FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd");
@@ -271,7 +280,7 @@ public final class PolyGlot {
                     InfoBox.info("Recovery Cancelled", "Recovery Cancelled. Restart PolyGlot to be prompted again.", s);
                 }
             } else {
-                if (InfoBox.yesNoCancel("Delete Recovery File", "Archive the recovery file, then?", s) == JOptionPane.YES_OPTION) {
+                if (InfoBox.yesNoCancel("Archive Recovery File", "Archive the recovery file, then?", s) == JOptionPane.YES_OPTION) {
                     IOHandler.archiveFile(recovery, core.getWorkingDirectory());
                 }
 
@@ -279,7 +288,16 @@ public final class PolyGlot {
             }
         }
 
-        return recovery;
+        return recovery != null;
+    }
+    
+    /**
+     * To be run on exit for cleanup purposes
+     */
+    public void exitCleanup() {
+        if (autoSaveFile.exists()) {
+            autoSaveFile.delete();
+        }
     }
 
     public DictCore getNewCore(ScrMainMenu rootWindow) {
@@ -422,5 +440,39 @@ public final class PolyGlot {
 
     public void setCore(DictCore _core) {
         this.core = _core;
+    }
+
+    /**
+     * Saves periodically to temp file location (to be reopened on
+     * freeze/disaster)
+     */
+    public void autoSave() {
+        new java.util.Timer().schedule(new java.util.TimerTask() {
+            @Override
+            public void run() {
+                if (core != null && !core.getRootWindow().isDisposed() && !PGTUtil.isInJUnitTest()) {
+                    try {
+                        core.writeFile(autoSaveFile.getAbsolutePath());
+                    }
+                    catch (ParserConfigurationException | TransformerException | IOException e) {
+                        // The working directory is unwritable. Impossible to log.
+                        InfoBox.error("Working Path Write Error", "Unable to write to path: " + autoSaveFile.getAbsolutePath(), null);
+                    }
+                    autoSave();
+                }
+            }
+        }, PGTUtil.SECONDS_BETWEEN_AUTO_SAVES);
+    }
+    
+    /**
+     * Fetches autosave file for PolyGlot
+     * @return 
+     */
+    public File getAutoSaveFile() {
+        String path = getWorkingDirectory().getAbsolutePath() 
+                + File.separator 
+                + PGTUtil.AUTO_SAVE_FILE_NAME;
+        
+        return new File(path);
     }
 }

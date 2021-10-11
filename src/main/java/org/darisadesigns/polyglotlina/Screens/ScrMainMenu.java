@@ -349,6 +349,7 @@ public final class ScrMainMenu extends PFrame {
                 InfoBox.warning("INI Save Error", e.getLocalizedMessage(), core.getRootWindow());
             }
 
+            core.exitCleanup();
             System.exit(0);
         }
     }
@@ -704,7 +705,7 @@ public final class ScrMainMenu extends PFrame {
         chooser.setApproveButtonText("Save");
         chooser.setCurrentDirectory(core.getWorkingDirectory());
 
-        String fileName = core.getCurFileName().replaceAll(".pgd", ".xls");
+        String fileName = core.getCurFileName().replaceAll("\\.pgd", ".xls");
         chooser.setSelectedFile(new File(fileName));
 
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -748,7 +749,7 @@ public final class ScrMainMenu extends PFrame {
      */
     public void exportFont(boolean exportCharis) {
         JFileChooser chooser = new JFileChooser();
-        String fileName = core.getCurFileName().replaceAll(".pgd", ".ttf");
+        String fileName = core.getCurFileName().replaceAll("\\.pgd", ".ttf");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Font Files", "ttf");
 
         chooser.setDialogTitle("Export Font");
@@ -800,8 +801,10 @@ public final class ScrMainMenu extends PFrame {
         } else if (PGTUtil.IS_LINUX) {
             Desktop.getDesktop().open(readmeFile);
         } else {
-            InfoBox.warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
-                    + "http://draquet.github.io/PolyGlot/readme.html\n(copied to clipboard for convenience)", this);
+            InfoBox.warning("Menu Warning", """
+                                            Unable to open browser. Please load manually at:
+                                            http://draquet.github.io/PolyGlot/readme.html
+                                            (copied to clipboard for convenience)""", this);
             new ClipboardHandler().setClipboardContents("http://draquet.github.io/PolyGlot/readme.html");
         }
     }
@@ -812,8 +815,7 @@ public final class ScrMainMenu extends PFrame {
      * @param id
      */
     public void selectWordById(int id) {
-        if (curWindow instanceof ScrLexicon) {
-            ScrLexicon scrLexicon = (ScrLexicon) curWindow;
+        if (curWindow instanceof ScrLexicon scrLexicon) {
             scrLexicon.setWordSelectedById(id);
         } else {
             InfoBox.warning("Open Lexicon",
@@ -831,8 +833,7 @@ public final class ScrMainMenu extends PFrame {
     public ConWord getCurrentUserSelection() {
         ConWord ret = null;
 
-        if (curWindow instanceof ScrLexicon) {
-            ScrLexicon scrLexicon = (ScrLexicon) curWindow;
+        if (curWindow instanceof ScrLexicon scrLexicon) {
             scrLexicon.saveAllValues();
             ret = scrLexicon.getCurrentWord();
         } else {
@@ -942,8 +943,8 @@ public final class ScrMainMenu extends PFrame {
         }
         
         // the search menu causes problems with cached Lexicon if left open
-        if (curWindow instanceof ScrLexicon) {
-            ((ScrLexicon)curWindow).closeAndClearSearchPanel();
+        if (curWindow instanceof ScrLexicon scrLexicon) {
+            scrLexicon.closeAndClearSearchPanel();
         }
 
         // blank the menu
@@ -1097,8 +1098,8 @@ public final class ScrMainMenu extends PFrame {
                 }
             });
             
-            if (w instanceof PFrame) {
-                ((PFrame) w).addWindowFocusListener(new WindowFocusListener() {
+            if (w instanceof PFrame pFrame) {
+                pFrame.addWindowFocusListener(new WindowFocusListener() {
                     @Override
                     public void windowGainedFocus(WindowEvent e) {
                         
@@ -1106,7 +1107,7 @@ public final class ScrMainMenu extends PFrame {
                     
                     @Override
                     public void windowLostFocus(WindowEvent e) {
-                        ((PFrame) w).saveAllValues();
+                        pFrame.saveAllValues();
                     }
                 });
             }
@@ -1188,10 +1189,10 @@ public final class ScrMainMenu extends PFrame {
 
     private void updateAllChildValues(DictCore _core) {
         for (Window win : childWindows) {
-            if (win instanceof PFrame) {
-                ((PFrame) win).updateAllValues(_core);
-            } else if (win instanceof PDialog) {
-                ((PDialog) win).updateAllValues(_core);
+            if (win instanceof PFrame pFrame) {
+                pFrame.updateAllValues(_core);
+            } else if (win instanceof PDialog pDialog) {
+                pDialog.updateAllValues(_core);
             }
         }
     }
@@ -2018,11 +2019,10 @@ public final class ScrMainMenu extends PFrame {
             String conFontFamily = core.getPropertiesManager().getFontCon().getFamily();
             if (!Arrays.asList(g.getAvailableFontFamilyNames()).contains(conFontFamily)) {
                 // prompt user to install font (either Charis or their chosen con-font) if not currently on system
-                InfoBox.warning("Font Not Installed",
-                        "The font used for your language is not installed on this computer.\n"
-                        + "This may result in the statistics page appearing incorrectly.\n"
-                        + "Please select a path to save font to, install from this location, "
-                        + "and re-run the statistics option.", this);
+                InfoBox.warning("Font Not Installed", """
+                                                      The font used for your language is not installed on this computer.
+                                                      This may result in the statistics page appearing incorrectly.
+                                                      Please select a path to save font to, install from this location, and re-run the statistics option.""", this);
                 if (conFontFamily.equals(PGTUtil.UNICODE_FONT_FAMILY_NAME)) {
                     exportFont(true);
                 } else {
