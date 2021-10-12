@@ -78,11 +78,6 @@ public final class PolyGlot {
      * in chunks if spaces in path
      */
     public static void main(final String[] args) {
-        // TODO: REMOVE THIS
-        for (String pathChunk : args) {
-            InfoBox.info("hi", pathChunk, null);
-        }
-        
         try {
             // must be set before accessing System to test OS (values will simply be ignored for other OSes
             if (PGTUtil.IS_OSX) {
@@ -178,24 +173,19 @@ public final class PolyGlot {
 
                 // open file if one is provided via arguments (but only if no recovery file- that takes precedence)
                 if (args.length > 0 && recoveredFile == false) {
-                    String filePath = "";
+                    InfoBox.info("ZEEP", "ZEEP", s);
+                    String filePath = args[0].trim();
 
-                    // file paths with spaces in their names are broken into multiple arguments. This is a best guess. (multiple spaces could exist)
-                    // TODO: Remove once this is fixed in Java
-                    for (String pathChunk : args) {
-                        filePath += " " + pathChunk;
-                    }
-
-                    filePath = filePath.trim();
-
-                    // arguments passed in by the OS choke on special charaters as of Java 14 release (jpackage issue, probably)
-                    // TODO: Remove once this is fixed in Java
                     if (new File(filePath).exists()) {
                         s.setFile(filePath);
                     } else {
                         InfoBox.warning("File Path Error", "Unable to open: " + filePath
                                 + "\nPlease retry opening this file by clicking File->Open from the menu.", null);
                     }
+                } else if (recoveredFile == true) {
+                    InfoBox.info("ZOOP", "ZOOP", s);
+                } else {
+                    InfoBox.info("ZAAP", "ZAAP", s);
                 }
 
                 // if a language has been loaded, open Lexicon
