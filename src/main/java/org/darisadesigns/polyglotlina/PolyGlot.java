@@ -173,7 +173,7 @@ public final class PolyGlot {
 
                 // open file if one is provided via arguments (but only if no recovery file- that takes precedence)
                 if (args.length > 0 && recoveredFile == false) {
-                    InfoBox.info("ZEEP", "ZEEP", s);
+
                     String filePath = args[0].trim();
 
                     if (new File(filePath).exists()) {
@@ -182,10 +182,6 @@ public final class PolyGlot {
                         InfoBox.warning("File Path Error", "Unable to open: " + filePath
                                 + "\nPlease retry opening this file by clicking File->Open from the menu.", null);
                     }
-                } else if (recoveredFile == true) {
-                    InfoBox.info("ZOOP", "ZOOP", s);
-                } else {
-                    InfoBox.info("ZAAP", "ZAAP", s);
                 }
 
                 // if a language has been loaded, open Lexicon
@@ -282,7 +278,7 @@ public final class PolyGlot {
             }
         }
         
-        return (recovery == null || !recovery.exists());
+        return recovery != null && recovery.exists();
     }
     
     /**
