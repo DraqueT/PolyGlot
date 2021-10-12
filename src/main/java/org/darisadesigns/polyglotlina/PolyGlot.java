@@ -281,8 +281,8 @@ public final class PolyGlot {
                 recovery = null;
             }
         }
-
-        return recovery != null;
+        
+        return (recovery == null || !recovery.exists());
     }
     
     /**
