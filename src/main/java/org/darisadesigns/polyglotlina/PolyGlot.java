@@ -66,7 +66,7 @@ public final class PolyGlot {
     private final File autoSaveFile;
 
     private PolyGlot(String overridePath) throws Exception {
-        overrideProgramPath = overridePath; // TODO: In the future, figure out how this might be better set. In options?
+        overrideProgramPath = overridePath;
         optionsManager = new OptionsManager();
         autoSaveFile = this.getAutoSaveFile();
         IOHandler.loadOptionsIni(optionsManager, getWorkingDirectory().getAbsolutePath());
@@ -78,6 +78,11 @@ public final class PolyGlot {
      * in chunks if spaces in path
      */
     public static void main(final String[] args) {
+        // TODO: REMOVE THIS
+        for (String pathChunk : args) {
+            InfoBox.info("hi", pathChunk, null);
+        }
+        
         try {
             // must be set before accessing System to test OS (values will simply be ignored for other OSes
             if (PGTUtil.IS_OSX) {
@@ -179,7 +184,6 @@ public final class PolyGlot {
                     // TODO: Remove once this is fixed in Java
                     for (String pathChunk : args) {
                         filePath += " " + pathChunk;
-                        InfoBox.info("hi", filePath, null);
                     }
 
                     filePath = filePath.trim();
