@@ -58,9 +58,9 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
     private final boolean overrideFont;
 
     public PTextPane(DictCore _core, boolean _overrideFont, String _defText) {
+        overrideFont = _overrideFont;
         setCore(_core);
         defText = _defText;
-        overrideFont = _overrideFont;
         this.setContentType("text/html");
         setupRightClickMenu();
 
