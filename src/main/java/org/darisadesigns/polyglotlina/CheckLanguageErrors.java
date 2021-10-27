@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020 - 2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -201,8 +201,9 @@ public class CheckLanguageErrors {
                 problemString += testLegal.getDefinition().isEmpty() ? "" : testLegal.getDefinition() + "\n";
             }
 
-            // check word made up of defined characters (document if not)
-            if (!core.getPropertiesManager().testStringAgainstAlphabet(curWord.getValue())) {
+            // check word made up of defined characters (document if not) if alphabet defined
+            if (!core.getPropertiesManager().getAlphaOrder().isEmpty()
+                    && !core.getPropertiesManager().testStringAgainstAlphabet(curWord.getValue())) {
                 problemString += "Word contains characters undefined in alphabet settings.\n";
                 problemString += "Suspect characters:\""
                         + core.getPropertiesManager().findBadLetters(curWord.getValue())

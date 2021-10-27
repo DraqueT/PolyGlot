@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020 - 2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -43,7 +43,6 @@ public class CheckLanguageErrorsTest {
             badLexEntriesCore.readFile(PGTUtil.TESTRESOURCES + "test_lex_problems.pgd");
             badRegexEntriesCore.readFile(PGTUtil.TESTRESOURCES + "test_regex_problems.pgd");
         } catch (IOException | IllegalStateException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -129,5 +128,20 @@ public class CheckLanguageErrorsTest {
         assertEquals("RomanRegex", problem.problemWord.getValue());
         assertEquals("Romanization value: \"RomanRegex\" is illegal regex insertion.", problem.description); 
         assertEquals("Phonology Problem", problem.shortDescription);
+    }
+    
+    @Test
+    public void testCheckLanguageNoAlphabet() {
+        System.out.println("CheckLanguageErrorsTest.testCheckLanguageNoAlphabet");
+        
+        try {
+            DictCore dictCore = DummyCore.newCore();
+            dictCore.readFile(PGTUtil.TESTRESOURCES + "test_check_lang_no_alphabet.pgd");
+            LexiconProblemNode[] problems = CheckLanguageErrors.checkCore(dictCore, false);
+            
+            assertEquals(problems.length, 0);
+        } catch (IOException | IllegalStateException e) {
+            fail(e);
+        }
     }
 }
