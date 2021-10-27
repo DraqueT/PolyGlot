@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -1360,6 +1360,14 @@ public final class ScrMainMenu extends PFrame {
         }
     }
     
+    private void OpenBugReport() {
+        try {
+            WebInterface.browseToLocation(PGTUtil.TROUBLE_TICKET_URL);
+        } catch (IOException e) {
+            InfoBox.info("Location Unreachable", "Unable to open ticket site. Please check web connection.", this);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -1441,6 +1449,7 @@ public final class ScrMainMenu extends PFrame {
         mnuAbout = new javax.swing.JMenuItem();
         mnuChkUpdate = new javax.swing.JMenuItem();
         mnuExLex = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         jMenuItem8 = new javax.swing.JMenuItem();
 
@@ -1915,6 +1924,14 @@ public final class ScrMainMenu extends PFrame {
         mnuExLex.setText("Example Languages");
         mnuExLex.setToolTipText("Languages with exmples to copy from");
         mnuHelp.add(mnuExLex);
+
+        jMenuItem4.setText("Create Bug Report");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        mnuHelp.add(jMenuItem4);
         mnuHelp.add(jSeparator3);
 
         jMenuItem8.setText("Check for Updates");
@@ -2201,6 +2218,10 @@ public final class ScrMainMenu extends PFrame {
         ExportDictionaryFile();
     }//GEN-LAST:event_mnuExportDictFileActionPerformed
 
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        OpenBugReport();
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClasses;
     private javax.swing.JButton btnGrammar;
@@ -2219,6 +2240,7 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
