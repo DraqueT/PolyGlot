@@ -207,7 +207,7 @@ public class PropertiesManager {
             ret = javafx.scene.text.Font.loadFont(new ByteArrayInputStream(cachedLocalFont), localFontSize);
         } else if (conFont != null) { // second try to load from registered OS fonts...
             java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(localFont);
-            ret = javafx.scene.text.Font.font(localFont.getFamily(), conFontSize);
+            ret = javafx.scene.text.Font.font(localFont.getFamily(), localFontSize);
         } else { // last default to menu standard
             ret = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), core.getOptionsManager().getMenuFontSize());
         }

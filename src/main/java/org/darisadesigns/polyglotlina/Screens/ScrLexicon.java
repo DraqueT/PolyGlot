@@ -875,9 +875,10 @@ public final class ScrLexicon extends PFrame {
         GridPane grid = new GridPane();
         javafx.scene.text.Font font = core.getPropertiesManager().getFXLocalFont();
         javafx.scene.text.Font conFont = core.getPropertiesManager().getFXConFont();
+        javafx.scene.text.Font menuFont = core.getOptionsManager().getFXMenuFont();
         
         gridTitlePane = new TitledPane();
-        gridTitlePane.setFont(font);
+        gridTitlePane.setFont(menuFont);
 
         grid.setPrefWidth(4000);
         txtConSrc = new TextField();
@@ -927,24 +928,39 @@ public final class ScrLexicon extends PFrame {
 
         grid.setVgap(4);
         grid.setPadding(new Insets(5, 5, 5, 5));
-        grid.add(new Label("Con Word: "), 0, 0);
+        Label conWordLabel = new Label("Con Word:");
+        conWordLabel.setFont(menuFont);
+        grid.add(conWordLabel, 0, 0);
         grid.add(txtConSrc, 1, 0);
-        grid.add(new Label("Local Word: "), 0, 1);
+        Label localWordLabel = new Label("Local Word: ");
+        localWordLabel.setFont(menuFont);
+        grid.add(localWordLabel, 0, 1);
         grid.add(txtLocalSrc, 1, 1);
-        grid.add(new Label("Part of Speech: "), 0, 2);
+        Label posLabel = new Label("Part of Speech: ");
+        posLabel.setFont(menuFont);
+        grid.add(posLabel, 0, 2);
         grid.add(cmbTypeSrc, 1, 2);
         grid.setPadding(new Insets(5, 5, 5, 5));
         grid.add(new Label("            "), 2, 0); // adds spacing
-        grid.add(new Label("Pronunciation: "), 3, 0);
+        Label pronunciationLabel = new Label("Pronunciation: ");
+        pronunciationLabel.setFont(menuFont);
+        grid.add(pronunciationLabel, 3, 0);
         grid.add(txtProcSrc, 4, 0);
-        grid.add(new Label("Definition: "), 3, 1);
+        Label definitionLabel = new Label("Definition: ");
+        definitionLabel.setFont(menuFont);
+        grid.add(definitionLabel, 3, 1);
         grid.add(txtDefSrc, 4, 1);
-        grid.add(new Label("Root: "), 3, 2);
+        Label rootLabel = new Label("Root: ");
+        rootLabel.setFont(menuFont);
+        grid.add(rootLabel, 3, 2);
         grid.add(cmbRootSrc, 4, 2);
-        grid.add(new Label("Illegals"), 0, 3);
+        Label illeggalsLabel = new Label("Illegals");
+        illeggalsLabel.setFont(menuFont);
+        grid.add(illeggalsLabel, 0, 3);
         grid.add(chkFindBad, 1, 3);
 
         javafx.scene.control.Button srcButton = new javafx.scene.control.Button("Filter");
+        srcButton.setFont(menuFont);
         srcButton.setOnAction((javafx.event.ActionEvent t) -> {
             runFilter();
         });
@@ -952,6 +968,7 @@ public final class ScrLexicon extends PFrame {
         
         // sets up button to clear filter
         javafx.scene.control.Button clearButton = new javafx.scene.control.Button("Clear Filter");
+        clearButton.setFont(menuFont);
         clearButton.setOnAction((javafx.event.ActionEvent t) -> {
             clearFilterInternal();
             runFilter();
