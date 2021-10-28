@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -562,7 +562,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
                     boolean cont = true;
 
                     for (String def1 : _filter.getDefinition().split(SPLIT_CHAR)) {
-                        if (definition.contains(def1)) {
+                        if (definition.matches(".*" + def1 + ".*")) {
                             cont = false;
                             break;
                         }
@@ -581,15 +581,10 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
 
                 // local word
                 if (!_filter.getLocalWord().trim().isEmpty()) {
-                    boolean cont = true;
-
-                    for (String loc1 : _filter.getLocalWord().split(SPLIT_CHAR)) {
-                        if (local.contains(loc1)) {
-                            cont = false;
-                            break;
-                        }
-                    }
-                    if (cont) {
+                    String match = _filter.getLocalWord().trim();
+                    
+                    if (!local.contains(match)
+                            && !local.matches(match)) {
                         continue;
                     }
                 }
@@ -612,16 +607,10 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
 
                 // pronunciation
                 if (!_filter.getPronunciation().trim().isEmpty()) {
-                    boolean cont = true;
-
-                    for (String proc1 : _filter.getPronunciation().split(SPLIT_CHAR)) {
-                        if (proc.contains(proc1)) {
-                            cont = false;
-                            break;
-                        }
-                    }
-
-                    if (cont) {
+                    String match = _filter.getPronunciation();
+                    
+                    if (!proc.contains(match)
+                            && !proc.matches(match)) {
                         continue;
                     }
                 }
@@ -629,16 +618,14 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
                 // etymological root
                 Object parent = _filter.getFilterEtyParent();
                 if (parent != null) {
-                    if (parent instanceof ConWord) {
-                        ConWord parWord = (ConWord)parent;
+                    if (parent instanceof ConWord parWord) {
                         if (parWord.getId() != -1 && !core.getEtymologyManager()
                                 .childHasParent(curWord.getId(), parWord.getId())) {
                             continue;
                         }
                     }
                     
-                    if (parent instanceof EtyExternalParent) {
-                        EtyExternalParent parExt = (EtyExternalParent)parent;
+                    if (parent instanceof EtyExternalParent parExt) {
                         if (parExt.getId() != -1 && !core.getEtymologyManager()
                                 .childHasExtParent(curWord.getId(), parExt.getUniqueId())) {
                             continue;
@@ -673,7 +660,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
 
         if (matchText.trim().isEmpty()
                 || head.matches(matchText)
-                || head.startsWith(matchText)) {
+                || head.contains(matchText)) {
             ret = true;
         }
         TypeNode type = core.getTypes().getNodeById(word.getWordTypeId());
@@ -690,7 +677,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
 
                     if (!declension.trim().isEmpty()
                             && (declension.matches(matchText)
-                            || declension.startsWith(matchText))) {
+                            || declension.contains(matchText))) {
                         ret = true;
                     }
                 } catch (Exception e) {

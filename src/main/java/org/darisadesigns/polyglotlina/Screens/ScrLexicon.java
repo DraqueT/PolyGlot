@@ -37,7 +37,6 @@ import org.darisadesigns.polyglotlina.Nodes.EtyExternalParent;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.Nodes.WordClassValue;
 import org.darisadesigns.polyglotlina.Nodes.WordClass;
-import org.darisadesigns.polyglotlina.PFontHandler;
 import org.darisadesigns.polyglotlina.WebInterface;
 import java.awt.Color;
 import java.awt.Component;
@@ -293,8 +292,7 @@ public final class ScrLexicon extends PFrame {
                     JComponent component = classPropMap.get(curProp.getKey());
 
                     try {
-                        if (component instanceof JComboBox) {
-                            JComboBox combo = (JComboBox) component;
+                        if (component instanceof JComboBox combo) {
                             combo.setSelectedItem(((WordClass) core.getWordClassCollection()
                                     .getNodeById(curProp.getKey())).getValueById(curProp.getValue()));
                         }
@@ -428,8 +426,7 @@ public final class ScrLexicon extends PFrame {
                         return;
                     }
                     ConWord curWord1 = getCurrentWord();
-                    if (classBox.getSelectedItem() instanceof WordClassValue) {
-                        WordClassValue curValue = (WordClassValue) classBox.getSelectedItem();
+                    if (classBox.getSelectedItem() instanceof WordClassValue curValue) {
                         curWord1.setClassValue(classId, curValue.getId());
                     } else {
                         // if not an instance of a value, then it's the default selection: remove class from word
@@ -646,12 +643,12 @@ public final class ScrLexicon extends PFrame {
             return;
         }
 
-        int filterType;
+        int posFilter;
 
         if (cmbTypeSrc.getValue().equals(defTypeValue)) {
-            filterType = 0;
+            posFilter = 0;
         } else {
-            filterType = ((TypeNode) cmbTypeSrc.getValue()).getId();
+            posFilter = ((TypeNode) cmbTypeSrc.getValue()).getId();
         }
         
         saveValuesTo(getCurrentWord());
@@ -682,7 +679,7 @@ public final class ScrLexicon extends PFrame {
         filter.setValue(txtConSrc.getText().trim());
         filter.setDefinition(txtDefSrc.getText().trim());
         filter.setLocalWord(txtLocalSrc.getText().trim());
-        filter.setWordTypeId(filterType);
+        filter.setWordTypeId(posFilter);
         filter.setPronunciation(txtProcSrc.getText().trim());
         filter.setFilterEtyParent(cmbRootSrc.getValue());
 
@@ -828,8 +825,7 @@ public final class ScrLexicon extends PFrame {
 
             txtErrorBox.setText(txtErrorBox.getText() + message);
             element.setBackground(hColor);
-            if (element instanceof PComboBox) {
-                PComboBox eleComb = (PComboBox) element;
+            if (element instanceof PComboBox eleComb) {
                 eleComb.makeFlash(hColor, false);
             }
 
@@ -884,7 +880,7 @@ public final class ScrLexicon extends PFrame {
         txtConSrc = new TextField();
         txtConSrc.setPromptText("Search ConWord...");
         txtConSrc.setFont(conFont);
-        txtConSrc.setTooltip(new Tooltip("Filter lexicon entries based on the value of your constructed words"));
+        txtConSrc.setTooltip(new Tooltip("Filter lexicon entries based on the value of your constructed words (filter includes conjugated word forms)"));
         txtLocalSrc = new TextField();
         txtLocalSrc.setPromptText("Search NatLang Word...");
         txtLocalSrc.setFont(font);
@@ -1246,22 +1242,6 @@ public final class ScrLexicon extends PFrame {
     }
 
     /**
-     * Adds appropriate listeners to conword property fields
-     *
-     * @param field field to add lister to
-     * @param defValue default string value
-     */
-    private void addPropertyListeners(JComponent field, final String defValue) {
-        if (field instanceof JComboBox) {
-            final JComboBox cmbField = (JComboBox) field;
-            cmbField.addActionListener((java.awt.event.ActionEvent evt) -> {
-                setGreyFields(cmbField, defValue);
-                setWordLegality();
-            });
-        }
-    }
-
-    /**
      * Adds appropriate listeners to filter fields (java FX Control objects)
      *
      * @param field field to add listener to
@@ -1401,21 +1381,6 @@ public final class ScrLexicon extends PFrame {
     }
 
     /**
-     * Sets appropriate fields grey
-     */
-    private void setGreyFields(JComponent comp, String defValue) {
-        if (comp instanceof JComboBox) {
-            JComboBox compCmb = (JComboBox) comp;
-            if (compCmb.getSelectedItem() != null
-                    && compCmb.getSelectedItem().toString().equals(defValue)) {
-                compCmb.setForeground(Color.red);
-            } else {
-                compCmb.setForeground(Color.black);
-            }
-        }
-    }
-
-    /**
      * populates lexicon list with all words from core
      */
     private void populateLexicon() {
@@ -1516,13 +1481,10 @@ public final class ScrLexicon extends PFrame {
 
         // save all class values
         classPropMap.entrySet().forEach((entry) -> {
-            if (entry.getValue() instanceof PTextField) {
-                PTextField textField = (PTextField) entry.getValue();
+            if (entry.getValue() instanceof PTextField textField) {
                 saveWord.setClassTextValue(entry.getKey(), textField.getText());
-            } else if (entry.getValue() instanceof PComboBox) {
-                PComboBox comboBox = (PComboBox) entry.getValue();
-                if (comboBox.getSelectedItem() instanceof WordClassValue) {
-                    WordClassValue curValue = (WordClassValue) comboBox.getSelectedItem();
+            } else if (entry.getValue() instanceof PComboBox comboBox) {
+                if (comboBox.getSelectedItem() instanceof WordClassValue curValue) {
                     saveWord.setClassValue(entry.getKey(), curValue.getId());
                 } else {
                     // if not an instance of a value, then it's the default selection: remove class from word
