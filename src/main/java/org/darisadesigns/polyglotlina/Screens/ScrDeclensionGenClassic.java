@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -458,9 +458,11 @@ public final class ScrDeclensionGenClassic extends PDialog {
         final JMenuItem copyItem = new JMenuItem("Copy Rule");
         final JMenuItem pasteItem = new JMenuItem("Paste Rule");
         final JMenuItem bulkDelete = new JMenuItem("Bulk Delete Rule");
+        final JMenuItem bulkUpdate = new JMenuItem("Bulk Update Rule");
         copyItem.setToolTipText("Copy currently selected rule.");
         pasteItem.setToolTipText("Paste rule in clipboard to rule list.");
         bulkDelete.setToolTipText("Bulk delete all instances of this rule from this part of speech");
+        bulkUpdate.setToolTipText("Bulk update all instances of this rule to match this one");
 
         copyItem.addActionListener((ActionEvent ae) -> {
             copyRuleToClipboard();
@@ -471,12 +473,16 @@ public final class ScrDeclensionGenClassic extends PDialog {
         bulkDelete.addActionListener((ActionEvent ae) -> {
             bulkDelete();
         });
+        bulkUpdate.addActionListener((ActionEvent ae) -> {
+            bulkUpdate();
+        });
         ruleMenu.add(copyItem);
         ruleMenu.add(pasteItem);
         ruleMenu.addSeparator();
         ruleMenu.add(pushToDimension);
         ruleMenu.add(deleteFromDimension);
         ruleMenu.add(bulkDelete);
+        ruleMenu.add(bulkUpdate);
         lstRules.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -623,6 +629,18 @@ public final class ScrDeclensionGenClassic extends PDialog {
         return InfoBox.actionConfirmation("Confirm Rule Copy", message, parent);
     }
     
+    public boolean verifyBulkUpdateRule(List<ConjugationGenRule> rules) {
+        String message = "You are about to bulk update the following rule(s):\n\n";
+        
+        for (ConjugationGenRule rule : rules) {
+            message += rule.getName() + "\n\nRules with matching names/patterns will be updated to the exact parameters of those selected.";
+        }
+        
+        message += "\n\nContinue?";
+        
+        return InfoBox.actionConfirmation("Confirm Rule Copy", message, parent);
+    }
+    
     public boolean verifyBulkDeleteRule(List<ConjugationGenRule> rules) {
         String message = "You are about to bulk delete the following rule(s):\n\n";
         
@@ -652,10 +670,26 @@ public final class ScrDeclensionGenClassic extends PDialog {
     }
 
     /**
+     * Bulk updates all matching rules to match the selected one
+     */
+    private void bulkUpdate() {
+        saveVolatileValues();
+        List<ConjugationGenRule> selectedRules = getSelectedRules();
+        
+        if (verifyBulkUpdateRule(selectedRules)) {
+            core.getConjugationManager().bulkUpdateRuleInConjugationTemplates(typeId, selectedRules);
+            populateRules();
+            populateRuleProperties();
+            populateTransforms();
+        }
+    }
+    
+    /**
      * Bulk deletes selected rule from current part of speech
      */
     private void bulkDelete() {
         List<ConjugationGenRule> selectedRules = getSelectedRules();
+        
         if (verifyBulkDeleteRule(selectedRules)) {
             core.getConjugationManager().bulkDeleteRuleFromConjugationTemplates(typeId, selectedRules);
             populateRules();

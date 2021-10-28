@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -28,7 +28,7 @@ import org.w3c.dom.Element;
  * Container class for declension auto-transform transformation pairs
  * @author draque
  */
-public class ConjugationGenTransform {
+public final class ConjugationGenTransform {
     public String regex;
     public String replaceText;
     
@@ -40,6 +40,10 @@ public class ConjugationGenTransform {
     public ConjugationGenTransform() {
         regex = "";
         replaceText = "";
+    }
+    
+    public ConjugationGenTransform(ConjugationGenTransform source) {
+        this.setEqual(source);
     }
     
     /**
@@ -65,9 +69,7 @@ public class ConjugationGenTransform {
         
         if (comp == this) {
             ret = true;
-        } else if (comp instanceof ConjugationGenTransform) {
-            ConjugationGenTransform compDec = (ConjugationGenTransform)comp;
-            
+        } else if (comp instanceof ConjugationGenTransform compDec) {
             ret = regex.equals(compDec.regex);
             ret = ret && replaceText.equals(compDec.replaceText);
         }
