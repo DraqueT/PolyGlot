@@ -309,8 +309,7 @@ public final class ScrLexicon extends PFrame {
                     JComponent component = classPropMap.get(curProp.getKey());
 
                     try {
-                        if (component instanceof PTextField) {
-                            PTextField textField = (PTextField) component;
+                        if (component instanceof PTextField textField) {
                             textField.setText(curProp.getValue());
                         }
                     } catch (Exception e) {
