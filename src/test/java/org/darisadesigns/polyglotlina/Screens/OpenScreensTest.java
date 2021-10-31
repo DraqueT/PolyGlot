@@ -25,8 +25,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
@@ -51,7 +51,7 @@ public class OpenScreensTest {
         Assumptions.assumeTrue(!PGTUtil.IS_WINDOWS);
         
         core = DummyCore.newCore();
-        errors = IOHandler.getErrorLogFile();
+        errors = DesktopIOHandler.getInstance().getErrorLogFile();
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "basic_lang.pgd");
@@ -60,7 +60,7 @@ public class OpenScreensTest {
                 errors.delete();
             }
         } catch (IOException | IllegalStateException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -450,7 +450,7 @@ public class OpenScreensTest {
 //            s.dispose();
 //            testExceptions(new Object() {}.getClass().getEnclosingMethod().getName());
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }

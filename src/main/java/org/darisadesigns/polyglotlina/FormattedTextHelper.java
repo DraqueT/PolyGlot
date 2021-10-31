@@ -19,29 +19,17 @@
  */
 package org.darisadesigns.polyglotlina;
 
-import org.darisadesigns.polyglotlina.CustomControls.PGrammarPane;
 import org.darisadesigns.polyglotlina.Nodes.ImageNode;
-import java.awt.Color;
-import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
-import javax.swing.JLabel;
-import javax.swing.JTextPane;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.Element;
-import javax.swing.text.MutableAttributeSet;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
 
 /**
  * This is a helper class, which deals with formatted text in Java
  *
  * @author draque
  */
-public final class FormattedTextHelper {
+public class FormattedTextHelper {
     private static final String FINDBODY = "<body>";
     private static final String FINDBODYEND = "</body>";
     private static final String BLACK = "black";
@@ -54,164 +42,6 @@ public final class FormattedTextHelper {
     private static final String FACE = "face";
     private static final String SIZE = "size";
 
-    /**
-     * Restores to the JTextPane the formatted text values encoded in the saved
-     * value string
-     * @param savedVal value to restore formatted text from
-     * @param pane Text pane to restore formatted text to.
-     * @param core Dictionary Core (needed for references)
-     * @throws javax.swing.text.BadLocationException if unable to load
-     */
-    public static void restoreFromString(String savedVal, JTextPane pane, DictCore core) throws BadLocationException {
-        String remaining = savedVal;
-        pane.setText("");
-        Color fontColor = Color.black;
-        String font = "";
-        int fontSize = -1;
-                
-        while (!remaining.isEmpty()) {
-            String nextNode = getNextNode(remaining);
-            Font conFont = core.getPropertiesManager().getFontCon();
-            
-            remaining = remaining.substring(nextNode.length());
-            
-            if (nextNode.startsWith("<font")) {
-                
-                font = extractFamily(nextNode);
-                fontSize = extractSize(nextNode);
-                fontColor = extractColor(nextNode);
-                
-                if (font.equals(conFont.getFamily())) {
-                    font = PGTUtil.CONLANG_FONT;
-                }
-            } else if (nextNode.startsWith("</font")) {
-                // do nothing
-            } else if (nextNode.startsWith("<img src=")) {
-                String idString = nextNode.replace("<img src=\"", "").replace("\">", "");
-                Integer id = Integer.parseInt(idString);
-                ImageNode imageNode = (ImageNode)core.getImageCollection().getNodeById(id);
-                ((PGrammarPane)pane).addImage(imageNode);      
-            } else {
-                Document doc = pane.getDocument();
-                
-                MutableAttributeSet aset = new SimpleAttributeSet();
-                if (font.equals(PGTUtil.CONLANG_FONT)) {
-                    if (core.getPropertiesManager().isEnforceRTL()) {
-                        nextNode = PGTUtil.RTL_CHARACTER + nextNode;
-                    }
-                    StyleConstants.setFontFamily(aset, conFont.getFamily());
-                } else {
-                    if (core.getPropertiesManager().isEnforceRTL()) {
-                        nextNode = PGTUtil.LTR_MARKER + nextNode;
-                    }
-                    if (!font.isEmpty()) {
-                        StyleConstants.setFontFamily(aset, font);
-                    }
-                }
-                
-                if (fontSize != -1) {
-                    StyleConstants.setFontSize(aset, fontSize);
-                }
-                
-                StyleConstants.setForeground(aset, fontColor);
-                
-                if (!nextNode.isEmpty()){
-                    doc.insertString(doc.getLength(), nextNode, aset);
-                }
-            }
-        }
-    }
-    
-    /**
-     * Returns list of strings representing a chapter section. The paired boolean
-     * is set to true if the segment of text is in the conlang's font
-     * @param savedVal section of text to analyze and return
-     * @param core
-     * @return ordered list of text
-     */
-    public static List<Entry<String, PFontInfo>> getSectionTextFontSpecific(String savedVal, DictCore core) {
-        String remaining = savedVal;
-        String font = "";
-        List<Entry<String, PFontInfo>> ret = new ArrayList<>();
-        PFontInfo conFont = new PFontInfo();
-                
-        while (!remaining.isEmpty()) {
-            String nextNode = getNextNode(remaining);
-            conFont.awtFont = core.getPropertiesManager().getFontCon();
-            
-            remaining = remaining.substring(nextNode.length());
-            
-            if (nextNode.startsWith("<font")) {                
-                font = extractFamily(nextNode);
-                conFont.size = extractSize(nextNode);
-                conFont.awtColor = extractColor(nextNode);
-            } else if (nextNode.startsWith("</font")) {
-                // do nothing. All font changes are prefixed with<font
-            } else {
-                if (font.equals(conFont.awtFont.getFamily()) && core.getPropertiesManager().isEnforceRTL()) {
-                    nextNode = PGTUtil.RTL_CHARACTER + nextNode;
-                } else if (core.getPropertiesManager().isEnforceRTL()) {
-                    nextNode = PGTUtil.LTR_MARKER + nextNode;
-                }
-                
-                if (!nextNode.isEmpty()){
-                    conFont.awtFont = font.equals(core.getPropertiesManager().getFontCon().getFamily()) ? 
-                            core.getPropertiesManager().getFontCon() : new JLabel().getFont();
-                    Entry<String, PFontInfo> temp = new SecEntry<>(nextNode, conFont);
-                    ret.add(temp);
-                    conFont = new PFontInfo();
-                }
-            }
-        }
-        
-        return ret;
-    }
-    
-    /**
-     * Given an HTML <font~> node, return the font family
-     * @param targetNode string value of HTML node
-     * @return string value of family name, blank if none
-     */
-    private static Color extractColor(String targetNode) {
-        Color ret = Color.black;
-        
-        int pos = targetNode.indexOf(COLOR) + 7;
-        
-        if (pos == -1) {
-            return ret;
-        }
-        
-        String strip = targetNode.substring(pos);
-        pos = strip.indexOf("\"");
-        strip = strip.substring(0, pos);
-        
-        switch (strip) {
-            case BLACK:
-                ret = Color.black;
-                break;
-            case RED:
-                ret = Color.red;
-                break;
-            case BLUE:
-                ret = Color.blue;
-                break;
-            case GRAY:
-                ret = Color.gray;
-                break;
-            case YELLOW:
-                ret = Color.yellow;
-                break;
-            case GREEN:
-                ret = Color.green;
-                break;
-            default:
-                ret = Color.black;
-                break;
-        }
-                
-        return ret;
-    }
-    
     /**
      * Given an HTML <font~> node, return the font family
      * @param targetNode string value of HTML node
@@ -289,123 +119,6 @@ public final class FormattedTextHelper {
     }
     
     /**
-     * Creates and returns string representing complex formatted text, which 
-     * can be saved. Filters out all RTL and LTR characters before returning.
-     * @param pane JTextPane containing text to be saved
-     * @return encoded values of pane
-     * @throws BadLocationException if unable to create string format
-     */
-    public static String storageFormat(JTextPane pane) throws Exception {
-        String ret = storeFormatRecurse(pane.getDocument().getDefaultRootElement(), pane);
-        return ret.replace(PGTUtil.RTL_CHARACTER, "").replace(PGTUtil.LTR_MARKER, "");
-    }
-
-    /**
-     * Recursing method implementing functionality of storageFormat()
-     * @param e element to be cycled through
-     * @param pane top parent JTextPane
-     * @return string format value of current node and its children
-     * @throws BadLocationException if unable to create string format
-     */
-    private static String storeFormatRecurse(Element e, JTextPane pane) throws Exception {
-        String ret = "";
-        int ec = e.getElementCount();
-
-        if (ec == 0) {
-            // if more media addable in the future, this is where to process it...
-            // hard coded values because they're hard coded in Java. Eh.
-            if (e.getAttributes().getAttribute("$ename") != null
-                    && e.getAttributes().getAttribute("$ename").equals("icon")) {
-                if (e.getAttributes().getAttribute(PGTUtil.IMAGE_ID_ATTRIBUTE) == null) {
-                    throw new Exception("ID For image not stored. Unable to store section.");
-                }
-                
-                ret += "<img src=\"" + e.getAttributes().getAttribute(PGTUtil.IMAGE_ID_ATTRIBUTE) + "\">";
-            } else {
-                int start = e.getStartOffset();
-                int len = e.getEndOffset() - start;
-                if (start < pane.getDocument().getLength()) {
-                    AttributeSet a = e.getAttributes();
-                    String font = StyleConstants.getFontFamily(a);
-                    String fontColor = colorToText(StyleConstants.getForeground(a));
-                    int fontSize = StyleConstants.getFontSize(a);
-                    ret += "<font face=\"" + font + "\""
-                            + "size=\"" + fontSize + "\""
-                            + "color=\"" + fontColor + "\"" + ">";
-                    ret += pane.getDocument().getText(start, len);
-                    ret += "</font>";
-                }
-            }
-        } else {
-            for (int i = 0; i < ec; i++) {
-                ret += storeFormatRecurse(e.getElement(i), pane);
-            }
-        }
-
-        return ret;
-    }
-
-    /**
-     * Gets standardized string value for color
-     *
-     * @param c color to get standard value for
-     * @return string format standard value
-     */
-    public static String colorToText(Color c) {
-        String ret;
-
-        // Java 1.6 can't switch on an enum...
-        if (c == Color.black) {
-            ret = BLACK;
-        } else if (c == Color.red) {
-            ret = RED;
-        } else if (c == Color.green) {
-            ret = GREEN;
-        } else if (c == Color.yellow) {
-            ret = YELLOW;
-        } else if (c == Color.blue) {
-            ret = BLUE;
-        } else if (c == Color.gray) {
-            ret = GRAY;
-        } else {
-            ret = BLACK;
-        }
-
-        return ret;
-    }
-    
-    public static Color textToColor(String color) {
-        Color ret;
-        
-        switch (color) {
-            case BLACK:
-                ret = Color.black;
-                break;
-            case RED:
-                ret = Color.red;
-                break;
-            case GREEN:
-                ret = Color.green;
-                break;
-            case YELLOW:
-                ret = Color.yellow;
-                break;
-            case BLUE:
-                ret = Color.blue;
-                break;
-            case GRAY:
-                ret = Color.gray;
-                break;
-            default:
-                ret = Color.black;
-                break;
-        }
-        
-        return ret;
-    }
-    
-    
-    /**
      * Takes html with linebreaks in body and converts the linebreaks to proper
      * <br> tags
      * @param html input html to be sanitized
@@ -474,6 +187,6 @@ public final class FormattedTextHelper {
         }
     }
 
-    private FormattedTextHelper() {
+    protected FormattedTextHelper() {
     }
 }

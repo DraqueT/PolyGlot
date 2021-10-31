@@ -155,7 +155,7 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmbFontsActionPerformed"/>
                       </Events>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(core.getPropertiesManager().getFontLocal())"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal())"/>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Object&gt;"/>
                       </AuxValues>
                     </Component>
@@ -195,7 +195,7 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmbFontColorActionPerformed"/>
                       </Events>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(core.getPropertiesManager().getFontMenu())"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu())"/>
                       </AuxValues>
                     </Component>
                     <Component class="javax.swing.JButton" name="btnApply">
@@ -504,7 +504,7 @@
                     <Property name="toolTipText" type="java.lang.String" value="Chapter Guide"/>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTree(core.getPropertiesManager().getFontLocal(), menuFontSize, nightMode)"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTree(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize, nightMode)"/>
                   </AuxValues>
                 </Component>
               </SubComponents>

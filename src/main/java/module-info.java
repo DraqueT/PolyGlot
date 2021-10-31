@@ -11,4 +11,5 @@ module org.darisadesigns.polyglotlina.polyglot {
 
     exports org.darisadesigns.polyglotlina;
     exports org.darisadesigns.polyglotlina.CustomControls;
+    exports org.darisadesigns.polyglotlina.Desktop.CustomControls;
 }

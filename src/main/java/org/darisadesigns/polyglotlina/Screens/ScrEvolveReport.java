@@ -21,12 +21,14 @@ package org.darisadesigns.polyglotlina.Screens;
 
 import java.awt.Color;
 import javax.swing.table.DefaultTableModel;
-import org.darisadesigns.polyglotlina.CustomControls.PDialog;
-import org.darisadesigns.polyglotlina.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.CustomControls.PTable;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTable;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.EvolutionPair;
-import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -46,7 +48,7 @@ public class ScrEvolveReport extends PDialog {
         
         reportModel = new DefaultTableModel(new String[]{"Notes", "Origin", "Evolution"}, 0);
         tblReport.setModel(reportModel);
-        tblReport.setFont(core.getPropertiesManager().getFontCon());
+        tblReport.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         
         for (EvolutionPair pair : pairs) {
             String notes = pair.issueDescription.isBlank() ? pair.notes : "Value reverted: " + "error-" + pair.issueDescription;
@@ -101,7 +103,7 @@ public class ScrEvolveReport extends PDialog {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tblReport = new PTable(core);
-        jLabel1 = new PLabel("Original and evolved lexical forms:", core.getOptionsManager().getMenuFontSize());
+        jLabel1 = new PLabel("Original and evolved lexical forms:", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Evolution Report");

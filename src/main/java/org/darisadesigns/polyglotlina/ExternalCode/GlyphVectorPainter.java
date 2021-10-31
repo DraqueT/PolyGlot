@@ -21,7 +21,7 @@ import javax.swing.text.GlyphView;
 import javax.swing.text.Position;
 import javax.swing.text.TabExpander;
 import javax.swing.text.View;
-import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 
 public class GlyphVectorPainter extends GlyphView.GlyphPainter {
     public static final String KEY_KERNING="KEY_KERNING";
@@ -54,7 +54,7 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
             }
         } catch (BadLocationException e) {
             //e.printStackTrace();
-            IOHandler.writeErrorLog(e, "EXTERNAL CODE");
+            DesktopIOHandler.getInstance().writeErrorLog(e, "EXTERNAL CODE");
         }
     }
 
@@ -114,7 +114,7 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
             return new GlyphVectorPainter(localText, v);
         } catch (BadLocationException e) {
             //e.printStackTrace();
-            IOHandler.writeErrorLog(e, "EXTERNAL CODE");
+            DesktopIOHandler.getInstance().writeErrorLog(e, "EXTERNAL CODE");
         }
         return null;
     }
@@ -135,7 +135,7 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
             return width;
         } catch (BadLocationException e) {
             //e.printStackTrace();
-            IOHandler.writeErrorLog(e, "EXTERNAL CODE");
+            DesktopIOHandler.getInstance().writeErrorLog(e, "EXTERNAL CODE");
         }
 
         return 0;
@@ -216,7 +216,7 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
 
         } catch (BadLocationException e) {
             //e.printStackTrace();
-            IOHandler.writeErrorLog(e, "EXTERNAL CODE");
+            DesktopIOHandler.getInstance().writeErrorLog(e, "EXTERNAL CODE");
         }
     }
 
@@ -294,7 +294,7 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
         } catch (BadLocationException e) {
             //e.printStackTrace();
             ret = -1;
-            IOHandler.writeErrorLog(e, "EXTERNAL CODE");
+            DesktopIOHandler.getInstance().writeErrorLog(e, "EXTERNAL CODE");
         }
         return ret;
     }
@@ -331,7 +331,7 @@ public class GlyphVectorPainter extends GlyphView.GlyphPainter {
         } catch (BadLocationException e) {
             //e.printStackTrace();
             ret = -1;
-            IOHandler.writeErrorLog(e, "EXTERNAL CODE");
+            DesktopIOHandler.getInstance().writeErrorLog(e, "EXTERNAL CODE");
         }
 
         return ret;

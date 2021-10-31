@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
@@ -33,7 +32,6 @@ import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode.ProblemType;
 import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
-import org.darisadesigns.polyglotlina.Screens.ScrLanguageProblemDisplay;
 
 /**
  * This checks a given language file for correctable errors
@@ -77,16 +75,16 @@ public class CheckLanguageErrors {
             thread.join();
         }
         catch (InterruptedException e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Thread Error", "Language validation thread error: " + e.getLocalizedMessage(), core.getRootWindow());
+            core.getOSHandler().getIOHandler().writeErrorLog(e);
+            core.getOSHandler().getInfoBox().error("Thread Error", "Language validation thread error: " + e.getLocalizedMessage());
         }
 
         Collections.sort(problems);
 
         if (!problems.isEmpty() && display) {
-            new ScrLanguageProblemDisplay(problems, core).setVisible(true);
+            core.getOSHandler().openLanguageProblemDisplay(problems, core);
         } else if (display) {
-            InfoBox.info("Lexicon Check Results", "No problems found in language file!", core.getRootWindow());
+            core.getOSHandler().getInfoBox().info("Lexicon Check Results", "No problems found in language file!");
         }
 
         return problems.toArray(new LexiconProblemNode[0]);
@@ -104,7 +102,7 @@ public class CheckLanguageErrors {
                 problemDescription = "Pronunciation text: \"" + node.getPronunciation() + "\" is illegal regex insertion.";
             }
             
-            if (!problemDescription.isBlank()) {
+            if (!core.getPGTUtil().isBlank(problemDescription)) {
                 problems.add(new LexiconProblemNode(node, problemDescription, ProblemType.Phonology));
             }
         }
@@ -120,7 +118,7 @@ public class CheckLanguageErrors {
                 problemDescription = "Romanization value: \"" + node.getValue() + "\" is illegal regex insertion.";
             }
             
-            if (!problemDescription.isBlank()) {
+            if (!core.getPGTUtil().isBlank(problemDescription)) {
                 problems.add(new LexiconProblemNode(node, problemDescription, ProblemType.Phonology));
             }
         }
@@ -153,7 +151,7 @@ public class CheckLanguageErrors {
                     }
                 }
 
-                if (!problemDescription.isBlank()) {
+                if (!core.getPGTUtil().isBlank(problemDescription)) {
                     problems.add(new LexiconProblemNode(pos,
                             problemDescription,
                             ProblemType.PoS));

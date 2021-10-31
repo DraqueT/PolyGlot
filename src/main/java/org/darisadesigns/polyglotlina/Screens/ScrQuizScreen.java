@@ -19,13 +19,13 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.CustomControls.PFrame;
-import org.darisadesigns.polyglotlina.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.CustomControls.PRadioButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PRadioButton;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.QuizEngine.Quiz;
 import org.darisadesigns.polyglotlina.QuizEngine.QuizQuestion;
@@ -41,6 +41,7 @@ import java.util.Objects;
 import javax.swing.JComponent;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Nodes.DictNode;
 
 /**
@@ -71,10 +72,11 @@ public final class ScrQuizScreen extends PFrame {
         lblQNode.setResize(true);
         lblQNode.setMinimumSize(new Dimension(1, 1));
         jPanel3.setLayout(new BorderLayout());
-        lblQuestion.setFont(core.getPropertiesManager().getFontLocal());
+        lblQuestion.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
 
         if (!quiz.hasNext()) {
-            InfoBox.warning("Empty Quiz", "Quiz has no questions. Check filter\nto make sure it is not too restrictive.", core.getRootWindow());
+            core.getOSHandler().getInfoBox().warning("Empty Quiz", 
+                    "Quiz has no questions. Check filter\nto make sure it is not too restrictive.");
         } else {
             nextQuestion();
             jPanel3.add(lblQNode);
@@ -89,8 +91,8 @@ public final class ScrQuizScreen extends PFrame {
         try {
             setQuestion(quiz.next());
         } catch (Exception e) {
-            InfoBox.error("Question Error", "Unable to move to next question: " + e.getLocalizedMessage(), this);
-            IOHandler.writeErrorLog(e);
+            new DesktopInfoBox(this).error("Question Error", "Unable to move to next question: " + e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e);
         }
     }
     
@@ -103,7 +105,7 @@ public final class ScrQuizScreen extends PFrame {
         try {
             setQuestion(quiz.prev());
         } catch (Exception e) {
-            InfoBox.error("Question Error", "Unable to move to previous question: " + e.getLocalizedMessage(), this);
+            new DesktopInfoBox(this).error("Question Error", "Unable to move to previous question: " + e.getLocalizedMessage());
         }
     }
 
@@ -112,12 +114,12 @@ public final class ScrQuizScreen extends PFrame {
         int quizLen = quiz.getLength();
 
         if (numRight == quizLen) {
-            InfoBox.info("Quiz Complete", "Perfect score! " + numRight
-                    + " out of " + quizLen + " correct!", this);
+            new DesktopInfoBox(this).info("Quiz Complete", "Perfect score! " + numRight
+                    + " out of " + quizLen + " correct!");
             dispose();
         } else {
-            if (InfoBox.actionConfirmation("Quiz Complete", numRight + " out of " + quizLen + " correct. Retake?", this)) {
-                if (InfoBox.actionConfirmation("Trim Quiz?", "Quiz only on incorrectly answered questions?", this)) {
+            if (new DesktopInfoBox(this).actionConfirmation("Quiz Complete", numRight + " out of " + quizLen + " correct. Retake?")) {
+                if (new DesktopInfoBox(this).actionConfirmation("Trim Quiz?", "Quiz only on incorrectly answered questions?")) {
                     quiz.trimQuiz();
                 } else {
                     quiz.resetQuiz();
@@ -147,13 +149,13 @@ public final class ScrQuizScreen extends PFrame {
                 case Def:
                 case Classes: {
                     ConWord sourceWord = (ConWord) question.getSource();
-                    lblQNode.setFont(core.getPropertiesManager().getFontCon());
+                    lblQNode.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
                     lblQNode.setText(sourceWord.getValue());
                     break;
                 }
                 case ConEquiv: {
                     ConWord sourceWord = (ConWord) question.getSource();
-                    lblQNode.setFont(core.getPropertiesManager().getFontLocal());
+                    lblQNode.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
                     lblQNode.setText(sourceWord.getLocalWord());
                     break;
                 }
@@ -177,9 +179,9 @@ public final class ScrQuizScreen extends PFrame {
                 choice.setType(question.getType());
                 
                 if (question.getType() == QuizQuestion.QuestionType.ConEquiv) {
-                    choice.setFont(core.getPropertiesManager().getFontCon());
+                    choice.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
                 } else {
-                    choice.setFont(core.getPropertiesManager().getFontLocal());
+                    choice.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
                 }
 
                 // on button selection, record user choice and right/wrong status
@@ -214,9 +216,9 @@ public final class ScrQuizScreen extends PFrame {
                 }
             }
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Population Error", "Problem populating question: "
-                    + e.getLocalizedMessage(), core.getRootWindow());
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            core.getOSHandler().getInfoBox().error("Population Error", "Problem populating question: "
+                    + e.getLocalizedMessage());
         }
 
         setupScreen();
@@ -287,8 +289,8 @@ public final class ScrQuizScreen extends PFrame {
                 lblAnsStat.setForeground(Color.red);
                 break;
             default:
-                InfoBox.error("Unhandled Answer Type", "Answer type "
-                        + curQuestion.getAnswered() + " is not handled.", this);
+                new DesktopInfoBox(this).error("Unhandled Answer Type", "Answer type "
+                        + curQuestion.getAnswered() + " is not handled.");
         }
 
         pnlChoices.repaint();

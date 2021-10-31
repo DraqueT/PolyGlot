@@ -19,9 +19,11 @@
  */
 package org.darisadesigns.polyglotlina.Nodes;
 
+import TestResources.DummyCore;
 import TestResources.TestResources;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,9 +36,11 @@ import org.w3c.dom.Element;
  */
 public class DeclensionNodeTest {
     private final ConjugationNode testNode;
+    private final DictCore core;
     
     public DeclensionNodeTest() {
-        testNode = new ConjugationNode(1);
+        core = DummyCore.newCore();
+        testNode = new ConjugationNode(1, core.getConjugationManager());
         
         testNode.setCombinedDimId("combId");
         testNode.setDimensionless(false);
@@ -48,7 +52,7 @@ public class DeclensionNodeTest {
     public void testEquals() {
         System.out.println("DeclensionNodeTest.testEquals");
         
-        ConjugationNode compNode = new ConjugationNode(1);
+        ConjugationNode compNode = new ConjugationNode(1, core.getConjugationManager());
         
         compNode.setCombinedDimId("combId");
         compNode.setDimensionless(false);
@@ -62,7 +66,7 @@ public class DeclensionNodeTest {
     public void testNotEquals() {
         System.out.println("DeclensionNodeTest.testNotEquals");
         
-        ConjugationNode compNode = new ConjugationNode(1);
+        ConjugationNode compNode = new ConjugationNode(1, core.getConjugationManager());
         
         compNode.setCombinedDimId("combId");
         compNode.setDimensionless(false);
@@ -248,7 +252,7 @@ public class DeclensionNodeTest {
     public void testSetEqual() {
         System.out.println("DeclensionNodeTest.testSetEqual");
         
-        ConjugationNode node = new ConjugationNode(0);
+        ConjugationNode node = new ConjugationNode(0, core.getConjugationManager());
         node.setEqual(testNode);
         assertTrue(node.equals(testNode));
     }
@@ -260,7 +264,7 @@ public class DeclensionNodeTest {
         String expectedMessage = "Object not of type DeclensionNode";
         
         Exception exception = assertThrows(ClassCastException.class, () -> {
-            ConjugationNode node = new ConjugationNode(0);
+            ConjugationNode node = new ConjugationNode(0, core.getConjugationManager());
             node.setEqual(new ConWord());
         });
 
@@ -276,7 +280,7 @@ public class DeclensionNodeTest {
         String expectedValue = "TESTO DEBESTO";
         int dimId = 2;
         
-        ConjugationNode node = new ConjugationNode(0);
+        ConjugationNode node = new ConjugationNode(0, core.getConjugationManager());
         ConjugationDimension dim = new ConjugationDimension(dimId);
         dim.setValue(expectedValue);
         node.addDimension(dim);
@@ -290,7 +294,7 @@ public class DeclensionNodeTest {
     public void testGetDeclensionDimensionByIdNotExists() {
         System.out.println("DeclensionNodeTest.testSetEqual");
         
-        ConjugationNode node = new ConjugationNode(0);
+        ConjugationNode node = new ConjugationNode(0, core.getConjugationManager());
         assertNull(node.getConjugationDimensionById(1));
     }
     

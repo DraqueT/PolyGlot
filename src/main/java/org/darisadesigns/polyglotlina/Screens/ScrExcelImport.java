@@ -20,22 +20,24 @@
 package org.darisadesigns.polyglotlina.Screens;
 
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.ImportFileHelper;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
-import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
-import org.darisadesigns.polyglotlina.CustomControls.PDialog;
-import org.darisadesigns.polyglotlina.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.Desktop.ImportFileHelper;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PComboBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import java.io.File;
 import java.nio.charset.Charset;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.csv.CSVFormat;
-import org.darisadesigns.polyglotlina.CustomControls.PRadioButton;
-import org.darisadesigns.polyglotlina.ImportFileHelper.DuplicateOption;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PRadioButton;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.ImportFileHelper.DuplicateOption;
 import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -100,21 +102,21 @@ public class ScrExcelImport extends PDialog {
         jLabel11 = new PLabel("", menuFontSize);
         txtExcelSheet = new javax.swing.JTextField();
         jLabel10 = new PLabel("", menuFontSize);
-        cmbPreferences = new PComboBox<Delimiter>(core.getPropertiesManager().getFontMenu());
+        cmbPreferences = new PComboBox<Delimiter>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
         jLabel12 = new PLabel("", menuFontSize);
-        cmbQuoteChar = new PComboBox<>(core.getPropertiesManager().getFontMenu());
+        cmbQuoteChar = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         btnImport = new PButton(nightMode, menuFontSize);
         btnCancel = new PButton(nightMode, menuFontSize);
         jPanel2 = new javax.swing.JPanel();
-        jLabel13 = new PLabel("Duplicate Handling", core.getOptionsManager().getMenuFontSize());
+        jLabel13 = new PLabel("Duplicate Handling", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
         rdoImpAll = new PRadioButton(core,
-            core.getOptionsManager().isNightMode());
+            PolyGlot.getPolyGlot().getOptionsManager().isNightMode());
         rdoIgnrDups = new PRadioButton(core,
-            core.getOptionsManager().isNightMode());
+            PolyGlot.getPolyGlot().getOptionsManager().isNightMode());
         rdoOverwDups = new PRadioButton(core,
-            core.getOptionsManager().isNightMode());
+            PolyGlot.getPolyGlot().getOptionsManager().isNightMode());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Import From External Format");
@@ -437,7 +439,7 @@ public class ScrExcelImport extends PDialog {
         File file = new File(txtFileName.getText());
 
         if (!file.exists()) {
-            InfoBox.error("File Error", "File does not exist: " + txtFileName.getText(), core.getRootWindow());
+            core.getOSHandler().getInfoBox().error("File Error", "File does not exist: " + txtFileName.getText());
             return;
         }
         try {
@@ -467,29 +469,28 @@ public class ScrExcelImport extends PDialog {
 
             if (parent != null) {
                 parent.updateAllValues(core);
-                InfoBox.info("Success!", txtFileName.getText() + " imported successfully!", this);
+                new DesktopInfoBox(this).info("Success!", txtFileName.getText() + " imported successfully!");
 
                 // if everything has completed without error, close the window and open Lexicon
                 dispose();
                 parent.openLexicon(true);
             }
         } catch (NumberFormatException e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Import Error", "All column fields and sheet field must contain "
-                    + "numeric values only:\n" + e.getLocalizedMessage(), this);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            new DesktopInfoBox(this).error("Import Error", "All column fields and sheet field must contain "
+                    + "numeric values only:\n" + e.getLocalizedMessage());
         } catch (IllegalStateException e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Import Error", "Could not import from file " + txtFileName.getText()
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            new DesktopInfoBox(this).error("Import Error", "Could not import from file " + txtFileName.getText()
                     + ".\n The text encoding is not supported. Please open the import file in a "
-                    + "text editor and save with encoding: " + Charset.defaultCharset().displayName(),
-                    this);
+                    + "text editor and save with encoding: " + Charset.defaultCharset().displayName());
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Import Error", "Could not import from file " + txtFileName.getText()
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            new DesktopInfoBox(this).error("Import Error", "Could not import from file " + txtFileName.getText()
                     + windowsError()
                     + ".\n Check to make certain that column mappings are correct "
                     + "(nothing above max cell value) and that the file is not corrupt:\n"
-                    + e.getLocalizedMessage(), this);
+                    + e.getLocalizedMessage());
         }
     }
     

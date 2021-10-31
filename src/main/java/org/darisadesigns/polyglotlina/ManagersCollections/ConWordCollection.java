@@ -24,7 +24,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.FormattedTextHelper;
@@ -123,9 +122,8 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         String line;
         
         try (BufferedReader r = new BufferedReader(new InputStreamReader(bs, StandardCharsets.UTF_8))) {
-            if (!showPrompt || InfoBox.actionConfirmation("Import Swadesh List?", 
-                    "This will import all the words defined within this Swadesh list into your lexicon. Continue?",
-                    core.getRootWindow())) {
+            if (!showPrompt || core.getOSHandler().getInfoBox().actionConfirmation("Import Swadesh List?", 
+                    "This will import all the words defined within this Swadesh list into your lexicon. Continue?")) {
                 for (int i = 0; (line = r.readLine()) != null; i++) {
                     if (line.startsWith("#")) {
                         continue;
@@ -271,7 +269,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         boolean ret = false;
         
         // don't bother checking blanks
-        if (conWord.isBlank()) {
+        if (core.getPGTUtil().isBlank(conWord)) {
             ret = false;
         } else {
             for (ConWord word : this.nodeMap.values()) {
@@ -295,7 +293,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         boolean ret = false;
         
         // don't bother checking blanks
-        if (local.isBlank()) {
+        if (core.getPGTUtil().isBlank(local)) {
             ret = true;
         } else {
             for (ConWord word : this.nodeMap.values()) {
@@ -476,7 +474,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
                     
                     String newValue = word.getValue();
                     
-                    if (newValue.isBlank()) {
+                    if (core.getPGTUtil().isBlank(newValue)) {
                         throw new Exception("Evolved word form is blank.");
                     }
                     
@@ -819,7 +817,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
      * @return text in plain tag
      */
     public static String formatPlain(String toPlain, DictCore core) {
-        String defaultFont = "face=\"" + core.getPropertiesManager().getFontLocal().getFamily() + "\"";
+        String defaultFont = "face=\"" + core.getPropertiesManager().getFontLocalFamily() + "\"";
         return "<font " + defaultFont + ">" + toPlain + "</font>";
     }
 
@@ -832,7 +830,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
      */
     public static String formatCon(String toCon, DictCore core) {
         // TODO: This is very bad. Strip this out at the same time that the language stats tool is rewritten. Use css style.
-        String defaultFont = "face=\"" + core.getPropertiesManager().getFontCon().getFamily() + "\"";
+        String defaultFont = "face=\"" + core.getPropertiesManager().getFontConFamily() + "\"";
         return "<font " + defaultFont + ">" + toCon + "</font>";
     }
 

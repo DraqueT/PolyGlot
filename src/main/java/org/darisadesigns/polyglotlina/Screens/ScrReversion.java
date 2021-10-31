@@ -20,13 +20,14 @@
 package org.darisadesigns.polyglotlina.Screens;
 
 import java.io.IOException;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ReversionNode;
 import javax.swing.DefaultListModel;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -47,8 +48,8 @@ public final class ScrReversion extends PDialog {
             revModel.addElement(curNode);
         }
         
-        if (core.getRootWindow() != null){
-            this.setLocation(core.getRootWindow().getLocation());
+        if (PolyGlot.getPolyGlot().getRootWindow() != null){
+            this.setLocation(PolyGlot.getPolyGlot().getRootWindow().getLocation());
         }
     }
 
@@ -108,16 +109,16 @@ public final class ScrReversion extends PDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         ReversionNode reversion = lstReversions.getSelectedValue();
         
-        if (reversion != null && InfoBox.actionConfirmation("Confirm Revert", "This action will revert to the state of "
-                + "this language " + reversion.toString() + ".\n Are you sure you would like to continue?", this)) {
+        if (reversion != null && new DesktopInfoBox(this).actionConfirmation("Confirm Revert", "This action will revert to the state of "
+                + "this language " + reversion.toString() + ".\n Are you sure you would like to continue?")) {
             try {
                 core.revertToState(reversion.getValue(), core.getCurFileName());
-                InfoBox.info("Successful Reversion", "Reversion Successful!", this);
+                new DesktopInfoBox(this).info("Successful Reversion", "Reversion Successful!");
                 this.dispose();
             } catch (IOException e) {
-                IOHandler.writeErrorLog(e);
-                InfoBox.error("Unable to Revert", "Unable to revert to prior version: " 
-                        + e.getLocalizedMessage(), this);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
+                new DesktopInfoBox(this).error("Unable to Revert", "Unable to revert to prior version: " 
+                        + e.getLocalizedMessage());
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed

@@ -19,23 +19,22 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.ClipboardHandler;
+import org.darisadesigns.polyglotlina.Desktop.ClipboardHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.darisadesigns.polyglotlina.Nodes.LogoNode;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.CustomControls.PFrame;
-import org.darisadesigns.polyglotlina.CustomControls.PTextField;
-import org.darisadesigns.polyglotlina.PGTUtil.WindowMode;
-import org.darisadesigns.polyglotlina.CustomControls.PCellEditor;
-import org.darisadesigns.polyglotlina.CustomControls.PCellRenderer;
-import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
-import org.darisadesigns.polyglotlina.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.CustomControls.PList;
-import org.darisadesigns.polyglotlina.CustomControls.PTable;
-import org.darisadesigns.polyglotlina.CustomControls.PTextPane;
-import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil.WindowMode;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellEditor;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellRenderer;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PList;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTable;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -83,8 +82,10 @@ import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
-import org.darisadesigns.polyglotlina.PFontHandler;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -180,8 +181,8 @@ public class ScrLogoDetails extends PFrame {
         try {
             latch.await();
         } catch (InterruptedException e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Form Load Error", "Unable to load Lexicon: " + e.getLocalizedMessage(), core.getRootWindow());
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            core.getOSHandler().getInfoBox().error("Form Load Error", "Unable to load Lexicon: " + e.getLocalizedMessage());
         }
         
         gridTitlePane.setTooltip(new Tooltip(FILTER_LABEL));
@@ -197,8 +198,8 @@ public class ScrLogoDetails extends PFrame {
     
     private TitledPane createSearchPanel() {
         GridPane grid = new GridPane();
-        javafx.scene.text.Font font = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), core.getOptionsManager().getMenuFontSize());
-        javafx.scene.text.Font conFont = core.getPropertiesManager().getFXConFont();
+        javafx.scene.text.Font font = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        javafx.scene.text.Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFXConFont();
         
         gridTitlePane = new TitledPane();
         gridTitlePane.setFont(font);
@@ -323,7 +324,7 @@ public class ScrLogoDetails extends PFrame {
      * Sets up fonts based on core properties
      */
     private void setupFonts() {
-        Font font = core.getPropertiesManager().getFontCon();
+        Font font = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
 
         if (font == null) {
             return;
@@ -471,17 +472,17 @@ public class ScrLogoDetails extends PFrame {
                 }
 
                 Image image = ClipboardHandler.getClipboardImage();
-                curNode.setLogoGraph(image);
+                curNode.setLogoBytes(DesktopIOHandler.getInstance().loadImageBytesFromImage(image));
                 saveReadings(lstLogos.getSelectedIndex());
                 saveRads(lstLogos.getSelectedIndex());
                 populateLogoProps();
             } catch (Exception e) {
-                IOHandler.writeErrorLog(e);
-                InfoBox.error("Paste Error", "Unable to paste: " + e.getLocalizedMessage(), core.getRootWindow());
+                DesktopIOHandler.getInstance().writeErrorLog(e);
+                core.getOSHandler().getInfoBox().error("Paste Error", "Unable to paste: " + e.getLocalizedMessage());
             }
         } else {
-            InfoBox.warning("Image Format Incompatibility",
-                    "The contents of the clipboard is not an image, or is an unrecognized format", core.getRootWindow());
+            core.getOSHandler().getInfoBox().warning("Image Format Incompatibility",
+                    "The contents of the clipboard is not an image, or is an unrecognized format");
         }
     }
 
@@ -508,7 +509,7 @@ public class ScrLogoDetails extends PFrame {
             java.awt.EventQueue.invokeLater(() -> {
                 curPopulating = true;
                 txtStrokes.setText("");
-                InfoBox.info("Type mismatch", "Please enter only numeric values into strokes field.", core.getRootWindow());
+                core.getOSHandler().getInfoBox().info("Type mismatch", "Please enter only numeric values into strokes field.");
                 curPopulating = false;
             });
         }
@@ -749,7 +750,7 @@ public class ScrLogoDetails extends PFrame {
                 java.awt.EventQueue.invokeLater(() -> {
                     curPopulating = true;
                     fltStrokes.setText("");
-                    InfoBox.info("Type mismatch", "Strokes field compatible with integer values only", core.getRootWindow());
+                    core.getOSHandler().getInfoBox().info("Type mismatch", "Strokes field compatible with integer values only");
                     curPopulating = false;
                 });
 
@@ -824,8 +825,9 @@ public class ScrLogoDetails extends PFrame {
             tblReadings.setModel(new DefaultTableModel(new Object[]{"Readings"}, 0));
             lstRelWords.setModel(new DefaultListModel<>());
             chkIsRad.setSelected(false);
-            lblLogo.setIcon(new ImageIcon(new LogoNode().getLogoGraph().getScaledInstance(
-                    lblLogo.getWidth(), lblLogo.getHeight(), Image.SCALE_SMOOTH)));
+            ImageIcon icon = new ImageIcon(new LogoNode(core).getLogoBytes());
+            icon.getImage().getScaledInstance(lblLogo.getWidth(), lblLogo.getHeight(), Image.SCALE_SMOOTH);
+            lblLogo.setIcon(icon);
             populateRelatedWords();
             setEnableControls(false);
 
@@ -848,7 +850,7 @@ public class ScrLogoDetails extends PFrame {
                 radModel.addElement(radNode);
             } catch (Exception e) {
                 // do nothing
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
             }
         }
 
@@ -872,8 +874,9 @@ public class ScrLogoDetails extends PFrame {
         tblReadings.setModel(procModel);
 
         // set logograph picture
-        lblLogo.setIcon(new ImageIcon(curNode.getLogoGraph().getScaledInstance(
-                lblLogo.getWidth(), lblLogo.getHeight(), Image.SCALE_SMOOTH)));
+        ImageIcon icon = new ImageIcon(curNode.getLogoBytes());
+        icon.getImage().getScaledInstance(lblLogo.getWidth(), lblLogo.getHeight(), Image.SCALE_SMOOTH);
+        lblLogo.setIcon(icon);
 
         populateRelatedWords();
         setEnableControls(true);
@@ -909,18 +912,18 @@ public class ScrLogoDetails extends PFrame {
         try {
             BufferedImage img = ImageIO.read(new File(fileName));
             LogoNode curNode = (LogoNode) lstLogos.getSelectedValue();
-            curNode.setLogoGraph(img);
+            curNode.setLogoBytes(DesktopIOHandler.getInstance().loadImageBytesFromImage(img));
             saveReadings(lstLogos.getSelectedIndex());
             saveRads(lstLogos.getSelectedIndex());
             populateLogoProps();
         } catch (IOException e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Image Load Error", "Unable to load image: " + fileName
-                    + ": " + e.getMessage(), core.getRootWindow());
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            core.getOSHandler().getInfoBox().error("Image Load Error", "Unable to load image: " + fileName
+                    + ": " + e.getMessage());
         } catch (NullPointerException e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Image Load Error", "Unable to read format of image: "
-                    + fileName, core.getRootWindow());
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            core.getOSHandler().getInfoBox().error("Image Load Error", "Unable to read format of image: "
+                    + fileName);
         }
     }
 
@@ -934,7 +937,7 @@ public class ScrLogoDetails extends PFrame {
             return;
         }
 
-        if (!InfoBox.deletionConfirmation(core.getRootWindow())) {
+        if (!core.getOSHandler().getInfoBox().deletionConfirmation()) {
             return;
         }
 
@@ -951,9 +954,9 @@ public class ScrLogoDetails extends PFrame {
 
             populateLogoProps();
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Logograph Error", "Unable to delete logograph: "
-                    + e.getMessage(), core.getRootWindow());
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            core.getOSHandler().getInfoBox().error("Logograph Error", "Unable to delete logograph: "
+                    + e.getMessage());
         }
     }
 
@@ -1026,7 +1029,7 @@ public class ScrLogoDetails extends PFrame {
     }
 
     private void addLogo() {
-        LogoNode newNode = new LogoNode();
+        LogoNode newNode = new LogoNode(core);
         newNode.setValue("");
 
         curPopulating = true;
@@ -1040,8 +1043,9 @@ public class ScrLogoDetails extends PFrame {
         try {
             core.getLogoCollection().addNode(newNode);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Logograph Error", "Unable to create Logograph: " + e.getMessage(), core.getRootWindow());
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            core.getOSHandler().getInfoBox().error("Logograph Error", 
+                    "Unable to create Logograph: " + e.getMessage());
         }
 
         populateLogographs();
@@ -1066,14 +1070,14 @@ public class ScrLogoDetails extends PFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel6 = new PLabel("", menuFontSize);
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstLogos = new PList(core.getPropertiesManager().getFontCon());
+        lstLogos = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         jPanel2 = new javax.swing.JPanel();
         lblLogo = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        lstRelWords = new PList(core.getPropertiesManager().getFontCon());
+        lstRelWords = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         jLabel8 = new PLabel("", menuFontSize);
         jScrollPane4 = new javax.swing.JScrollPane();
-        lstRadicals = new PList(core.getPropertiesManager().getFontCon());
+        lstRadicals = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         jLabel10 = new PLabel("", menuFontSize);
         btnAddReading = new PAddRemoveButton("+");
         btnDelReading = new PAddRemoveButton("-");

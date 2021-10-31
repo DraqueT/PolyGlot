@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina;
 
+import org.darisadesigns.polyglotlina.Desktop.Java8Bridge;
 import TestResources.DummyCore;
 import java.io.BufferedReader;
 import java.io.File;
@@ -27,6 +28,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Arrays;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,7 +58,7 @@ public class Java8BridgeTest {
             File result = Java8Bridge.getNewJavaBridgeLocation();
             assertTrue(result.exists());
         } catch (IOException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -82,7 +84,7 @@ public class Java8BridgeTest {
             Java8Bridge.exportPdf(OUTPUT, coverImage, foreward, printConLocal, printLocalCon, printOrtho, subTitleText, titleText, printPageNumber, printGlossKey, printGrammar, printWordEtymologies, printAllConjugations, core);
             assertTrue(new File(OUTPUT).exists());
         } catch (IOException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -110,7 +112,7 @@ public class Java8BridgeTest {
             assertTrue(result.exists());
             assertEquals(outputContents, expectedContents);
         } catch (IOException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -149,7 +151,7 @@ public class Java8BridgeTest {
                 assertTrue(Arrays.equals(expBytes, resBytes));
             }
         } catch (IOException | IllegalStateException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -176,7 +178,7 @@ public class Java8BridgeTest {
         } catch (FileNotFoundException e) {
             ret = null;
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
         

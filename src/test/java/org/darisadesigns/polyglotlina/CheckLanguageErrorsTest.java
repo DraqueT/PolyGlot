@@ -21,6 +21,7 @@ package org.darisadesigns.polyglotlina;
 
 import TestResources.DummyCore;
 import java.io.IOException;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode.ProblemType;
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,7 +44,7 @@ public class CheckLanguageErrorsTest {
             badLexEntriesCore.readFile(PGTUtil.TESTRESOURCES + "test_lex_problems.pgd");
             badRegexEntriesCore.readFile(PGTUtil.TESTRESOURCES + "test_regex_problems.pgd");
         } catch (IOException | IllegalStateException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }

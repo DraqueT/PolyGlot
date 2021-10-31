@@ -163,7 +163,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.darisadesigns.polyglotlina.PolyGlot</mainClass>
+                            <mainClass>org.darisadesigns.polyglotlina.Desktop.PolyGlot</mainClass>
                         </manifest>
                         <manifestEntries>
                             <SplashScreen-Image>assets/org/DarisaDesigns/ImageAssets/splash-image.png</SplashScreen-Image>

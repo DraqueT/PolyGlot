@@ -19,18 +19,15 @@
  */
 package org.darisadesigns.polyglotlina.Nodes;
 
+import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.WebInterface;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.awt.image.PixelGrabber;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import javax.swing.ImageIcon;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -42,34 +39,30 @@ public class LogoNode extends DictNode {
 
     private int strokes = 0;
     private String notes = "";
-    private Image logoGraph;
+    private byte[] logoBytes;
     private boolean isRadical = false;
     private String tmpRads = "";
     private String tmpReadingBuffer = "";
+    private DictCore core;
     protected List<LogoNode> radicals = new ArrayList<>();
     protected List<String> readings = new ArrayList<>();
 
-    public LogoNode() {
-        ImageIcon loadBlank = new ImageIcon(getClass().getResource(PGTUtil.EMPTY_LOGO_IMAGE));
-        BufferedImage image = new BufferedImage(
-                loadBlank.getIconWidth(),
-                loadBlank.getIconHeight(),
-                BufferedImage.TYPE_INT_RGB);
-
-        Graphics g = image.createGraphics();
-
-        loadBlank.paintIcon(null, g, 0, 0);
-        g.dispose();
-
-        logoGraph = image;
+    public LogoNode(DictCore _core) {
+        core = _core;
+        try {
+            logoBytes = _core.getOSHandler().getIOHandler().loadImageBytes(PGTUtil.EMPTY_LOGO_IMAGE);
+        }
+        catch (IOException ex) {
+            _core.getOSHandler().getIOHandler().writeErrorLog(ex);
+        }
     }
-
-    public Image getLogoGraph() {
-        return logoGraph;
+    
+    public byte[] getLogoBytes() {
+        return logoBytes;
     }
-
-    public void setLogoGraph(Image _logoGraph) {
-        logoGraph = _logoGraph;
+    
+    public void setLogoBytes(byte[] _logoBytes) {
+        logoBytes = _logoBytes;
     }
 
     public boolean isRadical() {
@@ -274,7 +267,7 @@ public class LogoNode extends DictNode {
         LogoNode setNode = (LogoNode) _node;
         radicals = new ArrayList<>(setNode.radicals);
         readings = new ArrayList<>(setNode.readings);
-        logoGraph = setNode.logoGraph;
+        logoBytes = setNode.logoBytes;
         notes = setNode.notes;
         value = setNode.value;
         strokes = setNode.getStrokes();
@@ -298,7 +291,7 @@ public class LogoNode extends DictNode {
         logoElement.appendChild(node);
 
         node = doc.createElement(PGTUtil.LOGO_NOTES_XID);
-        node.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.notes)));
+        node.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.notes, core)));
         logoElement.appendChild(node);
 
         node = doc.createElement(PGTUtil.LOGO_RADICAL_LIST_XID);
@@ -321,38 +314,6 @@ public class LogoNode extends DictNode {
         rootElement.appendChild(logoElement);
     }
 
-    /**
-     * Tests pixel for pixel equality of images
-     * @param image1
-     * @param image2
-     * @return 
-     */
-    private boolean imagesEqual(Image image1, Image image2) {
-        boolean ret;
-        try {
-            PixelGrabber grabImage1Pixels = new PixelGrabber(image1, 0, 0, -1, -1, false);
-            PixelGrabber grabImage2Pixels = new PixelGrabber(image2, 0, 0, -1, -1, false);
-
-            int[] image1Data = null;
-
-            if (grabImage1Pixels.grabPixels()) {
-                image1Data = (int[]) grabImage1Pixels.getPixels();
-            }
-
-            int[] image2Data = null;
-
-            if (grabImage2Pixels.grabPixels()) {
-                image2Data = (int[]) grabImage2Pixels.getPixels();
-            }
-
-            ret = Arrays.equals(image1Data, image2Data);
-        } catch (InterruptedException e) {
-            ret = false;
-        }
-        
-        return ret;
-    }
-
     @Override
     public boolean equals(Object comp) {
         boolean ret = false;
@@ -364,7 +325,7 @@ public class LogoNode extends DictNode {
 
             ret = value.equals(c.value);
             ret = ret && notes.equals(c.notes);
-            ret = ret && imagesEqual(logoGraph, c.logoGraph);
+            ret = ret && Arrays.equals(logoBytes, c.logoBytes);
             ret = ret && isRadical == c.isRadical;
             ret = ret && radicals.equals(c.radicals);
             ret = ret && readings.equals(c.readings);

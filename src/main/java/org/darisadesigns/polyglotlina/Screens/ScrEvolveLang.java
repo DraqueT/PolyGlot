@@ -24,18 +24,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
-import org.darisadesigns.polyglotlina.CustomControls.PDialog;
-import org.darisadesigns.polyglotlina.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PComboBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.EvolutionPair;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.RegexTools.ReplaceOptions;
 
 /**
@@ -111,27 +113,25 @@ public final class ScrEvolveLang extends PDialog {
 
         rdoGrpApplyTo = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new PLabel("", core.getOptionsManager().getMenuFontSize());
+        jLabel1 = new PLabel("", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
         txtConWordFilter = new PTextField(core, false, "ConWord Filter");
         txtLocalWordFilter = new PTextField(core, true, core.getPropertiesManager().getLocalLangName() + " Filter");
-        cmbPoS = new PComboBox<TypeNode>(
-            core.getPropertiesManager().getFontLocal(),
-            "-- Part of Speech --");
+        cmbPoS = new PComboBox<TypeNode>( ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), "-- Part of Speech --");
         jPanel2 = new javax.swing.JPanel();
-        jLabel2 = new PLabel("", core.getOptionsManager().getMenuFontSize());
+        jLabel2 = new PLabel("", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
         sldApplyTo = new javax.swing.JSlider();
-        lblApplyTo = new PLabel("", core.getOptionsManager().getMenuFontSize());
-        cmbTransformOptions = new PComboBox<>(core.getPropertiesManager().getFontMenu());
+        lblApplyTo = new PLabel("", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        cmbTransformOptions = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         rdoLexicon = new javax.swing.JRadioButton();
         rdoConjpatterns = new javax.swing.JRadioButton();
         rdoBoth = new javax.swing.JRadioButton();
-        jButton1 = new PButton(false, core.getOptionsManager().getMenuFontSize());
-        jButton2 = new PButton(false, core.getOptionsManager().getMenuFontSize());
-        jLabel4 = new PLabel("Use this tool to simulate linguistic drift.", PLabel.CENTER, core.getOptionsManager().getMenuFontSize());
+        jButton1 = new PButton(false, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        jButton2 = new PButton(false, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        jLabel4 = new PLabel("Use this tool to simulate linguistic drift.", PLabel.CENTER, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
         jPanel3 = new javax.swing.JPanel();
         txtReplace = new PTextField(core, false, "Replacement");
         txtPattern = new PTextField(core, false, "Target Pattern");
-        jLabel3 = new PLabel("", core.getOptionsManager().getMenuFontSize());
+        jLabel3 = new PLabel("", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);
@@ -328,7 +328,9 @@ public final class ScrEvolveLang extends PDialog {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if (InfoBox.actionConfirmation("Apply Evolution Confirmation", "Really apply evolution rules? This will update values in your lexicon.", this)) {
+        if (new DesktopInfoBox(this)
+                .actionConfirmation("Apply Evolution Confirmation", 
+                        "Really apply evolution rules? This will update values in your lexicon.")) {
             try {
                 ConWord filter = new ConWord();
                 filter.setValue(txtConWordFilter.getText());
@@ -344,7 +346,8 @@ public final class ScrEvolveLang extends PDialog {
                 
                 if (rdoLexicon.isSelected() || rdoBoth.isSelected()) {
                     if (PGTUtil.regexContainsLookaheadOrBehind(replace)) {
-                        InfoBox.warning("Language Evolution", "Replacement patterns with lookahead or lookbehind patterns\nmust use \"All Instances\" option.", this);
+                        new DesktopInfoBox(this).warning("Language Evolution", 
+                                "Replacement patterns with lookahead or lookbehind patterns\nmust use \"All Instances\" option.");
                     }
 
                     result.addAll(Arrays.asList(core.getWordCollection().evolveLexicon(filter, 
@@ -352,7 +355,7 @@ public final class ScrEvolveLang extends PDialog {
                             cmbTransformOptions.getItemAt(cmbTransformOptions.getSelectedIndex()),
                             regex, 
                             replace)));
-                    core.getRootWindow().updateAllValues(core);
+                    PolyGlot.getPolyGlot().getRootWindow().updateAllValues(core);
                 }
                 
                 if (rdoConjpatterns.isSelected() || rdoBoth.isSelected()) {
@@ -362,8 +365,8 @@ public final class ScrEvolveLang extends PDialog {
                 new ScrEvolveReport(core, result.toArray(new EvolutionPair[0])).setVisible(true);
                 this.dispose();
             } catch (Exception e) {
-                InfoBox.error("Evolution Error", "Problem evolving language: " + e.getLocalizedMessage(), this);
-                IOHandler.writeErrorLog(e);
+                new DesktopInfoBox(this).error("Evolution Error", "Problem evolving language: " + e.getLocalizedMessage());
+                DesktopIOHandler.getInstance().writeErrorLog(e);
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed

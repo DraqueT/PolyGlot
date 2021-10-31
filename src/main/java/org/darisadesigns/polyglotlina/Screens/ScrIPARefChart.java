@@ -19,20 +19,22 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PFrame;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.ClipboardHandler;
-import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
-import org.darisadesigns.polyglotlina.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.IOHandler;
-import org.darisadesigns.polyglotlina.IPAHandler;
+import org.darisadesigns.polyglotlina.Desktop.ClipboardHandler;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PComboBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.IPAHandler;
 import org.darisadesigns.polyglotlina.IPAHandler.IPALibrary;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.util.Map;
 import javax.swing.JComponent;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -61,7 +63,7 @@ public final class ScrIPARefChart extends PFrame {
      */
     private void setupToolTips() {
         lblVowels.setToolTipText(" ");
-        ((PLabel)lblVowels).setToolTipOverrideFont(core.getPropertiesManager().getFontCon());
+        ((PLabel)lblVowels).setToolTipOverrideFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         ((PLabel)lblVowels).setToolTipAction((e) -> {
             String ret = "";
             
@@ -80,7 +82,7 @@ public final class ScrIPARefChart extends PFrame {
         });
         
         lblNonPulmonicConsonants.setToolTipText(" ");
-        ((PLabel)lblNonPulmonicConsonants).setToolTipOverrideFont(core.getPropertiesManager().getFontCon());
+        ((PLabel)lblNonPulmonicConsonants).setToolTipOverrideFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         ((PLabel)lblNonPulmonicConsonants).setToolTipAction((e) -> {
             String ret = "";
             
@@ -99,7 +101,7 @@ public final class ScrIPARefChart extends PFrame {
         });
         
         lblOtherSymbols.setToolTipText(" ");
-        ((PLabel)lblOtherSymbols).setToolTipOverrideFont(core.getPropertiesManager().getFontCon());
+        ((PLabel)lblOtherSymbols).setToolTipOverrideFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         ((PLabel)lblOtherSymbols).setToolTipAction((e) -> {
             String ret = "";
             
@@ -118,7 +120,7 @@ public final class ScrIPARefChart extends PFrame {
         });
         
         lblPulmonicConsonants.setToolTipText(" ");
-        ((PLabel)lblPulmonicConsonants).setToolTipOverrideFont(core.getPropertiesManager().getFontCon());
+        ((PLabel)lblPulmonicConsonants).setToolTipOverrideFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         ((PLabel)lblPulmonicConsonants).setToolTipAction((e) -> {
             String ret = "";
             
@@ -155,8 +157,8 @@ public final class ScrIPARefChart extends PFrame {
         jPanel4 = new javax.swing.JPanel();
         lblOtherSymbols = new PLabel("",0);
         txtIPAChars = new javax.swing.JTextField();
-        cmbIpaLibSelect = new PComboBox<IPALibrary>(core.getPropertiesManager().getFontMenu());
-        lblHover = new PLabel("Hover over an IPA character to display which characters in your language express it.", core.getOptionsManager().getMenuFontSize());
+        cmbIpaLibSelect = new PComboBox<IPALibrary>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
+        lblHover = new PLabel("Hover over an IPA character to display which characters in your language express it.", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("IPA Pronunciation/Character Guide");
@@ -334,8 +336,8 @@ public final class ScrIPARefChart extends PFrame {
             String curText = txtIPAChars.getText();
             txtIPAChars.setText((curText.isEmpty() ? "" : curText + " ") + ipaChar);
         } catch(Exception e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("IPA Error", e.getLocalizedMessage(), this);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            new DesktopInfoBox(this).error("IPA Error", e.getLocalizedMessage());
         }
     }//GEN-LAST:event_lblOtherSymbolsMouseClicked
 
@@ -354,8 +356,8 @@ public final class ScrIPARefChart extends PFrame {
             text = ipaChar.isEmpty() ? text : text + " " + ipaChar;
             txtIPAChars.setText(text);
         } catch(Exception e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("IPA Error", e.getLocalizedMessage(), this);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            new DesktopInfoBox(this).error("IPA Error", e.getLocalizedMessage());
         }
     }//GEN-LAST:event_lblVowelsMouseClicked
 
@@ -368,8 +370,8 @@ public final class ScrIPARefChart extends PFrame {
             String curText = txtIPAChars.getText();
             txtIPAChars.setText((curText.isEmpty() || ipaChar.isEmpty() ? "" : curText + " ") + ipaChar);
         } catch(Exception e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("IPA Error", e.getLocalizedMessage(), this);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            new DesktopInfoBox(this).error("IPA Error", e.getLocalizedMessage());
         }
     }//GEN-LAST:event_lblPulmonicConsonantsMouseClicked
 
@@ -388,8 +390,8 @@ public final class ScrIPARefChart extends PFrame {
             String curText = txtIPAChars.getText();
             txtIPAChars.setText((curText.isEmpty() ? "" : curText + " ") + ipaChar);
         } catch(Exception e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("IPA Error", e.getLocalizedMessage(), this);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            new DesktopInfoBox(this).error("IPA Error", e.getLocalizedMessage());
         }
     }//GEN-LAST:event_lblNonPulmonicConsonantsMouseClicked
     

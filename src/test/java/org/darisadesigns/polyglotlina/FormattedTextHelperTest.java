@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina;
 
+import org.darisadesigns.polyglotlina.Desktop.PFontInfo;
 import TestResources.DummyCore;
 import java.awt.Color;
 import java.awt.GraphicsEnvironment;
@@ -30,7 +31,9 @@ import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
-import org.darisadesigns.polyglotlina.CustomControls.PGrammarPane;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PGrammarPane;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
+import org.darisadesigns.polyglotlina.Desktop.FormattedTextHelper;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
@@ -57,7 +60,7 @@ public class FormattedTextHelperTest {
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
         } catch (IOException | IllegalStateException e) {
-            IOHandler.writeErrorLog(e, "FORMATTEDTEXTHELPERTEST");
+            DesktopIOHandler.getInstance().writeErrorLog(e, "FORMATTEDTEXTHELPERTEST");
         }
     }
     
@@ -115,7 +118,7 @@ public class FormattedTextHelperTest {
             FormattedTextHelper.restoreFromString(testVal, pane, core);
             assertEquals(pane.getText(), "Lodenkur is a language that technically does not have pronunciation in any way that we are able to perceive. It is a language \"spoken\" via radio frequency, similar to what we might think of as telepathy. This having been said, it is useful to have a way to speak and vocalize this language in a more familiar way, as a helpful mnemonic to remember vocabulary and to allow better interaction with it. Below is an attempt to convert this it a more human-friendly form.   A Basic Explanation of Characters  	There are two types of characters, the tonal and the non-tonal. Tonal characters can be pronounced in one of three ways. The first comes with no special markers, and is flat. The second has a marker on the left side. This is pronounced with a rising tone. The third has a marker on the right side. This is pronounced with a descending tone.  Flat Characters:   1234567890  Rising Tone Characters:  qwertyuiop  Falling Tone Characters:  asdfghjkl;  	The second type of characters are not tonal. They are pronounced in ways the precludes rising or falling tone. In KLA, you will never see more than two of these consecutively, as this would be difficult or impossible to pronounce.  Non-Tonal Characters:  zxcvb  Pronunciation  	Below is a basic pronunciation guide for each of the characters. These pronunciations do not account for tone, which is explained in greater detail later in this document. Rising and falling tones do not affect the pronunciation of characters. All pronunciations are in IPA style.  z : t - t - (today) x : th - θ (theigh) 1 : ha - hɑː (hall) 2 : wa - wɑː (water) 3 : no - noʊ (no) 4 : reh - ʀə (red) (note: french, guttural R) 5 : lo - loʊ (load) 6 : ku - kuː (cocoon) 7 : mi - miː (me) 8 : de - dɛ (debt) 9 : ya - jæ (yak) 0 : si - siː (see) c : sh - ʃ (shy) v : f - f (fan) b : ng - ŋ (sang)  	Neutral tone is typically segmented by sentence. A speaker has their \"neutral\" voice tone, which is where each sentence begins. A character that is atonal or flat will leave the speaker's voice in the tone in which it began. A character with rising or falling tone however, will raise or lower the speaker's tone before the character is pronounced. This new tone replaces the base tone as the speaker continues. This results in a lyrical sound to speech, tone rising and falling through phrases and sentences.  	In cases where the tone is too low or too high for a speaker to continue, they may return to the neutral tone between words by leaving a stressed pause between the words, although this is considered indicative of poorly considered phrasing. Typically a speaker should manage this themselves. Tone may be raised or lowered as much as the speaker likes on an appropriate character, and the meaning remains the same. In this way, a speaker should take care that their words do not tonally escape them. Sentences tend to rise in tone as they continue, rather than dipping or staying in the same tonal position.");
         } catch (BadLocationException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -129,7 +132,7 @@ public class FormattedTextHelperTest {
         System.out.println("FormattedTextHelperTest.testGetSectionTextFontSpecific");
         GrammarChapNode chap = core.getGrammarManager().getChapters()[0];
         
-        String sectionText = ((GrammarSectionNode)chap.getFirstChild()).getSectionText();
+        String sectionText = ((GrammarSectionNode)chap.children.get(0)).getSectionText();
         List<Entry<String, PFontInfo>> results = FormattedTextHelper.getSectionTextFontSpecific(sectionText, core);
         Entry<String, PFontInfo> title = results.get(0);
         Entry<String, PFontInfo> lodenkurExample = results.get(6);
@@ -162,13 +165,13 @@ public class FormattedTextHelperTest {
         System.out.println("FormattedTextHelperTest.testStorageFormat");
         PGrammarPane pane = new PGrammarPane(core);
         GrammarChapNode chap = core.getGrammarManager().getChapters()[0];
-        String sectionText = ((GrammarSectionNode)chap.getChildAt(1)).getSectionText();
+        String sectionText = ((GrammarSectionNode)chap.children.get(1)).getSectionText();
         
         try {
             FormattedTextHelper.restoreFromString(sectionText, pane, core);
             assertEquals(sectionText, FormattedTextHelper.storageFormat(pane));
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }

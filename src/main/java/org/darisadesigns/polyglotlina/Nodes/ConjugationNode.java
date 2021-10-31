@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.RegexTools;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -36,6 +37,7 @@ import org.w3c.dom.Element;
  * @author draque
  */
 public class ConjugationNode extends DictNode {
+    private ConjugationManager manager;
     private String notes = "";
     private String combinedDimId = "";
     private boolean dimensionless = false;
@@ -43,8 +45,9 @@ public class ConjugationNode extends DictNode {
     private final Map<Integer, ConjugationDimension> dimensions = new HashMap<>();
     private ConjugationDimension buffer = new ConjugationDimension(-1);
     
-    public ConjugationNode(Integer _declensionId) {
+    public ConjugationNode(Integer _declensionId, ConjugationManager _manager) {
         super(_declensionId);
+        manager = _manager;
     }
     
     /**
@@ -208,7 +211,7 @@ public class ConjugationNode extends DictNode {
         wordNode.appendChild(nodeValue);
 
         nodeValue = doc.createElement(PGTUtil.DECLENSION_NOTES_XID);
-        nodeValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.notes)));
+        nodeValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.notes, manager.getCore())));
         wordNode.appendChild(nodeValue);
 
         nodeValue = doc.createElement(PGTUtil.DECLENSION_IS_TEMPLATE_XID);

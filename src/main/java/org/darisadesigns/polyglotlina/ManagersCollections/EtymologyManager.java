@@ -20,7 +20,6 @@
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.EtyExternalParent;
 import org.darisadesigns.polyglotlina.PGTUtil;
@@ -481,7 +480,7 @@ public class EtymologyManager {
             addRelation(bufferParent, bufferChild);
             // Do NOT set these to 0. This relies on the parent buffer persisting.
         } catch (IllegalLoopException e) {
-            IOHandler.writeErrorLog(e);
+            core.getOSHandler().getIOHandler().writeErrorLog(e);
             // do nothing. These will have been eliminated at the time of archiving.
         }
     }

@@ -23,17 +23,16 @@ import org.darisadesigns.polyglotlina.Nodes.ConjugationGenRule;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationGenTransform;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationPair;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.CustomControls.PDialog;
-import org.darisadesigns.polyglotlina.CustomControls.PTextField;
-import org.darisadesigns.polyglotlina.CustomControls.PCellEditor;
-import org.darisadesigns.polyglotlina.CustomControls.PCellRenderer;
-import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
-import org.darisadesigns.polyglotlina.CustomControls.PClassCheckboxPanel;
-import org.darisadesigns.polyglotlina.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.CustomControls.PList;
-import org.darisadesigns.polyglotlina.CustomControls.PTable;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellEditor;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellRenderer;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PClassCheckboxPanel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PList;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTable;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationDimension;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationNode;
 import java.awt.Color;
@@ -64,7 +63,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -186,7 +187,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         }
 
         if (!ret) {
-            InfoBox.error("Unable to Close With Error", userMessage, parent);
+            core.getOSHandler().getInfoBox().error("Unable to Close With Error", userMessage);
         }
 
         return ret;
@@ -202,7 +203,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
      */
     private void setObjectProperties() {
         if (!core.getPropertiesManager().isOverrideRegexFont()) {
-            Font setFont = core.getPropertiesManager().getFontCon();
+            Font setFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
             txtRuleRegex.setFont(setFont);
         }
     }
@@ -606,7 +607,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         
         message += "\nto all word forms for this part of speech with the " + decLabel + " value of " + decDimLabel + ". Continue?";
         
-        return InfoBox.actionConfirmation("Confirm Rule Copy", message, parent);
+        return core.getOSHandler().getInfoBox().actionConfirmation("Confirm Rule Copy", message);
     }
     
     public boolean verifyDeleteRulesToDimension(int decId, int dimId, List<ConjugationGenRule> rules) {
@@ -620,7 +621,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         
         message += "\nfrom all word forms for this part of speech with the " + decLabel + " value of " + decDimLabel + ". Continue?";
         
-        return InfoBox.actionConfirmation("Confirm Rule Copy", message, parent);
+        return core.getOSHandler().getInfoBox().actionConfirmation("Confirm Rule Copy", message);
     }
     
     public boolean verifyBulkDeleteRule(List<ConjugationGenRule> rules) {
@@ -632,7 +633,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         
         message += "Continue?";
         
-        return InfoBox.actionConfirmation("Confirm Rule Copy", message, parent);
+        return core.getOSHandler().getInfoBox().actionConfirmation("Confirm Rule Copy", message);
     }
     
     /**
@@ -669,14 +670,14 @@ public final class ScrDeclensionGenClassic extends PDialog {
      */
     private void copyRuleToClipboard() {
         this.saveTransPairs(lstRules.getSelectedIndex());
-        core.setClipBoard(getSelectedRules());
+        PolyGlot.getPolyGlot().setClipBoard(getSelectedRules());
     }
 
     /**
      * If rule exists on clipboard, copy to current rule list (with appropriate changes to type made, if necessary)
      */
     private void pasteRuleFromClipboard() {
-        Object fromClipBoard = core.getClipBoard();
+        Object fromClipBoard = PolyGlot.getPolyGlot().getClipBoard();
         ConjugationPair curPair = (ConjugationPair) lstCombinedDec.getSelectedValue();
 
         if (!(fromClipBoard instanceof ArrayList)
@@ -790,7 +791,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
      * deletes currently selected rule
      */
     private void deleteRule() {
-        if (!InfoBox.deletionConfirmation(parent)) {
+        if (!core.getOSHandler().getInfoBox().deletionConfirmation()) {
             return;
         }
 
@@ -823,7 +824,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
      * deletes currently selected transform from currently selected rule
      */
     private void deleteTransform() {
-        if (!InfoBox.deletionConfirmation(parent)) {
+        if (!core.getOSHandler().getInfoBox().deletionConfirmation()) {
             return;
         }
 
@@ -955,19 +956,16 @@ public final class ScrDeclensionGenClassic extends PDialog {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new PLabel("", menuFontSize);
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstCombinedDec = new PList(core.getPropertiesManager().getFontLocal(), menuFontSize);
+        lstCombinedDec = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new PLabel("", menuFontSize);
         jScrollPane2 = new javax.swing.JScrollPane();
-        lstRules = new PList(core.getPropertiesManager().getFontLocal(), menuFontSize);
+        lstRules = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
         btnAddRule = new PAddRemoveButton("+");
         btnDeleteRule = new PAddRemoveButton("-");
         chkDisableWordform = new PCheckBox(nightMode, menuFontSize);
-        btnMoveRuleUp = new PButton(nightMode, menuFontSize);
-        btnMoveRuleUp.setFont(core.getPropertiesManager().getFontMenu())
-        ;
-        btnMoveRuleDown = new PButton(nightMode, menuFontSize);
-        btnMoveRuleDown.setFont(core.getPropertiesManager().getFontMenu());
+        btnMoveRuleUp = new PButton(nightMode, menuFontSize); btnMoveRuleUp.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu()) ;
+        btnMoveRuleDown = new PButton(nightMode, menuFontSize); btnMoveRuleDown.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         jPanel3 = new javax.swing.JPanel();
         txtRuleName = new PTextField(core, true, "-- Name --");
         txtRuleRegex = new PTextField(core,
@@ -977,10 +975,8 @@ public final class ScrDeclensionGenClassic extends PDialog {
         sclTransforms = new javax.swing.JScrollPane();
         tblTransforms = new PTable(core);
         btnAddTransform = new PAddRemoveButton("+");
-        btnMoveTransformUp = new PButton(nightMode, menuFontSize);
-        btnMoveTransformUp.setFont(core.getPropertiesManager().getFontMenu());
-        btnMoveTransformDown = new PButton(nightMode, menuFontSize);
-        btnMoveTransformDown.setFont(core.getPropertiesManager().getFontMenu());
+        btnMoveTransformUp = new PButton(nightMode, menuFontSize); btnMoveTransformUp.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
+        btnMoveTransformDown = new PButton(nightMode, menuFontSize); btnMoveTransformDown.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         btnDeleteTransform = new PAddRemoveButton("-");
         pnlApplyClasses = new PClassCheckboxPanel(core, core.getTypes().getNodeById(typeId), true);
 

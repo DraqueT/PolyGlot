@@ -19,18 +19,19 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
-import org.darisadesigns.polyglotlina.CustomControls.PDialog;
-import org.darisadesigns.polyglotlina.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.CustomControls.PTextFieldFilter;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextFieldFilter;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.ManagersCollections.OptionsManager;
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.OptionsManager;
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.text.PlainDocument;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -61,7 +62,7 @@ public final class ScrOptions extends PDialog {
                 } catch (NumberFormatException e) {
                     // user error
                     // IOHandler.writeErrorLog(e);
-                    InfoBox.warning("Bad Input", "Please provide an integer (number) value.", optionsParent);
+                    new DesktopInfoBox(optionsParent).warning("Bad Input", "Please provide an integer (number) value.");
                     return false;
                 }
                 return true;
@@ -72,7 +73,7 @@ public final class ScrOptions extends PDialog {
     @Override
     public void dispose() {
         if (testWarnClose()) {
-            OptionsManager options = core.getOptionsManager();
+            OptionsManager options = PolyGlot.getPolyGlot().getOptionsManager();
             
             double fontSize = Double.parseDouble(txtTextFontSize.getText());
             double fontSizeOriginal = options.getMenuFontSize();
@@ -83,11 +84,11 @@ public final class ScrOptions extends PDialog {
             options.setAnimateWindows(chkResize.isSelected());
             options.setNightMode(chkNightMode.isSelected());
             options.setMenuFontSize(fontSize);
-            options.setMaxReversionCount(maxReversion, core);
+            options.setMaxReversionCount(maxReversion);
             
             // only refresh if font size changed or night mode setting switched
             if (fontSizeOriginal != fontSize|| nightModeOriginal != chkNightMode.isSelected()) {
-                core.refreshMainMenu();
+                PolyGlot.getPolyGlot().refreshUiDefaults();
             }
             
             super.dispose();
@@ -99,7 +100,7 @@ public final class ScrOptions extends PDialog {
         
         if (Double.parseDouble(txtTextFontSize.getText()) > 30.0) {
             ret = false;
-            InfoBox.warning("Inlaid text size", "Text cannot be larger thant 30.0 points.", this);
+            new DesktopInfoBox(this).warning("Inlaid text size", "Text cannot be larger thant 30.0 points.");
         }
         
         return ret;
@@ -113,8 +114,9 @@ public final class ScrOptions extends PDialog {
     }
     
     private void resetOptions() {
-        if (InfoBox.actionConfirmation("Verify Options Reset", "This will reset all options, including last saved file data, screen positions, screen sizes, etc.\n\nContinue?", this)) {
-            core.getOptionsManager().resetOptions();
+        if (new DesktopInfoBox(this).actionConfirmation("Verify Options Reset", 
+                "This will reset all options, including last saved file data, screen positions, screen sizes, etc.\n\nContinue?")) {
+            PolyGlot.getPolyGlot().getOptionsManager().resetOptions();
             updateAllValues(core);
         }
     }
@@ -241,12 +243,12 @@ public final class ScrOptions extends PDialog {
     private void btnResetOptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetOptionsActionPerformed
         resetOptions();
         super.dispose();
-        core.refreshMainMenu();
+        PolyGlot.getPolyGlot().refreshUiDefaults();
     }//GEN-LAST:event_btnResetOptionsActionPerformed
 
     @Override
     public void updateAllValues(DictCore _core) {
-        OptionsManager mgr = core.getOptionsManager();
+        OptionsManager mgr = PolyGlot.getPolyGlot().getOptionsManager();
         
         chkResize.setSelected(mgr.isAnimateWindows());
         chkNightMode.setSelected(mgr.isNightMode());

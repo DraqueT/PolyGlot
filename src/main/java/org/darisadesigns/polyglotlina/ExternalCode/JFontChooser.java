@@ -3,8 +3,7 @@
  ************************************************************/
 package org.darisadesigns.polyglotlina.ExternalCode;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.DictCore;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -47,6 +46,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Position;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  * The <code>JFontChooser</code> class is a swing component 
@@ -570,8 +571,8 @@ public class JFontChooser extends JComponent
             }
             catch (BadLocationException e)
             {
-                InfoBox.error("Font Selection Problem", "There was a problem with your font: "
-                        + e.getLocalizedMessage(), core.getRootWindow());
+                core.getOSHandler().getInfoBox().error("Font Selection Problem", "There was a problem with your font: "
+                        + e.getLocalizedMessage());
                 //e.printStackTrace();
             }
 
@@ -666,8 +667,8 @@ public class JFontChooser extends JComponent
 
     protected JDialog createDialog(Component parent)
     {
-        double menuFontSize = core.getOptionsManager().getMenuFontSize();
-        boolean nightMode = core.getOptionsManager().isNightMode();
+        double menuFontSize = PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();
+        boolean nightMode = PolyGlot.getPolyGlot().getOptionsManager().isNightMode();
         Frame frame = parent instanceof Frame ? (Frame) parent
             : (Frame) SwingUtilities.getAncestorOfClass(Frame.class, parent);
         JDialog dialog = new JDialog(frame, ("Select Font"), true);
@@ -742,7 +743,7 @@ public class JFontChooser extends JComponent
             label.setHorizontalTextPosition(JLabel.LEFT);
             label.setLabelFor(getFontFamilyTextField());
             label.setDisplayedMnemonic('F');
-            label.setFont(core.getPropertiesManager().getFontMenu());
+            label.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
 
             fontNamePanel.add(label, BorderLayout.NORTH);
             fontNamePanel.add(p, BorderLayout.CENTER);
@@ -777,7 +778,7 @@ public class JFontChooser extends JComponent
             label.setHorizontalTextPosition(JLabel.LEFT);
             label.setLabelFor(getFontStyleTextField());
             label.setDisplayedMnemonic('Y');
-            label.setFont(core.getPropertiesManager().getFontMenu());
+            label.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
 
             fontStylePanel.add(label, BorderLayout.NORTH);
             fontStylePanel.add(p, BorderLayout.CENTER);
@@ -811,7 +812,7 @@ public class JFontChooser extends JComponent
             label.setHorizontalTextPosition(JLabel.LEFT);
             label.setLabelFor(getFontSizeTextField());
             label.setDisplayedMnemonic('S');
-            label.setFont(core.getPropertiesManager().getFontMenu());
+            label.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
 
             fontSizePanel.add(label, BorderLayout.NORTH);
             fontSizePanel.add(p, BorderLayout.CENTER);
@@ -824,7 +825,8 @@ public class JFontChooser extends JComponent
         if (samplePanel == null)
         {
             Border titledBorder = BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), ("Sample"), 0, 0, core.getPropertiesManager().getFontMenu());
+                BorderFactory.createEtchedBorder(), ("Sample"), 0, 0, 
+                ((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
             Border empty = BorderFactory.createEmptyBorder(5, 10, 10, 10);
             Border border = BorderFactory.createCompoundBorder(titledBorder, empty);
 

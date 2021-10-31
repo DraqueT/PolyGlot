@@ -72,7 +72,7 @@
     </Container>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;Original and evolved lexical forms:&quot;, core.getOptionsManager().getMenuFontSize())"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;Original and evolved lexical forms:&quot;, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize())"/>
       </AuxValues>
     </Component>
   </SubComponents>

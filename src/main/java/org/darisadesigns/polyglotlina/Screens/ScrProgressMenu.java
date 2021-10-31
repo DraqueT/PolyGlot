@@ -19,15 +19,16 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.PLanguageStats.PLanguageStatsProgress;
 import javax.swing.SwingUtilities;
 
 /**
  *
  * @author draque
  */
-public final class ScrProgressMenu extends javax.swing.JDialog {
+public final class ScrProgressMenu extends javax.swing.JDialog implements PLanguageStatsProgress {
 
     private final int taskLength;
     private int progress;
@@ -99,8 +100,8 @@ public final class ScrProgressMenu extends javax.swing.JDialog {
                 try {
                     updateProcess();
                 } catch (InterruptedException e) {
-                    IOHandler.writeErrorLog(e);
-                    InfoBox.error("Progress Error", "Error in progress bar: " + e.getLocalizedMessage(), null);
+                    DesktopIOHandler.getInstance().writeErrorLog(e);
+                    new DesktopInfoBox(null).error("Progress Error", "Error in progress bar: " + e.getLocalizedMessage());
                     dispose();
                 }
             }

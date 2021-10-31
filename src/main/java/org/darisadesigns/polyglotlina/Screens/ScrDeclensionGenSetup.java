@@ -27,10 +27,9 @@ import java.awt.event.WindowFocusListener;
 import java.awt.event.WindowListener;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.CustomControls.PDialog;
-import org.darisadesigns.polyglotlina.CustomControls.PRadioButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PRadioButton;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationPair;
 
@@ -98,7 +97,7 @@ public final class ScrDeclensionGenSetup extends PDialog {
                     simplifiedSelected && !core.getPropertiesManager().isUseSimplifiedConjugations()) {
                 String confMessage = "Simplified conjugations have a single transformation per word form. Any forms edited will be left with a SINGLE RULE.\n"
                         + "Only select this option if you do not use more than one rule per form. Would you like to continue?";
-                if (InfoBox.actionConfirmation("Switch to Simplified Conjugations?", confMessage, parent)) {
+                if (core.getOSHandler().getInfoBox().actionConfirmation("Switch to Simplified Conjugations?", confMessage)) {
                     populateForm();
                     core.getPropertiesManager().setUseSimplifiedConjugations(simplifiedSelected);
                 } else {
@@ -183,8 +182,8 @@ public final class ScrDeclensionGenSetup extends PDialog {
         ConjugationPair[] decs = _core.getConjugationManager().getAllCombinedIds(_typeId);
 
         if (decs.length == 0) {
-            InfoBox.warning("No Declensions Exist", "Please set up some conjugations/declensions for \""
-                    + _core.getTypes().getNodeById(_typeId).getValue() + "\" before setting up automatic patterns.", _core.getRootWindow());
+            _core.getOSHandler().getInfoBox().warning("No Declensions Exist", "Please set up some conjugations/declensions for \""
+                    + _core.getTypes().getNodeById(_typeId).getValue() + "\" before setting up automatic patterns.");
             s.dispose();
         } else {
             s.setVisible(true);

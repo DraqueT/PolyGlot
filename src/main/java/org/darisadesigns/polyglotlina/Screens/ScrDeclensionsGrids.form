@@ -27,7 +27,7 @@
           <Component id="pnlTabDeclensions" alignment="0" max="32767" attributes="0"/>
           <Group type="102" alignment="0" attributes="0">
               <Component id="chkAutogenOverride" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="102" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
               <Component id="btnDeprecated" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="btnCancel" min="-2" max="-2" attributes="0"/>
@@ -81,7 +81,7 @@
         <Property name="toolTipText" type="java.lang.String" value="Rows in wordform grids will be based on this donjugation/declension dimension"/>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(core.getPropertiesManager().getFontMenu())"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu())"/>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;org.darisadesigns.polyglotlina.Nodes.ConjugationNode&gt;"/>
       </AuxValues>
     </Component>
@@ -93,7 +93,7 @@
         <Property name="toolTipText" type="java.lang.String" value="Columns in wordform grids will be based on this donjugation/declension dimension"/>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(core.getPropertiesManager().getFontMenu())"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu())"/>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;org.darisadesigns.polyglotlina.Nodes.ConjugationNode&gt;"/>
       </AuxValues>
     </Component>

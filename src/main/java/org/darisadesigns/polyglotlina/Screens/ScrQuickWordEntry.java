@@ -20,14 +20,14 @@
 package org.darisadesigns.polyglotlina.Screens;
 
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
-import org.darisadesigns.polyglotlina.CustomControls.PDialog;
-import org.darisadesigns.polyglotlina.CustomControls.PTextField;
-import org.darisadesigns.polyglotlina.CustomControls.PTextPane;
-import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PComboBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.Nodes.WordClassValue;
 import org.darisadesigns.polyglotlina.Nodes.WordClass;
@@ -44,7 +44,8 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 
 /**
  *
@@ -118,7 +119,7 @@ public final class ScrQuickWordEntry extends PDialog {
             }
         };
 
-        txtConWord.setFont(core.getPropertiesManager().getFontCon());
+        txtConWord.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         txtConWord.addKeyListener(enterListener);
         txtConWord.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -155,8 +156,8 @@ public final class ScrQuickWordEntry extends PDialog {
         } catch (Exception e) {
             // user error
             // IOHandler.writeErrorLog(e);
-            InfoBox.error("Regex Error", "Unable to generate pronunciation: " 
-                    + e.getLocalizedMessage(), this);
+            new DesktopInfoBox(this).error("Regex Error", "Unable to generate pronunciation: " 
+                    + e.getLocalizedMessage());
         }
 
         if (!proc.isEmpty()) {
@@ -252,8 +253,8 @@ public final class ScrQuickWordEntry extends PDialog {
         }
 
         if (!testResults.isEmpty()) {
-            InfoBox.warning("Illegal Values", "Word contains illegal values:\n\n"
-                    + testResults, this);
+            new DesktopInfoBox(this).warning("Illegal Values", "Word contains illegal values:\n\n"
+                    + testResults);
             return;
         }
 
@@ -264,8 +265,8 @@ public final class ScrQuickWordEntry extends PDialog {
 
             parent.refreshWordList(wordId);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Word Error", "Unable to insert word: " + e.getMessage(), this);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            new DesktopInfoBox(this).error("Word Error", "Unable to insert word: " + e.getMessage());
         }
     }
 
@@ -320,7 +321,7 @@ public final class ScrQuickWordEntry extends PDialog {
                 pnlClasses.add(textField, gbc);
                 classComboMap.put(curProp.getId(), textField); // dropbox mapped to related class ID.
             } else {
-                final PComboBox<Object> classBox = new PComboBox<>(core.getPropertiesManager().getFontMenu());
+                final PComboBox<Object> classBox = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
                 DefaultComboBoxModel<Object> comboModel = new DefaultComboBoxModel<>();
                 classBox.setModel(comboModel);
                 comboModel.addElement("-- " + curProp.getValue() + " --");
@@ -366,13 +367,13 @@ public final class ScrQuickWordEntry extends PDialog {
         }
         if (propList.length == 0) {
             // must include at least one item (even a dummy) to resize for some reason
-            PComboBox blank = new PComboBox(core.getPropertiesManager().getFontMenu());
+            PComboBox blank = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
             blank.setEnabled(false);
             pnlClasses.add(blank, gbc);
             pnlClasses.setPreferredSize(new Dimension(9999, 0));
         } else {
             pnlClasses.setMaximumSize(new Dimension(99999, 99999));
-            pnlClasses.setPreferredSize(new Dimension(9999, propList.length * new PComboBox(core.getPropertiesManager().getFontMenu()).getPreferredSize().height));
+            pnlClasses.setPreferredSize(new Dimension(9999, propList.length * new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu()).getPreferredSize().height));
         }
 
         pnlClasses.repaint();
@@ -396,7 +397,7 @@ public final class ScrQuickWordEntry extends PDialog {
         jPanel2 = new javax.swing.JPanel();
         txtConWord = new PTextField(core, false, "-- " + core.conLabel() + " word --");
         txtLocalWord = new PTextField(core, true, "-- " + core.localLabel() + " word --");
-        cmbType = new PComboBox(core.getPropertiesManager().getFontMenu());
+        cmbType = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         txtProc = new PTextField(core, true, "-- Pronunciation --");
         pnlClasses = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();

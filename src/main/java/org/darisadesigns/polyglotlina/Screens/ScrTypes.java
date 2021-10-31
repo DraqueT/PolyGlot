@@ -19,13 +19,13 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
-import org.darisadesigns.polyglotlina.CustomControls.PFrame;
-import org.darisadesigns.polyglotlina.CustomControls.PList;
-import org.darisadesigns.polyglotlina.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PList;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import java.awt.Color;
 import java.awt.Window;
@@ -36,14 +36,15 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import org.darisadesigns.polyglotlina.CustomControls.PTextPane;
-import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
 import java.awt.Component;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.JComponent;
-import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
-import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -68,7 +69,7 @@ public final class ScrTypes extends PFrame {
     }
     
     private void setupForm() {
-        int divider = core.getOptionsManager().getDividerPosition(this.getClass().getName());
+        int divider = PolyGlot.getPolyGlot().getOptionsManager().getDividerPosition(this.getClass().getName());
         
         if (divider > -1) {
             jSplitPane1.setDividerLocation(divider);
@@ -83,7 +84,7 @@ public final class ScrTypes extends PFrame {
         }
 
         saveAllValues();
-        core.getOptionsManager().setDividerPosition(getClass().getName(), jSplitPane1.getDividerLocation());
+        PolyGlot.getPolyGlot().getOptionsManager().setDividerPosition(getClass().getName(), jSplitPane1.getDividerLocation());
 
         if (canClose()) {
             killAllChildren();
@@ -214,9 +215,9 @@ public final class ScrTypes extends PFrame {
             lstTypes.setSelectedIndex(0);
             lstTypes.ensureIndexIsVisible(0);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Type Population Error", "Unable to populate types: "
-                    + e.getLocalizedMessage(), core.getRootWindow());
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            core.getOSHandler().getInfoBox().error("Type Population Error", "Unable to populate types: "
+                    + e.getLocalizedMessage());
         }
     }
 
@@ -268,7 +269,7 @@ public final class ScrTypes extends PFrame {
             saveNode.setNotes(((PTextPane) txtNotes).isDefaultText()
                     ? "" : txtNotes.getText());
             saveNode.setPattern(((PTextField) txtTypePattern).isDefaultText()
-                    ? "" : txtTypePattern.getText());
+                    ? "" : txtTypePattern.getText(), core);
             saveNode.setGloss(((PTextField) txtGloss).isDefaultText()
                     ? "" : txtGloss.getText());
             saveNode.setDefMandatory(chkDefMand.isSelected());
@@ -292,9 +293,9 @@ public final class ScrTypes extends PFrame {
         try {
             core.getTypes().insert();
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Type Creation Error", "Could not create new type: "
-                    + e.getLocalizedMessage(), core.getRootWindow());
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            core.getOSHandler().getInfoBox().error("Type Creation Error", "Could not create new type: "
+                    + e.getLocalizedMessage());
         }
         
         populateTypes();
@@ -323,8 +324,9 @@ public final class ScrTypes extends PFrame {
         try {
             core.getTypes().deleteNodeById(curType.getId());
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Deletion Error", "Unable to delete type." + e.getLocalizedMessage(), core.getRootWindow());
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            core.getOSHandler().getInfoBox().error("Deletion Error", 
+                    "Unable to delete type." + e.getLocalizedMessage());
         }
         
         
@@ -398,8 +400,8 @@ public final class ScrTypes extends PFrame {
 
         if (txtName.getText().isEmpty()
                 && curType != null) {
-            InfoBox.warning("Illegal Type",
-                    "Currently selected type is illegal. Please correct or delete.", core.getRootWindow());
+            core.getOSHandler().getInfoBox().warning("Illegal Type",
+                    "Currently selected type is illegal. Please correct or delete.");
             ret = false;
         }
         
@@ -431,7 +433,7 @@ public final class ScrTypes extends PFrame {
         txtNotes = new PTextPane(core, true, "-- Notes --");
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstTypes = new PList(core.getPropertiesManager().getFontLocal(), menuFontSize);
+        lstTypes = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
         btnAddType = new PAddRemoveButton("+");
         btnDelType = new PAddRemoveButton("-");
 
@@ -653,7 +655,7 @@ public final class ScrTypes extends PFrame {
 
         Window window = ScrDeclensionGenSetup.run(core, curNode.getId());
         
-        core.getRootWindow().setVisible(false);
+        PolyGlot.getPolyGlot().getRootWindow().setVisible(false);
         window.addWindowListener(new WindowListener() {
                     @Override
                     public void windowOpened(WindowEvent e) {
@@ -665,7 +667,7 @@ public final class ScrTypes extends PFrame {
 
                     @Override
                     public void windowClosed(WindowEvent e) {
-                        core.getRootWindow().setVisible(true);
+                        PolyGlot.getPolyGlot().getRootWindow().setVisible(true);
                     }
 
                     @Override

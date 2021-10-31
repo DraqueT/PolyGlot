@@ -23,7 +23,6 @@ import java.util.Objects;
 import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
 import org.darisadesigns.polyglotlina.PGTUtil;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import org.darisadesigns.polyglotlina.WebInterface;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -32,13 +31,14 @@ import org.w3c.dom.Element;
  * This is a chapter section of the PolyGlot grammar guide.
  * @author draque
  */
-public class GrammarSectionNode extends DefaultMutableTreeNode {
+public class GrammarSectionNode extends TreeNode {
     private final GrammarManager manager;
     private String name;
     private String sectionText;
     private int recordingId;
     
     public GrammarSectionNode(GrammarManager _manager) {
+        super(null);
         name = "";
         sectionText = "";
         recordingId = -1;
@@ -106,7 +106,8 @@ public class GrammarSectionNode extends DefaultMutableTreeNode {
         } else if (comp instanceof GrammarSectionNode) {
             GrammarSectionNode compSec = (GrammarSectionNode)comp;
             
-            ret = WebInterface.archiveHTML(sectionText).equals(WebInterface.archiveHTML(compSec.sectionText));
+            ret = WebInterface.archiveHTML(sectionText, manager.getCore())
+                    .equals(WebInterface.archiveHTML(compSec.sectionText, manager.getCore()));
             ret = ret && name.equals(compSec.name);
             ret = ret && recordingId == compSec.recordingId;
         }

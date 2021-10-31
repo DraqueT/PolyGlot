@@ -20,16 +20,6 @@
 
 package org.darisadesigns.polyglotlina;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.Window;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -38,19 +28,16 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.SwingWorker;
 
 /**
  * This contains various constant vales in PolyGlot
  *
  * @author draque
  */
-public final class PGTUtil {
+public class PGTUtil {
 
     // CONSTANTS
-    private static  final Map<String, Integer> VERSION_HIERARCHY;
+    protected static  final Map<String, Integer> VERSION_HIERARCHY;
     public static final String BUILD_DATE_TIME;
     public static final String DICTIONARY_XID = "dictionary";
     public static final String PGVERSION_XID = "PolyGlotVer";
@@ -322,8 +309,6 @@ public final class PGTUtil {
     public static final String HELP_FILE_URL = "http://draquet.github.io/PolyGlot/readme.html";
 
     // numeric constants...
-    public static final Integer NUM_MENU_FLASHES = 4;
-    public static final Integer MENU_FLASH_SLEEP = 200;
     public static final Double DEFAULT_FONT_SIZE = 12.0;
     public static final int MAX_PROC_RECURSE = 100;
     public static final int DEFAULT_MAX_ROLLBACK_NUM = 10;
@@ -331,43 +316,6 @@ public final class PGTUtil {
     public static final int MAX_LOG_CHARACTERS = 25000;
     public static final int PLABEL_MIN_FONT_SIZE = 3;
     public static final int PLABEL_MAX_FONT_SIZE = 240;
-
-    // color constants
-    public static final Color COLOR_DISABLED_BG;
-    public static final Color COLOR_ENABLED_BG;
-    public static final Color COLOR_SELECTED_BG;
-    public static final Color COLOR_DISABLED_FOREGROUND;
-    public static final Color COLOR_MOUSEOVER_BORDER;
-    public static final Color COLOR_TEXT;
-    public static final Color COLOR_DEFAULT_TEXT;
-    public static final Color COLOR_DEFAULT_TEXT_NIGHT;
-    public static final Color COLOR_TEXT_BG;
-    public static final Color COLOR_TEXT_NIGHT;
-    public static final Color COLOR_TEXT_BG_NIGHT;
-    public static final Color COLOR_TEXT_DISABLED;
-    public static final Color COLOR_TEXT_DISABLED_BG;
-    public static final Color COLOR_TEXT_DISABLED_NIGHT;
-    public static final Color COLOR_TEXT_DISABLED_BG_NIGHT;
-    public static final Color COLOR_CHECKBOX_SELECTED;
-    public static final Color COLOR_CHECKBOX_BG;
-    public static final Color COLOR_CHECKBOX_OUTLINE;
-    public static final Color COLOR_CHECKBOX_HOVER;
-    public static final Color COLOR_CHECKBOX_CLICKED;
-    public static final Color COLOR_CHECKBOX_FIELD_BACK;
-    public static final Color COLOR_CHECKBOX_SELECTED_NIGHT;
-    public static final Color COLOR_CHECKBOX_BG_NIGHT;
-    public static final Color COLOR_CHECKBOX_OUTLINE_NIGHT;
-    public static final Color COLOR_CHECKBOX_HOVER_NIGHT;
-    public static final Color COLOR_CHECKBOX_CLICKED_NIGHT;
-    public static final Color COLOR_CHECKBOX_FIELD_BACK_NIGHT;
-    public static final Color COLOR_CHECKBOX_SELECTED_DISABLED;
-    public static final Color COLOR_CHECKBOX_BG_DISABLED;
-    public static final Color COLOR_CHECKBOX_OUTLINE_DISABLED;
-    public static final Color COLOR_CHECKBOX_HOVER_DISABLED;
-    public static final Color COLOR_CHECKBOX_CLICKED_DISABLED;
-    public static final Color COLOR_CHECKBOX_FIELD_BACK_DISABLED;
-    public static final Color COLOR_REQUIRED_LEX_COLOR;
-    public static final Color COLOR_ERROR_FIELD;
 
     // visual style constants
     public static final int CHECKBOX_ROUNDING = 3;
@@ -400,101 +348,18 @@ public final class PGTUtil {
         "ToggleButton.focusInputMap",
         "Tree.focusInputMap"};
 
-    // images and icons that only need to be loaded once
-    public static final ImageIcon ADD_BUTTON_ICON;
-    public static final ImageIcon DEL_BUTTON_ICON;
-    public static final ImageIcon ADD_BUTTON_ICON_PRESSED;
-    public static final ImageIcon DEL_BUTTON_ICON_PRESSED;
-    public static final ImageIcon POLYGLOT_ICON;
-
-    // Fonts stored here to cache values single time
-    public static final Font MENU_FONT;
-    public static final Font CHARIS_UNICODE;
-
     public static final boolean IS_OSX;
     public static final boolean IS_WINDOWS;
     public static final boolean IS_LINUX;
 
     // one time set for code driven static values
     static {
-        COLOR_DISABLED_BG = Color.decode("#b0b0b0");
-        COLOR_ENABLED_BG = Color.decode("#66b2ff");
-        COLOR_SELECTED_BG = Color.decode("#7979ef");
-        COLOR_DISABLED_FOREGROUND = Color.decode("#808080");
-        COLOR_MOUSEOVER_BORDER = Color.decode("#909090");
-        COLOR_TEXT = Color.decode("#000000");
-        COLOR_TEXT_BG = Color.decode("#ffffff");
-        COLOR_TEXT_NIGHT = Color.decode("#ffffff");
-        COLOR_TEXT_BG_NIGHT = Color.decode("#000000");
-        COLOR_DEFAULT_TEXT = Color.lightGray;
-        COLOR_DEFAULT_TEXT_NIGHT = Color.darkGray;
-        COLOR_TEXT_DISABLED = Color.lightGray;
-        COLOR_TEXT_DISABLED_BG = Color.darkGray;
-        COLOR_TEXT_DISABLED_NIGHT = Color.lightGray;
-        COLOR_TEXT_DISABLED_BG_NIGHT = Color.darkGray;
-        COLOR_CHECKBOX_SELECTED = Color.black;
-        COLOR_CHECKBOX_BG = Color.white;
-        COLOR_CHECKBOX_OUTLINE = Color.black;
-        COLOR_CHECKBOX_HOVER = Color.black;
-        COLOR_CHECKBOX_CLICKED = Color.lightGray;
-        COLOR_CHECKBOX_FIELD_BACK = Color.white;
-        COLOR_CHECKBOX_SELECTED_NIGHT = Color.gray;
-        COLOR_CHECKBOX_BG_NIGHT = Color.black;
-        COLOR_CHECKBOX_OUTLINE_NIGHT = Color.darkGray;
-        COLOR_CHECKBOX_HOVER_NIGHT = Color.lightGray;
-        COLOR_CHECKBOX_CLICKED_NIGHT = Color.white;
-        COLOR_CHECKBOX_FIELD_BACK_NIGHT = Color.black;
-        COLOR_CHECKBOX_SELECTED_DISABLED = Color.gray;
-        COLOR_CHECKBOX_BG_DISABLED = Color.lightGray;
-        COLOR_CHECKBOX_OUTLINE_DISABLED = Color.gray;
-        COLOR_CHECKBOX_HOVER_DISABLED = Color.darkGray;
-        COLOR_CHECKBOX_CLICKED_DISABLED = Color.darkGray;
-        COLOR_CHECKBOX_FIELD_BACK_DISABLED = Color.gray;
-        COLOR_REQUIRED_LEX_COLOR = new Color(255, 204, 204);
-        COLOR_ERROR_FIELD = new Color(255, 204, 204);
-
-        // loads default font on system error (never came up, but for completeness...)
-        Font tmpFont;
-        try {
-            tmpFont = PFontHandler.getMenuFont();
-        } catch (IOException e) {
-            InfoBox.error("PolyGlot Load Error", "Unable to load default button font.", null);
-            IOHandler.writeErrorLog(e, "Initilization error (PGTUtil)");
-            tmpFont = javax.swing.UIManager.getDefaults().getFont("Label.font");
-        }
-        MENU_FONT = tmpFont;
-        
-        try {
-            tmpFont = PFontHandler.getCharisUnicodeFontInitial();
-        } catch (IOException e) {
-            InfoBox.error("PolyGlot Load Error", "Unable to load Charis Unicode.", null);
-            IOHandler.writeErrorLog(e, "Initilization error (PGTUtil)");
-            tmpFont = javax.swing.UIManager.getDefaults().getFont("Label.font");
-        }
-        
-        CHARIS_UNICODE = tmpFont;
-
-        ADD_BUTTON_ICON = new ImageIcon(new ImageIcon(
-                PGTUtil.class.getResource("/assets/org/DarisaDesigns/ImageAssets/add_button.png"))
-                .getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH));
-        DEL_BUTTON_ICON = new ImageIcon(new ImageIcon(
-                PGTUtil.class.getResource("/assets/org/DarisaDesigns/ImageAssets/delete_button.png"))
-                .getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH));
-        ADD_BUTTON_ICON_PRESSED = new ImageIcon(new ImageIcon(
-                PGTUtil.class.getResource("/assets/org/DarisaDesigns/ImageAssets/add_button_pressed.png"))
-                .getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH));
-        DEL_BUTTON_ICON_PRESSED = new ImageIcon(new ImageIcon(
-                PGTUtil.class.getResource("/assets/org/DarisaDesigns/ImageAssets/delete_button_pressed.png"))
-                .getImage().getScaledInstance(21, 21, Image.SCALE_SMOOTH));
-        POLYGLOT_ICON = new ImageIcon(
-                PGTUtil.class.getResource("/assets/org/DarisaDesigns/ImageAssets/PolyGlotIcon.png"));
-
         IS_OSX = isOSX();
         IS_WINDOWS = isWindows();
         IS_LINUX = isLinux();
         
         // sets version number and beta status
-        String version = getVersion();
+        String version = "3.3.1B";
         if (version.contains("B")) {
             IS_BETA = true;
             PGT_VERSION = version.replace("B", "");
@@ -566,21 +431,12 @@ public final class PGTUtil {
     }
     
     // ENVIRONMENT VARIABLES
-    private static File java8BridgeLocation = null;
     private static File errorDirectory = null;
     private static boolean forceSuppressDialogs = false;
     
     // OS CONSTANTS
     public static String OSX_FINDER_INFO_VALUE_DIC_FILES = "574443444D535350000000000000000000000000000000000000000000000000";
     public static String OSX_FINDER_METADATA_NAME = "com.apple.FinderInfo";
-
-    /**
-     * This records the mode of a given PDialog or PFrame window. Defaults to
-     * STANDARD
-     */
-    public enum WindowMode {
-        STANDARD, SINGLEVALUE, SELECTLIST
-    }
 
     /**
      * Strips string of RTL and LTR markers
@@ -590,21 +446,6 @@ public final class PGTUtil {
      */
     public static String stripRTL(String strip) {
         return strip.replace(RTL_CHARACTER, "").replace(LTR_MARKER, "");
-    }
-
-    /**
-     * Adds attributes to fontmapping
-     *
-     * @param key Key value
-     * @param value value-value
-     * @param font font to add value to
-     * @return newly derived font
-     */
-    @SuppressWarnings("unchecked") // No good way to do this in a type safe manner.
-    public static Font addFontAttribute(Object key, Object value, Font font) {
-        Map attributes = font.getAttributes();
-        attributes.put(key, value);
-        return font.deriveFont(attributes);
     }
 
     /**
@@ -622,36 +463,6 @@ public final class PGTUtil {
     
     private static boolean isLinux() {
         return System.getProperty("os.name").contains("Linux");
-    }
-
-    /**
-     * Checks that the position is in bounds for the screen and places it in
-     * visible area if not
-     *
-     * @param w
-     */
-    public static void checkPositionInBounds(Window w) {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Point location = w.getLocationOnScreen();
-
-        // if this would appear offscreen, simply place it in the center of the screen
-        if (screenSize.getWidth() < location.x || screenSize.getHeight() < location.y) {
-            w.setLocationRelativeTo(null);
-        }
-    }
-
-    /**
-     * Gets Java8 bridge class location. Caches value.
-     *
-     * @return
-     * @throws java.io.IOException
-     */
-    public static File getJava8BridgeLocation() throws IOException {
-        if (java8BridgeLocation == null || !java8BridgeLocation.exists()) {
-            java8BridgeLocation = Java8Bridge.getNewJavaBridgeLocation();
-        }
-
-        return java8BridgeLocation;
     }
 
     /**
@@ -680,48 +491,6 @@ public final class PGTUtil {
         }
 
         return errorDirectory;
-    }
-
-    /**
-     * Converts a given Image into a BufferedImage
-     *
-     * @param img The Image to be converted
-     * @return The converted BufferedImage
-     */
-    public static BufferedImage toBufferedImage(Image img) {
-        BufferedImage ret = null;
-        
-        if (img instanceof BufferedImage) {
-            ret = (BufferedImage) img;
-        } else if (img != null) {
-            // Create a buffered image with transparency
-            ret = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-
-            // Draw the image on to the buffered image
-            Graphics2D bGr = ret.createGraphics();
-            bGr.drawImage(img, 0, 0, null);
-            bGr.dispose();
-        }
-
-        return ret;
-    }
-    
-    /**
-     * Gets version of PolyGlot based on version resource file
-     * @return 
-     */
-    private static String getVersion() {
-        String ret = "ERROR";
-        
-        URL versionUrl = PGTUtil.class.getResource(VERSION_LOCATION);
-        
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(versionUrl.openStream()))) {
-            return br.readLine();
-        } catch (IOException e) {
-            InfoBox.error("PolyGlot Load Error", "Unable to load version file.", null);
-        }
-        
-        return ret;
     }
     
      /**
@@ -781,56 +550,6 @@ public final class PGTUtil {
     }
     
     /**
-     * gets a worker that can make a given component flash
-     *
-     * @param flashMe component to make flash
-     * @param flashColor color to use for flashing
-     * @param isBack whether display color is background (rather than foreground)
-     * @return SwingWorker that will make given component flash if run
-     */
-    public static SwingWorker getFlashWorker(final JComponent flashMe, final Color flashColor, final boolean isBack) {
-        // this will pop out in its own little thread...
-        return new SwingWorker() {
-            @Override
-            protected Object doInBackground() {
-                Color originColor;
-                if (isBack) {
-                    originColor = flashMe.getBackground();
-                } else {
-                    originColor = flashMe.getForeground();
-                }
-
-                Color requiredColor = flashColor.equals(originColor)
-                        ? Color.white : flashColor;
-
-                try {
-                    for (int i = 0; i < PGTUtil.NUM_MENU_FLASHES; i++) {
-                        if (isBack) {
-                            flashMe.setBackground(requiredColor);
-                        } else {
-                            flashMe.setEnabled(false);
-                        }
-                        // suppression for this is broken. Super annoying.
-                        Thread.sleep(PGTUtil.MENU_FLASH_SLEEP);
-                        if (isBack) {
-                            flashMe.setBackground(originColor);
-                        } else {
-                            flashMe.setEnabled(true);
-                        }
-                        Thread.sleep(PGTUtil.MENU_FLASH_SLEEP);
-                    }
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    // catch of thread interrupt not logworthy
-                    // IOHandler.writeErrorLog(e);
-                }
-
-                return null;
-            }
-        };
-    }
-    
-    /**
      * Used for getting the display version (potentially different than the internal version due to betas, etc.)
      * @return 
      */
@@ -845,27 +564,21 @@ public final class PGTUtil {
     }
     
     /**
-     * converts arbitrarily sized image to one appropriate for a button icon
-     * size
-     *
-     * @param rawImage image to shrink
-     * @return image of appropriate size
+     * Cross platform helper that can be overridden with platform specific check
+     * Should be overridden since this is a very basic helper
+     * @param test
+     * @return if the string is blank
      */
-    public static ImageIcon getButtonSizeIcon(ImageIcon rawImage) {
-        return getSizedIcon(rawImage, 30, 30);
+    public boolean isBlank(String test) {
+        for(int i = 0; i < test.length(); i++) {
+            if (test.charAt(i) != ' ' ||
+                test.charAt(i) != '\t' ||
+                test.charAt(i) != '\n' ||
+                test.charAt(i) != '\r')
+                return false;
+        }
+        return true;
     }
 
-    /**
-     * converts an icon to a user defined size for buttons
-     *
-     * @param rawImage image to convert
-     * @param width new width
-     * @param height new height
-     * @return resized image
-     */
-    public static ImageIcon getSizedIcon(ImageIcon rawImage, int width, int height) {
-        return new ImageIcon(rawImage.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
-    }
-
-    private PGTUtil() {}
+    protected PGTUtil() {}
 }
