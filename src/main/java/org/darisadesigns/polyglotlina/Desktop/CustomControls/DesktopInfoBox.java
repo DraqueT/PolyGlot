@@ -126,9 +126,14 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
         super();
         parent = _parent;
     }
+   
     
-    public void setParent(Window _parent) {
+    public void setParentWindow(Window _parent) {
         parent = _parent;
+    }
+    
+    public Window getParentWindow() {
+        return parent;
     }
     
     @Override
@@ -239,7 +244,8 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
     private void doError(String title, String message) {
         if (!PGTUtil.isForceSuppressDialogs()) {
             Object[] option = {OK};        
-            POptionPane.internalShowOptionDialog(parent, message, title, DEFAULT_OPTION,
+            // always use null here in case vsomething has gone very wrong with screens
+            POptionPane.internalShowOptionDialog(null, message, title, DEFAULT_OPTION,
                              JOptionPane.ERROR_MESSAGE, null, option, null);
         }
     }

@@ -125,6 +125,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @return Temporary file with specified contents
      * @throws IOException on write error
      */
+    @Override
     public File createTmpFileWithContents(String contents, String extension) throws IOException {
         File ret = File.createTempFile("POLYGLOT", extension);
         

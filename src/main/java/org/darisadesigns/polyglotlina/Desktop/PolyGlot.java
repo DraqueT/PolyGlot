@@ -42,6 +42,8 @@ import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.DefaultEditorKit;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.OptionsManager;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.VisualStyleManager;
@@ -65,9 +67,10 @@ public final class PolyGlot {
     private DictCore core;
     private ScrMainMenu rootWindow;
     private DesktopOSHandler osHandler;
-    private OptionsManager optionsManager;
+    private final OptionsManager optionsManager;
     private CoreUpdatedListener coreUpdatedListener;
     private FileReadListener fileReadListener;
+    private final File autoSaveFile;
 
     public PolyGlot(String overridePath, DictCore _core, DesktopOSHandler _osHandler) throws Exception {
         PolyGlot.polyGlot = this;
@@ -75,6 +78,7 @@ public final class PolyGlot {
         osHandler = _osHandler;
         osHandler.setWorkingDirectory(overridePath); // TODO: In the future, figure out how this might be better set. In options?
         optionsManager = new OptionsManager(core);
+        autoSaveFile = this.getAutoSaveFile();
         ((DesktopIOHandler)osHandler.getIOHandler()).loadOptionsIni(optionsManager, getWorkingDirectory().getAbsolutePath());
         refreshUiDefaults();
     }
@@ -124,7 +128,7 @@ public final class PolyGlot {
                 polyGlot.setRootWindow(s);
                 s.checkForUpdates(false);
                 s.setVisible(true);
-                cInfoBox.setParent(s);
+                cInfoBox.setParentWindow(s);
                 
                 polyGlot.coreUpdatedListener = (DictCore _core) -> {
                     polyGlot.getRootWindow().updateAllValues(_core);
@@ -197,22 +201,12 @@ public final class PolyGlot {
                 }
 
                 // if a recovery file exists, query user for action
-                File recovery = polyGlot.findRecoveryFile(s, polyGlot.getWorkingDirectory());
+                boolean recoveredFile = polyGlot.handleFileRecoveries(s, core.getWorkingDirectory());
 
                 // open file if one is provided via arguments (but only if no recovery file- that takes precedence)
-                if (args.length > 0 && recovery == null) {
-                    String filePath = "";
+                if (args.length > 0 && recoveredFile == false) {
+                    String filePath = args[0].trim();
 
-                    // file paths with spaces in their names are broken into multiple arguments. This is a best guess. (multiple spaces could exist)
-                    // TODO: Remove once this is fixed in Java
-                    for (String pathChunk : args) {
-                        filePath += " " + pathChunk;
-                    }
-
-                    filePath = filePath.trim();
-
-                    // arguments passed in by the OS choke on special charaters as of Java 14 release (jpackage issue, probably)
-                    // TODO: Remove once this is fixed in Java
                     if (new File(filePath).exists()) {
                         s.setFile(filePath);
                     } else {
@@ -226,16 +220,17 @@ public final class PolyGlot {
                 if (!polyGlot.getCore().getCurFileName().isBlank()) {
                     polyGlot.getRootWindow().openLexicon(true);
                 }
-            }
-            catch (ArrayIndexOutOfBoundsException e) {
+                
+                // only begin autosave loop once checks for rrecovery files are complete
+                polyGlot.autoSave();
+            } catch (ArrayIndexOutOfBoundsException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e, "Problem with top level PolyGlot arguments.");
-                cInfoBox.error("Unable to start", "Unable to open PolyGlot main frame: \n"
+                polyGlot.getOSHandler().getInfoBox().error("Unable to start", "Unable to open PolyGlot main frame: \n"
                         + e.getMessage() + "\n"
                         + "Problem with top level PolyGlot arguments.");
-            }
-            catch (Exception e) { // split up for logical clarity... might want to differentiate
+            } catch (Exception e) { // split up for logical clarity... might want to differentiate
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                cInfoBox.error("Unable to start", "Unable to open PolyGlot main frame: \n"
+                polyGlot.getOSHandler().getInfoBox().error("Unable to start", "Unable to open PolyGlot main frame: \n"
                         + e.getMessage() + "\n"
                         + "Please contact developer (draquemail@gmail.com) for assistance.");
 
@@ -252,19 +247,24 @@ public final class PolyGlot {
     }
 
     /**
-     * Seeks recovery file, queries user what to do with it, and returns value
-     * as appropriate
+     * Seeks recovery file or autosave file, queries user what to do with it, 
+     * and returns true if a recovery was made
      *
      * @param s
      * @param workingDirectory
      * @return
      * @throws IOException
      */
-    private File findRecoveryFile(ScrMainMenu s, File workingDirectory) throws IOException {
+    private boolean handleFileRecoveries(ScrMainMenu s, File workingDirectory) throws IOException {
         File recovery = DesktopIOHandler.getInstance().getTempSaveFileIfExists(workingDirectory);
-        if (recovery != null) {
-            if (osHandler.getInfoBox().yesNoCancel("Recovery File Detected",
-                    "PolyGlot appears to have shut down mid save. Would you like to recover the file?") == JOptionPane.YES_OPTION) {
+        
+        if (recovery == null) {
+            recovery = this.autoSaveFile;
+        }
+        
+        if (recovery != null && recovery.exists()) {
+            if (polyGlot.getOSHandler().getInfoBox().yesNoCancel("Recovery File Detected",
+                    "PolyGlot appears to have shut down incorrectly. Would you like to recover the latest stable autosave?") == JOptionPane.YES_OPTION) {
                 JFileChooser chooser = new JFileChooser();
                 chooser.setDialogTitle("Recover Language To");
                 FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Dictionaries", "pgd");
@@ -303,15 +303,26 @@ public final class PolyGlot {
                     osHandler.getInfoBox().info("Recovery Cancelled", "Recovery Cancelled. Restart PolyGlot to be prompted again.");
                 }
             } else {
-                if (osHandler.getInfoBox().yesNoCancel("Delete Recovery File", "Archive the recovery file, then?") == JOptionPane.YES_OPTION) {
+                if (polyGlot.getOSHandler().getInfoBox().yesNoCancel("Archive Recovery File", "Archive the recovery file, then?") == JOptionPane.YES_OPTION) {
                     DesktopIOHandler.getInstance().archiveFile(recovery, core.getWorkingDirectory());
                 }
 
                 recovery = null;
             }
         }
-
-        return recovery;
+        
+        return recovery != null && recovery.exists();
+    }
+    
+    /**
+     * Cleans up and exits program definitively
+     */
+    public void exitCleanup() {
+        if (autoSaveFile.exists()) {
+            autoSaveFile.delete();
+        }
+        
+        System.exit(0);
     }
 
     public DictCore getNewCore() {
@@ -489,5 +500,39 @@ public final class PolyGlot {
      */
     public ScrMainMenu getRootWindow() {
         return rootWindow;
+    }
+
+    /**
+     * Saves periodically to temp file location (to be reopened on
+     * freeze/disaster)
+     */
+    public void autoSave() {
+        new java.util.Timer().schedule(new java.util.TimerTask() {
+            @Override
+            public void run() {
+                if (core != null && !rootWindow.isDisposed() && !PGTUtil.isInJUnitTest()) {
+                    try {
+                        core.writeFile(autoSaveFile.getAbsolutePath());
+                    }
+                    catch (ParserConfigurationException | TransformerException | IOException e) {
+                        // The working directory is unwritable. Impossible to log.
+                        core.getOSHandler().getInfoBox().error("Working Path Write Error", "Unable to write to path: " + autoSaveFile.getAbsolutePath());
+                    }
+                    autoSave();
+                }
+            }
+        }, PGTUtil.SECONDS_BETWEEN_AUTO_SAVES);
+    }
+    
+    /**
+     * Fetches autosave file for PolyGlot
+     * @return 
+     */
+    public File getAutoSaveFile() {
+        String path = getWorkingDirectory().getAbsolutePath() 
+                + File.separator 
+                + PGTUtil.AUTO_SAVE_FILE_NAME;
+        
+        return new File(path);
     }
 }

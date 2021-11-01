@@ -126,14 +126,19 @@ if [ "$#" -eq 0 ] || [ "$1" == "$CONST_OSX" ] || [ "$1" == "$CONST_RELEASE" ]; t
     git pull
     
     # Apple signature must be provided. Must have xcode installed and pull in from keychain.
+    # Python3 must be brew installed if not present (not included on macs by default)
     if [ "$BUILD_STEP" == "" ] ; then
-        python build_image.py \
+        python3 build_image.py \
             -copyDestination "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas" \
-            -mac-sign-identity "Apple Development: draquemail@gmail.com (A3YEXQ2CB4)"
+            -mac-sign-identity "Apple Development: Draque Thompson (A3YEXQ2CB4)" \
+            -java-home-o "/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home" #\ #DISABLED FOR NOW
+            #-mac-distrib-cert "Apple Distribution: Draque Thompson (HS2SXD98BV)"
     else
-        python build_image.py \
+        python3 build_image.py \
             "$BUILD_STEP" -copyDestination "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas" \
-            -mac-sign-identity "Apple Development: draquemail@gmail.com (A3YEXQ2CB4)"
+            -mac-sign-identity "Apple Development: Draque Thompson (A3YEXQ2CB4)" \
+            -java-home-o "/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home" #\ #DISABLED FOR NOW
+            #-mac-distrib-cert "Apple Distribution: Draque Thompson (HS2SXD98BV)"
     fi
     echo "OSX build process complete."
     
@@ -170,17 +175,17 @@ fi
 # Announce any build failures...
 if [ -f "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas/Windows_BUILD_FAILED" ] &&  [ $WIN_BUILD_TIME != 0 ]; then
     echo -e "\x1B[41mWindows build failed.\x1B[0m"
-else
+elif [ $WIN_BUILD_TIME != 0 ]; then
     echo -e "\x1B[32mWindows build success.\x1B[0m"
 fi
 if [ -f "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas/Linux_BUILD_FAILED" ] && [ $LIN_BUILD_TIME != 0 ]; then
     echo -e "\x1B[41mLinux build failed.\x1B[0m"
-else
+elif [ $LIN_BUILD_TIME != 0 ]; then
     echo -e "\x1B[32mLinux build success.\x1B[0m"
 fi
 if [ -f "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas/Darwin_BUILD_FAILED" ] && [ $OSX_BUILD_TIME != 0 ]; then
     echo -e "\x1B[41mOSX build failed.\x1B[0m"
-else
+elif [ $OSX_BUILD_TIME != 0 ]; then
     echo -e "\x1B[32mOSX build success.\x1B[0m"
 fi
 echo "Full build process complete!"

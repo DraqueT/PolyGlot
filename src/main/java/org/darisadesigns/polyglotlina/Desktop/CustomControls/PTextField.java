@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -45,13 +45,14 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
 import javax.swing.text.JTextComponent;
+import org.darisadesigns.polyglotlina.CustomControls.CoreUpdateSubscriptionInterface;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
  * @author draque
  */
-public final class PTextField extends JTextField {
+public final class PTextField extends JTextField implements CoreUpdateSubscriptionInterface {
 
     private DictCore core;
     private boolean skipRepaint = false;
@@ -78,7 +79,7 @@ public final class PTextField extends JTextField {
         }
         pVis.addChangeListener(new PScrollRepainter());
 
-        core = _core;
+        setCore(_core);
         defText = _defText;
         overrideFont = _overrideFont;
         setupListeners();
@@ -88,7 +89,7 @@ public final class PTextField extends JTextField {
         setupLook();
         
         if (overrideFont || !defText.isBlank()) {
-            setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal().deriveFont((float) PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize()));
+            setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
         } else {
             setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         }
@@ -117,7 +118,12 @@ public final class PTextField extends JTextField {
         super.setBackground(b);
     }
 
+    @Override
     public void setCore(DictCore _core) {
+        if (core != _core && _core != null) {
+            _core.subscribe(this);
+        }
+        
         core = _core;
     }
 
@@ -239,6 +245,15 @@ public final class PTextField extends JTextField {
         if (worker == null || worker.isDone()) {
             worker = PGTUtil.getFlashWorker(this, _flashColor, isBack);
             worker.execute();
+        }
+    }
+
+    @Override
+    public void updateFromCore() {
+        if (overrideFont) {
+            this.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
+        } else {
+            this.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -118,6 +118,30 @@ public class ConjugationGenRule implements Comparable<ConjugationGenRule> {
         }
     }
     
+    public void copyTransformationsFrom(ConjugationGenRule fromRule) {
+        this.transformations.clear();
+        
+        for (var transformation : fromRule.transformations) {
+            this.transformations.add(new ConjugationGenTransform(transformation));
+        }
+    }
+    
+    public boolean valuesShallowEqual(Object o) {
+        boolean ret = true;
+        
+        if (this != o) {
+            if (o instanceof ConjugationGenRule comp) {
+                ret = this.typeId == comp.typeId
+                        && this.regex.equals(comp.regex)
+                        && this.name.equals(comp.name);
+            } else {
+                ret = false;
+            }
+        }
+        
+        return ret;
+    }
+    
     /***
      * Checks if Gen Rules are equal. The combination ID is NOT accounted for, 
      * as this is used when checking equality across rules set to different
@@ -131,8 +155,7 @@ public class ConjugationGenRule implements Comparable<ConjugationGenRule> {
         boolean ret = true;
         
         if (this != o) {
-            if (o instanceof ConjugationGenRule) {
-                ConjugationGenRule comp = (ConjugationGenRule)o;
+            if (o instanceof ConjugationGenRule comp) {
                 ret = this.typeId == comp.typeId
                         && this.regex.equals(comp.regex)
                         && this.name.equals(comp.name)
@@ -413,9 +436,7 @@ public class ConjugationGenRule implements Comparable<ConjugationGenRule> {
         
         if (comp == this) {
             ret = true;
-        } else if (comp instanceof ConjugationGenRule) {
-            ConjugationGenRule compRule = (ConjugationGenRule)comp;
-            
+        } else if (comp instanceof ConjugationGenRule compRule) {            
             ret = typeId == compRule.typeId;
             ret = ret && (combinationId == null && compRule.combinationId == null) 
                     || combinationId.equals(compRule.combinationId);

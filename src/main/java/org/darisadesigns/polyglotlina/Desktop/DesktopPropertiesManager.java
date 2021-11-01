@@ -27,13 +27,13 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  *
  * @author edga_
  */
-public class DesktopPropertiesManager extends
-        PropertiesManager {
+public class DesktopPropertiesManager extends PropertiesManager {
     private Font conFont = null;
     private Font localFont = PGTUtil.CHARIS_UNICODE;
     
@@ -56,7 +56,7 @@ public class DesktopPropertiesManager extends
     }
     
     public Font getFontLocal(double size) {
-        return localFont.deriveFont(Font.PLAIN, (float)size);
+        return localFont.deriveFont(localFont.getStyle(), (float)size);
     }
     
     public void setLocalFont(Font _localFont) {
@@ -71,6 +71,15 @@ public class DesktopPropertiesManager extends
         
         localFont = _localFont; 
         localFontSize = size;
+    }
+    
+    @Override
+    public void setLocalFontSize(double size) {
+        localFontSize = size;
+    }
+    
+    public double getLocalFontSize() {
+        return localFontSize;
     }
     
     /**
@@ -105,7 +114,7 @@ public class DesktopPropertiesManager extends
             ret = javafx.scene.text.Font.loadFont(new ByteArrayInputStream(cachedLocalFont), localFontSize);
         } else if (conFont != null) { // second try to load from registered OS fonts...
             java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(localFont);
-            ret = javafx.scene.text.Font.font(localFont.getFamily(), conFontSize);
+            ret = javafx.scene.text.Font.font(localFont.getFamily(), localFontSize);
         } else { // last default to menu standard
             ret = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
         }
@@ -334,5 +343,13 @@ public class DesktopPropertiesManager extends
         }
         
         return ret;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 53 * hash + Objects.hashCode(this.conFont);
+        hash = 53 * hash + Objects.hashCode(this.localFont);
+        return hash;
     }
 }

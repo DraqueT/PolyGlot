@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -270,6 +270,7 @@ public class ScrLangProps extends PFrame {
         }
 
         testRTLWarning();
+        core.pushUpdate();
     }
 
     private void setLocalFont(Font localFont) {
@@ -278,6 +279,7 @@ public class ScrLangProps extends PFrame {
             ((DesktopPropertiesManager)core.getPropertiesManager()).setLocalFont(localFont, localFont.getSize2D());
 
             txtLocalFont.setText(localFont.getFamily());
+            core.pushUpdate();
         }
     }
 

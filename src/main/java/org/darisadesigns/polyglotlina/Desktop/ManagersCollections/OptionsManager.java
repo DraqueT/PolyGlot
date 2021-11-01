@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -24,6 +24,7 @@ import org.darisadesigns.polyglotlina.PGTUtil;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,10 +48,12 @@ public class OptionsManager {
     private final List<String> screensUp = new ArrayList<>();
     private Double menuFontSize = 0.0;
     private int toDoBarPosition = -1;
-    private DictCore core;
+    private final DictCore core;
+    private javafx.scene.text.Font menuFontFX;
 
     public OptionsManager(DictCore _core) {
         core = _core;
+        this.setupFXMenuFont();
     }
     
     /**
@@ -75,6 +78,7 @@ public class OptionsManager {
     public void setMenuFontSize(double _size) {
         menuFontSize = _size;
         setDefaultJavaFontSize(_size);
+        this.setupFXMenuFont();
     }
     
     private void setDefaultJavaFontSize(double size) {
@@ -276,5 +280,20 @@ public class OptionsManager {
     
     public boolean isMaximized() {
         return maximized;
+    }
+    
+    /**
+     * Gets the java FX version of an AWT font
+     *
+     * @return javafx font
+     */
+    public javafx.scene.text.Font getFXMenuFont() {
+        return menuFontFX;
+    }
+    
+    
+    private void setupFXMenuFont() {
+        InputStream is = this.getClass().getResourceAsStream(PGTUtil.BUTTON_FONT_LOCATION);
+        this.menuFontFX = javafx.scene.text.Font.loadFont(is, menuFontSize);
     }
 }

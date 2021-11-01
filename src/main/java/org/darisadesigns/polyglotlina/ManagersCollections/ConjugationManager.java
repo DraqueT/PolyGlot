@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -1302,7 +1302,25 @@ public class ConjugationManager {
             }
         }
     }
+    
+    /**
+     * Updates all instances rules matching those passed in within a given word type
+     *
+     * @param typeId part of speech to update rules for
+     * @param rulesToUpdate rules in this pos to update
+     */
+    public void bulkUpdateRuleInConjugationTemplates(int typeId, List<ConjugationGenRule> rulesToUpdate) {
+        ConjugationGenRule[] rules = this.getConjugationRulesForType(typeId);
 
+        for (ConjugationGenRule rule : rules) {
+            for (ConjugationGenRule ruleUpdateFrom : rulesToUpdate) {
+                if (rule != ruleUpdateFrom && rule.valuesShallowEqual(ruleUpdateFrom)) {
+                    rule.setEqual(ruleUpdateFrom, false);
+                }
+            }
+        }
+    }
+    
     /**
      * Deletes ALL instances of a rule within a given word type
      *
