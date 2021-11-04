@@ -224,7 +224,7 @@ def dist():
 
 def buildLinux():
     print('cleaning/testing/compiling...')
-    os.system('export DISPLAY=:0.0')
+    os.system('setenv DISPLAY :0.0')
     os.system('/home/polyglot/Downloads/apache-maven-3.8.3/bin/mvn clean package')
     os.system('ECHO $DISPLAY')
     exit()
