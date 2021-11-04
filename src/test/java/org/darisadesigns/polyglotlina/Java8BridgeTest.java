@@ -117,7 +117,6 @@ public class Java8BridgeTest {
             assertEquals(outputContents, expectedContents);
             System.out.println("PASS");
         } catch (IOException e) {
-            e.printStackTrace();
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
@@ -155,8 +154,8 @@ public class Java8BridgeTest {
                 }
 
                 assertTrue(Arrays.equals(expBytes, resBytes));
-                System.out.println("PASS");
             }
+            System.out.println("PASS");
         } catch (IOException | IllegalStateException e) {
             e.printStackTrace();
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());

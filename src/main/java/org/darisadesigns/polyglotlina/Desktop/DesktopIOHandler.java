@@ -556,11 +556,10 @@ public final class DesktopIOHandler implements IOHandler {
                 // pass null shell class because this will ultimately be discarded
                 DesktopHelpHandler helpHandler = new DesktopHelpHandler();
                 PFontHandler fontHandler = new PFontHandler();
-                var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), new DesktopInfoBox(null), helpHandler, fontHandler);
+                var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), new DummyInfoBox(), helpHandler, fontHandler);
                 DictCore test = new DictCore(new DesktopPropertiesManager(), osHandler, new PGTUtil(), new DesktopGrammarManager());
                 PolyGlot.getTestShell(test);
                 test.readFile(tmpSaveLocation.getAbsolutePath());
-
             }
             catch (Exception ex) {
                 throw new IOException(ex);

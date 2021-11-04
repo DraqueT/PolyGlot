@@ -19,9 +19,9 @@
  */
 package TestResources;
 
+import org.darisadesigns.polyglotlina.Desktop.DummyInfoBox;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.DesktopHelpHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopOSHandler;
