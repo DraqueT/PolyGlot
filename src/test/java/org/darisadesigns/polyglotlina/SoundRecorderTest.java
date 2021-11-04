@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina;
 
+import org.darisadesigns.polyglotlina.Desktop.SoundRecorder;
 import java.awt.GraphicsEnvironment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -27,6 +28,7 @@ import javax.swing.JTextField;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Assumptions;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 
 /**
  *

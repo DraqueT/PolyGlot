@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.Nodes;
 
+import TestResources.DummyCore;
 import TestResources.TestResources;
 import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
@@ -41,8 +42,8 @@ public class LogoNodeTest {
     private final LogoNode radical;
     
     public LogoNodeTest() {
-        logoTest = new LogoNode();
-        radical = new LogoNode();
+        logoTest = new LogoNode(DummyCore.newCore());
+        radical = new LogoNode(DummyCore.newCore());
         
         radical.setValue("RADICAL!");
         radical.setRadical(true);
@@ -59,7 +60,7 @@ public class LogoNodeTest {
         System.out.println("LogoNodeTest.testAddRadical");
         
         String expectedReading = "ZIMZAM!";
-        LogoNode newRad = new LogoNode();
+        LogoNode newRad = new LogoNode(DummyCore.newCore());
         newRad.setValue(expectedReading);
         logoTest.addRadical(newRad);
         
@@ -89,7 +90,7 @@ public class LogoNodeTest {
     public void testSetEqual() {
         System.out.println("LogoNodeTest.testSetEqual");
         
-        LogoNode copy = new LogoNode();
+        LogoNode copy = new LogoNode(DummyCore.newCore());
         copy.setEqual(logoTest);
         assertEquals(copy, logoTest);
     }
@@ -129,7 +130,7 @@ public class LogoNodeTest {
     public void testEquals() {
         System.out.println("LogoNodeTest.testEquals");
         
-        LogoNode comp = new LogoNode();
+        LogoNode comp = new LogoNode(DummyCore.newCore());
         
         comp.setValue("VALUE");
         comp.setNotes("NOTES");
@@ -144,7 +145,7 @@ public class LogoNodeTest {
     public void testNotEquals() {
         System.out.println("LogoNodeTest.testNotEquals");
         
-        LogoNode comp = new LogoNode();
+        LogoNode comp = new LogoNode(DummyCore.newCore());
         
         comp.setValue("VALUE");
         comp.setNotes("NOTES");

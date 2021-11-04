@@ -19,16 +19,16 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.ExternalCode.JFontChooser;
-import org.darisadesigns.polyglotlina.CustomControls.PTextField;
-import org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager;
-import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
-import org.darisadesigns.polyglotlina.CustomControls.PFrame;
-import org.darisadesigns.polyglotlina.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
@@ -40,8 +40,8 @@ import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import org.darisadesigns.polyglotlina.CustomControls.PTextPane;
-import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 
 /**
  *
@@ -66,6 +66,8 @@ public class ScrLangProps extends PFrame {
         initComponents();
         populateProperties();
         setAlphaLegal();
+
+        txtAlphaOrder.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
 
         txtKerning.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -183,7 +185,7 @@ public class ScrLangProps extends PFrame {
 
     @Override
     public void saveAllValues() {
-        PropertiesManager propMan = core.getPropertiesManager();
+        var propMan = ((DesktopPropertiesManager)core.getPropertiesManager());
         propMan.setDisableProcRegex(chkDisableProcRegex.isSelected());
         propMan.setIgnoreCase(chkIgnoreCase.isSelected());
         propMan.setLangName(txtLangName.getText());
@@ -207,7 +209,7 @@ public class ScrLangProps extends PFrame {
     }
 
     private void populateProperties() {
-        PropertiesManager propMan = core.getPropertiesManager();
+        var propMan = ((DesktopPropertiesManager)core.getPropertiesManager());
 
         txtLangName.setText(propMan.getLangName());
         txtFont.setText(propMan.getFontCon().getFamily());
@@ -247,23 +249,24 @@ public class ScrLangProps extends PFrame {
     }
 
     private void setConFont(Font _font, int fontStyle, int fontSize) {
-        core.getPropertiesManager().setFontCon(_font, fontStyle, fontSize);
-        Font conFont = core.getPropertiesManager().getFontCon();
+        ((DesktopPropertiesManager)core.getPropertiesManager()).setFontCon(_font, fontStyle, fontSize);
+        Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
+        txtAlphaOrder.setFont(conFont);
         txtFont.setText(conFont.getFamily());
 
         try {
-            boolean synced = core.getPropertiesManager().syncCachedFontCon();
+            boolean synced = ((DesktopPropertiesManager)core.getPropertiesManager()).syncCachedFontCon();
 
             if (!synced) {
-                InfoBox.warning("Font Not Cached",
+                core.getOSHandler().getInfoBox().warning("Font Not Cached",
                         "Unable to locate physical font file. If your font uses ligatures, they may not appear correctly.\n"
-                        + "To address this, please load your font manually via Tools->Import Font", core.getRootWindow());
+                        + "To address this, please load your font manually via Tools->Import Font");
             }
         }
         catch (Exception e) {
-            InfoBox.error("Font Caching Error",
+            core.getOSHandler().getInfoBox().error("Font Caching Error",
                     "Unable to locate physical font file. If your font uses ligatures, they may not appear correctly.\n"
-                    + "To address this, please load your font manually via Tools->Import Font\n\nError: " + e.getLocalizedMessage(), core.getRootWindow());
+                    + "To address this, please load your font manually via Tools->Import Font\n\nError: " + e.getLocalizedMessage());
         }
 
         testRTLWarning();
@@ -272,7 +275,9 @@ public class ScrLangProps extends PFrame {
 
     private void setLocalFont(Font localFont) {
         if (localFont != null) {
-            core.getPropertiesManager().setLocalFont(localFont, localFont.getSize2D());
+
+            ((DesktopPropertiesManager)core.getPropertiesManager()).setLocalFont(localFont, localFont.getSize2D());
+
             txtLocalFont.setText(localFont.getFamily());
             core.pushUpdate();
         }
@@ -282,15 +287,15 @@ public class ScrLangProps extends PFrame {
      * Displays warning to user if RTL is enforced and confont is standard
      */
     private void testRTLWarning() {
-        Font conFont = core.getPropertiesManager().getFontCon();
+        Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
         Font stdFont = (new JTextField()).getFont();
 
         if (core.getPropertiesManager().isEnforceRTL()
                 && (conFont == null
                 || conFont.getFamily().equals(stdFont.getFamily()))) {
-            InfoBox.warning("RTL Font Warning", "Enforcing RTL with default font"
+            core.getOSHandler().getInfoBox().warning("RTL Font Warning", "Enforcing RTL with default font"
                     + " is not recommended. For best results, please set distinct"
-                    + " conlang font.", core.getRootWindow());
+                    + " conlang font.");
         }
     }
 
@@ -315,10 +320,10 @@ public class ScrLangProps extends PFrame {
     private void checkAlphaContainsRegexCharacters() {
         String test = txtAlphaOrder.getText();
         if (test.matches(".*(\\[|\\]|\\{|\\}|\\\\|\\^|\\$|\\.|\\||\\?|\\*|\\+|\\(|\\)).*")) {
-            InfoBox.warning("Character Warning", "Some of the characters defined in your alphabetic order are used \n"
+            new DesktopInfoBox(this).warning("Character Warning", "Some of the characters defined in your alphabetic order are used \n"
                     + "in regular expressions. If you are planning on autogenerating pronunciations or \n"
                     + "conjugations/declensions, please consider using alternate characters from these:\n\n"
-                    + "[ ] \\ ^ $ . | ? * + ( ) { }", this);
+                    + "[ ] \\ ^ $ . | ? * + ( ) { }");
         }
     }
 
@@ -661,10 +666,11 @@ public class ScrLangProps extends PFrame {
         try {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             core.getPropertiesManager().refreshFonts();
+            txtAlphaOrder.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         }
         catch (Exception e) {
-            InfoBox.error("Font Refresh Failed", e.getLocalizedMessage(), this);
-            IOHandler.writeErrorLog(e, "Top level exception caught here. See prior exception.");
+            new DesktopInfoBox(this).error("Font Refresh Failed", e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, "Top level exception caught here. See prior exception.");
         }
 
         this.setCursor(Cursor.getDefaultCursor());
@@ -672,9 +678,8 @@ public class ScrLangProps extends PFrame {
 
     private void chkIgnoreCaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkIgnoreCaseActionPerformed
         if (chkIgnoreCase.isSelected()) {
-            InfoBox.warning("Ignore Case Warning",
-                    "This feature does not work with all charactrers, and can disrupt regex features. Please use with caution.",
-                    core.getRootWindow());
+            core.getOSHandler().getInfoBox().warning("Ignore Case Warning",
+                    "This feature does not work with all charactrers, and can disrupt regex features. Please use with caution.");
         }
     }//GEN-LAST:event_chkIgnoreCaseActionPerformed
 
@@ -683,8 +688,8 @@ public class ScrLangProps extends PFrame {
         if (chkDisableProcRegex.isSelected()
                 && (core.getPronunciationMgr().isRecurse()
                 || core.getRomManager().isRecurse())) {
-            if (InfoBox.actionConfirmation("Disable Regex?", "You have recursion enabled in the Phonology section. "
-                    + "If you disable regex, this will also be disabled. Continue?", this)) {
+            if (new DesktopInfoBox(this).actionConfirmation("Disable Regex?", "You have recursion enabled in the Phonology section. "
+                    + "If you disable regex, this will also be disabled. Continue?")) {
                 core.getPronunciationMgr().setRecurse(false);
                 core.getRomManager().setRecurse(false);
             } else {

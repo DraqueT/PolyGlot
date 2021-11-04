@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina;
 
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import TestResources.DummyCore;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -34,7 +35,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
-import org.darisadesigns.polyglotlina.ManagersCollections.OptionsManager;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.OptionsManager;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
@@ -60,7 +62,7 @@ public class IOHandlerTest {
     public void testWriteErrorLogBasic() {
         System.out.println("IOHandlerTest.testWriteErrorLogBasic");
         
-        IOHandler.writeErrorLog(new Exception("This is a test."));
+        DesktopIOHandler.getInstance().writeErrorLog(new Exception("This is a test."));
         File myLog = new File(PGTUtil.getErrorDirectory().getAbsolutePath() 
                 + File.separator + PGTUtil.ERROR_LOG_FILE);
         
@@ -73,7 +75,7 @@ public class IOHandlerTest {
             assertTrue(contents.contains("java.lang.Exception: This is a test."));
             assertTrue(contents.contains("IOHandlerTest.testWriteErrorLogBasic(IOHandlerTest.java"));
         } catch (FileNotFoundException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
         
@@ -84,10 +86,10 @@ public class IOHandlerTest {
     public void testWriteMultipleErrorLogs() {
         System.out.println("IOHandlerTest.testWriteMultipleErrorLogs");
         
-        IOHandler.writeErrorLog(new Exception("This is a test."));
+        DesktopIOHandler.getInstance().writeErrorLog(new Exception("This is a test."));
         File myLog = new File(PGTUtil.ERROR_LOG_FILE);
         long logLenFirst = myLog.length() - 1;
-        IOHandler.writeErrorLog(new Exception("This is a test."));
+        DesktopIOHandler.getInstance().writeErrorLog(new Exception("This is a test."));
         long logLenSecond = myLog.length();
         
         assertTrue(logLenSecond >= logLenFirst * 2);
@@ -99,17 +101,17 @@ public class IOHandlerTest {
         System.out.println("IOHandlerTest.testWriteErrorLogsMaxLength");
         
         for (int i = 0; i < 20; i++) {
-            IOHandler.writeErrorLog(new Exception("This is a test: " + i));
+            DesktopIOHandler.getInstance().writeErrorLog(new Exception("This is a test: " + i));
         }
         
         try {
-            int logLength = IOHandler.getErrorLog().length();
-            int systemInfoLength = IOHandler.getSystemInformation().length();
+            int logLength = DesktopIOHandler.getInstance().getErrorLog().length();
+            int systemInfoLength = DesktopIOHandler.getInstance().getSystemInformation().length();
 
             // off by one due to concatenation effect when adding system info (newline)
             assertEquals(logLength, PGTUtil.MAX_LOG_CHARACTERS + systemInfoLength + 1);
         } catch (FileNotFoundException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
         
@@ -123,15 +125,15 @@ public class IOHandlerTest {
         String testErrorString = "UR INPUTS & OUTPUTS!";
         String bubblingException = "Bubbobbula!";
         IOException testException = new IOException(testErrorString);
-        IOHandler.writeErrorLog(new Exception(bubblingException, testException));
+        DesktopIOHandler.getInstance().writeErrorLog(new Exception(bubblingException, testException));
         
         try {
-            String log = IOHandler.getErrorLog();
+            String log = DesktopIOHandler.getInstance().getErrorLog();
 
             assertTrue(log.contains(testErrorString));
             assertTrue(log.contains(bubblingException));
         } catch (FileNotFoundException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -141,7 +143,7 @@ public class IOHandlerTest {
         System.out.println("IOHandlerTest.testGoodConsoleCommand");
         
         
-        String[] result = IOHandler.runAtConsole(new String[]{"java", "--version"}, false);
+        String[] result = DesktopIOHandler.getInstance().runAtConsole(new String[]{"java", "--version"}, false);
 
         assertTrue(!result[0].isEmpty()); // various versions of Java return every damned thing you can imagine... just test that it's SOMETHING
         assertTrue(result[1].isEmpty());
@@ -152,7 +154,7 @@ public class IOHandlerTest {
         System.out.println("IOHandlerTest.testBadConsoleCommand");
         
         
-        String[] result = IOHandler.runAtConsole(new String[]{"WAT", "AM", "COMMAND?!"}, false);
+        String[] result = DesktopIOHandler.getInstance().runAtConsole(new String[]{"WAT", "AM", "COMMAND?!"}, false);
 
         assertTrue(result[0].isEmpty());
         assertTrue(!result[1].isEmpty()); // different errors for different systems, but should be SOMETHING
@@ -162,14 +164,14 @@ public class IOHandlerTest {
     public void testGetTerminalJavaVersion() {
         System.out.println("IOHandlerTest.testGetTerminalJavaVersion");
         
-        assertFalse(IOHandler.getTerminalJavaVersion().isEmpty());
+        assertFalse(DesktopIOHandler.getInstance().getTerminalJavaVersion().isEmpty());
     }
     
     @Test
     public void textIsJavaAvailableInTerminal() {
         System.out.println("IOHandlerTest.textIsJavaAvailableInTerminal");
         
-        assertTrue(IOHandler.isJavaAvailableInTerminal());
+        assertTrue(DesktopIOHandler.getInstance().isJavaAvailableInTerminal());
     }
     
     @Test
@@ -179,10 +181,10 @@ public class IOHandlerTest {
         try {
             byte[] expectedResult = "!@)*\ntest\n".getBytes();
             InputStream is = new FileInputStream(PGTUtil.TESTRESOURCES + "inputTest.txt");
-            byte[] result = IOHandler.clearCarrigeReturns(IOHandler.streamToByetArray(is));
+            byte[] result = DesktopIOHandler.getInstance().clearCarrigeReturns(DesktopIOHandler.getInstance().streamToByetArray(is));
             assertTrue(java.util.Arrays.equals(expectedResult, result));
         } catch (IOException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -204,10 +206,10 @@ public class IOHandlerTest {
 
             // create test core to set values in...
             DictCore core = DummyCore.newCore();
-            OptionsManager opt = core.getOptionsManager();
+            OptionsManager opt = PolyGlot.getPolyGlot().getOptionsManager();
 
             opt.setAnimateWindows(animatedExpected);
-            opt.setMaxReversionCount(reversionCountExpected, core);
+            opt.setMaxReversionCount(reversionCountExpected);
             opt.setMenuFontSize(menuFontExpected);
             opt.setNightMode(nightModeExpected);
             opt.setScreenPosition(testScreenName, expectedScreenPosition);
@@ -217,14 +219,14 @@ public class IOHandlerTest {
             opt.setDividerPosition(testScreenName, toDoBarPositionExpected);
 
             // save values to disk...
-            IOHandler.writeOptionsIni(core.getWorkingDirectory().getAbsolutePath(), opt);
+            DesktopIOHandler.getInstance().writeOptionsIni(core.getWorkingDirectory().getAbsolutePath(), opt);
 
             // create new core to load saved values into...
             core = DummyCore.newCore();
-            opt = core.getOptionsManager();
+            opt = PolyGlot.getPolyGlot().getOptionsManager();
             
             // relaod saved values...
-            IOHandler.loadOptionsIni(opt, core.getWorkingDirectory().getAbsolutePath());
+            DesktopIOHandler.getInstance().loadOptionsIni(opt, core.getWorkingDirectory().getAbsolutePath());
             
             assertEquals(animatedExpected, opt.isAnimateWindows());
             assertEquals(reversionCountExpected, opt.getMaxReversionCount());
@@ -236,7 +238,7 @@ public class IOHandlerTest {
             assertEquals(toDoBarPositionExpected, opt.getDividerPosition(testScreenName));
             assertTrue(opt.isMaximized());
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             fail(e);
         } finally {
             // clean up
@@ -250,9 +252,10 @@ public class IOHandlerTest {
         
         try {
             wipeTempSaveFiles();
-            Method m = IOHandler.class.getDeclaredMethod("makeTempSaveFile", File.class);
+            IOHandler ioHandler = DesktopIOHandler.getInstance();
+            Method m = DesktopIOHandler.class.getDeclaredMethod("makeTempSaveFile", File.class);
             m.setAccessible(true);
-            File tmpFile = (File)m.invoke(null, new File(PGTUtil.TESTRESOURCES));
+            File tmpFile = (File)m.invoke(ioHandler, new File(PGTUtil.TESTRESOURCES));
             
             assertEquals(tmpFile.getName(), PGTUtil.TEMP_FILE);
         } catch (IllegalAccessException | IllegalArgumentException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
@@ -261,21 +264,22 @@ public class IOHandlerTest {
     }
     
     @Test
-    public void testMakeTempSaveFile_Backup(){
+    public void testMakeTempSaveFile_Backup() throws IOException{
         System.out.println("IOHandlerTest.testMakeTempSaveFile_Backup");
         
         try {
             wipeTempSaveFiles();
-            Method m = IOHandler.class.getDeclaredMethod("makeTempSaveFile", File.class);
+            IOHandler ioHandler = DesktopIOHandler.getInstance();
+            Method m = DesktopIOHandler.class.getDeclaredMethod("makeTempSaveFile", File.class);
             m.setAccessible(true);
-            File tmpFile = (File)m.invoke(null, new File(PGTUtil.TESTRESOURCES));
+            File tmpFile = (File)m.invoke(ioHandler, new File(PGTUtil.TESTRESOURCES));
             tmpFile.createNewFile();
             
-            m.invoke(null, new File(PGTUtil.TESTRESOURCES));
+            m.invoke(ioHandler, new File(PGTUtil.TESTRESOURCES));
             
-            m = IOHandler.class.getDeclaredMethod("getTempSaveFileIfExists", File.class);
+            m = DesktopIOHandler.class.getDeclaredMethod("getTempSaveFileIfExists", File.class);
             m.setAccessible(true);
-            tmpFile = (File)m.invoke(null, new File(PGTUtil.TESTRESOURCES));
+            tmpFile = (File)m.invoke(ioHandler, new File(PGTUtil.TESTRESOURCES));
             
             assertTrue(tmpFile.getName().startsWith(PGTUtil.TEMP_FILE));
             assertNotEquals(tmpFile.getName(), PGTUtil.TEMP_FILE);
@@ -290,14 +294,15 @@ public class IOHandlerTest {
         
         try {
             wipeTempSaveFiles();
-            Method m = IOHandler.class.getDeclaredMethod("makeTempSaveFile", File.class);
+            IOHandler ioHandler = DesktopIOHandler.getInstance();
+            Method m = DesktopIOHandler.class.getDeclaredMethod("makeTempSaveFile", File.class);
             m.setAccessible(true);
-            File tmpFile = (File)m.invoke(null, new File(PGTUtil.TESTRESOURCES));
+            File tmpFile = (File)m.invoke(ioHandler, new File(PGTUtil.TESTRESOURCES));
             tmpFile.createNewFile();
             
-            m = IOHandler.class.getDeclaredMethod("getTempSaveFileIfExists", File.class);
+            m = DesktopIOHandler.class.getDeclaredMethod("getTempSaveFileIfExists", File.class);
             m.setAccessible(true);
-            tmpFile = (File)m.invoke(null, new File(PGTUtil.TESTRESOURCES));
+            tmpFile = (File)m.invoke(ioHandler, new File(PGTUtil.TESTRESOURCES));
             
             assertEquals(tmpFile.getName(), PGTUtil.TEMP_FILE);
         } catch (IOException | IllegalAccessException | IllegalArgumentException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
@@ -312,7 +317,7 @@ public class IOHandlerTest {
         String testValue = "ß and ä\nZOT";
         
         try {
-            File testFile = IOHandler.createTmpFileWithContents(testValue, "txt");
+            File testFile = DesktopIOHandler.getInstance().createTmpFileWithContents(testValue, "txt");
             String result = "";
             
             if (!testFile.exists()) {
@@ -344,7 +349,7 @@ public class IOHandlerTest {
         File testFile = null;
         
         try {
-            testFile = IOHandler.createFileWithContents(testFileName, testValue);
+            testFile = DesktopIOHandler.getInstance().createFileWithContents(testFileName, testValue);
             String result = "";
             
             if (!testFile.exists()) {
@@ -379,15 +384,15 @@ public class IOHandlerTest {
         String expectedEnd = "com.apple.FinderInfo:00000000  57 44 43 44 4D 53 53 50 00 00 00 00 00 00 00 00  |WDCDMSSP........|00000010  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  |................|00000020";
         
         try {
-            File testFile = IOHandler.createTmpFileWithContents("test", "tst");
+            File testFile = DesktopIOHandler.getInstance().createTmpFileWithContents("test", "tst");
             String filePath = testFile.getAbsolutePath();
             
-            IOHandler.addFileAttributeOSX(filePath,
+            DesktopIOHandler.getInstance().addFileAttributeOSX(filePath,
                     PGTUtil.OSX_FINDER_METADATA_NAME,
                     PGTUtil.OSX_FINDER_INFO_VALUE_DIC_FILES,
                     true);
             
-            String result = IOHandler.getFileAttributeOSX(filePath, PGTUtil.OSX_FINDER_METADATA_NAME);
+            String result = DesktopIOHandler.getInstance().getFileAttributeOSX(filePath, PGTUtil.OSX_FINDER_METADATA_NAME);
             assertTrue(result.endsWith(expectedEnd));
         } catch (Exception e) {
             fail(e);
@@ -404,15 +409,15 @@ public class IOHandlerTest {
         String value = "mbam";
         
         try {
-            File testFile = IOHandler.createTmpFileWithContents("test", "tst");
+            File testFile = DesktopIOHandler.getInstance().createTmpFileWithContents("test", "tst");
             String filePath = testFile.getAbsolutePath();
             
-            IOHandler.addFileAttributeOSX(filePath,
+            DesktopIOHandler.getInstance().addFileAttributeOSX(filePath,
                     attribName,
                     value,
                     false);
             
-            String result = IOHandler.getFileAttributeOSX(filePath, attribName);
+            String result = DesktopIOHandler.getInstance().getFileAttributeOSX(filePath, attribName);
             assertTrue(result.endsWith(value));
         } catch (Exception e) {
             fail(e);
@@ -428,7 +433,7 @@ public class IOHandlerTest {
             File workingDirectory = new File(PGTUtil.TESTRESOURCES);
             Path archiveFilePath = Files.write(Paths.get(PGTUtil.TESTRESOURCES + "testArchive.txt"), testFileContents.getBytes());
             File archiveFile = archiveFilePath.toFile();
-            File resultFile = IOHandler.archiveFile(archiveFile, workingDirectory);
+            File resultFile = DesktopIOHandler.getInstance().archiveFile(archiveFile, workingDirectory);
             
             assertTrue(resultFile.exists());
             assertFalse(archiveFile.exists());

@@ -19,11 +19,11 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
-import org.darisadesigns.polyglotlina.CustomControls.PDeclensionGridPanel;
-import org.darisadesigns.polyglotlina.CustomControls.PDeclensionListPanel;
-import org.darisadesigns.polyglotlina.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PComboBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDeclensionGridPanel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDeclensionListPanel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
@@ -37,10 +37,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.swing.DefaultComboBoxModel;
-import org.darisadesigns.polyglotlina.CustomControls.PDeclensionPanelInterface;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDeclensionPanelInterface;
 import java.awt.Window;
 import javax.swing.JOptionPane;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 
 /**
  *
@@ -97,17 +98,16 @@ public final class ScrDeclensionsGrids extends PDialog {
         ConjugationManager decMan = core.getConjugationManager();
         
         if (typeId == 0) {
-            InfoBox.info("Missing Part of Speech", 
-                    "Word must have a part of Speech set and the part of speech must have declensions defined before using this feature.", 
-                    core.getRootWindow());
+            core.getOSHandler().getInfoBox().info("Missing Part of Speech", 
+                    "Word must have a part of Speech set and the part of speech must have declensions defined before using this feature.");
             ret = false;
         } else if ((decMan.getDimensionalConjugationListTemplate(typeId) == null
                     || decMan.getDimensionalConjugationListTemplate(typeId).length == 0)
                 && decMan.getDimensionalConjugationListWord(word.getId()).length == 0
                 && decMan.getSingletonCombinedIds(typeId).length == 0) {
-            InfoBox.info("Declensions", "No declensions for part of speech: " + word.getWordTypeDisplay()
+            core.getOSHandler().getInfoBox().info("Declensions", "No declensions for part of speech: " + word.getWordTypeDisplay()
                     + " set. Declensions can be created per part of speech under the Part of Speech menu by clicking the "
-                            + "Declensions button.", core.getRootWindow());
+                            + "Declensions button.");
             ret = false;
         }
         
@@ -164,7 +164,7 @@ public final class ScrDeclensionsGrids extends PDialog {
         // only renders as dimensional if there are at least two dimensional declensions. Renders as list otherwise.
         if (shouldRenderDimensional()) {
             if (dimX == dimY) {
-                    InfoBox.warning("Dimension Selection", "Please select differing Row and Column values.", this);
+                    new DesktopInfoBox(this).warning("Dimension Selection", "Please select differing Row and Column values.");
             }
             else {
                 // get all partial dim ID patterns (sans X & Y dims)/feed to grid panel class
@@ -252,7 +252,7 @@ public final class ScrDeclensionsGrids extends PDialog {
                 PDeclensionPanelInterface comp = (PDeclensionPanelInterface)pnlTabDeclensions.getComponentAt(i);
                 
                 for (Entry<String, String> entry : comp.getAllDecValues().entrySet()) {
-                    ConjugationNode saveNode = new ConjugationNode(-1);
+                    ConjugationNode saveNode = new ConjugationNode(-1, core.getConjugationManager());
 
                     saveNode.setValue(entry.getValue().trim());
                     saveNode.setCombinedDimId(entry.getKey());
@@ -273,7 +273,7 @@ public final class ScrDeclensionsGrids extends PDialog {
             super.dispose();
         } else {
             if (!closeWithoutSave && chkAutogenOverride.isSelected()) {
-                int userChoice = InfoBox.yesNoCancel("Save Confirmation", "Save changes?", this);
+                int userChoice = new DesktopInfoBox(this).yesNoCancel("Save Confirmation", "Save changes?");
 
                 // yes = save, no = don't save, any other choice = cancel & do not exit
                 if (userChoice == JOptionPane.YES_OPTION) {
@@ -302,8 +302,8 @@ public final class ScrDeclensionsGrids extends PDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        cmbDimX = new PComboBox(core.getPropertiesManager().getFontMenu());
-        cmbDimY = new PComboBox(core.getPropertiesManager().getFontMenu());
+        cmbDimX = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
+        cmbDimY = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         pnlTabDeclensions = new javax.swing.JTabbedPane();
         chkAutogenOverride = new javax.swing.JCheckBox();
         btnOk = new PButton(nightMode, menuFontSize);
@@ -357,7 +357,7 @@ public final class ScrDeclensionsGrids extends PDialog {
             .addComponent(pnlTabDeclensions)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(chkAutogenOverride)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 102, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnDeprecated)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCancel)
@@ -421,8 +421,8 @@ public final class ScrDeclensionsGrids extends PDialog {
     private javax.swing.JButton btnDeprecated;
     private javax.swing.JButton btnOk;
     private javax.swing.JCheckBox chkAutogenOverride;
-    private javax.swing.JComboBox<ConjugationNode> cmbDimX;
-    private javax.swing.JComboBox<ConjugationNode> cmbDimY;
+    private javax.swing.JComboBox<org.darisadesigns.polyglotlina.Nodes.ConjugationNode> cmbDimX;
+    private javax.swing.JComboBox<org.darisadesigns.polyglotlina.Nodes.ConjugationNode> cmbDimY;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTabbedPane pnlTabDeclensions;

@@ -19,13 +19,15 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.PDialog;
-import org.darisadesigns.polyglotlina.CustomControls.PList;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PList;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode.*;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -41,7 +43,7 @@ public class ScrLanguageProblemDisplay extends PDialog {
      */
     public ScrLanguageProblemDisplay(List<LexiconProblemNode> problems, DictCore _core) {
         super(_core);
-        main = (ScrMainMenu)core.getRootWindow();
+        main = (ScrMainMenu)PolyGlot.getPolyGlot().getRootWindow();
         initComponents();
         
         DefaultListModel<LexiconProblemNode> model = new DefaultListModel<>();
@@ -65,7 +67,7 @@ public class ScrLanguageProblemDisplay extends PDialog {
 
         jSplitPane1 = new javax.swing.JSplitPane();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new PList(core.getPropertiesManager().getFontCon());
+        jList1 = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jTextField1 = new javax.swing.JTextField();

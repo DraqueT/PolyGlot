@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.OptionsManager;
 import TestResources.DummyCore;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -39,10 +40,10 @@ public class OptionsManagerTest {
     public void testResetOptions() {
         System.out.println("OptionsManagerTest.testResetOptions");
         
-        OptionsManager mgr = new OptionsManager();
+        OptionsManager mgr = new OptionsManager(DummyCore.newCore());
         
         mgr.setAnimateWindows(true);
-        mgr.setMaxReversionCount(999, DummyCore.newCore());
+        mgr.setMaxReversionCount(999);
         mgr.setMenuFontSize(20);
         mgr.setNightMode(true);
         mgr.setScreenPosition("ZIMZAM", new Point(999,999));

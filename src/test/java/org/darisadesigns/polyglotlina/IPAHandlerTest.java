@@ -19,9 +19,12 @@
  */
 package org.darisadesigns.polyglotlina;
 
+import org.darisadesigns.polyglotlina.Desktop.SoundRecorder;
 import java.awt.GraphicsEnvironment;
 import java.lang.reflect.Field;
 import java.util.Map;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
+import org.darisadesigns.polyglotlina.Desktop.IPAHandler;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Assumptions;
@@ -41,7 +44,7 @@ public class IPAHandlerTest {
 
         try {
             Class<?> myClass = handler.getClass();
-            Field field = myClass.getDeclaredField("charMap");
+            Field field = myClass.getSuperclass().getDeclaredField("charMap");
             field.setAccessible(true);
             Map<String, String> charMap = (Map<String, String>)field.get(handler);
 
@@ -55,7 +58,7 @@ public class IPAHandlerTest {
             soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.UCLA_WAV_LOCATION + firstSound + PGTUtil.WAV_SUFFIX);
             soundRecorder.playAudioFile(PGTUtil.IPA_SOUNDS_LOCATION + PGTUtil.WIKI_WAV_LOCATION + firstSound + PGTUtil.WAV_SUFFIX);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -68,7 +71,7 @@ public class IPAHandlerTest {
         
         try {
             Class<?> classs = handler.getClass();
-            Field field = classs.getDeclaredField("charMap");
+            Field field = classs.getSuperclass().getDeclaredField("charMap");
             field.setAccessible(true);
             Map<String, String> charMap = (Map<String, String>)field.get(handler);
 
@@ -106,7 +109,7 @@ public class IPAHandlerTest {
 
             assertEquals(expectedResults, results);
         } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }

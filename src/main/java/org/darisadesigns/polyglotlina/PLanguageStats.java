@@ -21,13 +21,11 @@ package org.darisadesigns.polyglotlina;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import static org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection.formatCon;
 import static org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection.formatPlain;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
-import org.darisadesigns.polyglotlina.Screens.ScrProgressMenu;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +39,7 @@ public final class PLanguageStats {
     private final PGooglePieChart typesPie = new PGooglePieChart("Word Counts by Part of Speech");
     private final PGoogleBarChart charStatBar = new PGoogleBarChart("Character Stats");
     private final DictCore core;
-    private final ScrProgressMenu progress;
+    private final PLanguageStatsProgress progress;
     private final Map<String, Integer> wordStart = new HashMap<>();
     private final Map<String, Integer> letterCount = new HashMap<>();
     private final Map<String, Integer> letterComboCount = new HashMap<>();
@@ -52,7 +50,7 @@ public final class PLanguageStats {
     private final String[] alphabet;
     private final String[] alphaCombinations;
     
-    private PLanguageStats(DictCore _core, ScrProgressMenu _progress) {
+    private PLanguageStats(DictCore _core, PLanguageStatsProgress _progress) {
         core = _core;
         progress = _progress;
         wordList = core.getWordCollection().getWordNodes();
@@ -67,26 +65,18 @@ public final class PLanguageStats {
      * Builds report on words in ConLang. Potentially computationally expensive.
      *
      * @param core Core of language to analyze
+     * @param _progress
      * @return
      */
-    public static String buildWordReport(DictCore core) {
+    public static String buildWordReport(DictCore core, PLanguageStatsProgress _progress) {
         final String[] ret = new String[1]; // using array so I can set value in a thread...
         ret[0] = "";
 
         try {
-            final int wordCount = core.getWordCollection().getWordCount();
-            final ScrProgressMenu progress = ScrProgressMenu.createScrProgressMenu("Generating Language Stats", wordCount + 5, true, true);
-            progress.setVisible(true);
-
-            // unnessecary to test UI positioning here (and no root window in tests)
-            if (core.getRootWindow() != null) {
-                progress.setLocation(core.getRootWindow().getLocation());
-            }
-
             Thread thread = new Thread() {
                 @Override
                 public void run() {
-                    ret[0] = new PLanguageStats(core, progress).buildWordReport();
+                    ret[0] = new PLanguageStats(core, _progress).buildWordReport();
                 }
             };
 
@@ -94,8 +84,8 @@ public final class PLanguageStats {
             thread.join();
         }
         catch (InterruptedException e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Language Stat Error", "Unable to generate language statistics: " + e.getLocalizedMessage(), core.getRootWindow());
+            core.getOSHandler().getIOHandler().writeErrorLog(e);
+            core.getOSHandler().getInfoBox().error("Language Stat Error", "Unable to generate language statistics: " + e.getLocalizedMessage());
         }
 
         return ret[0];
@@ -126,7 +116,7 @@ public final class PLanguageStats {
         charStatBar.setLeftYAxisLabel("Starting With");
         charStatBar.setRightYAxisLabel("Overall Count");
         charStatBar.setLabels(new String[]{"Words Starting With", "Overall Count"});
-        charStatBar.setConFontName(core.getPropertiesManager().getFontCon().getFamily());
+        charStatBar.setConFontName(core.getPropertiesManager().getFontConFamily());
         for (String character : alphabet) {
             double starting = 0.0;
             double count = 0.0;
@@ -155,7 +145,7 @@ public final class PLanguageStats {
         ret += charStatBar.getBuildHTML();
 
         ret += "    </script>\n"
-                + "  <body style=\"font-family:" + core.getPropertiesManager().getFontLocal().getFamily() + ";\">\n"
+                + "  <body style=\"font-family:" + core.getPropertiesManager().getFontLocalFamily() + ";\">\n"
                 + "    <center>---LANGUAGE STAT REPORT---</center><br><br>";
 
         ret += formatPlain("Count of words in conlang lexicon: " + wordList.length + "<br><br>", core);
@@ -432,7 +422,7 @@ public final class PLanguageStats {
     private void addCharacterStringsToMap(Map<String, Integer> letterCombos, String[] combinations, String word) {
         String value = word;
 
-        while (!value.isBlank()) {
+        while (!core.getPGTUtil().isBlank(value)) {
             int startLength = value.length();
 
             for (String combo : combinations) {
@@ -486,5 +476,9 @@ public final class PLanguageStats {
         }
 
         return ret.toArray(new String[0]);
+    }
+    
+    public interface PLanguageStatsProgress {
+        void iterateTask(String textUpdate);
     }
 }

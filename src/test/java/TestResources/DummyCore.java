@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -21,27 +21,47 @@ package TestResources;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.DesktopHelpHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopOSHandler;
+import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammarManager;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.PGTUtil;
-import org.darisadesigns.polyglotlina.PolyGlot;
+import org.darisadesigns.polyglotlina.InfoBox;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
+import org.darisadesigns.polyglotlina.OSHandler;
 
 /**
  * Allows for testing which requires a DictCore without exposing PolyGlot object
  * @author draque
  */
 public class DummyCore extends DictCore {
-    private DummyCore (PolyGlot polyGlot) {
-        super(polyGlot);
+    private DummyCore (DesktopPropertiesManager propsManager, OSHandler osHandler) {
+        super(propsManager, osHandler, new PGTUtil(), new DesktopGrammarManager());
     }
     
     public static DummyCore newCore() {
         try {
-            Constructor constructor = PolyGlot.class.getDeclaredConstructor(new Class[]{String.class});
+            InfoBox infoBox = new DesktopInfoBox(null);
+            DesktopHelpHandler helpHandler = new DesktopHelpHandler();
+            PFontHandler fontHandler = new PFontHandler();
+            DesktopOSHandler osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), infoBox, helpHandler, fontHandler);
+            Constructor constructor = PolyGlot.class.getDeclaredConstructor(new Class[]{String.class, DictCore.class, DesktopOSHandler.class});
             constructor.setAccessible(true);
-            PolyGlot polyGlot = (PolyGlot)constructor.newInstance(PGTUtil.TESTRESOURCES);
-            
-            return new DummyCore(polyGlot);
+            DesktopPropertiesManager propsManager = new DesktopPropertiesManager();
+            DummyCore core = new DummyCore(propsManager, osHandler);
+            // Is this now really needed to be constructed?
+            // Some screens use new PolyGlot static instance
+            PolyGlot polyGlot = new PolyGlot(PGTUtil.TESTRESOURCES, (DictCore)core, osHandler);
+            PolyGlot.setTestPolyGlot(polyGlot);
+            return core;
         } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
+            System.err.println("Something's gone wrong with the Dummy Core generation: " + e.getLocalizedMessage());
+        }
+        catch (Exception e) {
             System.err.println("Something's gone wrong with the Dummy Core generation: " + e.getLocalizedMessage());
         }
         

@@ -309,7 +309,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox&lt;IPALibrary&gt;(core.getPropertiesManager().getFontMenu())"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox&lt;IPALibrary&gt;(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu())"/>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;IPALibrary&gt;"/>
       </AuxValues>
     </Component>
@@ -318,7 +318,7 @@
         <Property name="horizontalAlignment" type="int" value="0"/>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;Hover over an IPA character to display which characters in your language express it.&quot;, core.getOptionsManager().getMenuFontSize())"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;Hover over an IPA character to display which characters in your language express it.&quot;, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize())"/>
       </AuxValues>
     </Component>
   </SubComponents>

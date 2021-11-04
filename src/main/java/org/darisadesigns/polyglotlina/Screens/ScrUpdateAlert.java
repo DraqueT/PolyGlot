@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -19,12 +19,12 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.CustomControls.PDialog;
-import org.darisadesigns.polyglotlina.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.WebInterface;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -90,7 +90,6 @@ public class ScrUpdateAlert extends PDialog {
             jTextPane1.setText(text);
             txtVersion.setText("--URGENT--");
             setVisible(true);
-        //} else if (!ver.equals(core.getVersion())) { // next, handle update alerts
         } else if (upstreamVer > selfVer // need update if upstream version newer
                 || (PGTUtil.IS_BETA && upstreamVer == selfVer)) { // also need update if upstream version is non-beta of current ver
             this.setTitle("PolyGlot " + ver + " available");
@@ -110,11 +109,11 @@ public class ScrUpdateAlert extends PDialog {
             if (verbose) { // if in verbose mode (user selected update) inform user they're good to go
                 // custom message if user is on a beta copy of PolyGlot
                 if (PGTUtil.IS_BETA) {
-                    InfoBox.info("Update Status", "You're up to date on a beta build branched from the most recent release candidate ("
-                            + PGTUtil.getDisplayVersion() + ")", core.getRootWindow());
+                    core.getOSHandler().getInfoBox().info("Update Status", "You're up to date on a beta build branched from the most recent release candidate ("
+                            + PGTUtil.getDisplayVersion() + ")");
                 } else {
-                    InfoBox.info("Update Status", "You're up to date and on the newest version: "
-                        + PGTUtil.getDisplayVersion() + ".", core.getRootWindow());
+                    core.getOSHandler().getInfoBox().info("Update Status", "You're up to date and on the newest version: "
+                        + PGTUtil.getDisplayVersion() + ".");
                 }
             }            
             this.setVisible(false);
@@ -175,7 +174,7 @@ public class ScrUpdateAlert extends PDialog {
                     ret.add(message);
                 }
             } catch (Exception e) {
-                IOHandler.writeErrorLog(e);
+                DesktopIOHandler.getInstance().writeErrorLog(e);
                 throw new Exception("Message: " + messageId + " malformed: \n" + e.getLocalizedMessage());
             }
         }
@@ -191,10 +190,8 @@ public class ScrUpdateAlert extends PDialog {
         int result;
         
         switch (operator) {
-            case "eql":
-                ret = Arrays.equals(splitVersion1, splitVersion2);
-                break;
-            case "gt":
+            case "eql" -> ret = Arrays.equals(splitVersion1, splitVersion2);
+            case "gt" -> {
                 result = compareDotDelimited(splitVersion1[0], splitVersion2[0]);
                 if (result == -1){
                     ret = true;
@@ -203,8 +200,8 @@ public class ScrUpdateAlert extends PDialog {
                 } else {
                     ret = compareDotDelimited(splitVersion1[1], splitVersion2[1]) == -1;
                 }
-                break;
-            case "lt":
+            }
+            case "lt" -> {
                 result = compareDotDelimited(splitVersion1[0], splitVersion2[0]);
                 if (result == 1){
                     ret = true;
@@ -213,10 +210,9 @@ public class ScrUpdateAlert extends PDialog {
                 } else {
                     ret = compareDotDelimited(splitVersion1[1], splitVersion2[1]) == 1;
                 }
-                break;
+            }
 
-            default:
-                throw new Exception("Malformed equality operator: " + operator);
+            default -> throw new Exception("Malformed equality operator: " + operator);
         }
         
         return ret;
@@ -226,17 +222,10 @@ public class ScrUpdateAlert extends PDialog {
         boolean ret;
         
         switch (operator) {
-            case "eql":
-                ret = v1.equals(v2);
-                break;
-            case "gt":
-                ret = compareDotDelimited(v1, v2) == -1;
-                break;
-            case "lt":
-                ret = compareDotDelimited(v1, v2) == 1;
-                break;
-            default:
-                throw new Exception("Malformed equality operator: " + operator);
+            case "eql" -> ret = v1.equals(v2);
+            case "gt" -> ret = compareDotDelimited(v1, v2) == -1;
+            case "lt" -> ret = compareDotDelimited(v1, v2) == 1;
+            default -> throw new Exception("Malformed equality operator: " + operator);
         }
         
         return ret;
@@ -297,8 +286,9 @@ public class ScrUpdateAlert extends PDialog {
                     uri = uri.normalize();
                     java.awt.Desktop.getDesktop().browse(uri);
                 } catch (IOException | URISyntaxException ex) {
-                    IOHandler.writeErrorLog(ex);
-                    InfoBox.error("Browser Error", "Unable to open page: " + link, core.getRootWindow());
+                    DesktopIOHandler.getInstance().writeErrorLog(ex);
+                    core.getOSHandler().getInfoBox().error("Browser Error", 
+                            "Unable to open page: " + link);
                 }
             });
 
@@ -349,7 +339,7 @@ public class ScrUpdateAlert extends PDialog {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
-        txtVersion = new PLabel("", core.getOptionsManager().getMenuFontSize());
+        txtVersion = new PLabel("", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);
@@ -415,17 +405,10 @@ public class ScrUpdateAlert extends PDialog {
         MessageType ret;
         
         switch(val) {
-            case "U":
-                ret = MessageType.URGENT;
-                break;
-            case "O":
-                ret = MessageType.ONETIME;
-                break;
-            case "I":
-                ret = MessageType.INFO;
-                break;
-            default:
-                throw new Exception("Malformed message type: " + val);
+            case "U" -> ret = MessageType.URGENT;
+            case "O" -> ret = MessageType.ONETIME;
+            case "I" -> ret = MessageType.INFO;
+            default -> throw new Exception("Malformed message type: " + val);
         }
         
         return ret;

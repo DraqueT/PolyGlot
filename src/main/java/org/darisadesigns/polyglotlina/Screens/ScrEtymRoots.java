@@ -19,16 +19,16 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
-import org.darisadesigns.polyglotlina.CustomControls.PDialog;
-import org.darisadesigns.polyglotlina.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.CustomControls.PPanelDrawEtymology;
-import org.darisadesigns.polyglotlina.CustomControls.PTextField;
-import org.darisadesigns.polyglotlina.CustomControls.PTextPane;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PComboBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PPanelDrawEtymology;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.ManagersCollections.EtymologyManager;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.EtyExternalParent;
@@ -43,6 +43,8 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  * This screen is used for viewing and modifying the etymology of a word
@@ -73,14 +75,14 @@ public final class ScrEtymRoots extends PDialog {
         this.setModal(true);
         setupParentsPanels();
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        lblWord.setFont(core.getPropertiesManager().getFontCon());
+        lblWord.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         setupDrawPanel();
         setupForm();
         txtNotes.setText(word.getEtymNotes());
     }
     
     private void setupForm() {
-        int divider = core.getOptionsManager().getDividerPosition(this.getClass().getName());
+        int divider = PolyGlot.getPolyGlot().getOptionsManager().getDividerPosition(this.getClass().getName());
         
         if (divider > -1) {
             jSplitPane1.setDividerLocation(divider);
@@ -203,9 +205,9 @@ public final class ScrEtymRoots extends PDialog {
     private void addNewExtParent(PTextField[] values) {
         if (values.length > 0) { // empty set means user clicked cancel
             if (values.length != 3) {
-                InfoBox.error("Wrong number number of values", "Wrong number of values provided to create external parent.", this);
+                new DesktopInfoBox(this).error("Wrong number number of values", "Wrong number of values provided to create external parent.");
             } else if (values[0].getText().isEmpty()) {
-                InfoBox.error("Blank word not allowed", "At minimum, a value for the external parent's word must be provided.", this);
+                new DesktopInfoBox(this).error("Blank word not allowed", "At minimum, a value for the external parent's word must be provided.");
             } else {
                 EtyExternalParent newParent = new EtyExternalParent();
                 newParent.setValue(values[0].getText());
@@ -239,7 +241,7 @@ public final class ScrEtymRoots extends PDialog {
             // this field holds the text from a parent value
             textField.setEditable(false);
             textField.setText(core.getWordCollection().getNodeById(parentId).getValue());
-            textField.setFont(core.getPropertiesManager().getFontCon());
+            textField.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
             textField.setMaximumSize(new Dimension(9999, textField.getPreferredSize().height));
             textField.setMinimumSize(new Dimension(1, textField.getPreferredSize().height));
             textField.setToolTipText("Parent word");
@@ -264,9 +266,9 @@ public final class ScrEtymRoots extends PDialog {
         }
 
         //create new dropdown for potential additional parent to be added
-        final PComboBox<Object> newParentBox = new PComboBox<>(core.getPropertiesManager().getFontMenu());
+        final PComboBox<Object> newParentBox = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         newParentBox.setToolTipText("Add new parent to word here.");
-        newParentBox.setFont(core.getPropertiesManager().getFontCon());
+        newParentBox.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         DefaultComboBoxModel<Object> comboModel = new DefaultComboBoxModel<>();
         newParentBox.setModel(comboModel);
         newParentBox.setMaximumSize(new Dimension(99999, newParentBox.getPreferredSize().height));
@@ -300,8 +302,8 @@ public final class ScrEtymRoots extends PDialog {
         try {
             core.getEtymologyManager().addRelation(parentId, childId);
         } catch (EtymologyManager.IllegalLoopException e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Illegal Loop: Parent not Added", e.getLocalizedMessage(), this);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            new DesktopInfoBox(this).error("Illegal Loop: Parent not Added", e.getLocalizedMessage());
         }
     }
 
@@ -486,7 +488,7 @@ public final class ScrEtymRoots extends PDialog {
     @Override
     public void dispose() {
         word.setEtymNotes(txtNotes.getText());
-        core.getOptionsManager().setDividerPosition(getClass().getName(), jSplitPane1.getDividerLocation());
+        PolyGlot.getPolyGlot().getOptionsManager().setDividerPosition(getClass().getName(), jSplitPane1.getDividerLocation());
         super.dispose();
     }
 

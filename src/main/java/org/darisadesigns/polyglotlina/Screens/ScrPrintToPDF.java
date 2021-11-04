@@ -19,15 +19,15 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
-import org.darisadesigns.polyglotlina.CustomControls.PDialog;
-import org.darisadesigns.polyglotlina.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.CustomControls.PTextPane;
-import org.darisadesigns.polyglotlina.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.io.File;
@@ -35,7 +35,8 @@ import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import org.darisadesigns.polyglotlina.Java8Bridge;
+import org.darisadesigns.polyglotlina.Desktop.Java8Bridge;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -330,12 +331,12 @@ public class ScrPrintToPDF extends PDialog {
 
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
         if (txtSavePath.getText().isEmpty()) {
-            InfoBox.warning("File not Specified", "Please specify a file to save to.", core.getRootWindow());
+            core.getOSHandler().getInfoBox().warning("File not Specified", "Please specify a file to save to.");
             return;
         }
         
         if (new File(txtSavePath.getText()).exists()
-                && !InfoBox.actionConfirmation("Overwrite Confirmation", "File already exists. Overwrite?", this)) {
+                && !new DesktopInfoBox(this).actionConfirmation("Overwrite Confirmation", "File already exists. Overwrite?")) {
             return;
         }
         
@@ -347,7 +348,7 @@ public class ScrPrintToPDF extends PDialog {
                         "You have selected \"Print Etymology Trees\" with illegal loops present\n" +
                         "in your lexicon's etymology. To print the trees, this must be corrected.\n"+ 
                         "Please select Tools->Check Language to find/correct this problem.";
-                InfoBox.warning("Etymology Problem", message, this);
+                new DesktopInfoBox(this).warning("Etymology Problem", message);
             }
             
             Java8Bridge.exportPdf(txtSavePath.getText(), 
@@ -366,20 +367,22 @@ public class ScrPrintToPDF extends PDialog {
                     core);
 
             if (Desktop.isDesktopSupported()) {
-                if (InfoBox.yesNoCancel("Print Success", "PDF successfully printed. Open file now?", this) 
+                if (new DesktopInfoBox(this).yesNoCancel("Print Success", "PDF successfully printed. Open file now?") 
                         == JOptionPane.YES_OPTION) {
-                    if (!IOHandler.openFileNativeOS(txtSavePath.getText())) {
-                        InfoBox.error("File Error", "Unable to open PDF at location: " + txtSavePath.getText(), core.getRootWindow());
+                    if (!DesktopIOHandler.getInstance().openFileNativeOS(txtSavePath.getText())) {
+                        core.getOSHandler().getInfoBox().error("File Error", 
+                                "Unable to open PDF at location: " + txtSavePath.getText());
                     }
                 }
             } else {
-                InfoBox.info("Print Success", "Successfully printed to " + txtSavePath.getText(), core.getRootWindow());
+                core.getOSHandler().getInfoBox().info("Print Success", 
+                        "Successfully printed to " + txtSavePath.getText());
             }
             
             this.dispose();
         } catch (IOException e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Save Error", e.getMessage(), core.getRootWindow());
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            core.getOSHandler().getInfoBox().error("Save Error", e.getMessage());
         } finally {
             setCursor(Cursor.getDefaultCursor());
         }
@@ -408,7 +411,7 @@ public class ScrPrintToPDF extends PDialog {
      * @param _core Dictionary Core
      */
     public static void run(final DictCore _core) {
-        _core.getRootWindow().saveAllValues();
+        PolyGlot.getPolyGlot().getRootWindow().saveAllValues();
         java.awt.EventQueue.invokeLater(() -> {
             new ScrPrintToPDF(_core).setVisible(true);
         });

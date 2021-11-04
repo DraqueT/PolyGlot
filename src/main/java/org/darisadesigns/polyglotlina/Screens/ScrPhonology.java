@@ -19,14 +19,13 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.CustomControls.PCellEditor;
-import org.darisadesigns.polyglotlina.CustomControls.PCellRenderer;
-import org.darisadesigns.polyglotlina.CustomControls.PFrame;
-import org.darisadesigns.polyglotlina.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellEditor;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellRenderer;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager;
 import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
 import java.awt.Color;
 import java.awt.Component;
@@ -44,8 +43,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
-import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
 
 /**
  *
@@ -85,13 +84,13 @@ public final class ScrPhonology extends PFrame {
         saveAllValues();
         
         if (core.getRomManager().usingLookaheadsLookbacks() && !core.getRomManager().isRecurse()) {
-            InfoBox.warning("Possible Regex Issue", "It looks like your romanizations use lookahead or lookbehind patterns. "
-                    + "Please enable the recursion checkbox or these will not function correctly.", core.getRootWindow());
+            core.getOSHandler().getInfoBox().warning("Possible Regex Issue", "It looks like your romanizations use lookahead or lookbehind patterns. "
+                    + "Please enable the recursion checkbox or these will not function correctly.");
         }
         
         if (core.getPronunciationMgr().usingLookaheadsLookbacks() && !core.getPronunciationMgr().isRecurse()) {
-            InfoBox.warning("Possible Regex Issue", "It looks like your pronunciations use lookahead or lookbehind patterns. "
-                    + "Please enable the recursion checkbox or these will not function correctly.", core.getRootWindow());
+            core.getOSHandler().getInfoBox().warning("Possible Regex Issue", "It looks like your pronunciations use lookahead or lookbehind patterns. "
+                    + "Please enable the recursion checkbox or these will not function correctly.");
         }
         
         super.dispose();
@@ -115,7 +114,7 @@ public final class ScrPhonology extends PFrame {
     }
 
     private void setupButtons() {
-        Font charis = core.getPropertiesManager().getFontLocal();
+        Font charis = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
         btnDownProc.setFont(charis);
         btnDownRom.setFont(charis);
         btnUpProc.setFont(charis);
@@ -384,7 +383,8 @@ public final class ScrPhonology extends PFrame {
                         editChar.setIgnoreListenerSilencing(false);
                         editChar.setValue(value.substring(0, 1));
                         editChar.setIgnoreListenerSilencing(true);
-                        InfoBox.warning("Single Character Only", "Replacement characters can only be 1 character long.", core.getRootWindow());
+                        core.getOSHandler().getInfoBox().warning("Single Character Only", 
+                                "Replacement characters can only be 1 character long.");
                     });
                 }
             }
@@ -483,7 +483,7 @@ public final class ScrPhonology extends PFrame {
 
         boolean localPopulating = curPopulating;
         curPopulating = true;
-        PropertiesManager propMan = core.getPropertiesManager();
+        var propMan = ((DesktopPropertiesManager)core.getPropertiesManager());
 
         if (tblRep.getCellEditor() != null && tblRep.getSelectedRow() != -1 && tblRep.getRowCount() > 0) {
             tblRep.getCellEditor().stopCellEditing();
@@ -542,7 +542,7 @@ public final class ScrPhonology extends PFrame {
         int curRow = tblProcs.getSelectedRow();
 
         if (curRow == -1
-                || !InfoBox.deletionConfirmation(core.getRootWindow())) {
+                || !core.getOSHandler().getInfoBox().deletionConfirmation()) {
             return;
         }
 
@@ -562,7 +562,7 @@ public final class ScrPhonology extends PFrame {
         int curRow = tblRep.getSelectedRow();
 
         if (curRow == -1
-                || !InfoBox.deletionConfirmation(core.getRootWindow())) {
+                || !core.getOSHandler().getInfoBox().deletionConfirmation()) {
             return;
         }
 
@@ -578,7 +578,7 @@ public final class ScrPhonology extends PFrame {
         int curRow = tblRom.getSelectedRow();
 
         if (curRow == -1
-                || !InfoBox.deletionConfirmation(core.getRootWindow())) {
+                || !core.getOSHandler().getInfoBox().deletionConfirmation()) {
             return;
         }
 

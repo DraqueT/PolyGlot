@@ -251,7 +251,7 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmbTypeActionPerformed"/>
                       </Events>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(core.getPropertiesManager().getFontLocal())"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal())"/>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Object&gt;"/>
                       </AuxValues>
                     </Component>
@@ -473,7 +473,7 @@
                             <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lstLexiconValueChanged"/>
                           </Events>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PListLexicon(core.getPropertiesManager().getFontCon())"/>
+                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PListLexicon(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon())"/>
                             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;ConWordDisplay&gt;"/>
                           </AuxValues>
                         </Component>

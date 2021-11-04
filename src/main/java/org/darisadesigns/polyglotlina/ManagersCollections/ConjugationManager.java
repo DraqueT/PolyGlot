@@ -55,7 +55,7 @@ public class ConjugationManager {
     private Integer topId = 0;
     private boolean bufferDecTemp = false;
     private Integer bufferRelId = -1;
-    private ConjugationNode buffer = new ConjugationNode(-1);
+    private ConjugationNode buffer = null;
     private final Map<Integer, List<ConjugationGenRule>> generationRules = new HashMap<>();
     private ConjugationGenRule ruleBuffer = new ConjugationGenRule();
     
@@ -71,6 +71,7 @@ public class ConjugationManager {
 
     public ConjugationManager(DictCore _core) {
         core = _core;
+        buffer = new ConjugationNode(-1, this);
     }
     
     /**
@@ -93,7 +94,9 @@ public class ConjugationManager {
                     curNode.evolveConjugatedNode(regex, replacement, instanceOption);
                     
                     // only report error if prior value did not start out as blank
-                    if (curNode.getValue().isBlank() && !startValue.isBlank()) {
+                    
+                    if (core.getPGTUtil().isBlank(curNode.getValue()) && 
+                            !core.getPGTUtil().isBlank(startValue)) {
                         throw new Exception("Conjugation set to blank value.");
                     }
                     
@@ -160,7 +163,7 @@ public class ConjugationManager {
                     transform.replaceText = transform.replaceText.replace(regex, replacement);
                     
                     // Do NOT check the replaceText for being blank. There can be legit reasons for this.
-                    if (transform.regex.isBlank()) {
+                    if (core.getPGTUtil().isBlank(transform.regex)) {
                         throw new Exception("regex blanked");
                     }
                     
@@ -868,7 +871,7 @@ public class ConjugationManager {
     }
 
     public void clearBuffer() {
-        buffer = new ConjugationNode(-1);
+        buffer = new ConjugationNode(-1, this);
         bufferDecTemp = false;
         bufferRelId = -1;
     }
@@ -885,7 +888,7 @@ public class ConjugationManager {
             idToDecNodes.put(typeId, wordList);
         }
 
-        ConjugationNode addNode = new ConjugationNode(topId);
+        ConjugationNode addNode = new ConjugationNode(topId, this);
         addNode.setValue(declension);
 
         wordList.add(addNode);
@@ -918,7 +921,7 @@ public class ConjugationManager {
             list.put(relId, wordList);
         }
 
-        ConjugationNode addNode = new ConjugationNode(declensionId);
+        ConjugationNode addNode = new ConjugationNode(declensionId, this);
         addNode.setEqual(declension);
 
         wordList.add(addNode);
@@ -1018,7 +1021,7 @@ public class ConjugationManager {
                 ConjugationNode curNode = copyFrom.next();
 
                 if (curNode.getId().equals(declensionId)) {
-                    ConjugationNode modified = new ConjugationNode(declensionId);
+                    ConjugationNode modified = new ConjugationNode(declensionId, this);
                     modified.setEqual(declension);
                     copyTo.add(modified);
                     continue;
@@ -1522,5 +1525,9 @@ public class ConjugationManager {
             // finally, take the rule which was previously belo the block and give it the first index
             afterLast.setIndex(firstIndex);
         }
+    }
+    
+    public DictCore getCore() {
+        return this.core;
     }
 }

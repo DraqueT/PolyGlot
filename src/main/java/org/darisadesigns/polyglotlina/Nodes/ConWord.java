@@ -20,7 +20,6 @@
 package org.darisadesigns.polyglotlina.Nodes;
 
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.WebInterface;
@@ -233,7 +232,7 @@ public class ConWord extends DictNode {
             ret = value.equals(c.value);
             ret = ret && localWord.equals(c.localWord);
             ret = ret && typeId == c.typeId;
-            ret = ret && WebInterface.archiveHTML(definition).equals(WebInterface.archiveHTML(c.definition));
+            ret = ret && WebInterface.archiveHTML(definition, core).equals(WebInterface.archiveHTML(c.definition, core));
             ret = ret && pronunciation.equals(c.pronunciation);
             ret = ret && etymNotes.equals(c.etymNotes);
             ret = ret && procOverride == c.procOverride;
@@ -331,7 +330,7 @@ public class ConWord extends DictNode {
                 ret = core.getTypes().getNodeById(typeId).getValue();
             }
             catch (Exception e) {
-                IOHandler.writeErrorLog(e);
+                core.getOSHandler().getIOHandler().writeErrorLog(e);
                 // If a type no longer exists, set the type ID to 0, then continue
                 typeId = 0;
             }
@@ -506,7 +505,7 @@ public class ConWord extends DictNode {
                 try {
                     ret = conMan.declineWord(this, fullDecId);
                 } catch (Exception e) {
-                    IOHandler.writeErrorLog(e);
+                    core.getOSHandler().getIOHandler().writeErrorLog(e);
                 }
             }
         }
@@ -546,7 +545,7 @@ public class ConWord extends DictNode {
         }
 
         wordValue = doc.createElement(PGTUtil.WORD_DEF_XID);
-        wordValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.definition)));
+        wordValue.appendChild(doc.createTextNode(WebInterface.archiveHTML(this.definition, core)));
         wordNode.appendChild(wordValue);
 
         wordValue = doc.createElement(PGTUtil.WORD_PROCOVERRIDE_XID);

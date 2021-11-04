@@ -19,8 +19,11 @@ Any value defined here will override the pom.xml file value but is only applicab
         <org-netbeans-modules-javascript2-requirejs.enabled>true</org-netbeans-modules-javascript2-requirejs.enabled>
     </properties>
     <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+        <word>conlang</word>
         <word>conword</word>
         <word>conwords</word>
+        <word>javafx</word>
+        <word>quicksaving</word>
         <word>Swadesh</word>
         <word>tooltiptext</word>
     </spellchecker-wordlist>

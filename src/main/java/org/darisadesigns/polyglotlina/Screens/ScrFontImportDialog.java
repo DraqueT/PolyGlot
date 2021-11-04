@@ -27,15 +27,17 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.PlainDocument;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.CustomControls.PDialog;
-import org.darisadesigns.polyglotlina.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.CustomControls.PTextField;
-import org.darisadesigns.polyglotlina.CustomControls.PTextFieldFilter;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextFieldFilter;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
-import org.darisadesigns.polyglotlina.PFontHandler;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -106,7 +108,7 @@ public final class ScrFontImportDialog extends PDialog {
         jPanel1 = new javax.swing.JPanel();
         txtFontLocation = new PTextField(core, true, "-- Font File --");
         btnSelectFOnt = new PButton();
-        jLabel1 = new PLabel("Font Size", core.getOptionsManager().getMenuFontSize());
+        jLabel1 = new PLabel("Font Size", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
         txtFontSize = new PTextField(core, true, "");
         txtDemoText = new PTextField(core, false, "");
         rdoConlang = new javax.swing.JRadioButton();
@@ -225,7 +227,7 @@ public final class ScrFontImportDialog extends PDialog {
         String fileName = txtFontLocation.getText();
 
         try {
-            var propertiesManager = core.getPropertiesManager();
+            var propertiesManager = ((DesktopPropertiesManager)core.getPropertiesManager());
             var size = Double.valueOf(txtFontSize.getText());
             
             if (rdoConlang.isSelected()) {
@@ -236,14 +238,14 @@ public final class ScrFontImportDialog extends PDialog {
                 propertiesManager.setLocalFontSize(size);
             }
             
-            core.getRootWindow().selectFirstAvailableButton();
+            PolyGlot.getPolyGlot().getRootWindow().selectFirstAvailableButton();
             dispose();
         } catch (IOException e) {
-            InfoBox.error("IO Error", "Unable to open " + fileName + " due to: " + e.getLocalizedMessage(), core.getRootWindow());
+            core.getOSHandler().getInfoBox().error("IO Error", "Unable to open " + fileName + " due to: " + e.getLocalizedMessage());
         } catch (FontFormatException e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Font Format Error", "Unable to read " + fileName + " due to: "
-                    + e.getLocalizedMessage(), this);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            new DesktopInfoBox(this).error("Font Format Error", "Unable to read " + fileName + " due to: "
+                    + e.getLocalizedMessage());
         }
     }//GEN-LAST:event_btnOkActionPerformed
 
@@ -271,7 +273,7 @@ public final class ScrFontImportDialog extends PDialog {
                 Font newFont = PFontHandler.getFontFromFile(txtFontLocation.getText());
                 txtDemoText.setFont(newFont.deriveFont(Float.parseFloat(txtFontSize.getText())));
             } catch (FontFormatException | IOException e) {
-                InfoBox.error("Font Load Error", "Unable to load font: " + e.getLocalizedMessage(), this);
+                new DesktopInfoBox(this).error("Font Load Error", "Unable to load font: " + e.getLocalizedMessage());
             }
         }
     }

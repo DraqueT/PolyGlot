@@ -29,7 +29,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
-import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
@@ -81,7 +81,7 @@ public class ScrMainMenuTest {
         } catch (IOException | IllegalAccessException | IllegalArgumentException | NoSuchMethodException 
                 | SecurityException | InvocationTargetException | ParserConfigurationException 
                 | TransformerException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         } finally {
             File testFile = new File(testFileName);

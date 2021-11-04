@@ -25,8 +25,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationGenRule;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
@@ -224,7 +224,7 @@ public class DeclensionManagerTest {
             ConjugationManager decManSub = subCore.getConjugationManager();
             assertEquals(expectedInitialSize, decManSub.getConjugationRulesForType(2).length);
         } catch (IOException | IllegalStateException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -245,7 +245,7 @@ public class DeclensionManagerTest {
             decManSub.deleteRulesFromConjugationTemplates(2, 1, 2, rulesToDelete);
             assertEquals(expectedFinalSize, decManSub.getConjugationRulesForType(2).length);
         } catch (IOException | IllegalStateException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -266,7 +266,7 @@ public class DeclensionManagerTest {
             decManSub.deleteRulesFromConjugationTemplates(2, 0, 3, rulesToDelete);
             assertEquals(expectedFinalSize, decManSub.getConjugationRulesForType(2).length);
         } catch (IOException | IllegalStateException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -290,7 +290,7 @@ public class DeclensionManagerTest {
             decManSub.bulkDeleteRuleFromConjugationTemplates(2, rulesToDelete);
             assertEquals(expectedFinalSize, decManSub.getConjugationRulesForType(2).length);
         } catch (IOException | IllegalStateException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -311,7 +311,7 @@ public class DeclensionManagerTest {
             decManSub.bulkDeleteRuleFromConjugationTemplates(2, rulesToDelete);
             assertEquals(expectedFinalSize, decManSub.getConjugationRulesForType(2).length);
         } catch (IOException | IllegalStateException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -333,7 +333,7 @@ public class DeclensionManagerTest {
             List<ConjugationGenRule> result = Arrays.asList(decManSub.getConjugationRulesForType(typeId));
             assertEquals(result.size(), expectedResultSize);
         } catch (IOException | IllegalStateException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -357,7 +357,7 @@ public class DeclensionManagerTest {
             String resultMessage = threw.getLocalizedMessage();
             assertEquals(expectedMessage, resultMessage);
         } catch (IOException | IllegalStateException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -408,7 +408,7 @@ public class DeclensionManagerTest {
 
             assertEquals(result, expectdResult);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -465,7 +465,7 @@ public class DeclensionManagerTest {
 
             assertEquals(result, expectdResult);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -522,7 +522,7 @@ public class DeclensionManagerTest {
 
             assertEquals(result, expectdResult);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -575,7 +575,7 @@ public class DeclensionManagerTest {
 
             assertEquals(result, expectdResult);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -633,7 +633,7 @@ public class DeclensionManagerTest {
 
             assertEquals(result, expectdResult);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -727,7 +727,7 @@ public class DeclensionManagerTest {
             assertEquals(3, rules[2].getIndex());
         } catch (Exception e) {
             fail(e);
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
         }
     }
     

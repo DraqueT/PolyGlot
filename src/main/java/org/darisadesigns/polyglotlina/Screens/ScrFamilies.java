@@ -21,14 +21,14 @@ package org.darisadesigns.polyglotlina.Screens;
 
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PFrame;
-import org.darisadesigns.polyglotlina.CustomControls.PTextField;
-import org.darisadesigns.polyglotlina.CustomControls.FamTreeNode;
-import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
-import org.darisadesigns.polyglotlina.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.CustomControls.PTree;
-import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.FamTreeNode;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTree;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -49,8 +49,9 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
-import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
-import org.darisadesigns.polyglotlina.CustomControls.PTextPane;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 
 /**
  *
@@ -103,7 +104,7 @@ public final class ScrFamilies extends PFrame {
         treFam.setModel(newModel);
         treFam.setRootVisible(false);
         lstWords.setModel(new DefaultListModel<>());
-        lstWords.setFont(core.getPropertiesManager().getFontCon());
+        lstWords.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
     }
     
     @Override
@@ -180,7 +181,7 @@ public final class ScrFamilies extends PFrame {
             return;
         }
 
-        if (!InfoBox.deletionConfirmation(core.getRootWindow())) {
+        if (!core.getOSHandler().getInfoBox().deletionConfirmation()) {
             return;
         }
 
@@ -213,7 +214,7 @@ public final class ScrFamilies extends PFrame {
      */
     private void removeWord() {
         if (chkInclSubFam.isSelected()) {
-            InfoBox.info("Alert", "Words may only be removed when \"Include Subfamilies\" box is unchecked.", this);
+            new DesktopInfoBox(this).info("Alert", "Words may only be removed when \"Include Subfamilies\" box is unchecked.");
             return;
         }
 
@@ -429,7 +430,7 @@ public final class ScrFamilies extends PFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        treFam = new PTree(core.getPropertiesManager().getFontLocal(), menuFontSize, nightMode);
+        treFam = new PTree(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize, nightMode);
         jPanel1 = new javax.swing.JPanel();
         chkInclSubFam = new PCheckBox(nightMode, menuFontSize);
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -631,8 +632,8 @@ public final class ScrFamilies extends PFrame {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Window Error", "Unable to open families: " + e.getLocalizedMessage(), _core.getRootWindow());
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            _core.getOSHandler().getInfoBox().error("Window Error", "Unable to open families: " + e.getLocalizedMessage());
         }
 
         // set the leaf icon to be a folder, since all nodes are for containing words

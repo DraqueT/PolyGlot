@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -25,7 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
-import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopGrammarChapNode;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
@@ -66,7 +66,7 @@ public class DictCoreTest {
         System.out.println("DictCoreTest.testIsLanguageEmptyNoGrammar");
         
         try {
-            core.getGrammarManager().addChapter(new GrammarChapNode(null));
+            core.getGrammarManager().addChapter(new DesktopGrammarChapNode(null));
             assertFalse(core.isLanguageEmpty());
         } catch (Exception e) {
             fail(e);

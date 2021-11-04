@@ -22,6 +22,7 @@ package org.darisadesigns.polyglotlina;
 import TestResources.DummyCore;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
+import org.darisadesigns.polyglotlina.Screens.ScrProgressMenu;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Assumptions;
@@ -51,9 +52,12 @@ public class PLanguageStatsTest {
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "LangStatTest.pgd");
-            String result = PLanguageStats.buildWordReport(core).trim();
+            int wordCount = core.getWordCollection().getWordCount();
+            ScrProgressMenu progress = ScrProgressMenu.createScrProgressMenu("Generating Language Stats", wordCount + 5, true, true);
+            progress.setVisible(true);
+            String result = PLanguageStats.buildWordReport(core, progress).trim();
             assertFalse(result.isBlank());
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | InterruptedException e) {
             fail(e);
         }
     }
@@ -67,7 +71,10 @@ public class PLanguageStatsTest {
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "LangStatTest.pgd");
             core.getPropertiesManager().setAlphaOrder("qwertyuiop-asdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM");
-            String result = PLanguageStats.buildWordReport(core).trim();
+            int wordCount = core.getWordCollection().getWordCount();
+            ScrProgressMenu progress = ScrProgressMenu.createScrProgressMenu("Generating Language Stats", wordCount + 5, true, true);
+            progress.setVisible(true);
+            String result = PLanguageStats.buildWordReport(core, progress).trim();
             assertFalse(result.isBlank());
         } catch (Exception e) {
             fail(e);

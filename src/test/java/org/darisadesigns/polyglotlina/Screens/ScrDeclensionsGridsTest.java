@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -23,8 +23,8 @@ import TestResources.DummyCore;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.PGTUtil;
@@ -56,7 +56,7 @@ public class ScrDeclensionsGridsTest {
             TwoDimPop = words.getNodeById(5);
             TwoDimNopop = words.getNodeById(6);
         } catch (IOException | IllegalStateException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -78,7 +78,7 @@ public class ScrDeclensionsGridsTest {
             
             assertTrue(autoPop);
         } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -93,7 +93,7 @@ public class ScrDeclensionsGridsTest {
         
         ScrDeclensionsGrids screen = ScrDeclensionsGrids.run(core, OneDimNopop);
         Class<?> classs = screen.getClass();
-        
+
         try {
             Field field = classs.getDeclaredField("autoPopulated");
             field.setAccessible(true);
@@ -101,9 +101,9 @@ public class ScrDeclensionsGridsTest {
 
             assertFalse(autoPop);
         } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
-        }
+        }   
     }
     
     @Test
@@ -124,7 +124,7 @@ public class ScrDeclensionsGridsTest {
 
             assertTrue(autoPop);
         } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -147,7 +147,7 @@ public class ScrDeclensionsGridsTest {
 
             assertFalse(autoPop);
         } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
-            IOHandler.writeErrorLog(e, e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }

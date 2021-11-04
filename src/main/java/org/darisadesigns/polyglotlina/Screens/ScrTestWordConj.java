@@ -20,11 +20,11 @@
 package org.darisadesigns.polyglotlina.Screens;
 
 import java.util.Map.Entry;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.CustomControls.PClassCheckboxPanel;
-import org.darisadesigns.polyglotlina.CustomControls.PTextField;
-import org.darisadesigns.polyglotlina.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PClassCheckboxPanel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationGenRule;
@@ -81,7 +81,7 @@ public final class ScrTestWordConj extends PDialog {
             newForm = core.getConjugationManager().declineWord(testWord, curCombinedId);
         } catch (Exception e) {
             // this is based on user error. Inform, but do not log.
-            InfoBox.error("Declension Test Error", e.getLocalizedMessage(), this);
+            new DesktopInfoBox(this).error("Declension Test Error", e.getLocalizedMessage());
             newForm = "";
         }
     

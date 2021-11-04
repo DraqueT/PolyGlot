@@ -18,16 +18,16 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PCellEditor;
-import org.darisadesigns.polyglotlina.CustomControls.PCellRenderer;
-import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
-import org.darisadesigns.polyglotlina.CustomControls.PFrame;
-import org.darisadesigns.polyglotlina.CustomControls.PList;
-import org.darisadesigns.polyglotlina.CustomControls.PTableModel;
-import org.darisadesigns.polyglotlina.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellEditor;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellRenderer;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PList;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTableModel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.Nodes.WordClassValue;
 import org.darisadesigns.polyglotlina.Nodes.WordClass;
@@ -48,7 +48,8 @@ import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableColumn;
-import org.darisadesigns.polyglotlina.CustomControls.PAddRemoveButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 
 /**
  *
@@ -71,7 +72,7 @@ public final class ScrWordClasses extends PFrame {
     }
     
     private void setupForm() {
-        int divider = core.getOptionsManager().getDividerPosition(this.getClass().getName());
+        int divider = PolyGlot.getPolyGlot().getOptionsManager().getDividerPosition(this.getClass().getName());
         
         if (divider > -1) {
             jSplitPane1.setDividerLocation(divider);
@@ -121,7 +122,7 @@ public final class ScrWordClasses extends PFrame {
             tblValues.getCellEditor().stopCellEditing();
         }
         
-        core.getOptionsManager().setDividerPosition(getClass().getName(), jSplitPane1.getDividerLocation());
+        PolyGlot.getPolyGlot().getOptionsManager().setDividerPosition(getClass().getName(), jSplitPane1.getDividerLocation());
         super.dispose();
     }
     
@@ -181,7 +182,7 @@ public final class ScrWordClasses extends PFrame {
             final int typeId = curNode.getId();
             final PCheckBox checkType = new PCheckBox(nightMode, menuFontSize);
             
-            checkType.setFont(core.getPropertiesManager().getFontLocal());
+            checkType.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
             checkType.setText(curNode.getValue());
             checkType.addItemListener(new ItemListener() {
                 final PCheckBox thisBox = checkType;
@@ -314,8 +315,9 @@ public final class ScrWordClasses extends PFrame {
             propId = core.getWordClassCollection().addNode(new WordClass());
             prop = (WordClass) core.getWordClassCollection().getNodeById(propId);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Property Creation Error", "Unable to create new word property: " + e.getLocalizedMessage(), core.getRootWindow());
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            core.getOSHandler().getInfoBox().error("Property Creation Error", 
+                    "Unable to create new word property: " + e.getLocalizedMessage());
             return;
         }
 
@@ -328,16 +330,17 @@ public final class ScrWordClasses extends PFrame {
         WordClass prop = lstProperties.getSelectedValue();
         int position = lstProperties.getSelectedIndex();
 
-        if (prop == null || InfoBox.yesNoCancel("Are you sure?", "This will delete the class from all words."
-                + " Values will be irretrievably lost.", core.getRootWindow()) != JOptionPane.YES_OPTION) {
+        if (prop == null || core.getOSHandler().getInfoBox().yesNoCancel("Are you sure?", "This will delete the class from all words."
+                + " Values will be irretrievably lost.") != JOptionPane.YES_OPTION) {
             return;
         }
 
         try {
             core.getWordClassCollection().deleteNodeById(prop.getId());
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Unable to Delete", "Unable to delete property: " + e.getLocalizedMessage(), core.getRootWindow());
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            core.getOSHandler().getInfoBox().error("Unable to Delete", 
+                    "Unable to delete property: " + e.getLocalizedMessage());
         }
         DefaultListModel listModel = (DefaultListModel) lstProperties.getModel();
         listModel.removeElement(prop);
@@ -362,8 +365,9 @@ public final class ScrWordClasses extends PFrame {
         try {
             value = curProp.addValue("");
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Value Add Error", e.getLocalizedMessage(), core.getRootWindow());
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            core.getOSHandler().getInfoBox().error("Value Add Error", 
+                    e.getLocalizedMessage());
             return;
         }
 
@@ -404,7 +408,7 @@ public final class ScrWordClasses extends PFrame {
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstProperties = new PList(core.getPropertiesManager().getFontLocal(), menuFontSize);
+        lstProperties = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
         btnAddProp = new PAddRemoveButton("+");
         btnDelProp = new PAddRemoveButton("-");
         jPanel1 = new javax.swing.JPanel();

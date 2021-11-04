@@ -19,17 +19,14 @@
  */
 package org.darisadesigns.polyglotlina;
 
-import java.awt.Desktop;
-import java.io.File;
 import java.io.IOException;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 
 /**
  *
  * @author draque
  */
-public class HelpHandler {
-
+public interface HelpHandler {
+    
     public static String LEXICON_HELP = "BASIC_FUNCTIONALITY";
     public static String PARTSOFSPEECH_HELP = "-_Word_Types";
     public static String LEXICALCLASSES_HELP = "CLASSES";
@@ -39,36 +36,9 @@ public class HelpHandler {
     public static String LANGPROPERTIES_HELP = "-_Language_Properties";
     public static String QUIZGENERATOR_HELP = "QUIZ";
 
-    public static void openHelp() {
-        openHelpToLocation("");
-    }
+    public void openHelp();
 
-    public static void openHelpToLocation(String location) {
-        try {
-            if (WebInterface.isInternetConnected()) {
-                WebInterface.browseToLocation(PGTUtil.HELP_FILE_URL + "#" + location);
-            } else {
-                openHelpLocal();
-            }
-        }
-        catch (IOException e) {
-            IOHandler.writeErrorLog(e);
-            InfoBox.error("Help File Error", "Unable to open help file.", null);
-        }
-    }
+    public void openHelpToLocation(String location);
 
-    public static void openHelpLocal() throws IOException {
-        File readmeDir = IOHandler.unzipResourceToTempLocation(PGTUtil.HELP_FILE_ARCHIVE_LOCATION);
-        File readmeFile = new File(readmeDir.getAbsolutePath() + File.separator + PGTUtil.HELP_FILE_NAME);
-
-        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-            Desktop.getDesktop().browse(readmeFile.toURI());
-        } else if (PGTUtil.IS_LINUX) {
-            Desktop.getDesktop().open(readmeFile);
-        } else {
-            InfoBox.warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
-                    + "http://draquet.github.io/PolyGlot/readme.html\n(copied to clipboard for convenience)", null);
-            new ClipboardHandler().setClipboardContents("http://draquet.github.io/PolyGlot/readme.html");
-        }
-    }
+    public void openHelpLocal() throws IOException;
 }

@@ -140,7 +140,7 @@ public class FamilyManager {
         
         // save notes
         property = doc.createElement(PGTUtil.FAM_NOTES_XID);
-        property.appendChild(doc.createTextNode(WebInterface.archiveHTML(curNode.getNotes())));
+        property.appendChild(doc.createTextNode(WebInterface.archiveHTML(curNode.getNotes(), core)));
         curElement.appendChild(property);
         
         // save words

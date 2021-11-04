@@ -19,15 +19,15 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
-import org.darisadesigns.polyglotlina.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.CustomControls.PCheckBox;
-import org.darisadesigns.polyglotlina.CustomControls.PComboBox;
-import org.darisadesigns.polyglotlina.CustomControls.PFrame;
-import org.darisadesigns.polyglotlina.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PComboBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.QuizEngine.Quiz;
@@ -35,6 +35,7 @@ import org.darisadesigns.polyglotlina.QuizEngine.QuizFactory;
 import java.awt.Component;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 
 /**
  *
@@ -59,14 +60,15 @@ public final class ScrQuizGenDialog extends PFrame {
     }
     
     private void setupScreen() {
+        var propMan = ((DesktopPropertiesManager)core.getPropertiesManager());
         chkLocalQuiz.setText(core.localLabel() + " Equivalent");
         chkConlangQuiz.setText(core.conLabel() + " Equivalent");
-        chkClassQuiz.setFont(core.getPropertiesManager().getFontLocal());
-        chkConlangQuiz.setFont(core.getPropertiesManager().getFontLocal());
-        chkDefQuiz.setFont(core.getPropertiesManager().getFontLocal());
-        chkLocalQuiz.setFont(core.getPropertiesManager().getFontLocal());
-        chkProcQuiz.setFont(core.getPropertiesManager().getFontLocal());
-        chkTypeQuiz.setFont(core.getPropertiesManager().getFontLocal());
+        chkClassQuiz.setFont(propMan.getFontLocal());
+        chkConlangQuiz.setFont(propMan.getFontLocal());
+        chkDefQuiz.setFont(propMan.getFontLocal());
+        chkLocalQuiz.setFont(propMan.getFontLocal());
+        chkProcQuiz.setFont(propMan.getFontLocal());
+        chkTypeQuiz.setFont(propMan.getFontLocal());
         
         ((PTextField)txtFilterConWord).setDefaultValue("-- " + core.conLabel() + " Filter --");
         ((PTextField)txtFilterConWord).setDefault();
@@ -96,7 +98,7 @@ public final class ScrQuizGenDialog extends PFrame {
         } catch (NumberFormatException e) {
             // user error
             // IOHandler.writeErrorLog(e);
-            InfoBox.error("Integer Value Required", "Number of questions must be an integer value.", core.getRootWindow());
+            core.getOSHandler().getInfoBox().error("Integer Value Required", "Number of questions must be an integer value.");
             return;
         }
         
@@ -113,7 +115,7 @@ public final class ScrQuizGenDialog extends PFrame {
             !chkProcQuiz.isSelected()&& 
             !chkDefQuiz.isSelected()&& 
             !chkClassQuiz.isSelected()) {
-            InfoBox.warning("Quiz Generation Problem", "Please select at least one thing to quiz on!", this);
+            new DesktopInfoBox(this).warning("Quiz Generation Problem", "Please select at least one thing to quiz on!");
         } else {
             try {
                 Quiz genQuiz = factory.generateLexicalQuiz(numQuestions, 
@@ -127,8 +129,9 @@ public final class ScrQuizGenDialog extends PFrame {
 
                 ScrQuizScreen.run(genQuiz, core);
             } catch (Exception e) {
-                IOHandler.writeErrorLog(e);
-                InfoBox.error("Quiz Generation Error", "Unable to generate quiz: " + e.getLocalizedMessage(), core.getRootWindow());
+                DesktopIOHandler.getInstance().writeErrorLog(e);
+                core.getOSHandler().getInfoBox().error("Quiz Generation Error", 
+                        "Unable to generate quiz: " + e.getLocalizedMessage());
             }
         }
     }
@@ -154,7 +157,7 @@ public final class ScrQuizGenDialog extends PFrame {
         jPanel2 = new javax.swing.JPanel();
         txtFilterConWord = new PTextField(core, false, "-- " + core.conLabel() + " Filter --");
         txtFilterLocalWord = new PTextField(core, true, "-- " + core.localLabel() + " Filter --");
-        cmbFilterType = new PComboBox(core.getPropertiesManager().getFontMenu());
+        cmbFilterType = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         txtFilterProc = new PTextField(core, true, "-- Pronunciation Filter --");
         btnClearFilter = new PButton(nightMode, menuFontSize);
         jLabel1 = new PLabel("", menuFontSize);
@@ -363,7 +366,7 @@ public final class ScrQuizGenDialog extends PFrame {
         // do not allow self to be checked if no classes exist
         if (core.getWordClassCollection().getAllWordClasses().length == 0
                 && chkClassQuiz.isSelected()) {
-            InfoBox.warning("No Classes Exist", "No word classes exist.", core.getRootWindow());
+            core.getOSHandler().getInfoBox().warning("No Classes Exist", "No word classes exist.");
             chkClassQuiz.setSelected(false);
         }            
     }//GEN-LAST:event_chkClassQuizActionPerformed
@@ -376,7 +379,7 @@ public final class ScrQuizGenDialog extends PFrame {
         // do not allow self to be checked if no PoS exist
         if (core.getTypes().getNodes().length == 0
                 && chkTypeQuiz.isSelected()) {
-            InfoBox.warning("No PoS Exist", "No parts of speech exist.", core.getRootWindow());
+            core.getOSHandler().getInfoBox().warning("No PoS Exist", "No parts of speech exist.");
             chkTypeQuiz.setSelected(false);
         }
     }//GEN-LAST:event_chkTypeQuizActionPerformed

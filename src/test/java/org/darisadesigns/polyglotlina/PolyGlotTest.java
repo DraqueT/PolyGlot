@@ -19,6 +19,8 @@
  */
 package org.darisadesigns.polyglotlina;
 
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -39,7 +41,7 @@ public class PolyGlotTest {
             String[] args = {""};
             PolyGlot.main(args);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             //e.printStackTrace();
         }
     }
@@ -56,7 +58,7 @@ public class PolyGlotTest {
             String[] args = {PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd"};
             PolyGlot.main(args);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             //e.printStackTrace();
         }
     }
@@ -73,7 +75,7 @@ public class PolyGlotTest {
             String[] args = {PGTUtil.TESTRESOURCES, "Lodenkur_TEST.pgd"};
             PolyGlot.main(args);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             //e.printStackTrace();
         }
     }
@@ -91,7 +93,7 @@ public class PolyGlotTest {
             String[] args = {PGTUtil.TESTRESOURCES + "MISSING_FILE.pgd"};
             PolyGlot.main(args);
         } catch (Exception e) {
-            IOHandler.writeErrorLog(e);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
             //e.printStackTrace();
         }
     }

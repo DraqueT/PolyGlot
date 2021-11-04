@@ -19,7 +19,6 @@
  */
 package org.darisadesigns.polyglotlina;
 
-import java.awt.Desktop;
 import org.darisadesigns.polyglotlina.Nodes.ImageNode;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,11 +26,7 @@ import java.io.StringReader;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.Socket;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -39,7 +34,6 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.darisadesigns.polyglotlina.CustomControls.InfoBox;
 import org.jsoup.Jsoup;
 
 /**
@@ -47,7 +41,7 @@ import org.jsoup.Jsoup;
  *
  * @author draque
  */
-public final class WebInterface {
+public class WebInterface {
 
     /**
      * Checks for updates to PolyGlot
@@ -137,9 +131,10 @@ public final class WebInterface {
      * actual image references with static, id based refs
      *
      * @param html unarchived html
+     * @param core
      * @return archivable html
      */
-    public static String archiveHTML(String html) {
+    public static String archiveHTML(String html, DictCore core) {
         // pattern for finding unarchived images
         Pattern pattern = Pattern.compile("(<img src=\"[^>,_]+_[^>]+\">)");
         Matcher matcher = pattern.matcher(html);
@@ -149,50 +144,12 @@ public final class WebInterface {
             regPath = regPath.replace("<img src=\"file:///", "");
             regPath = regPath.replace("\"", "");
             regPath = regPath.replace(">", "");
-            String fileName = IOHandler.getFilenameFromPath(regPath);
+            String fileName = core.getOSHandler().ioHandler.getFilenameFromPath(regPath);
             String arcPath = fileName.replaceFirst("_.*", "");
             html = html.replace("file:///" + regPath, arcPath);
         }
 
         return html;
-    }
-
-    /**
-     * This cycles through the body of HTML and generates an ordered list of
-     * objects representing all of the items in the HTML. Consumers are
-     * responsible for identifying objects.
-     *
-     * @param html HTML to extract from
-     * @return
-     * @throws java.io.IOException
-     */
-    public static List<Object> getElementsHTMLBody(String html) throws IOException {
-        List<Object> ret = new ArrayList<>();
-        String body = html.replaceAll(".*<body>", "");
-        body = body.replaceAll("</body>.*", "");
-        Pattern pattern = Pattern.compile("([^<]+|<[^>]+>)");//("(<[^>]+>)");
-        Matcher matcher = pattern.matcher(body);
-
-        // loops on unincumbered text and tags.
-        while (matcher.find()) {
-            String token = matcher.group(1);
-            if (token.startsWith("<")) {
-                if (token.contains("<img src=\"")) {
-                    String path = token.replace("<img src=\"file:///", "").replace("\">", "");
-                    ret.add(IOHandler.getImage(path));
-                } else {
-                    // do nothing with unrecognized elements - might be upgraded later.
-                }
-            } else {
-                // this is plaintext
-                String add = token.trim();
-                if (!add.isEmpty()) {
-                    ret.add(add + " ");
-                }
-            }
-        }
-
-        return ret;
     }
 
     /**
@@ -213,42 +170,10 @@ public final class WebInterface {
             ret = true;
         }
         catch (IOException e) {
-            IOHandler.writeErrorLog(e, "Unable to reach: " + address);
+            // TODO: write to log?
         }
 
         return ret;
-    }
-
-    /**
-     * Tell the OS to open a browser and go to a given web address.(distinct
-     * behavior in Linux due to lack of certain features)
-     *
-     * @param url
-     * @throws java.io.IOException
-     */
-    public static void browseToLocation(String url) throws IOException {
-        if (PGTUtil.IS_WINDOWS) {
-            try {
-                URI help = new URI(url);
-                Desktop.getDesktop().browse(help);
-            }
-            catch (URISyntaxException e) {
-                IOHandler.writeErrorLog(e);
-                InfoBox.warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
-                        + url + "\n(copied to your clipboard for convenience)", null);
-                new ClipboardHandler().setClipboardContents(url);
-            }
-        } else if (PGTUtil.IS_OSX) {
-            Runtime runtime = Runtime.getRuntime();
-            runtime.exec("open " + url);
-        } else if (PGTUtil.IS_LINUX) {
-            Runtime runtime = Runtime.getRuntime();
-            runtime.exec("xdg-open " + url);
-        } else {
-            InfoBox.warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
-                    + url + "\n(copied to your clipboard for convenience)", null);
-            new ClipboardHandler().setClipboardContents(url);
-        }
     }
 
     /**
