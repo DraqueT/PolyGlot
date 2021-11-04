@@ -47,7 +47,6 @@ public class DictCoreTest {
     public void testIsLanguageEmptyYes() {
         System.out.println("DictCoreTest.testIsLanguageEmptyYes");
         assertTrue(core.isLanguageEmpty(), "DictCoreTest.testIsLanguageEmptyYes:F");
-        System.out.println("PASS");
     }
     
     @Test
@@ -57,7 +56,6 @@ public class DictCoreTest {
         try {
             core.getWordCollection().addWord(new ConWord());
             assertFalse(core.isLanguageEmpty(), "DictCoreTest.testIsLanguageEmptyNoLexicon:F");
-            System.out.println("PASS");
         } catch (Exception e) {
             fail(e);
         }
@@ -70,7 +68,6 @@ public class DictCoreTest {
         try {
             core.getGrammarManager().addChapter(new DesktopGrammarChapNode(null));
             assertFalse(core.isLanguageEmpty(), "DictCoreTest.testIsLanguageEmptyNoGrammar:F");
-            System.out.println("PASS");
         } catch (Exception e) {
             fail(e);
         }
@@ -83,7 +80,6 @@ public class DictCoreTest {
         try {
             core.getPronunciationMgr().addPronunciation(new PronunciationNode());
             assertFalse(core.isLanguageEmpty(), "DictCoreTest.testIsLanguageEmptyNoPronunciation:F");
-            System.out.println("PASS");
         } catch (Exception e) {
             fail(e);
         }
@@ -95,16 +91,17 @@ public class DictCoreTest {
         try {
             core.getTypes().addNode(new TypeNode());
             assertFalse(core.isLanguageEmpty(), "DictCoreTest.testIsLanguageEmptyNoPOS:F");
-            System.out.println("PASS");
         } catch (Exception e) {
             fail(e);
         }
     }
     
+    // TODO: WHY DOES THIS MAKE LINUX FAIL?
+    
     @Test
     public void testSaveLanguageIntegrityDeep() {
         // this tests the deep integrity of saved languages
-        System.out.println("DictCoreTest.testIsLanguageEmptyNoPOS");
+        System.out.println("DictCoreTest.testSaveLanguageIntegrityDeep");
         
         try {
             DictCore origin = DummyCore.newCore();
@@ -116,7 +113,6 @@ public class DictCoreTest {
             target.readFile(targetPath.toString());
             
             assertEquals(origin, target, "DictCoreTest.testIsLanguageEmptyNoPOS:F");
-            System.out.println("PASS");
         } catch (IOException | IllegalStateException | ParserConfigurationException | TransformerException e) {
             fail(e);
         }

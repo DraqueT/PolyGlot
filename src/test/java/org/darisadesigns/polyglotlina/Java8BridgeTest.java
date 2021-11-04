@@ -57,7 +57,9 @@ public class Java8BridgeTest {
         try {
             File result = Java8Bridge.getNewJavaBridgeLocation();
             assertTrue(result.exists());
+            System.out.println("PASS");
         } catch (IOException e) {
+            e.printStackTrace();
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
@@ -83,7 +85,9 @@ public class Java8BridgeTest {
         try {
             Java8Bridge.exportPdf(OUTPUT, coverImage, foreward, printConLocal, printLocalCon, printOrtho, subTitleText, titleText, printPageNumber, printGlossKey, printGrammar, printWordEtymologies, printAllConjugations, core);
             assertTrue(new File(OUTPUT).exists());
+            System.out.println("PASS");
         } catch (IOException e) {
+            e.printStackTrace();
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
@@ -111,7 +115,9 @@ public class Java8BridgeTest {
 
             assertTrue(result.exists());
             assertEquals(outputContents, expectedContents);
+            System.out.println("PASS");
         } catch (IOException e) {
+            e.printStackTrace();
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
@@ -149,8 +155,10 @@ public class Java8BridgeTest {
                 }
 
                 assertTrue(Arrays.equals(expBytes, resBytes));
+                System.out.println("PASS");
             }
         } catch (IOException | IllegalStateException e) {
+            e.printStackTrace();
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
