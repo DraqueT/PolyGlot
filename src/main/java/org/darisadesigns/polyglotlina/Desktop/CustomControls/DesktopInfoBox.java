@@ -257,8 +257,7 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
     private void doError(String title, String message) {
         if (!PGTUtil.isForceSuppressDialogs()) {
             Object[] option = {getOKButton()};        
-            // always use null here in case something has gone very wrong with screens
-            POptionPane.internalShowOptionDialog(null, message, title, DEFAULT_OPTION,
+            POptionPane.internalShowOptionDialog(parent, message, title, DEFAULT_OPTION,
                              JOptionPane.ERROR_MESSAGE, null, option, null);
         }
     }
