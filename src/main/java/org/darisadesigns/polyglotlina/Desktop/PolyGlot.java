@@ -480,7 +480,7 @@ public final class PolyGlot {
     public static PolyGlot getTestShell(DictCore _core) throws IOException, Exception {
         var osHandler = new DesktopOSHandler(
                 DesktopIOHandler.getInstance(), 
-                new DesktopInfoBox(null), 
+                new DummyInfoBox(), 
                 new DesktopHelpHandler(),
                 new PFontHandler()
         );
