@@ -40,10 +40,6 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
 
     private Window parent;
     private final Icon optionIcon = UIManager.getIcon("FileView.computerIcon");
-//    private static final PButton YES;
-//    private static final PButton NO;
-//    private static final PButton OK;
-//    private static final PButton CANCEL;
     
     private PButton getYesButton() {
         var YES = new PButton() {

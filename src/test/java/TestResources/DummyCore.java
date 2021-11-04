@@ -45,7 +45,7 @@ public class DummyCore extends DictCore {
     
     public static DummyCore newCore() {
         try {
-            InfoBox infoBox = new DesktopInfoBox(null);
+            InfoBox infoBox = new DummyInfoBox();
             DesktopHelpHandler helpHandler = new DesktopHelpHandler();
             PFontHandler fontHandler = new PFontHandler();
             DesktopOSHandler osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), infoBox, helpHandler, fontHandler);
