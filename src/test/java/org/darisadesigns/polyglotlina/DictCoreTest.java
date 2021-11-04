@@ -46,7 +46,7 @@ public class DictCoreTest {
     @Test
     public void testIsLanguageEmptyYes() {
         System.out.println("DictCoreTest.testIsLanguageEmptyYes");
-        assertTrue(core.isLanguageEmpty());
+        assertTrue(core.isLanguageEmpty(), "DictCoreTest.testIsLanguageEmptyYes:F");
     }
     
     @Test
@@ -55,7 +55,7 @@ public class DictCoreTest {
         
         try {
             core.getWordCollection().addWord(new ConWord());
-            assertFalse(core.isLanguageEmpty());
+            assertFalse(core.isLanguageEmpty(), "DictCoreTest.testIsLanguageEmptyNoLexicon:F");
         } catch (Exception e) {
             fail(e);
         }
@@ -67,7 +67,7 @@ public class DictCoreTest {
         
         try {
             core.getGrammarManager().addChapter(new DesktopGrammarChapNode(null));
-            assertFalse(core.isLanguageEmpty());
+            assertFalse(core.isLanguageEmpty(), "DictCoreTest.testIsLanguageEmptyNoGrammar:F");
         } catch (Exception e) {
             fail(e);
         }
@@ -79,7 +79,7 @@ public class DictCoreTest {
         
         try {
             core.getPronunciationMgr().addPronunciation(new PronunciationNode());
-            assertFalse(core.isLanguageEmpty());
+            assertFalse(core.isLanguageEmpty(), "DictCoreTest.testIsLanguageEmptyNoPronunciation:F");
         } catch (Exception e) {
             fail(e);
         }
@@ -90,7 +90,7 @@ public class DictCoreTest {
         System.out.println("DictCoreTest.testIsLanguageEmptyNoPOS");
         try {
             core.getTypes().addNode(new TypeNode());
-            assertFalse(core.isLanguageEmpty());
+            assertFalse(core.isLanguageEmpty(), "DictCoreTest.testIsLanguageEmptyNoPOS:F");
         } catch (Exception e) {
             fail(e);
         }
@@ -110,7 +110,7 @@ public class DictCoreTest {
             origin.writeFile(targetPath.toString());
             target.readFile(targetPath.toString());
             
-            assertEquals(origin, target, "Languge archive saving inconsistenies detected.");
+            assertEquals(origin, target, "DictCoreTest.testIsLanguageEmptyNoPOS:F");
         } catch (IOException | IllegalStateException | ParserConfigurationException | TransformerException e) {
             fail(e);
         }
