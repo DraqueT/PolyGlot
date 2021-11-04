@@ -34,7 +34,6 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.FontFormatException;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
@@ -89,7 +88,6 @@ import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.HelpHandler;
 import org.darisadesigns.polyglotlina.Desktop.Java8Bridge;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.OptionsManager;
-import org.darisadesigns.polyglotlina.PFontHandler;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.ToolsHelpers.ExportSpellingDictionary;
 import org.darisadesigns.polyglotlina.WebInterface;
@@ -354,7 +352,6 @@ public final class ScrMainMenu extends PFrame {
             }
 
             PolyGlot.getPolyGlot().exitCleanup();
-            System.exit(0);
         }
     }
 

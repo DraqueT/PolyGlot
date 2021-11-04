@@ -35,10 +35,6 @@ import javax.swing.JComponent;
 import javax.swing.SwingWorker;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 
-/**
- *
- * @author edga_
- */
 public class PGTUtil extends org.darisadesigns.polyglotlina.PGTUtil {
     
     // numeric constants...

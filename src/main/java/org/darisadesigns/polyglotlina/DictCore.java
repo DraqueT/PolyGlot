@@ -85,14 +85,15 @@ public class DictCore {
      * @param _propertiesManager
      * @param _osHandler
      * @param _util
+     * @param _grammarManager
      */
-    public DictCore(PropertiesManager _propertiesManager, OSHandler _osHandler, PGTUtil _util) {
+    public DictCore(PropertiesManager _propertiesManager, OSHandler _osHandler, PGTUtil _util, GrammarManager _grammarManager) {
         osHandler = _osHandler;
         pgtUtil = _util;
-        initializeDictCore(_propertiesManager);
+        initializeDictCore(_propertiesManager, _grammarManager);
     }
     
-    private void initializeDictCore(PropertiesManager _propertiesManager) {
+    private void initializeDictCore(PropertiesManager _propertiesManager, GrammarManager _grammarManager) {
         try {
             wordCollection = new ConWordCollection(this);
             typeCollection = new TypeCollection(this);
@@ -103,7 +104,8 @@ public class DictCore {
             romMgr = new RomanizationManager(this);
             famManager = new FamilyManager(this);
             logoCollection = new LogoCollection(this);
-            grammarManager = new GrammarManager(this);
+            _grammarManager.setCore(this);
+            grammarManager = _grammarManager;
             wordClassCollection = new WordClassCollection(this);
             imageCollection = new ImageCollection(this);
             etymologyManager = new EtymologyManager(this);
@@ -409,7 +411,7 @@ public class DictCore {
      * @throws java.io.IOException 
      */
     public void revertToState(byte[] revision, String fileName) throws IOException{
-        DictCore revDict = new DictCore(this.propertiesManager, this.osHandler, this.pgtUtil);
+        DictCore revDict = new DictCore(this.propertiesManager, this.osHandler, this.pgtUtil, this.grammarManager);
         revDict.readFile(fileName, revision);
         
         pushUpdateWithCore(revDict);

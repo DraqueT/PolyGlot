@@ -29,10 +29,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
 
-/**
- *
- * @author edga_
- */
 public class DesktopPropertiesManager extends PropertiesManager {
     private Font conFont = null;
     private Font localFont = PGTUtil.CHARIS_UNICODE;

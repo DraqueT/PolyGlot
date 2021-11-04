@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 - 2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017 - 2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -75,14 +75,15 @@ public class PButton extends JButton implements MouseListener {
     public synchronized final void addMouseListener(MouseListener l) {
         super.addMouseListener(l);
     }
-
+    
     @Override
     public void paintComponent(Graphics g) {
         boolean enabled = isEnabled();
         Color bgColor;
         Color fontColor;
-        final int thisHeight = getHeight();
-        final int thisWidth = getWidth();
+
+        final int thisHeight = this.getHeight();
+        final int thisWidth = this.getWidth();
         
         if (!enabled) {
             bgColor = PGTUtil.COLOR_DISABLED_BG;

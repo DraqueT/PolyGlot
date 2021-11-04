@@ -45,6 +45,7 @@ import javax.swing.text.DefaultEditorKit;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammarManager;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.OptionsManager;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.VisualStyleManager;
 import org.darisadesigns.polyglotlina.DictCore;
@@ -73,7 +74,6 @@ public final class PolyGlot {
     private final File autoSaveFile;
 
     public PolyGlot(String overridePath, DictCore _core, DesktopOSHandler _osHandler) throws Exception {
-        PolyGlot.polyGlot = this;
         core = _core;
         osHandler = _osHandler;
         osHandler.setWorkingDirectory(overridePath); // TODO: In the future, figure out how this might be better set. In options?
@@ -121,8 +121,14 @@ public final class PolyGlot {
                 PFontHandler fontHandler = new PFontHandler();
                 var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), cInfoBox, helpHandler, fontHandler);
 
-                DictCore core = new DictCore(new DesktopPropertiesManager(), osHandler, new PGTUtil());
-                new PolyGlot("", core, osHandler);
+                DictCore core = new DictCore(
+                        new DesktopPropertiesManager(), 
+                        osHandler, 
+                        new PGTUtil(), 
+                        new DesktopGrammarManager()
+                );
+                
+                PolyGlot.polyGlot = new PolyGlot("", core, osHandler);
                 
                 s = new ScrMainMenu(core);
                 polyGlot.setRootWindow(s);
@@ -190,7 +196,13 @@ public final class PolyGlot {
                     });
 
                     desk.setAboutHandler((AboutEvent e) -> {
-                        DictCore _core = new DictCore(new DesktopPropertiesManager(), osHandler, new PGTUtil());
+                        DictCore _core = new DictCore(
+                                new DesktopPropertiesManager(), 
+                                osHandler, 
+                                new PGTUtil(), 
+                                new DesktopGrammarManager()
+                        );
+                        
                         polyGlot.setCore(_core);
                         ScrAbout.run(_core);
                     });
@@ -326,7 +338,13 @@ public final class PolyGlot {
     }
 
     public DictCore getNewCore() {
-        this.core = new DictCore(new DesktopPropertiesManager(), this.getOSHandler(), new PGTUtil());
+        this.core = new DictCore(
+                new DesktopPropertiesManager(),
+                this.getOSHandler(),
+                new PGTUtil(),
+                new DesktopGrammarManager()
+        );
+        
         return this.core;
     }
 
@@ -534,5 +552,18 @@ public final class PolyGlot {
                 + PGTUtil.AUTO_SAVE_FILE_NAME;
         
         return new File(path);
+    }
+    
+    /**
+     * Used for testing purposes only
+     * @param _polyGlot 
+     * @throws java.lang.Exception 
+     */
+    public static void setTestPolyGlot(PolyGlot _polyGlot) throws Exception {
+        if (!PGTUtil.isInJUnitTest()) {
+            throw new Exception("ONLY TO BE RUN AS SETUP FOR JUNIT TESTING");
+        }
+        
+        PolyGlot.polyGlot = _polyGlot;
     }
 }

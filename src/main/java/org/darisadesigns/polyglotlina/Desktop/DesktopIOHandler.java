@@ -19,7 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.Desktop;
 
-import org.darisadesigns.polyglotlina.*;
 import org.darisadesigns.polyglotlina.Nodes.LogoNode;
 import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.LogoCollection;
@@ -91,7 +90,11 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.darisadesigns.polyglotlina.CustHandler;
+import org.darisadesigns.polyglotlina.CustHandlerFactory;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopGrammarChapNode;
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammarManager;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.IOHandler;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -140,6 +143,7 @@ public final class DesktopIOHandler implements IOHandler {
         return ret;
     }
     
+    @Override
     public File createTmpFileFromImageBytes(byte[] imageBytes, String fileName) throws IOException {
         File tmpFile = File.createTempFile(fileName, ".png");
         ByteArrayInputStream stream = new ByteArrayInputStream(imageBytes);
@@ -152,6 +156,7 @@ public final class DesktopIOHandler implements IOHandler {
         return tmpFile;
     }
     
+    @Override
     public File createFileWithContents(String path, String contents) throws IOException {
         File ret = new File(path);
         
@@ -168,6 +173,7 @@ public final class DesktopIOHandler implements IOHandler {
         return ret;
     }
 
+    @Override
     public byte[] getByteArrayFromFile(File file) throws IOException {
         try (InputStream inputStream = new FileInputStream(file)) {
             return streamToByetArray(inputStream);
@@ -181,6 +187,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @return raw byte representation of stream
      * @throws IOException
      */
+    @Override
     public byte[] streamToByetArray(InputStream is) throws IOException {
         try (ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
             int nRead;
@@ -201,6 +208,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @return byte array of file at given path
      * @throws java.io.FileNotFoundException
      */
+    @Override
     public byte[] getFileByteArray(String filePath) throws IOException {
         byte[] ret;
         final File toByteArrayFile = new File(filePath);
@@ -297,6 +305,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @param fullPath full path to file
      * @return string of filename
      */
+    @Override
     public String getFilenameFromPath(String fullPath) {
         File file = new File(fullPath);
         return file.getName();
@@ -307,6 +316,7 @@ public final class DesktopIOHandler implements IOHandler {
      *
      * @param workingDirectory
      */
+    @Override
     public void deleteIni(String workingDirectory) {
         File f = new File(workingDirectory + File.separator + PGTUtil.POLYGLOT_INI);
         if (!f.exists()) {
@@ -356,17 +366,17 @@ public final class DesktopIOHandler implements IOHandler {
                 }
 
                 switch (bothVal[0]) {
-                    case PGTUtil.OPTIONS_LAST_FILES:
+                    case PGTUtil.OPTIONS_LAST_FILES -> {
                         for (String last : bothVal[1].split(",")) {
                             opMan.pushRecentFile(last);
                         }
-                        break;
-                    case PGTUtil.OPTIONS_SCREENS_OPEN:
+                    }
+                    case PGTUtil.OPTIONS_SCREENS_OPEN -> {
                         for (String screen : bothVal[1].split(",")) {
                             opMan.addScreenUp(screen);
                         }
-                        break;
-                    case PGTUtil.OPTIONS_SCREEN_POS:
+                    }
+                    case PGTUtil.OPTIONS_SCREEN_POS -> {
                         for (String curPosSet : bothVal[1].split(",")) {
                             if (curPosSet.isEmpty()) {
                                 continue;
@@ -381,8 +391,8 @@ public final class DesktopIOHandler implements IOHandler {
                             Point p = new Point(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
                             opMan.setScreenPosition(splitSet[0], p);
                         }
-                        break;
-                    case PGTUtil.OPTIONS_SCREENS_SIZE:
+                    }
+                    case PGTUtil.OPTIONS_SCREENS_SIZE -> {
                         for (String curSizeSet : bothVal[1].split(",")) {
                             if (curSizeSet.isEmpty()) {
                                 continue;
@@ -397,8 +407,8 @@ public final class DesktopIOHandler implements IOHandler {
                             Dimension d = new Dimension(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
                             opMan.setScreenSize(splitSet[0], d);
                         }
-                        break;
-                    case PGTUtil.OPTIONS_DIVIDER_POSITION:
+                    }
+                    case PGTUtil.OPTIONS_DIVIDER_POSITION -> {
                         for (String curPosition : bothVal[1].split(",")) {
                             if (curPosition.isEmpty()) {
                                 continue;
@@ -413,29 +423,16 @@ public final class DesktopIOHandler implements IOHandler {
                             Integer position = Integer.parseInt(splitSet[1]);
                             opMan.setDividerPosition(splitSet[0], position);
                         }
-                        break;
-                    case PGTUtil.OPTIONS_AUTO_RESIZE:
-                        opMan.setAnimateWindows(bothVal[1].equals(PGTUtil.TRUE));
-                        break;
-                    case PGTUtil.OPTIONS_MAXIMIZED:
-                        opMan.setMaximized(bothVal[1].equals(PGTUtil.TRUE));
-                        break;
-                    case PGTUtil.OPTIONS_MENU_FONT_SIZE:
-                        opMan.setMenuFontSize(Double.parseDouble(bothVal[1]));
-                        break;
-                    case PGTUtil.OPTIONS_NIGHT_MODE:
-                        opMan.setNightMode(bothVal[1].equals(PGTUtil.TRUE));
-                        break;
-                    case PGTUtil.OPTIONS_REVERSIONS_COUNT:
-                        opMan.setMaxReversionCount(Integer.parseInt(bothVal[1]));
-                        break;
-                    case PGTUtil.OPTIONS_TODO_DIV_LOCATION:
-                        opMan.setToDoBarPosition(Integer.parseInt(bothVal[1]));
-                        break;
-                    case "\n":
-                        break;
-                    default:
-                        loadProblems += "Unrecognized value: " + bothVal[0] + " in PolyGlot.ini." + "\n";
+                    }
+                    case PGTUtil.OPTIONS_AUTO_RESIZE -> opMan.setAnimateWindows(bothVal[1].equals(PGTUtil.TRUE));
+                    case PGTUtil.OPTIONS_MAXIMIZED -> opMan.setMaximized(bothVal[1].equals(PGTUtil.TRUE));
+                    case PGTUtil.OPTIONS_MENU_FONT_SIZE -> opMan.setMenuFontSize(Double.parseDouble(bothVal[1]));
+                    case PGTUtil.OPTIONS_NIGHT_MODE -> opMan.setNightMode(bothVal[1].equals(PGTUtil.TRUE));
+                    case PGTUtil.OPTIONS_REVERSIONS_COUNT -> opMan.setMaxReversionCount(Integer.parseInt(bothVal[1]));
+                    case PGTUtil.OPTIONS_TODO_DIV_LOCATION -> opMan.setToDoBarPosition(Integer.parseInt(bothVal[1]));
+                    case "\n" -> {
+                    }
+                    default -> loadProblems += "Unrecognized value: " + bothVal[0] + " in PolyGlot.ini." + "\n";
                 }
             }
 
@@ -485,6 +482,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @return true is passed file is a zip archive
      * @throws java.io.FileNotFoundException
      */
+    @Override
     public boolean isFileZipArchive(String _fileName) throws IOException {
         File file = new File(_fileName);
 
@@ -559,8 +557,8 @@ public final class DesktopIOHandler implements IOHandler {
                 DesktopHelpHandler helpHandler = new DesktopHelpHandler();
                 PFontHandler fontHandler = new PFontHandler();
                 var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), new DesktopInfoBox(null), helpHandler, fontHandler);
-                DictCore test = new DictCore(new DesktopPropertiesManager(), osHandler, new PGTUtil());
-                PolyGlot testShell = PolyGlot.getTestShell(test);
+                DictCore test = new DictCore(new DesktopPropertiesManager(), osHandler, new PGTUtil(), new DesktopGrammarManager());
+                PolyGlot.getTestShell(test);
                 test.readFile(tmpSaveLocation.getAbsolutePath());
 
             }
@@ -610,6 +608,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @param workingDirectory
      * @return
      */
+    @Override
     public File getTempSaveFileIfExists(File workingDirectory) {
         File ret = new File(workingDirectory + File.separator + PGTUtil.TEMP_FILE);
 
@@ -635,6 +634,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @return  
      * @throws IOException
      */
+    @Override
     public File archiveFile(File source, File workingDirectory) throws IOException {
         String workingDirectoryPath = workingDirectory.getCanonicalPath();
         File dest = new File(workingDirectoryPath 
@@ -653,6 +653,7 @@ public final class DesktopIOHandler implements IOHandler {
         return dest;
     }
 
+    @Override
     public void copyFile(Path fromLocation, Path toLocation, boolean replaceExisting) throws IOException {
         StandardCopyOption option = replaceExisting ? StandardCopyOption.REPLACE_EXISTING : StandardCopyOption.ATOMIC_MOVE;
         Files.copy(fromLocation, toLocation, option);
@@ -713,7 +714,7 @@ public final class DesktopIOHandler implements IOHandler {
 
     private String writeWavToArchive(ZipOutputStream out, DictCore core) {
         String writeLog = "";
-        Map<Integer, byte[]> grammarSoundMap = core.getGrammarManager().getSoundMap();
+        Map<Integer, byte[]> grammarSoundMap = ((DesktopGrammarManager)core.getGrammarManager()).getSoundMap();
         Iterator<Entry<Integer, byte[]>> gramSoundIt = grammarSoundMap.entrySet().iterator();
         if (gramSoundIt.hasNext()) {
             try {
@@ -782,6 +783,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @param fullPath path of file to test
      * @return true if file exists, false otherwise
      */
+    @Override
     public boolean fileExists(String fullPath) {
         File f = new File(fullPath);
         return f.exists();
@@ -795,6 +797,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @param fileName of file containing assets
      * @throws java.io.IOException
      */
+    @Override
     public void loadImageAssets(ImageCollection imageCollection,
             String fileName) throws Exception {
         try (ZipFile zipFile = new ZipFile(fileName)) {
@@ -841,6 +844,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @param fileName name/path of archive
      * @throws java.lang.Exception
      */
+    @Override
     public void loadLogographs(LogoCollection logoCollection,
             String fileName) throws Exception {
         try (ZipFile zipFile = new ZipFile(fileName)) {
@@ -867,6 +871,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @param fileName full path of polyglot archive
      * @throws IOException on read error
      */
+    @Override
     public void loadReversionStates(ReversionManager reversionManager,
             String fileName) throws IOException {
         try (ZipFile zipFile = new ZipFile(fileName)) {
@@ -895,6 +900,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @param dictionaryPath path of PGT dictionary
      * @throws IOException
      */
+    @Override
     public void exportFont(String exportPath, String dictionaryPath) throws IOException {
         try (ZipFile zipFile = new ZipFile(dictionaryPath)) {
             // ensure export file has the proper extension
@@ -921,6 +927,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @param exportPath full export path
      * @throws IOException on failure
      */
+    @Override
     public void exportCharisFont(String exportPath) throws IOException {
         try (InputStream fontStream = IOHandler.class.getResourceAsStream(PGTUtil.UNICODE_FONT_LOCATION)) {
             byte[] buffer = new byte[fontStream.available()];
@@ -940,13 +947,14 @@ public final class DesktopIOHandler implements IOHandler {
      * @param grammarManager grammar manager to populate with sounds
      * @throws Exception on sound load errors
      */
+    @Override
     public void loadGrammarSounds(String fileName, GrammarManager grammarManager) throws Exception {
         String loadLog = "";
 
         try (ZipFile zipFile = new ZipFile(fileName)) {
             for (GrammarChapNode curChap : grammarManager.getChapters()) {
                 for (int i = 0; i < curChap.getChildCount(); i++) {
-                    GrammarSectionNode curNode = (GrammarSectionNode) curChap.children.get(i);
+                    GrammarSectionNode curNode = (GrammarSectionNode)((DesktopGrammarChapNode)curChap).getChildAt(i);
 
                     if (curNode.getRecordingId() == -1) {
                         continue;
@@ -1090,6 +1098,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @param path
      * @return
      */
+    @Override
     public boolean openFileNativeOS(String path) {
         boolean ret = true;
 
@@ -1114,6 +1123,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @return File representing directory, null if unable to capture directory
      * path for any reason
      */
+    @Override
     public File getDirectoryFromPath(String path) {
         File ret = new File(path);
 
@@ -1136,6 +1146,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @param path path to file
      * @return file
      */
+    @Override
     public File getFileFromPath(String path) {
         return new File(path);
     }
@@ -1145,6 +1156,7 @@ public final class DesktopIOHandler implements IOHandler {
      *
      * @param exception
      */
+    @Override
     public void writeErrorLog(Throwable exception) {
         writeErrorLog(exception, "");
     }
@@ -1155,6 +1167,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @param exception
      * @param comment
      */
+    @Override
     public void writeErrorLog(Throwable exception, String comment) {
         String curContents = "";
         String errorMessage = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now());
@@ -1197,11 +1210,13 @@ public final class DesktopIOHandler implements IOHandler {
         }
     }
 
+    @Override
     public File getErrorLogFile() {
         return new File(PGTUtil.getErrorDirectory().getAbsolutePath()
                 + File.separator + PGTUtil.ERROR_LOG_FILE);
     }
 
+    @Override
     public String getErrorLog() throws FileNotFoundException {
         String ret = "";
         File errorLog = getErrorLogFile();
@@ -1219,6 +1234,7 @@ public final class DesktopIOHandler implements IOHandler {
      *
      * @return system information
      */
+    @Override
     public String getSystemInformation() {
         List<String> attributes = Arrays.asList("java.version",
                 "java.vendor",
@@ -1245,6 +1261,7 @@ public final class DesktopIOHandler implements IOHandler {
         return ret;
     }
 
+    @Override
     public File unzipResourceToTempLocation(String resourceLocation) throws IOException {
         Path tmpPath = Files.createTempDirectory(PGTUtil.DISPLAY_NAME);
         unzipResourceToDir(resourceLocation, tmpPath);
@@ -1258,6 +1275,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @param target destination to unzip to
      * @throws java.io.IOException
      */
+    @Override
     public void unzipResourceToDir(String internalPath, Path target) throws IOException {
         InputStream fin = IOHandler.class.getResourceAsStream(internalPath);
         try (ZipInputStream zin = new ZipInputStream(fin)) {
@@ -1288,6 +1306,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @param isHexVal
      * @throws Exception if you try to run it on a nonOSX platform
      */
+    @Override
     public void addFileAttributeOSX(String filePath, String attribute, String value, boolean isHexVal) throws Exception {
         if (!PGTUtil.IS_OSX) {
             throw new Exception("This method may only be called within OSX.");
@@ -1305,6 +1324,7 @@ public final class DesktopIOHandler implements IOHandler {
     // TODO: If I ever need this, refine it. It currently gives very little back.
     // Consider returning object which specifies whether hex or string data. or something.
     // No need exept for testing at this point.
+    @Override
     public String getFileAttributeOSX(String filePath, String attribute) throws Exception {
         if (!PGTUtil.IS_OSX) {
             throw new Exception("This method may only be called within OSX.");
@@ -1328,6 +1348,7 @@ public final class DesktopIOHandler implements IOHandler {
      * to a single space (some OSes will simply ignore arguments that are empty)
      * @return String array with two entries. [0] = Output, [1] = Error Output
      */
+    @Override
     public String[] runAtConsole(String[] arguments, boolean addSpaces) {
         String output = "";
         String error = "";
@@ -1368,6 +1389,7 @@ public final class DesktopIOHandler implements IOHandler {
      *
      * @return current version of Java, or blank if none available
      */
+    @Override
     public String getTerminalJavaVersion() {
         String ret = "";
         String[] command = {PGTUtil.JAVA8_JAVA_COMMAND, PGTUtil.JAVA8_VERSION_ARG};
@@ -1399,6 +1421,7 @@ public final class DesktopIOHandler implements IOHandler {
      *
      * @return
      */
+    @Override
     public boolean isJavaAvailableInTerminal() {
         return !getTerminalJavaVersion().isEmpty();
     }
@@ -1409,6 +1432,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @param filthyWithWindows
      * @return
      */
+    @Override
     public byte[] clearCarrigeReturns(byte[] filthyWithWindows) {
         byte[] ret = new byte[filthyWithWindows.length];
         int cleanCount = 0;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -90,7 +90,6 @@ public class ScrUpdateAlert extends PDialog {
             jTextPane1.setText(text);
             txtVersion.setText("--URGENT--");
             setVisible(true);
-        //} else if (!ver.equals(core.getVersion())) { // next, handle update alerts
         } else if (upstreamVer > selfVer // need update if upstream version newer
                 || (PGTUtil.IS_BETA && upstreamVer == selfVer)) { // also need update if upstream version is non-beta of current ver
             this.setTitle("PolyGlot " + ver + " available");
@@ -191,10 +190,8 @@ public class ScrUpdateAlert extends PDialog {
         int result;
         
         switch (operator) {
-            case "eql":
-                ret = Arrays.equals(splitVersion1, splitVersion2);
-                break;
-            case "gt":
+            case "eql" -> ret = Arrays.equals(splitVersion1, splitVersion2);
+            case "gt" -> {
                 result = compareDotDelimited(splitVersion1[0], splitVersion2[0]);
                 if (result == -1){
                     ret = true;
@@ -203,8 +200,8 @@ public class ScrUpdateAlert extends PDialog {
                 } else {
                     ret = compareDotDelimited(splitVersion1[1], splitVersion2[1]) == -1;
                 }
-                break;
-            case "lt":
+            }
+            case "lt" -> {
                 result = compareDotDelimited(splitVersion1[0], splitVersion2[0]);
                 if (result == 1){
                     ret = true;
@@ -213,10 +210,9 @@ public class ScrUpdateAlert extends PDialog {
                 } else {
                     ret = compareDotDelimited(splitVersion1[1], splitVersion2[1]) == 1;
                 }
-                break;
+            }
 
-            default:
-                throw new Exception("Malformed equality operator: " + operator);
+            default -> throw new Exception("Malformed equality operator: " + operator);
         }
         
         return ret;
@@ -226,17 +222,10 @@ public class ScrUpdateAlert extends PDialog {
         boolean ret;
         
         switch (operator) {
-            case "eql":
-                ret = v1.equals(v2);
-                break;
-            case "gt":
-                ret = compareDotDelimited(v1, v2) == -1;
-                break;
-            case "lt":
-                ret = compareDotDelimited(v1, v2) == 1;
-                break;
-            default:
-                throw new Exception("Malformed equality operator: " + operator);
+            case "eql" -> ret = v1.equals(v2);
+            case "gt" -> ret = compareDotDelimited(v1, v2) == -1;
+            case "lt" -> ret = compareDotDelimited(v1, v2) == 1;
+            default -> throw new Exception("Malformed equality operator: " + operator);
         }
         
         return ret;
@@ -416,17 +405,10 @@ public class ScrUpdateAlert extends PDialog {
         MessageType ret;
         
         switch(val) {
-            case "U":
-                ret = MessageType.URGENT;
-                break;
-            case "O":
-                ret = MessageType.ONETIME;
-                break;
-            case "I":
-                ret = MessageType.INFO;
-                break;
-            default:
-                throw new Exception("Malformed message type: " + val);
+            case "U" -> ret = MessageType.URGENT;
+            case "O" -> ret = MessageType.ONETIME;
+            case "I" -> ret = MessageType.INFO;
+            default -> throw new Exception("Malformed message type: " + val);
         }
         
         return ret;

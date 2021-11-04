@@ -28,6 +28,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 
 /**
  * This contains various constant vales in PolyGlot
@@ -364,7 +365,7 @@ public class PGTUtil {
         IS_LINUX = isLinux();
         
         // sets version number and beta status
-        String version = "3.3.1B";
+        String version = getVersion();
         if (version.contains("B")) {
             IS_BETA = true;
             PGT_VERSION = version.replace("B", "");
@@ -421,18 +422,39 @@ public class PGTUtil {
         VERSION_HIERARCHY.put("3.2", 43);
         VERSION_HIERARCHY.put("3.3", 44);
         VERSION_HIERARCHY.put("3.3.1", 45);
+        VERSION_HIERARCHY.put("3.3.1B", 46);
+        VERSION_HIERARCHY.put("3.3.5", 46);
+        VERSION_HIERARCHY.put("3.5", 46);
         
-        // Gather build date/time from resources (if it does not exist, ignore)
-        URL buildDate = PGTUtil.class.getResource(BUILD_DATE_TIME_LOCATION);
-        String buildDateString = "";
-        if (buildDate != null) {
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(buildDate.openStream(), StandardCharsets.UTF_8))) {
-                buildDateString = br.readLine();
-            } catch (IOException ex) {
-                buildDateString = "BUILD DATE FILE NOT PRESENT";
+        BUILD_DATE_TIME = getBuildDate();
+    }
+    
+    private static String getVersion() {
+        URL version = PGTUtil.class.getResource(VERSION_LOCATION);
+        
+        if (version != null) {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(version.openStream(), StandardCharsets.UTF_8))) {
+                return br.readLine();
+            } catch (IOException e) {
+                DesktopIOHandler.getInstance().writeErrorLog(e, "Unable to fetch version at startup");
             }
         }
-        BUILD_DATE_TIME = buildDateString;
+
+        return "?.?";
+    }
+    
+    private static String getBuildDate() {
+        URL buildDate = PGTUtil.class.getResource(BUILD_DATE_TIME_LOCATION);
+        
+        if (buildDate != null) {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(buildDate.openStream(), StandardCharsets.UTF_8))) {
+                return br.readLine();
+            } catch (IOException e) {
+                DesktopIOHandler.getInstance().writeErrorLog(e, "Unable to fetch build date at startup");
+            }
+        }
+
+        return "BUILD DATE FILE NOT PRESENT";
     }
     
     // ENVIRONMENT VARIABLES

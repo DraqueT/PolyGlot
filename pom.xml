@@ -10,7 +10,7 @@
     <groupId>org.DarisaDesigns</groupId>
     <name>PolyGlot Linear A</name>
     <artifactId>PolyGlotLinA</artifactId>
-    <version>3.3.1</version>
+    <version>3.5</version>
     <description>PolyGlot is a utility for creating and publishing spoken languages.</description>
     <url>https://draquet.github.io/PolyGlot/</url>
     
@@ -165,6 +165,7 @@
                     <archive>
                         <manifest>
                             <mainClass>org.darisadesigns.polyglotlina.Desktop.PolyGlot</mainClass>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                         </manifest>
                         <manifestEntries>
                             <SplashScreen-Image>assets/org/DarisaDesigns/ImageAssets/splash-image.png</SplashScreen-Image>

@@ -21,10 +21,6 @@ package org.darisadesigns.polyglotlina.Desktop;
 
 import java.awt.Window;
 
-/**
- *
- * @author edga_
- */
 public class IPAHandler extends org.darisadesigns.polyglotlina.IPAHandler {
     
     private final SoundRecorder soundRecorder;
