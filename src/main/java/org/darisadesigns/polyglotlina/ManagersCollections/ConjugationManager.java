@@ -549,7 +549,20 @@ public class ConjugationManager {
      */
     public void deprecateAllConjugations(Integer typeId) {
         Iterator<Entry<Integer, List<ConjugationNode>>> decIt = dList.entrySet().iterator();
+        
+        // rename rules first for easier organization
+        Map<String, ConjugationPair> mappedConjugations = new HashMap<>();
+        for (var conjugation : getAllCombinedIds(typeId)) {
+            mappedConjugations.put(conjugation.combinedId, conjugation);
+        }
+        if (generationRules.containsKey(typeId)) {
+            for (var rule : generationRules.get(typeId)) {
+                ConjugationPair parent = mappedConjugations.get(rule.getCombinationId());
+                rule.setName(parent.label + ": " + rule.getName());
+            }
+        }
 
+        // after renaming, mark deprecations
         while (decIt.hasNext()) {
             Entry<Integer, List<ConjugationNode>> curEntry = decIt.next();
             List<ConjugationNode> curList = curEntry.getValue();
