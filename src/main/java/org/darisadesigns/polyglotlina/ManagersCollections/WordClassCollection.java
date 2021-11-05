@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2020, Draque Thompson
+ * Copyright (c) 2016-2021, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -90,6 +90,11 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
             }
         });
 
+        // alternative way to do it
+//        nodeMap.values().stream()
+//                .filter((prop) -> prop.appliesToType(classId) || prop.appliesToType(-1))
+//                .forEach((prop) -> ret.add(prop));
+
         Collections.sort(ret);
         return ret.toArray(new WordClass[0]);
     }
@@ -123,51 +128,57 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
      * @return randomly generated combinations of word classes
      */
     public List<List<PEntry<Integer, Integer>>> getRandomPropertyCombinations(int numRandom, ConWord excludeWord) {
+        // combocache should generally be pre-built before something like this is done, but cover the contingency
+        if (comboCache == null)
+            buildComboCache();
+
+        Collections.shuffle(comboCache, new Random(System.nanoTime()));
+
+        if (comboCache == null || comboCache.isEmpty())
+            return new ArrayList<>();
+
         List<List<PEntry<Integer, Integer>>> ret = new ArrayList<>();
         int offset = 0;
 
-        // combocache should generally be pre-built before something like this is done, but cover the contingency
-        if (comboCache == null) {
-            buildComboCache();
-        }
-        
-        Collections.shuffle(comboCache, new Random(System.nanoTime()));
-
-        if (comboCache != null && !comboCache.isEmpty()) {
-            for (int i = 0; (i - offset) < numRandom && i + offset < comboCache.size(); i++) {
-                if (propCombEqual(comboCache.get(i + offset), new ArrayList<>(excludeWord.getClassValues()))) {
-                    offset++;
-                    continue;
-                }
-
-                ret.add(comboCache.get(i + offset));
+        for (int i = 0; (i - offset) < numRandom && i + offset < comboCache.size(); i++) {
+            if (propCombEqual(comboCache.get(i + offset), new ArrayList<>(excludeWord.getClassValues()))) {
+                offset++;
+                continue;
             }
+            ret.add(comboCache.get(i + offset));
         }
 
         return ret;
     }
 
     private boolean propCombEqual(List<PEntry<Integer, Integer>> a, List<Entry<Integer, Integer>> b) {
-        boolean ret = true;
+        if (a.size() != b.size())
+            return false;
 
-        if (a.size() == b.size()) {
-            for (Entry aEntry : a) {
-                boolean aRet = false;
+        for (Entry aEntry : a) {
+            boolean result = false;
 
-                for (Entry bEntry : b) {
-                    if (aEntry.equals(bEntry)) {
-                        aRet = true;
-                        break;
-                    }
+            for (Entry bEntry : b) {
+                if (aEntry.equals(bEntry)) {
+                    result = true;
+                    break;
                 }
-
-                ret = ret && aRet;
             }
-        } else {
-            ret = false;
-        }
+            if (!result)
+                return false;
 
-        return ret;
+            // alternative way using a for + stream
+//            boolean result = b.stream().anyMatch((bEntry) -> aEntry.equals(bEntry));
+//            if (!result)
+//                return false;
+        }
+        return true;
+
+        // one more way using 2 streams
+//        return a.stream().allMatch(
+//                (aEntry) -> b.stream().anyMatch(
+//                        (bEntry) -> aEntry.equals(bEntry)
+//                ));
     }
 
     /**
@@ -216,17 +227,10 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
      * @return true if pair exists
      */
     public boolean isValid(Integer classId, Integer valId) {
-        boolean ret = true;
+        if (nodeMap.containsKey(classId))
+            return nodeMap.get(classId).isValid(valId);
 
-        if (nodeMap.containsKey(classId)) {
-            if (!nodeMap.get(classId).isValid(valId)) {
-                ret = false;
-            }
-        } else {
-            ret = false;
-        }
-
-        return ret;
+        return false;
     }
     
     /**
@@ -248,17 +252,14 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
     
     @Override
     public boolean equals(Object comp) {
-        boolean ret = false;
-        
-        if (this == comp) {
-            ret = true;
-        } else if (comp instanceof WordClassCollection) {
-            WordClassCollection compCol = (WordClassCollection)comp;
-            ret = ((comboCache == null && compCol.comboCache == null) || comboCache.equals(compCol.comboCache));
-            ret = ret && super.equals(comp);
-        }
-        
-        return ret;
+        if (this == comp)
+            return true;
+
+        if (comp instanceof WordClassCollection compCol)
+            return ((comboCache == null && compCol.comboCache == null) || comboCache.equals(compCol.comboCache))
+                    && super.equals(comp);
+
+        return false;
     }
 
     @Override

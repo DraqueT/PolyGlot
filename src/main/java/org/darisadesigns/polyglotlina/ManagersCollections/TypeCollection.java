@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -23,6 +23,7 @@ package org.darisadesigns.polyglotlina.ManagersCollections;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.darisadesigns.polyglotlina.DictCore;
@@ -115,7 +116,7 @@ public class TypeCollection extends DictionaryCollection<TypeNode> {
 
     @Override
     public TypeNode getNodeById(Integer _id) {
-        return (TypeNode) super.getNodeById(_id);
+        return super.getNodeById(_id);
     }
     
     @Override
@@ -149,8 +150,7 @@ public class TypeCollection extends DictionaryCollection<TypeNode> {
     public TypeNode findOrCreate(TypeNode node) throws Exception {
         TypeNode ret = null;
         
-        for (Object n : nodeMap.values()) {
-            TypeNode compNode = (TypeNode)n;
+        for (TypeNode compNode : nodeMap.values()) {
             if (compNode.getValue().equals(node.getValue())
                     && compNode.getGloss().equals(node.getGloss())) {
                 ret = compNode;
@@ -172,10 +172,10 @@ public class TypeCollection extends DictionaryCollection<TypeNode> {
      */
     public void writeXML(Document doc, Element rootElement) {
         Element typeContainer = doc.createElement(PGTUtil.POS_COLLECTION_XID);
-        
-        for (TypeNode curNode : getNodes()) {
+
+        Arrays.stream(getNodes()).forEach((curNode) -> {
             curNode.writeXML(doc, typeContainer);
-        }
+        });
         
         rootElement.appendChild(typeContainer);
     }
