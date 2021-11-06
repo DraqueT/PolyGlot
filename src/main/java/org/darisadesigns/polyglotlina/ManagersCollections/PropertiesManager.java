@@ -661,29 +661,28 @@ public abstract class PropertiesManager {
         if (this == comp)
             return true;
 
-        boolean ret = false;
-        if (comp instanceof PropertiesManager prop) {
-            ret = conFontStyle.equals(prop.conFontStyle);
-            ret = ret && conFontSize == prop.conFontSize;
-            ret = ret && localFontSize == prop.localFontSize;
-            ret = ret && alphaPlainText.equals(prop.alphaPlainText);
-            ret = ret && langName.equals(prop.langName);
-            ret = ret && localLangName.equals(prop.localLangName);
-            ret = ret && copyrightAuthorInfo.equals(prop.copyrightAuthorInfo);
-            ret = ret && typesMandatory == prop.typesMandatory;
-            ret = ret && localMandatory == prop.localMandatory;
-            ret = ret && wordUniqueness == prop.wordUniqueness;
-            ret = ret && localUniqueness == prop.localUniqueness;
-            ret = ret && overrideRegexFont == prop.overrideRegexFont;
-            ret = ret && ignoreCase == prop.ignoreCase;
-            ret = ret && disableProcRegex == prop.disableProcRegex;
-            ret = ret && enforceRTL == prop.enforceRTL;
-            ret = ret && useLocalWordLex == prop.useLocalWordLex;
-            ret = ret && charRep.equals(prop.charRep);
-            ret = ret && kerningSpace.equals(prop.kerningSpace);
-            ret = ret && useSimplifiedConjugations == prop.useSimplifiedConjugations;
-        }
-        return ret;
+        if (comp instanceof PropertiesManager prop)
+            return conFontStyle.equals(prop.conFontStyle)
+                    && conFontSize == prop.conFontSize
+                    && localFontSize == prop.localFontSize
+                    && alphaPlainText.equals(prop.alphaPlainText)
+                    && langName.equals(prop.langName)
+                    && localLangName.equals(prop.localLangName)
+                    && copyrightAuthorInfo.equals(prop.copyrightAuthorInfo)
+                    && typesMandatory == prop.typesMandatory
+                    && localMandatory == prop.localMandatory
+                    && wordUniqueness == prop.wordUniqueness
+                    && localUniqueness == prop.localUniqueness
+                    && overrideRegexFont == prop.overrideRegexFont
+                    && ignoreCase == prop.ignoreCase
+                    && disableProcRegex == prop.disableProcRegex
+                    && enforceRTL == prop.enforceRTL
+                    && useLocalWordLex == prop.useLocalWordLex
+                    && charRep.equals(prop.charRep)
+                    && kerningSpace.equals(prop.kerningSpace)
+                    && useSimplifiedConjugations == prop.useSimplifiedConjugations;
+
+        return false;
     }
 
     @Override

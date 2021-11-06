@@ -90,7 +90,7 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
             }
         });
 
-        // alternative way to do it
+        // TODO alternative way to do it
 //        nodeMap.values().stream()
 //                .filter((prop) -> prop.appliesToType(classId) || prop.appliesToType(-1))
 //                .forEach((prop) -> ret.add(prop));
@@ -167,14 +167,14 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
             if (!result)
                 return false;
 
-            // alternative way using a for + stream
+            // TODO: alternative way using a for + stream
 //            boolean result = b.stream().anyMatch((bEntry) -> aEntry.equals(bEntry));
 //            if (!result)
 //                return false;
         }
         return true;
 
-        // one more way using 2 streams
+        // TODO: one more way using 2 streams
 //        return a.stream().allMatch(
 //                (aEntry) -> b.stream().anyMatch(
 //                        (bEntry) -> aEntry.equals(bEntry)
