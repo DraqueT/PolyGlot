@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -25,7 +25,6 @@ import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.Nodes.FamNode;
 import org.darisadesigns.polyglotlina.WebInterface;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import org.w3c.dom.Document;
@@ -62,11 +61,7 @@ public class FamilyManager {
      * @param wordList raw words from entry
      */
     public void removeDeadWords(FamNode fam, List<ConWord> wordList) {
-        Iterator<ConWord> wordIt = new ArrayList<>(wordList).iterator();
-        
-        while (wordIt.hasNext()) {
-            ConWord curWord = wordIt.next();
-            
+        for (ConWord curWord : new ArrayList<>(wordList)) {
             if (!core.getWordCollection().exists(curWord.getId())) {
                 fam.removeWord(curWord);
             }
@@ -104,7 +99,7 @@ public class FamilyManager {
      * jumps to buffer parent, or does nothing if at root
      */
     public void bufferDone() {
-        if(buffer.getParentNode() == null) {
+        if (buffer.getParentNode() == null) {
             return;
         }
         
@@ -161,17 +156,15 @@ public class FamilyManager {
     
     @Override
     public boolean equals(Object comp) {
-        boolean ret = false;
-        
-        if (this == comp) {
-            ret = true;
-        } else if (comp instanceof FamilyManager) {
-            FamilyManager compMan = (FamilyManager)comp;
-            ret = (famRoot == null && compMan.famRoot == null) 
+        if (this == comp)
+            return true;
+
+        if (comp instanceof FamilyManager compMan) {
+            return (famRoot == null && compMan.famRoot == null)
                     || famRoot.equals(compMan.famRoot); 
         }
         
-        return ret;
+        return false;
     }
 
     @Override

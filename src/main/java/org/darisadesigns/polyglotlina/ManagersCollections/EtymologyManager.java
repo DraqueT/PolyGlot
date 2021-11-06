@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -77,17 +77,13 @@ public class EtymologyManager {
      * @return true if illegal loop(s) present
      */
     private boolean checkLoopChildren(int topParentId, Integer[] childrenIds) {
-        boolean ret = false;
-        
         for (int childId : childrenIds) {
             if (createsLoop(topParentId, childId) 
                     || checkLoopChildren(topParentId, getChildren(childId))) {
-                ret = true;
-                break;
+                return true;
             }
         }
-        
-        return ret;
+        return false;
     }
     
     /**
@@ -441,24 +437,18 @@ public class EtymologyManager {
      * @return true if in etymology
      */
     public boolean childHasParent(Integer childId, Integer parId) {
-        boolean ret = false;
+        if (!childToParent.containsKey(childId))
+            return false;
+
+        List<Integer> myList = childToParent.get(childId);
         
-        if (childToParent.containsKey(childId)) {
-            List<Integer> myList = childToParent.get(childId);
-            ret = myList.contains(parId);
-            
-            if (!ret) {
-                for (Integer newChild : myList) {
-                    ret = childHasParent(newChild, parId);
-                    
-                    if (ret) {
-                        break;
-                    }
-                }
+        if (!myList.contains(parId)) {
+            for (Integer newChild : myList) {
+                if (childHasParent(newChild, parId))
+                    return true;
             }
         }
-        
-        return ret;
+        return false;
     }
     
     /**
@@ -493,21 +483,17 @@ public class EtymologyManager {
     
     @Override
     public boolean equals(Object comp) {
-        boolean ret = false;
+        if (this == comp)
+            return true;
+
+        if (comp instanceof EtymologyManager compEt)
+            return parentToChild.equals(compEt.parentToChild)
+                    && childToParent.equals(compEt.childToParent)
+                    && extParentToChild.equals(compEt.extParentToChild)
+                    && childToExtParent.equals(compEt.childToExtParent)
+                    && allExtParents.equals(compEt.allExtParents);
         
-        if (this == comp) {
-            ret = true;
-        } else if (comp instanceof EtymologyManager) {
-            EtymologyManager compEt = (EtymologyManager)comp;
-            
-            ret = parentToChild.equals(compEt.parentToChild);
-            ret = ret && childToParent.equals(compEt.childToParent);
-            ret = ret && extParentToChild.equals(compEt.extParentToChild);
-            ret = ret && childToExtParent.equals(compEt.childToExtParent);
-            ret = ret && allExtParents.equals(compEt.allExtParents);
-        }
-        
-        return ret;
+        return false;
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -86,7 +86,7 @@ public abstract class DictionaryCollection<N extends DictNode> {
             throw new Exception("Id can never be less than 1.");
         }
 
-        DictNode myNode = _modNode;
+        DictNode myNode = _modNode; // TODO: possible removal
 
         myNode.setId(_id);
         myNode.setParent(this);
@@ -110,15 +110,10 @@ public abstract class DictionaryCollection<N extends DictNode> {
      * @return 
      */
     public N getNodeById(Integer _id) {
-        N ret;
+        if (nodeMap.containsKey(_id))
+            return nodeMap.get(_id);
 
-        if (nodeMap.containsKey(_id)) {
-            ret = nodeMap.get(_id);
-        } else {
-            ret = this.notFoundNode();
-        }
-
-        return ret;
+        return this.notFoundNode();
     }
 
     /**
@@ -171,7 +166,7 @@ public abstract class DictionaryCollection<N extends DictNode> {
      * @throws Exception if unable to insert
      */
     protected Integer insert(Integer _id, N _buffer) throws Exception {
-        DictNode myBuffer = _buffer;
+        DictNode myBuffer = _buffer; // TODO: possible removal
 
         if (nodeMap.containsKey(_id)) {
             throw new Exception("Duplicate ID " + _id + " for collection object: " + myBuffer.getValue());
@@ -245,16 +240,12 @@ public abstract class DictionaryCollection<N extends DictNode> {
     
     @Override
     public boolean equals(Object comp) {
-        boolean ret = false;
-        
-        if (comp instanceof DictionaryCollection) {
-            DictionaryCollection dictComp = (DictionaryCollection) comp;
-            
-            ret = ((alphaOrder == null && dictComp.alphaOrder == null) || alphaOrder.equals(dictComp.alphaOrder));
-            ret = ret && nodeMap.equals(dictComp.nodeMap);
+        if (comp instanceof DictionaryCollection dictComp) {
+            return ((alphaOrder == null && dictComp.alphaOrder == null) || alphaOrder.equals(dictComp.alphaOrder))
+                    && nodeMap.equals(dictComp.nodeMap);
         }
         
-        return ret;
+        return false;
     }
 
     @Override
@@ -312,15 +303,12 @@ public abstract class DictionaryCollection<N extends DictNode> {
      * @return 
      */
     public boolean canSafelySort() {
-        boolean ret = false;
-        
         try {
-            ret = canSafelySort(false);
+            return canSafelySort(false);
         } catch (Exception e) {
             // do nothing. this is explicitly surpressing errors
         }
-        
-        return ret;
+        return false;
     }
     
     /**
@@ -330,8 +318,6 @@ public abstract class DictionaryCollection<N extends DictNode> {
      * @throws java.lang.Exception 
      */
     public boolean canSafelySort(boolean throwError) throws Exception {
-        boolean ret = true;
-        
         try {
             Collections.sort(new ArrayList<>(nodeMap.values()));
         } catch (Exception e) {
@@ -339,11 +325,9 @@ public abstract class DictionaryCollection<N extends DictNode> {
                 throw new Exception(e);
                 // planned exception, do not log
             }
-            
-            ret = false;
+            return false;
         }
-        
-        return ret;
+        return true;
     }
     
     public PAlphaMap<String, Integer> getAlphaOrder() {
