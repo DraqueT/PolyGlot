@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -292,7 +292,6 @@ public class ConWordTest {
             doc.appendChild(rootElement);
 
             word.writeXML(doc, rootElement);
-
             assertTrue(TestResources.textXmlDocEquals(doc, expectedValue));
         } catch (IOException | ParserConfigurationException | TransformerException | DOMException e) {
             fail(e);

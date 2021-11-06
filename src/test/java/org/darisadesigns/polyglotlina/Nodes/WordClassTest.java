@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -139,6 +139,7 @@ public class WordClassTest {
                 + "<wordGrammarClassID>0</wordGrammarClassID>"
                 + "<wordGrammarClassName/>"
                 + "<wordGrammarIsFreeTextField>F</wordGrammarIsFreeTextField>"
+                + "<wordGrammarIsAssociative>F</wordGrammarIsAssociative>"
                 + "<wordGrammarApplyTypes>-1,1,3</wordGrammarApplyTypes>"
                 + "<wordGrammarClassValuesCollection>"
                 + "<wordGrammarClassValueNode>"

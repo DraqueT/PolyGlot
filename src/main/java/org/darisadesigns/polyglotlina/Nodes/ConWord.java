@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -416,8 +416,7 @@ public class ConWord extends DictNode {
         while (classIt.hasNext()) {
             Entry<Integer, Integer> curEntry = classIt.next();
 
-            if (!core.getWordClassCollection().isValid(curEntry.getKey(),
-                    curEntry.getValue())) {
+            if (!core.getWordClassCollection().isValid(curEntry.getKey(), curEntry.getValue())) {
                 classValues.remove(curEntry.getKey());
             }
         }
@@ -484,6 +483,48 @@ public class ConWord extends DictNode {
     public Object getFilterEtyParent() {
         return filterEtyParent;
     }
+    
+    /**
+     * Gets a summary of the conlang word (primarily for hover text)
+     * 
+     * @param procGen whether to include pronunciation generation in summary
+     * @return 
+     * @throws java.lang.Exception
+     */
+    public String getWordSummaryValue(boolean procGen) throws Exception {
+        TypeNode curType = core.getTypes().getNodeById(this.getWordTypeId());
+        String summary = "";
+        
+        try {
+            summary = core.getPronunciationMgr().getPronunciation(this.getValue());
+            
+            if (summary.isEmpty()) {
+                // allow for pronunciation overrides
+                summary = this.getPronunciation();
+            }
+        } catch (Exception ex) {
+            // User is informed of this elsewhere.
+        }
+            
+        if (summary.isEmpty()) {
+            summary = this.getLocalWord();
+        }
+        
+        if (summary.isEmpty()) {
+            summary = this.getValue();
+        }
+        
+        if (curType != null && (curType.getId() != 0 || core.getPropertiesManager().isTypesMandatory())) {
+            summary += " : " + (curType.getGloss().isEmpty()
+                    ? curType.getValue() : curType.getGloss());
+        }
+        
+        if (!this.getDefinition().isEmpty()) {
+            summary += " : " + WebInterface.getTextFromHtml(this.getDefinition());
+        }
+        
+        return summary;
+    }
 
     /**
      * @param _filterEtyParent the filterEtyParent to set
@@ -535,8 +576,7 @@ public class ConWord extends DictNode {
 
         try {
             wordValue = doc.createElement(PGTUtil.WORD_PROC_XID);
-            wordValue
-                    .appendChild(doc.createTextNode(this.getPronunciation()));
+            wordValue.appendChild(doc.createTextNode(this.getPronunciation()));
             wordNode.appendChild(wordValue);
         }
         catch (Exception e) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -30,6 +30,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import javax.swing.JComboBox;
+import javax.swing.ListCellRenderer;
 import javax.swing.SwingWorker;
 
 /**
@@ -45,6 +46,7 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
     public PComboBox(Font font) {
         setupListeners();
         super.setFont(font);
+        this.setRenderer(new PListCellRenderer());
     }
     
     /**
@@ -57,6 +59,12 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         setupListeners();
         super.setFont(font);
         defaultText = _defaultText;
+        this.setRenderer(new PListCellRenderer());
+    }
+    
+    @Override
+    public final void setRenderer(ListCellRenderer r) {
+        super.setRenderer(r);
     }
 
     /**
