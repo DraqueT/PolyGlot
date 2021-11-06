@@ -227,8 +227,20 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
      * @return true if pair exists
      */
     public boolean isValid(Integer classId, Integer valId) {
-        if (nodeMap.containsKey(classId))
-            return nodeMap.get(classId).isValid(valId);
+        boolean ret = true;
+
+        if (nodeMap.containsKey(classId)) {
+            WordClass wordClass = nodeMap.get(classId);
+            
+            if (wordClass.isAssociative()) {
+                // This will revert to an unknown value if unable to be found
+                ret = true;
+            }else if (!wordClass.isValid(valId)) {
+                ret = false;
+            }
+        } else {
+            ret = false;
+        }
 
         return false;
     }

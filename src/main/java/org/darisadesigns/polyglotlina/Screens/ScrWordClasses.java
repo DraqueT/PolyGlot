@@ -284,7 +284,7 @@ public final class ScrWordClasses extends PFrame {
                 e.getValue().setSelected(curProp.appliesToType(e.getKey()));
             });
 
-            setFreeTextEnabled();
+            enableProperMenuItems();
             setEnabledTypeText();
             tblValues.setModel(tableModel);
         }
@@ -299,6 +299,7 @@ public final class ScrWordClasses extends PFrame {
         txtName.setEnabled(enable);
         tblValues.setEnabled(enable);
         chkFreeText.setEnabled(enable);
+        chkAssociative.setEnabled(enable);
         btnAddValue.setEnabled(enable);
         btnDelValue.setEnabled(enable);
         
@@ -419,6 +420,7 @@ public final class ScrWordClasses extends PFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         tblValues = new javax.swing.JTable();
         chkFreeText = new PCheckBox(nightMode, menuFontSize);
+        chkAssociative = new PCheckBox(false, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Word Classes");
@@ -504,7 +506,7 @@ public final class ScrWordClasses extends PFrame {
         pnlTypes.setLayout(pnlTypesLayout);
         pnlTypesLayout.setHorizontalGroup(
             pnlTypesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 244, Short.MAX_VALUE)
+            .addGap(0, 182, Short.MAX_VALUE)
         );
         pnlTypesLayout.setVerticalGroup(
             pnlTypesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -531,22 +533,31 @@ public final class ScrWordClasses extends PFrame {
             }
         });
 
+        chkAssociative.setText("Associative");
+        chkAssociative.setToolTipText("Check this if the class associates a word with one other (ex: antonyms)");
+        chkAssociative.setEnabled(false);
+        chkAssociative.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkAssociativeActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnAddValue, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(47, 47, 47)
                         .addComponent(btnDelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(chkFreeText)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
+                    .addComponent(chkFreeText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(chkAssociative, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlTypes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -561,7 +572,9 @@ public final class ScrWordClasses extends PFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(chkFreeText)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                        .addComponent(chkAssociative)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnAddValue, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -609,11 +622,25 @@ public final class ScrWordClasses extends PFrame {
     private void chkFreeTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkFreeTextActionPerformed
         WordClass prop = lstProperties.getSelectedValue();
         prop.setFreeText(chkFreeText.isSelected());
-        setFreeTextEnabled();
+        enableProperMenuItems();
+        
+        if (chkFreeText.isSelected()) {
+            chkAssociative.setSelected(false);
+        }
     }//GEN-LAST:event_chkFreeTextActionPerformed
 
-    private void setFreeTextEnabled() {
-        boolean enable = !chkFreeText.isSelected();
+    private void chkAssociativeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkAssociativeActionPerformed
+        WordClass prop = lstProperties.getSelectedValue();
+        prop.setAssociative(chkAssociative.isSelected());
+        enableProperMenuItems();
+        
+        if (chkAssociative.isSelected()) {
+            chkFreeText.setSelected(false);
+        }
+    }//GEN-LAST:event_chkAssociativeActionPerformed
+
+    private void enableProperMenuItems() {
+        boolean enable = !chkFreeText.isSelected() && !chkAssociative.isSelected();
         tblValues.setEnabled(enable);
         btnAddValue.setEnabled(enable);
         btnDelValue.setEnabled(enable);
@@ -636,6 +663,7 @@ public final class ScrWordClasses extends PFrame {
     private javax.swing.JButton btnAddValue;
     private javax.swing.JButton btnDelProp;
     private javax.swing.JButton btnDelValue;
+    private javax.swing.JCheckBox chkAssociative;
     private javax.swing.JCheckBox chkFreeText;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

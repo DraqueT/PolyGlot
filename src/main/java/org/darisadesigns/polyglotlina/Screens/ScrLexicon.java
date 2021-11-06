@@ -38,7 +38,6 @@ import org.darisadesigns.polyglotlina.Nodes.EtyExternalParent;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.Nodes.WordClassValue;
 import org.darisadesigns.polyglotlina.Nodes.WordClass;
-import org.darisadesigns.polyglotlina.WebInterface;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -96,6 +95,7 @@ import javax.swing.event.DocumentListener;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
+import org.darisadesigns.polyglotlina.Nodes.DictNode;
 
 /**
  *
@@ -294,9 +294,16 @@ public final class ScrLexicon extends PFrame {
                     JComponent component = classPropMap.get(curProp.getKey());
 
                     try {
-                        if (component instanceof JComboBox combo) {
-                            combo.setSelectedItem(((WordClass) core.getWordClassCollection()
-                                    .getNodeById(curProp.getKey())).getValueById(curProp.getValue()));
+                        WordClass wordClass = core.getWordClassCollection().getNodeById(curProp.getKey());
+                        if (wordClass.isAssociative() && component instanceof JComboBox combo) {
+                            ConWord associatedWord = core.getWordCollection().getNodeById(curProp.getValue());
+                            
+                            if (associatedWord.getId() > 0) {
+                                combo.setSelectedItem(associatedWord);
+                            }
+                        } else if (component instanceof JComboBox combo) {
+                            WordClassValue value = wordClass.getValueById(curProp.getValue());
+                            combo.setSelectedItem(value);
                         }
                     } catch (Exception e) {
                         DesktopIOHandler.getInstance().writeErrorLog(e);
@@ -410,6 +417,34 @@ public final class ScrLexicon extends PFrame {
 
                 pnlClasses.add(classText, gbc);
                 classPropMap.put(curProp.getId(), classText); // text box mapped to related class ID.
+            } else if (curProp.isAssociative()) {
+                final JComboBox<Object> classBox = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
+                DefaultComboBoxModel<Object> comboModel = new DefaultComboBoxModel<>();
+                classBox.setModel(comboModel);
+                
+                comboModel.addElement(" ");
+                
+                for (var populateWord : core.getWordCollection().getAllValues()) {
+                    comboModel.addElement(populateWord);
+                }
+                
+                classBox.addActionListener((ActionEvent e) -> {
+                    if (!curPopulating) {
+                        ConWord classWord = getCurrentWord();
+                        
+                        if (classBox.getSelectedItem() instanceof ConWord curValue) {
+                            classWord.setClassValue(classId, curValue.getId());
+                        } else {
+                            // if not an instance of a value, then it's the default selection: remove class from word
+                            classWord.setClassValue(classId, -1);
+                        }
+                    }
+                });
+                
+                classBox.setToolTipText("Associative word for class: " + curProp.getValue());
+                classBox.setPreferredSize(new Dimension(4000, classBox.getPreferredSize().height));
+                pnlClasses.add(classBox, gbc);
+                classPropMap.put(curProp.getId(), classBox); // combobox mapped to related class ID.
             } else {
                 final JComboBox<Object> classBox = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
                 DefaultComboBoxModel<Object> comboModel = new DefaultComboBoxModel<>();
@@ -422,16 +457,15 @@ public final class ScrLexicon extends PFrame {
                 });
 
                 classBox.addActionListener((ActionEvent e) -> {
-                    // don't run if populating currently
-                    if (curPopulating) {
-                        return;
-                    }
-                    ConWord curWord1 = getCurrentWord();
-                    if (classBox.getSelectedItem() instanceof WordClassValue curValue) {
-                        curWord1.setClassValue(classId, curValue.getId());
-                    } else {
-                        // if not an instance of a value, then it's the default selection: remove class from word
-                        curWord1.setClassValue(classId, -1);
+                    if (!curPopulating) {
+                        ConWord classWord = getCurrentWord();
+                        
+                        if (classBox.getSelectedItem() instanceof WordClassValue curValue) {
+                            classWord.setClassValue(classId, curValue.getId());
+                        } else {
+                            // if not an instance of a value, then it's the default selection: remove class from word
+                            classWord.setClassValue(classId, -1);
+                        }
                     }
                 });
 
@@ -1164,6 +1198,8 @@ public final class ScrLexicon extends PFrame {
                 setWordLegality();
             }
         });
+        
+        final Window self = this;
 
         lstLexicon.addMouseMotionListener(new MouseMotionListener() {
             @Override
@@ -1175,45 +1211,19 @@ public final class ScrLexicon extends PFrame {
                 JList theList = (JList) e.getSource();
                 ListModel model = theList.getModel();
                 int index = theList.locationToIndex(e.getPoint());
+                String tip = DEF_LEX_VALUE;
+                
                 if (index > -1) {
-                    ConWord curWord = ((ConWordDisplay)model.getElementAt(index)).getConWord();
-                    TypeNode curType = null;
                     try {
-                        curType = core.getTypes().getNodeById(curWord.getWordTypeId());
+                        ConWord curWord = ((ConWordDisplay)model.getElementAt(index)).getConWord();
+                        tip = curWord.getWordSummaryValue(enableProcGen);
                     } catch (Exception ex) {
                         DesktopIOHandler.getInstance().writeErrorLog(ex);
-                        core.getOSHandler().getInfoBox().error("Type error on lookup.", ex.getMessage());
+                        new DesktopInfoBox(self).error("Type error on lookup.", ex.getMessage());
                     }
-                    String tip = "";
-                    if (enableProcGen) {
-                        try {
-                            tip = core.getPronunciationMgr().getPronunciation(curWord.getValue());
-                            if (tip.isEmpty()) {
-                                tip = curWord.getPronunciation();
-                            }
-                        } catch (Exception ex) {
-                            // IOHandler.writeErrorLog(ex);
-                            enableProcGen = false;
-                        }
-                    }
-                    if (tip.isEmpty()) {
-                        tip = curWord.getLocalWord();
-                    }
-                    if (tip.isEmpty()) {
-                        tip = curWord.getValue();
-                    }
-                    if (curType != null && (curType.getId() != 0 || core.getPropertiesManager().isTypesMandatory())) {
-                        tip += " : " + (curType.getGloss().isEmpty()
-                                ? curType.getValue() : curType.getGloss());
-                    }
-                    if (!curWord.getDefinition().isEmpty()) {
-                        tip += " : " + WebInterface.getTextFromHtml(curWord.getDefinition());
-                    }
-
-                    theList.setToolTipText(tip);
-                } else {
-                    theList.setToolTipText(DEF_LEX_VALUE);
                 }
+                
+                theList.setToolTipText(tip);
             }
         });
 
@@ -1485,7 +1495,9 @@ public final class ScrLexicon extends PFrame {
             if (entry.getValue() instanceof PTextField textField) {
                 saveWord.setClassTextValue(entry.getKey(), textField.getText());
             } else if (entry.getValue() instanceof PComboBox comboBox) {
-                if (comboBox.getSelectedItem() instanceof WordClassValue curValue) {
+                Object selectedItem = comboBox.getSelectedItem();
+                
+                if (selectedItem instanceof DictNode curValue) {
                     saveWord.setClassValue(entry.getKey(), curValue.getId());
                 } else {
                     // if not an instance of a value, then it's the default selection: remove class from word

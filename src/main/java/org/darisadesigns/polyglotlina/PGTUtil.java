@@ -206,6 +206,7 @@ public class PGTUtil {
     public static final String CLASS_NAME_XID = "wordGrammarClassName";
     public static final String CLASS_APPLY_TYPES_XID = "wordGrammarApplyTypes";
     public static final String CLASS_IS_FREETEXT_XID = "wordGrammarIsFreeTextField";
+    public static final String CLASS_IS_ASSOCIATIVE_XID = "wordGrammarIsAssociative";
     public static final String CLASS_VALUES_COLLECTION_XID = "wordGrammarClassValuesCollection";
     public static final String CLASS_VALUES_NODE_XID = "wordGrammarClassValueNode";
     public static final String CLASS_VALUE_NAME_XID = "wordGrammarClassValueName";
