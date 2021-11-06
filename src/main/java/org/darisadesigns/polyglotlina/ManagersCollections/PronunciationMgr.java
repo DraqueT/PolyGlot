@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -115,9 +115,11 @@ public class PronunciationMgr {
     public void deletePronunciation(PronunciationNode remove) {
         List<PronunciationNode> newProcs = new ArrayList<>();
 
-        pronunciations.stream().filter((node) -> !(node.equals(remove))).forEachOrdered((node) -> {
-            newProcs.add(node);
-        });
+        pronunciations.stream()
+                .filter((node) -> !(node.equals(remove)))
+                .forEachOrdered((node) -> {
+                    newProcs.add(node);
+                });
 
         pronunciations = newProcs;
     }
@@ -136,25 +138,24 @@ public class PronunciationMgr {
      */
     public String getPronunciation(String base) throws Exception {
         String[] spaceDelimited = base.trim().split(" ");
-        String ret = "";
+        StringBuilder ret = new StringBuilder();
         
         for (String fragment : spaceDelimited) {
-            ret += " " + getPronunciationInternal(fragment);
+            ret.append(" ").append(getPronunciationInternal(fragment));
         }
-        
-        return ret.trim();
+        return ret.toString().trim();
     }
     
     private String getPronunciationInternal(String base) throws Exception {
-        String ret = "";
+        StringBuilder ret = new StringBuilder();
 
         // -base.length() fed as initial depth to ensure that longer words cannot be artificially labeled as breaking max depth
         List<PronunciationNode> procCycle = getPronunciationElements(base, -base.length(), true);
         for (PronunciationNode curProc : procCycle) {
-            ret += curProc.getPronunciation();
+            ret.append(curProc.getPronunciation());
         }
 
-        return ret;
+        return ret.toString();
     }
 
     /**
@@ -184,28 +185,23 @@ public class PronunciationMgr {
      * string returned
      */
     private List<PronunciationNode> getPronunciationElements(String base, int depth, boolean beginning) throws Exception {
-        List<PronunciationNode> ret;
+        if (depth > PGTUtil.MAX_PROC_RECURSE)
+            throw new Exception("Max recursions for " + getToolLabel() + " exceeded.");
+
         Iterator<PronunciationNode> finder = pronunciations.iterator();
 
-        if (depth > PGTUtil.MAX_PROC_RECURSE) {
-            throw new Exception("Max recursions for " + getToolLabel() + " exceeded.");
-        }
-        
         // return blank for empty string
-        if (base.isEmpty() || !finder.hasNext()) {
-            ret = new ArrayList<>();
-        } else {
-            // split logic here to use recursion, string comparison, or regex matching
-            if (recurse) {
-                ret = getPronunciationElementsRecurse(base);
-            } else if (core.getPropertiesManager().isDisableProcRegex()) {
-                ret = getPronunciationElementsNoRegex(base, depth, beginning);
-            } else {
-                ret = getPronunciationElementsWithRegex(base, depth, beginning);
-            }
-        }
+        if (base.isEmpty() || !finder.hasNext())
+            return new ArrayList<>();
 
-        return ret;
+        // split logic here to use recursion, string comparison, or regex matching
+        if (recurse)
+            return getPronunciationElementsRecurse(base);
+
+        if (core.getPropertiesManager().isDisableProcRegex())
+            return getPronunciationElementsNoRegex(base, depth, beginning);
+
+        return getPronunciationElementsWithRegex(base, depth, beginning);
     }
     
     private List<PronunciationNode> getPronunciationElementsWithRegex(String base, int depth, boolean beginning) throws Exception {
@@ -353,18 +349,14 @@ public class PronunciationMgr {
     
     @Override
     public boolean equals(Object comp) {
-        boolean ret = false;
+        if (this == comp)
+            return true;
         
-        if (this == comp) {
-            ret = true;
-        } else if (comp instanceof PronunciationMgr) {
-            PronunciationMgr compProp = (PronunciationMgr)comp;
-            
-            ret = recurse == compProp.recurse
+        if (comp instanceof PronunciationMgr compProp)
+            return recurse == compProp.recurse
                     && pronunciations.equals(compProp.pronunciations);
-        }
-        
-        return ret;
+
+        return false;
     }
 
     @Override
@@ -380,19 +372,14 @@ public class PronunciationMgr {
      * @return 
      */
     public boolean usingLookaheadsLookbacks() {
-        boolean ret = false;
-        
         for (PronunciationNode curNode : pronunciations) {
             String pattern = curNode.getValue();
             
             // checks for all positive and negative lookaheads and lookbehinds
-            if (isRegexLookaheadBehind(pattern)) {
-                ret = true;
-                break;
-            }
+            if (isRegexLookaheadBehind(pattern))
+                return true;
         }
-        
-        return ret;
+        return false;
     }
     
     /**
@@ -473,7 +460,7 @@ public class PronunciationMgr {
             for (int i = 0; i < values.length; i += 2) {
                 String value = values[i];
                 if (ret.containsKey(value)) {
-                    List<String> curVals = new  ArrayList(Arrays.asList(ret.get(value)));
+                    List<String> curVals = new ArrayList(Arrays.asList(ret.get(value)));
                     if (!curVals.contains(key)) {
                         curVals.add(key);
                     }

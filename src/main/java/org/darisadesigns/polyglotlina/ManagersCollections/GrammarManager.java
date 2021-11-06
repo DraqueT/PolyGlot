@@ -135,17 +135,13 @@ public abstract class GrammarManager {
     }
     
     public byte[] getRecording(Integer id) throws Exception {
-        byte[] ret = null;
-        
-        if (id != -1) {
-            if (soundMap.containsKey(id)) {
-                ret = soundMap.get(id);
-            } else {
-                throw new Exception("Unable to retrieve related recording with ID: " + id);
-            }
-        }
-        
-        return ret;
+        if (id == -1)
+            return null;
+
+        if (soundMap.containsKey(id))
+            return soundMap.get(id);
+
+        throw new Exception("Unable to retrieve related recording with ID: " + id);
     }
     
     public boolean isEmpty() {

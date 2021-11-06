@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -94,7 +94,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
      */
     @Override
     public void deleteNodeById(Integer _id) throws Exception {
-        LogoNode logo = (LogoNode)getNodeById(_id);
+        LogoNode logo = getNodeById(_id);
         ConWord[] words = getLogoWords(logo);
         
         for (ConWord curWord : words) {
@@ -162,23 +162,18 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
      * @return true if related, false otherwise
      */
     private boolean logoRelatedToWord(LogoNode node, String relWord) {
-        boolean ret = false;
         boolean ignoreCase = core.getPropertiesManager().isIgnoreCase();
-        
+
         if (logoToWord.containsKey(node.getId())) {
-            Iterator<Integer> it = logoToWord.get(node.getId()).iterator();
-            
-            while (it.hasNext()) {
-                ConWord curWord = core.getWordCollection().getNodeById(it.next());
+            for (Integer integer : logoToWord.get(node.getId())) {
+                ConWord curWord = core.getWordCollection().getNodeById(integer);
                 if ((ignoreCase && curWord.getValue().equalsIgnoreCase(relWord))
                         || curWord.getValue().equals(relWord)) {
-                    ret = true;
-                    break;
+                    return true;
                 }
             }
         }
-        
-        return ret;
+        return false;
     }
     
     /**
@@ -216,7 +211,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
         if (initialList != null) {
             it = initialList.iterator();
         }
-        
+
         while (it != null && it.hasNext()) {
             ConWord curNode = core.getWordCollection().getNodeById(it.next());
             retList.add(curNode);
@@ -231,13 +226,10 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
      */
     public LogoNode[] getRadicals() {
         List<LogoNode> retList = new ArrayList<>();
-        Iterator<LogoNode> it = new ArrayList<>(nodeMap.values()).iterator();
 
-        while (it.hasNext()) {
-            LogoNode curNode = it.next();
-            if (curNode.isRadical()) {
+        for (LogoNode curNode : new ArrayList<>(nodeMap.values())) {
+            if (curNode.isRadical())
                 retList.add(curNode);
-            }
         }
         
         this.safeSort(retList);
@@ -270,14 +262,14 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
             Entry<Integer, ArrayList<Integer>> curEntry = setIt.next();
             Iterator<Integer> relIt = curEntry.getValue().iterator();
             String logoId = curEntry.getKey().toString();
-            String wordIds = "";
+            StringBuilder wordIds = new StringBuilder();
             
             while (relIt.hasNext()) {
-                wordIds += ("," + relIt.next());
+                wordIds.append(",").append(relIt.next());
             }
             
             // only add if there is one more more relation
-            if (!wordIds.isEmpty()) {
+            if (wordIds.length() > 0) {
                 Element node = doc.createElement(PGTUtil.LOGO_WORD_RELATION_XID);
                 // node is encoded with the logograph ID first, followed by all related words IDs
                 node.appendChild(doc.createTextNode(logoId + wordIds));
@@ -308,10 +300,10 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
     public void loadLogoRelations(String relations) throws Exception {
         String[] ids = relations.split(",");
         LogoNode relNode;
-        String loadLog = "";
+        StringBuilder loadLog = new StringBuilder();
         
         try {
-            relNode = (LogoNode)getNodeById(Integer.parseInt(ids[0]));
+            relNode = getNodeById(Integer.parseInt(ids[0]));
         } catch (NumberFormatException e) {
             throw new Exception("Unable to load logograph relations.", e);
         }
@@ -326,11 +318,11 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
                 addWordLogoRelation(word, relNode);
             } catch (NumberFormatException e) {
                 core.getOSHandler().getIOHandler().writeErrorLog(e);
-                loadLog += "\nLogograph load error: " + e.getLocalizedMessage();
+                loadLog.append("\nLogograph load error: ").append(e.getLocalizedMessage());
             }
         }
         
-        if (!loadLog.isEmpty()) {
+        if (loadLog.length() > 0) {
             throw new Exception("\nLogograph load errors:");
         }
     }
@@ -381,19 +373,15 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
     
     @Override
     public boolean equals(Object comp) {
-        boolean ret = false;
-        
-        if (comp == this) {
-            ret = true;
-        } else if (comp instanceof LogoCollection) {
-            LogoCollection compLog = (LogoCollection) comp;
-            
-            ret = logoToWord.equals(compLog.logoToWord)
+        if (comp == this)
+            return true;
+
+        if (comp instanceof LogoCollection compLog)
+            return logoToWord.equals(compLog.logoToWord)
                     && wordToLogo.equals(compLog.wordToLogo)
                     && super.equals(comp);
-        }
             
-        return ret;
+        return false;
     }
 
     @Override
