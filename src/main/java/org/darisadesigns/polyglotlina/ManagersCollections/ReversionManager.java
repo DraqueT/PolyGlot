@@ -78,17 +78,16 @@ public class ReversionManager {
     
     public void setMaxReversionCount(int maxRollbackVersions, boolean trimRevisions) {
         this.maxReversionCount = maxRollbackVersions;
-        if(trimRevisions) trimReversions();
+        if(trimRevisions)
+            trimReversions();
     }
     
     /**
      * Trims reversions down to the max number allowed in the options
      */
     public void trimReversions() {
-        int maxVersions = maxReversionCount;
-        
-        if (reversionList.size() > maxVersions && maxVersions != 0) {
-            reversionList = reversionList.subList(0, maxVersions);
+        if (reversionList.size() > maxReversionCount && maxReversionCount != 0) {
+            reversionList = reversionList.subList(0, maxReversionCount);
         }
     }
 }

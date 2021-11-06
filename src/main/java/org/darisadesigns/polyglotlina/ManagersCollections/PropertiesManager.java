@@ -75,15 +75,10 @@ public abstract class PropertiesManager {
      * @return replacement string. empty if none exists.
      */
     public String getCharacterReplacement(String repChar) {
-        String ret;
-        
-        if (!charRep.isEmpty() && charRep.containsKey(repChar)) {
-            ret = charRep.get(repChar);
-        } else {
-            ret = "";
-        }
-        
-        return ret;
+        if (!charRep.isEmpty() && charRep.containsKey(repChar))
+            return charRep.get(repChar);
+
+        return "";
     }
     
     /**
@@ -257,22 +252,21 @@ public abstract class PropertiesManager {
      */
     public void setAlphaOrder(String order, boolean overrideDupe) throws Exception {
         alphaPlainText = order;
-        String error = "";
+        StringBuilder error = new StringBuilder();
 
         alphaOrder.clear();
 
         // if comma delimited, alphabet may contain multiple character values
         if (order.contains(",")) {
             String[] orderVals = order.split(",");
-            
+
             for (int i = 0; i < orderVals.length; i++) {
                 String newEntry = orderVals[i].trim();
-                if (newEntry.isEmpty()) {
+                if (newEntry.isEmpty())
                     continue;
-                }
-                
+
                 if (alphaOrder.containsKey(newEntry) && ! overrideDupe) {
-                    error += "Alphabet contains duplicate entry: " + newEntry;
+                    error.append("Alphabet contains duplicate entry: ").append(newEntry);
                 }
                 else {
                     alphaOrder.put(newEntry, i);
@@ -283,7 +277,7 @@ public abstract class PropertiesManager {
                 String newEntry = order.substring(i, i+1);
                 
                 if (alphaOrder.containsKey(newEntry) && !overrideDupe) {
-                    error += "Alphabet contains duplicate entry: " + newEntry;
+                    error.append("Alphabet contains duplicate entry: ").append(newEntry);
                 }
                 else {
                     alphaOrder.put(newEntry, i);
@@ -291,8 +285,8 @@ public abstract class PropertiesManager {
             }
         }
         
-        if (!error.isEmpty()) {
-            throw new Exception(error.trim());
+        if (error.length() > 0) {
+            throw new Exception(error.toString().trim());
         }
     }
        
@@ -374,11 +368,7 @@ public abstract class PropertiesManager {
     }
 
     public String buildPropertiesReportTitle() {
-        String ret = "";
-
-        ret += ConWordCollection.formatPlain("Language Name: " + WebInterface.encodeHTML(langName) + "<br><br>", core);
-
-        return ret;
+        return ConWordCollection.formatPlain("Language Name: " + WebInterface.encodeHTML(langName) + "<br><br>", core);
     }
 
     /**
@@ -555,16 +545,11 @@ public abstract class PropertiesManager {
      * @return 
      */
     public boolean isAlphabetComplete() {
-        boolean ret = true;
-        
         for (ConWord word : core.getWordCollection().getWordNodes()) {
-            if (!testStringAgainstAlphabet(word.getValue())) {
-                ret = false;
-                break;
-            }
+            if (!testStringAgainstAlphabet(word.getValue()))
+                return false;
         }
-        
-        return ret;
+        return true;
     }
     
     /**
@@ -574,35 +559,30 @@ public abstract class PropertiesManager {
      * order menu
      */
     public boolean testStringAgainstAlphabet(String testString) {
-        int longestChar = alphaOrder.getLongestEntry();
-        boolean ret = false;
-        
         // an empty string means having reached the end of the word without issue. Return true.
-        if (testString.isEmpty()) {
-            ret = true;
-        } else if (!alphaOrder.isEmpty()) {
-            String currentCharacter = ""; // Linguistic character (can be made up of multiple string entries)
-            
-            for (char c : testString.toCharArray()) {
-                if (c == ' ') { // spaces are skipped in all parsing
-                    continue;
-                }
-                
-                currentCharacter += c; // add current character to unmatched prior character (or set value if last character matched)
-                
-                // if current string longer than any recorded, fail
-                if (currentCharacter.length() > longestChar) {
-                    ret = false;
-                    break;
-                } else if (alphaOrder.containsKey(currentCharacter) 
-                        && testStringAgainstAlphabet(testString.substring(currentCharacter.length()))) {
-                    ret = true;
-                    break;
-                }
-            }
+        if (testString.isEmpty())
+            return true;
+
+        if (alphaOrder.isEmpty())
+            return false;
+
+        String currentCharacter = ""; // Linguistic character (can be made up of multiple string entries)
+
+        for (char c : testString.toCharArray()) {
+            if (c == ' ') // spaces are skipped in all parsing
+                continue;
+
+            currentCharacter += c; // add current character to unmatched prior character (or set value if last character matched)
+
+            // if current string longer than any recorded, fail
+            if (currentCharacter.length() > alphaOrder.getLongestEntry())
+                return false;
+
+            if (alphaOrder.containsKey(currentCharacter)
+                    && testStringAgainstAlphabet(testString.substring(currentCharacter.length())))
+                return true;
         }
-        
-        return ret;
+        return false;
     }
     
     /**
@@ -623,7 +603,7 @@ public abstract class PropertiesManager {
                 }
             }
         }
-        
+
         return "???";
     }
     
@@ -678,12 +658,11 @@ public abstract class PropertiesManager {
     
     @Override
     public boolean equals(Object comp) {
+        if (this == comp)
+            return true;
+
         boolean ret = false;
-        
-        if (this == comp) {
-            ret = true;
-        } else if (comp instanceof PropertiesManager) {
-            PropertiesManager prop = (PropertiesManager) comp;
+        if (comp instanceof PropertiesManager prop) {
             ret = conFontStyle.equals(prop.conFontStyle);
             ret = ret && conFontSize == prop.conFontSize;
             ret = ret && localFontSize == prop.localFontSize;
@@ -704,7 +683,6 @@ public abstract class PropertiesManager {
             ret = ret && kerningSpace.equals(prop.kerningSpace);
             ret = ret && useSimplifiedConjugations == prop.useSimplifiedConjugations;
         }
-        
         return ret;
     }
 

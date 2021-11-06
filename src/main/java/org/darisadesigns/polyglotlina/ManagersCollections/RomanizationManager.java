@@ -86,16 +86,13 @@ public class RomanizationManager extends PronunciationMgr {
     
     @Override
     public boolean equals(Object comp) {
-        boolean ret = false;
-        
-        if (this == comp) {
-            ret = true;
-        } else if (comp instanceof RomanizationManager) {
-            ret = enabled == ((RomanizationManager) comp).enabled
-                    && super.equals(comp);
-        }
-        
-        return ret;
+        if (this == comp)
+            return true;
+
+        if (comp instanceof RomanizationManager roMan)
+            return enabled == roMan.enabled && super.equals(comp);
+
+        return false;
     }
 
     @Override
