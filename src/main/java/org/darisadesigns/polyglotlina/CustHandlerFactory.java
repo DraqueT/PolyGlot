@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -194,6 +194,7 @@ public final class CustHandlerFactory {
             boolean bclassName = false;
             boolean bclassApplyTypes = false;
             boolean bclassFreeText = false;
+            boolean bclassAssociative = false;
             boolean bclassValueNode = false;
             boolean bclassValueId = false;
             boolean bclassValueName = false;
@@ -417,6 +418,8 @@ public final class CustHandlerFactory {
                     bclassApplyTypes = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.CLASS_IS_FREETEXT_XID)) {
                     bclassFreeText = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.CLASS_IS_ASSOCIATIVE_XID)) {
+                    bclassAssociative = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.CLASS_VALUES_NODE_XID)) {
                     bclassValueNode = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.CLASS_VALUE_ID_XID)) {
@@ -463,9 +466,6 @@ public final class CustHandlerFactory {
                 if (qName.equalsIgnoreCase(PGTUtil.DICTIONARY_SAVE_DATE)) {
                     blastSave = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_XID)) {
-                    ConWord curWord = core.getWordCollection()
-                            .getBufferWord();
-
                     try {
                         core.getWordCollection().insert(wId);
                     } catch (Exception e) {
@@ -734,6 +734,8 @@ public final class CustHandlerFactory {
                     bclassApplyTypes = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.CLASS_IS_FREETEXT_XID)) {
                     bclassFreeText = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.CLASS_IS_ASSOCIATIVE_XID)) {
+                    bclassAssociative = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.CLASS_VALUES_NODE_XID)) {
                     try {
                         core.getWordClassCollection().getBuffer().insert();
@@ -1105,6 +1107,13 @@ public final class CustHandlerFactory {
                         core.getWordClassCollection().getBuffer().setFreeText(true);
                     } else {
                         core.getWordClassCollection().getBuffer().setFreeText(false);
+                    }
+                } else if (bclassAssociative) {
+                    String freeText = new String(ch, start, length);                    
+                    if (freeText.equals(PGTUtil.TRUE)) {
+                        core.getWordClassCollection().getBuffer().setAssociative(true);
+                    } else {
+                        core.getWordClassCollection().getBuffer().setAssociative(false);
                     }
                 } else if (bclassValueId) {
                     core.getWordClassCollection().getBuffer().buffer.setId(Integer.parseInt(new String(ch, start, length)));

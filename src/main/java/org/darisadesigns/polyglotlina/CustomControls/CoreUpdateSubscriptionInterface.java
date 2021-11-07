@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2015-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
- * Licensed under: MIT Licence
+ * Licensed under: MIT License
  * See LICENSE.TXT included with this code to read the full license agreement.
 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
@@ -19,23 +19,21 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.darisadesigns.polyglotlina.DictCore;
 
 /**
- * This node represents a chapter within the grammar recording section of
- * PolyGlot
  *
- * Uses obsolete Vector class due to how the underlying class API is written...
- * 
  * @author draque
  */
-public interface GrammarChapNode {
-    public void insert();
-    public void clear();
-    public GrammarSectionNode getBuffer();
-    public String getName();
-    public void setName(String _name);
-    public int getChildCount();
-    public void writeXML(Document doc, Element rootElement);
+public interface CoreUpdateSubscriptionInterface {
+    /**
+     * Updates self to new core/core values/settings
+     */
+    public void updateFromCore();
+    
+    /**
+     * Updates core value to new value
+     * @param _core 
+     */
+    public void setCore(DictCore _core);
 }

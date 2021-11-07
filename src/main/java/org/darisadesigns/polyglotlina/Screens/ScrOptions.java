@@ -139,6 +139,7 @@ public final class ScrOptions extends PDialog {
         btnResetOptions = new PButton();
         btnOk = new PButton();
 
+        setTitle("PolyGlot Options");
         setBackground(new java.awt.Color(255, 255, 255));
         setMinimumSize(new java.awt.Dimension(319, 278));
         setModal(true);

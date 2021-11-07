@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -549,7 +549,20 @@ public class ConjugationManager {
      */
     public void deprecateAllConjugations(Integer typeId) {
         Iterator<Entry<Integer, List<ConjugationNode>>> decIt = dList.entrySet().iterator();
+        
+        // rename rules first for easier organization
+        Map<String, ConjugationPair> mappedConjugations = new HashMap<>();
+        for (var conjugation : getAllCombinedIds(typeId)) {
+            mappedConjugations.put(conjugation.combinedId, conjugation);
+        }
+        if (generationRules.containsKey(typeId)) {
+            for (var rule : generationRules.get(typeId)) {
+                ConjugationPair parent = mappedConjugations.get(rule.getCombinationId());
+                rule.setName(parent.label + ": " + rule.getName());
+            }
+        }
 
+        // after renaming, mark deprecations
         while (decIt.hasNext()) {
             Entry<Integer, List<ConjugationNode>> curEntry = decIt.next();
             List<ConjugationNode> curList = curEntry.getValue();
@@ -1302,7 +1315,25 @@ public class ConjugationManager {
             }
         }
     }
+    
+    /**
+     * Updates all instances rules matching those passed in within a given word type
+     *
+     * @param typeId part of speech to update rules for
+     * @param rulesToUpdate rules in this pos to update
+     */
+    public void bulkUpdateRuleInConjugationTemplates(int typeId, List<ConjugationGenRule> rulesToUpdate) {
+        ConjugationGenRule[] rules = this.getConjugationRulesForType(typeId);
 
+        for (ConjugationGenRule rule : rules) {
+            for (ConjugationGenRule ruleUpdateFrom : rulesToUpdate) {
+                if (rule != ruleUpdateFrom && rule.valuesShallowEqual(ruleUpdateFrom)) {
+                    rule.setEqual(ruleUpdateFrom, false);
+                }
+            }
+        }
+    }
+    
     /**
      * Deletes ALL instances of a rule within a given word type
      *

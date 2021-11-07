@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2019, Draque Thompson
+ * Copyright (c) 2015-2021, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -38,9 +38,8 @@ public class PGTreeCellRenderer extends DefaultTreeCellRenderer {
 
     @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean _selected, boolean expanded, boolean leaf, int row, boolean _hasFocus) {
-        Object node = ((DefaultMutableTreeNode) value).getUserObject();
-
-        setText(node.toString());
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+        setText(value.toString());
 
         if (node instanceof GrammarChapNode
                 && expanded) {

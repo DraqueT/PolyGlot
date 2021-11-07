@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -93,7 +93,7 @@ public class ScrDeclensionsGridsTest {
         
         ScrDeclensionsGrids screen = ScrDeclensionsGrids.run(core, OneDimNopop);
         Class<?> classs = screen.getClass();
-        
+
         try {
             Field field = classs.getDeclaredField("autoPopulated");
             field.setAccessible(true);
@@ -103,7 +103,7 @@ public class ScrDeclensionsGridsTest {
         } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
-        }
+        }   
     }
     
     @Test

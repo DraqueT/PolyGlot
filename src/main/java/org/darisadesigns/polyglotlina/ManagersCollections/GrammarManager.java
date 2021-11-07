@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -19,16 +19,12 @@
  */
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
-import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Objects;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -37,17 +33,19 @@ import org.w3c.dom.Element;
  * Grammar manager for PolyGlot organizes and stores all grammar data
  * @author draque
  */
-public class GrammarManager {
-    private final List<GrammarChapNode> chapters;
-    private final Map<Integer, byte[]> soundMap;
-    private GrammarChapNode buffer;
-    private final DictCore core;
+public abstract class GrammarManager {
+    protected final List<GrammarChapNode> chapters;
+    protected final Map<Integer, byte[]> soundMap;
+    protected GrammarChapNode buffer;
+    protected DictCore core;
     
-    public GrammarManager(DictCore _core) {
-        core = _core;
+    public GrammarManager() {
         soundMap = new HashMap<>();
         chapters = new ArrayList<>();
-        buffer = new GrammarChapNode(this);
+    }
+    
+    public void setCore(DictCore _core) {
+        core = _core;
     }
     
     /**
@@ -67,17 +65,6 @@ public class GrammarManager {
     }
     
     /**
-     * clears chapter buffer
-     */
-    public void clear() {
-        buffer = new GrammarChapNode(this);
-    }
-    
-    public GrammarChapNode[] getChapters() {
-        return chapters.toArray(new GrammarChapNode[0]);
-    }
-
-    /**
      * Adds new chapter to index
      * @param newChap new chapter to add
      */
@@ -87,6 +74,20 @@ public class GrammarManager {
     
     public Map<Integer, byte[]> getSoundMap() {
         return soundMap;
+    }
+    
+    /**
+     * Writes all Grammar information to XML document
+     * @param doc Document to write to
+     * @param rootElement root element of document
+     */
+    public void writeXML(Document doc, Element rootElement) {
+        Element grammarRoot = doc.createElement(PGTUtil.GRAMMAR_SECTION_XID);
+        rootElement.appendChild(grammarRoot);
+        
+        chapters.forEach((chapter)->{
+            chapter.writeXML(doc, grammarRoot);
+        });
     }
     
     /**
@@ -109,10 +110,6 @@ public class GrammarManager {
     public void removeChapter(GrammarChapNode remove) {
         chapters.remove(remove);
     }
-    
-    /**
-     * builds and returns new grammar node
-     */
     
     /**
      * Adds or changes a grammar recording.
@@ -149,75 +146,17 @@ public class GrammarManager {
         }
         
         return ret;
-    }    
-    
-    /**
-     * Creates a new grammar section node
-     * @return new section node
-     */
-    public GrammarSectionNode getNewSection() {
-        return new GrammarSectionNode(this);
-    }
-    
-    public DictCore getCore() {
-        return this.core;
-    }
-    
-    /**
-     * Writes all Grammar information to XML document
-     * @param doc Document to write to
-     * @param rootElement root element of document
-     */
-    public void writeXML(Document doc, Element rootElement) {
-        Element grammarRoot = doc.createElement(PGTUtil.GRAMMAR_SECTION_XID);
-        rootElement.appendChild(grammarRoot);
-        
-        chapters.forEach((chapter)->{
-            chapter.writeXML(doc, grammarRoot);
-        });
     }
     
     public boolean isEmpty() {
         return chapters.isEmpty();
     }
     
+    public abstract void clear();
+    public abstract GrammarChapNode[] getChapters();
+    
     @Override
-    public boolean equals(Object comp) {
-        boolean ret = false;
-        
-        if (comp == this) {
-            ret = true;
-        } else if (comp instanceof GrammarManager) {
-            GrammarManager compMan = (GrammarManager)comp;
-            
-            ret = chapters.equals(compMan.chapters);
-            
-            if (ret) {
-                for (Object o : soundMap.entrySet().toArray()) {
-                    Entry<Integer, byte[]> entry = (Entry<Integer, byte[]>)o;
-
-                    int id = entry.getKey();
-                    byte[] soundVal = entry.getValue();
-
-                    ret = compMan.soundMap.containsKey(id);
-
-                    if (ret) {
-                        ret = Arrays.equals(soundVal, compMan.soundMap.get(id));
-                    } else {
-                        break;
-                    }
-                }
-            }
-        }
-        
-        return ret;
-    }
-
+    public abstract boolean equals(Object comp);
     @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 89 * hash + Objects.hashCode(this.chapters);
-        hash = 89 * hash + Objects.hashCode(this.soundMap);
-        return hash;
-    }
+    public abstract int hashCode();
 }

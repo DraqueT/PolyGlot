@@ -826,7 +826,7 @@ public class ScrLogoDetails extends PFrame {
             lstRelWords.setModel(new DefaultListModel<>());
             chkIsRad.setSelected(false);
             ImageIcon icon = new ImageIcon(new LogoNode(core).getLogoBytes());
-            icon.getImage().getScaledInstance(lblLogo.getWidth(), lblLogo.getHeight(), Image.SCALE_SMOOTH);
+            icon = new ImageIcon(icon.getImage().getScaledInstance(lblLogo.getWidth(), lblLogo.getHeight(), Image.SCALE_SMOOTH));
             lblLogo.setIcon(icon);
             populateRelatedWords();
             setEnableControls(false);
@@ -875,7 +875,7 @@ public class ScrLogoDetails extends PFrame {
 
         // set logograph picture
         ImageIcon icon = new ImageIcon(curNode.getLogoBytes());
-        icon.getImage().getScaledInstance(lblLogo.getWidth(), lblLogo.getHeight(), Image.SCALE_SMOOTH);
+        icon = new ImageIcon(icon.getImage().getScaledInstance(lblLogo.getWidth(), lblLogo.getHeight(), Image.SCALE_SMOOTH));
         lblLogo.setIcon(icon);
 
         populateRelatedWords();

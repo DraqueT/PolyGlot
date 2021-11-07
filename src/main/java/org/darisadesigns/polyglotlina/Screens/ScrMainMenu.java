@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -34,7 +34,6 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.FontFormatException;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
@@ -84,11 +83,11 @@ import org.darisadesigns.polyglotlina.CheckLanguageErrors;
 import org.darisadesigns.polyglotlina.Desktop.ClipboardHandler;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.Desktop.DesktopHelpHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopOSHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.HelpHandler;
 import org.darisadesigns.polyglotlina.Desktop.Java8Bridge;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.OptionsManager;
-import org.darisadesigns.polyglotlina.PFontHandler;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.ToolsHelpers.ExportSpellingDictionary;
 import org.darisadesigns.polyglotlina.WebInterface;
@@ -352,7 +351,7 @@ public final class ScrMainMenu extends PFrame {
                 core.getOSHandler().getInfoBox().warning("INI Save Error", e.getLocalizedMessage());
             }
 
-            System.exit(0);
+            PolyGlot.getPolyGlot().exitCleanup();
         }
     }
 
@@ -707,7 +706,7 @@ public final class ScrMainMenu extends PFrame {
         chooser.setApproveButtonText("Save");
         chooser.setCurrentDirectory(core.getWorkingDirectory());
 
-        String fileName = core.getCurFileName().replaceAll(".pgd", ".xls");
+        String fileName = core.getCurFileName().replaceAll("\\.pgd", ".xls");
         chooser.setSelectedFile(new File(fileName));
 
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -751,7 +750,7 @@ public final class ScrMainMenu extends PFrame {
      */
     public void exportFont(boolean exportCharis) {
         JFileChooser chooser = new JFileChooser();
-        String fileName = core.getCurFileName().replaceAll(".pgd", ".ttf");
+        String fileName = core.getCurFileName().replaceAll("\\.pgd", ".ttf");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Font Files", "ttf");
 
         chooser.setDialogTitle("Export Font");
@@ -815,8 +814,7 @@ public final class ScrMainMenu extends PFrame {
      * @param id
      */
     public void selectWordById(int id) {
-        if (curWindow instanceof ScrLexicon) {
-            ScrLexicon scrLexicon = (ScrLexicon) curWindow;
+        if (curWindow instanceof ScrLexicon scrLexicon) {
             scrLexicon.setWordSelectedById(id);
         } else {
             core.getOSHandler().getInfoBox().warning("Open Lexicon",
@@ -833,8 +831,7 @@ public final class ScrMainMenu extends PFrame {
     public ConWord getCurrentUserSelection() {
         ConWord ret = null;
 
-        if (curWindow instanceof ScrLexicon) {
-            ScrLexicon scrLexicon = (ScrLexicon) curWindow;
+        if (curWindow instanceof ScrLexicon scrLexicon) {
             scrLexicon.saveAllValues();
             ret = scrLexicon.getCurrentWord();
         } else {
@@ -943,8 +940,8 @@ public final class ScrMainMenu extends PFrame {
         }
         
         // the search menu causes problems with cached Lexicon if left open
-        if (curWindow instanceof ScrLexicon) {
-            ((ScrLexicon)curWindow).closeAndClearSearchPanel();
+        if (curWindow instanceof ScrLexicon scrLexicon) {
+            scrLexicon.closeAndClearSearchPanel();
         }
 
         // blank the menu
@@ -1098,8 +1095,8 @@ public final class ScrMainMenu extends PFrame {
                 }
             });
             
-            if (w instanceof PFrame) {
-                ((PFrame) w).addWindowFocusListener(new WindowFocusListener() {
+            if (w instanceof PFrame pFrame) {
+                pFrame.addWindowFocusListener(new WindowFocusListener() {
                     @Override
                     public void windowGainedFocus(WindowEvent e) {
                         
@@ -1107,7 +1104,7 @@ public final class ScrMainMenu extends PFrame {
                     
                     @Override
                     public void windowLostFocus(WindowEvent e) {
-                        ((PFrame) w).saveAllValues();
+                        pFrame.saveAllValues();
                     }
                 });
             }
@@ -1189,10 +1186,10 @@ public final class ScrMainMenu extends PFrame {
 
     private void updateAllChildValues(DictCore _core) {
         for (Window win : childWindows) {
-            if (win instanceof PFrame) {
-                ((PFrame) win).updateAllValues(_core);
-            } else if (win instanceof PDialog) {
-                ((PDialog) win).updateAllValues(_core);
+            if (win instanceof PFrame pFrame) {
+                pFrame.updateAllValues(_core);
+            } else if (win instanceof PDialog pDialog) {
+                pDialog.updateAllValues(_core);
             }
         }
     }
@@ -1360,6 +1357,14 @@ public final class ScrMainMenu extends PFrame {
         }
     }
     
+    private void OpenBugReport() {
+        try {
+            DesktopOSHandler.browseToLocation(PGTUtil.TROUBLE_TICKET_URL);
+        } catch (IOException e) {
+            core.getOSHandler().getInfoBox().info("Location Unreachable", "Unable to open ticket site. Please check web connection.");
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -1441,6 +1446,7 @@ public final class ScrMainMenu extends PFrame {
         mnuAbout = new javax.swing.JMenuItem();
         mnuChkUpdate = new javax.swing.JMenuItem();
         mnuExLex = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         jMenuItem8 = new javax.swing.JMenuItem();
 
@@ -1915,6 +1921,14 @@ public final class ScrMainMenu extends PFrame {
         mnuExLex.setText("Example Languages");
         mnuExLex.setToolTipText("Languages with exmples to copy from");
         mnuHelp.add(mnuExLex);
+
+        jMenuItem4.setText("Create Bug Report");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        mnuHelp.add(jMenuItem4);
         mnuHelp.add(jSeparator3);
 
         jMenuItem8.setText("Check for Updates");
@@ -2216,6 +2230,10 @@ public final class ScrMainMenu extends PFrame {
         ExportDictionaryFile();
     }//GEN-LAST:event_mnuExportDictFileActionPerformed
 
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        OpenBugReport();
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClasses;
     private javax.swing.JButton btnGrammar;
@@ -2234,6 +2252,7 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -40,25 +40,9 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
 
     private Window parent;
     private final Icon optionIcon = UIManager.getIcon("FileView.computerIcon");
-    private static final PButton YES;
-    private static final PButton NO;
-    private static final PButton OK;
-    private static final PButton CANCEL;
-
-    static {
-        OK = new PButton() {
-            @Override
-            public boolean equals(Object value) {
-                return Integer.class == value.getClass()
-                        && value.equals(JOptionPane.OK_OPTION);
-            }
-
-            @Override
-            public int hashCode() {
-                return 7;
-            }
-        };
-        YES = new PButton() {
+    
+    private PButton getYesButton() {
+        var YES = new PButton() {
             @Override
             public boolean equals(Object value) {
                 return Integer.class == value.getClass()
@@ -70,8 +54,42 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
                 return 7;
             }
         };
+        
+        YES.setText("Yes");
+        YES.addActionListener((ActionEvent e) -> {
+            JOptionPane pane = (JOptionPane) ((Component) e.getSource()).getParent().getParent();
+            pane.setValue(JOptionPane.YES_OPTION);
+        });
+        
+        return YES;
+    }
+    
+    private PButton getOKButton() {
+        var OK = new PButton() {
+            @Override
+            public boolean equals(Object value) {
+                return Integer.class == value.getClass()
+                        && value.equals(JOptionPane.OK_OPTION);
+            }
 
-        NO = new PButton() {
+            @Override
+            public int hashCode() {
+                return 7;
+            }
+        };
+        
+        OK.setText("OK");
+        OK.addActionListener((ActionEvent e) -> {
+            JOptionPane pane = (JOptionPane) ((Component) e.getSource()).getParent().getParent();
+            // set the value of the option pane
+            pane.setValue(JOptionPane.OK_OPTION);
+        });
+        
+        return OK;
+    }
+    
+    private PButton getNoButton() {
+        var NO = new PButton() {
             @Override
             public boolean equals(Object value) {
                 return Integer.class == value.getClass()
@@ -83,7 +101,18 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
                 return 7;
             }
         };
-        CANCEL = new PButton() {
+        
+        NO.setText("No");
+        NO.addActionListener((ActionEvent e) -> {
+            JOptionPane pane = (JOptionPane) ((Component) e.getSource()).getParent().getParent();
+            pane.setValue(JOptionPane.NO_OPTION);
+        });
+        
+        return NO;
+    }
+    
+    private PButton getCancelButton() {
+        var CANCEL = new PButton() {
             @Override
             public boolean equals(Object value) {
                 return Integer.class == value.getClass()
@@ -96,39 +125,27 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
             }
         };
 
-        OK.setText("OK");
-        OK.addActionListener((ActionEvent e) -> {
-            JOptionPane pane = (JOptionPane) ((Component) e.getSource()).getParent().getParent();
-            // set the value of the option pane
-            pane.setValue(JOptionPane.OK_OPTION);
-        });
-        
-        YES.setText("Yes");
-        YES.addActionListener((ActionEvent e) -> {
-            JOptionPane pane = (JOptionPane) ((Component) e.getSource()).getParent().getParent();
-            pane.setValue(JOptionPane.YES_OPTION);
-        });
-
-        NO.setText("No");
-        NO.addActionListener((ActionEvent e) -> {
-            JOptionPane pane = (JOptionPane) ((Component) e.getSource()).getParent().getParent();
-            pane.setValue(JOptionPane.NO_OPTION);
-        });
-
         CANCEL.setText("Cancel");
         CANCEL.addActionListener((ActionEvent e) -> {
             JOptionPane pane = (JOptionPane) ((Component) e.getSource()).getParent().getParent();
             pane.setValue(JOptionPane.CANCEL_OPTION);
         });
+        
+        return CANCEL;
     }
     
     public DesktopInfoBox(Window _parent) {
         super();
         parent = _parent;
     }
+   
     
-    public void setParent(Window _parent) {
+    public void setParentWindow(Window _parent) {
         parent = _parent;
+    }
+    
+    public Window getParentWindow() {
+        return parent;
     }
     
     @Override
@@ -170,7 +187,8 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
      * @return true if chooser accepts, false otherwise
      */
     public boolean actionConfirmation(String title, String message) {
-        PButton[] buttons = {YES, NO};
+        PButton[] buttons = {getYesButton(), getNoButton()};
+        
         int option = POptionPane.internalShowOptionDialog(parent,
                 message,
                 title,
@@ -222,7 +240,7 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
 
     private Integer doYesNoCancel(String title, String message) {
         int ret;
-        PButton[] option = {YES, NO, CANCEL};
+        PButton[] option = {getYesButton(), getNoButton(), getCancelButton()};
 
         ret = POptionPane.internalShowOptionDialog(parent, 
                 message, 
@@ -238,7 +256,7 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
 
     private void doError(String title, String message) {
         if (!PGTUtil.isForceSuppressDialogs()) {
-            Object[] option = {OK};        
+            Object[] option = {getOKButton()};        
             POptionPane.internalShowOptionDialog(parent, message, title, DEFAULT_OPTION,
                              JOptionPane.ERROR_MESSAGE, null, option, null);
         }
@@ -246,14 +264,14 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
 
     private void doWarning(String title, String message) {
         if (!PGTUtil.isForceSuppressDialogs()) {
-            Object[] option = {OK};
+            Object[] option = {getOKButton()};
             POptionPane.internalShowOptionDialog(parent, message, title, DEFAULT_OPTION,
                              JOptionPane.WARNING_MESSAGE, null, option, null);
         }
     }
 
     private void doInfo(String title, String message) {
-        Object[] option = {OK};        
+        Object[] option = {getOKButton()};        
         POptionPane.internalShowOptionDialog(parent, message, title, DEFAULT_OPTION,
                          JOptionPane.INFORMATION_MESSAGE, null, option, null);
     }

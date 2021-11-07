@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -40,11 +40,14 @@ import org.darisadesigns.polyglotlina.OSHandler.FileReadListener;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import org.darisadesigns.polyglotlina.CustomControls.CoreUpdateSubscriptionInterface;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -55,7 +58,7 @@ import org.xml.sax.SAXException;
  */
 public class DictCore {
 
-    private PGTUtil pgtUtil;
+    private final PGTUtil pgtUtil;
     private ConWordCollection wordCollection;
     private TypeCollection typeCollection;
     private ConjugationManager conjugationMgr;
@@ -74,6 +77,7 @@ public class DictCore {
     private boolean curLoading = false;
     private Instant lastSaveTime = Instant.MIN;
     private String curFileName = "";
+    private List<CoreUpdateSubscriptionInterface> subscribers;
     
     /**
      * Language core initialization
@@ -81,14 +85,15 @@ public class DictCore {
      * @param _propertiesManager
      * @param _osHandler
      * @param _util
+     * @param _grammarManager
      */
-    public DictCore(PropertiesManager _propertiesManager, OSHandler _osHandler, PGTUtil _util) {
+    public DictCore(PropertiesManager _propertiesManager, OSHandler _osHandler, PGTUtil _util, GrammarManager _grammarManager) {
         osHandler = _osHandler;
         pgtUtil = _util;
-        initializeDictCore(_propertiesManager);
+        initializeDictCore(_propertiesManager, _grammarManager);
     }
     
-    private void initializeDictCore(PropertiesManager _propertiesManager) {
+    private void initializeDictCore(PropertiesManager _propertiesManager, GrammarManager _grammarManager) {
         try {
             wordCollection = new ConWordCollection(this);
             typeCollection = new TypeCollection(this);
@@ -99,7 +104,8 @@ public class DictCore {
             romMgr = new RomanizationManager(this);
             famManager = new FamilyManager(this);
             logoCollection = new LogoCollection(this);
-            grammarManager = new GrammarManager(this);
+            _grammarManager.setCore(this);
+            grammarManager = _grammarManager;
             wordClassCollection = new WordClassCollection(this);
             imageCollection = new ImageCollection(this);
             etymologyManager = new EtymologyManager(this);
@@ -107,6 +113,7 @@ public class DictCore {
             toDoManager = new ToDoManager();
 
             PAlphaMap<String, Integer> alphaOrder = propertiesManager.getAlphaOrder();
+            subscribers = new ArrayList<>();
 
             wordCollection.setAlphaOrder(alphaOrder);
             logoCollection.setAlphaOrder(alphaOrder);
@@ -180,6 +187,9 @@ public class DictCore {
      * @param _core new core to push
      */
     public void pushUpdateWithCore(DictCore _core) {
+        // ------------------------------
+        // OLD STYLE OF UPDATING OBJECTS
+        // ------------------------------
         StackTraceElement[] stack = Thread.currentThread().getStackTrace();
 
         // prevent recursion (exclude check of top method, obviously)
@@ -194,6 +204,32 @@ public class DictCore {
         if(null != listener) {
             listener.coreUpdated(_core);
         }
+        
+        // ------------------------------
+        // NEW STYLE OF UPDATING OBJECTS
+        // ------------------------------
+        sendUpdate(_core);
+    }
+    
+    /**
+     * subscribes to updates from core
+     * @param newSub 
+     */
+    public void subscribe(CoreUpdateSubscriptionInterface newSub) {
+        if (!subscribers.contains(newSub)) {
+            subscribers.add(newSub);
+        }
+    }
+    
+    /**
+     * Sends out update to all subscribers
+     * @param core
+     */
+    public void sendUpdate(DictCore core) {
+        subscribers.forEach(subscriber -> {
+            subscriber.setCore(core);
+            subscriber.updateFromCore();
+        });
     }
 
     /**
@@ -375,7 +411,7 @@ public class DictCore {
      * @throws java.io.IOException 
      */
     public void revertToState(byte[] revision, String fileName) throws IOException{
-        DictCore revDict = new DictCore(this.propertiesManager, this.osHandler, this.pgtUtil);
+        DictCore revDict = new DictCore(this.propertiesManager, this.osHandler, this.pgtUtil, this.grammarManager);
         revDict.readFile(fileName, revision);
         
         pushUpdateWithCore(revDict);
@@ -587,8 +623,7 @@ public class DictCore {
     public boolean equals(Object comp) {
         boolean ret = false;
 
-        if (comp instanceof DictCore) {
-            DictCore compCore = (DictCore)comp;
+        if (comp instanceof DictCore compCore) {
             
             ret = wordCollection.equals(compCore.wordCollection);
             ret = ret && typeCollection.equals(compCore.typeCollection);

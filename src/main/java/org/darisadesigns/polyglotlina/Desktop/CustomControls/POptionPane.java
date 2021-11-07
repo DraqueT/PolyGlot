@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2019, Draque Thompson
+ * Copyright (c) 2016-2021, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -99,6 +99,9 @@ public class POptionPane extends JOptionPane {
         pane.selectInitialValue();
 
         dialog.toFront();
+        dialog.setAlwaysOnTop(true);
+        dialog.toFront();
+        dialog.requestFocus();
         dialog.setVisible(true);
         dialog.dispose();
 

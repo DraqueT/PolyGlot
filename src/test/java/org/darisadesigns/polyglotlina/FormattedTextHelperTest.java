@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2018-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -30,7 +30,8 @@ import java.util.Map.Entry;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
-import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopGrammarChapNode;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopGrammarSectionNode;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PGrammarPane;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.FormattedTextHelper;
@@ -132,7 +133,7 @@ public class FormattedTextHelperTest {
         System.out.println("FormattedTextHelperTest.testGetSectionTextFontSpecific");
         GrammarChapNode chap = core.getGrammarManager().getChapters()[0];
         
-        String sectionText = ((GrammarSectionNode)chap.children.get(0)).getSectionText();
+        String sectionText = ((DesktopGrammarSectionNode)((DesktopGrammarChapNode)chap).getFirstChild()).getSectionText();
         List<Entry<String, PFontInfo>> results = FormattedTextHelper.getSectionTextFontSpecific(sectionText, core);
         Entry<String, PFontInfo> title = results.get(0);
         Entry<String, PFontInfo> lodenkurExample = results.get(6);
@@ -165,7 +166,7 @@ public class FormattedTextHelperTest {
         System.out.println("FormattedTextHelperTest.testStorageFormat");
         PGrammarPane pane = new PGrammarPane(core);
         GrammarChapNode chap = core.getGrammarManager().getChapters()[0];
-        String sectionText = ((GrammarSectionNode)chap.children.get(1)).getSectionText();
+        String sectionText = ((DesktopGrammarSectionNode)((DesktopGrammarChapNode)chap).getChildAt(1)).getSectionText();
         
         try {
             FormattedTextHelper.restoreFromString(sectionText, pane, core);

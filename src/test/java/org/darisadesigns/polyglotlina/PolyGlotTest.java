@@ -42,7 +42,6 @@ public class PolyGlotTest {
             PolyGlot.main(args);
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            //e.printStackTrace();
         }
     }
     
@@ -59,7 +58,6 @@ public class PolyGlotTest {
             PolyGlot.main(args);
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            //e.printStackTrace();
         }
     }
     
@@ -76,7 +74,6 @@ public class PolyGlotTest {
             PolyGlot.main(args);
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            //e.printStackTrace();
         }
     }
     
@@ -94,7 +91,6 @@ public class PolyGlotTest {
             PolyGlot.main(args);
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            //e.printStackTrace();
         }
     }
 }

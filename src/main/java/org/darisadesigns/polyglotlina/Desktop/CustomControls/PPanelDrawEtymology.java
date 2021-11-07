@@ -99,6 +99,7 @@ public final class PPanelDrawEtymology extends JPanel {
      * Builds the etymology tree that the graphic representation object consumes
      */
     private void buildEtTree() {
+        lowestDepth = 0;
         addEtTreeParents(myWordPosition);
         addEtTreeChildren(myWordPosition, myWordPosition.depth);
         columnWidth.clear();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2019, Draque Thompson
+ * Copyright (c) 2015-2021, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -20,7 +20,6 @@
 package org.darisadesigns.polyglotlina.Desktop;
 
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
-import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import java.awt.Window;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

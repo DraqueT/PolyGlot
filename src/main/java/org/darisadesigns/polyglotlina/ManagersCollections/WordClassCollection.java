@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2020, Draque Thompson
+ * Copyright (c) 2016-2021, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -219,7 +219,12 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
         boolean ret = true;
 
         if (nodeMap.containsKey(classId)) {
-            if (!nodeMap.get(classId).isValid(valId)) {
+            WordClass wordClass = nodeMap.get(classId);
+            
+            if (wordClass.isAssociative()) {
+                // This will revert to an unknown value if unable to be found
+                ret = true;
+            }else if (!wordClass.isValid(valId)) {
                 ret = false;
             }
         } else {

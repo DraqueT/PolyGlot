@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, draque
+ * Copyright (c) 2019-2021, Draque Thompson draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -231,5 +231,168 @@ public class ConWordCollectionTest {
         }
         
         assertTrue(core.getWordCollection().testLocalValueExists(localVal));
+    }
+    
+    @Test
+    public void testFilterConword_noRegex() {
+        System.out.println("ConWordCollectionTest.testFilterConword_noRegex");
+        
+        int expectedResultCount = 22;
+        
+        DictCore dictCore = DummyCore.newCore();
+        ConWord filter = new ConWord();
+        filter.setWordTypeId(0);
+        filter.setValue("w");
+        
+        try {
+            dictCore.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            
+            var filteredList = dictCore.getWordCollection().filteredList(filter);
+            
+            assertEquals(expectedResultCount, filteredList.length, "Expected: " + expectedResultCount + " Saw: " + filteredList.length);
+            
+            for (var word : filteredList) {
+                assertTrue(word.getValue().contains("w"));
+            }
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testFilterLocalword_noRegex() {
+        System.out.println("ConWordCollectionTest.testFilterConword_noRegex");
+        
+        int expectedResultCount = 65;
+        
+        DictCore dictCore = DummyCore.newCore();
+        ConWord filter = new ConWord();
+        filter.setWordTypeId(0);
+        filter.setLocalWord("w");
+        
+        try {
+            dictCore.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            
+            var filteredList = dictCore.getWordCollection().filteredList(filter);
+            
+            assertEquals(expectedResultCount, filteredList.length, "Expected: " + expectedResultCount + " Saw: " + filteredList.length);
+            
+            for (var word : filteredList) {
+                assertTrue(word.getLocalWord().contains("w"));
+            }
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testFilterLocalword_withRegex() {
+        System.out.println("ConWordCollectionTest.testFilterLocalword_withRegex");
+        
+        int expectedResultCount = 2;
+        
+        DictCore dictCore = DummyCore.newCore();
+        ConWord filter = new ConWord();
+        filter.setWordTypeId(0);
+        filter.setLocalWord("b.d");
+        
+        try {
+            dictCore.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            
+            var filteredList = dictCore.getWordCollection().filteredList(filter);
+            
+            assertEquals(expectedResultCount, filteredList.length, "Expected: " + expectedResultCount + " Saw: " + filteredList.length);
+            
+            for (var word : filteredList) {
+                assertTrue(word.getLocalWord().matches("b.d"));
+            }
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testFilterPartOfSpeech() {
+        System.out.println("ConWordCollectionTest.testFilterPartOfSpeech");
+        
+        int expectedResultCount = 17;
+        
+        DictCore dictCore = DummyCore.newCore();
+        ConWord filter = new ConWord();
+        filter.setWordTypeId(2);
+        
+        try {
+            dictCore.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            
+            var filteredList = dictCore.getWordCollection().filteredList(filter);
+            
+            assertEquals(expectedResultCount, filteredList.length, "Expected: " + expectedResultCount + " Saw: " + filteredList.length);
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testFilterProcSpeech() {
+        System.out.println("ConWordCollectionTest.testFilterPartOfSpeech");
+        
+        int expectedResultCount = 1;
+        
+        DictCore dictCore = DummyCore.newCore();
+        ConWord filter = new ConWord();
+        filter.setPronunciation("ʃsiːʃ↘kuː");
+        
+        try {
+            dictCore.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            
+            var filteredList = dictCore.getWordCollection().filteredList(filter);
+            
+            assertEquals(expectedResultCount, filteredList.length, "Expected: " + expectedResultCount + " Saw: " + filteredList.length);
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testFilterDefinition() {
+        System.out.println("ConWordCollectionTest.testFilterDefinition");
+        
+        int expectedResultCount = 1;
+        
+        DictCore dictCore = DummyCore.newCore();
+        ConWord filter = new ConWord();
+        filter.setDefinition("bed");
+        
+        try {
+            dictCore.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            
+            var filteredList = dictCore.getWordCollection().filteredList(filter);
+            
+            assertEquals(expectedResultCount, filteredList.length, "Expected: " + expectedResultCount + " Saw: " + filteredList.length);
+            assertTrue(filteredList[0].getDefinition().contains("bed"));
+        } catch (Exception e) {
+            fail(e);
+        }
+  }
+        
+    @Test
+    public void testFilterEtymology() {
+        System.out.println("ConWordCollectionTest.testFilterEtymology");
+        
+        int expectedResultCount = 1;
+        
+        DictCore dictCore = DummyCore.newCore();
+        ConWord filter = new ConWord();
+        
+        try {
+            dictCore.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            filter.setFilterEtyParent(dictCore.getWordCollection().getNodeById(398));
+            
+            var filteredList = dictCore.getWordCollection().filteredList(filter);
+            assertEquals(expectedResultCount, filteredList.length, "Expected: " + expectedResultCount + " Saw: " + filteredList.length);
+            assertTrue(filteredList[0].getValue().equals("8d6"));
+        } catch (Exception e) {
+            fail(e);
+        }
     }
 }

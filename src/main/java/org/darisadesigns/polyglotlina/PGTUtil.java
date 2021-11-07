@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -28,6 +28,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 
 /**
  * This contains various constant vales in PolyGlot
@@ -54,6 +55,9 @@ public class PGTUtil {
     public static final String BUILD_DATE_TIME_LOCATION = "/assets/org/DarisaDesigns/buildDate";
     public static final String[] SWADESH_LISTS = {"Original_Swadesh", "Modern_Swadesh"};
     public static final int WINDOWS_CLIPBOARD_DELAY = 15;
+    public static final int SECONDS_BETWEEN_AUTO_SAVES = 300000; // 5 minutes in microsecnds
+    public static final String AUTO_SAVE_FILE_NAME = ".pgtAutoSave.bak";
+    public static final String TROUBLE_TICKET_URL = "https://github.com/DraqueT/PolyGlot/issues/new";
 
     // properties on words
     public static final String LEXICON_XID = "lexicon";
@@ -202,6 +206,7 @@ public class PGTUtil {
     public static final String CLASS_NAME_XID = "wordGrammarClassName";
     public static final String CLASS_APPLY_TYPES_XID = "wordGrammarApplyTypes";
     public static final String CLASS_IS_FREETEXT_XID = "wordGrammarIsFreeTextField";
+    public static final String CLASS_IS_ASSOCIATIVE_XID = "wordGrammarIsAssociative";
     public static final String CLASS_VALUES_COLLECTION_XID = "wordGrammarClassValuesCollection";
     public static final String CLASS_VALUES_NODE_XID = "wordGrammarClassValueNode";
     public static final String CLASS_VALUE_NAME_XID = "wordGrammarClassValueName";
@@ -321,7 +326,8 @@ public class PGTUtil {
     public static final int CHECKBOX_ROUNDING = 3;
 
     // UI Elements to set on OSX (copy/paste/cut)
-    public static final String[] INPUT_MAPS = {"Button.focusInputMap",
+    public static final String[] INPUT_MAPS = {
+        "Button.focusInputMap",
         "CheckBox.focusInputMap",
         "ComboBox.ancestorInputMap",
         "EditorPane.focusInputMap",
@@ -346,7 +352,8 @@ public class PGTUtil {
         "TextField.focusInputMap",
         "TextPane.focusInputMap",
         "ToggleButton.focusInputMap",
-        "Tree.focusInputMap"};
+        "Tree.focusInputMap"
+    };
 
     public static final boolean IS_OSX;
     public static final boolean IS_WINDOWS;
@@ -359,7 +366,7 @@ public class PGTUtil {
         IS_LINUX = isLinux();
         
         // sets version number and beta status
-        String version = "3.3.1B";
+        String version = getVersion();
         if (version.contains("B")) {
             IS_BETA = true;
             PGT_VERSION = version.replace("B", "");
@@ -416,18 +423,39 @@ public class PGTUtil {
         VERSION_HIERARCHY.put("3.2", 43);
         VERSION_HIERARCHY.put("3.3", 44);
         VERSION_HIERARCHY.put("3.3.1", 45);
+        VERSION_HIERARCHY.put("3.3.1B", 46);
+        VERSION_HIERARCHY.put("3.3.5", 46);
+        VERSION_HIERARCHY.put("3.5", 46);
         
-        // Gather build date/time from resources (if it does not exist, ignore)
-        URL buildDate = PGTUtil.class.getResource(BUILD_DATE_TIME_LOCATION);
-        String buildDateString = "";
-        if (buildDate != null) {
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(buildDate.openStream(), StandardCharsets.UTF_8))) {
-                buildDateString = br.readLine();
-            } catch (IOException ex) {
-                buildDateString = "BUILD DATE FILE NOT PRESENT";
+        BUILD_DATE_TIME = getBuildDate();
+    }
+    
+    private static String getVersion() {
+        URL version = PGTUtil.class.getResource(VERSION_LOCATION);
+        
+        if (version != null) {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(version.openStream(), StandardCharsets.UTF_8))) {
+                return br.readLine();
+            } catch (IOException e) {
+                DesktopIOHandler.getInstance().writeErrorLog(e, "Unable to fetch version at startup");
             }
         }
-        BUILD_DATE_TIME = buildDateString;
+
+        return "?.?";
+    }
+    
+    private static String getBuildDate() {
+        URL buildDate = PGTUtil.class.getResource(BUILD_DATE_TIME_LOCATION);
+        
+        if (buildDate != null) {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(buildDate.openStream(), StandardCharsets.UTF_8))) {
+                return br.readLine();
+            } catch (IOException e) {
+                DesktopIOHandler.getInstance().writeErrorLog(e, "Unable to fetch build date at startup");
+            }
+        }
+
+        return "BUILD DATE FILE NOT PRESENT";
     }
     
     // ENVIRONMENT VARIABLES

@@ -19,24 +19,10 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.Desktop.ClipboardHandler;
-import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Desktop.FormattedTextHelper;
-import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
-import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
-import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.HighlightCaret;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PComboBox;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PGDocument;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PGrammarPane;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.ExternalCode.GlyphVectorPainter;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTree;
-import org.darisadesigns.polyglotlina.Desktop.SoundRecorder;
+import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -68,12 +54,26 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
+import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
+import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
+import org.darisadesigns.polyglotlina.Desktop.ClipboardHandler;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopGrammarChapNode;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopGrammarSectionNode;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.HighlightCaret;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
-import org.darisadesigns.polyglotlina.CustomControls.TreeNode;
-import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
-import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PComboBox;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PGDocument;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PGrammarPane;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTree;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammarManager;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
+import org.darisadesigns.polyglotlina.Desktop.SoundRecorder;
 
 /**
  * This form displays and allows editing of a chapter/section style grammar text
@@ -84,8 +84,7 @@ import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 public final class ScrGrammarGuide extends PFrame {
 
     private final String defTime;
-    private DefaultMutableTreeNode rootNode;
-    private final GrammarManager gramMan;
+    private final DesktopGrammarManager gramMan;
     private SoundRecorder soundRecorder;
     private boolean isUpdating;
     private final ImageIcon playButtonUp;
@@ -104,7 +103,7 @@ public final class ScrGrammarGuide extends PFrame {
      */
     public ScrGrammarGuide(DictCore _core) {
         super(_core);
-        gramMan = core.getGrammarManager();
+        gramMan = (DesktopGrammarManager)core.getGrammarManager();
         
         isUpdating = false;
         defTime = "00:00:00";
@@ -145,7 +144,7 @@ public final class ScrGrammarGuide extends PFrame {
         setupForm();
     }
     
-    private void setupForm() {
+    private void setupForm() {        
         int divider = PolyGlot.getPolyGlot().getOptionsManager().getDividerPosition(this.getClass().getName());
         
         if (divider > -1) {
@@ -160,7 +159,7 @@ public final class ScrGrammarGuide extends PFrame {
     }
     
     private void setupChapTreeModel() {
-        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(new GrammarChapNode("Root Node", gramMan));
+        DefaultMutableTreeNode rootNode = new DesktopGrammarChapNode("Root Node", gramMan);
         DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
         treChapList.setModel(treeModel);
         treChapList.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -245,9 +244,556 @@ public final class ScrGrammarGuide extends PFrame {
                 soundRecorder.playPause();
             } catch (IOException e) {
                 // ignore any sound errors here. We're killing the screen, and no process can be orphaned in doing so.
-                // IOHandler.writeErrorLog(e);
+                // core.getOSHandler().getIOHandler().writeErrorLog(e);
             }
         }
+    }
+    
+    private void updateFontSize() {
+        try {
+            Integer.parseInt(txtFontSize.getText());
+        } catch (NumberFormatException e) {
+            // user error
+            // core.getOSHandler().getIOHandler().writeErrorLog(e);
+            core.getOSHandler().getInfoBox().warning("Font Size", "Invalid size: " + txtFontSize.getText());
+            txtFontSize.setText("12");
+        }
+        setFont();
+    }
+
+    /**
+     * Sets up initial values of components
+     */
+    private void setInitialValues() {
+        // popping to back somewhere here
+        treChapList.requestFocus();
+        soundRecorder.setTimer(txtTimer);
+        soundRecorder.setSlider(sldSoundPosition);
+        txtSection.setDocument(new PGDocument(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon()));
+        treChapList.setRootVisible(false);
+        txtTimer.setText(defTime);
+        txtSection.addStyle("default", null); // default style makes word wrap active
+
+        try {
+            txtTimer.setFont(PFontHandler.getLcdFont().deriveFont(Font.PLAIN, 18f));
+        } catch (FontFormatException | IOException e) {
+            core.getOSHandler().getIOHandler().writeErrorLog(e);
+            core.getOSHandler().getInfoBox().error("Font Error", "Unable to load LCD font due to: " + e.getMessage());
+        }
+
+        btnPlayPauseAudio.setText("");
+        btnRecordAudio.setText("");
+        btnAddSection.setText("");
+        btnDelete.setText("");
+        btnAddSection.setIcon(PGTUtil.getSizedIcon(addButton, 21, 21));
+        btnAddSection.setPressedIcon(PGTUtil.getSizedIcon(addButtonPressed, 21, 21));
+        btnDelete.setIcon(PGTUtil.getSizedIcon(deleteButton, 21, 21));
+        btnDelete.setPressedIcon(PGTUtil.getSizedIcon(deleteButtonPressed, 21, 21));
+        btnAddSection.setContentAreaFilled(false);
+        btnDelete.setContentAreaFilled(false);
+    }
+
+    /**
+     * Sets input font/font of selected text
+     */
+    private void setFont() {
+        Font natFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
+        Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
+        SimpleAttributeSet aset = new SimpleAttributeSet();
+
+        // natlang font is always 0, conlang font always 1
+        if (cmbFonts.getSelectedIndex() == 0) {
+            StyleConstants.setFontFamily(aset, natFont.getFamily());
+        } else {
+            aset.addAttribute(GlyphVectorPainter.KEY_KERNING, core.getPropertiesManager().getKerningSpace() * 10);
+            StyleConstants.setFontFamily(aset, conFont.getFamily());
+        }
+
+        StyleConstants.setForeground(aset,
+                FormattedTextHelper.textToColor((String) cmbFontColor.getSelectedItem()));
+
+        StyleConstants.setFontSize(aset, Integer.parseInt(txtFontSize.getText()));
+
+        txtSection.setCharacterAttributes(aset, true);
+
+        int caretStart = txtSection.getSelectionStart();
+        int caretEnd = txtSection.getSelectionEnd();
+
+        // logic for ensuring LTR enforcement if no text is currently selected
+        if (caretStart == caretEnd
+                && core.getPropertiesManager().isEnforceRTL()) {
+            StyledDocument doc = txtSection.getStyledDocument();
+            try {
+                doc.insertString(caretStart, " ", aset);
+                caretEnd++;
+            } catch (BadLocationException e) {
+                core.getOSHandler().getIOHandler().writeErrorLog(e);
+                core.getOSHandler().getInfoBox().warning("Font Error", "Problem setting font: "
+                        + e.getLocalizedMessage());
+            }
+        }
+
+        if (core.getPropertiesManager().isEnforceRTL()) {
+            // this ensures that the correct sections are displayed RTL
+            savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
+            populateProperties();
+        }
+
+        txtSection.requestFocus();
+        txtSection.setSelectionStart(caretStart);
+        txtSection.setSelectionEnd(caretEnd);
+    }
+
+    /**
+     * sets up object listeners
+     */
+    private void setupListeners() {
+        txtSearch.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                if (!isUpdating) {
+                    populateFromSearch();
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                if (!isUpdating) {
+                    populateFromSearch();
+                }
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if (!isUpdating) {
+                    populateFromSearch();
+                }
+            }
+        });
+        txtName.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                if (!isUpdating) {
+                    updateName();
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                if (!isUpdating) {
+                    updateName();
+                }
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if (!isUpdating) {
+                    updateName();
+                }
+            }
+        });
+        treChapList.addTreeSelectionListener((TreeSelectionEvent e) -> {
+            TreePath oldPath = e.getOldLeadSelectionPath();
+            if (oldPath != null) {
+                Object oldNode = oldPath.getPathComponent(oldPath.getPathCount() - 1);
+                savePropsToNode((DefaultMutableTreeNode) oldNode);
+            }
+            
+            closeAllPlayRecord();
+            populateProperties();
+        });
+        // add listener for character replacement logic
+        txtSection.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                Character c = e.getKeyChar();
+                String repString = core.getPropertiesManager().getCharacterReplacement(c.toString());
+                
+                // only run replacement logic if currently set to Conlang font
+                // replacement logic at form level because this text editor can handle multiple fonts simultaneously
+                if (!repString.isEmpty()
+                        && cmbFonts.getSelectedItem().equals(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon().getName())) {
+                    try {
+                        e.consume();
+                        ClipboardHandler cb = new ClipboardHandler();
+                        cb.cacheClipboard();
+                        cb.setClipboardContents(repString);
+                        txtSection.paste();
+                        cb.restoreClipboard();
+                    } catch (Exception ex) {
+                        core.getOSHandler().getIOHandler().writeErrorLog(ex);
+                        core.getOSHandler().getInfoBox().error("Character Replacement Error",
+                                "Clipboard threw error during character replacement process:"
+                                + ex.getLocalizedMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                // do nothing
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                // do nothing
+            }
+        });
+    }
+
+    /**
+     * Saves current grammar properties to the node passed in. If null, nothing.
+     *
+     * @param node node to save values to
+     */
+    public void savePropsToNode(DefaultMutableTreeNode node) {
+        if (node instanceof GrammarSectionNode secNode) {
+            secNode.setName(txtName.getText());
+            secNode.setRecording(soundRecorder.getSound());
+            try {
+                secNode.setSectionText(FormattedTextHelper.storageFormat(txtSection));
+            } catch (Exception e) {
+                core.getOSHandler().getIOHandler().writeErrorLog(e);
+                core.getOSHandler().getInfoBox().error("Section Save Error", "Unable to save section text: "
+                        + e.getLocalizedMessage());
+            }
+        } else if (node instanceof GrammarChapNode chapNode) {
+            chapNode.setName(txtName.getText());
+        }
+    }
+
+    /**
+     * Updates name from UI element of currently selected chapter or section
+     */
+    private void updateName() {
+        boolean localUpdating = isUpdating;
+        isUpdating = true;
+
+        Object selection = treChapList.getLastSelectedPathComponent();
+
+        if (selection instanceof GrammarSectionNode grammarSectionNode) {
+            grammarSectionNode.setName(txtName.getText());
+        } else if (selection instanceof GrammarChapNode grammarChapNode) {
+            grammarChapNode.setName(txtName.getText());
+        }
+
+        treChapList.repaint();
+        isUpdating = localUpdating;
+    }
+
+    /**
+     * Stops all recording and play streams
+     */
+    private void closeAllPlayRecord() {
+        try {
+            if (soundRecorder.isPlaying()) {
+                soundRecorder.playPause();
+            }
+            if (soundRecorder.isRecording()) {
+                soundRecorder.endRecording();
+            }
+        } catch (IOException e) {
+            // on exception, inform user and replace sound recorder
+            core.getOSHandler().getIOHandler().writeErrorLog(e);
+            soundRecorder = new SoundRecorder(this);
+            soundRecorder.setButtons(btnRecordAudio, btnPlayPauseAudio, playButtonUp, playButtonDown, recordButtonUp, recordButtonDown);
+            core.getOSHandler().getInfoBox().error("Recorder Error", "Unable to end audio stream: " + e.getLocalizedMessage());
+        }
+    }
+
+    /**
+     * Populates properties of chapter/section and sets appropriate controls
+     */
+    private void populateProperties() {
+        if (isUpdating) {
+            return;
+        }
+
+        isUpdating = true;
+
+        Object selection = treChapList.getLastSelectedPathComponent();
+        if (selection instanceof GrammarChapNode chapNode) {
+            txtName.setText(chapNode.getName());
+            txtName.setEnabled(true);
+            txtSection.setText("");
+            txtSection.setEnabled(false);
+            btnApply.setEnabled(false);
+            txtFontSize.setEnabled(false);
+            cmbFontColor.setEnabled(false);
+            cmbFonts.setEnabled(false);
+            btnPlayPauseAudio.setEnabled(false);
+            btnRecordAudio.setEnabled(false);
+            sldSoundPosition.setValue(0);
+            sldSoundPosition.setEnabled(false);
+            txtTimer.setText(defTime);
+            soundRecorder.setSound(null);
+        } else if (selection instanceof GrammarSectionNode secNode) {
+            txtName.setText(secNode.getName());
+            txtName.setEnabled(true);
+            txtSection.setEnabled(true);
+            btnApply.setEnabled(true);
+            txtFontSize.setEnabled(true);
+            cmbFontColor.setEnabled(true);
+            cmbFonts.setEnabled(true);
+            btnPlayPauseAudio.setEnabled(true);
+            btnRecordAudio.setEnabled(true);
+            sldSoundPosition.setValue(0);
+            sldSoundPosition.setEnabled(true);
+            txtTimer.setText(defTime);
+            try {
+                soundRecorder.setSound(secNode.getRecording());
+            } catch (Exception e) {
+                core.getOSHandler().getIOHandler().writeErrorLog(e);
+                core.getOSHandler().getInfoBox().error("Recording Load Failure", "Unable to load recording: "
+                        + e.getLocalizedMessage());
+            }
+            try {
+                FormattedTextHelper.restoreFromString(secNode.getSectionText(),
+                        txtSection, core);
+            } catch (BadLocationException e) {
+                core.getOSHandler().getIOHandler().writeErrorLog(e);
+                core.getOSHandler().getInfoBox().error("Section Load Error", "Unable to load section text: "
+                        + e.getLocalizedMessage());
+            }
+            SwingUtilities.invokeLater(() -> {
+                panSection.getVerticalScrollBar().setValue(0);
+            });
+
+        } else {
+            // if neither is selected, then the whole tree has been deleted by the user
+            txtName.setText("");
+            txtName.setForeground(Color.gray);
+            txtName.setEnabled(false);
+            txtSection.setText("");
+            txtSection.setEnabled(false);
+            btnApply.setEnabled(false);
+            txtFontSize.setEnabled(false);
+            cmbFontColor.setEnabled(false);
+            cmbFonts.setEnabled(false);
+            btnPlayPauseAudio.setEnabled(false);
+            btnRecordAudio.setEnabled(false);
+            sldSoundPosition.setValue(0);
+            sldSoundPosition.setEnabled(false);
+            txtTimer.setText(defTime);
+            soundRecorder.setSound(null);
+        }
+
+        isUpdating = false;
+    }
+
+    private void deleteNode() {
+        Object selection = treChapList.getLastSelectedPathComponent();
+        DefaultTreeModel model = (DefaultTreeModel) treChapList.getModel();
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+
+        if (selection != null
+                && core.getOSHandler().getInfoBox().yesNoCancel("Confirmation", "Really delete? This cannot be undone.")
+                        == JOptionPane.YES_OPTION) {
+            if (selection instanceof GrammarSectionNode) {
+                DesktopGrammarSectionNode curNode = (DesktopGrammarSectionNode) selection;
+                DesktopGrammarChapNode parent = (DesktopGrammarChapNode) curNode.getParent();
+                parent.doRemove(curNode);
+                treChapList.expandPath(new TreePath(model.getPathToRoot(parent)));
+                treChapList.setSelectionPath(new TreePath(model.getPathToRoot(parent)));
+            } else if (selection instanceof GrammarChapNode) {
+                ((DesktopGrammarChapNode) root).doRemove((DesktopGrammarChapNode) selection);
+                gramMan.removeChapter((DesktopGrammarChapNode) selection);
+            }
+
+            model.reload(root);
+        }
+    }
+    
+    private void moveNodeUp() {
+        moveNode(-1);
+    }
+    
+    private void moveNodeDown() {
+        moveNode(1);
+    }
+    
+    private void moveNode(int distance) {
+        Object selection = treChapList.getLastSelectedPathComponent();
+        DefaultTreeModel model = (DefaultTreeModel) treChapList.getModel();
+        DesktopGrammarChapNode root = (DesktopGrammarChapNode) model.getRoot();
+        TreePath selectedPath = treChapList.getSelectionPath();
+        
+        if (selection != null) {
+            if (selection instanceof DesktopGrammarSectionNode curNode) {
+                DesktopGrammarChapNode parent = (DesktopGrammarChapNode) curNode.getParent();
+                int nodeIndex = parent.getIndex(curNode);
+                int newLocation = nodeIndex + distance;
+                
+                if (newLocation >= 0 && newLocation < parent.getChildCount()) {
+                    parent.remove(nodeIndex);
+                    parent.insert(curNode, newLocation);
+                    model.reload(root);
+                    treChapList.setSelectionPath(selectedPath);
+                }
+            } else if (selection instanceof DesktopGrammarChapNode chapter) {
+                int chapIndex = root.getIndex(chapter);
+                int newLocation = chapIndex + distance;
+                
+                if (newLocation >= 0 && newLocation < root.getChildCount()) {
+                    root.doRemove(chapter);
+                    root.doInsert(chapter, newLocation);
+                    model.reload(root);
+                    treChapList.setSelectionPath(selectedPath);
+                }
+            }
+        }
+    }
+
+    private void addChapter() {
+        DefaultTreeModel model = (DefaultTreeModel) treChapList.getModel();
+        Object selection = treChapList.getLastSelectedPathComponent();
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+        DesktopGrammarChapNode newNode = new DesktopGrammarChapNode(gramMan);
+        newNode.setName("NEW CHAPTER");
+
+        if (selection instanceof DesktopGrammarChapNode selectionNode) {
+            DesktopGrammarChapNode parent = (DesktopGrammarChapNode)selectionNode.getParent();
+            int index = root.getIndex(parent);
+            model.insertNodeInto(newNode, root, index + 1);
+            gramMan.addChapterAtIndex(newNode, index + 1);
+        } else if (selection instanceof DesktopGrammarChapNode selectionNode) {
+            int index = root.getIndex(selectionNode);
+            model.insertNodeInto(newNode, root, index + 1);
+            gramMan.addChapterAtIndex(newNode, index + 1);
+        } else {
+            root.add(newNode);
+            gramMan.addChapter(newNode);
+        }
+
+        model.reload();
+        treChapList.setSelectionPath(new TreePath(model.getPathToRoot(newNode)));
+        txtName.setText("");
+        txtName.setForeground(Color.gray);
+    }
+
+    private void addSection() {
+        DefaultTreeModel model = (DefaultTreeModel) treChapList.getModel();
+        Object selection = treChapList.getLastSelectedPathComponent();
+
+        if (selection instanceof DesktopGrammarSectionNode selectionNode) {
+            DesktopGrammarChapNode parent = (DesktopGrammarChapNode) selectionNode.getParent();
+            int index = parent.getIndex(selectionNode);
+            DesktopGrammarSectionNode newNode = gramMan.getNewSection();
+            newNode.setName("NEW SECTION");
+            model.insertNodeInto(newNode, parent, index + 1);
+            model.reload();
+            treChapList.setSelectionPath(new TreePath(model.getPathToRoot(newNode)));
+        } else if (selection instanceof DesktopGrammarChapNode parent) {
+            DesktopGrammarSectionNode newNode = gramMan.getNewSection();
+            newNode.setName("NEW SECTION");
+            parent.add(newNode);
+            model.reload();
+            treChapList.setSelectionPath(new TreePath(model.getPathToRoot(newNode)));
+        } else {
+            core.getOSHandler().getInfoBox().warning("Section Creation", "Select a chapter in which to create a section.");
+        }
+
+        txtName.setText("");
+        txtName.setForeground(Color.gray);
+    }
+
+    private void playPauseAudio() {
+        try {
+            soundRecorder.playPause();
+        } catch (IOException e) {
+            core.getOSHandler().getIOHandler().writeErrorLog(e);
+            core.getOSHandler().getInfoBox().error("Play Error", "Unable to play due to: " + e.getLocalizedMessage());
+        }
+    }
+
+    private void recordAudio() {
+        try {
+            if (soundRecorder.isRecording()) {
+                soundRecorder.endRecording();
+            } else {
+                if (soundRecorder.getSound() != null) { // confirm overwrite of existing data
+                    if (core.getOSHandler().getInfoBox().yesNoCancel("Overwrite Confirmation",
+                            "Discard existing audio recording?") != JOptionPane.YES_OPTION) {
+                        return;
+                    }
+                }
+
+                soundRecorder.beginRecording();
+            }
+        } catch (Exception e) {
+            core.getOSHandler().getIOHandler().writeErrorLog(e);
+            core.getOSHandler().getInfoBox().error("Recording Error", "Unable to record due to: " + e.getLocalizedMessage());
+        }
+    }
+
+    public static ScrGrammarGuide run(DictCore _core) {
+        final ScrGrammarGuide s = new ScrGrammarGuide(_core);
+
+        // For some reason, adding items to the combobox moves this to the back... this fixes it
+        SwingUtilities.invokeLater(() -> {
+            s.toFront();
+            s.requestFocus();
+        });
+
+        return s;
+    }
+
+    /**
+     * populates all grammar chapters and sections
+     */
+    private void populateSections() {
+        DefaultMutableTreeNode rootNode = new DesktopGrammarChapNode("Root Node", gramMan);
+        DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
+        treChapList.setModel(treeModel);
+
+        for (DesktopGrammarChapNode curChap : gramMan.getChapters()) {
+            rootNode.add(curChap);
+        }
+
+        treeModel.reload(rootNode);
+        treChapList.setLargeModel(true);
+    }
+
+    /**
+     * Populates all grammar chapters and sections that match search value
+     */
+    private void populateFromSearch() {
+        savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
+        DesktopGrammarChapNode rootNode = new DesktopGrammarChapNode("Root Node", gramMan);
+
+        if (((PTextField) txtSearch).isDefaultText() || txtSearch.getText().isEmpty()) {
+            populateSections();
+            return;
+        }
+
+        DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
+        treChapList.setModel(treeModel);
+        for (DesktopGrammarChapNode chapter : gramMan.getChapters()) {
+            DesktopGrammarChapNode srcChap = new DesktopGrammarChapNode(gramMan);
+            srcChap.setName(chapter.getName());
+
+            Enumeration sections = chapter.children(txtSearch.getText());
+            while (sections.hasMoreElements()) {
+                DesktopGrammarSectionNode curSec = (DesktopGrammarSectionNode) sections.nextElement();
+                srcChap.add(curSec);
+            }
+
+            if (srcChap.children().hasMoreElements()) {
+                rootNode.add(srcChap);
+            }
+        }
+        
+        treeModel.reload(rootNode);
+    }
+
+    @Override
+    public Component getWindow() {
+        return jSplitPane1;
+    }
+
+    @Override
+    public boolean canClose() {
+        return true;
     }
 
     /**
@@ -684,586 +1230,6 @@ public final class ScrGrammarGuide extends PFrame {
         moveNodeDown();
     }//GEN-LAST:event_btnMoveNodeDownActionPerformed
 
-    private void updateFontSize() {
-        try {
-            Integer.parseInt(txtFontSize.getText());
-        } catch (NumberFormatException e) {
-            // user error
-            // IOHandler.writeErrorLog(e);
-            core.getOSHandler().getInfoBox().warning("Font Size", "Invalid size: " + txtFontSize.getText());
-            txtFontSize.setText("12");
-        }
-        setFont();
-    }
-
-    /**
-     * Sets up initial values of components
-     */
-    private void setInitialValues() {
-        // popping to back somewhere here
-        treChapList.requestFocus();
-        soundRecorder.setTimer(txtTimer);
-        soundRecorder.setSlider(sldSoundPosition);
-        txtSection.setDocument(new PGDocument(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon()));
-        treChapList.setRootVisible(false);
-        txtTimer.setText(defTime);
-        txtSection.addStyle("default", null); // default style makes word wrap active
-
-        try {
-            txtTimer.setFont(PFontHandler.getLcdFont().deriveFont(Font.PLAIN, 18f));
-        } catch (FontFormatException | IOException e) {
-            DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getOSHandler().getInfoBox().error("Font Error", "Unable to load LCD font due to: " + e.getMessage());
-        }
-
-        btnPlayPauseAudio.setText("");
-        btnRecordAudio.setText("");
-        btnAddSection.setText("");
-        btnDelete.setText("");
-        btnAddSection.setIcon(PGTUtil.getSizedIcon(addButton, 21, 21));
-        btnAddSection.setPressedIcon(PGTUtil.getSizedIcon(addButtonPressed, 21, 21));
-        btnDelete.setIcon(PGTUtil.getSizedIcon(deleteButton, 21, 21));
-        btnDelete.setPressedIcon(PGTUtil.getSizedIcon(deleteButtonPressed, 21, 21));
-        btnAddSection.setContentAreaFilled(false);
-        btnDelete.setContentAreaFilled(false);
-    }
-
-    /**
-     * Sets input font/font of selected text
-     */
-    private void setFont() {
-        Font natFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
-        Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
-        SimpleAttributeSet aset = new SimpleAttributeSet();
-
-        // natlang font is always 0, conlang font always 1
-        if (cmbFonts.getSelectedIndex() == 0) {
-            StyleConstants.setFontFamily(aset, natFont.getFamily());
-        } else {
-            aset.addAttribute(GlyphVectorPainter.KEY_KERNING, core.getPropertiesManager().getKerningSpace() * 10);
-            StyleConstants.setFontFamily(aset, conFont.getFamily());
-        }
-
-        StyleConstants.setForeground(aset,
-                FormattedTextHelper.textToColor((String) cmbFontColor.getSelectedItem()));
-
-        StyleConstants.setFontSize(aset, Integer.parseInt(txtFontSize.getText()));
-
-        txtSection.setCharacterAttributes(aset, true);
-
-        int caretStart = txtSection.getSelectionStart();
-        int caretEnd = txtSection.getSelectionEnd();
-
-        // logic for ensuring LTR enforcement if no text is currently selected
-        if (caretStart == caretEnd
-                && core.getPropertiesManager().isEnforceRTL()) {
-            StyledDocument doc = txtSection.getStyledDocument();
-            try {
-                doc.insertString(caretStart, " ", aset);
-                caretEnd++;
-            } catch (BadLocationException e) {
-                DesktopIOHandler.getInstance().writeErrorLog(e);
-                core.getOSHandler().getInfoBox().warning("Font Error", "Problem setting font: "
-                        + e.getLocalizedMessage());
-            }
-        }
-
-        if (core.getPropertiesManager().isEnforceRTL()) {
-            // this ensures that the correct sections are displayed RTL
-            savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
-            populateProperties();
-        }
-
-        txtSection.requestFocus();
-        txtSection.setSelectionStart(caretStart);
-        txtSection.setSelectionEnd(caretEnd);
-    }
-
-    /**
-     * sets up object listeners
-     */
-    private void setupListeners() {
-        txtSearch.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                if (!isUpdating) {
-                    populateFromSearch();
-                }
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                if (!isUpdating) {
-                    populateFromSearch();
-                }
-            }
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                if (!isUpdating) {
-                    populateFromSearch();
-                }
-            }
-        });
-        txtName.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                if (!isUpdating) {
-                    updateName();
-                }
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                if (!isUpdating) {
-                    updateName();
-                }
-            }
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                if (!isUpdating) {
-                    updateName();
-                }
-            }
-        });
-        treChapList.addTreeSelectionListener((TreeSelectionEvent e) -> {
-            TreePath oldPath = e.getOldLeadSelectionPath();
-            if (oldPath != null) {
-                Object oldNode = oldPath.getPathComponent(oldPath.getPathCount() - 1);
-                savePropsToNode((DefaultMutableTreeNode) oldNode);
-            }
-            
-            closeAllPlayRecord();
-            populateProperties();
-        });
-        // add listener for character replacement logic
-        txtSection.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                Character c = e.getKeyChar();
-                String repString = core.getPropertiesManager().getCharacterReplacement(c.toString());
-                
-                // only run replacement logic if currently set to Conlang font
-                // replacement logic at form level because this text editor can handle multiple fonts simultaneously
-                if (!repString.isEmpty()
-                        && cmbFonts.getSelectedItem().equals(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon().getName())) {
-                    try {
-                        e.consume();
-                        ClipboardHandler cb = new ClipboardHandler();
-                        cb.cacheClipboard();
-                        cb.setClipboardContents(repString);
-                        txtSection.paste();
-                        cb.restoreClipboard();
-                    } catch (Exception ex) {
-                        DesktopIOHandler.getInstance().writeErrorLog(ex);
-                        core.getOSHandler().getInfoBox().error("Character Replacement Error",
-                                "Clipboard threw error during character replacement process:"
-                                + ex.getLocalizedMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                // do nothing
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                // do nothing
-            }
-        });
-    }
-
-    /**
-     * Saves current grammar properties to the node passed in. If null, nothing.
-     *
-     * @param node node to save values to
-     */
-    public void savePropsToNode(DefaultMutableTreeNode node) {
-        if(null == node) return;
-        
-        Object nodeObj = node.getUserObject();
-        if (nodeObj instanceof GrammarSectionNode) {
-            GrammarSectionNode secNode = (GrammarSectionNode) nodeObj;
-            secNode.setName(txtName.getText());
-            secNode.setRecording(soundRecorder.getSound());
-            try {
-                secNode.setSectionText(FormattedTextHelper.storageFormat(txtSection));
-            } catch (Exception e) {
-                DesktopIOHandler.getInstance().writeErrorLog(e);
-                core.getOSHandler().getInfoBox().error("Section Save Error", "Unable to save section text: "
-                        + e.getLocalizedMessage());
-            }
-        } else if (nodeObj instanceof GrammarChapNode) {
-            GrammarChapNode chapNode = (GrammarChapNode) nodeObj;
-            chapNode.setName(txtName.getText());
-        }
-    }
-
-    /**
-     * Updates name from UI element of currently selected chapter or section
-     */
-    private void updateName() {
-        boolean localUpdating = isUpdating;
-        isUpdating = true;
-
-        Object selection = treChapList.getLastSelectedPathComponent();
-
-        if (selection instanceof GrammarSectionNode) {
-            ((GrammarSectionNode) selection).setName(txtName.getText());
-        } else if (selection instanceof GrammarChapNode) {
-            ((GrammarChapNode) selection).setName(txtName.getText());
-        }
-
-        treChapList.repaint();
-        isUpdating = localUpdating;
-    }
-
-    /**
-     * Stops all recording and play streams
-     */
-    private void closeAllPlayRecord() {
-        try {
-            if (soundRecorder.isPlaying()) {
-                soundRecorder.playPause();
-            }
-            if (soundRecorder.isRecording()) {
-                soundRecorder.endRecording();
-            }
-        } catch (IOException e) {
-            // on exception, inform user and replace sound recorder
-            DesktopIOHandler.getInstance().writeErrorLog(e);
-            soundRecorder = new SoundRecorder(this);
-            soundRecorder.setButtons(btnRecordAudio, btnPlayPauseAudio, playButtonUp, playButtonDown, recordButtonUp, recordButtonDown);
-            core.getOSHandler().getInfoBox().error("Recorder Error", "Unable to end audio stream: " + e.getLocalizedMessage());
-        }
-    }
-
-    /**
-     * Populates properties of chapter/section and sets appropriate controls
-     */
-    private void populateProperties() {
-        if (isUpdating) {
-            return;
-        }
-
-        isUpdating = true;
-
-        Object selection = treChapList.getLastSelectedPathComponent();
-        if (selection instanceof GrammarChapNode) {
-            GrammarChapNode chapNode = (GrammarChapNode) selection;
-            txtName.setText(chapNode.getName());
-            txtName.setEnabled(true);
-            txtSection.setText("");
-            txtSection.setEnabled(false);
-            btnApply.setEnabled(false);
-            txtFontSize.setEnabled(false);
-            cmbFontColor.setEnabled(false);
-            cmbFonts.setEnabled(false);
-            btnPlayPauseAudio.setEnabled(false);
-            btnRecordAudio.setEnabled(false);
-            sldSoundPosition.setValue(0);
-            sldSoundPosition.setEnabled(false);
-            txtTimer.setText(defTime);
-            soundRecorder.setSound(null);
-        } else if (selection instanceof GrammarSectionNode) {
-            GrammarSectionNode secNode = (GrammarSectionNode) selection;
-            txtName.setText(secNode.getName());
-            txtName.setEnabled(true);
-            txtSection.setEnabled(true);
-            btnApply.setEnabled(true);
-            txtFontSize.setEnabled(true);
-            cmbFontColor.setEnabled(true);
-            cmbFonts.setEnabled(true);
-            btnPlayPauseAudio.setEnabled(true);
-            btnRecordAudio.setEnabled(true);
-            sldSoundPosition.setValue(0);
-            sldSoundPosition.setEnabled(true);
-            txtTimer.setText(defTime);
-            try {
-                soundRecorder.setSound(secNode.getRecording());
-            } catch (Exception e) {
-                DesktopIOHandler.getInstance().writeErrorLog(e);
-                core.getOSHandler().getInfoBox().error("Recording Load Failure", "Unable to load recording: "
-                        + e.getLocalizedMessage());
-            }
-            try {
-                FormattedTextHelper.restoreFromString(secNode.getSectionText(),
-                        txtSection, core);
-            } catch (BadLocationException e) {
-                DesktopIOHandler.getInstance().writeErrorLog(e);
-                core.getOSHandler().getInfoBox().error("Section Load Error", "Unable to load section text: "
-                        + e.getLocalizedMessage());
-            }
-            SwingUtilities.invokeLater(() -> {
-                panSection.getVerticalScrollBar().setValue(0);
-            });
-
-        } else {
-            // if neither is selected, then the whole tree has been deleted by the user
-            txtName.setText("");
-            txtName.setForeground(Color.gray);
-            txtName.setEnabled(false);
-            txtSection.setText("");
-            txtSection.setEnabled(false);
-            btnApply.setEnabled(false);
-            txtFontSize.setEnabled(false);
-            cmbFontColor.setEnabled(false);
-            cmbFonts.setEnabled(false);
-            btnPlayPauseAudio.setEnabled(false);
-            btnRecordAudio.setEnabled(false);
-            sldSoundPosition.setValue(0);
-            sldSoundPosition.setEnabled(false);
-            txtTimer.setText(defTime);
-            soundRecorder.setSound(null);
-        }
-
-        isUpdating = false;
-    }
-
-    private void deleteNode() {
-        DefaultMutableTreeNode selection = (DefaultMutableTreeNode)treChapList.getLastSelectedPathComponent();
-        Object selectionObj = null;
-        DefaultTreeModel model = (DefaultTreeModel) treChapList.getModel();
-        DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
-        
-        if(selection != null)
-            selectionObj = selection.getUserObject();
-
-        if (selectionObj != null
-                && core.getOSHandler().getInfoBox().yesNoCancel("Confirmation", "Really delete? This cannot be undone.")
-                        == JOptionPane.YES_OPTION) {
-            if (selectionObj instanceof GrammarSectionNode) {
-                GrammarSectionNode curNode = (GrammarSectionNode) selectionObj;
-                GrammarChapNode parent = (GrammarChapNode) curNode.parent;
-                parent.doRemove(curNode);
-                treChapList.expandPath(new TreePath(model.getPathToRoot(selection.getParent())));
-                treChapList.setSelectionPath(new TreePath(model.getPathToRoot(selection.getParent())));
-            } else if (selectionObj instanceof GrammarChapNode) {
-                root.remove(selection);
-                ((GrammarChapNode) root.getUserObject()).doRemove((GrammarChapNode) selectionObj);
-                gramMan.removeChapter((GrammarChapNode) selectionObj);
-            }
-
-            model.reload(root);
-        }
-    }
-    
-    private void moveNodeUp() {
-        moveNode(-1);
-    }
-    
-    private void moveNodeDown() {
-        moveNode(1);
-    }
-    
-    private void moveNode(int distance) {
-        // Object selection = treChapList.getLastSelectedPathComponent();
-        DefaultMutableTreeNode selection = ((DefaultMutableTreeNode)treChapList.getLastSelectedPathComponent());
-        Object selectionObj = null;
-        DefaultTreeModel model = (DefaultTreeModel) treChapList.getModel();
-        DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
-        GrammarChapNode rootObj = (GrammarChapNode) root.getUserObject();
-        TreePath selectedPath = treChapList.getSelectionPath();
-        
-        if(selection != null)
-            selectionObj = selection.getUserObject();
-        
-        if (selectionObj != null) {
-            if (selectionObj instanceof GrammarSectionNode) {
-                GrammarSectionNode curNode = (GrammarSectionNode) selectionObj;
-                GrammarChapNode parent = (GrammarChapNode) curNode.parent;
-                int nodeIndex = parent.getIndex(curNode);
-                int newLocation = nodeIndex + distance;
-                
-                if (newLocation >= 0 && newLocation < parent.getChildCount()) {
-                    parent.remove(nodeIndex);
-                    parent.insert(curNode, newLocation);
-                    model.reload(root);
-                    treChapList.setSelectionPath(selectedPath);
-                }
-            } else if (selectionObj instanceof GrammarChapNode) {
-                GrammarChapNode chapter = (GrammarChapNode) selectionObj;
-                int chapIndex = root.getIndex(selection);
-                int newLocation = chapIndex + distance;
-                
-                if (newLocation >= 0 && newLocation < root.getChildCount()) {
-                    rootObj.doRemove(chapter);
-                    rootObj.doInsert(chapter, newLocation);
-                    model.reload(root);
-                    treChapList.setSelectionPath(selectedPath);
-                }
-            }
-        }
-    }
-
-    private void addChapter() {
-        DefaultTreeModel model = (DefaultTreeModel) treChapList.getModel();
-        DefaultMutableTreeNode selection = ((DefaultMutableTreeNode)treChapList.getLastSelectedPathComponent());
-        Object selectionObj = null;
-        DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
-        Object rootObj = root.getUserObject();
-        GrammarChapNode newNode = new GrammarChapNode(gramMan);
-        newNode.setName("NEW CHAPTER");
-        DefaultMutableTreeNode newTreeNode = new DefaultMutableTreeNode(newNode);
-        
-        if(selection != null)
-            selectionObj = selection.getUserObject();
-
-        if (selectionObj instanceof GrammarSectionNode) {
-            GrammarChapNode parent = (GrammarChapNode) ((GrammarSectionNode) selectionObj).parent;
-            int index = root.getIndex(selection.getParent());
-            model.insertNodeInto(newTreeNode, root, index + 1);
-            ((TreeNode)rootObj).insert(newNode, index + 1);
-            gramMan.addChapterAtIndex(newNode, index + 1);
-        } else if (selectionObj instanceof GrammarChapNode) {
-            int index = root.getIndex(selection);
-            model.insertNodeInto(newTreeNode, root, index + 1);
-            ((TreeNode)rootObj).insert(newNode, index + 1);
-            gramMan.addChapterAtIndex(newNode, index + 1);
-        } else {
-            root.add(newTreeNode);
-            gramMan.addChapter(newNode);
-        }
-
-        model.reload();
-        treChapList.setSelectionPath(new TreePath(model.getPathToRoot(newTreeNode)));
-        txtName.setText("");
-        txtName.setForeground(Color.gray);
-    }
-
-    private void addSection() {
-        DefaultTreeModel model = (DefaultTreeModel) treChapList.getModel();
-        DefaultMutableTreeNode selection = ((DefaultMutableTreeNode)treChapList.getLastSelectedPathComponent());
-        Object selectionObj = selection.getUserObject();
-
-        if (selectionObj instanceof GrammarSectionNode) {
-            DefaultMutableTreeNode parent = (DefaultMutableTreeNode)selection.getParent();
-            int index = parent.getIndex(selection);
-            GrammarSectionNode newNode = gramMan.getNewSection();
-            newNode.setName("NEW SECTION");
-            DefaultMutableTreeNode newTreeNode = new DefaultMutableTreeNode(newNode);
-            model.insertNodeInto(newTreeNode, parent, index + 1);
-            ((TreeNode)parent.getUserObject()).insert(newNode, index + 1);
-            model.reload();
-            treChapList.setSelectionPath(new TreePath(model.getPathToRoot(newTreeNode)));
-        } else if (selectionObj instanceof GrammarChapNode) {
-            GrammarChapNode parent = (GrammarChapNode) selectionObj;
-            GrammarSectionNode newNode = gramMan.getNewSection();
-            DefaultMutableTreeNode newTreeNode = new DefaultMutableTreeNode(newNode);
-            newNode.setName("NEW SECTION");
-            parent.add(newNode);
-            selection.add(newTreeNode);
-            model.reload();
-            treChapList.setSelectionPath(new TreePath(model.getPathToRoot(newTreeNode)));
-        } else {
-            core.getOSHandler().getInfoBox().warning("Section Creation", "Select a chapter in which to create a section.");
-        }
-
-        txtName.setText("");
-        txtName.setForeground(Color.gray);
-    }
-
-    private void playPauseAudio() {
-        try {
-            soundRecorder.playPause();
-        } catch (IOException e) {
-            DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getOSHandler().getInfoBox().error("Play Error", "Unable to play due to: " + e.getLocalizedMessage());
-        }
-    }
-
-    private void recordAudio() {
-        try {
-            if (soundRecorder.isRecording()) {
-                soundRecorder.endRecording();
-            } else {
-                if (soundRecorder.getSound() != null) { // confirm overwrite of existing data
-                    if (core.getOSHandler().getInfoBox().yesNoCancel("Overwrite Confirmation",
-                            "Discard existing audio recording?") != JOptionPane.YES_OPTION) {
-                        return;
-                    }
-                }
-
-                soundRecorder.beginRecording();
-            }
-        } catch (Exception e) {
-            DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getOSHandler().getInfoBox().error("Recording Error", "Unable to record due to: " + e.getLocalizedMessage());
-        }
-    }
-
-    public static ScrGrammarGuide run(DictCore _core) {
-        final ScrGrammarGuide s = new ScrGrammarGuide(_core);
-
-        // For some reason, adding items to the combobox moves this to the back... this fixes it
-        SwingUtilities.invokeLater(() -> {
-            s.toFront();
-            s.requestFocus();
-        });
-
-        return s;
-    }
-
-    /**
-     * populates all grammar chapters and sections
-     */
-    private void populateSections() {
-        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(new GrammarChapNode("Root Node", gramMan));
-        DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
-        treChapList.setModel(treeModel);
-
-        for (GrammarChapNode curChap : gramMan.getChapters()) {
-            rootNode.add(new DefaultMutableTreeNode(curChap));
-        }
-
-        treeModel.reload(rootNode);
-        treChapList.setLargeModel(true);
-    }
-
-    /**
-     * Populates all grammar chapters and sections that match search value
-     */
-    private void populateFromSearch() {
-        savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
-        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(new GrammarChapNode("Root Node", gramMan));
-
-        if (((PTextField) txtSearch).isDefaultText() || txtSearch.getText().isEmpty()) {
-            populateSections();
-            return;
-        }
-
-        DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
-        treChapList.setModel(treeModel);
-        for (GrammarChapNode chapter : gramMan.getChapters()) {
-            GrammarChapNode srcChap = new GrammarChapNode(gramMan);
-            srcChap.setName(chapter.getName());
-
-            Enumeration sections = chapter.children(txtSearch.getText());
-            while (sections.hasMoreElements()) {
-                GrammarSectionNode curSec = (GrammarSectionNode) sections.nextElement();
-                srcChap.add(curSec);
-            }
-
-            if (srcChap.children("").hasMoreElements()) {
-                rootNode.add(new DefaultMutableTreeNode(srcChap));
-            }
-        }
-        
-        treeModel.reload(rootNode);
-    }
-
-    @Override
-    public Component getWindow() {
-        return jSplitPane1;
-    }
-
-    @Override
-    public boolean canClose() {
-        return true;
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddChapter;
     private javax.swing.JButton btnAddSection;

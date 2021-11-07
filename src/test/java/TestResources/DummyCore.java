@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -19,14 +19,15 @@
  */
 package TestResources;
 
+import org.darisadesigns.polyglotlina.Desktop.DummyInfoBox;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.DesktopHelpHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopOSHandler;
 import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammarManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.InfoBox;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
@@ -39,12 +40,12 @@ import org.darisadesigns.polyglotlina.OSHandler;
  */
 public class DummyCore extends DictCore {
     private DummyCore (DesktopPropertiesManager propsManager, OSHandler osHandler) {
-        super(propsManager, osHandler, new PGTUtil());
+        super(propsManager, osHandler, new PGTUtil(), new DesktopGrammarManager());
     }
     
     public static DummyCore newCore() {
         try {
-            InfoBox infoBox = new DesktopInfoBox(null);
+            InfoBox infoBox = new DummyInfoBox();
             DesktopHelpHandler helpHandler = new DesktopHelpHandler();
             PFontHandler fontHandler = new PFontHandler();
             DesktopOSHandler osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), infoBox, helpHandler, fontHandler);
@@ -55,7 +56,7 @@ public class DummyCore extends DictCore {
             // Is this now really needed to be constructed?
             // Some screens use new PolyGlot static instance
             PolyGlot polyGlot = new PolyGlot(PGTUtil.TESTRESOURCES, (DictCore)core, osHandler);
-            
+            PolyGlot.setTestPolyGlot(polyGlot);
             return core;
         } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
             System.err.println("Something's gone wrong with the Dummy Core generation: " + e.getLocalizedMessage());

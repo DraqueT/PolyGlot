@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -37,6 +37,7 @@ public class WordClass extends DictNode {
     private final Map<Integer, WordClassValue> values = new HashMap<>();
     private final List<Integer> applyTypes = new ArrayList<>();
     private boolean freeText = false;
+    private boolean associative = false;
     private int topId = 0;
     public WordClassValue buffer = new WordClassValue();
     
@@ -197,6 +198,28 @@ public class WordClass extends DictNode {
      */
     public void setFreeText(boolean _freeText) {
         this.freeText = _freeText;
+        this.associative = !_freeText;
+    }
+    
+    /**
+     * Whether or not this represents a free text field, rather than a multi-
+     * selection with predefined values
+     * 
+     * @return Whether the property is an associative property
+     */
+    public boolean isAssociative() {
+        return associative;
+    }
+
+    /**
+     * Sets whether or not this represents a free text field, rather than a
+     * multi-selection with predefined values
+     * 
+     * @param _associative
+     */
+    public void setAssociative(boolean _associative) {
+        this.associative = _associative;
+        this.freeText = !_associative;
     }
     
     public void writeXML(Document doc, Element rootElement) {
@@ -215,6 +238,11 @@ public class WordClass extends DictNode {
         // Is Text Override
         classValue = doc.createElement(PGTUtil.CLASS_IS_FREETEXT_XID);
         classValue.appendChild(doc.createTextNode(this.freeText ? PGTUtil.TRUE : PGTUtil.FALSE));
+        classElement.appendChild(classValue);
+        
+        // Is class associative CLASS_IS_ASSOCIATIVE_XID
+        classValue = doc.createElement(PGTUtil.CLASS_IS_ASSOCIATIVE_XID);
+        classValue.appendChild(doc.createTextNode(this.associative ? PGTUtil.TRUE : PGTUtil.FALSE));
         classElement.appendChild(classValue);
 
         // generates element with all type IDs of types this class applies to
@@ -253,6 +281,7 @@ public class WordClass extends DictNode {
             ret = ret && values.equals(c.values);
             ret = ret && applyTypes.equals(c.applyTypes);
             ret = ret && freeText == c.freeText;
+            ret = ret && associative == c.associative;
         }
         
         return ret;

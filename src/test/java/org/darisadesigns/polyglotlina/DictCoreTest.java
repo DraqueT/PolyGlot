@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -25,7 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
-import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopGrammarChapNode;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
@@ -46,7 +46,7 @@ public class DictCoreTest {
     @Test
     public void testIsLanguageEmptyYes() {
         System.out.println("DictCoreTest.testIsLanguageEmptyYes");
-        assertTrue(core.isLanguageEmpty());
+        assertTrue(core.isLanguageEmpty(), "DictCoreTest.testIsLanguageEmptyYes:F");
     }
     
     @Test
@@ -55,7 +55,7 @@ public class DictCoreTest {
         
         try {
             core.getWordCollection().addWord(new ConWord());
-            assertFalse(core.isLanguageEmpty());
+            assertFalse(core.isLanguageEmpty(), "DictCoreTest.testIsLanguageEmptyNoLexicon:F");
         } catch (Exception e) {
             fail(e);
         }
@@ -66,8 +66,8 @@ public class DictCoreTest {
         System.out.println("DictCoreTest.testIsLanguageEmptyNoGrammar");
         
         try {
-            core.getGrammarManager().addChapter(new GrammarChapNode(null));
-            assertFalse(core.isLanguageEmpty());
+            core.getGrammarManager().addChapter(new DesktopGrammarChapNode(null));
+            assertFalse(core.isLanguageEmpty(), "DictCoreTest.testIsLanguageEmptyNoGrammar:F");
         } catch (Exception e) {
             fail(e);
         }
@@ -79,7 +79,7 @@ public class DictCoreTest {
         
         try {
             core.getPronunciationMgr().addPronunciation(new PronunciationNode());
-            assertFalse(core.isLanguageEmpty());
+            assertFalse(core.isLanguageEmpty(), "DictCoreTest.testIsLanguageEmptyNoPronunciation:F");
         } catch (Exception e) {
             fail(e);
         }
@@ -90,16 +90,18 @@ public class DictCoreTest {
         System.out.println("DictCoreTest.testIsLanguageEmptyNoPOS");
         try {
             core.getTypes().addNode(new TypeNode());
-            assertFalse(core.isLanguageEmpty());
+            assertFalse(core.isLanguageEmpty(), "DictCoreTest.testIsLanguageEmptyNoPOS:F");
         } catch (Exception e) {
             fail(e);
         }
     }
     
+    // TODO: WHY DOES THIS MAKE LINUX FAIL?
+    
     @Test
     public void testSaveLanguageIntegrityDeep() {
         // this tests the deep integrity of saved languages
-        System.out.println("DictCoreTest.testIsLanguageEmptyNoPOS");
+        System.out.println("DictCoreTest.testSaveLanguageIntegrityDeep");
         
         try {
             DictCore origin = DummyCore.newCore();
@@ -110,7 +112,7 @@ public class DictCoreTest {
             origin.writeFile(targetPath.toString());
             target.readFile(targetPath.toString());
             
-            assertEquals(origin, target, "Languge archive saving inconsistenies detected.");
+            assertEquals(origin, target, "DictCoreTest.testIsLanguageEmptyNoPOS:F");
         } catch (IOException | IllegalStateException | ParserConfigurationException | TransformerException e) {
             fail(e);
         }
