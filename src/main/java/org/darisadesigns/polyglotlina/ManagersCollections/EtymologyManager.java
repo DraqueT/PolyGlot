@@ -209,48 +209,50 @@ public class EtymologyManager {
      */
     public void addExternalRelation(EtyExternalParent parent, Integer child) {
         // return immediately if child does not exist
-        if (core.getWordCollection().exists(child)) {
-            if (extParentToChild.containsKey(parent.getUniqueId())) {
-                List<Integer> myList = extParentToChild.get(parent.getUniqueId());
-                if (!myList.contains(child)) {
-                    myList.add(child);
-                }
-            } else {
-                List<Integer> myList = new ArrayList<>();
-                myList.add(child);
-                extParentToChild.put(parent.getUniqueId(), myList);
-                allExtParents.put(parent.getUniqueId(), parent);
-            }
+        if (!core.getWordCollection().exists(child))
+            return;
 
-            if (childToExtParent.containsKey(child)) {
-                Map<String, EtyExternalParent> myMap = childToExtParent.get(child);
-                if (!myMap.containsKey(parent.getUniqueId())) {
-                    myMap.put(parent.getUniqueId(), parent);
-                }
-            } else {
-                Map<String, EtyExternalParent> myMap = new HashMap<>();
-                myMap.put(parent.getUniqueId(), parent);
-                childToExtParent.put(child, myMap);
+        if (extParentToChild.containsKey(parent.getUniqueId())) {
+            List<Integer> myList = extParentToChild.get(parent.getUniqueId());
+            if (!myList.contains(child)) {
+                myList.add(child);
             }
+        } else {
+            List<Integer> myList = new ArrayList<>();
+            myList.add(child);
+            extParentToChild.put(parent.getUniqueId(), myList);
+            allExtParents.put(parent.getUniqueId(), parent);
+        }
+
+        if (childToExtParent.containsKey(child)) {
+            Map<String, EtyExternalParent> myMap = childToExtParent.get(child);
+            if (!myMap.containsKey(parent.getUniqueId())) {
+                myMap.put(parent.getUniqueId(), parent);
+            }
+        } else {
+            Map<String, EtyExternalParent> myMap = new HashMap<>();
+            myMap.put(parent.getUniqueId(), parent);
+            childToExtParent.put(child, myMap);
         }
     }
     
     public void delExternalRelation(EtyExternalParent parent, Integer child) {
         // only run if child exists
-        if (core.getWordCollection().exists(child)) {
-            if (extParentToChild.containsKey(parent.getUniqueId())) {
-                List<Integer> myList = extParentToChild.get(parent.getUniqueId());
-                myList.remove(child);
-                
-                if (myList.isEmpty()) {
-                    allExtParents.remove(getExtListParentValue(parent));
-                }
+        if (!core.getWordCollection().exists(child))
+            return;
+
+        if (extParentToChild.containsKey(parent.getUniqueId())) {
+            List<Integer> myList = extParentToChild.get(parent.getUniqueId());
+            myList.remove(child);
+
+            if (myList.isEmpty()) {
+                allExtParents.remove(getExtListParentValue(parent));
             }
-            
-            if (childToExtParent.containsKey(child)) {
-                Map<String, EtyExternalParent> myMap = childToExtParent.get(child);
-                myMap.remove(parent.getUniqueId());
-            }
+        }
+
+        if (childToExtParent.containsKey(child)) {
+            Map<String, EtyExternalParent> myMap = childToExtParent.get(child);
+            myMap.remove(parent.getUniqueId());
         }
     }
     
@@ -302,33 +304,34 @@ public class EtymologyManager {
         Element collection = doc.createElement(PGTUtil.ETY_COLLECTION_XID);
         
         // we only need to record the relationship one way, the bidirection will be regenerated
-        for (Entry<Integer, List<Integer>> curEntry : parentToChild.entrySet()) {
-            // skip nonexistent words
-            if (!wordCollection.exists(curEntry.getKey())) {
-                continue;
-            }
-            
+        // skip nonexistent words
+        parentToChild.entrySet()
+                .stream()
+                .filter((curEntry) -> wordCollection.exists(curEntry.getKey()))
+                .forEach((curEntry) -> {
             Element myNode = doc.createElement(PGTUtil.ETY_INT_RELATION_NODE_XID);
             myNode.appendChild(doc.createTextNode(curEntry.getKey().toString()));
-            
-            for (Integer curChild : curEntry.getValue()) {
-                if (!wordCollection.exists(curChild)) {
-                    continue;
-                }
-                
+
+            curEntry.getValue()
+                    .stream()
+                    .filter((curChild) -> wordCollection.exists(curChild))
+                    .forEach((curChild) -> {
                 Element child = doc.createElement(PGTUtil.ETY_INT_CHILD_XID);
                 child.appendChild(doc.createTextNode(curChild.toString()));
                 myNode.appendChild(child);
-            }
+            });
             collection.appendChild(myNode);
-        }
+        });
         
         // adds a node for each word with at least one external parent
-        childToExtParent.entrySet().stream().map((curEntry) -> {
+        childToExtParent.entrySet()
+                .stream()
+                .map((curEntry) -> {
             Element childContainer = doc.createElement(PGTUtil.ETY_CHILD_EXTERNALS_XID);
             childContainer.appendChild(doc.createTextNode(curEntry.getKey().toString()));
             // creates a node for each external parent within a word
-            curEntry.getValue().values().forEach((parent) -> {
+            curEntry.getValue().values()
+                    .forEach((parent) -> {
                 Element extParentNode = doc.createElement(PGTUtil.ETY_EXTERNAL_WORD_NODE_XID);
                 // record external word value
                 Element curElement = doc.createElement(PGTUtil.ETY_EXTERNAL_WORD_VALUE_XID);
@@ -441,14 +444,12 @@ public class EtymologyManager {
             return false;
 
         List<Integer> myList = childToParent.get(childId);
-        
-        if (!myList.contains(parId)) {
-            for (Integer newChild : myList) {
-                if (childHasParent(newChild, parId))
-                    return true;
-            }
-        }
-        return false;
+
+        if (myList.contains(parId))
+            return false;
+
+        return myList.stream()
+                .anyMatch((newChild) -> childHasParent(newChild, parId));
     }
     
     /**

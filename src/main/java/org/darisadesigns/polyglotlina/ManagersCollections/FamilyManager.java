@@ -24,7 +24,6 @@ import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.Nodes.FamNode;
 import org.darisadesigns.polyglotlina.WebInterface;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import org.w3c.dom.Document;
@@ -61,11 +60,9 @@ public class FamilyManager {
      * @param wordList raw words from entry
      */
     public void removeDeadWords(FamNode fam, List<ConWord> wordList) {
-        for (ConWord curWord : new ArrayList<>(wordList)) {
-            if (!core.getWordCollection().exists(curWord.getId())) {
-                fam.removeWord(curWord);
-            }
-        }
+        wordList.stream()
+                .filter(curWord -> !core.getWordCollection().exists(curWord.getId()))
+                .forEach((word) -> fam.removeWord(word));
     }
     
     /**
