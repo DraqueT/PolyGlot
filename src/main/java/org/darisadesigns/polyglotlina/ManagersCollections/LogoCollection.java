@@ -109,6 +109,12 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
      * @return list of all logographs
      */
     public LogoNode[] getAllLogos() {
+        // TODO: could be replaced by this
+//        return nodeMap.values()
+//                .stream()
+//                .sorted()
+//                .toArray(LogoNode[]::new);
+
         List<LogoNode> retList = new ArrayList<>(nodeMap.values());
 
         this.safeSort(retList);
@@ -162,18 +168,17 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
      * @return true if related, false otherwise
      */
     private boolean logoRelatedToWord(LogoNode node, String relWord) {
-        boolean ignoreCase = core.getPropertiesManager().isIgnoreCase();
+        if (!logoToWord.containsKey(node.getId()))
+            return false;
 
-        if (logoToWord.containsKey(node.getId())) {
-            for (Integer integer : logoToWord.get(node.getId())) {
-                ConWord curWord = core.getWordCollection().getNodeById(integer);
-                if ((ignoreCase && curWord.getValue().equalsIgnoreCase(relWord))
-                        || curWord.getValue().equals(relWord)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return logoToWord.get(node.getId())
+                .stream()
+                .map((nodeId) -> core.getWordCollection().getNodeById(nodeId))
+                .anyMatch((curWord) ->
+                        (core.getPropertiesManager().isIgnoreCase()
+                                && curWord.getValue().equalsIgnoreCase(relWord)
+                        ) || curWord.getValue().equals(relWord)
+                );
     }
     
     /**
@@ -268,7 +273,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
                 wordIds.append(",").append(relIt.next());
             }
             
-            // only add if there is one more more relation
+            // only add if there is one more relation
             if (wordIds.length() > 0) {
                 Element node = doc.createElement(PGTUtil.LOGO_WORD_RELATION_XID);
                 // node is encoded with the logograph ID first, followed by all related words IDs

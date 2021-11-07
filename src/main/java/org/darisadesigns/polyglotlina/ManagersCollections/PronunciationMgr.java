@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.darisadesigns.polyglotlina.IPAHandler;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -113,15 +114,10 @@ public class PronunciationMgr {
     }
 
     public void deletePronunciation(PronunciationNode remove) {
-        List<PronunciationNode> newProcs = new ArrayList<>();
-
-        pronunciations.stream()
+        pronunciations = pronunciations
+                .stream()
                 .filter((node) -> !(node.equals(remove)))
-                .forEachOrdered((node) -> {
-                    newProcs.add(node);
-                });
-
-        pronunciations = newProcs;
+                .collect(Collectors.toList());
     }
 
     public void addPronunciation(PronunciationNode newNode) {
@@ -147,15 +143,12 @@ public class PronunciationMgr {
     }
     
     private String getPronunciationInternal(String base) throws Exception {
-        StringBuilder ret = new StringBuilder();
-
         // -base.length() fed as initial depth to ensure that longer words cannot be artificially labeled as breaking max depth
         List<PronunciationNode> procCycle = getPronunciationElements(base, -base.length(), true);
-        for (PronunciationNode curProc : procCycle) {
-            ret.append(curProc.getPronunciation());
-        }
 
-        return ret.toString();
+        return procCycle.stream()
+                .map((curProc) -> curProc.getPronunciation())
+                .collect(Collectors.joining());
     }
 
     /**
@@ -209,10 +202,10 @@ public class PronunciationMgr {
         
         for (PronunciationNode curNode : pronunciations) {
             String pattern = curNode.getValue();
+
             // skip if set as starting characters, but later in word
-            if (pattern.startsWith("^") && !beginning) {
+            if (pattern.startsWith("^") && !beginning)
                 continue;
-            }
 
             // original pattern
             String origPattern = pattern;
@@ -227,30 +220,31 @@ public class PronunciationMgr {
             Pattern findString = Pattern.compile(pattern);
             Matcher matcher = findString.matcher(base);
 
-            if (matcher.matches()) {
-                String leadingChars = matcher.group(1);
+            if (!matcher.matches())
+                continue;
 
-                // if a user has entered an empty pattern... just continue.
-                if (leadingChars.isEmpty()) {
-                    continue;
-                }
-                List<PronunciationNode> temp
-                        = getPronunciationElementsWithRegex(base.substring(leadingChars.length()), depth + 1, false);
+            String leadingChars = matcher.group(1);
 
-                try {
-                    if (leadingChars.length() == base.length() || !temp.isEmpty()) {
-                        PronunciationNode finalNode = new PronunciationNode();
-                        finalNode.setEqual(curNode);
-                        finalNode.setPronunciation(leadingChars.replaceAll(origPattern, curNode.getPronunciation()));
-                        ret.add(finalNode);
-                        ret.addAll(temp);
-                        break;
-                    }
-                } catch (IndexOutOfBoundsException e) {
-                    throw new Exception("The pronunciation pair " + curNode.getValue() + "->"
-                            + curNode.getPronunciation() + " is generating a regex error. Please correct."
-                            + "\nError: " + e.getLocalizedMessage() + e.getClass().getName(), e);
+            // if a user has entered an empty pattern... just continue.
+            if (leadingChars.isEmpty())
+                continue;
+
+            List<PronunciationNode> temp
+                    = getPronunciationElementsWithRegex(base.substring(leadingChars.length()), depth + 1, false);
+
+            try {
+                if (leadingChars.length() == base.length() || !temp.isEmpty()) {
+                    PronunciationNode finalNode = new PronunciationNode();
+                    finalNode.setEqual(curNode);
+                    finalNode.setPronunciation(leadingChars.replaceAll(origPattern, curNode.getPronunciation()));
+                    ret.add(finalNode);
+                    ret.addAll(temp);
+                    break;
                 }
+            } catch (IndexOutOfBoundsException e) {
+                throw new Exception("The pronunciation pair " + curNode.getValue() + "->"
+                        + curNode.getPronunciation() + " is generating a regex error. Please correct."
+                        + "\nError: " + e.getLocalizedMessage() + e.getClass().getName(), e);
             }
         }
         
@@ -263,26 +257,28 @@ public class PronunciationMgr {
         for (PronunciationNode curNode : pronunciations) {
             String pattern = curNode.getValue();
             // do not overstep string
-            if (pattern.length() <= base.length()) {
-                // capture string to compare based on pattern length
-                String comp = base.substring(0, curNode.getValue().length());
+            if (pattern.length() > base.length())
+                continue;
 
-                if (core.getPropertiesManager().isIgnoreCase()) {
-                    comp = comp.toLowerCase();
-                    pattern = pattern.toLowerCase();
-                }
+            // capture string to compare based on pattern length
+            String comp = base.substring(0, curNode.getValue().length());
 
-                if (comp.equals(pattern)) {
-                    List<PronunciationNode> temp
-                            = getPronunciationElementsNoRegex(base.substring(pattern.length()), depth + 1, false);
+            if (core.getPropertiesManager().isIgnoreCase()) {
+                comp = comp.toLowerCase();
+                pattern = pattern.toLowerCase();
+            }
 
-                    // if lengths are equal, success! return. If unequal and no further match found-failure
-                    if (pattern.length() == base.length() || !temp.isEmpty()) {
-                        ret.add(curNode);
-                        ret.addAll(temp);
-                        break;
-                    }
-                }
+            if (!comp.equals(pattern))
+                continue;
+
+            List<PronunciationNode> temp
+                    = getPronunciationElementsNoRegex(base.substring(pattern.length()), depth + 1, false);
+
+            // if lengths are equal, success! return. If unequal and no further match found-failure
+            if (pattern.length() == base.length() || !temp.isEmpty()) {
+                ret.add(curNode);
+                ret.addAll(temp);
+                break;
             }
         }
         
@@ -322,7 +318,7 @@ public class PronunciationMgr {
                 PGTUtil.TRUE : PGTUtil.FALSE));
         collection.appendChild(recurseNode);
         
-        pronunciations.forEach((proc)->{
+        pronunciations.forEach((proc) -> {
             proc.writeXML(doc, collection);
         });
     }
@@ -372,14 +368,10 @@ public class PronunciationMgr {
      * @return 
      */
     public boolean usingLookaheadsLookbacks() {
-        for (PronunciationNode curNode : pronunciations) {
-            String pattern = curNode.getValue();
-            
-            // checks for all positive and negative lookaheads and lookbehinds
-            if (isRegexLookaheadBehind(pattern))
-                return true;
-        }
-        return false;
+        return pronunciations
+                .stream()
+                .map((curNode) -> curNode.getValue())
+                .anyMatch((pattern) -> isRegexLookaheadBehind(pattern));
     }
     
     /**
@@ -392,7 +384,7 @@ public class PronunciationMgr {
     }
     
     /**
-     * Generates and returns a map of characters to to the IPA sounds that they
+     * Generates and returns a map of characters to the IPA sounds that they
      * can create and their context. The returned map has values which come in
      * pairs. Each pair of two represents; 
      * 1) The IPA character which is pronounced as a result of the key alphabetic character
@@ -406,23 +398,24 @@ public class PronunciationMgr {
         Map<String, List<PronunciationNode>> alphaAssociations = new HashMap<>();
         
         // Test if the VALUE for each pronunciation pair (containing the match pattern) includes any given
-        // alhpabetic character. If so, associate the alphabetic character with the pronunciation
+        // alphabetic character. If so, associate the alphabetic character with the pronunciation
         for (PronunciationNode pronunciation : pronunciations) {
             for (String alphaChar : alphaValues) {
-                if (pronunciation.getValue().contains(alphaChar)) {
-                    if (alphaAssociations.containsKey(alphaChar)) {
-                        alphaAssociations.get(alphaChar).add(pronunciation);
-                    } else {
-                        List<PronunciationNode> associationList = new ArrayList<>();
-                        associationList.add(pronunciation);
-                        alphaAssociations.put(alphaChar, associationList);
-                    }
+                if (!pronunciation.getValue().contains(alphaChar))
+                    continue;
+
+                if (alphaAssociations.containsKey(alphaChar)) {
+                    alphaAssociations.get(alphaChar).add(pronunciation);
+                } else {
+                    List<PronunciationNode> associationList = new ArrayList<>();
+                    associationList.add(pronunciation);
+                    alphaAssociations.put(alphaChar, associationList);
                 }
             }
         }
         
         // Next, check through each REPLACEMENT pattern of every pattern for each IPA
-        // character. For those that match, add the IPA Character, then the pronunciaton
+        // character. For those that match, add the IPA Character, then the pronunciation
         // VALUE to the return. Ths returns the Alphabet character as a key value leading
         // to paired IPA characters they can represent and the situation WHEN they
         // represent those characters
@@ -457,17 +450,17 @@ public class PronunciationMgr {
         // values and keys are swapped
         for (String key : charsPerIpa.keySet()) {
             String[] values = charsPerIpa.get(key);
-            for (int i = 0; i < values.length; i += 2) {
-                String value = values[i];
-                if (ret.containsKey(value)) {
+
+            for (String value : values) {
+                if (!ret.containsKey(value)) {
+                    ret.put(value, new String[]{key});
+                } else {
                     List<String> curVals = new ArrayList(Arrays.asList(ret.get(value)));
                     if (!curVals.contains(key)) {
                         curVals.add(key);
                     }
                     
                     ret.replace(value, curVals.toArray(new String[0]));
-                } else {
-                    ret.put(value, new String[]{key});
                 }
             }
         }

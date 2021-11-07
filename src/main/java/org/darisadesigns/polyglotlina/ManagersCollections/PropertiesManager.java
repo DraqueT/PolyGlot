@@ -265,22 +265,20 @@ public abstract class PropertiesManager {
                 if (newEntry.isEmpty())
                     continue;
 
-                if (alphaOrder.containsKey(newEntry) && ! overrideDupe) {
-                    error.append("Alphabet contains duplicate entry: ").append(newEntry);
-                }
-                else {
+                if (!alphaOrder.containsKey(newEntry) || overrideDupe) {
                     alphaOrder.put(newEntry, i);
+                } else {
+                    error.append("Alphabet contains duplicate entry: ").append(newEntry);
                 }
             }
         } else {
             for (int i = 0; i < order.length(); i++) {
                 String newEntry = order.substring(i, i+1);
-                
-                if (alphaOrder.containsKey(newEntry) && !overrideDupe) {
-                    error.append("Alphabet contains duplicate entry: ").append(newEntry);
-                }
-                else {
+
+                if (!alphaOrder.containsKey(newEntry) || overrideDupe) {
                     alphaOrder.put(newEntry, i);
+                } else {
+                    error.append("Alphabet contains duplicate entry: ").append(newEntry);
                 }
             }
         }
