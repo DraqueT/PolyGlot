@@ -100,9 +100,7 @@ public class TypeCollection extends DictionaryCollection<TypeNode> {
      */
     @Override
     public Integer insert() throws Exception {
-        Integer ret;
-
-        ret = super.insert(bufferNode);
+        Integer ret = super.insert(bufferNode);
 
         bufferNode = new TypeNode();
         
@@ -135,6 +133,11 @@ public class TypeCollection extends DictionaryCollection<TypeNode> {
         Collections.sort(retList);
 
         return retList.toArray(new TypeNode[0]);
+
+        // TODO: Could be replaced by this
+//        return nodeMap.values()
+//                .stream()
+//                .sorted().toArray(TypeNode[]::new);
     }
     
     public boolean nodeExists(int id) {
@@ -148,6 +151,14 @@ public class TypeCollection extends DictionaryCollection<TypeNode> {
     }
     
     public TypeNode findOrCreate(TypeNode node) throws Exception {
+        // TODO: Alternative way to do it
+//        TypeNode ret = nodeMap.values()
+//                .stream()
+//                .filter((compNode) -> compNode.getValue().equals(node.getValue())
+//                        && compNode.getGloss().equals(node.getGloss()))
+//                .findFirst()
+//                .orElse(null);
+
         TypeNode ret = null;
         
         for (TypeNode compNode : nodeMap.values()) {

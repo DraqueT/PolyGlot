@@ -86,8 +86,7 @@ public class ReversionManager {
      * Trims reversions down to the max number allowed in the options
      */
     public void trimReversions() {
-        if (reversionList.size() > maxReversionCount && maxReversionCount != 0) {
+        if (reversionList.size() > maxReversionCount && maxReversionCount != 0)
             reversionList = reversionList.subList(0, maxReversionCount);
-        }
     }
 }

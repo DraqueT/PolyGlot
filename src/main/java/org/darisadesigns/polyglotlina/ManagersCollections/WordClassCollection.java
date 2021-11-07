@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Random;
+import java.util.stream.Collectors;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -81,21 +82,12 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
     }
 
     public WordClass[] getClassesForType(int classId) {
-        List<WordClass> ret = new ArrayList<>();
+        List<WordClass> ret = nodeMap.values()
+                .stream()
+                .filter((prop) -> prop.appliesToType(classId) || prop.appliesToType(-1))
+                .sorted()
+                .collect(Collectors.toList()); // TODO: could be replaced by "toArray(WordClass[]::new)"
 
-        nodeMap.values().forEach((prop) -> {
-            if (prop.appliesToType(classId)
-                    || prop.appliesToType(-1)) { // -1 is class "all"
-                ret.add(prop);
-            }
-        });
-
-        // TODO alternative way to do it
-//        nodeMap.values().stream()
-//                .filter((prop) -> prop.appliesToType(classId) || prop.appliesToType(-1))
-//                .forEach((prop) -> ret.add(prop));
-
-        Collections.sort(ret);
         return ret.toArray(new WordClass[0]);
     }
 
@@ -155,30 +147,10 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
         if (a.size() != b.size())
             return false;
 
-        for (Entry aEntry : a) {
-            boolean result = false;
-
-            for (Entry bEntry : b) {
-                if (aEntry.equals(bEntry)) {
-                    result = true;
-                    break;
-                }
-            }
-            if (!result)
-                return false;
-
-            // TODO: alternative way using a for + stream
-//            boolean result = b.stream().anyMatch((bEntry) -> aEntry.equals(bEntry));
-//            if (!result)
-//                return false;
-        }
-        return true;
-
-        // TODO: one more way using 2 streams
-//        return a.stream().allMatch(
-//                (aEntry) -> b.stream().anyMatch(
-//                        (bEntry) -> aEntry.equals(bEntry)
-//                ));
+        return a.stream()
+                .allMatch(
+                        (aEntry) -> b.stream().anyMatch((bEntry) -> aEntry.equals(bEntry))
+                );
     }
 
     /**
@@ -236,9 +208,8 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
         if (wordClass.isAssociative())
             return true; // This will revert to an unknown value if unable to be found
 
-        if (!wordClass.isValid(valId)) {
-            return false; // could be further simplified by using "return wordClass.isValid(valId);"
-        }
+        if (!wordClass.isValid(valId))
+            return false; // TODO: could be further simplified by using "return wordClass.isValid(valId);"
 
         return true;
     }
