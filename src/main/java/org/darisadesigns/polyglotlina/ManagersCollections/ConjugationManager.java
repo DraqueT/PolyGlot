@@ -549,11 +549,11 @@ public class ConjugationManager {
     public void deprecateAllConjugations(Integer typeId) {
         // rename rules first for easier organization
         Map<String, ConjugationPair> mappedConjugations = new HashMap<>();
-        for (var conjugation : getAllCombinedIds(typeId)) {
+        for (ConjugationPair conjugation : getAllCombinedIds(typeId)) {
             mappedConjugations.put(conjugation.combinedId, conjugation);
         }
         if (generationRules.containsKey(typeId)) {
-            for (var rule : generationRules.get(typeId)) {
+            for (ConjugationGenRule rule : generationRules.get(typeId)) {
                 ConjugationPair parent = mappedConjugations.get(rule.getCombinationId());
                 rule.setName(parent.label + ": " + rule.getName());
             }

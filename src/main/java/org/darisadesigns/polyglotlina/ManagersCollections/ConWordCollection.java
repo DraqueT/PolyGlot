@@ -613,14 +613,16 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
                 // etymological root
                 Object parent = _filter.getFilterEtyParent();
                 if (parent != null) {
-                    if (parent instanceof ConWord parWord) {
+                    if (parent instanceof ConWord) {
+                        ConWord parWord = (ConWord)parent;
                         if (parWord.getId() != -1 && !core.getEtymologyManager()
                                 .childHasParent(curWord.getId(), parWord.getId())) {
                             continue;
                         }
                     }
 
-                    if (parent instanceof EtyExternalParent parExt) {
+                    if (parent instanceof EtyExternalParent) {
+                        EtyExternalParent parExt = (EtyExternalParent)parent;
                         if (parExt.getId() != -1 && !core.getEtymologyManager()
                                 .childHasExtParent(curWord.getId(), parExt.getUniqueId())) {
                             continue;
