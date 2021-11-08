@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.stream.Collectors;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -153,7 +155,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
                     ((ignoreCase && !curNode.getNotes().toLowerCase().contains(notes.toLowerCase())) 
                             || !curNode.getNotes().contains(notes))) {
                 continue;                
-            }            
+            }
             
             retList.add(curNode);
         }
@@ -230,13 +232,11 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
      * @return 
      */
     public LogoNode[] getRadicals() {
-        List<LogoNode> retList = new ArrayList<>();
+        List<LogoNode> retList = nodeMap.values()
+                .stream()
+                .filter((curNode) -> curNode.isRadical())
+                .collect(Collectors.toList());
 
-        for (LogoNode curNode : new ArrayList<>(nodeMap.values())) {
-            if (curNode.isRadical())
-                retList.add(curNode);
-        }
-        
         this.safeSort(retList);
 
         return retList.toArray(new LogoNode[0]);

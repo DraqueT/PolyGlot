@@ -276,16 +276,9 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         if (core.getPGTUtil().isBlank(conWord))
             return false;
 
-        // TODO: Alternative way to do it
-//        return this.nodeMap.values()
-//                .stream()
-//                .anyMatch((word) -> conWord.equals(word.getValue()));
-
-        for (ConWord word : this.nodeMap.values()) {
-            if (conWord.equals(word.getValue()))
-                return true;
-        }
-        return false;
+        return this.nodeMap.values()
+                .stream()
+                .anyMatch((word) -> conWord.equals(word.getValue()));
     }
 
     /**
@@ -295,21 +288,15 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
      * @param local value to search for
      * @return true if exists, false otherwise
      */
-    public boolean testLocalValueExists(String local) { // TODO: possible logic merge with "testValueExists"
+    public boolean testLocalValueExists(String local) {
         // don't bother checking blanks
         if (core.getPGTUtil().isBlank(local))
             return true;
 
-        // TODO: Alternative way to do it
-//        return this.nodeMap.values()
-//            .stream()
-//            .anyMatch((word) -> local.equals(word.getValue()));
+        return this.nodeMap.values()
+            .stream()
+            .anyMatch((word) -> local.equals(word.getValue()));
 
-        for (ConWord word : this.nodeMap.values()) {
-            if (local.equals(word.getLocalWord()))
-                return true;
-        }
-        return false;
     }
     
     /**
@@ -337,7 +324,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
      * string occurrences within conlang words of the lexicon
      * @return 
      */
-    public Map<String, Integer> getConWordCount() { // TODO: possible logic merge with "getLocalCount"
+    public Map<String, Integer> getConWordCount() {
         Map<String, Integer> ret = new HashMap<>();
         
         for (ConWord word : this.nodeMap.values()) {

@@ -23,7 +23,6 @@ package org.darisadesigns.polyglotlina.ManagersCollections;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.darisadesigns.polyglotlina.DictCore;
@@ -184,10 +183,9 @@ public class TypeCollection extends DictionaryCollection<TypeNode> {
     public void writeXML(Document doc, Element rootElement) {
         Element typeContainer = doc.createElement(PGTUtil.POS_COLLECTION_XID);
 
-        Arrays.stream(getNodes()).forEach((curNode) -> {
+        for (TypeNode curNode : getNodes()) {
             curNode.writeXML(doc, typeContainer);
-        });
-        
+        }
         rootElement.appendChild(typeContainer);
     }
 

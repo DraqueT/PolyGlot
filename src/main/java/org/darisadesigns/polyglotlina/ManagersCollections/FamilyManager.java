@@ -158,7 +158,7 @@ public class FamilyManager {
 
         if (comp instanceof FamilyManager compMan) {
             return (famRoot == null && compMan.famRoot == null)
-                    || famRoot.equals(compMan.famRoot); 
+                    || famRoot.equals(compMan.famRoot);
         }
         
         return false;

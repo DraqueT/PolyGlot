@@ -114,10 +114,12 @@ public class PronunciationMgr {
     }
 
     public void deletePronunciation(PronunciationNode remove) {
-        pronunciations = pronunciations
+        List<PronunciationNode> newProcs = pronunciations
                 .stream()
                 .filter((node) -> !(node.equals(remove)))
                 .collect(Collectors.toList());
+
+        pronunciations = newProcs;
     }
 
     public void addPronunciation(PronunciationNode newNode) {
@@ -451,7 +453,8 @@ public class PronunciationMgr {
         for (String key : charsPerIpa.keySet()) {
             String[] values = charsPerIpa.get(key);
 
-            for (String value : values) {
+            for (int i = 0; i < values.length; i += 2) {
+                String value = values[i];
                 if (!ret.containsKey(value)) {
                     ret.put(value, new String[]{key});
                 } else {
@@ -459,7 +462,7 @@ public class PronunciationMgr {
                     if (!curVals.contains(key)) {
                         curVals.add(key);
                     }
-                    
+
                     ret.replace(value, curVals.toArray(new String[0]));
                 }
             }

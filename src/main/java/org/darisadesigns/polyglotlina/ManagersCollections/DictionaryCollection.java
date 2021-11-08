@@ -205,8 +205,8 @@ public abstract class DictionaryCollection<N extends DictNode> {
     public List<N> getRandomNodes(int numRandom, Integer... exclusions) {
         List<N> ret = new ArrayList<>();
         List<N> allValues = new ArrayList<>(nodeMap.values());
-        
-        
+
+
         for (Integer exclude : exclusions) {
             if (nodeMap.containsKey(exclude)) {
                 allValues.remove(nodeMap.get(exclude));
@@ -264,7 +264,7 @@ public abstract class DictionaryCollection<N extends DictNode> {
      */
     public Map<String, List<N>> getValueMapping() {
         Map<String, List<N>> ret = new HashMap<>();
-        
+
         for (N node : nodeMap.values()) {
             String nodeVal = node.getValue();
             List<N> nodeList;
@@ -306,7 +306,7 @@ public abstract class DictionaryCollection<N extends DictNode> {
         try {
             return canSafelySort(false);
         } catch (Exception e) {
-            // do nothing. this is explicitly surpressing errors
+            // do nothing. this is explicitly suppressing errors
         }
         return false;
     }

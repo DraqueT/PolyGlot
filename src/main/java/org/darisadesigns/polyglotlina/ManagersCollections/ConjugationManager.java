@@ -87,32 +87,32 @@ public class ConjugationManager {
             String replacement, 
             RegexTools.ReplaceOptions instanceOption) {
         List<EvolutionPair> ret = new ArrayList<>();
-        if (dList.containsKey(wordId)) {
-            dList.get(wordId).forEach(curNode -> {
-                String startValue = curNode.getValue();
-                try {
-                    curNode.evolveConjugatedNode(regex, replacement, instanceOption);
-                    
-                    // only report error if prior value did not start out as blank
-                    
 
-                    if (core.getPGTUtil().isBlank(curNode.getValue()) &&
-                            !core.getPGTUtil().isBlank(startValue)) {
-                        throw new Exception("Conjugation set to blank value.");
-                    }
-                    
-                    ret.add(new EvolutionPair(startValue,
-                            curNode.getValue(),
-                            EvolutionType.savedConjugation,
-                            "",
-                            "Evolved Wordform"
-                    ));
-                } catch (Exception e) {
-                    
+        if (!dList.containsKey(wordId))
+            return ret.toArray(new EvolutionPair[0]);
+
+        dList.get(wordId).forEach(curNode -> {
+            String startValue = curNode.getValue();
+            try {
+                curNode.evolveConjugatedNode(regex, replacement, instanceOption);
+
+                // only report error if prior value did not start out as blank
+                if (core.getPGTUtil().isBlank(curNode.getValue()) &&
+                        !core.getPGTUtil().isBlank(startValue)) {
+                    throw new Exception("Conjugation set to blank value.");
                 }
-            });
-        }
-        
+
+                ret.add(new EvolutionPair(startValue,
+                        curNode.getValue(),
+                        EvolutionType.savedConjugation,
+                        "",
+                        "Evolved Wordform"
+                ));
+            } catch (Exception e) {
+
+            }
+        });
+
         return ret.toArray(new EvolutionPair[0]);
     }
     
@@ -388,7 +388,7 @@ public class ConjugationManager {
      */
     public ConjugationGenRule[] getConjugationRulesForConjugation(int typeId, String combinedId) {
         List<ConjugationGenRule> ret = new ArrayList<>();
-        
+
         for (ConjugationGenRule curRule : getConjugationRulesForType(typeId)) {
             if (curRule.getCombinationId().equals(combinedId)) {
                 ret.add(curRule);
@@ -588,7 +588,7 @@ public class ConjugationManager {
             return null;
 
         return decList.stream()
-                .filter(curNode -> curNode.getId().equals(declensionId))
+                .filter((curNode) -> curNode.getId().equals(declensionId))
                 .findFirst()
                 .orElse(null);
     }
@@ -687,8 +687,9 @@ public class ConjugationManager {
      * @return null if none found
      */
     public ConjugationNode getDimensionalConjugationTemplateByIndex(int typeId, int index) {
+        List<ConjugationNode> nodes = dTemplates.get(typeId);
         int curIndex = 0;
-        for (ConjugationNode node : dTemplates.get(typeId)) {
+        for (ConjugationNode node : nodes) {
             if (node.isDimensionless())
                 continue;
 
@@ -788,7 +789,7 @@ public class ConjugationManager {
 
         return searchList
                 .stream()
-                .filter(test -> test.getId().equals(templateId))
+                .filter((test) -> test.getId().equals(templateId))
                 .findFirst()
                 .orElse(null);
     }
@@ -925,7 +926,7 @@ public class ConjugationManager {
 
         return dList.get(wordId)
                 .stream()
-                .filter(test -> dimId.equals(test.getCombinedDimId()))
+                .filter((test) -> dimId.equals(test.getCombinedDimId()))
                 .findFirst()
                 .orElse(null);
     }
@@ -1273,7 +1274,7 @@ public class ConjugationManager {
      * @param typeId part of speech to clear
      * @param rulesToDelete rules in this pos to delete
      */
-    public void bulkDeleteRuleFromConjugationTemplates(int typeId, List<ConjugationGenRule> rulesToDelete) { // TODO: possible logic merge with "bulkUpdateRuleInConjugationTemplates"
+    public void bulkDeleteRuleFromConjugationTemplates(int typeId, List<ConjugationGenRule> rulesToDelete) {
         ConjugationGenRule[] rules = this.getConjugationRulesForType(typeId);
 
         for (ConjugationGenRule rule : rules) {
@@ -1364,8 +1365,8 @@ public class ConjugationManager {
 
 
         if (comp instanceof ConjugationManager compMan) {
-            boolean ret = ((generationRules == null && compMan.generationRules == null)
-                    || generationRules.equals(compMan.generationRules));
+            boolean ret = (generationRules == null && compMan.generationRules == null)
+                    || generationRules.equals(compMan.generationRules);
             return ret
                     && ((dList == null && compMan.dList == null) || dList.equals(compMan.dList))
                     && combSettings.equals(compMan.combSettings);
