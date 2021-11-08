@@ -620,7 +620,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
                             continue;
                         }
                     }
-
+                    
                     if (parent instanceof EtyExternalParent) {
                         EtyExternalParent parExt = (EtyExternalParent)parent;
                         if (parExt.getId() != -1 && !core.getEtymologyManager()
