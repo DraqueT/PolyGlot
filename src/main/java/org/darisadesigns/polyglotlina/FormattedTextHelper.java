@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2018, Draque Thompson
+ * Copyright (c) 2015-2021, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -19,9 +19,6 @@
  */
 package org.darisadesigns.polyglotlina;
 
-import org.darisadesigns.polyglotlina.Nodes.ImageNode;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map.Entry;
 
 /**
@@ -32,91 +29,6 @@ import java.util.Map.Entry;
 public class FormattedTextHelper {
     private static final String FINDBODY = "<body>";
     private static final String FINDBODYEND = "</body>";
-    private static final String BLACK = "black";
-    private static final String RED = "red";
-    private static final String GRAY = "gray";
-    private static final String GREEN = "green";
-    private static final String YELLOW = "yellow";
-    private static final String BLUE = "blue";
-    private static final String COLOR = "color";
-    private static final String FACE = "face";
-    private static final String SIZE = "size";
-
-    /**
-     * Given an HTML <font~> node, return the font family
-     * @param targetNode string value of HTML node
-     * @return string value of family name, blank if none
-     */
-    private static String extractFamily(String targetNode) {
-        String ret = "";
-        
-        int pos = targetNode.indexOf(FACE) + 6;
-        
-        if (pos == -1) {
-            return ret;
-        }
-        
-        String strip = targetNode.substring(pos);
-        pos = strip.indexOf("\"");
-        ret = strip.substring(0, pos);
-        
-        return ret;
-    }
-    
-    /**
-     * Given an HTML <font~> node, return the font size
-     * @param targetNode string value of HTML node
-     * @return integer value of family size, -1 if none
-     */
-    private static int extractSize(String targetNode) {
-        int ret = -1;
-        
-        int pos = targetNode.indexOf(SIZE) + 6;
-        
-        if (pos == -1) {
-            return ret;
-        }
-        
-        String strip = targetNode.substring(pos);
-        pos = strip.indexOf("\"");
-        ret = Integer.parseInt(strip.substring(0, pos));
-        
-        return ret;
-    }
-    
-    /**
-     * Gets next node from saved text
-     * @param fromText remaining text from which to pull node
-     * @return next node in string form
-     */
-    private static String getNextNode(String fromText) {
-        String ret;
-        
-        if (fromText.startsWith("<font") ||
-                fromText.startsWith("</font")) {
-            int pos = fromText.indexOf('>');
-            ret = fromText.substring(0, pos + 1);
-        } else {
-            int posStart = fromText.indexOf("<font");
-            int posEnd = fromText.indexOf("</font");
-            
-            // get the nearest start/end of a font ascription
-            int pos;
-            if (posStart == -1 && posEnd == -1) {
-                pos = fromText.length();
-            } else if (posStart == -1) {
-                pos = posEnd;
-            } else if (posEnd == -1) {
-                pos = posStart;
-            } else {
-                pos = Math.min(posStart, posEnd);
-            }
-            
-            ret = fromText.substring(0, pos);
-        }
-        
-        return ret;
-    }
     
     /**
      * Takes html with linebreaks in body and converts the linebreaks to proper
