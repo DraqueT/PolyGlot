@@ -28,7 +28,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -375,21 +374,13 @@ public class EtymologyManager {
      * @return true if illegal due to loop, false otherwise
      */
     private boolean createsLoopParent(Integer curWordId, Integer childId) {
-        boolean ret = false;
-        
-        if (childToParent.containsKey(curWordId)) {
-            for (Integer selectedParent : childToParent.get(curWordId)) {
-                ret = selectedParent.equals(childId) 
-                        || createsLoopParent(selectedParent, childId);
-                
-                // break on single loop occurrence and return
-                if (ret) {
-                    break;
-                }
-            }
-        }
-           
-        return ret;
+        if (!childToParent.containsKey(curWordId))
+            return false;
+
+        return childToParent.get(curWordId)
+                .stream()
+                .anyMatch((selectedParent) -> selectedParent.equals(childId)
+                        || createsLoopParent(selectedParent, childId));
     }
     
     /**
