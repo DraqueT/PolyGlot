@@ -121,7 +121,7 @@ public class ConjugationGenRule implements Comparable<ConjugationGenRule> {
     public void copyTransformationsFrom(ConjugationGenRule fromRule) {
         this.transformations.clear();
         
-        for (var transformation : fromRule.transformations) {
+        for (ConjugationGenTransform transformation : fromRule.transformations) {
             this.transformations.add(new ConjugationGenTransform(transformation));
         }
     }
@@ -130,7 +130,8 @@ public class ConjugationGenRule implements Comparable<ConjugationGenRule> {
         boolean ret = true;
         
         if (this != o) {
-            if (o instanceof ConjugationGenRule comp) {
+            if (o instanceof ConjugationGenRule) {
+                ConjugationGenRule comp = (ConjugationGenRule)o;
                 ret = this.typeId == comp.typeId
                         && this.regex.equals(comp.regex)
                         && this.name.equals(comp.name);
@@ -155,7 +156,8 @@ public class ConjugationGenRule implements Comparable<ConjugationGenRule> {
         boolean ret = true;
         
         if (this != o) {
-            if (o instanceof ConjugationGenRule comp) {
+            if (o instanceof ConjugationGenRule) {
+                ConjugationGenRule comp = (ConjugationGenRule)o;
                 ret = this.typeId == comp.typeId
                         && this.regex.equals(comp.regex)
                         && this.name.equals(comp.name)
@@ -436,7 +438,8 @@ public class ConjugationGenRule implements Comparable<ConjugationGenRule> {
         
         if (comp == this) {
             ret = true;
-        } else if (comp instanceof ConjugationGenRule compRule) {            
+        } else if (comp instanceof ConjugationGenRule) {
+            ConjugationGenRule compRule = (ConjugationGenRule)comp;
             ret = typeId == compRule.typeId;
             ret = ret && (combinationId == null && compRule.combinationId == null) 
                     || combinationId.equals(compRule.combinationId);
