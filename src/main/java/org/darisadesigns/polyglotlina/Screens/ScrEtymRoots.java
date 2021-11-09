@@ -189,8 +189,10 @@ public final class ScrEtymRoots extends PDialog {
      * @param parent
      */
     private void delExtParent(EtyExternalParent parent) {
+        int divLoc = jSplitPane1.getDividerLocation();
         core.getEtymologyManager().delExternalRelation(parent, word.getId());
         setupExternalParentsPanel();
+        jSplitPane1.setDividerLocation(divLoc);
     }
 
     /**
@@ -251,9 +253,11 @@ public final class ScrEtymRoots extends PDialog {
             delButton.setText("-");
             delButton.setToolTipText("Delete this parent from your word.");
             delButton.addActionListener((ActionEvent e) -> {
+                int divLoc = jSplitPane1.getDividerLocation();
                 core.getEtymologyManager().delRelation(textField.getContentId(), word.getId());
                 setupDrawPanel();
                 setupParentsPanels();
+                jSplitPane1.setDividerLocation(divLoc);
             });
 
             // panel to contain parent value and removal button
