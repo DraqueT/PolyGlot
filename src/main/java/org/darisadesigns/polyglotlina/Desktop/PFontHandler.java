@@ -422,6 +422,26 @@ public class PFontHandler extends org.darisadesigns.polyglotlina.PFontHandler {
             return ret;
         }
     }
+    
+    /**
+     * Tests whether given string can have every character represented as a glyph for the given font
+     * @param value string to test
+     * @param conFont true if using the conlang font, false if using the local language font
+     * @return 
+     */
+    public boolean canStringBeRendered(String value, boolean conFont) {
+        Font font = conFont ?
+                ((DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager()).getFontCon() :
+                ((DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager()).getFontLocal();
+        
+        for (int i = 0; i < value.length(); i++) {
+            if (!font.canDisplay(value.charAt(i))) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
 
     /**
      * Fetches and returns unicode compatible font NOTE 1: this is a non-static
@@ -464,8 +484,7 @@ public class PFontHandler extends org.darisadesigns.polyglotlina.PFontHandler {
     /**
      * For getting Font based on javafx's needs NOTE 1: this is a non-static
      * method due to an input stream restriction NOTE 2: this is the default
-     * conlang font in PolyGlot NOTE 2: this is the default conlang font in
-     * PolyGlot
+     * conlang font in PolyGlot
      *
      * @return
      */

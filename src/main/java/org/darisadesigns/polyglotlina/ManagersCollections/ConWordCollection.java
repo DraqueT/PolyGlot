@@ -42,6 +42,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Random;
+import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
 import org.darisadesigns.polyglotlina.Nodes.EvolutionPair;
 import org.darisadesigns.polyglotlina.Nodes.EvolutionPair.EvolutionType;
 import org.darisadesigns.polyglotlina.RegexTools;
@@ -223,6 +224,11 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
                 ret.setDefinition(ret.getDefinition() + (ret.getDefinition().isEmpty() ? "" : "\n")
                         + "Definition required for " + wordPos.getValue() + " words.");
             }
+        }
+        
+        if (!new PFontHandler().canStringBeRendered(word.getValue(), true)) {
+            ret.setValue(ret.getValue() + "\nWord: \"" + word.getValue() + "\" with local value: \"" + word.getLocalWord() 
+                    + "\" cannot be rendered properly using font: " + core.getPropertiesManager().getFontConFamily());
         }
 
         return ret;
