@@ -19,7 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
-import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.OptionsManager;
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import TestResources.DummyCore;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -40,7 +40,7 @@ public class OptionsManagerTest {
     public void testResetOptions() {
         System.out.println("OptionsManagerTest.testResetOptions");
         
-        OptionsManager mgr = new OptionsManager(DummyCore.newCore());
+        DesktopOptionsManager mgr = new DesktopOptionsManager(DummyCore.newCore());
         
         mgr.setAnimateWindows(true);
         mgr.setMaxReversionCount(999);

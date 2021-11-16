@@ -41,6 +41,7 @@ import java.awt.Component;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.JComponent;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
@@ -216,7 +217,7 @@ public final class ScrTypes extends PFrame {
             lstTypes.ensureIndexIsVisible(0);
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getOSHandler().getInfoBox().error("Type Population Error", "Unable to populate types: "
+            new DesktopInfoBox(this).error("Type Population Error", "Unable to populate types: "
                     + e.getLocalizedMessage());
         }
     }

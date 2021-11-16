@@ -48,6 +48,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.darisadesigns.polyglotlina.CustomControls.CoreUpdateSubscriptionInterface;
+import org.darisadesigns.polyglotlina.ManagersCollections.PhraseManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -72,6 +73,7 @@ public class DictCore {
     private ImageCollection imageCollection;
     private EtymologyManager etymologyManager;
     private ReversionManager reversionManager;
+    private PhraseManager phraseManager;
     private ToDoManager toDoManager;
     private final OSHandler osHandler;
     private boolean curLoading = false;
@@ -111,6 +113,7 @@ public class DictCore {
             etymologyManager = new EtymologyManager(this);
             reversionManager = new ReversionManager(this);
             toDoManager = new ToDoManager();
+            phraseManager = new PhraseManager();
 
             PAlphaMap<String, Integer> alphaOrder = propertiesManager.getAlphaOrder();
             subscribers = new ArrayList<>();
@@ -448,11 +451,12 @@ public class DictCore {
      * Writes to given file
      *
      * @param _fileName filename to write to
+     * @param writeToReversionMgr
      * @throws javax.xml.parsers.ParserConfigurationException
      * @throws javax.xml.transform.TransformerException
      * @throws java.io.FileNotFoundException
      */
-    public void writeFile(String _fileName)
+    public void writeFile(String _fileName, boolean writeToReversionMgr)
             throws ParserConfigurationException, TransformerException, IOException {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -476,12 +480,20 @@ public class DictCore {
         logoCollection.writeXML(doc, rootElement);
         grammarManager.writeXML(doc, rootElement);
         toDoManager.writeXML(doc, rootElement);
+        phraseManager.writeXML(doc, rootElement);
 
         // write family entries
         rootElement.appendChild(famManager.writeToSaveXML(doc));
 
         // have IOHandler write constructed document to file
-        this.osHandler.getIOHandler().writeFile(_fileName, doc, this, this.getWorkingDirectory(), newSaveTime);
+        this.osHandler.getIOHandler().writeFile(
+                _fileName, 
+                doc, 
+                this, 
+                this.getWorkingDirectory(), 
+                newSaveTime, 
+                writeToReversionMgr
+        );
         
         lastSaveTime = newSaveTime;
     }
@@ -552,6 +564,10 @@ public class DictCore {
         return toDoManager;
     }
     
+    public PhraseManager getPhraseManager() {
+        return phraseManager;
+    }
+    
     /**
      * Returns DictCore OS handler
      * @return 
@@ -605,7 +621,8 @@ public class DictCore {
                 && logoCollection.isEmpty()
                 && grammarManager.isEmpty()
                 && wordClassCollection.isEmpty()
-                && imageCollection.isEmpty();
+                && imageCollection.isEmpty()
+                && phraseManager.isEmpty();
     }
     
     /**
@@ -638,6 +655,7 @@ public class DictCore {
             ret = ret && imageCollection.equals(compCore.imageCollection);
             ret = ret && etymologyManager.equals(compCore.etymologyManager);
             ret = ret && toDoManager.equals(compCore.toDoManager);
+            ret = ret && phraseManager.equals(compCore.phraseManager);
         }
         
         return ret;

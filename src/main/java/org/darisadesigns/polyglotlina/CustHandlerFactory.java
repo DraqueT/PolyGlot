@@ -44,6 +44,8 @@ import java.io.InputStream;
 import java.time.Instant;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.darisadesigns.polyglotlina.ManagersCollections.PhraseManager;
+import org.darisadesigns.polyglotlina.Nodes.PhraseNode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.Attributes;
@@ -189,7 +191,7 @@ public final class CustHandlerFactory {
             boolean bgrammarSecName = false;
             boolean bgrammarSecRecId = false;
             boolean bgrammarSecText = false;
-            boolean bclassNode = false;
+            //boolean bclassNode = false;
             boolean bclassId = false;
             boolean bclassName = false;
             boolean bclassApplyTypes = false;
@@ -212,6 +214,16 @@ public final class CustHandlerFactory {
             boolean betyExternalWordDefinition = false;
             boolean btoDoNodeDone = false;
             boolean btoDoNodeLabel = false;
+            boolean bphraseBook = false;
+            boolean bphraseNode = false;
+            boolean bphraseid = false;
+            boolean bphrasegloss = false;
+            boolean bconPhrase = false;
+            boolean blocalPhrase = false;
+            boolean bphrasePronunciation = false;
+            boolean bphrasePronunciationOverride = false;
+            boolean bphraseNotes = false;
+            boolean bphraseOrder = false;
             
             int wId;
             int wCId;
@@ -224,6 +236,7 @@ public final class CustHandlerFactory {
             final RomanizationManager romanizationMgr = core.getRomManager();
             final PropertiesManager propertiesManager = core.getPropertiesManager();
             final FamilyManager famMgr = core.getFamManager();
+            final PhraseManager phraseManager = core.getPhraseManager();
 
             @Override
             public void startElement(String uri, String localName, String qName, Attributes attributes) {
@@ -407,7 +420,8 @@ public final class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.GRAMMAR_SECTION_TEXT_XID)) {
                     bgrammarSecText = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.CLASS_XID)) {
-                    bclassNode = true;
+                    // logic not used
+                    //bclassNode = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.CLASS_ID_XID)) {
                     bclassId = true;
                     // the buffer should not default to "apply to all."
@@ -456,6 +470,28 @@ public final class CustHandlerFactory {
                      btoDoNodeLabel = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_DONE_XID)) {
                      btoDoNodeDone = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.PHRASEBOOK_XID)) {
+                    // no subsequent logic required.
+                    //bphraseBook = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_NODE_XID)) {
+                    // no subsequent logicrequired.
+                    //bphraseNode = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_ID_XID)) {
+                    bphraseid = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_CONPHRASE_XID)) {
+                    bconPhrase = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_LOCALPHRASE_XID)) {
+                    blocalPhrase = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_PRONUNCIATION_XID)) {
+                    bphrasePronunciation = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_PRONUNCIATION_OVERRIDE_XID)) {
+                    bphrasePronunciationOverride = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_NOTES_XID)) {
+                    bphraseNotes = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_GLOSS_XID)) {
+                    bphrasegloss = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_ORDER_XID)) {
+                    bphraseOrder = true;
                 }
             }
 
@@ -726,7 +762,10 @@ public final class CustHandlerFactory {
                         core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nWord class load error: " + e.getLocalizedMessage();
                     }
-                } else if (qName.equalsIgnoreCase(PGTUtil.CLASS_ID_XID)) {
+                } else if(qName.equalsIgnoreCase(PGTUtil.CLASS_XID)) {
+                    // logic not used
+                    //bclassNode = false;
+                }  else if (qName.equalsIgnoreCase(PGTUtil.CLASS_ID_XID)) {
                     bclassId = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.CLASS_NAME_XID)) {
                     bclassName = false;
@@ -788,6 +827,34 @@ public final class CustHandlerFactory {
                      btoDoNodeLabel = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_DONE_XID)) {
                      btoDoNodeDone = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.PHRASEBOOK_XID)) {
+                    bphraseBook = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_NODE_XID)) {
+                    PhraseNode buffer = phraseManager.getBuffer();
+                    try {
+                        phraseManager.insert(buffer.getId(), buffer);
+                    } catch (Exception e) {
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
+                        warningLog += "\nPhrase load error: " + e.getLocalizedMessage();
+                    }
+                    phraseManager.clear();
+                    bphraseNode = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_ID_XID)) {
+                    bphraseid = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_CONPHRASE_XID)) {
+                    bconPhrase = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_LOCALPHRASE_XID)) {
+                    blocalPhrase = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_PRONUNCIATION_XID)) {
+                    bphrasePronunciation = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_PRONUNCIATION_OVERRIDE_XID)) {
+                    bphrasePronunciationOverride = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_NOTES_XID)) {
+                    bphraseNotes = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_GLOSS_XID)) {
+                    bphrasegloss = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_ORDER_XID)) {
+                    bphraseOrder = false;
                 }
             }
 
@@ -1164,6 +1231,44 @@ public final class CustHandlerFactory {
                     node.setValue(node.toString() + new String(ch, start, length));
                 } else if (btoDoNodeDone) {
                     core.getToDoManager().getBuffer().setDone(new String(ch, start, length).equals(PGTUtil.TRUE));
+                } else if (bphraseBook) {
+                    // nothing to do: blank book populated in DictCore already
+                    bphraseBook = false; // set false here so not to consume action from subnodes
+                } else if (bphraseNode) {
+                    bphraseNode = false; // set false here so not to consume action from subnodes
+                } else if (bphraseid) {
+                    int id = Integer.parseInt(new String(ch, start, length));
+                    phraseManager.getBuffer().setId(id);
+                } else if (bphrasegloss) {
+                    PhraseNode buffer = phraseManager.getBuffer();
+                    String gloss = buffer.getGloss();
+                    gloss += new String(ch, start, length);
+                    buffer.setGloss(gloss);
+                } else if (bconPhrase) {
+                    PhraseNode buffer = phraseManager.getBuffer();
+                    String conPhrase = buffer.getConPhrase();
+                    conPhrase += new String(ch, start, length);
+                    buffer.setConPhrase(conPhrase);
+                } else if (blocalPhrase) {
+                    PhraseNode buffer = phraseManager.getBuffer();
+                    String localPhrase = buffer.getLocalPhrase();
+                    localPhrase += new String(ch, start, length);
+                    buffer.setLocalPhrase(localPhrase);
+                } else if (bphrasePronunciation) {
+                    PhraseNode buffer = phraseManager.getBuffer();
+                    String proc = buffer.getPronunciation();
+                    proc += new String(ch, start, length);
+                    buffer.setPronunciation(proc);
+                } else if (bphrasePronunciationOverride) {
+                    phraseManager.getBuffer().setProcOverride(new String(ch, start, length).equals(PGTUtil.TRUE));
+                } else if (bphraseNotes) {
+                    PhraseNode buffer = phraseManager.getBuffer();
+                    String notes = buffer.getNotes();
+                    notes += new String(ch, start, length);
+                    buffer.setNotes(notes);
+                } else if (bphraseOrder) {
+                    int orderId = Integer.parseInt(new String(ch, start, length));
+                    phraseManager.getBuffer().setOrderId(orderId);
                 }
             }
             

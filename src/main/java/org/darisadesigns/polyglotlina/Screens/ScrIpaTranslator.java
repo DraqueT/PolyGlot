@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -87,20 +87,8 @@ public final class ScrIpaTranslator extends PDialog {
     
     private void translateToIpa() {
         PronunciationMgr procMan = core.getPronunciationMgr();
-        String[] words = ((PTextPane)txtSource).getNakedText().split("\\s");
-        String curWord = "";
-        String ipaDisplay = "";
-        
-        try {
-            for (String word : words) {
-                curWord = word;
-                ipaDisplay += procMan.getPronunciation(word) + " ";
-            }
-        } catch (Exception e) {
-            ipaDisplay += "\n ERROR CONVERTING PATTERN: " + curWord; 
-        }
-        
-        txtTarget.setText(ipaDisplay);
+        String rawText = ((PTextPane)txtSource).getNakedText();
+        txtTarget.setText(procMan.getIpaOfPhrase(rawText));
     }
 
     /**

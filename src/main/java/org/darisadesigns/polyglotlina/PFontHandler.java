@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 - 2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019 - 2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -38,4 +38,12 @@ public abstract class PFontHandler {
      * @throws java.awt.FontFormatException
      */
     public abstract void setFontFrom(String _path, DictCore core) throws IOException, Exception;
+    
+    /**
+     * Tests whether given string can have every character represented as a glyph for the given font
+     * @param value string to test
+     * @param conFont true if using the conlang font, false if using the local language font
+     * @return 
+     */
+    public abstract boolean canStringBeRendered(String value, boolean conFont);
 }

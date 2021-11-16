@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -170,6 +170,28 @@ public class PronunciationMgr {
         return getPronunciationElements(base, -base.length(), true).toArray(new PronunciationNode[0]);
     }
     
+    /**
+     * Generates IPA version of an entire phrase
+     * @param phrase
+     * @return 
+     */
+    public String getIpaOfPhrase(String phrase) {
+        String[] words = phrase.split("\\s");
+        String curWord = "";
+        String result = "";
+        
+        try {
+            for (String word : words) {
+                curWord = word;
+                result += this.getPronunciation(word) + " ";
+            }
+        } catch (Exception e) {
+            result += "\n ERROR CONVERTING PATTERN: " + curWord; 
+        }
+        
+        return result;
+    }
+    
     protected String getToolLabel() {
         return "Pronunciation Manager";
     }
@@ -199,7 +221,7 @@ public class PronunciationMgr {
             if (recurse) {
                 ret = getPronunciationElementsRecurse(base);
             } else if (core.getPropertiesManager().isDisableProcRegex()) {
-                ret = getPronunciationElementsNoRegex(base, depth, beginning);
+                ret = getPronunciationElementsNoRegex(base, depth);
             } else {
                 ret = getPronunciationElementsWithRegex(base, depth, beginning);
             }
@@ -261,7 +283,7 @@ public class PronunciationMgr {
         return ret;
     }
     
-    private List<PronunciationNode> getPronunciationElementsNoRegex(String base, int depth, boolean beginning) throws Exception {
+    private List<PronunciationNode> getPronunciationElementsNoRegex(String base, int depth) throws Exception {
         List<PronunciationNode> ret = new ArrayList<>();
         
         for (PronunciationNode curNode : pronunciations) {
@@ -278,7 +300,7 @@ public class PronunciationMgr {
 
                 if (comp.equals(pattern)) {
                     List<PronunciationNode> temp
-                            = getPronunciationElementsNoRegex(base.substring(pattern.length()), depth + 1, false);
+                            = getPronunciationElementsNoRegex(base.substring(pattern.length()), depth + 1);
 
                     // if lengths are equal, success! return. If unequal and no further match found-failure
                     if (pattern.length() == base.length() || !temp.isEmpty()) {

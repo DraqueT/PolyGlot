@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -26,7 +26,7 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextFieldFilter;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.OptionsManager;
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
@@ -73,7 +73,7 @@ public final class ScrOptions extends PDialog {
     @Override
     public void dispose() {
         if (testWarnClose()) {
-            OptionsManager options = PolyGlot.getPolyGlot().getOptionsManager();
+            DesktopOptionsManager options = PolyGlot.getPolyGlot().getOptionsManager();
             
             double fontSize = Double.parseDouble(txtTextFontSize.getText());
             double fontSizeOriginal = options.getMenuFontSize();
@@ -249,7 +249,7 @@ public final class ScrOptions extends PDialog {
 
     @Override
     public void updateAllValues(DictCore _core) {
-        OptionsManager mgr = PolyGlot.getPolyGlot().getOptionsManager();
+        DesktopOptionsManager mgr = PolyGlot.getPolyGlot().getOptionsManager();
         
         chkResize.setSelected(mgr.isAnimateWindows());
         chkNightMode.setSelected(mgr.isNightMode());

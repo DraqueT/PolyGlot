@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -45,6 +45,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -114,7 +117,8 @@ public final class ScrPhonology extends PFrame {
     }
 
     private void setupButtons() {
-        Font charis = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
+        float fontSize = (float)((DesktopOptionsManager)PolyGlot.getPolyGlot().getOptionsManager()).getMenuFontSize();
+        Font charis = PGTUtil.CHARIS_UNICODE.deriveFont(fontSize);
         btnDownProc.setFont(charis);
         btnDownRom.setFont(charis);
         btnUpProc.setFont(charis);
@@ -265,27 +269,6 @@ public final class ScrPhonology extends PFrame {
     }
 
     /**
-     * Tests whether the replacement table contains duplicates
-     *
-     * @param value value to be checked
-     * @return true if dups, false otherwise
-     */
-    private boolean checkRepRepeats(String value) {
-        boolean ret = false;
-
-        if (!value.isEmpty()) {
-            for (int i = 0; i < tblRep.getRowCount(); i++) {
-                if (value.equals(tblRep.getModel().getValueAt(i, 0))) {
-                    ret = true;
-                    break;
-                }
-            }
-        }
-        
-        return ret;
-    }
-
-    /**
      * Adds pronunciation with values existing
      *
      * @param base base characters
@@ -362,20 +345,20 @@ public final class ScrPhonology extends PFrame {
         editChar.setDocuListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
-                doSave(e);
+                doSave();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                doSave(e);
+                doSave();
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-                doSave(e);
+                doSave();
             }
 
-            private void doSave(DocumentEvent e) {
+            private void doSave() {
                 final String value = editChar.getCellEditorValue().toString();
 
                 if (!curPopulating && value.length() > 1) {
@@ -441,11 +424,6 @@ public final class ScrPhonology extends PFrame {
         procInput.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "none");
         procInput.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.SHIFT_DOWN_MASK), "none");
     }
-
-    // TODO: THIS
-    // save on lose focus
-    // save on close
-    // do not save on field update
     
     /**
      * Saves pronunciation guide to core

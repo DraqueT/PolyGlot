@@ -31,7 +31,6 @@ import java.util.Set;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
-import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
 
@@ -237,7 +236,7 @@ public final class Java8Bridge {
         File ret = File.createTempFile("PolyGlot", "LangFile");
         
         try {
-            core.writeFile(ret.getAbsolutePath());
+            core.writeFile(ret.getAbsolutePath(), false);
         } catch (IOException | ParserConfigurationException | TransformerException e) {
             throw new IOException("Unable to save temp file to export from.", e);
         }

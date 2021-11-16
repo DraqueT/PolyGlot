@@ -211,6 +211,18 @@ public class PGTUtil {
     public static final String CLASS_VALUES_NODE_XID = "wordGrammarClassValueNode";
     public static final String CLASS_VALUE_NAME_XID = "wordGrammarClassValueName";
     public static final String CLASS_VALUE_ID_XID = "wordGrammarClassValueId";
+    
+    // properties for phrasebook
+    public static final String PHRASEBOOK_XID = "phraseBookCollection";
+    public static final String PHRASE_NODE_XID = "phraseNode";
+    public static final String PHRASE_ID_XID = "phraseId";
+    public static final String PHRASE_GLOSS_XID = "phraseGloss";
+    public static final String PHRASE_CONPHRASE_XID = "phraseConPhrase";
+    public static final String PHRASE_LOCALPHRASE_XID = "phraseLocalPhrase";
+    public static final String PHRASE_PRONUNCIATION_XID = "phrasePronunciation";
+    public static final String PHRASE_PRONUNCIATION_OVERRIDE_XID = "phrasePronunciationOverride";
+    public static final String PHRASE_NOTES_XID = "phraseNotes";
+    public static final String PHRASE_ORDER_XID = "phraseNotesOrder";
 
     // etymology constants
     public static final String ETY_COLLECTION_XID = "EtymologyCollection";
@@ -222,7 +234,7 @@ public class PGTUtil {
     public static final String ETY_EXTERNAL_WORD_ORIGIN_XID = "EtymologyExternalWordOrigin";
     public static final String ETY_EXTERNAL_WORD_DEFINITION_XID = "EtymologyExternalWordDefinition";
 
-    // TODO Node constants
+    // TO DO Node constants
     public static final String TODO_LOG_XID = "ToDoLog";
     public static final String TODO_NODE_XID = "ToDoNodeHead";
     public static final String TODO_NODE_DONE_XID = "ToDoNodeDone";

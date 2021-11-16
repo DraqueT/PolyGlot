@@ -66,7 +66,7 @@ public class ScrMainMenuTest {
 
             setFileMethod.invoke(mainMenu, PGTUtil.TESTRESOURCES +  "earien_ORIGINAL.pgd");
             int correctLexiconCount = mainMenu.getCore().getWordCollection().getWordCount();
-            mainMenu.getCore().writeFile(testFileName);
+            mainMenu.getCore().writeFile(testFileName, true);
 
             for (int i = 0; i < 10 ; i++) {
                 setFileMethod.invoke(mainMenu, testFileName);
@@ -76,7 +76,7 @@ public class ScrMainMenuTest {
                 } catch (AssertionError e) {
                     throw new AssertionError("Run: " + i + "->" + curLexCount + " != " + correctLexiconCount);
                 }
-                mainMenu.getCore().writeFile(testFileName);
+                mainMenu.getCore().writeFile(testFileName, true);
             }
         } catch (IOException | IllegalAccessException | IllegalArgumentException | NoSuchMethodException 
                 | SecurityException | InvocationTargetException | ParserConfigurationException 

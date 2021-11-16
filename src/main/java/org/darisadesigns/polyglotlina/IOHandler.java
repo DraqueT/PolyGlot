@@ -137,7 +137,14 @@ public interface IOHandler {
      */
     public boolean isFileZipArchive(String _fileName) throws IOException;
 
-    public void writeFile(String _fileName, Document doc, DictCore core, File workingDirectory, Instant saveTime)
+    public void writeFile(
+            String _fileName, 
+            Document doc, 
+            DictCore core, 
+            File workingDirectory, 
+            Instant saveTime, 
+            boolean writeToReversionMgr
+    )
             throws IOException, TransformerException;
 
     /**
