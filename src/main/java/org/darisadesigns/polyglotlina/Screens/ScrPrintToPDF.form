@@ -76,7 +76,7 @@
                       </Group>
                       <Group type="102" attributes="0">
                           <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="266" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="314" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="txtSavePath" max="32767" attributes="0"/>
@@ -199,7 +199,7 @@
                                   <Component id="chkLocalCon" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="chkLogographs" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="137" max="32767" attributes="0"/>
+                              <EmptySpace pref="144" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -207,6 +207,7 @@
                                   <Component id="chkPageNum" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="chkEtymology" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="chkPrintConjugations" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkPrintPhrases" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
@@ -232,8 +233,10 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="chkPageNum" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="chkPrintConjugations" min="-2" max="-2" attributes="0"/>
+                      <Component id="chkPrintPhrases" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
+                      <Component id="chkPrintConjugations" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="chkEtymology" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -323,6 +326,16 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Print All Conjugations"/>
                 <Property name="toolTipText" type="java.lang.String" value="If checked, words will have a list of all conjugated forms printed under their definitions."/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="chkPrintPhrases">
+              <Properties>
+                <Property name="selected" type="boolean" value="true"/>
+                <Property name="text" type="java.lang.String" value="Print Phrases"/>
+                <Property name="toolTipText" type="java.lang.String" value="Prints a phrasebook section within the PDF"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>

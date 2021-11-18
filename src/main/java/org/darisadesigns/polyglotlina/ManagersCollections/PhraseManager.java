@@ -22,6 +22,7 @@ package org.darisadesigns.polyglotlina.ManagersCollections;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.PhraseNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.w3c.dom.Document;
@@ -32,8 +33,11 @@ import org.w3c.dom.Element;
  * @author draque
  */
 public class PhraseManager extends DictionaryCollection<PhraseNode> {
-    public PhraseManager() {
+    private final DictCore core;
+    
+    public PhraseManager(DictCore _core) {
         super(new PhraseNode());
+        core = _core;
     }
     
     /**
@@ -42,7 +46,7 @@ public class PhraseManager extends DictionaryCollection<PhraseNode> {
      */
     public void moveNodeUp(PhraseNode node) {
         smoothOrder();
-        var orderedNodes = this.getAllValues();
+        List<PhraseNode> orderedNodes = this.getAllValues();
         
         if (node.getOrderId() > 0) {
             orderedNodes.get(node.getOrderId() - 1).setOrderId(node.getOrderId());
@@ -52,7 +56,7 @@ public class PhraseManager extends DictionaryCollection<PhraseNode> {
     
     public void moveNodeDown(PhraseNode node) {
         smoothOrder();
-        var orderedNodes = this.getAllValues();
+        List<PhraseNode> orderedNodes = this.getAllValues();
         
         if (node.getOrderId() < orderedNodes.size() - 1) {
             orderedNodes.get(node.getOrderId() + 1).setOrderId(node.getOrderId());
@@ -72,7 +76,7 @@ public class PhraseManager extends DictionaryCollection<PhraseNode> {
     
     @Override
     public List<PhraseNode> getAllValues() {
-        var ret = new ArrayList<PhraseNode>(super.getAllValues());
+        List<PhraseNode> ret = new ArrayList<PhraseNode>(super.getAllValues());
         Collections.sort(ret);
         return ret;
     }
@@ -82,10 +86,14 @@ public class PhraseManager extends DictionaryCollection<PhraseNode> {
         Collections.sort(orderedNodes);
         
         int i = 0;
-        for (var node : orderedNodes) {
+        for (PhraseNode node : orderedNodes) {
             node.setOrderId(i);
             i++;
         }
+    }
+    
+    public DictCore getCore() {
+        return core;
     }
     
     @Override
@@ -119,7 +127,7 @@ public class PhraseManager extends DictionaryCollection<PhraseNode> {
 
     @Override
     public PhraseNode notFoundNode() {
-        var notFound = new PhraseNode();
+        PhraseNode notFound = new PhraseNode();
         
         notFound.setConPhrase("NOTFOUND");
         notFound.setLocalPhrase("NOT FOUND");

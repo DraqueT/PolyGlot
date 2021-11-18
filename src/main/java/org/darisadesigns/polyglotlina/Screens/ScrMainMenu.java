@@ -778,7 +778,7 @@ public final class ScrMainMenu extends PFrame {
             if (exportCharis) {
                 DesktopIOHandler.getInstance().exportCharisFont(fileName);
             } else {
-                DesktopIOHandler.getInstance().exportFont(fileName, core.getCurFileName());
+                DesktopIOHandler.getInstance().exportConFont(fileName, core.getCurFileName());
             }
             core.getOSHandler().getInfoBox().info("Export Success", "Font exported to: " + fileName);
         } catch (IOException e) {

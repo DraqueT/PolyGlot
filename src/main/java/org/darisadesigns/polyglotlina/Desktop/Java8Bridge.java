@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -75,21 +75,31 @@ public final class Java8Bridge {
             boolean printGrammar,
             boolean printWordEtymologies,
             boolean printAllConjugations,
+            boolean printPhrases,
             DictCore core) throws IOException {
         
         errorIfJavaUnavailableInTerminal();
         
         File bridge = Java8Bridge.getJava8BridgeLocation();
         File tmpLangFile = createTmpLangFile(core);
-        File tmpFontFile = File.createTempFile("PolyGlotFont", ".ttf", core.getWorkingDirectory());
-        tmpFontFile.deleteOnExit();
+        File tmpConFontFile = File.createTempFile("PolyGlotConFont", ".ttf", core.getWorkingDirectory());
+        File tmpLocalFontFile = File.createTempFile("PolyGlotLocalFont", ".ttf", core.getWorkingDirectory());
+        tmpConFontFile.deleteOnExit();
+        tmpLocalFontFile.deleteOnExit();
         
-        String tmpFontFileLocation = tmpFontFile.getCanonicalPath();
+        String tmpConFontFileLocation = tmpConFontFile.getCanonicalPath();
+        String tmlLocalFontFileLocation = tmpLocalFontFile.getCanonicalPath();
         
         try {
-            DesktopIOHandler.getInstance().exportFont(tmpFontFileLocation, core.getCurFileName());
+            DesktopIOHandler.getInstance().exportConFont(tmpConFontFileLocation, core.getCurFileName());
         } catch (IOException e) {
-            tmpFontFileLocation = "";
+            tmpConFontFileLocation = "";
+        }
+        
+        try {
+            DesktopIOHandler.getInstance().exportLocalFont(tmpConFontFileLocation, core.getCurFileName());
+        } catch (IOException e) {
+            tmlLocalFontFileLocation = "";
         }
         
         String[] command = {PGTUtil.JAVA8_JAVA_COMMAND,
@@ -110,8 +120,10 @@ public final class Java8Bridge {
             (printOrtho ? PGTUtil.TRUE : PGTUtil.FALSE),
             (printPageNumber ? PGTUtil.TRUE : PGTUtil.FALSE),
             (printWordEtymologies ? PGTUtil.TRUE : PGTUtil.FALSE),
-            tmpFontFileLocation,
-            PGTUtil.PGT_VERSION
+            tmpConFontFileLocation,
+            PGTUtil.PGT_VERSION,
+            (printPhrases ? PGTUtil.TRUE : PGTUtil.FALSE),
+            tmlLocalFontFileLocation
         };
         
         String[] results = DesktopIOHandler.getInstance().runAtConsole(command, true);

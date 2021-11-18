@@ -20,7 +20,7 @@
 package org.darisadesigns.polyglotlina.Nodes;
 
 import java.util.Objects;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
+import org.darisadesigns.polyglotlina.ManagersCollections.PhraseManager;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -77,8 +77,8 @@ public class PhraseNode extends DictNode {
     public String getPronunciation() {
         String ret = pronunciation;
         
-        if (!isProcOverride()) {
-            ret = PolyGlot.getPolyGlot().getCore().getPronunciationMgr().getIpaOfPhrase(getConPhrase());
+        if (!isProcOverride() && this.parent != null) {
+            ret = ((PhraseManager)this.parent).getCore().getPronunciationMgr().getIpaOfPhrase(getConPhrase());
         }
         
         return ret;

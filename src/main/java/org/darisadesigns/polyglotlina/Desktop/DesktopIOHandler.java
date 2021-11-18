@@ -909,14 +909,23 @@ public final class DesktopIOHandler implements IOHandler {
      * @throws IOException
      */
     @Override
-    public void exportFont(String exportPath, String dictionaryPath) throws IOException {
+    public void exportConFont(String exportPath, String dictionaryPath) throws IOException {
+        exportFont(exportPath, dictionaryPath, PGTUtil.CON_FONT_FILE_NAME);
+    }
+    
+    @Override
+    public void exportLocalFont(String exportPath, String dictionaryPath) throws IOException {
+        exportFont(exportPath, dictionaryPath, PGTUtil.LOCAL_FONT_FILE_NAME);
+    }
+    
+    public void exportFont(String exportPath, String dictionaryPath, String exportFontFilename) throws IOException {
         try (ZipFile zipFile = new ZipFile(dictionaryPath)) {
             // ensure export file has the proper extension
             if (!exportPath.toLowerCase().endsWith(".ttf")) {
                 exportPath += ".ttf";
             }
 
-            ZipEntry fontEntry = zipFile.getEntry(PGTUtil.CON_FONT_FILE_NAME);
+            ZipEntry fontEntry = zipFile.getEntry(exportFontFilename);
 
             if (fontEntry != null) {
                 Path path = Paths.get(exportPath);
@@ -924,7 +933,7 @@ public final class DesktopIOHandler implements IOHandler {
                     Files.copy(copyStream, path, StandardCopyOption.REPLACE_EXISTING);
                 }
             } else {
-                throw new IOException("Custom font not found in PGD language file.");
+                throw new IOException(exportFontFilename + " not found in PGD language file.");
             }
         }
     }

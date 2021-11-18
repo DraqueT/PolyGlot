@@ -113,7 +113,7 @@ public class DictCore {
             etymologyManager = new EtymologyManager(this);
             reversionManager = new ReversionManager(this);
             toDoManager = new ToDoManager();
-            phraseManager = new PhraseManager();
+            phraseManager = new PhraseManager(this);
 
             PAlphaMap<String, Integer> alphaOrder = propertiesManager.getAlphaOrder();
             subscribers = new ArrayList<>();

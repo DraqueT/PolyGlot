@@ -31,7 +31,7 @@ import org.darisadesigns.polyglotlina.ManagersCollections.DictionaryCollection;
 public abstract class DictNode implements Comparable<DictNode> {
     protected String value;
     protected Integer id;    
-    private DictionaryCollection parent = null;
+    protected DictionaryCollection parent = null;
 
     @Override
     abstract public boolean equals(Object comp);

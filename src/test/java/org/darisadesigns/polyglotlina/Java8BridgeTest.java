@@ -79,9 +79,26 @@ public class Java8BridgeTest {
         boolean printGrammar = false;
         boolean printWordEtymologies = false;
         boolean printAllConjugations = false;
+        boolean printPhrases = false;
         
         try {
-            Java8Bridge.exportPdf(OUTPUT, coverImage, foreward, printConLocal, printLocalCon, printOrtho, subTitleText, titleText, printPageNumber, printGlossKey, printGrammar, printWordEtymologies, printAllConjugations, core);
+            Java8Bridge.exportPdf(
+                    OUTPUT, 
+                    coverImage, 
+                    foreward, 
+                    printConLocal, 
+                    printLocalCon, 
+                    printOrtho, 
+                    subTitleText, 
+                    titleText, 
+                    printPageNumber, 
+                    printGlossKey, 
+                    printGrammar, 
+                    printWordEtymologies, 
+                    printAllConjugations,
+                    printPhrases,
+                    core
+            );
             assertTrue(new File(OUTPUT).exists());
         } catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());

@@ -93,6 +93,35 @@ public class ScrPhrasebook extends PFrame {
             }
         });
         
+        txtConPhrase.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updatePronunciation();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updatePronunciation();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updatePronunciation();
+            }
+            
+            private void updatePronunciation() {
+                PhraseNode node = lstPhrases.getSelectedValue();
+                
+                if (node != null && !chkOverrideProc.isSelected()) {
+                    node.setConPhrase(((PTextPane)txtConPhrase).getNakedText());
+                    var localPopulating = isCurPopulating;
+                    isCurPopulating = true;
+                    txtPronunciation.setText(node.getPronunciation());
+                    isCurPopulating = localPopulating;
+                }
+            }
+        });
+        
         float fontSize = (float)((DesktopOptionsManager)PolyGlot.getPolyGlot().getOptionsManager()).getMenuFontSize();
         Font charis = PGTUtil.CHARIS_UNICODE.deriveFont(fontSize);
         btnUp.setFont(charis);
@@ -428,6 +457,7 @@ public class ScrPhrasebook extends PFrame {
         
         if (node != null) {
             node.setProcOverride(chkOverrideProc.isSelected());
+            node.setConPhrase(((PTextPane)txtConPhrase).getNakedText());
             var localPopulating = isCurPopulating;
             isCurPopulating = true;
             txtPronunciation.setText(node.getPronunciation());
