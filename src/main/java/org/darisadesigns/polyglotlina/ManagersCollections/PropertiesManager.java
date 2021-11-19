@@ -54,6 +54,7 @@ public abstract class PropertiesManager {
     private boolean disableProcRegex = false;
     private boolean enforceRTL = false;
     private boolean useLocalWordLex = false;
+    private boolean expandedLexListDisplay = true;
     protected byte[] cachedConFont = null;
     protected byte[] cachedLocalFont = null;
     private final Map<String, String> charRep = new HashMap<>();
@@ -67,6 +68,14 @@ public abstract class PropertiesManager {
     
     public void setDictCore(DictCore _core) {
         this.core = _core;
+    }
+    
+    public boolean isExpandedLexListDisplay() {
+        return expandedLexListDisplay;
+    }
+
+    public void setExpandedLexListDisplay(boolean expandedLexListDisplay) {
+        this.expandedLexListDisplay = expandedLexListDisplay;
     }
     
     /**
@@ -490,6 +499,11 @@ public abstract class PropertiesManager {
         wordValue.appendChild(doc.createTextNode(useSimplifiedConjugations ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
         
+        // store option whether to display both conword and local word in lexicon list
+        wordValue = doc.createElement(PGTUtil.LANG_PROP_EXPANDED_LEX_LIST_DISP);
+        wordValue.appendChild(doc.createTextNode(expandedLexListDisplay ? PGTUtil.TRUE : PGTUtil.FALSE));
+        propContainer.appendChild(wordValue);
+        
         // store all replacement pairs
         wordValue = doc.createElement(PGTUtil.LANG_PROP_CHAR_REP_CONTAINER_XID);
         for (Entry<String, String> pair : getAllCharReplacements()) {
@@ -703,6 +717,7 @@ public abstract class PropertiesManager {
             ret = ret && charRep.equals(prop.charRep);
             ret = ret && kerningSpace.equals(prop.kerningSpace);
             ret = ret && useSimplifiedConjugations == prop.useSimplifiedConjugations;
+            ret = ret && expandedLexListDisplay == prop.expandedLexListDisplay;
         }
         
         return ret;

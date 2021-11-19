@@ -224,6 +224,7 @@ public final class CustHandlerFactory {
             boolean bphrasePronunciationOverride = false;
             boolean bphraseNotes = false;
             boolean bphraseOrder = false;
+            boolean bexpandedLexListDisp = false;
             
             int wId;
             int wCId;
@@ -301,6 +302,8 @@ public final class CustHandlerFactory {
                     blangPropAuthCopyright = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_USE_SIMPLIFIED_CONJ)) {
                     blangPropSimpConj = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_EXPANDED_LEX_LIST_DISP)) {
+                    bexpandedLexListDisp = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_LOCAL_NAME_XID)) {
                     blangPropLocalLangName = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_AUTODECLOVERRIDE_XID)) {
@@ -615,6 +618,8 @@ public final class CustHandlerFactory {
                     blangPropAuthCopyright = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_USE_SIMPLIFIED_CONJ)) {
                     blangPropSimpConj = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_EXPANDED_LEX_LIST_DISP)) {
+                    bexpandedLexListDisp = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_LOCAL_NAME_XID)) {
                     blangPropLocalLangName = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_ID_XID)) {
@@ -1044,6 +1049,8 @@ public final class CustHandlerFactory {
                             + new String(ch, start, length));
                 } else if (blangPropSimpConj) {
                     propertiesManager.setUseSimplifiedConjugations(new String(ch, start, length).equals(PGTUtil.TRUE));
+                } else if (bexpandedLexListDisp) {
+                    propertiesManager.setExpandedLexListDisplay(new String(ch, start, length).equals(PGTUtil.TRUE));
                 } else if (blangPropLocalLangName) {
                     propertiesManager.setLocalLangName(propertiesManager.getLocalLangName()
                             + new String(ch, start, length));
