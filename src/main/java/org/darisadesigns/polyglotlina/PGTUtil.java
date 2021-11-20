@@ -300,6 +300,9 @@ public class PGTUtil {
     public static final String PLAY_BUTTON_DOWN = "/assets/org/DarisaDesigns/ImageAssets/play_ON_BIG.png";
     public static final String RECORD_BUTTON_UP = "/assets/org/DarisaDesigns/ImageAssets/recording_OFF_BIG.png";
     public static final String RECORD_BUTTON_DOWN = "/assets/org/DarisaDesigns/ImageAssets/recording_ON_BIG.png";
+    public static final String TRASH_BUTTON_UP = "/assets/org/DarisaDesigns/ImageAssets/trashcan_color.png";
+    public static final String TRASH_BUTTON_DOWN = "/assets/org/DarisaDesigns/ImageAssets/trashcan_clicked.png";
+    public static final String TRASH_BUTTON_DISABLED = "/assets/org/DarisaDesigns/ImageAssets/trashcan_bw.png";
     public static final String ADD_BUTTON = "/assets/org/DarisaDesigns/ImageAssets/add_button.png";
     public static final String DELETE_BUTTON = "/assets/org/DarisaDesigns/ImageAssets/delete_button.png";
     public static final String ADD_BUTTON_PRESSED = "/assets/org/DarisaDesigns/ImageAssets/add_button_pressed.png";

@@ -79,9 +79,16 @@ public class DesktopGrammarSectionNode extends DefaultMutableTreeNode implements
     public void setRecording(byte[] _recording) {
         recordingId = manager.addChangeRecording(recordingId, _recording);
     }
+    
     @Override
     public byte[] getRecording() throws Exception {
         return manager.getRecording(recordingId);
+    }
+    
+    @Override
+    public void clearRecording() {
+        manager.deleteRecording(recordingId);
+        recordingId = -1;
     }
     
     @Override

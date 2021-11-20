@@ -59,6 +59,7 @@ import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
 import org.darisadesigns.polyglotlina.Desktop.ClipboardHandler;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopGrammarChapNode;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopGrammarSectionNode;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.HighlightCaret;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
@@ -91,6 +92,9 @@ public final class ScrGrammarGuide extends PFrame {
     private final ImageIcon playButtonDown;
     private final ImageIcon recordButtonUp;
     private final ImageIcon recordButtonDown;
+    private final ImageIcon trashButtonUp;
+    private final ImageIcon trashButtonDown;
+    private final ImageIcon trashButtonDisabled;
     private final ImageIcon addButton;
     private final ImageIcon deleteButton;
     private final ImageIcon addButtonPressed;
@@ -115,6 +119,9 @@ public final class ScrGrammarGuide extends PFrame {
         addButtonPressed = PGTUtil.getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.ADD_BUTTON_PRESSED)));
         deleteButton = PGTUtil.getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.DELETE_BUTTON)));
         deleteButtonPressed = PGTUtil.getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.DELETE_BUTTON_PRESSED)));
+        trashButtonUp = PGTUtil.getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.TRASH_BUTTON_UP)));
+        trashButtonDown = PGTUtil.getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.TRASH_BUTTON_DOWN)));
+        trashButtonDisabled = PGTUtil.getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.TRASH_BUTTON_DISABLED)));
 
         initComponents();
         
@@ -127,7 +134,18 @@ public final class ScrGrammarGuide extends PFrame {
         txtSection.setCaret(new HighlightCaret());
 
         soundRecorder = new SoundRecorder(this);
-        soundRecorder.setButtons(btnRecordAudio, btnPlayPauseAudio, playButtonUp, playButtonDown, recordButtonUp, recordButtonDown);
+        soundRecorder.setButtons(
+                btnRecordAudio, 
+                btnPlayPauseAudio, 
+                btnDeleteRecordedAudio,
+                playButtonUp, 
+                playButtonDown, 
+                recordButtonUp, 
+                recordButtonDown,
+                trashButtonDown,
+                trashButtonUp,
+                trashButtonDisabled
+        );
 
         setInitialValues();
         setupListeners();
@@ -180,6 +198,13 @@ public final class ScrGrammarGuide extends PFrame {
         btnRecordAudio.setFocusable(false);
         btnRecordAudio.setRequestFocusEnabled(false);
         btnRecordAudio.setContentAreaFilled(false);
+        btnDeleteRecordedAudio.setBorder(null);
+        btnDeleteRecordedAudio.setBorderPainted(false);
+        btnDeleteRecordedAudio.setFocusPainted(false);
+        btnDeleteRecordedAudio.setFocusTraversalKeysEnabled(false);
+        btnDeleteRecordedAudio.setFocusable(false);
+        btnDeleteRecordedAudio.setRequestFocusEnabled(false);
+        btnDeleteRecordedAudio.setContentAreaFilled(false);
     }
 
     @Override
@@ -284,6 +309,7 @@ public final class ScrGrammarGuide extends PFrame {
         btnPlayPauseAudio.setText("");
         btnRecordAudio.setText("");
         btnAddSection.setText("");
+        btnDeleteRecordedAudio.setText("");
         btnDelete.setText("");
         btnAddSection.setIcon(PGTUtil.getSizedIcon(addButton, 21, 21));
         btnAddSection.setPressedIcon(PGTUtil.getSizedIcon(addButtonPressed, 21, 21));
@@ -496,7 +522,19 @@ public final class ScrGrammarGuide extends PFrame {
             // on exception, inform user and replace sound recorder
             core.getOSHandler().getIOHandler().writeErrorLog(e);
             soundRecorder = new SoundRecorder(this);
-            soundRecorder.setButtons(btnRecordAudio, btnPlayPauseAudio, playButtonUp, playButtonDown, recordButtonUp, recordButtonDown);
+            soundRecorder.setButtons(
+                    btnRecordAudio, 
+                    btnPlayPauseAudio, 
+                    btnDeleteRecordedAudio,
+                    playButtonUp, 
+                    playButtonDown, 
+                    recordButtonUp, 
+                    recordButtonDown,
+                    trashButtonDown,
+                    trashButtonUp,
+                    trashButtonDisabled
+            );
+            
             core.getOSHandler().getInfoBox().error("Recorder Error", "Unable to end audio stream: " + e.getLocalizedMessage());
         }
     }
@@ -522,6 +560,7 @@ public final class ScrGrammarGuide extends PFrame {
             cmbFontColor.setEnabled(false);
             cmbFonts.setEnabled(false);
             btnPlayPauseAudio.setEnabled(false);
+            btnDeleteRecordedAudio.setEnabled(false);
             btnRecordAudio.setEnabled(false);
             sldSoundPosition.setValue(0);
             sldSoundPosition.setEnabled(false);
@@ -537,10 +576,18 @@ public final class ScrGrammarGuide extends PFrame {
             cmbFonts.setEnabled(true);
             btnPlayPauseAudio.setEnabled(true);
             btnRecordAudio.setEnabled(true);
+            btnDeleteRecordedAudio.setEnabled(true);
             sldSoundPosition.setValue(0);
             sldSoundPosition.setEnabled(true);
             txtTimer.setText(defTime);
             try {
+                byte[] sound = secNode.getRecording();
+                
+                if (sound == null) {
+                    btnPlayPauseAudio.setEnabled(false);
+                    btnDeleteRecordedAudio.setEnabled(false);
+                }
+                
                 soundRecorder.setSound(secNode.getRecording());
             } catch (Exception e) {
                 core.getOSHandler().getIOHandler().writeErrorLog(e);
@@ -571,6 +618,7 @@ public final class ScrGrammarGuide extends PFrame {
             cmbFontColor.setEnabled(false);
             cmbFonts.setEnabled(false);
             btnPlayPauseAudio.setEnabled(false);
+            btnDeleteRecordedAudio.setEnabled(false);
             btnRecordAudio.setEnabled(false);
             sldSoundPosition.setValue(0);
             sldSoundPosition.setEnabled(false);
@@ -709,6 +757,7 @@ public final class ScrGrammarGuide extends PFrame {
     private void recordAudio() {
         try {
             if (soundRecorder.isRecording()) {
+                btnDeleteRecordedAudio.setEnabled(true);
                 soundRecorder.endRecording();
             } else {
                 if (soundRecorder.getSound() != null) { // confirm overwrite of existing data
@@ -822,6 +871,7 @@ public final class ScrGrammarGuide extends PFrame {
         btnPlayPauseAudio = new JButton();
         jPanel5 = new javax.swing.JPanel();
         txtTimer = new javax.swing.JTextField();
+        btnDeleteRecordedAudio = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         treChapList = new PTree(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize, nightMode);
@@ -991,6 +1041,23 @@ public final class ScrGrammarGuide extends PFrame {
                 .addComponent(txtTimer, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        btnDeleteRecordedAudio.setText("delete");
+        btnDeleteRecordedAudio.setToolTipText("Deletes recorded audio");
+        btnDeleteRecordedAudio.setBorderPainted(false);
+        btnDeleteRecordedAudio.setBounds(new java.awt.Rectangle(0, 0, 0, 0));
+        btnDeleteRecordedAudio.setEnabled(false);
+        btnDeleteRecordedAudio.setFocusable(false);
+        btnDeleteRecordedAudio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnDeleteRecordedAudio.setMaximumSize(new java.awt.Dimension(40, 40));
+        btnDeleteRecordedAudio.setMinimumSize(new java.awt.Dimension(40, 40));
+        btnDeleteRecordedAudio.setPreferredSize(new java.awt.Dimension(40, 40));
+        btnDeleteRecordedAudio.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnDeleteRecordedAudio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteRecordedAudioActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -1008,7 +1075,8 @@ public final class ScrGrammarGuide extends PFrame {
                         .addComponent(btnRecordAudio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnDeleteRecordedAudio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -1023,7 +1091,8 @@ public final class ScrGrammarGuide extends PFrame {
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(btnRecordAudio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnPlayPauseAudio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDeleteRecordedAudio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addComponent(sldSoundPosition, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -1230,11 +1299,27 @@ public final class ScrGrammarGuide extends PFrame {
         moveNodeDown();
     }//GEN-LAST:event_btnMoveNodeDownActionPerformed
 
+    private void btnDeleteRecordedAudioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteRecordedAudioActionPerformed
+        var infoBox = new DesktopInfoBox(this);
+        Object selection = treChapList.getSelectionPath().getLastPathComponent();
+        
+        closeAllPlayRecord();
+
+        if (selection instanceof GrammarSectionNode grammarSectionNode
+                && infoBox.deletionConfirmation()) {
+            grammarSectionNode.clearRecording();
+            soundRecorder.setSound(null);
+            btnPlayPauseAudio.setEnabled(false);
+            btnDeleteRecordedAudio.setEnabled(false);
+        }
+    }//GEN-LAST:event_btnDeleteRecordedAudioActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddChapter;
     private javax.swing.JButton btnAddSection;
     private javax.swing.JButton btnApply;
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnDeleteRecordedAudio;
     private javax.swing.JButton btnMoveNodeDown;
     private javax.swing.JButton btnMoveNodeUp;
     private javax.swing.JButton btnPlayPauseAudio;

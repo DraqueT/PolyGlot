@@ -49,10 +49,24 @@ public class SoundRecorderTest {
         ImageIcon playButtonDown = PGTUtil.getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.PLAY_BUTTON_DOWN)));
         ImageIcon recordButtonUp = PGTUtil.getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.RECORD_BUTTON_UP)));
         ImageIcon recordButtonDown = PGTUtil.getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.RECORD_BUTTON_DOWN)));
+        ImageIcon deleteButtonDown = PGTUtil.getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.TRASH_BUTTON_UP)));
+        ImageIcon deleteButtonUp = PGTUtil.getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.TRASH_BUTTON_UP)));
+        ImageIcon deleteButtonDisabled = PGTUtil.getButtonSizeIcon(new ImageIcon(getClass().getResource(PGTUtil.TRASH_BUTTON_DISABLED)));
         
         try {
             SoundRecorder recorder = new SoundRecorder(null);
-            recorder.setButtons(new JButton(), new JButton(), playButtonUp, playButtonDown, recordButtonUp, recordButtonDown);
+            recorder.setButtons(
+                    new JButton(), 
+                    new JButton(), 
+                    new JButton(), 
+                    playButtonUp, 
+                    playButtonDown, 
+                    recordButtonUp, 
+                    recordButtonDown, 
+                    deleteButtonDown, 
+                    deleteButtonUp, 
+                    deleteButtonDisabled
+            );
             recorder.setTimer(new JTextField());
             recorder.setSlider(new JSlider());
             recorder.beginRecording();
