@@ -105,6 +105,8 @@ public final class ScrDeclensionGenClassic extends PDialog {
         populateCombinedDecl();
         pnlApplyClasses.setVisible(false);
         pnlApplyClasses.setVisible(true);
+        scrApplyClasses.setVisible(false);
+        scrApplyClasses.setVisible(true);
     }
 
     public String getCurSelectedCombId() {
@@ -1010,6 +1012,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
         btnMoveTransformUp = new PButton(nightMode, menuFontSize); btnMoveTransformUp.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         btnMoveTransformDown = new PButton(nightMode, menuFontSize); btnMoveTransformDown.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         btnDeleteTransform = new PAddRemoveButton("-");
+        scrApplyClasses = new javax.swing.JScrollPane();
         pnlApplyClasses = new PClassCheckboxPanel(core, core.getTypes().getNodeById(typeId), true);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -1203,12 +1206,14 @@ public final class ScrDeclensionGenClassic extends PDialog {
         pnlApplyClasses.setLayout(pnlApplyClassesLayout);
         pnlApplyClassesLayout.setHorizontalGroup(
             pnlApplyClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 169, Short.MAX_VALUE)
+            .addGap(0, 165, Short.MAX_VALUE)
         );
         pnlApplyClassesLayout.setVerticalGroup(
             pnlApplyClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 333, Short.MAX_VALUE)
         );
+
+        scrApplyClasses.setViewportView(pnlApplyClasses);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -1227,10 +1232,11 @@ public final class ScrDeclensionGenClassic extends PDialog {
                     .addComponent(chkDisableWordform))
                 .addGap(3, 3, 3)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnMoveRuleDown, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnMoveRuleUp, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlApplyClasses, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnMoveRuleUp, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnMoveRuleDown, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(scrApplyClasses, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -1249,7 +1255,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(60, 60, 60)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(pnlApplyClasses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(scrApplyClasses)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(btnMoveRuleUp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1408,6 +1414,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
     private javax.swing.JList<org.darisadesigns.polyglotlina.Nodes.ConjugationGenRule> lstRules;
     private javax.swing.JPanel pnlApplyClasses;
     private javax.swing.JScrollPane sclTransforms;
+    private javax.swing.JScrollPane scrApplyClasses;
     private javax.swing.JTable tblTransforms;
     private javax.swing.JTextField txtRuleName;
     private javax.swing.JTextField txtRuleRegex;
