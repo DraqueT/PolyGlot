@@ -524,12 +524,7 @@ public final class ScrPhonology extends PFrame {
             return;
         }
 
-        PronunciationNode delNode = new PronunciationNode();
-
-        delNode.setValue(tblProcs.getValueAt(curRow, 0).toString());
-        delNode.setPronunciation(tblProcs.getValueAt(curRow, 1).toString());
-
-        core.getPronunciationMgr().deletePronunciation(delNode);
+        core.getPronunciationMgr().deletePronunciation(curRow);
         populateProcs();
     }
 
@@ -560,12 +555,7 @@ public final class ScrPhonology extends PFrame {
             return;
         }
 
-        PronunciationNode delNode = new PronunciationNode();
-
-        delNode.setValue(tblRom.getValueAt(curRow, 0).toString());
-        delNode.setPronunciation(tblRom.getValueAt(curRow, 1).toString());
-
-        core.getRomManager().deletePronunciation(delNode);
+        core.getRomManager().deletePronunciation(curRow);
         populateRoms();
     }
 
