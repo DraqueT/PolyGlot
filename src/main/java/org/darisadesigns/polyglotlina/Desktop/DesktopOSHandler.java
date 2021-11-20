@@ -52,9 +52,11 @@ public class DesktopOSHandler extends OSHandler {
     
     @Override
     public File getWorkingDirectory() {
-        return overrideProgramPath != null || overrideProgramPath.isEmpty()
-                ? PGTUtil.getDefaultDirectory()
-                : new File(overrideProgramPath);
+        if (overrideProgramPath != null && !overrideProgramPath.trim().isEmpty()) {
+            return new File(overrideProgramPath);
+        }
+        
+        return PGTUtil.getDefaultDirectory();
     }
     
     @Override

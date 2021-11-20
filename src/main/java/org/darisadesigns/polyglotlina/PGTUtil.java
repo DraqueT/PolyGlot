@@ -512,7 +512,14 @@ public class PGTUtil {
      * @return
      */
     public static File getDefaultDirectory() {
-        File ret = new File(System.getProperty("user.home") + File.separator + POLYGLOT_WORKINGDIRECTORY);
+        String defaultDirectoryPath = System.getProperty("user.home") + File.separator + POLYGLOT_WORKINGDIRECTORY;
+        
+        // for my own sanity, this keeps test stuff from overwriting options and stuff
+        if (PGTUtil.isInJUnitTest()) {
+            defaultDirectoryPath += "_TEST";
+        }
+        
+        File ret = new File(defaultDirectoryPath);
 
         if (!ret.exists()) {
             ret.mkdir();

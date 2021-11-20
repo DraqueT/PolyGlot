@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2021-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -36,7 +36,7 @@ public class ImportFileHelperTest {
     
     private static final String ORIGIN_VAL = "word1";
     private static final String ORIGIN_DEF = "ORIGIN DEF";
-    private static final String TEST_FILE = PGTUtil.TESTRESOURCES + "excel_export_check_0.csv";
+    private static final String TEST_FILE = PGTUtil.TESTRESOURCES + "excel_import_check.csv";
     private DictCore core;
     
     public ImportFileHelperTest() {
