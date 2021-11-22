@@ -96,8 +96,6 @@ public class DictCoreTest {
         }
     }
     
-    // TODO: WHY DOES THIS MAKE LINUX FAIL?
-    
     @Test
     public void testSaveLanguageIntegrityDeep() {
         // this tests the deep integrity of saved languages
@@ -109,11 +107,13 @@ public class DictCoreTest {
             Path targetPath = Files.createTempFile("POLYGLOT", "pgt");
             
             origin.readFile(PGTUtil.TESTRESOURCES + "test_equality.pgd");
-            origin.writeFile(targetPath.toString());
+            origin.writeFile(targetPath.toString(), false);
             target.readFile(targetPath.toString());
             
             assertEquals(origin, target, "DictCoreTest.testIsLanguageEmptyNoPOS:F");
         } catch (IOException | IllegalStateException | ParserConfigurationException | TransformerException e) {
+            //e.printStackTrace();
+            //System.out.println(e.getMessage());
             fail(e);
         }
     }

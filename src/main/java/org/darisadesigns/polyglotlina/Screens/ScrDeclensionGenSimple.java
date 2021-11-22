@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -248,7 +248,6 @@ public class ScrDeclensionGenSimple extends PDialog {
             }
         });
 
-        chkDisableForm.setLabel("Disable Wordform");
         chkDisableForm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 chkDisableFormActionPerformed(evt);

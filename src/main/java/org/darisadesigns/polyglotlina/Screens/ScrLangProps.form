@@ -66,7 +66,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jPanel4" min="-2" pref="113" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="txtAlphaOrder" alignment="0" pref="548" max="32767" attributes="0"/>
+                      <Component id="txtAlphaOrder" alignment="0" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="btnChangeFont" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -153,22 +153,19 @@
                           </Group>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="chkTypesMandatory" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="chkWordUniqueness" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="chkDisableProcRegex" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="chkLocalMandatory" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="chkOverrideRegexFont" min="-2" max="-2" attributes="0"/>
-                                          <Component id="chkEnforceRTL" min="-2" max="-2" attributes="0"/>
-                                          <Component id="chkLocalUniqueness" min="-2" max="-2" attributes="0"/>
-                                          <Component id="chkIgnoreCase" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                  <Component id="chkUseLocalWordLex" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkTypesMandatory" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkWordUniqueness" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkDisableProcRegex" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkLocalMandatory" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkUseLocalWordLex" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="chkExpandedLexList" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkOverrideRegexFont" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkEnforceRTL" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkLocalUniqueness" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkIgnoreCase" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
@@ -202,7 +199,10 @@
                           <Component id="chkOverrideRegexFont" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="chkUseLocalWordLex" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="chkUseLocalWordLex" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkExpandedLexList" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace pref="17" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -306,6 +306,15 @@
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="chkExpandedLexList">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Expanded Lexicon List Text"/>
+                <Property name="toolTipText" type="java.lang.String" value="Show both the conword and local definition side by side in the lexicon list display"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize);"/>
               </AuxValues>
             </Component>
           </SubComponents>

@@ -62,10 +62,14 @@ public class SoundRecorder {
     private final Window parentWindow;
     private JButton playPauseBut;
     private JButton recordBut;
+    private JButton deleteBut;
     private ImageIcon playUp;
     private ImageIcon playDown;
     private ImageIcon recUp;
     private ImageIcon recDown;
+    private ImageIcon deleteDisabled;
+    private ImageIcon deleteUp;
+    private ImageIcon deleteDown;
 
     /**
      * Instantiates recorder with default format
@@ -93,23 +97,37 @@ public class SoundRecorder {
      *
      * @param _playPause play/pause button
      * @param _record record button
+     * @param _deleteBut
      * @param _playUp play button up graphic
      * @param _playDown play button down graphic
      * @param _recUp record button up graphic
      * @param _recDown record button down graphic
+     * @param _deleteDown
+     * @param _deleteUp
+     * @param _deleteDisabled
      */
-    public void setButtons(JButton _record, JButton _playPause,
+    public void setButtons(
+            JButton _record, JButton _playPause, JButton _deleteBut,
             ImageIcon _playUp, ImageIcon _playDown, ImageIcon _recUp,
-            ImageIcon _recDown) {
+            ImageIcon _recDown, ImageIcon _deleteDown, ImageIcon _deleteUp, 
+            ImageIcon _deleteDisabled
+    ) {
         playPauseBut = _playPause;
         recordBut = _record;
+        deleteBut = _deleteBut;
         playUp = _playUp;
         playDown = _playDown;
         recUp = _recUp;
         recDown = _recDown;
+        deleteDisabled = _deleteDown;
+        deleteUp = _deleteUp;
+        deleteDown = _deleteDisabled;
 
         playPauseBut.setIcon(playUp);
         recordBut.setIcon(recUp);
+        deleteBut.setIcon(deleteUp);
+        deleteBut.setDisabledIcon(deleteDown);
+        deleteBut.setPressedIcon(deleteDisabled);
     }
 
     public void setTimer(JTextField _timer) {

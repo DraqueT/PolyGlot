@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2018-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -41,7 +41,7 @@ public class ToDoManager {
     }
     
     /**
-     * Writes todo information to XML document
+     * Writes to do information to XML document
      *
      * @param doc Document to write to
      * @param rootElement root element of document

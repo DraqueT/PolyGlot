@@ -21,6 +21,7 @@ package org.darisadesigns.polyglotlina.Desktop.CustomControls;
 
 
 import java.awt.Font;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection.ConWordDisplay;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 
@@ -31,6 +32,7 @@ import org.darisadesigns.polyglotlina.Nodes.ConWord;
 public class PListLexicon extends PList<ConWordDisplay> {
     public PListLexicon(Font font) {
         super(font);
+        this.setCellRenderer(new PListLexiconCellRenderer(PolyGlot.getPolyGlot().getCore()));
     }
     
     public Font conFontToolTip() {

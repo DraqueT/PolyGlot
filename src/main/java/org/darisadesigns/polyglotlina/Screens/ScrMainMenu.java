@@ -87,7 +87,7 @@ import org.darisadesigns.polyglotlina.Desktop.DesktopOSHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.HelpHandler;
 import org.darisadesigns.polyglotlina.Desktop.Java8Bridge;
-import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.OptionsManager;
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.ToolsHelpers.ExportSpellingDictionary;
 import org.darisadesigns.polyglotlina.WebInterface;
@@ -330,7 +330,7 @@ public final class ScrMainMenu extends PFrame {
         super.dispose();
 
         if (doExit) { // skip saving options if not exiting program...
-            OptionsManager opMan = PolyGlot.getPolyGlot().getOptionsManager();
+            DesktopOptionsManager opMan = PolyGlot.getPolyGlot().getOptionsManager();
             
             // Note: this only applies to Windows - Mac OS requires reflection or implementing mac only class on form classes (no)
             boolean isMaximized = (this.getExtendedState() & JFrame.MAXIMIZED_BOTH) == JFrame.MAXIMIZED_BOTH;
@@ -514,7 +514,7 @@ public final class ScrMainMenu extends PFrame {
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
         try {
-            core.writeFile(_fileName);
+            core.writeFile(_fileName, true);
             cleanSave = true;
         } catch (IOException | ParserConfigurationException
                 | TransformerException e) {
@@ -778,7 +778,7 @@ public final class ScrMainMenu extends PFrame {
             if (exportCharis) {
                 DesktopIOHandler.getInstance().exportCharisFont(fileName);
             } else {
-                DesktopIOHandler.getInstance().exportFont(fileName, core.getCurFileName());
+                DesktopIOHandler.getInstance().exportConFont(fileName, core.getCurFileName());
             }
             core.getOSHandler().getInfoBox().info("Export Success", "Font exported to: " + fileName);
         } catch (IOException e) {
@@ -850,6 +850,7 @@ public final class ScrMainMenu extends PFrame {
         ((PButton) btnGrammar).setActiveSelected(false);
         ((PButton) btnClasses).setActiveSelected(false);
         ((PButton) btnPhonology).setActiveSelected(false);
+        ((PButton) btnPhrasebook).setActiveSelected(false);
         ((PButton) btnQuiz).setActiveSelected(false);
     }
 
@@ -1386,6 +1387,7 @@ public final class ScrMainMenu extends PFrame {
         btnProp = new PButton(nightMode, menuFontSize);
         btnPhonology = new PButton(nightMode, menuFontSize);
         btnQuiz = new PButton(nightMode, menuFontSize);
+        btnPhrasebook = new PButton(nightMode, menuFontSize);
         pnlMain = new javax.swing.JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -1543,6 +1545,16 @@ public final class ScrMainMenu extends PFrame {
             }
         });
 
+        btnPhrasebook.setText("Phrasebook");
+        btnPhrasebook.setToolTipText("A list of common phrases");
+        btnPhrasebook.setPreferredSize(new java.awt.Dimension(141, 29));
+        btnPhrasebook.setSize(new java.awt.Dimension(0, 0));
+        btnPhrasebook.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPhrasebookActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlSideButtonsLayout = new javax.swing.GroupLayout(pnlSideButtons);
         pnlSideButtons.setLayout(pnlSideButtonsLayout);
         pnlSideButtonsLayout.setHorizontalGroup(
@@ -1557,7 +1569,8 @@ public final class ScrMainMenu extends PFrame {
                     .addComponent(btnLogos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnGrammar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnPhonology, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnQuiz, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnQuiz, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnPhrasebook, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlSideButtonsLayout.setVerticalGroup(
@@ -1576,10 +1589,12 @@ public final class ScrMainMenu extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnPhonology, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnPhrasebook, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnProp, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnQuiz)
-                .addContainerGap(157, Short.MAX_VALUE))
+                .addContainerGap(123, Short.MAX_VALUE))
         );
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
@@ -2109,7 +2124,6 @@ public final class ScrMainMenu extends PFrame {
     }//GEN-LAST:event_btnLogosActionPerformed
 
     private void btnPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPropActionPerformed
-
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         saveAllValues();
         ScrLangProps s = new ScrLangProps(core);
@@ -2234,6 +2248,14 @@ public final class ScrMainMenu extends PFrame {
         OpenBugReport();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
+    private void btnPhrasebookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPhrasebookActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        saveAllValues();
+        ScrPhrasebook s = new ScrPhrasebook(core);
+        changeScreen(s, s.getWindow(), (PButton) evt.getSource());
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_btnPhrasebookActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClasses;
     private javax.swing.JButton btnGrammar;
@@ -2243,6 +2265,7 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JButton btnOpenLang;
     private javax.swing.JButton btnOpenManual;
     private javax.swing.JButton btnPhonology;
+    private javax.swing.JButton btnPhrasebook;
     private javax.swing.JButton btnPos;
     private javax.swing.JButton btnProp;
     private javax.swing.JButton btnQuiz;

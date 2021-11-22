@@ -197,6 +197,7 @@ public class ScrLangProps extends PFrame {
         propMan.setWordUniqueness(chkWordUniqueness.isSelected());
         propMan.setEnforceRTL(chkEnforceRTL.isSelected());
         propMan.setOverrideRegexFont(chkOverrideRegexFont.isSelected());
+        propMan.setExpandedLexListDisplay(chkExpandedLexList.isSelected());
         propMan.setUseLocalWordLex(chkUseLocalWordLex.isSelected());
         propMan.setKerningSpace(Double.parseDouble(txtKerning.getText()));
 
@@ -225,6 +226,7 @@ public class ScrLangProps extends PFrame {
         chkWordUniqueness.setSelected(propMan.isWordUniqueness());
         chkEnforceRTL.setSelected(propMan.isEnforceRTL());
         chkOverrideRegexFont.setSelected(propMan.isOverrideRegexFont());
+        chkExpandedLexList.setSelected(propMan.isExpandedLexListDisplay());
         chkUseLocalWordLex.setSelected(propMan.isUseLocalWordLex());
         txtKerning.setValue(propMan.getKerningSpace());
     }
@@ -349,6 +351,7 @@ public class ScrLangProps extends PFrame {
         jLabel2 = new PLabel("", menuFontSize);
         chkOverrideRegexFont = new PCheckBox(nightMode, menuFontSize);
         chkUseLocalWordLex = new PCheckBox(nightMode, menuFontSize);
+        chkExpandedLexList = new PCheckBox(nightMode, menuFontSize);
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new PLabel("", menuFontSize);
         jLabel3 = new PLabel("", menuFontSize);
@@ -429,6 +432,9 @@ public class ScrLangProps extends PFrame {
         chkUseLocalWordLex.setText("Local Word Lex Display");
         chkUseLocalWordLex.setToolTipText("Display the local word rather than the conlang word in the lexicon display");
 
+        chkExpandedLexList.setText("Expanded Lexicon List Text");
+        chkExpandedLexList.setToolTipText("Show both the conword and local definition side by side in the lexicon list display");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -440,19 +446,18 @@ public class ScrLangProps extends PFrame {
                         .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(chkTypesMandatory)
-                                    .addComponent(chkWordUniqueness)
-                                    .addComponent(chkDisableProcRegex)
-                                    .addComponent(chkLocalMandatory))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(chkOverrideRegexFont)
-                                    .addComponent(chkEnforceRTL)
-                                    .addComponent(chkLocalUniqueness)
-                                    .addComponent(chkIgnoreCase)))
+                            .addComponent(chkTypesMandatory)
+                            .addComponent(chkWordUniqueness)
+                            .addComponent(chkDisableProcRegex)
+                            .addComponent(chkLocalMandatory)
                             .addComponent(chkUseLocalWordLex))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(chkExpandedLexList)
+                            .addComponent(chkOverrideRegexFont)
+                            .addComponent(chkEnforceRTL)
+                            .addComponent(chkLocalUniqueness)
+                            .addComponent(chkIgnoreCase))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -477,7 +482,9 @@ public class ScrLangProps extends PFrame {
                     .addComponent(chkLocalMandatory)
                     .addComponent(chkOverrideRegexFont))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chkUseLocalWordLex)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(chkUseLocalWordLex)
+                    .addComponent(chkExpandedLexList))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
@@ -550,7 +557,7 @@ public class ScrLangProps extends PFrame {
                         .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtAlphaOrder, javax.swing.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE)
+                    .addComponent(txtAlphaOrder)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(btnChangeFont)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -710,6 +717,7 @@ public class ScrLangProps extends PFrame {
     private javax.swing.JButton btnFontRefresh;
     private javax.swing.JCheckBox chkDisableProcRegex;
     private javax.swing.JCheckBox chkEnforceRTL;
+    private javax.swing.JCheckBox chkExpandedLexList;
     private javax.swing.JCheckBox chkIgnoreCase;
     private javax.swing.JCheckBox chkLocalMandatory;
     private javax.swing.JCheckBox chkLocalUniqueness;

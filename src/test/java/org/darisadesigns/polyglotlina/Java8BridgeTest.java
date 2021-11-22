@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -79,9 +79,26 @@ public class Java8BridgeTest {
         boolean printGrammar = false;
         boolean printWordEtymologies = false;
         boolean printAllConjugations = false;
+        boolean printPhrases = false;
         
         try {
-            Java8Bridge.exportPdf(OUTPUT, coverImage, foreward, printConLocal, printLocalCon, printOrtho, subTitleText, titleText, printPageNumber, printGlossKey, printGrammar, printWordEtymologies, printAllConjugations, core);
+            Java8Bridge.exportPdf(
+                    OUTPUT, 
+                    coverImage, 
+                    foreward, 
+                    printConLocal, 
+                    printLocalCon, 
+                    printOrtho, 
+                    subTitleText, 
+                    titleText, 
+                    printPageNumber, 
+                    printGlossKey, 
+                    printGrammar, 
+                    printWordEtymologies, 
+                    printAllConjugations,
+                    printPhrases,
+                    core
+            );
             assertTrue(new File(OUTPUT).exists());
         } catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
@@ -131,6 +148,10 @@ public class Java8BridgeTest {
             for (int i = 0 ; i < 6; i++) {
                 File expectedFile = new File(PGTUtil.TESTRESOURCES + "excel_export_check_" + i + ".csv");
                 File result = Java8Bridge.excelToCvs(tmpExcel.getAbsolutePath(), i);
+                
+                // On modification of bridge functionality, check output, then uncomment below to update test files if good
+//                expectedFile.delete();
+//                Files.copy(result.toPath(), expectedFile.toPath());
 
                 byte[] expBytes = Files.readAllBytes(expectedFile.toPath());
                 byte[] resBytes = Files.readAllBytes(result.toPath());

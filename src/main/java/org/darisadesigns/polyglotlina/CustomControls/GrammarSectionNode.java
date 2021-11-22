@@ -32,4 +32,5 @@ public interface GrammarSectionNode {
     public String getName();
     public void setRecording(byte[] _recording);
     public byte[] getRecording() throws Exception ;
+    public void clearRecording();
 }

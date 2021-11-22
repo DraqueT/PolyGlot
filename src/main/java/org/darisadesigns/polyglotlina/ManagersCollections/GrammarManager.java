@@ -134,6 +134,12 @@ public abstract class GrammarManager {
         return ret;
     }
     
+    public void deleteRecording(int id) {
+        if (soundMap.containsKey(id)) {
+            soundMap.remove(id);
+        }
+    }
+    
     public byte[] getRecording(Integer id) throws Exception {
         byte[] ret = null;
         

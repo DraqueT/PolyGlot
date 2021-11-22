@@ -69,7 +69,8 @@ public final class ConjugationGenTransform {
         
         if (comp == this) {
             ret = true;
-        } else if (comp instanceof ConjugationGenTransform compDec) {
+        } else if (comp instanceof ConjugationGenTransform) {
+            ConjugationGenTransform compDec = (ConjugationGenTransform)comp;
             ret = regex.equals(compDec.regex);
             ret = ret && replaceText.equals(compDec.replaceText);
         }

@@ -19,7 +19,11 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
+import TestResources.DummyCore;
 import java.awt.GraphicsEnvironment;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Assumptions;
@@ -30,24 +34,19 @@ import org.junit.jupiter.api.Test;
  * @author DThompson
  */
 public class ScrUpdateAlertTest {
+
     private ScrUpdateAlert updateAlert;
-    
+
     public ScrUpdateAlertTest() {
         Assumptions.assumeFalse(GraphicsEnvironment.isHeadless());
-        
-            try {
-                // TODO: Re-enstate this later when I have network access...
-                // TODO: Rewrite so that these are skipped when there is no internet onnection (use Assumptions as above)
-//                updateAlert = new ScrUpdateAlert(false, DummyCore.newCore());
-            } catch (Exception e) {
-                boolean noConnection = e.getLocalizedMessage().contains("No Internet connection detected.");
-                
-                Assumptions.assumeFalse(noConnection);
-                
-                if (!noConnection) {
-                    fail(e);
-                }
-            }
+        Assumptions.assumeTrue(netConnected());
+
+        try {
+            updateAlert = new ScrUpdateAlert(false, DummyCore.newCore());
+        }
+        catch (Exception e) {
+            fail(e);
+        }
     }
 
     /**
@@ -55,15 +54,28 @@ public class ScrUpdateAlertTest {
      */
     @Test
     public void testTestRun() {
+        Assumptions.assumeTrue(netConnected());
+
         System.out.println("ScrUpdateAlertTest.testTestRun");
         try {
-            // TODO: Re-enstate this later when I have network access...
-            // TODO: Rewrite so that these are skipped when there is no internet onnection (use Assumptions as above)
-//            updateAlert.testRun();
-//            updateAlert.dispose();
-        } catch (Exception e) {
-            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
+            updateAlert.testRun();
+            updateAlert.dispose();
+        }
+        catch (Exception e) {
+            //DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
+    }
+    
+    private boolean netConnected() {
+        try {
+            URL url = new URL("http://www.google.com");
+            URLConnection connection = url.openConnection();
+            connection.connect();
+        } catch (IOException e) {
+            return false;
+        }
+        
+        return true;
     }
 }

@@ -36,7 +36,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
-import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.OptionsManager;
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
@@ -206,7 +206,7 @@ public class IOHandlerTest {
 
             // create test core to set values in...
             DictCore core = DummyCore.newCore();
-            OptionsManager opt = PolyGlot.getPolyGlot().getOptionsManager();
+            DesktopOptionsManager opt = PolyGlot.getPolyGlot().getOptionsManager();
 
             opt.setAnimateWindows(animatedExpected);
             opt.setMaxReversionCount(reversionCountExpected);

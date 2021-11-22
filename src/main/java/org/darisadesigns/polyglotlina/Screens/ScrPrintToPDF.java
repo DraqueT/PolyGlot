@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -90,6 +90,7 @@ public class ScrPrintToPDF extends PDialog {
         chkGloss = new PCheckBox(nightMode, menuFontSize);
         chkEtymology = new PCheckBox(nightMode, menuFontSize);
         chkPrintConjugations = new PCheckBox(nightMode, menuFontSize);
+        chkPrintPhrases = new PCheckBox(nightMode, menuFontSize);
         txtTitle = new PTextField(core, true, "-- Title --");
         txtSubtitle = new PTextField(core, true, "-- Title --");
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -164,6 +165,10 @@ public class ScrPrintToPDF extends PDialog {
         chkPrintConjugations.setText("Print All Conjugations");
         chkPrintConjugations.setToolTipText("If checked, words will have a list of all conjugated forms printed under their definitions.");
 
+        chkPrintPhrases.setSelected(true);
+        chkPrintPhrases.setText("Print Phrases");
+        chkPrintPhrases.setToolTipText("Prints a phrasebook section within the PDF");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -178,13 +183,14 @@ public class ScrPrintToPDF extends PDialog {
                             .addComponent(chkOrtho)
                             .addComponent(chkLocalCon)
                             .addComponent(chkLogographs))
-                        .addContainerGap(137, Short.MAX_VALUE))
+                        .addContainerGap(144, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(chkGloss)
                             .addComponent(chkPageNum)
                             .addComponent(chkEtymology)
-                            .addComponent(chkPrintConjugations))
+                            .addComponent(chkPrintConjugations)
+                            .addComponent(chkPrintPhrases))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
@@ -205,8 +211,10 @@ public class ScrPrintToPDF extends PDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkPageNum)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chkPrintConjugations)
+                .addComponent(chkPrintPhrases)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(chkPrintConjugations)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkEtymology)
                 .addContainerGap())
         );
@@ -232,7 +240,7 @@ public class ScrPrintToPDF extends PDialog {
                         .addComponent(btnSelectImagePath))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4)
-                        .addGap(0, 266, Short.MAX_VALUE))
+                        .addGap(0, 314, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(txtSavePath)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -364,6 +372,7 @@ public class ScrPrintToPDF extends PDialog {
                     chkGrammar.isSelected(), 
                     chkEtymology.isSelected(), 
                     chkPrintConjugations.isSelected(),
+                    chkPrintPhrases.isSelected(),
                     core);
 
             if (Desktop.isDesktopSupported()) {
@@ -436,6 +445,7 @@ public class ScrPrintToPDF extends PDialog {
     private javax.swing.JCheckBox chkOrtho;
     private javax.swing.JCheckBox chkPageNum;
     private javax.swing.JCheckBox chkPrintConjugations;
+    private javax.swing.JCheckBox chkPrintPhrases;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

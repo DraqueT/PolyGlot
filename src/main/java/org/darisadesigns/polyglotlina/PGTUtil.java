@@ -109,7 +109,8 @@ public class PGTUtil {
     public static final String LANG_PROP_USE_LOCAL_LEX_XID = "langPropUseLocalLexicon";
     public static final String LANG_PROP_KERN_VAL_XID = "langPropKerningValue";
     public static final String LANG_PROP_OVERRIDE_REGEX_FONT_XID = "langPropOverrideRegexFont";
-    public static final String LANG_PROP_USE_SIMPLIFIED_CONJ = "langPropUseSimplifiedConjugations"; // blangPropSimpConj
+    public static final String LANG_PROP_USE_SIMPLIFIED_CONJ = "langPropUseSimplifiedConjugations";
+    public static final String LANG_PROP_EXPANDED_LEX_LIST_DISP = "expandedLexListDisplay";
 
     // character replacement pair values
     public static final String LANG_PROP_CHAR_REP_CONTAINER_XID = "langPropCharRep";
@@ -211,6 +212,18 @@ public class PGTUtil {
     public static final String CLASS_VALUES_NODE_XID = "wordGrammarClassValueNode";
     public static final String CLASS_VALUE_NAME_XID = "wordGrammarClassValueName";
     public static final String CLASS_VALUE_ID_XID = "wordGrammarClassValueId";
+    
+    // properties for phrasebook
+    public static final String PHRASEBOOK_XID = "phraseBookCollection";
+    public static final String PHRASE_NODE_XID = "phraseNode";
+    public static final String PHRASE_ID_XID = "phraseId";
+    public static final String PHRASE_GLOSS_XID = "phraseGloss";
+    public static final String PHRASE_CONPHRASE_XID = "phraseConPhrase";
+    public static final String PHRASE_LOCALPHRASE_XID = "phraseLocalPhrase";
+    public static final String PHRASE_PRONUNCIATION_XID = "phrasePronunciation";
+    public static final String PHRASE_PRONUNCIATION_OVERRIDE_XID = "phrasePronunciationOverride";
+    public static final String PHRASE_NOTES_XID = "phraseNotes";
+    public static final String PHRASE_ORDER_XID = "phraseNotesOrder";
 
     // etymology constants
     public static final String ETY_COLLECTION_XID = "EtymologyCollection";
@@ -222,7 +235,7 @@ public class PGTUtil {
     public static final String ETY_EXTERNAL_WORD_ORIGIN_XID = "EtymologyExternalWordOrigin";
     public static final String ETY_EXTERNAL_WORD_DEFINITION_XID = "EtymologyExternalWordDefinition";
 
-    // TODO Node constants
+    // TO DO Node constants
     public static final String TODO_LOG_XID = "ToDoLog";
     public static final String TODO_NODE_XID = "ToDoNodeHead";
     public static final String TODO_NODE_DONE_XID = "ToDoNodeDone";
@@ -287,6 +300,9 @@ public class PGTUtil {
     public static final String PLAY_BUTTON_DOWN = "/assets/org/DarisaDesigns/ImageAssets/play_ON_BIG.png";
     public static final String RECORD_BUTTON_UP = "/assets/org/DarisaDesigns/ImageAssets/recording_OFF_BIG.png";
     public static final String RECORD_BUTTON_DOWN = "/assets/org/DarisaDesigns/ImageAssets/recording_ON_BIG.png";
+    public static final String TRASH_BUTTON_UP = "/assets/org/DarisaDesigns/ImageAssets/trashcan_color.png";
+    public static final String TRASH_BUTTON_DOWN = "/assets/org/DarisaDesigns/ImageAssets/trashcan_clicked.png";
+    public static final String TRASH_BUTTON_DISABLED = "/assets/org/DarisaDesigns/ImageAssets/trashcan_bw.png";
     public static final String ADD_BUTTON = "/assets/org/DarisaDesigns/ImageAssets/add_button.png";
     public static final String DELETE_BUTTON = "/assets/org/DarisaDesigns/ImageAssets/delete_button.png";
     public static final String ADD_BUTTON_PRESSED = "/assets/org/DarisaDesigns/ImageAssets/add_button_pressed.png";
@@ -424,8 +440,8 @@ public class PGTUtil {
         VERSION_HIERARCHY.put("3.3", 44);
         VERSION_HIERARCHY.put("3.3.1", 45);
         VERSION_HIERARCHY.put("3.3.1B", 46);
-        VERSION_HIERARCHY.put("3.3.5", 46);
-        VERSION_HIERARCHY.put("3.5", 46);
+        VERSION_HIERARCHY.put("3.3.5", 47);
+        VERSION_HIERARCHY.put("3.5", 48);
         
         BUILD_DATE_TIME = getBuildDate();
     }
@@ -499,7 +515,14 @@ public class PGTUtil {
      * @return
      */
     public static File getDefaultDirectory() {
-        File ret = new File(System.getProperty("user.home") + File.separator + POLYGLOT_WORKINGDIRECTORY);
+        String defaultDirectoryPath = System.getProperty("user.home") + File.separator + POLYGLOT_WORKINGDIRECTORY;
+        
+        // for my own sanity, this keeps test stuff from overwriting options and stuff
+        if (PGTUtil.isInJUnitTest()) {
+            defaultDirectoryPath += "_TEST";
+        }
+        
+        File ret = new File(defaultDirectoryPath);
 
         if (!ret.exists()) {
             ret.mkdir();

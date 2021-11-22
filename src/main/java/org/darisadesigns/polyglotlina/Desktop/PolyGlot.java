@@ -46,7 +46,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammarManager;
-import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.OptionsManager;
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.VisualStyleManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.OSHandler.CoreUpdatedListener;
@@ -68,7 +68,7 @@ public final class PolyGlot {
     private DictCore core;
     private ScrMainMenu rootWindow;
     private DesktopOSHandler osHandler;
-    private final OptionsManager optionsManager;
+    private final DesktopOptionsManager optionsManager;
     private CoreUpdatedListener coreUpdatedListener;
     private FileReadListener fileReadListener;
     private final File autoSaveFile;
@@ -77,8 +77,8 @@ public final class PolyGlot {
         core = _core;
         osHandler = _osHandler;
         osHandler.setWorkingDirectory(overridePath); // TODO: In the future, figure out how this might be better set. In options?
-        optionsManager = new OptionsManager(core);
-        autoSaveFile = this.getAutoSaveFile();
+        optionsManager = new DesktopOptionsManager(core);
+        autoSaveFile = this.getNewAutoSaveFile();
         ((DesktopIOHandler)osHandler.getIOHandler()).loadOptionsIni(optionsManager, getWorkingDirectory().getAbsolutePath());
         refreshUiDefaults();
     }
@@ -429,7 +429,7 @@ public final class PolyGlot {
         return PolyGlot.polyGlot;
     }
 
-    public OptionsManager getOptionsManager() {
+    public DesktopOptionsManager getOptionsManager() {
         return optionsManager;
     }
 
@@ -530,11 +530,16 @@ public final class PolyGlot {
             public void run() {
                 if (core != null && !rootWindow.isDisposed() && !PGTUtil.isInJUnitTest()) {
                     try {
-                        core.writeFile(autoSaveFile.getAbsolutePath());
-                    }
-                    catch (ParserConfigurationException | TransformerException | IOException e) {
-                        // The working directory is unwritable. Impossible to log.
-                        core.getOSHandler().getInfoBox().error("Working Path Write Error", "Unable to write to path: " + autoSaveFile.getAbsolutePath());
+                        core.writeFile(autoSaveFile.getAbsolutePath(), false);
+                    } catch (IOException e) {
+                        // Impossible to write to error log
+                        //core.getOSHandler().getIOHandler().writeErrorLog(e, "Autosave Exeption");
+                        core.getOSHandler().getInfoBox().error("Working Path Write Error", "Unable to write to path: " 
+                                + autoSaveFile.getAbsolutePath() + " due to: " + e.getLocalizedMessage());
+                    } catch (ParserConfigurationException | TransformerException e) {
+                        core.getOSHandler().getIOHandler().writeErrorLog(e, "Autosave Exeption");
+                        core.getOSHandler().getInfoBox().error("Working Path Write Error", "Unable to write to path: " 
+                                + autoSaveFile.getAbsolutePath() + " due to: " + e.getLocalizedMessage());
                     }
                     autoSave();
                 }
@@ -546,7 +551,7 @@ public final class PolyGlot {
      * Fetches autosave file for PolyGlot
      * @return 
      */
-    public File getAutoSaveFile() {
+    public File getNewAutoSaveFile() {
         String path = getWorkingDirectory().getAbsolutePath() 
                 + File.separator 
                 + PGTUtil.AUTO_SAVE_FILE_NAME;

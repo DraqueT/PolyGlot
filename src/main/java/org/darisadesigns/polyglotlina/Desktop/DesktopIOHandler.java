@@ -26,7 +26,7 @@ import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.ManagersCollections.ImageCollection;
-import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.OptionsManager;
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.ReversionManager;
 import org.darisadesigns.polyglotlina.Nodes.ImageNode;
 import org.darisadesigns.polyglotlina.Nodes.ReversionNode;
@@ -342,7 +342,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @param workingDirectory
      * @throws IOException on failure to open existing file
      */
-    public void loadOptionsIni(OptionsManager opMan, String workingDirectory) throws Exception {
+    public void loadOptionsIni(DesktopOptionsManager opMan, String workingDirectory) throws Exception {
         File f = new File(workingDirectory + File.separator + PGTUtil.POLYGLOT_INI);
         if (!f.exists() || f.isDirectory()) {
             return;
@@ -504,7 +504,14 @@ public final class DesktopIOHandler implements IOHandler {
     }
 
     @Override
-    public void writeFile(String _fileName, Document doc, DictCore core, File workingDirectory, Instant saveTime)
+    public void writeFile(
+            String _fileName, 
+            Document doc, 
+            DictCore core, 
+            File workingDirectory, 
+            Instant saveTime, 
+            boolean writeToReversionMgr
+    )
             throws IOException, TransformerException {
         File finalFile = new File(_fileName);
         String writeLog = "";
@@ -573,7 +580,9 @@ public final class DesktopIOHandler implements IOHandler {
                 throw new IOException("Unable to save file: " + e.getMessage(), e);
             }
 
-            core.getReversionManager().addVersion(xmlData, saveTime);
+            if (writeToReversionMgr) {
+                core.getReversionManager().addVersion(xmlData, saveTime);
+            }
         }
 
         if (!writeLog.isEmpty()) {
@@ -900,14 +909,23 @@ public final class DesktopIOHandler implements IOHandler {
      * @throws IOException
      */
     @Override
-    public void exportFont(String exportPath, String dictionaryPath) throws IOException {
+    public void exportConFont(String exportPath, String dictionaryPath) throws IOException {
+        exportFont(exportPath, dictionaryPath, PGTUtil.CON_FONT_FILE_NAME);
+    }
+    
+    @Override
+    public void exportLocalFont(String exportPath, String dictionaryPath) throws IOException {
+        exportFont(exportPath, dictionaryPath, PGTUtil.LOCAL_FONT_FILE_NAME);
+    }
+    
+    public void exportFont(String exportPath, String dictionaryPath, String exportFontFilename) throws IOException {
         try (ZipFile zipFile = new ZipFile(dictionaryPath)) {
             // ensure export file has the proper extension
             if (!exportPath.toLowerCase().endsWith(".ttf")) {
                 exportPath += ".ttf";
             }
 
-            ZipEntry fontEntry = zipFile.getEntry(PGTUtil.CON_FONT_FILE_NAME);
+            ZipEntry fontEntry = zipFile.getEntry(exportFontFilename);
 
             if (fontEntry != null) {
                 Path path = Paths.get(exportPath);
@@ -915,7 +933,7 @@ public final class DesktopIOHandler implements IOHandler {
                     Files.copy(copyStream, path, StandardCopyOption.REPLACE_EXISTING);
                 }
             } else {
-                throw new IOException("Custom font not found in PGD language file.");
+                throw new IOException(exportFontFilename + " not found in PGD language file.");
             }
         }
     }
@@ -1008,7 +1026,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @param opMan
      * @throws IOException on failure or lack of permission to write
      */
-    public void writeOptionsIni(String workingDirectory, OptionsManager opMan) throws IOException {
+    public void writeOptionsIni(String workingDirectory, DesktopOptionsManager opMan) throws IOException {
 
         try (Writer f0 = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(workingDirectory

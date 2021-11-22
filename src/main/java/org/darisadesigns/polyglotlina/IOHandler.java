@@ -137,7 +137,14 @@ public interface IOHandler {
      */
     public boolean isFileZipArchive(String _fileName) throws IOException;
 
-    public void writeFile(String _fileName, Document doc, DictCore core, File workingDirectory, Instant saveTime)
+    public void writeFile(
+            String _fileName, 
+            Document doc, 
+            DictCore core, 
+            File workingDirectory, 
+            Instant saveTime, 
+            boolean writeToReversionMgr
+    )
             throws IOException, TransformerException;
 
     /**
@@ -207,7 +214,16 @@ public interface IOHandler {
      * @param dictionaryPath path of PGT dictionary
      * @throws IOException
      */
-    public void exportFont(String exportPath, String dictionaryPath) throws IOException;
+    public void exportConFont(String exportPath, String dictionaryPath) throws IOException;
+    
+    /**
+     * Exports font in PGD to external file
+     *
+     * @param exportPath path to export to
+     * @param dictionaryPath path of PGT dictionary
+     * @throws IOException
+     */
+    public void exportLocalFont(String exportPath, String dictionaryPath) throws IOException;
 
     /**
      * Exports Charis unicode font to specified location
