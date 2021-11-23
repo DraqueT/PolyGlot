@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -272,6 +272,7 @@ public final class ScrEtymRoots extends PDialog {
         //create new dropdown for potential additional parent to be added
         final PComboBox<Object> newParentBox = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         newParentBox.setToolTipText("Add new parent to word here.");
+        newParentBox.setDefaultText("-- " + "Select Parent" +  " --");
         newParentBox.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         DefaultComboBoxModel<Object> comboModel = new DefaultComboBoxModel<>();
         newParentBox.setModel(comboModel);

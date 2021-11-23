@@ -32,6 +32,7 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.JComboBox;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingWorker;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -46,7 +47,10 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
     public PComboBox(Font font) {
         setupListeners();
         super.setFont(font);
-        this.setRenderer(new PListCellRenderer());
+        var cellRenderer = new PListCellRenderer();
+        cellRenderer.setAddLocalExtraText(PolyGlot.getPolyGlot().getCore().getPropertiesManager().isExpandedLexListDisplay());
+        cellRenderer.setFont(font);
+        this.setRenderer(cellRenderer);
     }
     
     /**
@@ -112,20 +116,29 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         Object selectedItem = getSelectedItem();
         String text = selectedItem == null ? "" : selectedItem.toString();
         
+        Font tmpFont = this.getFont();
+        Font defaultMenuFont = tmpFont;
+        
         // display default text if appropriate
         if (text.isBlank() && this.getSelectedIndex() == 0) {
-            text = defaultText;
+            text = getDefaultText();
             antiAlias.setColor(Color.decode("#909090"));
+            defaultMenuFont = PGTUtil.MENU_FONT.deriveFont((float)PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
         }
         
         if (!text.isEmpty()) { // 0 length text makes bounding box explode
-            FontMetrics fm = antiAlias.getFontMetrics(getFont());
+            this.setFont(defaultMenuFont);
+            FontMetrics fm = antiAlias.getFontMetrics(defaultMenuFont);
+            antiAlias.setFont(defaultMenuFont);
             Rectangle2D rec = fm.getStringBounds(text, antiAlias);
             int stringW = (int) Math.round(rec.getWidth());
             int stringH = (int) Math.round(rec.getHeight());
             antiAlias.drawChars(text.toCharArray(), 0, text.length(), ((getWidth() - buttonWidth)/2) 
                     - (stringW/2), (getHeight() - 9)/2 + stringH/2);
         }
+        
+        antiAlias.setFont(tmpFont);
+        this.setFont(tmpFont);
         
         if (enabled) {
             antiAlias.setColor(PGTUtil.COLOR_ENABLED_BG);
@@ -167,5 +180,13 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
     @Override
     public void mouseReleased(MouseEvent e) {
         // do nothing
+    }
+
+    public String getDefaultText() {
+        return defaultText;
+    }
+
+    public void setDefaultText(String defaultText) {
+        this.defaultText = defaultText;
     }
 }

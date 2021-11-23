@@ -53,7 +53,6 @@ public class PListLexiconCellRenderer extends DefaultListCellRenderer {
             Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
             FontMetrics localMetrics = g.getFontMetrics(localFont);
             FontMetrics conMetrics = g.getFontMetrics(conFont);
-            g.setColor(Color.black);
             
             int wordEnd;
             int dropPosition;
@@ -74,7 +73,9 @@ public class PListLexiconCellRenderer extends DefaultListCellRenderer {
                 g.setFont(localFont);
             }
             
+            g.setColor(Color.blue);
             g.drawLine(wordEnd + 10, 0, wordEnd + 10, height);
+            g.setColor(Color.black);
             g.drawString(printValue, wordEnd + 15, dropPosition);
         }
     }
