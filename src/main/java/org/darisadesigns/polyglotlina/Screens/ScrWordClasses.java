@@ -273,6 +273,7 @@ public final class ScrWordClasses extends PFrame {
             txtName.setText(curProp.getValue());
             
             chkFreeText.setSelected(curProp.isFreeText());
+            chkAssociative.setSelected(curProp.isAssociative());
 
             // add property values
             curProp.getValues().forEach((curValue) -> {

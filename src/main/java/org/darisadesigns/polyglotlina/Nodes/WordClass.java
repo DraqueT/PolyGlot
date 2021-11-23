@@ -198,7 +198,7 @@ public class WordClass extends DictNode {
      */
     public void setFreeText(boolean _freeText) {
         this.freeText = _freeText;
-        this.associative = !_freeText;
+        this.associative = this.associative && !_freeText;
     }
     
     /**
@@ -219,7 +219,7 @@ public class WordClass extends DictNode {
      */
     public void setAssociative(boolean _associative) {
         this.associative = _associative;
-        this.freeText = !_associative;
+        this.freeText = this.freeText && !_associative;
     }
     
     public void writeXML(Document doc, Element rootElement) {
