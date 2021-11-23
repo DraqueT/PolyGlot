@@ -827,13 +827,18 @@ public final class DesktopIOHandler implements IOHandler {
             String fileName) throws Exception {
         try ( ZipFile zipFile = new ZipFile(fileName)) {
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
-            ZipEntry entry;
+            ZipEntry entry = null;
             while (entries.hasMoreElements()) { // find images directory (zip paths are linear, only simulating tree structure)
                 entry = entries.nextElement();
                 if (!entry.getName().equals(PGTUtil.IMAGES_SAVE_PATH)) {
                     continue;
                 }
                 break;
+            }
+            
+            // gotta check for this due to how Linux sometimes bulds archives...
+            if (entry == null || !entry.getName().equals(PGTUtil.IMAGES_SAVE_PATH)) {
+                return;
             }
 
             while (entries.hasMoreElements()) {
