@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -28,8 +28,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
-import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 
 /**
  *
@@ -50,7 +49,7 @@ public final class PTable extends JTable {
         disabledRend.setBackground(Color.darkGray);
 
         if (core != null) {
-            Font font = PGTUtil.MENU_FONT.deriveFont((float) PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+            Font font = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
             this.getTableHeader().setFont(font);
         }
     }
