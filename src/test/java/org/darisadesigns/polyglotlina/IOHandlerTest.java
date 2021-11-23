@@ -439,9 +439,57 @@ public class IOHandlerTest {
             assertFalse(archiveFile.exists());
             resultFile.delete();
             assertFalse(resultFile.exists());
-        } catch (Exception e) {
+        } catch (IOException e) {
             fail(e);
         }
+    }
+    
+    @Test
+    public void testUnpackRepackLanguage() {
+        System.out.println("IOHandlerTest.testUnpackRepackLanguage");
+        
+        File tmpLangFile = new File(PGTUtil.TESTRESOURCES + "tmpPackedLang");
+        File tmpDir = new File(PGTUtil.TESTRESOURCES + "tmpExtractedLang");
+        
+        try {
+            String originFilePath = PGTUtil.TESTRESOURCES + "test_equality.pgd";
+            DictCore origin = DummyCore.newCore();
+            DictCore target = DummyCore.newCore();
+
+            origin.readFile(originFilePath);
+            
+            DesktopIOHandler.getInstance().unzipFileToDir(originFilePath, tmpDir.toPath());
+            DesktopIOHandler.packDirectoryToZip(tmpDir.getPath(), tmpLangFile.getPath(), true);
+            target.readFile(tmpLangFile.getPath());
+            
+            assertEquals(origin, target);
+        } catch (Exception e) {
+            //e.printStackTrace();
+            fail(e);
+        } finally {
+            if (tmpLangFile.exists()) {
+                tmpLangFile.delete();
+            }
+            
+            if (tmpDir.exists()) {
+                deleteDirectory(tmpDir);
+            }
+        }
+    }
+    
+    /**
+     * Recursively deletes directory
+     * @param directoryToBeDeleted 
+     */
+    private void deleteDirectory(File directoryToBeDeleted) {
+        File[] allContents = directoryToBeDeleted.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                deleteDirectory(file);
+            }
+        }
+        
+        directoryToBeDeleted.delete();
     }
     
     /**

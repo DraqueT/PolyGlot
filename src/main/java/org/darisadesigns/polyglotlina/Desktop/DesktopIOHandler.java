@@ -104,7 +104,7 @@ import org.xml.sax.SAXException;
  * @author draque
  */
 public final class DesktopIOHandler implements IOHandler {
-    
+
     private static DesktopIOHandler ioHandler;
 
     /**
@@ -131,51 +131,51 @@ public final class DesktopIOHandler implements IOHandler {
     @Override
     public File createTmpFileWithContents(String contents, String extension) throws IOException {
         File ret = File.createTempFile("POLYGLOT", extension);
-        
-        try (Writer out = new BufferedWriter(new OutputStreamWriter(
+
+        try ( Writer out = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(ret), "UTF8"))) {
             out.append(contents);
             out.flush();
         }
-        
+
         ret.deleteOnExit();
 
         return ret;
     }
-    
+
     @Override
     public File createTmpFileFromImageBytes(byte[] imageBytes, String fileName) throws IOException {
         File tmpFile = File.createTempFile(fileName, ".png");
         ByteArrayInputStream stream = new ByteArrayInputStream(imageBytes);
         BufferedImage img = ImageIO.read(stream);
         ImageIO.write(
-                img, 
-                "PNG", 
+                img,
+                "PNG",
                 new FileOutputStream(tmpFile)
         );
         return tmpFile;
     }
-    
+
     @Override
     public File createFileWithContents(String path, String contents) throws IOException {
         File ret = new File(path);
-        
+
         if (!ret.exists() && !ret.createNewFile()) {
             throw new IOException("Unable to create: " + path);
         }
-        
-        try (Writer out = new BufferedWriter(new OutputStreamWriter(
+
+        try ( Writer out = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(ret), "UTF8"))) {
             out.write(contents);
             out.flush();
         }
-        
+
         return ret;
     }
 
     @Override
     public byte[] getByteArrayFromFile(File file) throws IOException {
-        try (InputStream inputStream = new FileInputStream(file)) {
+        try ( InputStream inputStream = new FileInputStream(file)) {
             return streamToByetArray(inputStream);
         }
     }
@@ -189,7 +189,7 @@ public final class DesktopIOHandler implements IOHandler {
      */
     @Override
     public byte[] streamToByetArray(InputStream is) throws IOException {
-        try (ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+        try ( ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
             int nRead;
             byte[] data = new byte[16384];
 
@@ -213,7 +213,7 @@ public final class DesktopIOHandler implements IOHandler {
         byte[] ret;
         final File toByteArrayFile = new File(filePath);
 
-        try (InputStream inputStream = new FileInputStream(toByteArrayFile)) {
+        try ( InputStream inputStream = new FileInputStream(toByteArrayFile)) {
             ret = streamToByetArray(inputStream);
         }
 
@@ -233,9 +233,14 @@ public final class DesktopIOHandler implements IOHandler {
         CustHandler ret = null;
 
         if (isFileZipArchive(_fileName)) {
-            try (ZipFile zipFile = new ZipFile(_fileName)) {
+            try ( ZipFile zipFile = new ZipFile(_fileName)) {
                 ZipEntry xmlEntry = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
-                try (InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
+                
+                if (xmlEntry == null) {
+                    throw new IOException("PGD file corrupt. Unable to read required file from archive: " + PGTUtil.LANG_FILE_NAME);
+                }
+                
+                try ( InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
                     ret = CustHandlerFactory.getCustHandler(ioStream, _core);
                 }
                 catch (Exception e) {
@@ -243,7 +248,7 @@ public final class DesktopIOHandler implements IOHandler {
                 }
             }
         } else {
-            try (InputStream ioStream = new FileInputStream(_fileName)) {
+            try ( InputStream ioStream = new FileInputStream(_fileName)) {
                 ret = CustHandlerFactory.getCustHandler(ioStream, _core);
             }
             catch (Exception e) {
@@ -348,7 +353,7 @@ public final class DesktopIOHandler implements IOHandler {
             return;
         }
 
-        try (BufferedReader br = new BufferedReader(new FileReader(
+        try ( BufferedReader br = new BufferedReader(new FileReader(
                 workingDirectory + File.separator + PGTUtil.POLYGLOT_INI, StandardCharsets.UTF_8))) {
             String loadProblems = "";
 
@@ -413,9 +418,9 @@ public final class DesktopIOHandler implements IOHandler {
                             if (curPosition.isEmpty()) {
                                 continue;
                             }
-                            
+
                             String[] splitSet = curPosition.split(":");
-                            
+
                             if (splitSet.length != 2) {
                                 loadProblems += "Malformed divider position: " + curPosition + "\n";
                                 continue;
@@ -424,15 +429,22 @@ public final class DesktopIOHandler implements IOHandler {
                             opMan.setDividerPosition(splitSet[0], position);
                         }
                     }
-                    case PGTUtil.OPTIONS_AUTO_RESIZE -> opMan.setAnimateWindows(bothVal[1].equals(PGTUtil.TRUE));
-                    case PGTUtil.OPTIONS_MAXIMIZED -> opMan.setMaximized(bothVal[1].equals(PGTUtil.TRUE));
-                    case PGTUtil.OPTIONS_MENU_FONT_SIZE -> opMan.setMenuFontSize(Double.parseDouble(bothVal[1]));
-                    case PGTUtil.OPTIONS_NIGHT_MODE -> opMan.setNightMode(bothVal[1].equals(PGTUtil.TRUE));
-                    case PGTUtil.OPTIONS_REVERSIONS_COUNT -> opMan.setMaxReversionCount(Integer.parseInt(bothVal[1]));
-                    case PGTUtil.OPTIONS_TODO_DIV_LOCATION -> opMan.setToDoBarPosition(Integer.parseInt(bothVal[1]));
+                    case PGTUtil.OPTIONS_AUTO_RESIZE ->
+                        opMan.setAnimateWindows(bothVal[1].equals(PGTUtil.TRUE));
+                    case PGTUtil.OPTIONS_MAXIMIZED ->
+                        opMan.setMaximized(bothVal[1].equals(PGTUtil.TRUE));
+                    case PGTUtil.OPTIONS_MENU_FONT_SIZE ->
+                        opMan.setMenuFontSize(Double.parseDouble(bothVal[1]));
+                    case PGTUtil.OPTIONS_NIGHT_MODE ->
+                        opMan.setNightMode(bothVal[1].equals(PGTUtil.TRUE));
+                    case PGTUtil.OPTIONS_REVERSIONS_COUNT ->
+                        opMan.setMaxReversionCount(Integer.parseInt(bothVal[1]));
+                    case PGTUtil.OPTIONS_TODO_DIV_LOCATION ->
+                        opMan.setToDoBarPosition(Integer.parseInt(bothVal[1]));
                     case "\n" -> {
                     }
-                    default -> loadProblems += "Unrecognized value: " + bothVal[0] + " in PolyGlot.ini." + "\n";
+                    default ->
+                        loadProblems += "Unrecognized value: " + bothVal[0] + " in PolyGlot.ini." + "\n";
                 }
             }
 
@@ -454,9 +466,14 @@ public final class DesktopIOHandler implements IOHandler {
      */
     public void parseHandler(String _fileName, CustHandler _handler)
             throws IOException, ParserConfigurationException, SAXException {
-        try (ZipFile zipFile = new ZipFile(_fileName)) {
+        try ( ZipFile zipFile = new ZipFile(_fileName)) {
             ZipEntry xmlEntry = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
-            try (InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
+            
+            if (xmlEntry == null) {
+                throw new IOException("PGD file corrupt. Unable to read required file from archive: " + PGTUtil.LANG_FILE_NAME);
+            }
+            
+            try ( InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
                 parseHandlerInternal(ioStream, _handler);
             }
         }
@@ -493,9 +510,9 @@ public final class DesktopIOHandler implements IOHandler {
         }
 
         int test;
-        try (FileInputStream fileStream = new FileInputStream(file)) {
-            try (BufferedInputStream buffer = new BufferedInputStream(fileStream)) {
-                try (DataInputStream in = new DataInputStream(buffer)) {
+        try ( FileInputStream fileStream = new FileInputStream(file)) {
+            try ( BufferedInputStream buffer = new BufferedInputStream(fileStream)) {
+                try ( DataInputStream in = new DataInputStream(buffer)) {
                     test = in.readInt();
                 }
             }
@@ -505,11 +522,11 @@ public final class DesktopIOHandler implements IOHandler {
 
     @Override
     public void writeFile(
-            String _fileName, 
-            Document doc, 
-            DictCore core, 
-            File workingDirectory, 
-            Instant saveTime, 
+            String _fileName,
+            Document doc,
+            DictCore core,
+            File workingDirectory,
+            Instant saveTime,
             boolean writeToReversionMgr
     )
             throws IOException, TransformerException {
@@ -518,7 +535,7 @@ public final class DesktopIOHandler implements IOHandler {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
 
-        try (StringWriter writer = new StringWriter()) {
+        try ( StringWriter writer = new StringWriter()) {
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
 
             StringBuilder sb = new StringBuilder();
@@ -527,8 +544,8 @@ public final class DesktopIOHandler implements IOHandler {
 
             final File tmpSaveLocation = makeTempSaveFile(workingDirectory);
 
-            try (FileOutputStream fileOutputStream = new FileOutputStream(tmpSaveLocation)) {
-                try (ZipOutputStream out = new ZipOutputStream(fileOutputStream, StandardCharsets.UTF_8)) {
+            try ( FileOutputStream fileOutputStream = new FileOutputStream(tmpSaveLocation)) {
+                try ( ZipOutputStream out = new ZipOutputStream(fileOutputStream, StandardCharsets.UTF_8)) {
                     ZipEntry e = new ZipEntry(PGTUtil.LANG_FILE_NAME);
                     out.putNextEntry(e);
 
@@ -537,13 +554,13 @@ public final class DesktopIOHandler implements IOHandler {
                     out.closeEntry();
 
                     writeLog += PFontHandler.writeFont(out,
-                            ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon(),
+                            ((DesktopPropertiesManager) core.getPropertiesManager()).getFontCon(),
                             core.getPropertiesManager().getCachedFont(),
                             core,
                             true);
 
                     writeLog += PFontHandler.writeFont(out,
-                            ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(),
+                            ((DesktopPropertiesManager) core.getPropertiesManager()).getFontLocal(),
                             core.getPropertiesManager().getCachedLocalFont(),
                             core,
                             false);
@@ -634,30 +651,30 @@ public final class DesktopIOHandler implements IOHandler {
 
         return ret;
     }
-    
+
     /**
      * Moves file to archive folder with name prefixed with current epoch time
+     *
      * @param source
-     * @param workingDirectory 
-     * @return  
+     * @param workingDirectory
+     * @return
      * @throws IOException
      */
     @Override
     public File archiveFile(File source, File workingDirectory) throws IOException {
         String workingDirectoryPath = workingDirectory.getCanonicalPath();
-        File dest = new File(workingDirectoryPath 
-                + File.separator 
+        File dest = new File(workingDirectoryPath
+                + File.separator
                 + Instant.now().getEpochSecond()
                 + "_" + source.getName()
                 + ".archive");
-        
-        try (FileChannel sourceChannel = new FileInputStream(source).getChannel();
-                FileChannel destChannel = new FileOutputStream(dest).getChannel()) {
+
+        try ( FileChannel sourceChannel = new FileInputStream(source).getChannel();  FileChannel destChannel = new FileOutputStream(dest).getChannel()) {
             destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
         }
-        
+
         source.delete();
-        
+
         return dest;
     }
 
@@ -699,7 +716,7 @@ public final class DesktopIOHandler implements IOHandler {
                     try {
                         out.putNextEntry(new ZipEntry(PGTUtil.LOGOGRAPH_SAVE_PATH
                                 + curNode.getId() + ".png"));
-                        
+
                         BufferedImage write = ImageIO.read(new ByteArrayInputStream(curNode.getLogoBytes()));
                         ImageIO.write(write, "png", out);
 
@@ -722,7 +739,7 @@ public final class DesktopIOHandler implements IOHandler {
 
     private String writeWavToArchive(ZipOutputStream out, DictCore core) {
         String writeLog = "";
-        Map<Integer, byte[]> grammarSoundMap = ((DesktopGrammarManager)core.getGrammarManager()).getSoundMap();
+        Map<Integer, byte[]> grammarSoundMap = ((DesktopGrammarManager) core.getGrammarManager()).getSoundMap();
         Iterator<Entry<Integer, byte[]>> gramSoundIt = grammarSoundMap.entrySet().iterator();
         if (gramSoundIt.hasNext()) {
             try {
@@ -764,7 +781,7 @@ public final class DesktopIOHandler implements IOHandler {
                     try {
                         out.putNextEntry(new ZipEntry(PGTUtil.IMAGES_SAVE_PATH
                                 + curNode.getId() + ".png"));
-                        
+
                         BufferedImage write = ImageIO.read(new ByteArrayInputStream(curNode.getImageBytes()));
                         ImageIO.write(write, "png", out);
 
@@ -808,7 +825,7 @@ public final class DesktopIOHandler implements IOHandler {
     @Override
     public void loadImageAssets(ImageCollection imageCollection,
             String fileName) throws Exception {
-        try (ZipFile zipFile = new ZipFile(fileName)) {
+        try ( ZipFile zipFile = new ZipFile(fileName)) {
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
             ZipEntry entry;
             while (entries.hasMoreElements()) { // find images directory (zip paths are linear, only simulating tree structure)
@@ -827,7 +844,7 @@ public final class DesktopIOHandler implements IOHandler {
                 }
 
                 BufferedImage img;
-                try (InputStream imageStream = zipFile.getInputStream(entry)) {
+                try ( InputStream imageStream = zipFile.getInputStream(entry)) {
                     String name = entry.getName().replace(".png", "")
                             .replace(PGTUtil.IMAGES_SAVE_PATH, "");
                     int imageId = Integer.parseInt(name);
@@ -835,7 +852,7 @@ public final class DesktopIOHandler implements IOHandler {
                     ImageNode imageNode = new ImageNode(PolyGlot.getPolyGlot().getCore());
                     imageNode.setId(imageId);
                     imageNode.setImageBytes(
-                        DesktopIOHandler.getInstance().loadImageBytesFromImage(img)
+                            DesktopIOHandler.getInstance().loadImageBytesFromImage(img)
                     );
                     imageCollection.getBuffer().setEqual(imageNode);
                     imageCollection.insert(imageId);
@@ -855,16 +872,21 @@ public final class DesktopIOHandler implements IOHandler {
     @Override
     public void loadLogographs(LogoCollection logoCollection,
             String fileName) throws Exception {
-        try (ZipFile zipFile = new ZipFile(fileName)) {
+        try ( ZipFile zipFile = new ZipFile(fileName)) {
             for (LogoNode curNode : logoCollection.getAllLogos()) {
-                if (curNode.getLogoBytes() != null &&
-                        curNode.getLogoBytes().length != 0)
+                if (curNode.getLogoBytes() != null
+                        && curNode.getLogoBytes().length != 0) {
                     continue;
+                }
                 ZipEntry imgEntry = zipFile.getEntry(PGTUtil.LOGOGRAPH_SAVE_PATH
                         + curNode.getId() + ".png");
+                
+                if (imgEntry == null) {
+                    throw new IOException("PGD file corrupt. Unable to read required file from archive: " + PGTUtil.LOGOGRAPH_SAVE_PATH);
+                }
 
                 byte[] img;
-                try (InputStream imageStream = zipFile.getInputStream(imgEntry)) {
+                try ( InputStream imageStream = zipFile.getInputStream(imgEntry)) {
                     img = this.loadImageBytesFromStream(imageStream);
                 }
                 curNode.setLogoBytes(img);
@@ -882,7 +904,7 @@ public final class DesktopIOHandler implements IOHandler {
     @Override
     public void loadReversionStates(ReversionManager reversionManager,
             String fileName) throws IOException {
-        try (ZipFile zipFile = new ZipFile(fileName)) {
+        try ( ZipFile zipFile = new ZipFile(fileName)) {
             int i = 0;
 
             ZipEntry reversion = zipFile.getEntry(PGTUtil.REVERSION_SAVE_PATH
@@ -912,14 +934,14 @@ public final class DesktopIOHandler implements IOHandler {
     public void exportConFont(String exportPath, String dictionaryPath) throws IOException {
         exportFont(exportPath, dictionaryPath, PGTUtil.CON_FONT_FILE_NAME);
     }
-    
+
     @Override
     public void exportLocalFont(String exportPath, String dictionaryPath) throws IOException {
         exportFont(exportPath, dictionaryPath, PGTUtil.LOCAL_FONT_FILE_NAME);
     }
-    
+
     public void exportFont(String exportPath, String dictionaryPath, String exportFontFilename) throws IOException {
-        try (ZipFile zipFile = new ZipFile(dictionaryPath)) {
+        try ( ZipFile zipFile = new ZipFile(dictionaryPath)) {
             // ensure export file has the proper extension
             if (!exportPath.toLowerCase().endsWith(".ttf")) {
                 exportPath += ".ttf";
@@ -929,7 +951,7 @@ public final class DesktopIOHandler implements IOHandler {
 
             if (fontEntry != null) {
                 Path path = Paths.get(exportPath);
-                try (InputStream copyStream = zipFile.getInputStream(fontEntry)) {
+                try ( InputStream copyStream = zipFile.getInputStream(fontEntry)) {
                     Files.copy(copyStream, path, StandardCopyOption.REPLACE_EXISTING);
                 }
             } else {
@@ -946,11 +968,11 @@ public final class DesktopIOHandler implements IOHandler {
      */
     @Override
     public void exportCharisFont(String exportPath) throws IOException {
-        try (InputStream fontStream = IOHandler.class.getResourceAsStream(PGTUtil.UNICODE_FONT_LOCATION)) {
+        try ( InputStream fontStream = IOHandler.class.getResourceAsStream(PGTUtil.UNICODE_FONT_LOCATION)) {
             byte[] buffer = new byte[fontStream.available()];
             fontStream.read(buffer);
 
-            try (OutputStream oStream = new FileOutputStream(new File(exportPath))) {
+            try ( OutputStream oStream = new FileOutputStream(new File(exportPath))) {
                 oStream.write(buffer);
             }
         }
@@ -968,10 +990,10 @@ public final class DesktopIOHandler implements IOHandler {
     public void loadGrammarSounds(String fileName, GrammarManager grammarManager) throws Exception {
         String loadLog = "";
 
-        try (ZipFile zipFile = new ZipFile(fileName)) {
+        try ( ZipFile zipFile = new ZipFile(fileName)) {
             for (GrammarChapNode curChap : grammarManager.getChapters()) {
                 for (int i = 0; i < curChap.getChildCount(); i++) {
-                    GrammarSectionNode curNode = (GrammarSectionNode)((DesktopGrammarChapNode)curChap).getChildAt(i);
+                    GrammarSectionNode curNode = (GrammarSectionNode) ((DesktopGrammarChapNode) curChap).getChildAt(i);
 
                     if (curNode.getRecordingId() == -1) {
                         continue;
@@ -983,7 +1005,7 @@ public final class DesktopIOHandler implements IOHandler {
 
                     byte[] sound = null;
 
-                    try (InputStream soundStream = zipFile.getInputStream(soundEntry)) {
+                    try ( InputStream soundStream = zipFile.getInputStream(soundEntry)) {
                         sound = streamToByetArray(soundStream);
                     }
                     catch (IOException e) {
@@ -1028,7 +1050,7 @@ public final class DesktopIOHandler implements IOHandler {
      */
     public void writeOptionsIni(String workingDirectory, DesktopOptionsManager opMan) throws IOException {
 
-        try (Writer f0 = new BufferedWriter(new OutputStreamWriter(
+        try ( Writer f0 = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(workingDirectory
                         + File.separator + PGTUtil.POLYGLOT_INI), StandardCharsets.UTF_8))) {
             String newLine = System.getProperty("line.separator");
@@ -1096,10 +1118,10 @@ public final class DesktopIOHandler implements IOHandler {
 
             nextLine = PGTUtil.OPTIONS_TODO_DIV_LOCATION + "=" + opMan.getToDoBarPosition();
             f0.write(nextLine + newLine);
-            
+
             nextLine = PGTUtil.OPTIONS_MAXIMIZED + "=" + (opMan.isMaximized() ? PGTUtil.TRUE : PGTUtil.FALSE);
             f0.write(nextLine + newLine);
-            
+
             nextLine = PGTUtil.OPTIONS_DIVIDER_POSITION + "=";
             for (Entry<String, Integer> location : opMan.getDividerPositions().entrySet()) {
                 nextLine += ("," + location.getKey() + ":" + location.getValue());
@@ -1202,7 +1224,7 @@ public final class DesktopIOHandler implements IOHandler {
 
         try {
             if (errorLog.exists()) {
-                try (Scanner logScanner = new Scanner(errorLog).useDelimiter("\\Z")) {
+                try ( Scanner logScanner = new Scanner(errorLog).useDelimiter("\\Z")) {
                     curContents = logScanner.hasNext() ? logScanner.next() : "";
                     int length = curContents.length();
                     int newLength = length + errorMessage.length();
@@ -1213,7 +1235,7 @@ public final class DesktopIOHandler implements IOHandler {
                 }
             }
 
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(errorLog))) {
+            try ( BufferedWriter writer = new BufferedWriter(new FileWriter(errorLog))) {
                 String output = getSystemInformation() + "\n" + curContents + errorMessage + "\n";
 //                System.out.println("Writing error to: " + errorLog.getAbsolutePath());
                 writer.write(output);
@@ -1239,7 +1261,7 @@ public final class DesktopIOHandler implements IOHandler {
         File errorLog = getErrorLogFile();
 
         if (errorLog.exists()) {
-            try (Scanner logScanner = new Scanner(errorLog).useDelimiter("\\Z")) {
+            try ( Scanner logScanner = new Scanner(errorLog).useDelimiter("\\Z")) {
                 ret = logScanner.hasNext() ? logScanner.next() : "";
             }
         }
@@ -1295,20 +1317,44 @@ public final class DesktopIOHandler implements IOHandler {
     @Override
     public void unzipResourceToDir(String internalPath, Path target) throws IOException {
         InputStream fin = IOHandler.class.getResourceAsStream(internalPath);
-        try (ZipInputStream zin = new ZipInputStream(fin)) {
-            ZipEntry ze;
-            while ((ze = zin.getNextEntry()) != null) {
-                File extractTo = new File(target + File.separator + ze.getName());
-                if (ze.isDirectory()) {
-                    extractTo.mkdir();
-                } else {
-                    try (FileOutputStream out = new FileOutputStream(extractTo)) {
-                        int nRead;
-                        byte[] data = new byte[16384];
+        try ( ZipInputStream zin = new ZipInputStream(fin)) {
+            unZipStreamToLocation(zin, target);
+        }
+    }
 
-                        while ((nRead = zin.read(data, 0, data.length)) != -1) {
-                            out.write(data, 0, nRead);
-                        }
+    public void unzipFileToDir(String archivePath, Path target) throws IOException {
+        var fin = new FileInputStream(new File(archivePath));
+        try ( var zin = new ZipInputStream(fin)) {
+            File targetDir = new File(target.toString());
+            if (!targetDir.exists()) {
+                targetDir.mkdir();
+            }
+            unZipStreamToLocation(zin, target);
+        }
+    }
+
+    /**
+     * Unzips zipstream to particular location, preserving file/directory
+     * structure
+     *
+     * @param zin
+     * @param target
+     * @throws IOException
+     */
+    private static void unZipStreamToLocation(ZipInputStream zin, Path target) throws IOException {
+        ZipEntry ze;
+        while ((ze = zin.getNextEntry()) != null) {
+            File extractTo = new File(target + File.separator + ze.getName());
+            if (ze.isDirectory()) {
+                extractTo.mkdir();
+            } else {
+                extractTo.createNewFile();
+                try ( FileOutputStream out = new FileOutputStream(extractTo)) {
+                    int nRead;
+                    byte[] data = new byte[16384];
+
+                    while ((nRead = zin.read(data, 0, data.length)) != -1) {
+                        out.write(data, 0, nRead);
                     }
                 }
             }
@@ -1316,7 +1362,78 @@ public final class DesktopIOHandler implements IOHandler {
     }
     
     /**
+     * Archives directory (used for packing pgt files manually)
+     * When packing a pgt file from directory, set preserveBaseDir to false
+     * 
+     * @param directoryPath
+     * @param targetPath 
+     * @param packingPgdFile Whether This is being used to pack a PGD file
+     * @throws java.io.IOException 
+     */
+    public static void packDirectoryToZip(String directoryPath, String targetPath, boolean packingPgdFile) throws Exception {
+        String sourceFile = directoryPath;
+        try (FileOutputStream fos = new FileOutputStream(targetPath); 
+                ZipOutputStream zipOut = new ZipOutputStream(fos)) {
+            File fileToZip = new File(sourceFile);
+            zipFile(fileToZip, fileToZip.getName(), zipOut, !packingPgdFile);
+        }
+        
+        // if packing PGD file, test readability afterward
+        if (packingPgdFile) {
+            // pass null shell class because this will ultimately be discarded
+            DesktopHelpHandler helpHandler = new DesktopHelpHandler();
+            PFontHandler fontHandler = new PFontHandler();
+            var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), new DummyInfoBox(), helpHandler, fontHandler);
+            DictCore test = new DictCore(new DesktopPropertiesManager(), osHandler, new PGTUtil(), new DesktopGrammarManager());
+            PolyGlot.getTestShell(test);
+            test.readFile(targetPath);
+        }
+    }
+    
+    /**
+     * Recursing method to zip files/directors while preserving structure
+     * 
+     * @param fileToZip
+     * @param fileName
+     * @param zipOut
+     * @param preserveBaseDir Whether to preserve th base directory or to add its CONTENTS to the root
+     * @throws IOException 
+     */
+    private static void zipFile(File fileToZip, String fileName, ZipOutputStream zipOut, boolean preserveBaseDir) throws IOException {
+        if (!fileToZip.isHidden()) { // ignore files added by OS, they are garbo to PolyGlot
+            if (fileToZip.isDirectory()) {
+                if (preserveBaseDir) {
+                    if (!fileName.endsWith("/")) {
+                        fileName += "/";
+                    }
+                    
+                    zipOut.putNextEntry(new ZipEntry(fileName));
+                    zipOut.closeEntry();
+                } else {
+                    fileName = "";
+                }
+                
+                File[] children = fileToZip.listFiles();
+                for (var childFile : children) {
+                    zipFile(childFile, fileName + childFile.getName(), zipOut, true);
+                }
+            } else { 
+                try (FileInputStream fis = new FileInputStream(fileToZip)) { // handles normal files
+                    ZipEntry zipEntry = new ZipEntry(fileName);
+                    zipOut.putNextEntry(zipEntry);
+                    byte[] bytes = new byte[1024];
+                    int length;
+                    while ((length = fis.read(bytes)) >= 0) {
+                        zipOut.write(bytes, 0, length);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * Adds a metadata attribute to an OSX file
+     *
      * @param filePath
      * @param attribute
      * @param value
@@ -1328,16 +1445,16 @@ public final class DesktopIOHandler implements IOHandler {
         if (!PGTUtil.IS_OSX) {
             throw new Exception("This method may only be called within OSX.");
         }
-        
+
         String writeMode = isHexVal ? "-wx" : "-w";
         String[] cmd = {"xattr", writeMode, attribute, value, filePath};
         String[] result = runAtConsole(cmd, false);
-        
+
         if (!result[1].isBlank()) {
             throw new Exception(result[1]);
         }
     }
-    
+
     // TODO: If I ever need this, refine it. It currently gives very little back.
     // Consider returning object which specifies whether hex or string data. or something.
     // No need exept for testing at this point.
@@ -1346,14 +1463,14 @@ public final class DesktopIOHandler implements IOHandler {
         if (!PGTUtil.IS_OSX) {
             throw new Exception("This method may only be called within OSX.");
         }
-        
+
         String[] cmd = {"xattr", "-l", attribute, filePath};
         String[] result = runAtConsole(cmd, false);
-        
+
         if (!result[1].isBlank()) {
             throw new Exception(result[1]);
         }
-        
+
         return result[0];
     }
 
@@ -1378,12 +1495,9 @@ public final class DesktopIOHandler implements IOHandler {
 
         try {
             Process p = Runtime.getRuntime().exec(arguments);
-            //Process p = new ProcessBuilder(arguments).start();
-//            System.out.println(Arrays.toString(arguments));
 
             // get general output
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                    BufferedReader errorReader = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+            try ( BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));  BufferedReader errorReader = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     output += line;
@@ -1411,20 +1525,20 @@ public final class DesktopIOHandler implements IOHandler {
         String ret = "";
         String[] command = {PGTUtil.JAVA8_JAVA_COMMAND, PGTUtil.JAVA8_VERSION_ARG};
         String[] result = runAtConsole(command, false);
-        
+
         // gotta check for version with both the earlier and the later version arguments here
         if (result[0].isEmpty() && result[1].isEmpty()) {
             command = new String[]{PGTUtil.JAVA8_JAVA_COMMAND, PGTUtil.JAVA9P_VERSION_ARG};
             result = runAtConsole(command, false);
         }
-        
+
         // if both the result and the error are STILL empty, then it is a non-reporting version of J8
         if (!result[0].isEmpty() && result[1].isEmpty()) {
             ret = result[0];
         } else if (result[0].isEmpty() && result[1].isEmpty()) {
             ret = "Java 1.8";
         }
-        
+
         // if there's an error, then Java could not be run at all. Return a blank string
         if (!result[1].isEmpty()) {
             ret = "";
@@ -1463,10 +1577,11 @@ public final class DesktopIOHandler implements IOHandler {
 
         return Arrays.copyOfRange(ret, 0, cleanCount);
     }
-    
+
     /**
-     * Pulls in new image from user selected file
-     * Returns null if user cancels process
+     * Pulls in new image from user selected file Returns null if user cancels
+     * process
+     *
      * @param parent parent form
      * @param workingDirectory
      * @return ImageNode inserted into collection with populated image
@@ -1477,18 +1592,19 @@ public final class DesktopIOHandler implements IOHandler {
         try {
             DictCore core = PolyGlot.getPolyGlot().getCore();
             BufferedImage buffImg = openImage(parent, workingDirectory);
-            
+
             if (buffImg != null) {
                 image = new ImageNode(core);
                 image.setImageBytes(loadImageBytesFromImage(buffImg));
                 core.getImageCollection().insert(image);
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new IOException("Problem loading image: " + e.getLocalizedMessage(), e);
         }
         return image;
     }
-    
+
     @Override
     public byte[] loadImageBytes(String path) throws IOException {
         ImageIcon loadBlank = new ImageIcon(getClass().getResource(path));
@@ -1501,34 +1617,35 @@ public final class DesktopIOHandler implements IOHandler {
 
         loadBlank.paintIcon(null, g, 0, 0);
         g.dispose();
-        
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write( image, "jpg", baos );
+        ImageIO.write(image, "jpg", baos);
         baos.flush();
         return baos.toByteArray();
     }
-    
+
     public byte[] loadImageBytesFromStream(InputStream stream) throws IOException {
         BufferedImage image = ImageIO.read(stream);
-        
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write( image, "jpg", baos );
+        ImageIO.write(image, "jpg", baos);
         baos.flush();
         return baos.toByteArray();
     }
-    
+
     public byte[] loadImageBytesFromImage(Image img) throws IOException {
         BufferedImage image = PGTUtil.toBufferedImage(img);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write( image, "png", baos );
+        ImageIO.write(image, "png", baos);
         baos.flush();
         return baos.toByteArray();
     }
-    
+
     /**
      * Takes a buffered image, and returns a node containing it, having inserted
      * the node with ID to persist on save
+     *
      * @param _image Image to get node of.
      * @return populated Image node
      * @throws java.lang.Exception
@@ -1538,10 +1655,10 @@ public final class DesktopIOHandler implements IOHandler {
         ImageNode ret = new ImageNode(core);
         ret.setImageBytes(loadImageBytesFromImage(_image));
         core.getImageCollection().insert(ret);
-        
+
         return ret;
     }
-    
+
     public static DesktopIOHandler getInstance() {
         if (ioHandler == null) {
             ioHandler = new DesktopIOHandler();
@@ -1549,6 +1666,7 @@ public final class DesktopIOHandler implements IOHandler {
 
         return ioHandler;
     }
-    
-    private DesktopIOHandler() { }
+
+    private DesktopIOHandler() {
+    }
 }

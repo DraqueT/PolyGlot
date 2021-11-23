@@ -1366,6 +1366,69 @@ public final class ScrMainMenu extends PFrame {
         }
     }
     
+    private void unpackLanguage() {
+        String curFileName = core.getCurFileName();
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Unpack Language File");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Languages", "pgd");
+        chooser.setFileFilter(filter);
+        
+        if (curFileName.isEmpty()) {
+            chooser.setCurrentDirectory(core.getWorkingDirectory());
+        } else {
+            chooser.setCurrentDirectory(DesktopIOHandler.getInstance().getDirectoryFromPath(curFileName));
+        }
+
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            String originFile = chooser.getSelectedFile().getAbsolutePath();
+            String unpackTo = originFile.replace(".pgd", "");
+            
+            try {
+                File targetDir = new File(unpackTo);
+                
+                for (int i = 1; targetDir.exists(); i++) {
+                    targetDir = new File(unpackTo + "_" + i);
+                }
+                
+                DesktopIOHandler.getInstance().unzipFileToDir(originFile, targetDir.toPath());
+                new DesktopInfoBox(this).info("Language Unpacked", "Unpacked languge to folder: \n" + targetDir.getAbsolutePath());
+            } catch (IOException e) {
+                new DesktopInfoBox(this).error("Unpacking Error", "Unable to unpack langauge file: " + e.getLocalizedMessage());
+            }
+        }
+    }
+    
+    private void packLanguage() {
+        String curFileName = core.getCurFileName();
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Pack Language Dirctory to PGD File");
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        
+        if (curFileName.isEmpty()) {
+            chooser.setCurrentDirectory(core.getWorkingDirectory());
+        } else {
+            chooser.setCurrentDirectory(DesktopIOHandler.getInstance().getDirectoryFromPath(curFileName));
+        }
+
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            String origin = chooser.getSelectedFile().getAbsolutePath();
+            String packTo = origin + ".pgd";
+            
+            try {
+                File targetFile = new File(packTo);
+
+                for (int i = 1; targetFile.exists(); i++) {
+                    targetFile = new File(origin + "_" + i + ".pgd");
+                }
+                
+                DesktopIOHandler.packDirectoryToZip(origin, targetFile.getAbsolutePath(), true);
+                new DesktopInfoBox(this).info("Language Packed", "Packed languge to file: \n" + targetFile.getAbsolutePath());
+            } catch (Exception e) {
+                new DesktopInfoBox(this).error("Packing Error", "Unable to unpack langauge file: " + e.getLocalizedMessage());
+            }
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -1431,6 +1494,9 @@ public final class ScrMainMenu extends PFrame {
         mnuImport = new javax.swing.JMenu();
         mnuImportFile = new javax.swing.JMenuItem();
         mnuImportFont = new javax.swing.JMenuItem();
+        mnuAdvanced = new javax.swing.JMenu();
+        mnuUnpackLanguage = new javax.swing.JMenuItem();
+        mnuPackLanguage = new javax.swing.JMenuItem();
         mnuCheckLanguage = new javax.swing.JMenuItem();
         mnuIpaTranslator = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -1548,7 +1614,6 @@ public final class ScrMainMenu extends PFrame {
         btnPhrasebook.setText("Phrasebook");
         btnPhrasebook.setToolTipText("A list of common phrases");
         btnPhrasebook.setPreferredSize(new java.awt.Dimension(141, 29));
-        btnPhrasebook.setSize(new java.awt.Dimension(0, 0));
         btnPhrasebook.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPhrasebookActionPerformed(evt);
@@ -1831,6 +1896,28 @@ public final class ScrMainMenu extends PFrame {
         mnuImport.add(mnuImportFont);
 
         mnuTools.add(mnuImport);
+
+        mnuAdvanced.setText("Advanced");
+
+        mnuUnpackLanguage.setText("Unpack Language");
+        mnuUnpackLanguage.setToolTipText("Unpacks language to its raw files to local directory for manual editing (USE CAUTION)");
+        mnuUnpackLanguage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuUnpackLanguageActionPerformed(evt);
+            }
+        });
+        mnuAdvanced.add(mnuUnpackLanguage);
+
+        mnuPackLanguage.setText("Pack Language");
+        mnuPackLanguage.setToolTipText("Re-packs language into pgt file (USE CAUTION)");
+        mnuPackLanguage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuPackLanguageActionPerformed(evt);
+            }
+        });
+        mnuAdvanced.add(mnuPackLanguage);
+
+        mnuTools.add(mnuAdvanced);
 
         mnuCheckLanguage.setText("Check Language");
         mnuCheckLanguage.setToolTipText("Checks language for problems and inconsistencies.");
@@ -2256,6 +2343,14 @@ public final class ScrMainMenu extends PFrame {
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnPhrasebookActionPerformed
 
+    private void mnuUnpackLanguageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuUnpackLanguageActionPerformed
+        unpackLanguage();
+    }//GEN-LAST:event_mnuUnpackLanguageActionPerformed
+
+    private void mnuPackLanguageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPackLanguageActionPerformed
+        packLanguage();
+    }//GEN-LAST:event_mnuPackLanguageActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClasses;
     private javax.swing.JButton btnGrammar;
@@ -2288,6 +2383,7 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JList<RecentFile> lstRecentOpened;
     private javax.swing.JMenuItem mnuAbout;
+    private javax.swing.JMenu mnuAdvanced;
     private javax.swing.JMenuItem mnuCheckLanguage;
     private javax.swing.JMenuItem mnuChkUpdate;
     private javax.swing.JMenu mnuExLex;
@@ -2308,6 +2404,7 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JMenuItem mnuNewLocal;
     private javax.swing.JMenuItem mnuOpenLocal;
     private javax.swing.JMenuItem mnuOptions;
+    private javax.swing.JMenuItem mnuPackLanguage;
     private javax.swing.JMenuItem mnuPublish;
     private javax.swing.JMenu mnuRecents;
     private javax.swing.JMenuItem mnuReversion;
@@ -2315,6 +2412,7 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JMenuItem mnuSaveLocal;
     private javax.swing.JMenu mnuSwadesh;
     private javax.swing.JMenu mnuTools;
+    private javax.swing.JMenuItem mnuUnpackLanguage;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlSideButtons;
     private javax.swing.JPanel pnlStartButtons;

@@ -147,6 +147,31 @@
                 </MenuItem>
               </SubComponents>
             </Menu>
+            <Menu class="javax.swing.JMenu" name="mnuAdvanced">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Advanced"/>
+              </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="mnuUnpackLanguage">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Unpack Language"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Unpacks language to its raw files to local directory for manual editing (USE CAUTION)"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuUnpackLanguageActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="mnuPackLanguage">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Pack Language"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Re-packs language into pgt file (USE CAUTION)"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuPackLanguageActionPerformed"/>
+                  </Events>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
             <MenuItem class="javax.swing.JMenuItem" name="mnuCheckLanguage">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Check Language"/>
@@ -547,9 +572,6 @@
                     <Property name="toolTipText" type="java.lang.String" value="A list of common phrases"/>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[141, 29]"/>
-                    </Property>
-                    <Property name="size" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[0, 0]"/>
                     </Property>
                   </Properties>
                   <Events>
