@@ -835,14 +835,14 @@ public final class DesktopIOHandler implements IOHandler {
                 }
                 break;
             }
-            
-            // gotta check for this due to how Linux sometimes bulds archives...
-            if (entry == null || !entry.getName().equals(PGTUtil.IMAGES_SAVE_PATH)) {
-                return;
-            }
 
             while (entries.hasMoreElements()) {
                 entry = entries.nextElement();
+                
+                // Linear nature of zip files makes this necessary
+                if (!entry.getName().startsWith(PGTUtil.IMAGES_SAVE_PATH)) {
+                    continue;
+                }
 
                 if (entry.isDirectory()) { // kills process after last image found
                     break;
@@ -850,7 +850,8 @@ public final class DesktopIOHandler implements IOHandler {
 
                 BufferedImage img;
                 try ( InputStream imageStream = zipFile.getInputStream(entry)) {
-                    String name = entry.getName().replace(".png", "")
+                    String name = entry.getName();
+                    name = name.replace(".png", "")
                             .replace(PGTUtil.IMAGES_SAVE_PATH, "");
                     int imageId = Integer.parseInt(name);
                     img = ImageIO.read(imageStream);
