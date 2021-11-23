@@ -464,7 +464,8 @@ public class IOHandlerTest {
             
             assertEquals(origin, target);
         } catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
+            System.out.println(e.getMessage());
             fail(e);
         } finally {
             if (tmpLangFile.exists()) {
