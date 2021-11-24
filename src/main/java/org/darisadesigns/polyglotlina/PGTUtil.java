@@ -28,7 +28,6 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 
 /**
  * This contains various constant vales in PolyGlot
@@ -453,7 +452,8 @@ public class PGTUtil {
             try (BufferedReader br = new BufferedReader(new InputStreamReader(version.openStream(), StandardCharsets.UTF_8))) {
                 return br.readLine();
             } catch (IOException e) {
-                DesktopIOHandler.getInstance().writeErrorLog(e, "Unable to fetch version at startup");
+                // TODO: Find a way to call OSHandler
+                // DesktopIOHandler.getInstance().writeErrorLog(e, "Unable to fetch version at startup");
             }
         }
 
@@ -467,7 +467,8 @@ public class PGTUtil {
             try (BufferedReader br = new BufferedReader(new InputStreamReader(buildDate.openStream(), StandardCharsets.UTF_8))) {
                 return br.readLine();
             } catch (IOException e) {
-                DesktopIOHandler.getInstance().writeErrorLog(e, "Unable to fetch build date at startup");
+                // TODO: Find a way to call OSHandler
+                // DesktopIOHandler.getInstance().writeErrorLog(e, "Unable to fetch build date at startup");
             }
         }
 
