@@ -497,7 +497,7 @@
                 <Component class="javax.swing.JButton" name="btnClasses">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Lexical Classes"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Create customizable classes, like gender, or create freetext fieldsfor vocabulary here."/>
+                    <Property name="toolTipText" type="java.lang.String" value="Create customizable classes, like gender, or create freetext fields for vocabulary here."/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnClassesActionPerformed"/>

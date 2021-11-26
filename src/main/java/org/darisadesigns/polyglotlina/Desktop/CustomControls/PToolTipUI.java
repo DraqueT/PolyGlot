@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2020, Draque Thompson
+ * Copyright (c) 2017-2021, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -30,6 +30,8 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 import javax.swing.JComponent;
 import javax.swing.JToolTip;
 import javax.swing.LookAndFeel;
@@ -129,7 +131,7 @@ public class PToolTipUI extends ToolTipUI
     @Override
     public void paint(Graphics g, JComponent c) {
         String tipText = ((JToolTip)c).getTipText();
-        tipText = tipText == null ? "" : tipText;
+        tipText = getFormattedTipText(tipText);
         String[] tipLines = tipText.split("\n");
         Font font = c.getFont();
         
@@ -172,6 +174,42 @@ public class PToolTipUI extends ToolTipUI
             g.drawString(tipLines[i], paintTextR.x + 5,
                     paintTextR.y + metrics.getAscent() + (i * (fontHeight)));
         }
+    }
+    
+    /**
+     * Formats tip text appropriately with linebreaks if it is not formatted initially.
+     * @param text
+     * @return 
+     */
+    private String getFormattedTipText(String text) {
+        if (text == null) {
+            return "";
+        }
+        
+        // if it contains a linebreak, it has been manually formatted already
+        if (text.contains("\n")) {
+            return text;
+        }
+        
+        var lines = new ArrayList<String>();
+        String curLine = "";
+        
+        for (String token : text.split(" ")) {
+            if (curLine.length() > 0 && curLine.length() + token.length() > PGTUtil.MAX_TOOLTIP_LENGTH) {
+                lines.add(curLine);
+                curLine = "";
+            }
+            if (!curLine.isBlank()) {
+                curLine += " ";
+            }
+            curLine += token;
+        }
+        
+        if (!curLine.isBlank()) {
+            lines.add(curLine);
+        }
+        
+        return lines.stream().collect(Collectors.joining("\n"));
     }
     
     /**

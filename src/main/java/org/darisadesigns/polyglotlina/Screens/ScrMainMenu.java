@@ -1053,7 +1053,7 @@ public final class ScrMainMenu extends PFrame {
         final boolean enable = _enable;
 
         if (enable) {
-            button.setToolTipText(button.getToolTipText() + "\n(right click to pop window out or for help)");
+            button.setToolTipText(button.getToolTipText() + " (right click for help or to pop as new window)");
             popOut.setToolTipText("Pops " + button.getText() + " into independent window.");
         } else {
             popOut.setToolTipText(button.getText() + " cannot be popped out.");
@@ -1564,7 +1564,7 @@ public final class ScrMainMenu extends PFrame {
         });
 
         btnClasses.setText("Lexical Classes");
-        btnClasses.setToolTipText("Create customizable classes, like gender, or create freetext fieldsfor vocabulary here.");
+        btnClasses.setToolTipText("Create customizable classes, like gender, or create freetext fields for vocabulary here.");
         btnClasses.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnClassesActionPerformed(evt);
