@@ -35,6 +35,7 @@ public interface HelpHandler {
     public static String PHONOLOGY_HELP = "PHONOLOGY";
     public static String LANGPROPERTIES_HELP = "-_Language_Properties";
     public static String QUIZGENERATOR_HELP = "QUIZ";
+    public static String PHRASEBOOK_HELP = "-_Phrasebook";
 
     public void openHelp();
 

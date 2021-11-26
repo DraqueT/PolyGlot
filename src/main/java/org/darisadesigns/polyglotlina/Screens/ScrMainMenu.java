@@ -1034,6 +1034,9 @@ public final class ScrMainMenu extends PFrame {
         setupDropdownMenu((PButton) btnQuiz, () -> {
             return null;
         }, HelpHandler.QUIZGENERATOR_HELP, false);
+        setupDropdownMenu((PButton) btnPhrasebook, () -> {
+            return new ScrPhrasebook(core);
+        }, HelpHandler.PHRASEBOOK_HELP, true);
     }
 
     /**
@@ -1043,10 +1046,12 @@ public final class ScrMainMenu extends PFrame {
      * @param helpLocation
      * @param _enable
      */
-    private void setupDropdownMenu(final PButton button, 
+    private void setupDropdownMenu(
+            final PButton button, 
             Supplier<Window> setNewWindow, 
             String helpLocation, 
-            boolean _enable) {
+            boolean _enable
+    ) {
         final JPopupMenu buttonMenu = new JPopupMenu();
         final JMenuItem popOut = new JMenuItem("Pop Window Out");
         final JMenuItem help = new JMenuItem("Open Relevant Help Section");
