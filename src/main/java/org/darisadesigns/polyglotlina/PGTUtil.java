@@ -452,7 +452,7 @@ public class PGTUtil {
             try (BufferedReader br = new BufferedReader(new InputStreamReader(version.openStream(), StandardCharsets.UTF_8))) {
                 return br.readLine();
             } catch (IOException e) {
-                // TODO: Find a way to call OSHandler
+                // inappropriate to log here
                 // DesktopIOHandler.getInstance().writeErrorLog(e, "Unable to fetch version at startup");
             }
         }
@@ -467,7 +467,7 @@ public class PGTUtil {
             try (BufferedReader br = new BufferedReader(new InputStreamReader(buildDate.openStream(), StandardCharsets.UTF_8))) {
                 return br.readLine();
             } catch (IOException e) {
-                // TODO: Find a way to call OSHandler
+                // Inappropriate to throw exception here
                 // DesktopIOHandler.getInstance().writeErrorLog(e, "Unable to fetch build date at startup");
             }
         }
