@@ -54,10 +54,7 @@ public final class PLanguageStats {
         core = _core;
         progress = _progress;
         wordList = core.getWordCollection().getWordNodes();
-        
-        String rawAlphabet = core.getPropertiesManager().getAlphaPlainText();
-        String splitRegex = rawAlphabet.contains(",") ? "," : "(?!^)";
-        alphabet = rawAlphabet.split(splitRegex);
+        alphabet = core.getPropertiesManager().getOrderedAlphaList();
         alphaCombinations = getAllCombinations();
     } 
 

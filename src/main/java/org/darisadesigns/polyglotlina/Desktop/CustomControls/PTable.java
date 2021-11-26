@@ -24,8 +24,11 @@ import java.awt.Component;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import java.awt.Font;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import javax.swing.JTable;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
@@ -35,17 +38,19 @@ import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
  * @author DThompson
  */
 public final class PTable extends JTable {
+
+    private CellEditorListener defaultCellListender = null;
+    private FocusListener defaultCellFocusListener = null;
+    private DocumentListener defaultCellEditorDocumentListener = null;
     private final DictCore core;
-    private final PCellEditor disabledEd;
     private final PCellRenderer disabledRend;
     private RenderController rendererController = (r,x,y)->{};
     private EditorController editorController = (e,x,y)->{};
+    private boolean useConFont = false;
 
     public PTable(DictCore _core) {
         core = _core;
-        disabledEd = new PCellEditor(false, core);
-        disabledRend = new PCellRenderer(false, core);
-        disabledEd.setBackground(Color.gray);
+        disabledRend = new PCellRenderer(isUseConFont(), core);
         disabledRend.setBackground(Color.darkGray);
 
         if (core != null) {
@@ -54,7 +59,8 @@ public final class PTable extends JTable {
         }
     }
     
-        @Override
+    // TODO: RIP THIS OUT AND PUT IN SPECIAL PRONUNCIATION TABLE CLASS
+    @Override
     public String getToolTipText(MouseEvent e) {
         String tip = "";
         java.awt.Point p = e.getPoint();
@@ -93,13 +99,21 @@ public final class PTable extends JTable {
             
             // only set new value if not already overridden elsewhere
             if (!(ret instanceof PCellRenderer)) {
-                boolean conFont = this.getFont().getFamily().equals(core.getPropertiesManager().getFontLocalFamily());
+                boolean conFont = this.getFont().getFamily().equals(core.getPropertiesManager().getFontConFamily());
                 ret = new PCellRenderer(conFont, core);
+                ((PCellRenderer)ret).setBackground(this.getBackground());
                 this.prepareRenderer(ret, row, column);
             }
         }
 
         return ret;
+    }
+    
+    @Override
+    public void setFont(Font font) {
+        var metrics = this.getFontMetrics(font);
+        this.setRowHeight(metrics.getHeight() + 5);
+        super.setFont(font);
     }
 
     @Override
@@ -114,6 +128,18 @@ public final class PTable extends JTable {
                 boolean conFont = this.getFont().getFamily().equals(core.getPropertiesManager().getFontConFamily());
                 ret = new PCellEditor(conFont, core);
                 this.prepareEditor(ret, row, column);
+                
+                if (defaultCellListender != null) {
+                    ret.addCellEditorListener(defaultCellListender);
+                }
+                
+                if (defaultCellFocusListener != null) {
+                    ((PCellEditor)ret).setComponentFocusListener(defaultCellFocusListener);
+                }
+                
+                if(getDefaultCellEditorDocumentListener() != null) {
+                    ((PCellEditor)ret).setDocuListener(getDefaultCellEditorDocumentListener());
+                }
             }
         }
 
@@ -167,5 +193,37 @@ public final class PTable extends JTable {
         }
         
         return ret;
+    }
+    
+    public boolean isUseConFont() {
+        return useConFont;
+    }
+
+    public void setUseConFont(boolean useConFont) {
+        this.useConFont = useConFont;
+    }
+
+    public CellEditorListener getDefaultCellListender() {
+        return defaultCellListender;
+    }
+
+    public void setDefaultCellListender(CellEditorListener defaultCellListender) {
+        this.defaultCellListender = defaultCellListender;
+    }
+
+    public FocusListener getDefaultCellFocusListener() {
+        return defaultCellFocusListener;
+    }
+
+    public void setDefaultCellFocusListener(FocusListener defaultCellFocusListener) {
+        this.defaultCellFocusListener = defaultCellFocusListener;
+    }
+    
+    public DocumentListener getDefaultCellEditorDocumentListener() {
+        return defaultCellEditorDocumentListener;
+    }
+
+    public void setDefaultCellEditorDocumentListener(DocumentListener defaultCellEditorDocumentListener) {
+        this.defaultCellEditorDocumentListener = defaultCellEditorDocumentListener;
     }
 }

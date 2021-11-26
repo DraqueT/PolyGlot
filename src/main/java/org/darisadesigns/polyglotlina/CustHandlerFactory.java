@@ -230,7 +230,7 @@ public final class CustHandlerFactory {
             int wCId;
             int wGId;
             String combinedDecId = "";
-            String tmpString; // used mostly for converting deprecated values (as they no longer have placeholder points)
+            String tmpString; // placeholder for building serialized values that are guaranteed processed in a single pass
 
             final ConjugationManager conjugationMgr = core.getConjugationManager();
             final PronunciationMgr pronuncMgr = core.getPronunciationMgr();
@@ -295,6 +295,7 @@ public final class CustHandlerFactory {
                 else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_FONT_STYLE_XID)) {
                     bfontStyle = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ALPHA_ORDER_XID)) {
+                    tmpString = "";
                     balphaOrder = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ENFORCE_RTL_XID)) {
                     blangPropEnforceRTL = true;
@@ -611,6 +612,12 @@ public final class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_FONT_STYLE_XID)) {
                     bfontStyle = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ALPHA_ORDER_XID)) {
+                    try {
+                        propertiesManager.setAlphaOrder(tmpString);
+                    } catch (Exception e) {
+                        throw new SAXException("Load error: " + e.getLocalizedMessage(), e);
+                    }
+                    
                     balphaOrder = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ENFORCE_RTL_XID)) {
                     blangPropEnforceRTL = false;
@@ -981,12 +988,7 @@ public final class CustHandlerFactory {
                     propertiesManager.setLocalFontSize(Double.parseDouble(new String(ch, start, length)));
                 }
                 else if (balphaOrder) {
-                    try {
-                        propertiesManager.setAlphaOrder(propertiesManager.getAlphaPlainText()
-                                + new String(ch, start, length), true);
-                    } catch (Exception e) {
-                        throw new SAXException("Load error: " + e.getLocalizedMessage(), e);
-                    }
+                    tmpString += new String(ch, start, length);
                 } else if (bDecId) {
                     conjugationMgr.setBufferId(Integer.parseInt(new String(ch, start, length)));
                     bDecId = false;

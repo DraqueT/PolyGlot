@@ -64,23 +64,24 @@ public class PListCellRenderer extends DefaultListCellRenderer {
     public void paint(Graphics g) {
         super.paint(g);
         
-        if (this.addLocalExtraText) {
+        // prints expanded word display if set in properties
+        if (this.addLocalExtraText && curVal instanceof ConWord word) {
             DictCore core = PolyGlot.getPolyGlot().getCore();
+            Font localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
+            Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
+            FontMetrics localMetrics = g.getFontMetrics(localFont);
+            FontMetrics conMetrics = g.getFontMetrics(conFont);
+
+            int wordEnd;
+            int dropPosition;
+            int height;
+            String printValue;
+
+            printValue = word.getLocalWord();
             
-            if (curVal instanceof ConWord word) {
-                Font localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
-                Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
-                FontMetrics localMetrics = g.getFontMetrics(localFont);
-                FontMetrics conMetrics = g.getFontMetrics(conFont);
-
-                int wordEnd;
-                int dropPosition;
-                int height;
-                String printValue;
-
-                printValue = word.getLocalWord();
+            if (!printValue.isBlank()) {
                 wordEnd = conMetrics.stringWidth(word.getValue());
-                dropPosition = localMetrics.getHeight();
+                dropPosition = (localMetrics.getHeight() * 6) / 7;
                 height = conMetrics.getHeight();
                 g.setFont(localFont);
                 g.setColor(Color.blue);

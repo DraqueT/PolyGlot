@@ -304,7 +304,7 @@ public final class ScrPhonology extends PFrame {
         DefaultTableModel procTableModel = new DefaultTableModel();
         procTableModel.addColumn("Character(s)");
         procTableModel.addColumn("Pronunciation");
-        tblProcs.setModel(procTableModel); // TODO: find way to make tblProcs display RTL order when appropriate Maybe something on my custom cell editor
+        tblProcs.setModel(procTableModel);
         
         boolean useConFont = !core.getPropertiesManager().isOverrideRegexFont();
 

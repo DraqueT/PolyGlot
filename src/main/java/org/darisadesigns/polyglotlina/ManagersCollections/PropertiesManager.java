@@ -24,6 +24,7 @@ import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -41,7 +42,6 @@ public abstract class PropertiesManager {
     protected double conFontSize = 12;
     protected double localFontSize = 12;
     private final PAlphaMap<String, Integer> alphaOrder;
-    private String alphaPlainText = "";
     private String langName = "";
     private String localLangName = "";
     private String copyrightAuthorInfo = "";
@@ -265,20 +265,16 @@ public abstract class PropertiesManager {
      * @throws java.lang.Exception
      */
     public void setAlphaOrder(String order, boolean overrideDupe) throws Exception {
-        alphaPlainText = order;
         String error = "";
 
         alphaOrder.clear();
 
-        // if comma delimited, alphabet may contain multiple character values
+        // Some older files may not be comma delimited - left for compatibility
         if (order.contains(",")) {
-            String[] orderVals = order.split(",");
+            String[] orderVals = getCommaDelimitedValuesAsArray(order);
             
             for (int i = 0; i < orderVals.length; i++) {
-                String newEntry = orderVals[i].trim();
-                if (newEntry.isEmpty()) {
-                    continue;
-                }
+                String newEntry = orderVals[i];
                 
                 if (alphaOrder.containsKey(newEntry) && ! overrideDupe) {
                     error += "Alphabet contains duplicate entry: " + newEntry;
@@ -292,7 +288,7 @@ public abstract class PropertiesManager {
                 String newEntry = order.substring(i, i+1);
                 
                 if (alphaOrder.containsKey(newEntry) && !overrideDupe) {
-                    error += "Alphabet contains duplicate entry: " + newEntry;
+                    error += "Alphabet contains duplicate entry: " + newEntry + "\n";
                 }
                 else {
                     alphaOrder.put(newEntry, i);
@@ -304,12 +300,24 @@ public abstract class PropertiesManager {
             throw new Exception(error.trim());
         }
     }
-       
+    
     /**
-     * @return the alphaPlainText
+     * Fetches comma delimited values with empty values removed
+     * @param input
+     * @return 
      */
-    public String getAlphaPlainText() {
-        return alphaPlainText;
+    public String[] getCommaDelimitedValuesAsArray(String input) {
+        List<String> ret = new ArrayList<>();
+        
+        for(String cur : input.split(",")) {
+            cur = cur.trim();
+            
+            if (!cur.isEmpty()) {
+                ret.add(cur);
+            }
+        }
+        
+        return ret.toArray(new String[0]);
     }
 
     /**
@@ -431,7 +439,7 @@ public abstract class PropertiesManager {
 
         // store alpha order for conlang
         wordValue = doc.createElement(PGTUtil.LANG_PROP_ALPHA_ORDER_XID);
-        wordValue.appendChild(doc.createTextNode(alphaPlainText));
+        wordValue.appendChild(doc.createTextNode(String.join(",", getOrderedAlphaList())));
         propContainer.appendChild(wordValue);
 
         // store option for mandatory Types
@@ -690,6 +698,16 @@ public abstract class PropertiesManager {
         this.useSimplifiedConjugations = _useSimplifiedConjugations;
     }
     
+    public String[] getOrderedAlphaList() {
+        String[] orderedVals = new String[alphaOrder.getDelegate().size()];
+
+        for (String key : alphaOrder.keySet()) { 
+            orderedVals[alphaOrder.get(key)] = key;
+        }
+        
+        return orderedVals;
+    }
+    
     @Override
     public boolean equals(Object comp) {
         boolean ret = false;
@@ -701,7 +719,7 @@ public abstract class PropertiesManager {
             ret = conFontStyle.equals(prop.conFontStyle);
             ret = ret && conFontSize == prop.conFontSize;
             ret = ret && localFontSize == prop.localFontSize;
-            ret = ret && alphaPlainText.equals(prop.alphaPlainText);
+            ret = ret && alphaOrder.equals(prop.alphaOrder);
             ret = ret && langName.equals(prop.langName);
             ret = ret && localLangName.equals(prop.localLangName);
             ret = ret && copyrightAuthorInfo.equals(prop.copyrightAuthorInfo);

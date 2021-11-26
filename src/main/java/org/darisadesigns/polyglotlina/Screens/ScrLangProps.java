@@ -33,15 +33,30 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellEditor;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellRenderer;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTable;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -50,6 +65,7 @@ import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 public class ScrLangProps extends PFrame {
 
     private final DecimalFormat decimalFormat;
+    private final DesktopPropertiesManager propMan;
 
     /**
      * Creates new form ScrLangProps
@@ -58,6 +74,7 @@ public class ScrLangProps extends PFrame {
      */
     public ScrLangProps(DictCore _core) {
         super(_core);
+        propMan = (DesktopPropertiesManager)core.getPropertiesManager();
 
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
         decimalFormat = (DecimalFormat) numberFormat;
@@ -66,9 +83,136 @@ public class ScrLangProps extends PFrame {
         initComponents();
         populateProperties();
         setAlphaLegal();
+        
+        float fontSize = (float)((DesktopOptionsManager)PolyGlot.getPolyGlot().getOptionsManager()).getMenuFontSize();
+        Font charis = PGTUtil.CHARIS_UNICODE.deriveFont(fontSize);
+        btnAlphaUp.setFont(charis);
+        btnAlphaDown.setFont(charis);
+        
+        super.getRootPane().getContentPane().setBackground(Color.white);
+        this.setupListeners();
+    }
 
-        txtAlphaOrder.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
+    /**
+     * Sets up custom labeling that can't be modified in generated code
+     */
+    public void setCustomLabels() {
+        chkLocalMandatory.setToolTipText("Check to enforce as mandatory a(n) "
+                + core.localLabel() + " word on each created lexicon entry.");
+        chkLocalUniqueness.setToolTipText("Check to enforce as mandatory uniqueness in entries on the "
+                + core.localLabel() + " word field.");
+        btnChangeFont.setText(core.conLabel() + " Font");
+        txtFont.setToolTipText(core.conLabel() + " Font");
+        txtLocalFont.setToolTipText(core.localLabel() + " Font");
+    }
+    
+    private List<String> getAlphaOrderFromTable() {
+        var alphaOrder = new ArrayList<String>();
+        var curSelected = tblAlphabet.getSelectedRow();
+        
+        for (int i = 0; i < tblAlphabet.getRowCount(); i++) {
+            var renderer = (PCellRenderer)tblAlphabet.getCellRenderer(i, 0);
+            var val = renderer.getStringContents();
+            
+            var cellEditor = (PCellEditor)((PTable)tblAlphabet).getCellEditor();
+            if (i == curSelected && cellEditor != null) {
+                val = (String)cellEditor.getCellEditorValue();
+            }
+            
+            alphaOrder.add(val);
+        }
+        
+        return alphaOrder;
+    }
+    
+    /**
+     * Saves alphabetic order and updates errored status if necessary
+     */
+    private void saveAlphaOrder() {
+        try {
+            var alphaOrder = getAlphaOrderFromTable();
+            propMan.setAlphaOrder(alphaOrder.stream().collect(Collectors.joining(",")));
+        } catch (Exception e) {
+            setAlphaProblems(e.getLocalizedMessage());
+            return;
+        }
 
+        setAlphaLegal();
+    }
+    
+    private void moveAlphaUp() {
+        int curSelection = tblAlphabet.getSelectedRow();
+        
+        if (curSelection > 0) {
+            var editor = tblAlphabet.getCellEditor();
+            if (editor != null) {
+                editor.stopCellEditing();
+            }
+
+            var model = (DefaultTableModel)tblAlphabet.getModel();
+            Object value = model.getValueAt(curSelection - 1, 0);
+            model.setValueAt(model.getValueAt(curSelection, 0), curSelection -1, 0);
+            model.setValueAt(value, curSelection, 0);
+            tblAlphabet.changeSelection(curSelection - 1, 0, false, false);
+            saveAlphaOrder();
+        }
+    }
+    
+    private void moveAlphaDown() {
+        int curSelection = tblAlphabet.getSelectedRow();
+        
+        if (curSelection < tblAlphabet.getRowCount() - 1) {
+            var editor = tblAlphabet.getCellEditor();
+            if (editor != null) {
+                editor.stopCellEditing();
+            }
+
+            var model = (DefaultTableModel)tblAlphabet.getModel();
+            Object value = model.getValueAt(curSelection + 1, 0);
+            model.setValueAt(model.getValueAt(curSelection, 0), curSelection +1, 0);
+            model.setValueAt(value, curSelection, 0);
+            tblAlphabet.changeSelection(curSelection + 1, 0, false, false);
+            saveAlphaOrder();
+        }
+    }
+    
+    private void addAlpha() {
+        var editor = tblAlphabet.getCellEditor();
+        if (editor != null) {
+            editor.stopCellEditing();
+        }
+        
+        int curSelection = tblAlphabet.getSelectedRow();
+        var model = (DefaultTableModel)tblAlphabet.getModel();
+        
+        model.insertRow(curSelection + 1, new String[]{""});
+        tblAlphabet.changeSelection(curSelection + 1, 0, false, false);
+    }
+    
+    private void deleteAlpha() {
+        int curSelection = tblAlphabet.getSelectedRow();
+        
+        if (curSelection > -1) {
+            var editor = tblAlphabet.getCellEditor();
+            if (editor != null) {
+                editor.stopCellEditing();
+            }
+            
+            var model = (DefaultTableModel)tblAlphabet.getModel();
+            
+            model.removeRow(curSelection);
+            
+            if (curSelection > 0) {
+                tblAlphabet.changeSelection(curSelection - 1, 0, false, false);
+            } else if (tblAlphabet.getRowCount() > 0) {
+                tblAlphabet.changeSelection(0, 0, false, false);
+            }
+            
+            saveAlphaOrder();
+        }
+    }
+
+    private void setupListeners() {
         txtKerning.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -95,78 +239,87 @@ public class ScrLangProps extends PFrame {
                 }
             }
         });
+        
+        ((PTable)tblAlphabet).setDefaultCellListender(new CellEditorListener() {
+            @Override
+            public void editingStopped(ChangeEvent e) {
+                saveAlphaOrder();
+            }
 
-        super.getRootPane().getContentPane().setBackground(Color.white);
-        this.setupListeners();
-    }
+            @Override
+            public void editingCanceled(ChangeEvent e) {
+                saveAlphaOrder();
+            }
+        });
+        
+        ((PTable)tblAlphabet).setDefaultCellFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                // nothing
+            }
 
-    /**
-     * Sets up custom labeling that can't be modified in generated code
-     */
-    public void setCustomLabels() {
-        chkLocalMandatory.setToolTipText("Check to enforce as mandatory a(n) "
-                + core.localLabel() + " word on each created lexicon entry.");
-        chkLocalUniqueness.setToolTipText("Check to enforce as mandatory uniqueness in entries on the "
-                + core.localLabel() + " word field.");
-        btnChangeFont.setText(core.conLabel() + " Font");
-        txtFont.setToolTipText(core.conLabel() + " Font");
-        txtLocalFont.setToolTipText(core.localLabel() + " Font");
-    }
-
-    private void setupListeners() {
-        txtAlphaOrder.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                saveAlphaOrder();
+            }
+        });
+        
+        ((PTable)tblAlphabet).setDefaultCellEditorDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                this.doUpdate();
+                saveAlphaOrder();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                this.doUpdate();
+                saveAlphaOrder();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                this.doUpdate();
-            }
-
-            private void doUpdate() {
-                try {
-                    core.getPropertiesManager().setAlphaOrder(txtAlphaOrder.getText().trim());
-                }
-                catch (Exception e) {
-                    setAlphaProblems(e.getLocalizedMessage());
-                    return;
-                }
-                checkAlphaContainsRegexCharacters();
-                setAlphaLegal();
+                saveAlphaOrder();
             }
         });
+    }
+    
+    private void populateAlphaTable() {
+        DefaultTableModel procTableModel = new DefaultTableModel();
+        procTableModel.addColumn("");
+        tblAlphabet.setFont(propMan.getFontCon());
+        
+        for (var character : propMan.getOrderedAlphaList()) {
+            procTableModel.addRow(new String[]{character});
+        }
+        
+        tblAlphabet.setModel(procTableModel);
     }
 
     // sets problems for the alphabet order and makes appropriate ui updates
     private void setAlphaProblems(String errors) {
         if (errors.isBlank()) {
-            txtAlphaOrder.setBackground(PGTUtil.COLOR_TEXT_BG);
-            txtAlphaOrder.setToolTipText("List of all characters in conlang in alphabetical order (both upper and lower case). Comma delimt if using character groups. (blank = default alpha)");
+            tblAlphabet.setBackground(PGTUtil.COLOR_TEXT_BG);
         } else {
-            txtAlphaOrder.setBackground(PGTUtil.COLOR_REQUIRED_LEX_COLOR);
-            txtAlphaOrder.setToolTipText(errors);
+            tblAlphabet.setBackground(PGTUtil.COLOR_REQUIRED_LEX_COLOR);
         }
+        
+        txtAlphaProblems.setText(errors);
     }
     
     // detects whether the alphabet covers all characters in words of the lexicon and sets screen up appropriately
     private void setAlphaLegal() {
-        if (!txtAlphaOrder.getText().isBlank()) {
+        setAlphaProblems("");
+        
+        if (tblAlphabet.getRowCount() > 0) {
             if (!core.getWordCollection().canSafelySort()) {
                 setAlphaProblems("There is a logical problem in your alphabetic ordering system. If using values greater than 2 characters, ensure that there can be no ambiguity in order.");
             } else if (!core.getPropertiesManager().isAlphabetComplete()) {
                 setAlphaProblems("Characters missing from Alpha Order. Please select Tools->Check Language to see which words contain unordered characters. (Note: some characters look the same, but are not!)");
-            } else {
-                setAlphaProblems("");
+            } else if (alphaContainsRegexChars()) {
+                setAlphaProblems("Some of the characters defined in your alphabetic order are used "
+                        + "in regular expressions. If you are planning on autogenerating pronunciations or "
+                        + "conjugations/declensions, please consider using alternate characters from these:\n\n"
+                        + "[ ] \\ ^ $ . | ? * + ( ) { }");
             }
-        } else {
-            setAlphaProblems("");
         }
     }
 
@@ -185,7 +338,6 @@ public class ScrLangProps extends PFrame {
 
     @Override
     public void saveAllValues() {
-        var propMan = ((DesktopPropertiesManager)core.getPropertiesManager());
         propMan.setDisableProcRegex(chkDisableProcRegex.isSelected());
         propMan.setIgnoreCase(chkIgnoreCase.isSelected());
         propMan.setLangName(txtLangName.getText());
@@ -201,21 +353,18 @@ public class ScrLangProps extends PFrame {
         propMan.setUseLocalWordLex(chkUseLocalWordLex.isSelected());
         propMan.setKerningSpace(Double.parseDouble(txtKerning.getText()));
 
-        try {
-            propMan.setAlphaOrder(txtAlphaOrder.getText().trim());
+        TableCellEditor cellEdit = tblAlphabet.getCellEditor();
+        if (cellEdit != null) {
+            cellEdit.stopCellEditing();
         }
-        catch (Exception e) {
-            // this is a user error, and they are informed elsewhere
-        }
+        
+        saveAlphaOrder();
     }
 
     private void populateProperties() {
-        var propMan = ((DesktopPropertiesManager)core.getPropertiesManager());
-
         txtLangName.setText(propMan.getLangName());
         txtFont.setText(propMan.getFontCon().getFamily());
         txtLocalFont.setText(propMan.getFontLocal().getFamily());
-        txtAlphaOrder.setText(propMan.getAlphaPlainText());
         txtLocalLanguage.setText(propMan.getLocalLangName());
         txtAuthorCopyright.setText(propMan.getCopyrightAuthorInfo());
         chkDisableProcRegex.setSelected(propMan.isDisableProcRegex());
@@ -229,6 +378,8 @@ public class ScrLangProps extends PFrame {
         chkExpandedLexList.setSelected(propMan.isExpandedLexListDisplay());
         chkUseLocalWordLex.setSelected(propMan.isUseLocalWordLex());
         txtKerning.setValue(propMan.getKerningSpace());
+        
+        populateAlphaTable();
     }
 
     /**
@@ -251,13 +402,12 @@ public class ScrLangProps extends PFrame {
     }
 
     private void setConFont(Font _font, int fontStyle, int fontSize) {
-        ((DesktopPropertiesManager)core.getPropertiesManager()).setFontCon(_font, fontStyle, fontSize);
-        Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
-        txtAlphaOrder.setFont(conFont);
+        propMan.setFontCon(_font, fontStyle, fontSize);
+        Font conFont = propMan.getFontCon();
         txtFont.setText(conFont.getFamily());
 
         try {
-            boolean synced = ((DesktopPropertiesManager)core.getPropertiesManager()).syncCachedFontCon();
+            boolean synced = propMan.syncCachedFontCon();
 
             if (!synced) {
                 core.getOSHandler().getInfoBox().warning("Font Not Cached",
@@ -278,7 +428,7 @@ public class ScrLangProps extends PFrame {
     private void setLocalFont(Font localFont) {
         if (localFont != null) {
 
-            ((DesktopPropertiesManager)core.getPropertiesManager()).setLocalFont(localFont, localFont.getSize2D());
+            propMan.setLocalFont(localFont, localFont.getSize2D());
 
             txtLocalFont.setText(localFont.getFamily());
             core.pushUpdate();
@@ -289,7 +439,7 @@ public class ScrLangProps extends PFrame {
      * Displays warning to user if RTL is enforced and confont is standard
      */
     private void testRTLWarning() {
-        Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
+        Font conFont = propMan.getFontCon();
         Font stdFont = (new JTextField()).getFont();
 
         if (core.getPropertiesManager().isEnforceRTL()
@@ -319,14 +469,14 @@ public class ScrLangProps extends PFrame {
     /**
      * Alerts user if their alphabetic order contains regex characters
      */
-    private void checkAlphaContainsRegexCharacters() {
-        String test = txtAlphaOrder.getText();
-        if (test.matches(".*(\\[|\\]|\\{|\\}|\\\\|\\^|\\$|\\.|\\||\\?|\\*|\\+|\\(|\\)).*")) {
-            new DesktopInfoBox(this).warning("Character Warning", "Some of the characters defined in your alphabetic order are used \n"
-                    + "in regular expressions. If you are planning on autogenerating pronunciations or \n"
-                    + "conjugations/declensions, please consider using alternate characters from these:\n\n"
-                    + "[ ] \\ ^ $ . | ? * + ( ) { }");
+    private boolean alphaContainsRegexChars() {
+        for (var letter : getAlphaOrderFromTable()) {
+            if (letter.matches(".*(\\[|\\]|\\{|\\}|\\\\|\\^|\\$|\\.|\\||\\?|\\*|\\+|\\(|\\)).*")) {
+                return true;
+            }
         }
+        
+        return false;
     }
 
     /**
@@ -354,17 +504,25 @@ public class ScrLangProps extends PFrame {
         chkExpandedLexList = new PCheckBox(nightMode, menuFontSize);
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new PLabel("", menuFontSize);
-        jLabel3 = new PLabel("", menuFontSize);
         txtKerning = new javax.swing.JFormattedTextField(decimalFormat);
         btnFontLocal = new PButton(nightMode, menuFontSize);
         txtLocalFont = new javax.swing.JTextField();
-        txtAlphaOrder = new PTextField(core, false, "-- Alphabetical Order --");
         btnFontRefresh = new PButton(nightMode, menuFontSize);
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtAlphaProblems = new javax.swing.JTextArea();
         jPanel5 = new javax.swing.JPanel();
         txtLangName = new PTextField(core, true, "-- Language Name --");
         txtLocalLanguage = new PTextField(core, true, "-- Local Language --");
         jScrollPane4 = new javax.swing.JScrollPane();
         txtAuthorCopyright = new PTextPane(core, true, "-- Author/Copyright Info --");
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblAlphabet = new PTable(core);
+        jLabel4 = new javax.swing.JLabel();
+        btnAlphaUp = new PButton(nightMode, menuFontSize);
+        btnAlphaDown = new PButton(nightMode, menuFontSize);
+        btnDeleteAlpha = new PAddRemoveButton("-");
+        btnAddAlpha = new PAddRemoveButton("+");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Language Properties");
@@ -386,6 +544,7 @@ public class ScrLangProps extends PFrame {
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel3.setMaximumSize(new java.awt.Dimension(470, 32767));
 
         chkTypesMandatory.setText("Part of Speech Mandatory");
         chkTypesMandatory.setToolTipText("Select to enforce selection of a part of speech on each created word.");
@@ -458,7 +617,7 @@ public class ScrLangProps extends PFrame {
                             .addComponent(chkEnforceRTL)
                             .addComponent(chkLocalUniqueness)
                             .addComponent(chkIgnoreCase))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 47, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -485,7 +644,7 @@ public class ScrLangProps extends PFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(chkUseLocalWordLex)
                     .addComponent(chkExpandedLexList))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -494,31 +653,25 @@ public class ScrLangProps extends PFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Kerning");
 
-        jLabel3.setText("Value");
-
         txtKerning.setToolTipText("Values between -0.1 and 0.3 work best. 0 is default(blank) WARNING: Values over 0 will cause PolyGlot to ignore ligatures.");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel3)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtKerning, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
+                    .addComponent(jLabel1)
                     .addComponent(txtKerning, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         btnFontLocal.setText("Local Font");
@@ -531,13 +684,6 @@ public class ScrLangProps extends PFrame {
         txtLocalFont.setToolTipText("Local Language Font");
         txtLocalFont.setEnabled(false);
 
-        txtAlphaOrder.setToolTipText("");
-        txtAlphaOrder.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtAlphaOrderFocusLost(evt);
-            }
-        });
-
         btnFontRefresh.setText("Refresh Fonts");
         btnFontRefresh.setToolTipText("Refreshes fonts used in PolyGlot from those stored installed locally on your system");
         btnFontRefresh.addActionListener(new java.awt.event.ActionListener() {
@@ -546,28 +692,35 @@ public class ScrLangProps extends PFrame {
             }
         });
 
+        txtAlphaProblems.setBackground(new java.awt.Color(230, 230, 230));
+        txtAlphaProblems.setColumns(20);
+        txtAlphaProblems.setForeground(new java.awt.Color(255, 0, 0));
+        txtAlphaProblems.setLineWrap(true);
+        txtAlphaProblems.setRows(1);
+        txtAlphaProblems.setWrapStyleWord(true);
+        jScrollPane2.setViewportView(txtAlphaProblems);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtAlphaOrder)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnChangeFont)
+                        .addComponent(btnChangeFont, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtFont))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(btnFontRefresh, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnFontLocal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnFontLocal, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtLocalFont)))
+                        .addComponent(txtLocalFont))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnFontRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -580,15 +733,15 @@ public class ScrLangProps extends PFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnFontLocal)
                     .addComponent(txtLocalFont, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnFontRefresh)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtAlphaOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
@@ -604,9 +757,9 @@ public class ScrLangProps extends PFrame {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4)
-            .addComponent(txtLangName)
+            .addComponent(txtLangName, javax.swing.GroupLayout.DEFAULT_SIZE, 667, Short.MAX_VALUE)
             .addComponent(txtLocalLanguage, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jScrollPane4)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -616,23 +769,115 @@ public class ScrLangProps extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtLocalLanguage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
                 .addContainerGap())
+        );
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        tblAlphabet.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tblAlphabet);
+
+        jLabel4.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("Alphabetic Order");
+
+        btnAlphaUp.setText("↑");
+        btnAlphaUp.setToolTipText("Move selected letter up in alphabetic order");
+        btnAlphaUp.setMaximumSize(new java.awt.Dimension(75, 29));
+        btnAlphaUp.setMinimumSize(new java.awt.Dimension(75, 29));
+        btnAlphaUp.setPreferredSize(new java.awt.Dimension(75, 29));
+        btnAlphaUp.setSize(new java.awt.Dimension(75, 29));
+        btnAlphaUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlphaUpActionPerformed(evt);
+            }
+        });
+
+        btnAlphaDown.setText("↓");
+        btnAlphaDown.setToolTipText("Move selected letter down in alphabetic order");
+        btnAlphaDown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlphaDownActionPerformed(evt);
+            }
+        });
+
+        btnDeleteAlpha.setToolTipText("Delete currently selected alphabetic entry");
+        btnDeleteAlpha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteAlphaActionPerformed(evt);
+            }
+        });
+
+        btnAddAlpha.setToolTipText("Add an additional alphabetic entry");
+        btnAddAlpha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddAlphaActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnAddAlpha, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnDeleteAlpha, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAlphaUp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAlphaDown, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnAlphaUp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAlphaDown))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAddAlpha)
+                    .addComponent(btnDeleteAlpha)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -658,22 +903,11 @@ public class ScrLangProps extends PFrame {
         setLocalFont(fontDialog());
     }//GEN-LAST:event_btnFontLocalActionPerformed
 
-    private void txtAlphaOrderFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAlphaOrderFocusLost
-//        try {
-//            core.getPropertiesManager().setAlphaOrder(txtAlphaOrder.getText().trim());
-//        }
-//        catch (Exception e) {
-//            // do nothing. Alerting the user here would cause a big headache. They will be alerted when they leave the tab
-//        }
-//        checkAlphaContainsRegexCharacters();
-//        setAlphaLegal();
-    }//GEN-LAST:event_txtAlphaOrderFocusLost
-
     private void btnFontRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFontRefreshActionPerformed
         try {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             core.getPropertiesManager().refreshFonts();
-            txtAlphaOrder.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
+            tblAlphabet.setFont(propMan.getFontCon());
         }
         catch (Exception e) {
             new DesktopInfoBox(this).error("Font Refresh Failed", e.getLocalizedMessage());
@@ -705,6 +939,22 @@ public class ScrLangProps extends PFrame {
         }
     }//GEN-LAST:event_chkDisableProcRegexActionPerformed
 
+    private void btnAlphaUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlphaUpActionPerformed
+        moveAlphaUp();
+    }//GEN-LAST:event_btnAlphaUpActionPerformed
+
+    private void btnAlphaDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlphaDownActionPerformed
+        moveAlphaDown();
+    }//GEN-LAST:event_btnAlphaDownActionPerformed
+
+    private void btnAddAlphaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddAlphaActionPerformed
+        addAlpha();
+    }//GEN-LAST:event_btnAddAlphaActionPerformed
+
+    private void btnDeleteAlphaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteAlphaActionPerformed
+        deleteAlpha();
+    }//GEN-LAST:event_btnDeleteAlphaActionPerformed
+
     public static ScrLangProps run(DictCore _core) {
         ScrLangProps s = new ScrLangProps(_core);
         s.setCore(_core);
@@ -712,7 +962,11 @@ public class ScrLangProps extends PFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddAlpha;
+    private javax.swing.JButton btnAlphaDown;
+    private javax.swing.JButton btnAlphaUp;
     private javax.swing.JButton btnChangeFont;
+    private javax.swing.JButton btnDeleteAlpha;
     private javax.swing.JButton btnFontLocal;
     private javax.swing.JButton btnFontRefresh;
     private javax.swing.JCheckBox chkDisableProcRegex;
@@ -727,13 +981,17 @@ public class ScrLangProps extends PFrame {
     private javax.swing.JCheckBox chkWordUniqueness;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTextField txtAlphaOrder;
+    private javax.swing.JTable tblAlphabet;
+    private javax.swing.JTextArea txtAlphaProblems;
     private javax.swing.JTextPane txtAuthorCopyright;
     private javax.swing.JTextField txtFont;
     private javax.swing.JFormattedTextField txtKerning;

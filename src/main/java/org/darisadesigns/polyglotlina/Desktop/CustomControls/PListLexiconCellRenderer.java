@@ -47,6 +47,7 @@ public class PListLexiconCellRenderer extends DefaultListCellRenderer {
     public void paint(Graphics g) {
         super.paint(g);
         
+        // prints expanded word display if set in properties
         if (curVal != null && core.getPropertiesManager().isExpandedLexListDisplay()) {
             ConWord word = curVal.getConWord();
             Font localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
@@ -62,21 +63,23 @@ public class PListLexiconCellRenderer extends DefaultListCellRenderer {
             if (core.getPropertiesManager().isUseLocalWordLex()) {
                 printValue = word.getValue();
                 wordEnd = localMetrics.stringWidth(word.getLocalWord());
-                dropPosition = conMetrics.getHeight();
+                dropPosition = (conMetrics.getHeight() * 6) / 7;
                 height = localMetrics.getHeight();
                 g.setFont(conFont);
             } else {
                 printValue = word.getLocalWord();
                 wordEnd = conMetrics.stringWidth(word.getValue());
-                dropPosition = localMetrics.getHeight();
+                dropPosition = (localMetrics.getHeight() * 6) / 7;
                 height = conMetrics.getHeight();
                 g.setFont(localFont);
             }
             
-            g.setColor(Color.blue);
-            g.drawLine(wordEnd + 10, 0, wordEnd + 10, height);
-            g.setColor(Color.black);
-            g.drawString(printValue, wordEnd + 15, dropPosition);
+            if (!printValue.isBlank()) {
+                g.setColor(Color.blue);
+                g.drawLine(wordEnd + 10, 0, wordEnd + 10, height);
+                g.setColor(Color.black);
+                g.drawString(printValue, wordEnd + 15, dropPosition);
+            }
         }
     }
     
