@@ -471,7 +471,7 @@ public class ScrLangProps extends PFrame {
      */
     private boolean alphaContainsRegexChars() {
         for (var letter : getAlphaOrderFromTable()) {
-            if (letter.matches(".*(\\[|\\]|\\{|\\}|\\\\|\\^|\\$|\\.|\\||\\?|\\*|\\+|\\(|\\)).*")) {
+            if (letter.matches(".*(\\[|\\]|\\{|\\}|\\\\|\\^|\\$|\\.|\\||\\?|\\*|\\+|\\(|\\)).*")) { 
                 return true;
             }
         }

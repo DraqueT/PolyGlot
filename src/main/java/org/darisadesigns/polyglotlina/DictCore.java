@@ -640,7 +640,8 @@ public class DictCore {
     public boolean equals(Object comp) {
         boolean ret = false;
 
-        if (comp instanceof DictCore compCore) {
+        if (comp instanceof DictCore) {
+            DictCore compCore = (DictCore)comp;
             
             ret = wordCollection.equals(compCore.wordCollection);
             ret = ret && typeCollection.equals(compCore.typeCollection);

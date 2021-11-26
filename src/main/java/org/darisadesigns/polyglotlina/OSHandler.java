@@ -55,6 +55,8 @@ public abstract class OSHandler {
     public InfoBox getInfoBox() { return this.infoBox; }
     
     public HelpHandler getHelpHandler() { return this.helpHandler; }
+
+    public PFontHandler getPFontHandler() { return this.fontHandler; }
     
     public void setCoreUpdatedListener(CoreUpdatedListener listener) {
         this.coreUpdatedListener = listener;
