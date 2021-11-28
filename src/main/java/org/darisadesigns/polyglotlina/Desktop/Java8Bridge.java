@@ -88,7 +88,7 @@ public final class Java8Bridge {
         tmpLocalFontFile.deleteOnExit();
         
         String tmpConFontFileLocation = tmpConFontFile.getCanonicalPath();
-        String tmlLocalFontFileLocation = tmpLocalFontFile.getCanonicalPath();
+        String tmpLocalFontFileLocation = tmpLocalFontFile.getCanonicalPath();
         
         try {
             DesktopIOHandler.getInstance().exportConFont(tmpConFontFileLocation, core.getCurFileName());
@@ -97,9 +97,17 @@ public final class Java8Bridge {
         }
         
         try {
-            DesktopIOHandler.getInstance().exportLocalFont(tmpConFontFileLocation, core.getCurFileName());
+            DesktopIOHandler.getInstance().exportLocalFont(tmpLocalFontFileLocation, core.getCurFileName());
         } catch (IOException e) {
-            tmlLocalFontFileLocation = "";
+            tmpLocalFontFileLocation = "";
+        }
+        
+        if (tmpConFontFile.length() == 500) {
+            tmpConFontFileLocation = "";
+        }
+        
+        if (tmpLocalFontFileLocation.length() < 500) {
+            tmpLocalFontFileLocation = "";
         }
         
         String[] command = {PGTUtil.JAVA8_JAVA_COMMAND,
@@ -123,7 +131,7 @@ public final class Java8Bridge {
             tmpConFontFileLocation,
             PGTUtil.PGT_VERSION,
             (printPhrases ? PGTUtil.TRUE : PGTUtil.FALSE),
-            tmlLocalFontFileLocation
+            tmpLocalFontFileLocation
         };
         
         String[] results = DesktopIOHandler.getInstance().runAtConsole(command, true);
