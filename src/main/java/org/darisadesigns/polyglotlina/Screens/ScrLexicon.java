@@ -55,6 +55,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -425,7 +426,10 @@ public final class ScrLexicon extends PFrame {
                 
                 comboModel.addElement(" ");
                 
-                for (var populateWord : core.getWordCollection().getAllValues()) {
+                var sortedValues = new ArrayList(core.getWordCollection().getAllValues());
+                core.getWordCollection().safeSort(sortedValues);
+                
+                for (var populateWord : sortedValues) {
                     comboModel.addElement(populateWord);
                 }
                 
