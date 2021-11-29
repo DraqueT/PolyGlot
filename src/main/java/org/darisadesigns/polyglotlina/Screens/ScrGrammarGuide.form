@@ -423,9 +423,6 @@
                     <Property name="text" type="java.lang.String" value="delete"/>
                     <Property name="toolTipText" type="java.lang.String" value="Deletes recorded audio"/>
                     <Property name="borderPainted" type="boolean" value="false"/>
-                    <Property name="bounds" type="java.awt.Rectangle" editor="org.netbeans.beaninfo.editors.RectangleEditor">
-                      <Rectangle value="[0, 0, 0, 0]"/>
-                    </Property>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>

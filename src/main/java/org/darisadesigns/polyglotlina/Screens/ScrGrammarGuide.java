@@ -496,12 +496,17 @@ public final class ScrGrammarGuide extends PFrame {
         isUpdating = true;
 
         Object selection = treChapList.getLastSelectedPathComponent();
+        var name = txtName.getText();
 
         if (selection instanceof GrammarSectionNode grammarSectionNode) {
-            grammarSectionNode.setName(txtName.getText());
+            grammarSectionNode.setName(name);
         } else if (selection instanceof GrammarChapNode grammarChapNode) {
-            grammarChapNode.setName(txtName.getText());
+            grammarChapNode.setName(name);
         }
+        
+        btnAddChapter.setEnabled(!name.isEmpty());
+        btnAddSection.setEnabled(!name.isEmpty());
+        treChapList.setEnabled(!name.isEmpty());
 
         treChapList.repaint();
         isUpdating = localUpdating;
@@ -1044,7 +1049,6 @@ public final class ScrGrammarGuide extends PFrame {
         btnDeleteRecordedAudio.setText("delete");
         btnDeleteRecordedAudio.setToolTipText("Deletes recorded audio");
         btnDeleteRecordedAudio.setBorderPainted(false);
-        btnDeleteRecordedAudio.setBounds(new java.awt.Rectangle(0, 0, 0, 0));
         btnDeleteRecordedAudio.setEnabled(false);
         btnDeleteRecordedAudio.setFocusable(false);
         btnDeleteRecordedAudio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -1258,10 +1262,14 @@ public final class ScrGrammarGuide extends PFrame {
 
     private void btnAddChapterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddChapterActionPerformed
         addChapter();
+        btnAddChapter.setEnabled(false);
+        btnAddSection.setEnabled(false);
     }//GEN-LAST:event_btnAddChapterActionPerformed
 
     private void btnAddSectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSectionActionPerformed
         addSection();
+        btnAddChapter.setEnabled(false);
+        btnAddSection.setEnabled(false);
     }//GEN-LAST:event_btnAddSectionActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
