@@ -1203,8 +1203,6 @@ public final class ScrLexicon extends PFrame {
                 setWordLegality();
             }
         });
-        
-        final Window self = this;
 
         lstLexicon.addMouseMotionListener(new MouseMotionListener() {
             @Override
@@ -1224,7 +1222,7 @@ public final class ScrLexicon extends PFrame {
                         tip = curWord.getWordSummaryValue(enableProcGen);
                     } catch (Exception ex) {
                         DesktopIOHandler.getInstance().writeErrorLog(ex);
-                        new DesktopInfoBox(self).error("Type error on lookup.", ex.getMessage());
+                        new DesktopInfoBox().error("Type error on lookup.", ex.getMessage());
                     }
                 }
                 

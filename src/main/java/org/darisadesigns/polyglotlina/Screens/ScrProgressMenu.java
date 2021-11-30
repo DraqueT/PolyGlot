@@ -101,7 +101,7 @@ public final class ScrProgressMenu extends javax.swing.JDialog implements PLangu
                     updateProcess();
                 } catch (InterruptedException e) {
                     DesktopIOHandler.getInstance().writeErrorLog(e);
-                    new DesktopInfoBox(null).error("Progress Error", "Error in progress bar: " + e.getLocalizedMessage());
+                    new DesktopInfoBox().error("Progress Error", "Error in progress bar: " + e.getLocalizedMessage());
                     dispose();
                 }
             }
@@ -113,6 +113,7 @@ public final class ScrProgressMenu extends javax.swing.JDialog implements PLangu
         progress++;
     }
     
+    @Override
     public void iterateTask(String textUpdate) {
         iterateTask();
         displayTextValue += "\n" + textUpdate;

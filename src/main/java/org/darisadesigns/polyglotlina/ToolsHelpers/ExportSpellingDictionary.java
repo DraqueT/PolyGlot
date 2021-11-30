@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
@@ -121,7 +120,7 @@ public class ExportSpellingDictionary {
                         true);
             } catch (Exception e) {
                 core.getOSHandler().getIOHandler().writeErrorLog(e);
-                new DesktopInfoBox(null).warning("Metadata Error", "Problem writing metadata.");
+                core.getOSHandler().getInfoBox().warning("Metadata Error", "Problem writing metadata.");
             }
         }
     }

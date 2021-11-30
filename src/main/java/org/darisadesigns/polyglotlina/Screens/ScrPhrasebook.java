@@ -144,7 +144,7 @@ public class ScrPhrasebook extends PFrame {
             lstPhrases.ensureIndexIsVisible(0);
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            new DesktopInfoBox(this).error("Type Population Error", "Unable to populate types: "
+            new DesktopInfoBox().error("Type Population Error", "Unable to populate types: "
                     + e.getLocalizedMessage());
         } finally {
             isCurPopulating = localPopulating;
@@ -432,7 +432,7 @@ public class ScrPhrasebook extends PFrame {
             lstPhrases.setSelectedValue(phraseManager.getNodeById(newPhraseId), true);
             populatePhraseAttributes();
         } catch(Exception e) {
-            new DesktopInfoBox(this).error("Phrase Creation Error", "Unable to create phrase due to: " + e.getMessage());
+            new DesktopInfoBox().error("Phrase Creation Error", "Unable to create phrase due to: " + e.getMessage());
         }
     }//GEN-LAST:event_btnAddActionPerformed
 
@@ -447,7 +447,7 @@ public class ScrPhrasebook extends PFrame {
                 lstPhrases.setSelectedIndex(listIndex > 1 ? listIndex - 1 : 0);
                 populatePhraseAttributes();
             } catch (Exception e) {
-                new DesktopInfoBox(this).error("Phrase Deletion Error", "Unable to delete phrase due to: " + e.getMessage());
+                new DesktopInfoBox().error("Phrase Deletion Error", "Unable to delete phrase due to: " + e.getMessage());
             }
         }
     }//GEN-LAST:event_btnDeleteActionPerformed

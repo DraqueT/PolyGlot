@@ -910,7 +910,7 @@ public class ScrLangProps extends PFrame {
             tblAlphabet.setFont(propMan.getFontCon());
         }
         catch (Exception e) {
-            new DesktopInfoBox(this).error("Font Refresh Failed", e.getLocalizedMessage());
+            new DesktopInfoBox().error("Font Refresh Failed", e.getLocalizedMessage());
             DesktopIOHandler.getInstance().writeErrorLog(e, "Top level exception caught here. See prior exception.");
         }
 
@@ -929,7 +929,7 @@ public class ScrLangProps extends PFrame {
         if (chkDisableProcRegex.isSelected()
                 && (core.getPronunciationMgr().isRecurse()
                 || core.getRomManager().isRecurse())) {
-            if (new DesktopInfoBox(this).actionConfirmation("Disable Regex?", "You have recursion enabled in the Phonology section. "
+            if (new DesktopInfoBox().actionConfirmation("Disable Regex?", "You have recursion enabled in the Phonology section. "
                     + "If you disable regex, this will also be disabled. Continue?")) {
                 core.getPronunciationMgr().setRecurse(false);
                 core.getRomManager().setRecurse(false);

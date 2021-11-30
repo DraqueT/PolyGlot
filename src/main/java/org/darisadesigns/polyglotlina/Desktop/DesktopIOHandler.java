@@ -334,7 +334,7 @@ public final class DesktopIOHandler implements IOHandler {
         catch (Exception e) {
             // can't write to folder, so don't bother trying to write log file...
             // IOHandler.writeErrorLog(e);
-            new DesktopInfoBox(null).error("Permissions Error", "PolyGlot lacks permissions to write to its native folder.\n"
+            new DesktopInfoBox().error("Permissions Error", "PolyGlot lacks permissions to write to its native folder.\n"
                     + "Please move to a folder with full write permissions: " + e.getLocalizedMessage());
         }
     }
@@ -603,7 +603,7 @@ public final class DesktopIOHandler implements IOHandler {
         }
 
         if (!writeLog.isEmpty()) {
-            new DesktopInfoBox(null).warning("File Save Issues", "Problems encountered when saving file " + _fileName + writeLog);
+            new DesktopInfoBox().warning("File Save Issues", "Problems encountered when saving file " + _fileName + writeLog);
         }
     }
 
@@ -827,9 +827,9 @@ public final class DesktopIOHandler implements IOHandler {
             String fileName) throws Exception {
         try ( ZipFile zipFile = new ZipFile(fileName)) {
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
-            ZipEntry entry = null;
+
             while (entries.hasMoreElements()) { // find images directory (zip paths are linear, only simulating tree structure)
-                entry = entries.nextElement();
+                ZipEntry entry = entries.nextElement();
                 if (!entry.getName().equals(PGTUtil.IMAGES_SAVE_PATH)) {
                     continue;
                 }
@@ -837,7 +837,7 @@ public final class DesktopIOHandler implements IOHandler {
             }
 
             while (entries.hasMoreElements()) {
-                entry = entries.nextElement();
+                ZipEntry entry = entries.nextElement();
                 
                 // Linear nature of zip files makes this necessary
                 if (!entry.getName().startsWith(PGTUtil.IMAGES_SAVE_PATH)) {

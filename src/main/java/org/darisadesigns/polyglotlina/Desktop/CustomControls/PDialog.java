@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson - draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson - draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -175,7 +175,7 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
     public void setVisible(boolean visible) {
         if (firstVisible && !ignoreInitialResize) {
             if (core == null) {
-                new DesktopInfoBox(null).error("Dict Core Null", "Dictionary core not set in new window.");
+                new DesktopInfoBox().error("Dict Core Null", "Dictionary core not set in new window.");
             }
 
             Point lastPos = PolyGlot.getPolyGlot().getOptionsManager().getScreenPosition(getClass().getName());

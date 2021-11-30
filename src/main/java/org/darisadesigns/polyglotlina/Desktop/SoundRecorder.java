@@ -487,7 +487,7 @@ public class SoundRecorder {
         } catch (IOException
                 | LineUnavailableException
                 | UnsupportedAudioFileException e) {
-            new DesktopInfoBox(null).error("Sound Error", "Unable to play sound: " + filePath + " due to: " + e.getLocalizedMessage());
+            new DesktopInfoBox(parentWindow).error("Sound Error", "Unable to play sound: " + filePath + " due to: " + e.getLocalizedMessage());
         } finally {
             if (sourceLine != null) {
                 sourceLine.drain();

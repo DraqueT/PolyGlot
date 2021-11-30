@@ -46,7 +46,6 @@ import javax.swing.JTextPane;
 import javax.swing.SwingWorker;
 import org.darisadesigns.polyglotlina.CustomControls.CoreUpdateSubscriptionInterface;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -123,7 +122,7 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
                     bGr.drawImage(imageObject, 0, 0, null);
                     bGr.dispose();
                 } else {
-                    new DesktopInfoBox(null).error("Paste Error", "Unable to paste image. Object is null.");
+                    new DesktopInfoBox().error("Paste Error", "Unable to paste image. Object is null.");
                 }
                 
                 if (image != null) {

@@ -88,7 +88,7 @@ public final class PolyGlot {
      * in chunks if spaces in path
      */
     public static void main(final String[] args) {
-        DesktopInfoBox cInfoBox = new DesktopInfoBox(null);
+        DesktopInfoBox cInfoBox = new DesktopInfoBox();
         try {
             // must be set before accessing System to test OS (values will simply be ignored for other OSes
             if (PGTUtil.IS_OSX) {
@@ -315,7 +315,7 @@ public final class PolyGlot {
                     osHandler.getInfoBox().info("Recovery Cancelled", "Recovery Cancelled. Restart PolyGlot to be prompted again.");
                 }
             } else {
-                if (polyGlot.getOSHandler().getInfoBox().yesNoCancel("Archive Recovery File", "Archive the recovery file, then?") == JOptionPane.YES_OPTION) {
+                if (polyGlot.getOSHandler().getInfoBox().yesNoCancel("Archive Recovery File", "Archive the recovery file, then? (stops this dialog from appearing)") == JOptionPane.YES_OPTION) {
                     DesktopIOHandler.getInstance().archiveFile(recovery, core.getWorkingDirectory());
                 }
 
@@ -354,7 +354,7 @@ public final class PolyGlot {
      */
     private static void conditionalBetaSetup() {
         if (PGTUtil.IS_BETA && !PGTUtil.isInJUnitTest()) { // This requires user interaction and is not covered by the test
-            new DesktopInfoBox(null).warning("BETA BUILD", "This is a pre-release, beta build of PolyGlot. Please use with care.\n\nBuild Date: " + PGTUtil.BUILD_DATE_TIME);
+            new DesktopInfoBox().warning("BETA BUILD", "This is a pre-release, beta build of PolyGlot. Please use with care.\n\nBuild Date: " + PGTUtil.BUILD_DATE_TIME);
         }
     }
 
