@@ -155,7 +155,8 @@ public final class Java8Bridge {
         }
         
         if (!warningString.isBlank()) {
-            new DesktopInfoBox(null).warning("PDF Print Warnings", 
+            
+            new DesktopInfoBox().warning("PDF Print Warnings", 
                     "The following warnings were generated in the print process:\n" + warningString);
         }
         
