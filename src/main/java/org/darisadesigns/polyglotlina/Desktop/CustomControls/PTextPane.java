@@ -137,6 +137,15 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
             super.paste();
         }
     }
+    
+    /**
+     * Takes raw text and sets it as html
+     * @param t 
+     */
+    public void setHtmlTextFromRaw(String t) {
+        var html = t.replaceAll("\n", "<br>");
+        setText(html);
+    }
 
     @Override
     public void setText(String t) {
@@ -424,8 +433,7 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
      * @return
      */
     public String getNakedText() {
-        String ret;  
-        ret = WebInterface.getTextFromHtml(getSuperText()).trim();
+        var ret = WebInterface.getTextFromHtml(getSuperText()).trim();
   
         if (ret.equals(defText)) {
             ret = "";

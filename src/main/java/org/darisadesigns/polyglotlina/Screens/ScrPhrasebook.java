@@ -160,10 +160,10 @@ public class ScrPhrasebook extends PFrame {
         try {
             if (phrase != null) {
                 txtGloss.setText(phrase.getGloss());
-                ((PTextPane)txtConPhrase).setText(phrase.getConPhrase());
-                ((PTextPane)txtLocalPhrase).setText(phrase.getLocalPhrase());
-                ((PTextPane)txtPronunciation).setText(phrase.getPronunciation());
-                ((PTextPane)txtNotes).setText(phrase.getNotes());
+                ((PTextPane)txtConPhrase).setHtmlTextFromRaw(phrase.getConPhrase());
+                ((PTextPane)txtLocalPhrase).setHtmlTextFromRaw(phrase.getLocalPhrase());
+                ((PTextPane)txtPronunciation).setHtmlTextFromRaw(phrase.getPronunciation());
+                ((PTextPane)txtNotes).setHtmlTextFromRaw(phrase.getNotes());
                 chkOverrideProc.setSelected(phrase.isProcOverride());
                 
                 setEnableAttributeEdit(true);
