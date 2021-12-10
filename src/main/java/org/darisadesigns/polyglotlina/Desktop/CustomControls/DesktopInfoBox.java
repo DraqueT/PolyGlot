@@ -31,7 +31,6 @@ import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.DEFAULT_OPTION;
-
 import javax.swing.UIManager;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.InfoBox;
@@ -49,7 +48,11 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
     
     public DesktopInfoBox() {
         super();
-        parent = PolyGlot.getPolyGlot().getRootWindow();
+        parent = null;
+        
+        if (PolyGlot.getPolyGlot() != null) {
+            parent = PolyGlot.getPolyGlot().getRootWindow();
+        }
     }
     
     private PButton getYesButton() {

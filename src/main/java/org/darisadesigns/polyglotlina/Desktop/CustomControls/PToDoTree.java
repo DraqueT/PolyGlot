@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2018-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -99,7 +99,7 @@ public final class PToDoTree extends JTree {
                     (ToDoTreeNode)this.getModel().getRoot()
                     : (ToDoTreeNode)clickedPath.getLastPathComponent();
             
-            String toDoLabel = new DesktopInfoBox(null).stringInputDialog("ToDo Label", "Create ToDo Label");
+            String toDoLabel = new DesktopInfoBox().stringInputDialog("ToDo Label", "Create ToDo Label");
             
             if (toDoLabel != null && !toDoLabel.isEmpty()) {
                 ToDoTreeNode childNode = ToDoTreeNode.createToDoTreeNode(new ToDoNode(null, toDoLabel, false));
@@ -127,7 +127,7 @@ public final class PToDoTree extends JTree {
         
         renameItem.addActionListener((ActionEvent ae) -> {
             if (clickedPath != null) {
-                String toDoLabel = new DesktopInfoBox(null).stringInputDialog("New Todo Label", 
+                String toDoLabel = new DesktopInfoBox().stringInputDialog("New Todo Label", 
                                 "What would you like the new label to be?");
                 
                 if (toDoLabel != null && !toDoLabel.isEmpty()) {

@@ -1308,7 +1308,7 @@ public final class ScrGrammarGuide extends PFrame {
     }//GEN-LAST:event_btnMoveNodeDownActionPerformed
 
     private void btnDeleteRecordedAudioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteRecordedAudioActionPerformed
-        var infoBox = new DesktopInfoBox(this);
+        var infoBox = new DesktopInfoBox();
         Object selection = treChapList.getSelectionPath().getLastPathComponent();
         
         closeAllPlayRecord();

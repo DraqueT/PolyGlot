@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -156,7 +156,7 @@ public final class ScrQuickWordEntry extends PDialog {
         } catch (Exception e) {
             // user error
             // IOHandler.writeErrorLog(e);
-            new DesktopInfoBox(this).error("Regex Error", "Unable to generate pronunciation: " 
+            new DesktopInfoBox().error("Regex Error", "Unable to generate pronunciation: " 
                     + e.getLocalizedMessage());
         }
 
@@ -253,7 +253,7 @@ public final class ScrQuickWordEntry extends PDialog {
         }
 
         if (!testResults.isEmpty()) {
-            new DesktopInfoBox(this).warning("Illegal Values", "Word contains illegal values:\n\n"
+            new DesktopInfoBox().warning("Illegal Values", "Word contains illegal values:\n\n"
                     + testResults);
             return;
         }
@@ -266,7 +266,7 @@ public final class ScrQuickWordEntry extends PDialog {
             parent.refreshWordList(wordId);
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            new DesktopInfoBox(this).error("Word Error", "Unable to insert word: " + e.getMessage());
+            new DesktopInfoBox().error("Word Error", "Unable to insert word: " + e.getMessage());
         }
     }
 

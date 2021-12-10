@@ -65,6 +65,11 @@ public class DesktopOSHandler extends OSHandler {
     }
     
     @Override
+    public InfoBox getInfoBox() {
+        return new DesktopInfoBox();
+    }
+    
+    @Override
     public void openLanguageReport(String reportContents) {
         try {
             File report = ioHandler.createTmpFileWithContents(reportContents, ".html");
@@ -100,7 +105,7 @@ public class DesktopOSHandler extends OSHandler {
             }
             catch (URISyntaxException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                new DesktopInfoBox(null).warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
+                new DesktopInfoBox().warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
                         + url + "\n(copied to your clipboard for convenience)");
                 new ClipboardHandler().setClipboardContents(url);
             }
@@ -111,7 +116,7 @@ public class DesktopOSHandler extends OSHandler {
             Runtime runtime = Runtime.getRuntime();
             runtime.exec("xdg-open " + url);
         } else {
-            new DesktopInfoBox(null).warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
+            new DesktopInfoBox().warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
                     + url + "\n(copied to your clipboard for convenience)");
             new ClipboardHandler().setClipboardContents(url);
         }

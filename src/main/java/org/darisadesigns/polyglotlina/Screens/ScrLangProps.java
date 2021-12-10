@@ -19,11 +19,11 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButtonDropdown;
 import org.darisadesigns.polyglotlina.ExternalCode.JFontChooser;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
@@ -31,8 +31,8 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.text.DecimalFormat;
@@ -42,6 +42,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
@@ -49,10 +52,12 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
+import javax.swing.text.PlainDocument;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellEditor;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellRenderer;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTable;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextFieldFilter;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
@@ -213,6 +218,62 @@ public class ScrLangProps extends PFrame {
     }
 
     private void setupListeners() {
+        ((PlainDocument)txtConSize.getDocument()).setDocumentFilter(new PTextFieldFilter());
+        txtConSize.getDocument().addDocumentListener(new DocumentListener(){
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateSize();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateSize();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateSize();
+            }
+            
+            private void updateSize() {
+                String text = txtConSize.getText();
+                
+                if (!text.isBlank()) {
+                    propMan.setFontSize(Double.parseDouble(txtConSize.getText()));
+                }
+                
+                updateScreenFonts();
+            }
+        });
+        
+        ((PlainDocument)txtLocalSize.getDocument()).setDocumentFilter(new PTextFieldFilter());
+        txtLocalSize.getDocument().addDocumentListener(new DocumentListener(){
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateSize();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateSize();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateSize();
+            }
+            
+            private void updateSize() {
+                String text = txtLocalSize.getText();
+                
+                if (!text.isBlank()) {
+                    propMan.setLocalFontSize(Double.parseDouble(txtLocalSize.getText()));
+                }
+                
+                updateScreenFonts();
+            }
+        });
+        
         txtKerning.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -280,6 +341,16 @@ public class ScrLangProps extends PFrame {
                 saveAlphaOrder();
             }
         });
+    }
+    
+    private void updateScreenFonts() {
+        populateAlphaTable();
+        
+        Font localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
+        
+        txtLangName.setFont(localFont);
+        txtAuthorCopyright.setFont(localFont);
+        txtLocalLanguage.setFont(localFont);
     }
     
     private void populateAlphaTable() {
@@ -378,6 +449,8 @@ public class ScrLangProps extends PFrame {
         chkExpandedLexList.setSelected(propMan.isExpandedLexListDisplay());
         chkUseLocalWordLex.setSelected(propMan.isUseLocalWordLex());
         txtKerning.setValue(propMan.getKerningSpace());
+        txtConSize.setText(Double.toString(propMan.getFontSize()));
+        txtLocalSize.setText(Double.toString(propMan.getLocalFontSize()));
         
         populateAlphaTable();
     }
@@ -478,6 +551,70 @@ public class ScrLangProps extends PFrame {
         
         return false;
     }
+    
+    private JPopupMenu getConFontPopupMenu() {
+        JPopupMenu ret = new JPopupMenu();
+        
+        JMenuItem selectFile = new JMenuItem("Select Font File");
+        selectFile.setToolTipText("Select conlang font via direct file selection (recommended)");
+        selectFile.addActionListener((ActionEvent e) -> {
+            var fontDialog = new ScrFontImportDialog(core);
+            fontDialog.setConSelected();
+            fontDialog.setVisible(true);
+        });
+        
+        JMenuItem osSelect = new JMenuItem("Font Selector Window");
+        osSelect.setToolTipText("Select conlang font via OS based selection window (not recommended)");
+        osSelect.addActionListener((ActionEvent e) -> {
+            if (new DesktopInfoBox().yesNoCancel("Deprecated Functionality",
+                    "It is recommended to maximize compatibility that you select your font files directly."
+                            + "\nContinue to OS font selection anyway?") == JOptionPane.YES_OPTION) {
+                Font selectedFont = fontDialog();
+
+                if (selectedFont != null) {
+                    setConFont(selectedFont, selectedFont.getStyle(), selectedFont.getSize());
+                }
+            }
+        });
+        
+        ret.add(selectFile);
+        ret.add(osSelect);  
+        
+        return ret;
+    }
+    
+    private JPopupMenu getLocalFontPopupMenu() {
+        JPopupMenu ret = new JPopupMenu();
+        JMenuItem selectFile = new JMenuItem("Select Font File");
+        selectFile.setToolTipText("Select local font via direct file selection (recommended)");
+        selectFile.addActionListener((ActionEvent e) -> {
+            var fontDialog = new ScrFontImportDialog(core);
+            fontDialog.setLocalSelected();
+            fontDialog.setVisible(true);
+        });
+        
+        JMenuItem osSelect = new JMenuItem("Font Selector Window");
+        osSelect.setToolTipText("Select local font via OS based selection window (not recommended)");
+        osSelect.addActionListener((ActionEvent e) -> {
+            if (new DesktopInfoBox().yesNoCancel("Deprecated Functionality",
+                    "It is recommended to maximize compatibility that you select your font files directly."
+                            + "\nContinue to OS font selection anyway?") == JOptionPane.YES_OPTION) {
+                Font selectedFont = fontDialog();
+
+                if (selectedFont != null) {
+                    setLocalFont(selectedFont);
+                }
+            }
+        });
+        
+        ret.add(selectFile);
+        ret.add(osSelect); 
+        
+        ret.add(selectFile);
+        ret.add(osSelect);
+        
+        return ret;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -488,7 +625,7 @@ public class ScrLangProps extends PFrame {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
-        btnChangeFont = new PButton(nightMode, menuFontSize);
+        btnChangeFont = new PButtonDropdown(getConFontPopupMenu());
         txtFont = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         chkTypesMandatory = new PCheckBox(nightMode, menuFontSize);
@@ -505,11 +642,12 @@ public class ScrLangProps extends PFrame {
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new PLabel("", menuFontSize);
         txtKerning = new javax.swing.JFormattedTextField(decimalFormat);
-        btnFontLocal = new PButton(nightMode, menuFontSize);
+        btnFontLocal = new PButtonDropdown(getLocalFontPopupMenu());
         txtLocalFont = new javax.swing.JTextField();
-        btnFontRefresh = new PButton(nightMode, menuFontSize);
         jScrollPane2 = new javax.swing.JScrollPane();
         txtAlphaProblems = new javax.swing.JTextArea();
+        txtConSize = new javax.swing.JTextField();
+        txtLocalSize = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         txtLangName = new PTextField(core, true, "-- Language Name --");
         txtLocalLanguage = new PTextField(core, true, "-- Local Language --");
@@ -532,7 +670,7 @@ public class ScrLangProps extends PFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         btnChangeFont.setText("Conlang Font");
-        btnChangeFont.setToolTipText("Change native conlang font");
+        btnChangeFont.setToolTipText("Change conlang font");
         btnChangeFont.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnChangeFontActionPerformed(evt);
@@ -644,7 +782,7 @@ public class ScrLangProps extends PFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(chkUseLocalWordLex)
                     .addComponent(chkExpandedLexList))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(65, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -675,6 +813,7 @@ public class ScrLangProps extends PFrame {
         );
 
         btnFontLocal.setText("Local Font");
+        btnFontLocal.setToolTipText("Change local language font");
         btnFontLocal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFontLocalActionPerformed(evt);
@@ -684,14 +823,7 @@ public class ScrLangProps extends PFrame {
         txtLocalFont.setToolTipText("Local Language Font");
         txtLocalFont.setEnabled(false);
 
-        btnFontRefresh.setText("Refresh Fonts");
-        btnFontRefresh.setToolTipText("Refreshes fonts used in PolyGlot from those stored installed locally on your system");
-        btnFontRefresh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFontRefreshActionPerformed(evt);
-            }
-        });
-
+        txtAlphaProblems.setEditable(false);
         txtAlphaProblems.setBackground(new java.awt.Color(230, 230, 230));
         txtAlphaProblems.setColumns(20);
         txtAlphaProblems.setForeground(new java.awt.Color(255, 0, 0));
@@ -708,33 +840,37 @@ public class ScrLangProps extends PFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnChangeFont, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtFont))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnFontLocal, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtLocalFont))
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnFontRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addComponent(btnFontLocal, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtLocalSize))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addComponent(btnChangeFont, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtConSize, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtFont)
+                            .addComponent(txtLocalFont))))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnChangeFont)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnChangeFont)
+                        .addComponent(txtConSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(txtFont, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnFontLocal)
-                    .addComponent(txtLocalFont, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnFontRefresh)
+                    .addComponent(txtLocalFont, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtLocalSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -794,9 +930,6 @@ public class ScrLangProps extends PFrame {
 
         btnAlphaUp.setText("↑");
         btnAlphaUp.setToolTipText("Move selected letter up in alphabetic order");
-        btnAlphaUp.setMaximumSize(new java.awt.Dimension(75, 29));
-        btnAlphaUp.setMinimumSize(new java.awt.Dimension(75, 29));
-        btnAlphaUp.setPreferredSize(new java.awt.Dimension(75, 29));
         btnAlphaUp.setSize(new java.awt.Dimension(75, 29));
         btnAlphaUp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -850,7 +983,7 @@ public class ScrLangProps extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnAlphaUp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAlphaUp)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAlphaDown))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
@@ -885,12 +1018,9 @@ public class ScrLangProps extends PFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnChangeFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeFontActionPerformed
-        // Font not set manually because JAVA IS BROKEN. Gotta pull the binary for ligatures to load...
-        Font selectedFont = fontDialog();
-
-        if (selectedFont != null) {
-            setConFont(selectedFont, selectedFont.getStyle(), selectedFont.getSize());
-        }
+        var fontDialog = new ScrFontImportDialog(core);
+        fontDialog.setConSelected();
+        fontDialog.setVisible(true);
     }//GEN-LAST:event_btnChangeFontActionPerformed
 
     private void chkEnforceRTLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkEnforceRTLActionPerformed
@@ -900,22 +1030,10 @@ public class ScrLangProps extends PFrame {
     }//GEN-LAST:event_chkEnforceRTLActionPerformed
 
     private void btnFontLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFontLocalActionPerformed
-        setLocalFont(fontDialog());
+        var fontDialog = new ScrFontImportDialog(core);
+        fontDialog.setLocalSelected();
+        fontDialog.setVisible(true);
     }//GEN-LAST:event_btnFontLocalActionPerformed
-
-    private void btnFontRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFontRefreshActionPerformed
-        try {
-            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            core.getPropertiesManager().refreshFonts();
-            tblAlphabet.setFont(propMan.getFontCon());
-        }
-        catch (Exception e) {
-            new DesktopInfoBox(this).error("Font Refresh Failed", e.getLocalizedMessage());
-            DesktopIOHandler.getInstance().writeErrorLog(e, "Top level exception caught here. See prior exception.");
-        }
-
-        this.setCursor(Cursor.getDefaultCursor());
-    }//GEN-LAST:event_btnFontRefreshActionPerformed
 
     private void chkIgnoreCaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkIgnoreCaseActionPerformed
         if (chkIgnoreCase.isSelected()) {
@@ -929,7 +1047,7 @@ public class ScrLangProps extends PFrame {
         if (chkDisableProcRegex.isSelected()
                 && (core.getPronunciationMgr().isRecurse()
                 || core.getRomManager().isRecurse())) {
-            if (new DesktopInfoBox(this).actionConfirmation("Disable Regex?", "You have recursion enabled in the Phonology section. "
+            if (new DesktopInfoBox().actionConfirmation("Disable Regex?", "You have recursion enabled in the Phonology section. "
                     + "If you disable regex, this will also be disabled. Continue?")) {
                 core.getPronunciationMgr().setRecurse(false);
                 core.getRomManager().setRecurse(false);
@@ -968,7 +1086,6 @@ public class ScrLangProps extends PFrame {
     private javax.swing.JButton btnChangeFont;
     private javax.swing.JButton btnDeleteAlpha;
     private javax.swing.JButton btnFontLocal;
-    private javax.swing.JButton btnFontRefresh;
     private javax.swing.JCheckBox chkDisableProcRegex;
     private javax.swing.JCheckBox chkEnforceRTL;
     private javax.swing.JCheckBox chkExpandedLexList;
@@ -993,10 +1110,12 @@ public class ScrLangProps extends PFrame {
     private javax.swing.JTable tblAlphabet;
     private javax.swing.JTextArea txtAlphaProblems;
     private javax.swing.JTextPane txtAuthorCopyright;
+    private javax.swing.JTextField txtConSize;
     private javax.swing.JTextField txtFont;
     private javax.swing.JFormattedTextField txtKerning;
     private javax.swing.JTextField txtLangName;
     private javax.swing.JTextField txtLocalFont;
     private javax.swing.JTextField txtLocalLanguage;
+    private javax.swing.JTextField txtLocalSize;
     // End of variables declaration//GEN-END:variables
 }

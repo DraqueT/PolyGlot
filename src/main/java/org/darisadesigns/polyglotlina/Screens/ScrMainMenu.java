@@ -63,6 +63,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Supplier;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
@@ -213,7 +214,7 @@ public final class ScrMainMenu extends PFrame {
                     finalCore.getWordCollection().loadSwadesh(bs, true);
                     updateAllValues(finalCore);
                 } catch (Exception ex) {
-                    new DesktopInfoBox(null).error("Swadesh Load Error",
+                    new DesktopInfoBox(this).error("Swadesh Load Error",
                             "Could not load selected Swadesh List. Please make certain it is formatted correctly (newline separated)");
                     DesktopIOHandler.getInstance().writeErrorLog(ex, "Swadesh load error");
                 }
@@ -889,9 +890,10 @@ public final class ScrMainMenu extends PFrame {
     }
 
     private void setupEasterEgg() {
+        final Window self = this;
+        
         class EnterKeyListener implements KeyEventPostProcessor {
-
-            String lastChars = "------------------------------";
+            String lastChars = "------------------------------"; 
 
             @Override
             public boolean postProcessKeyEvent(KeyEvent e) {
@@ -900,16 +902,18 @@ public final class ScrMainMenu extends PFrame {
                     lastChars += e.getKeyChar();
 
                     if (lastChars.toLowerCase().endsWith("what did you see last tuesday")) {
-                        new DesktopInfoBox(null).info("Coded Response", "A pink elephant.");
+                        new DesktopInfoBox(self).info("Coded Response", "A pink elephant.");
                     } else if (lastChars.toLowerCase().endsWith("this is the forest primeval")) {
-                        new DesktopInfoBox(null).info("Bearded with moss", "The murmuring pines and the hemlocks.");
+                        new DesktopInfoBox(self).info("Bearded with moss", "The murmuring pines and the hemlocks.");
                     } else if (lastChars.toLowerCase().endsWith("it can't outlast you")) {
-                        new DesktopInfoBox(null).info("Just human...", "Yes it can. You're not a kukun.");
+                        new DesktopInfoBox(self).info("Just human...", "Yes it can. You're not a kukun.");
                     } else if (lastChars.toLowerCase().endsWith("who's draque")
                             || lastChars.toLowerCase().endsWith("who is draque")) {
                         ScrEasterEgg.run(PolyGlot.getPolyGlot().getRootWindow());
                     } else if (lastChars.endsWith("uuddlrlrba")) {
-                        new DesktopInfoBox(null).info("コナミコマンド", "30の命を与えます。");
+                        new DesktopInfoBox(self).info("コナミコマンド", "30の命を与えます。");
+                    } else if (lastChars.toLowerCase().endsWith("owo what's this")) {
+                        new DesktopInfoBox(self).info("It's too late.", "You have been assigned a fursona: " + genFursona());
                     }
                 }
 
@@ -918,6 +922,13 @@ public final class ScrMainMenu extends PFrame {
         }
         KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         manager.addKeyEventPostProcessor(new EnterKeyListener());
+    }
+    
+    private String genFursona() {
+        String[] descriptor = {"stinky","stimky","silly","horny","bouncy","candy","puppet","piñiata","dank","scaly","shiny","multi","fuzzy","grody","hypno","latex","horned","maned","shaved","leggy","beefy","spotted"};
+        String[] species ={"skink","lion","wolf","fox","dragon","kukun (lucky you!)","protogen","skunk","possum","owl","secretary bird","tiger","sheep","ram","unidentifiable craature","lamb","deer","mouse","rabbit","hyena","gopher","sergal","sparkledog","llama","frog","horse","snake","shark","weasil","gryphon","skink","hamster","bat"};
+        
+        return descriptor[new Random().nextInt(descriptor.length)] + " " + species[new Random().nextInt(species.length)];
     }
 
     public void setWordSelectedById(Integer id) {
@@ -1007,7 +1018,7 @@ public final class ScrMainMenu extends PFrame {
     public void selectFirstAvailableButton() {
         openLexicon();
     }
-
+    
     private void setupButtonPopouts() {
         // not all buttons support this feature, but those that don't should still display it in grey
         setupDropdownMenu((PButton) btnLexicon, () -> {
@@ -1172,6 +1183,14 @@ public final class ScrMainMenu extends PFrame {
         saveAllValues();
         cacheLexicon.updateAllValues(core);
         changeScreen(cacheLexicon, cacheLexicon.getWindow(), (PButton) btnLexicon);
+    }
+    
+    public void openProperties() {
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        saveAllValues();
+        ScrLangProps s = new ScrLangProps(core);
+        changeScreen(s, s.getWindow(), (PButton)btnProp);
+        setCursor(Cursor.getDefaultCursor());
     }
 
     @Override
@@ -1498,7 +1517,6 @@ public final class ScrMainMenu extends PFrame {
         mnuExportDictFile = new javax.swing.JMenuItem();
         mnuImport = new javax.swing.JMenu();
         mnuImportFile = new javax.swing.JMenuItem();
-        mnuImportFont = new javax.swing.JMenuItem();
         mnuAdvanced = new javax.swing.JMenu();
         mnuUnpackLanguage = new javax.swing.JMenuItem();
         mnuPackLanguage = new javax.swing.JMenuItem();
@@ -1882,7 +1900,7 @@ public final class ScrMainMenu extends PFrame {
         mnuImport.setText("Import Tools");
         mnuImport.setToolTipText("Tools for importing to PolyGlot");
 
-        mnuImportFile.setText("Import from File");
+        mnuImportFile.setText("Import lexicon from File");
         mnuImportFile.setToolTipText("Import language values from comma delimited file or excel sheet");
         mnuImportFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1890,15 +1908,6 @@ public final class ScrMainMenu extends PFrame {
             }
         });
         mnuImport.add(mnuImportFile);
-
-        mnuImportFont.setText("Import Font");
-        mnuImportFont.setToolTipText("Import font from file");
-        mnuImportFont.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuImportFontActionPerformed(evt);
-            }
-        });
-        mnuImport.add(mnuImportFont);
 
         mnuTools.add(mnuImport);
 
@@ -2216,11 +2225,7 @@ public final class ScrMainMenu extends PFrame {
     }//GEN-LAST:event_btnLogosActionPerformed
 
     private void btnPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPropActionPerformed
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        saveAllValues();
-        ScrLangProps s = new ScrLangProps(core);
-        changeScreen(s, s.getWindow(), (PButton) evt.getSource());
-        setCursor(Cursor.getDefaultCursor());
+        openProperties();
     }//GEN-LAST:event_btnPropActionPerformed
 
     private void mnuLexFamiliesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLexFamiliesActionPerformed
@@ -2292,10 +2297,6 @@ public final class ScrMainMenu extends PFrame {
         s.setLocation(getLocation());
         s.setVisible(true);
     }
-
-    private void mnuImportFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportFontActionPerformed
-        new ScrFontImportDialog(core).setVisible(true);
-    }//GEN-LAST:event_mnuImportFontActionPerformed
 
     private void btnQuizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuizActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -2402,7 +2403,6 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JMenuItem mnuIPAChart;
     private javax.swing.JMenu mnuImport;
     private javax.swing.JMenuItem mnuImportFile;
-    private javax.swing.JMenuItem mnuImportFont;
     private javax.swing.JMenuItem mnuIpaTranslator;
     private javax.swing.JMenuItem mnuLangStats;
     private javax.swing.JMenuItem mnuLexFamilies;

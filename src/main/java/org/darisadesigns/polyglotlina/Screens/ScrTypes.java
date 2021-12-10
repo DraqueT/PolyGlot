@@ -217,7 +217,7 @@ public final class ScrTypes extends PFrame {
             lstTypes.ensureIndexIsVisible(0);
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            new DesktopInfoBox(this).error("Type Population Error", "Unable to populate types: "
+            new DesktopInfoBox().error("Type Population Error", "Unable to populate types: "
                     + e.getLocalizedMessage());
         }
     }

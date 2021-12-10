@@ -115,7 +115,7 @@ public final class ScrQuizGenDialog extends PFrame {
             !chkProcQuiz.isSelected()&& 
             !chkDefQuiz.isSelected()&& 
             !chkClassQuiz.isSelected()) {
-            new DesktopInfoBox(this).warning("Quiz Generation Problem", "Please select at least one thing to quiz on!");
+            new DesktopInfoBox().warning("Quiz Generation Problem", "Please select at least one thing to quiz on!");
         } else {
             try {
                 Quiz genQuiz = factory.generateLexicalQuiz(numQuestions, 

@@ -54,7 +54,10 @@ public final class ScrFontImportDialog extends PDialog {
         super(_core);
         this.setModal(true);
         initComponents();
-
+        setupListeners();
+    }
+    
+    private void setupListeners() {
         txtFontSize.setText(Double.toString(core.getPropertiesManager().getFontSize()));
         ((PlainDocument) txtFontSize.getDocument())
                 .setDocumentFilter(new PTextFieldFilter());
@@ -91,6 +94,16 @@ public final class ScrFontImportDialog extends PDialog {
                 updateDisplayFont();
             }
         });
+    }
+    
+    public void setLocalSelected() {
+        rdoConlang.setSelected(false);
+        rdoLocal.setSelected(true);
+    }
+    
+    public void setConSelected() {
+        rdoLocal.setSelected(false);
+        rdoConlang.setSelected(true);
     }
 
     /**
@@ -225,7 +238,7 @@ public final class ScrFontImportDialog extends PDialog {
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
         String fileName = txtFontLocation.getText();
-
+        
         try {
             var propertiesManager = ((DesktopPropertiesManager)core.getPropertiesManager());
             var size = Double.valueOf(txtFontSize.getText());
@@ -238,7 +251,7 @@ public final class ScrFontImportDialog extends PDialog {
                 propertiesManager.setLocalFontSize(size);
             }
             
-            PolyGlot.getPolyGlot().getRootWindow().selectFirstAvailableButton();
+            PolyGlot.getPolyGlot().getRootWindow().openProperties();
             dispose();
         } catch (IOException e) {
             core.getOSHandler().getInfoBox().error("IO Error", "Unable to open " + fileName + " due to: " + e.getLocalizedMessage());

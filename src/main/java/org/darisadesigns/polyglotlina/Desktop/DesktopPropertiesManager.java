@@ -243,8 +243,9 @@ public class DesktopPropertiesManager extends PropertiesManager {
      */
     @Override
     public void setFontSize(double _fontSize) {
+        var curFont = this.getFontCon();
         conFontSize = _fontSize < 0 ? 12 : _fontSize;
-        conFont = conFont.deriveFont(conFontStyle, (float)conFontSize);
+        conFont = curFont.deriveFont(conFontStyle, (float)conFontSize);
     }
     
     /**
