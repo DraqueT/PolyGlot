@@ -1018,7 +1018,7 @@ public final class ScrMainMenu extends PFrame {
     public void selectFirstAvailableButton() {
         openLexicon();
     }
-
+    
     private void setupButtonPopouts() {
         // not all buttons support this feature, but those that don't should still display it in grey
         setupDropdownMenu((PButton) btnLexicon, () -> {
@@ -1183,6 +1183,14 @@ public final class ScrMainMenu extends PFrame {
         saveAllValues();
         cacheLexicon.updateAllValues(core);
         changeScreen(cacheLexicon, cacheLexicon.getWindow(), (PButton) btnLexicon);
+    }
+    
+    public void openProperties() {
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        saveAllValues();
+        ScrLangProps s = new ScrLangProps(core);
+        changeScreen(s, s.getWindow(), (PButton)btnProp);
+        setCursor(Cursor.getDefaultCursor());
     }
 
     @Override
@@ -1509,7 +1517,6 @@ public final class ScrMainMenu extends PFrame {
         mnuExportDictFile = new javax.swing.JMenuItem();
         mnuImport = new javax.swing.JMenu();
         mnuImportFile = new javax.swing.JMenuItem();
-        mnuImportFont = new javax.swing.JMenuItem();
         mnuAdvanced = new javax.swing.JMenu();
         mnuUnpackLanguage = new javax.swing.JMenuItem();
         mnuPackLanguage = new javax.swing.JMenuItem();
@@ -1893,7 +1900,7 @@ public final class ScrMainMenu extends PFrame {
         mnuImport.setText("Import Tools");
         mnuImport.setToolTipText("Tools for importing to PolyGlot");
 
-        mnuImportFile.setText("Import from File");
+        mnuImportFile.setText("Import lexicon from File");
         mnuImportFile.setToolTipText("Import language values from comma delimited file or excel sheet");
         mnuImportFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1901,15 +1908,6 @@ public final class ScrMainMenu extends PFrame {
             }
         });
         mnuImport.add(mnuImportFile);
-
-        mnuImportFont.setText("Import Font");
-        mnuImportFont.setToolTipText("Import font from file");
-        mnuImportFont.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuImportFontActionPerformed(evt);
-            }
-        });
-        mnuImport.add(mnuImportFont);
 
         mnuTools.add(mnuImport);
 
@@ -2227,11 +2225,7 @@ public final class ScrMainMenu extends PFrame {
     }//GEN-LAST:event_btnLogosActionPerformed
 
     private void btnPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPropActionPerformed
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        saveAllValues();
-        ScrLangProps s = new ScrLangProps(core);
-        changeScreen(s, s.getWindow(), (PButton) evt.getSource());
-        setCursor(Cursor.getDefaultCursor());
+        openProperties();
     }//GEN-LAST:event_btnPropActionPerformed
 
     private void mnuLexFamiliesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLexFamiliesActionPerformed
@@ -2303,10 +2297,6 @@ public final class ScrMainMenu extends PFrame {
         s.setLocation(getLocation());
         s.setVisible(true);
     }
-
-    private void mnuImportFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportFontActionPerformed
-        new ScrFontImportDialog(core).setVisible(true);
-    }//GEN-LAST:event_mnuImportFontActionPerformed
 
     private void btnQuizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuizActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -2413,7 +2403,6 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JMenuItem mnuIPAChart;
     private javax.swing.JMenu mnuImport;
     private javax.swing.JMenuItem mnuImportFile;
-    private javax.swing.JMenuItem mnuImportFont;
     private javax.swing.JMenuItem mnuIpaTranslator;
     private javax.swing.JMenuItem mnuLangStats;
     private javax.swing.JMenuItem mnuLexFamilies;
