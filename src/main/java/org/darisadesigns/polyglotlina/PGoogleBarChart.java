@@ -19,8 +19,10 @@
  */
 package org.darisadesigns.polyglotlina;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 /**
  * This is a wrapper class for google bar charts.
@@ -104,20 +106,19 @@ public class PGoogleBarChart extends PGoogleChart {
         }
         
         ret += "        " + data + ".addRows([\n";
-        
+
+        List<String> tmp = new ArrayList<>();
         for (Entry<String, List<Double>> e : chartVals.entrySet()) {
             String dataSet = "";
             
-            dataSet = e.getValue().stream().map((datum) -> 
+            dataSet = e.getValue().stream().map((datum) ->
             {
-                return datum.intValue() + ",";
-            }).reduce(dataSet, String::concat);
-            
-            dataSet = dataSet.substring(0, dataSet.length()-1); // remove trailing comma...
-            
-            ret += "          ['" + e.getKey() + "', createCustomHTMLContent('" + e.getKey() + "'," + dataSet + ")," + dataSet + "],\n";
+                return String.valueOf(datum.intValue());
+            }).collect(Collectors.joining(","));
+
+            tmp.add("          ['" + WebInterface.encodeHTML(e.getKey()) + "', createCustomHTMLContent('" + WebInterface.encodeHTML(e.getKey()) + "'," + dataSet + ")," + dataSet + "]");
         }
-        ret = ret.substring(0, ret.length()-2); // remove trailing comma and \n...
+        ret += String.join(",\n", tmp);
         ret += "\n        ]);\n"
                 + "\n"
                 + "        var " + materialOptions + " = {\n"
