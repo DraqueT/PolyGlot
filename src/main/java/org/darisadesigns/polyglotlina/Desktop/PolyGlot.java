@@ -249,6 +249,8 @@ public final class PolyGlot {
                 if (s != null) {
                     s.dispose();
                 }
+                
+                System.exit(0);
             }
             catch (Throwable t) {
                 cInfoBox.error("PolyGlot Error", "A serious error has occurred: " + t.getLocalizedMessage());
