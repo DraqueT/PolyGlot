@@ -1001,10 +1001,10 @@ public final class ScrDeclensionGenClassic extends PDialog {
         btnMoveRuleUp = new PButton(nightMode, menuFontSize); btnMoveRuleUp.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu()) ;
         btnMoveRuleDown = new PButton(nightMode, menuFontSize); btnMoveRuleDown.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         jPanel3 = new javax.swing.JPanel();
-        txtRuleName = new PTextField(core, true, "-- Name --");
+        txtRuleName = new PTextField(core, true, "Name");
         txtRuleRegex = new PTextField(core,
             core.getPropertiesManager().isOverrideRegexFont(),
-            "-- Filter Regex --");
+            "Filter Regex");
         jLabel3 = new PLabel("", menuFontSize);
         sclTransforms = new javax.swing.JScrollPane();
         tblTransforms = new PTable(core);
@@ -1251,7 +1251,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
                         .addGap(9, 9, 9)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE))
+                        .addComponent(jScrollPane2))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(60, 60, 60)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

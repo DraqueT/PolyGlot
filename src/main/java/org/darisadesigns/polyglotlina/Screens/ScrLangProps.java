@@ -649,8 +649,8 @@ public class ScrLangProps extends PFrame {
         txtConSize = new javax.swing.JTextField();
         txtLocalSize = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
-        txtLangName = new PTextField(core, true, "-- Language Name --");
-        txtLocalLanguage = new PTextField(core, true, "-- Local Language --");
+        txtLangName = new PTextField(core, true, "Language Name");
+        txtLocalLanguage = new PTextField(core, true, "Local Language");
         jScrollPane4 = new javax.swing.JScrollPane();
         txtAuthorCopyright = new PTextPane(core, true, "-- Author/Copyright Info --");
         jPanel1 = new javax.swing.JPanel();

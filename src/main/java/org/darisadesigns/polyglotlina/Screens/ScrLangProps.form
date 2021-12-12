@@ -476,7 +476,7 @@
             <Property name="toolTipText" type="java.lang.String" value="Your Conlang&apos;s Name"/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- Language Name --&quot;)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;Language Name&quot;)"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="txtLocalLanguage">
@@ -484,7 +484,7 @@
             <Property name="toolTipText" type="java.lang.String" value="The natural language you use when writing your conlang"/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- Local Language --&quot;)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;Local Language&quot;)"/>
           </AuxValues>
         </Component>
         <Container class="javax.swing.JScrollPane" name="jScrollPane4">

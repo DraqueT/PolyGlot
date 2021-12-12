@@ -75,9 +75,9 @@ public class ScrPrintToPDF extends PDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        txtSavePath = new PTextField(core, true, "-- Save to File --");
+        txtSavePath = new PTextField(core, true, "Save to File");
         btnSelectSavePath = new PButton(nightMode, menuFontSize);
-        txtImageLocation = new PTextField(core, true, "-- Cover Image --");
+        txtImageLocation = new PTextField(core, true, "Cover Image");
         btnSelectImagePath = new PButton(nightMode, menuFontSize);
         jLabel4 = new PLabel("", menuFontSize);
         jPanel2 = new javax.swing.JPanel();
@@ -91,8 +91,8 @@ public class ScrPrintToPDF extends PDialog {
         chkEtymology = new PCheckBox(nightMode, menuFontSize);
         chkPrintConjugations = new PCheckBox(nightMode, menuFontSize);
         chkPrintPhrases = new PCheckBox(nightMode, menuFontSize);
-        txtTitle = new PTextField(core, true, "-- Title --");
-        txtSubtitle = new PTextField(core, true, "-- Title --");
+        txtTitle = new PTextField(core, true, "Title");
+        txtSubtitle = new PTextField(core, true, "Subtitle");
         jScrollPane2 = new javax.swing.JScrollPane();
         txtForeword = new PTextPane(core, true, "-- Author Foreword --");
         btnPrint = new PButton(nightMode, menuFontSize);

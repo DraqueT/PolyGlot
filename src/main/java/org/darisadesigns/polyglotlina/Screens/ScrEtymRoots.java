@@ -272,7 +272,7 @@ public final class ScrEtymRoots extends PDialog {
         //create new dropdown for potential additional parent to be added
         final PComboBox<Object> newParentBox = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         newParentBox.setToolTipText("Add new parent to word here.");
-        newParentBox.setDefaultText("-- " + "Select Parent" +  " --");
+        newParentBox.setDefaultText("Select Parent");
         newParentBox.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         DefaultComboBoxModel<Object> comboModel = new DefaultComboBoxModel<>();
         newParentBox.setModel(comboModel);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -527,7 +527,7 @@ public final class ScrDeclensionSetup extends PDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         lstDeclensionList = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
         jPanel2 = new javax.swing.JPanel();
-        txtDeclensionName = new PTextField(core, true, "-- Name --");//PTextField(core, true, "-- Name --");
+        txtDeclensionName = new PTextField(core, true, "Name");
         jLabel3 = new PLabel("", menuFontSize);
         btnAddDimension = new PAddRemoveButton("+");
         btnDelDimension = new PAddRemoveButton("-");

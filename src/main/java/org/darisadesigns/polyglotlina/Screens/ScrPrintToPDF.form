@@ -127,7 +127,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- Save to File --&quot;)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;Save to File&quot;)"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="btnSelectSavePath">
@@ -150,7 +150,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- Cover Image --&quot;)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;Cover Image&quot;)"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="btnSelectImagePath">
@@ -348,7 +348,7 @@
             <Property name="toolTipText" type="java.lang.String" value="The title of your document"/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- Title --&quot;)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;Title&quot;)"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="txtSubtitle">
@@ -356,7 +356,7 @@
             <Property name="toolTipText" type="java.lang.String" value="The subtitle of your document (if any)"/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- Title --&quot;)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;Subtitle&quot;)"/>
           </AuxValues>
         </Component>
         <Container class="javax.swing.JScrollPane" name="jScrollPane2">

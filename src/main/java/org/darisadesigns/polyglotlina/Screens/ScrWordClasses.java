@@ -414,7 +414,7 @@ public final class ScrWordClasses extends PFrame {
         btnAddProp = new PAddRemoveButton("+");
         btnDelProp = new PAddRemoveButton("-");
         jPanel1 = new javax.swing.JPanel();
-        txtName = new PTextField(core, true, "-- Name --");
+        txtName = new PTextField(core, true, "Name");
         btnAddValue = new PAddRemoveButton("+");
         btnDelValue = new PAddRemoveButton("-");
         pnlTypes = new javax.swing.JPanel();
@@ -555,9 +555,8 @@ public final class ScrWordClasses extends PFrame {
                         .addGap(47, 47, 47)
                         .addComponent(btnDelValue, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(chkFreeText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(txtName)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(chkAssociative, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlTypes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))

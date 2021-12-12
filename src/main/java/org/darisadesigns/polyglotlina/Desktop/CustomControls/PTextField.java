@@ -93,6 +93,8 @@ public final class PTextField extends JTextField implements CoreUpdateSubscripti
         } else {
             setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         }
+        
+        setHorizontalAlignment(JTextField.CENTER);
     }
     
     public void setupLook() {
@@ -300,7 +302,7 @@ public final class PTextField extends JTextField implements CoreUpdateSubscripti
             core.getOSHandler().getInfoBox().error("Repaint error", "Could not repaint component: " + e.getLocalizedMessage());
             skipRepaint = false;
         }
-
+        
         try {
             super.paint(g);
         } catch (NullPointerException e) {
@@ -310,6 +312,22 @@ public final class PTextField extends JTextField implements CoreUpdateSubscripti
              method is unable to properly handle it (it never checks an object for 
              a null value when the object is populated from a method that returns
              null under certain circumstances). Thanks, Java.*/
+        }
+        
+        // paint default text if appropriate
+        if (!defText.isBlank() && !isDefaultText()) {
+            var localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
+            var thisFont = getFont();
+            var localMetrics = g.getFontMetrics(localFont);
+            var conMetrics = g.getFontMetrics(thisFont);
+            var drawPosition = (getWidth() / 2) 
+                    - (conMetrics.stringWidth(getText()) / 2)
+                    - localMetrics.stringWidth(defText);
+            
+            g.setFont(localFont);
+            g.setColor(Color.lightGray);
+            
+            g.drawString(defText, drawPosition - 10, conMetrics.getHeight());
         }
     }
 
@@ -332,6 +350,7 @@ public final class PTextField extends JTextField implements CoreUpdateSubscripti
                 super.setText(t);
             }
         } catch (Exception e) {
+            // e.printStackTrace();
             DesktopIOHandler.getInstance().writeErrorLog(e);
             core.getOSHandler().getInfoBox().error("Set text error", "Could not set text component: " 
                     + e.getLocalizedMessage());

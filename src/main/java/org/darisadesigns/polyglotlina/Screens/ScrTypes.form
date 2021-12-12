@@ -111,7 +111,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Part of speech name"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- Part of Speech Name --&quot;)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;Part of Speech Name&quot;)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JTextField" name="txtTypePattern">
@@ -119,7 +119,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Regex pattern which words of this type must conform to"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, &#xa;core.getPropertiesManager().isOverrideRegexFont(),&#xa;&quot;-- Type Pattern --&quot;)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core,&#xa;    core.getPropertiesManager().isOverrideRegexFont(),&#xa;    &quot;Type Pattern&quot;)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="btnSetup">
@@ -218,7 +218,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Part of speech&apos;s gloss"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- Part of Speech Gloss --&quot;)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;Part of Speech Gloss&quot;)"/>
               </AuxValues>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane3">

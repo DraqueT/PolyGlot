@@ -119,7 +119,7 @@ public final class ScrFontImportDialog extends PDialog {
         btnOk = new PButton();
         btnCancel = new PButton();
         jPanel1 = new javax.swing.JPanel();
-        txtFontLocation = new PTextField(core, true, "-- Font File --");
+        txtFontLocation = new PTextField(core, true, "Font File");
         btnSelectFOnt = new PButton();
         jLabel1 = new PLabel("Font Size", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
         txtFontSize = new PTextField(core, true, "");

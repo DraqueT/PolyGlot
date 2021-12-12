@@ -367,17 +367,18 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         
         // draw default text if appropriate
         if (!defaultText.isBlank() && !isDefaultValue()) {
-            Font localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
-            Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
-            FontMetrics localMetrics = g.getFontMetrics(localFont);
-            FontMetrics conMetrics = g.getFontMetrics(conFont);
+            var localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
+            var thisFont = getFont();
+            var localMetrics = g.getFontMetrics(localFont);
+            var conMetrics = g.getFontMetrics(thisFont);
+            var drawPosition = (getWidth() / 2) 
+                    - (conMetrics.stringWidth(text) / 2)
+                    - localMetrics.stringWidth(defaultText)
+                    - 10;
             
-            var drawPosition = (getWidth() / 2) -
-                    (conMetrics.stringWidth(defaultText) / 2);
             g.setFont(localFont);
-            
-            g.setColor(Color.blue);
             g.setColor(Color.lightGray);
+            
             g.drawString(defaultText, drawPosition - 10, localMetrics.getHeight());
         }
     }
