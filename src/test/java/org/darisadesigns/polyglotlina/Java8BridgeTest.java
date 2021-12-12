@@ -97,6 +97,7 @@ public class Java8BridgeTest {
                     printWordEtymologies, 
                     printAllConjugations,
                     printPhrases,
+                    "0,1,2,3,4,5",
                     core
             );
             assertTrue(new File(OUTPUT).exists());

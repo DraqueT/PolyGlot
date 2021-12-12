@@ -311,7 +311,7 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         if (text.isBlank() && this.getSelectedIndex() == 0) {
             text = getDefaultText();
             antiAlias.setColor(Color.decode("#909090"));
-            defaultMenuFont = PGTUtil.MENU_FONT.deriveFont((float)PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+            defaultMenuFont = ((DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager()).getFontLocal();
         }
         
         if (!text.isEmpty()) { // 0 length text makes bounding box explode
