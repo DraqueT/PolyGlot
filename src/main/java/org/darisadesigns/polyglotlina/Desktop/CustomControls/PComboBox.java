@@ -43,7 +43,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
+import org.darisadesigns.polyglotlina.Nodes.ConWord;
 
 /**
  *
@@ -56,6 +58,7 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
     private String defaultText = "";
     private List<E> baseObjects;
     private boolean filterActive = false;
+    private Object lastSetValue = null;
 
     public PComboBox(Font font) {
         doSetup(font, "");
@@ -186,15 +189,30 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
             worker.execute();
         }
     }
+
+    @Override
+    public void setSelectedIndex(int i) {
+        super.setSelectedIndex(i);
+        lastSetValue = getItemAt(i);
+    }
+    
+    @Override
+    public void setSelectedItem(Object o) {
+        super.setSelectedItem(o);
+        lastSetValue = o;
+    }
     
     private void setupListeners() {
-        final JTextField textfield = (JTextField) this.getEditor().getEditorComponent();
+        final JTextField textField = (JTextField) this.getEditor().getEditorComponent();
         final PComboBox self = this;
-        
+
         this.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
                 self.setEditable(true);
+                if (lastSetValue != null) {
+                    textField.setText(lastSetValue.toString());
+                }
             }
 
             @Override
@@ -203,7 +221,7 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
             }
         });
         
-        textfield.addFocusListener(new FocusListener() {
+        textField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
                 self.showPopup();
@@ -212,7 +230,7 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
             @Override
             public void focusLost(FocusEvent e) {
                 self.setEditable(false);
-                var text = textfield.getText();
+                var text = textField.getText();
                 var priorSelection = self.getSelectedItem();
                 
                 for (var i = 0; i < self.getItemCount(); i++) {
@@ -224,9 +242,9 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
                 }
                 
                 if (priorSelection != null) {
-                    textfield.setText(priorSelection.toString());
+                    textField.setText(priorSelection.toString());
                 } else {
-                    textfield.setText("");
+                    textField.setText("");
                     comboFilter("", defaultText);
                     hidePopup();
                 }
@@ -235,7 +253,7 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
             }
         });
         
-        textfield.addKeyListener(new KeyAdapter() {
+        textField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent ke) {
                 // no arrow keys are only selection events
@@ -249,7 +267,7 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
                 final var priorSelection = self.getSelectedItem();
                 SwingUtilities.invokeLater(() -> {
                     var priorString = priorSelection == null ? "" : priorSelection.toString();
-                    comboFilter(textfield.getText(), priorString);
+                    comboFilter(textField.getText(), priorString);
                 });
             }
         });
@@ -325,6 +343,29 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
             antiAlias.setColor(Color.lightGray);
         }
         antiAlias.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, 5, 5);
+        
+        // draw local word if appropriate
+        var core = PolyGlot.getPolyGlot().getCore();
+        if (!filterActive && core.getPropertiesManager().isExpandedLexListDisplay()
+                && getSelectedItem() instanceof ConWord word) {
+            Font localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
+            Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
+            FontMetrics localMetrics = g.getFontMetrics(localFont);
+            FontMetrics conMetrics = g.getFontMetrics(conFont);
+            
+            var printValue = word.getLocalWord();
+            var drawPosition = (conMetrics.stringWidth(word.getValue()) / 2) 
+                    + (getWidth()/2);
+            var height = conMetrics.getHeight();
+            g.setFont(localFont);
+            
+            if (!printValue.isBlank()) {
+                g.setColor(Color.blue);
+                g.drawLine(drawPosition + 10, 5, drawPosition + 10, height);
+                g.setColor(Color.darkGray);
+                g.drawString(printValue, drawPosition + 15, localMetrics.getHeight());
+            }
+        }
     }
     
     @Override

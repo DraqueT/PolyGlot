@@ -85,8 +85,8 @@ public class PListCellRenderer extends DefaultListCellRenderer {
                 height = conMetrics.getHeight();
                 g.setFont(localFont);
                 g.setColor(Color.blue);
-                g.drawLine(wordEnd + 10, 0, wordEnd + 10, height);
-                g.setColor(Color.black);
+                g.drawLine(wordEnd + 10, 5, wordEnd + 10, height);
+                g.setColor(Color.darkGray);
                 g.drawString(printValue, wordEnd + 15, dropPosition);
             }
         }

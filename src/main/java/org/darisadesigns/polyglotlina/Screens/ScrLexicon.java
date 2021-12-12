@@ -451,10 +451,11 @@ public final class ScrLexicon extends PFrame {
                 pnlClasses.add(classBox, gbc);
                 classPropMap.put(curProp.getId(), classBox); // combobox mapped to related class ID.
             } else {
-                final JComboBox<Object> classBox = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
+                final PComboBox<Object> classBox = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
                 DefaultComboBoxModel<Object> comboModel = new DefaultComboBoxModel<>();
                 classBox.setModel(comboModel);
-                comboModel.addElement("-- " + curProp.getValue() + " --");
+                classBox.setDefaultText("-- " + curProp.getValue() + " --");
+                comboModel.addElement(" ");
 
                 // populate class dropdown
                 curProp.getValues().forEach((value) -> {
