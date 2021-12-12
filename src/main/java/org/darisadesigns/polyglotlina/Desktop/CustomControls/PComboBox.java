@@ -315,7 +315,6 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         }
         
         if (!text.isEmpty()) { // 0 length text makes bounding box explode
-            this.setFont(defaultMenuFont);
             FontMetrics fm = antiAlias.getFontMetrics(defaultMenuFont);
             antiAlias.setFont(defaultMenuFont);
             Rectangle2D rec = fm.getStringBounds(text, antiAlias);
@@ -356,15 +355,30 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
             var printValue = word.getLocalWord();
             var drawPosition = (conMetrics.stringWidth(word.getValue()) / 2) 
                     + (getWidth()/2);
-            var height = conMetrics.getHeight();
             g.setFont(localFont);
             
             if (!printValue.isBlank()) {
                 g.setColor(Color.blue);
-                g.drawLine(drawPosition + 10, 5, drawPosition + 10, height);
+                g.drawLine(drawPosition + 10, 5, drawPosition + 10, conMetrics.getHeight());
                 g.setColor(Color.darkGray);
                 g.drawString(printValue, drawPosition + 15, localMetrics.getHeight());
             }
+        }
+        
+        // draw default text if appropriate
+        if (!defaultText.isBlank() && !isDefaultValue()) {
+            Font localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
+            Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
+            FontMetrics localMetrics = g.getFontMetrics(localFont);
+            FontMetrics conMetrics = g.getFontMetrics(conFont);
+            
+            var drawPosition = (getWidth() / 2) -
+                    (conMetrics.stringWidth(defaultText) / 2);
+            g.setFont(localFont);
+            
+            g.setColor(Color.blue);
+            g.setColor(Color.lightGray);
+            g.drawString(defaultText, drawPosition - 10, localMetrics.getHeight());
         }
     }
     
