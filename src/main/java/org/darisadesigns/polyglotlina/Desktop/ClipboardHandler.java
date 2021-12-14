@@ -40,19 +40,19 @@ public final class ClipboardHandler implements ClipboardOwner {
     public void lostOwnership(Clipboard aClipboard, Transferable aContents) {
         windowsPause();
     }
-    
+
     /**
-     * Windows sometimes requires a moment to regain ownership of clipboard.
-     * If windows is not the host OS, does nothing
+     * Windows sometimes requires a moment to regain ownership of clipboard. If
+     * windows is not the host OS, does nothing
      */
     private static void windowsPause() {
         if (PGTUtil.IS_WINDOWS) {
             try {
-            Thread.sleep(PGTUtil.WINDOWS_CLIPBOARD_DELAY);
-        }
-        catch (InterruptedException e) {
-            DesktopIOHandler.getInstance().writeErrorLog(e);
-        }
+                Thread.sleep(PGTUtil.WINDOWS_CLIPBOARD_DELAY);
+            }
+            catch (InterruptedException e) {
+                DesktopIOHandler.getInstance().writeErrorLog(e);
+            }
         }
     }
 
@@ -162,17 +162,10 @@ public final class ClipboardHandler implements ClipboardOwner {
     public void restoreClipboard() {
         if (cachedContents != null) {
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            
+
             windowsPause();
 
-            for (DataFlavor flavor : cachedContents.getTransferDataFlavors()) {
-                if (!clipboard.isDataFlavorAvailable(flavor)) {
-                    // if something somehow got into the cache that is incompatible with the OS' clipboard, reject it
-                    return;
-                }
-            }
-
-            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(cachedContents, null);
+            clipboard.setContents(cachedContents, null);
         }
     }
 }
