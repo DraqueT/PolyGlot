@@ -688,8 +688,10 @@ public final class ScrLexicon extends PFrame {
 
         if (cmbTypeSrc.getValue().equals(defTypeValue)) {
             posFilter = 0;
+        } else if (cmbTypeSrc.getValue() instanceof TypeNode typeNode){
+            posFilter = typeNode.getId();
         } else {
-            posFilter = ((TypeNode) cmbTypeSrc.getValue()).getId();
+            posFilter = 0;
         }
         
         saveValuesTo(getCurrentWord());

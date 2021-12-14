@@ -136,7 +136,7 @@ public class ScrLangProps extends PFrame {
     private void saveAlphaOrder() {
         try {
             var alphaOrder = getAlphaOrderFromTable();
-            propMan.setAlphaOrder(alphaOrder.stream().collect(Collectors.joining(",")));
+            propMan.setAlphaOrder(alphaOrder.stream().collect(Collectors.joining(",")) + ",");
         } catch (Exception e) {
             setAlphaProblems(e.getLocalizedMessage());
             return;

@@ -396,7 +396,6 @@ public final class PLanguageStats {
      * multi-character) it begins with
      *
      * @param word
-     * @param alphabet
      * @return
      */
     private String startsWith(String word) {
@@ -417,7 +416,6 @@ public final class PLanguageStats {
      * multi-character) it begins with
      *
      * @param word
-     * @param alphabet
      * @return
      */
     private String endsWith(String word) {
@@ -486,7 +484,6 @@ public final class PLanguageStats {
     /**
      * Gets every combination of characters and returns as an array
      *
-     * @param combinations
      * @return
      */
     private String[] getAllCombinations() {
