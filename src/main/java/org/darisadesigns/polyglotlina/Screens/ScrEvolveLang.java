@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -116,7 +116,7 @@ public final class ScrEvolveLang extends PDialog {
         jLabel1 = new PLabel("", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
         txtConWordFilter = new PTextField(core, false, "ConWord Filter");
         txtLocalWordFilter = new PTextField(core, true, core.getPropertiesManager().getLocalLangName() + " Filter");
-        cmbPoS = new PComboBox<TypeNode>( ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), "-- Part of Speech --");
+        cmbPoS = new PComboBox<TypeNode>( ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), "Part of Speech");
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new PLabel("", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
         sldApplyTo = new javax.swing.JSlider();

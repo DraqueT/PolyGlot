@@ -30,12 +30,19 @@ import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import java.awt.Cursor;
 import java.awt.Desktop;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PList;
 import org.darisadesigns.polyglotlina.Desktop.Java8Bridge;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
@@ -43,7 +50,6 @@ import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
  * @author draque.thompson
  */
 public class ScrPrintToPDF extends PDialog {
-
     /**
      * Creates new form ScrPrintToPDF
      * @param _core Dictionary core
@@ -58,12 +64,77 @@ public class ScrPrintToPDF extends PDialog {
         
         txtForeword.setText(""); // default test fails to load here... forcing update
         
+        setupOrderList();
+        setupListeners();
         setModal(true);
     }
 
-    @Override
-    public final void setModal(boolean _modal) {
-        super.setModal(_modal);
+    private void setupOrderList() {
+        DefaultListModel model = new DefaultListModel();
+        
+        model.addElement(new PrintOrderNode("Orthogrphy", PGTUtil.CHAP_ORTHOGRAPHY, chkOrtho));
+        model.addElement(new PrintOrderNode("Gloss Key", PGTUtil.CHAP_GLOSSKEY, chkGloss));
+        model.addElement(new PrintOrderNode(core.conLabel() + " -> " + core.localLabel() + " Dictionary", PGTUtil.CHAP_CONTOLOCAL, chkConLocal));
+        model.addElement(new PrintOrderNode(core.localLabel() + " -> " + core.conLabel() + " Dictionary", PGTUtil.CHAP_LOCALTOCON, chkLocalCon));
+        model.addElement(new PrintOrderNode("Phrasebook", PGTUtil.CHAP_PHRASEBOOK, chkPrintPhrases));
+        model.addElement(new PrintOrderNode("Grammar", PGTUtil.CHAP_GRAMMAR, chkGrammar));
+        
+        lstChapOrder.setModel(model);
+    }
+    
+    private void moveOrederUp() {
+        var model = (DefaultListModel)lstChapOrder.getModel();
+        var selectionIndex = lstChapOrder.getSelectedIndex();
+        
+        if (selectionIndex <= 0) {
+            return;
+        }
+        
+        var selectedItem = model.get(selectionIndex);
+        model.remove(selectionIndex);
+        model.insertElementAt(selectedItem, selectionIndex - 1);
+        
+        lstChapOrder.setSelectedIndex(selectionIndex - 1);
+    }
+    
+    private void moveOrderDown() {
+        var model = (DefaultListModel)lstChapOrder.getModel();
+        var selectionIndex = lstChapOrder.getSelectedIndex();
+        
+        if (selectionIndex >= model.getSize() - 1 ) {
+            return;
+        }
+        
+        var selectedItem = model.get(selectionIndex);
+        model.remove(selectionIndex);
+        model.insertElementAt(selectedItem, selectionIndex + 1);
+        
+        lstChapOrder.setSelectedIndex(selectionIndex + 1);
+    }
+    
+    private void setupListeners() {
+        var chkListener = (ActionListener) (ActionEvent e) -> {
+            lstChapOrder.repaint();
+        };
+        
+        chkConLocal.addActionListener(chkListener);
+        chkGloss.addActionListener(chkListener);
+        chkGrammar.addActionListener(chkListener);
+        chkLocalCon.addActionListener(chkListener);
+        chkOrtho.addActionListener(chkListener);
+        chkPrintPhrases.addActionListener(chkListener);
+    }
+    
+    private String getChapterOrder() {
+        var chapters = new ArrayList<String>();
+        var model = (DefaultListModel)lstChapOrder.getModel();
+        
+        for (int i = 0; i < model.getSize(); i++) {
+            var item = (PrintOrderNode)model.get(i);
+            chapters.add(Integer.toString(item.index));
+        }
+        
+        return String.join(",", chapters.toArray(new String[0]));
     }
     
     /**
@@ -75,9 +146,9 @@ public class ScrPrintToPDF extends PDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        txtSavePath = new PTextField(core, true, "-- Save to File --");
+        txtSavePath = new PTextField(core, true, "Save to File");
         btnSelectSavePath = new PButton(nightMode, menuFontSize);
-        txtImageLocation = new PTextField(core, true, "-- Cover Image --");
+        txtImageLocation = new PTextField(core, true, "Cover Image");
         btnSelectImagePath = new PButton(nightMode, menuFontSize);
         jLabel4 = new PLabel("", menuFontSize);
         jPanel2 = new javax.swing.JPanel();
@@ -91,8 +162,13 @@ public class ScrPrintToPDF extends PDialog {
         chkEtymology = new PCheckBox(nightMode, menuFontSize);
         chkPrintConjugations = new PCheckBox(nightMode, menuFontSize);
         chkPrintPhrases = new PCheckBox(nightMode, menuFontSize);
-        txtTitle = new PTextField(core, true, "-- Title --");
-        txtSubtitle = new PTextField(core, true, "-- Title --");
+        jScrollPane1 = new javax.swing.JScrollPane();
+        lstChapOrder = new PList<>(PGTUtil.MENU_FONT);
+        jLabel1 = new PLabel("Chapter Order", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        btnMoveUp = new PButton(nightMode, menuFontSize);
+        btnMoveDown = new PButton(nightMode, menuFontSize);
+        txtTitle = new PTextField(core, true, "Title");
+        txtSubtitle = new PTextField(core, true, "Subtitle");
         jScrollPane2 = new javax.swing.JScrollPane();
         txtForeword = new PTextPane(core, true, "-- Author Foreword --");
         btnPrint = new PButton(nightMode, menuFontSize);
@@ -160,6 +236,7 @@ public class ScrPrintToPDF extends PDialog {
         chkGloss.setText("Print Gloss Key");
         chkGloss.setToolTipText("Prints a key for part of speech glosses");
 
+        chkEtymology.setSelected(true);
         chkEtymology.setText("Print Etymology Trees");
 
         chkPrintConjugations.setText("Print All Conjugations");
@@ -169,6 +246,29 @@ public class ScrPrintToPDF extends PDialog {
         chkPrintPhrases.setText("Print Phrases");
         chkPrintPhrases.setToolTipText("Prints a phrasebook section within the PDF");
 
+        lstChapOrder.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(lstChapOrder);
+
+        jLabel1.setText("Chapter Order");
+
+        btnMoveUp.setText("↑");
+        btnMoveUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMoveUpActionPerformed(evt);
+            }
+        });
+
+        btnMoveDown.setText("↓");
+        btnMoveDown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMoveDownActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -176,22 +276,25 @@ public class ScrPrintToPDF extends PDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(chkConLocal)
-                            .addComponent(chkGrammar)
-                            .addComponent(chkOrtho)
-                            .addComponent(chkLocalCon)
-                            .addComponent(chkLogographs))
-                        .addContainerGap(144, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(chkGloss)
-                            .addComponent(chkPageNum)
-                            .addComponent(chkEtymology)
-                            .addComponent(chkPrintConjugations)
-                            .addComponent(chkPrintPhrases))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(chkGloss)
+                        .addComponent(chkPageNum)
+                        .addComponent(chkEtymology)
+                        .addComponent(chkPrintConjugations)
+                        .addComponent(chkPrintPhrases)
+                        .addComponent(chkConLocal, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(chkLogographs)
+                        .addComponent(chkOrtho))
+                    .addComponent(chkLocalCon)
+                    .addComponent(chkGrammar))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnMoveUp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnMoveDown, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -201,9 +304,11 @@ public class ScrPrintToPDF extends PDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkGloss)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkLocalCon)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkConLocal)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chkLocalCon)
+                .addComponent(chkPrintPhrases)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkGrammar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -211,12 +316,20 @@ public class ScrPrintToPDF extends PDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkPageNum)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chkPrintPhrases)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(chkPrintConjugations)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkEtymology)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnMoveUp)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnMoveDown))
+                    .addComponent(jScrollPane1)))
         );
 
         txtTitle.setToolTipText("The title of your document");
@@ -240,7 +353,7 @@ public class ScrPrintToPDF extends PDialog {
                         .addComponent(btnSelectImagePath))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4)
-                        .addGap(0, 314, Short.MAX_VALUE))
+                        .addGap(0, 387, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(txtSavePath)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -373,6 +486,7 @@ public class ScrPrintToPDF extends PDialog {
                     chkEtymology.isSelected(), 
                     chkPrintConjugations.isSelected(),
                     chkPrintPhrases.isSelected(),
+                    getChapterOrder(),
                     core);
 
             if (Desktop.isDesktopSupported()) {
@@ -415,6 +529,14 @@ public class ScrPrintToPDF extends PDialog {
         txtImageLocation.setText(fileName);
     }//GEN-LAST:event_btnSelectImagePathActionPerformed
 
+    private void btnMoveUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveUpActionPerformed
+        moveOrederUp();
+    }//GEN-LAST:event_btnMoveUpActionPerformed
+
+    private void btnMoveDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveDownActionPerformed
+        moveOrderDown();
+    }//GEN-LAST:event_btnMoveDownActionPerformed
+
     /**
      * Open PDF print window
      * @param _core Dictionary Core
@@ -433,6 +555,8 @@ public class ScrPrintToPDF extends PDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnMoveDown;
+    private javax.swing.JButton btnMoveUp;
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnSelectImagePath;
     private javax.swing.JButton btnSelectSavePath;
@@ -446,14 +570,38 @@ public class ScrPrintToPDF extends PDialog {
     private javax.swing.JCheckBox chkPageNum;
     private javax.swing.JCheckBox chkPrintConjugations;
     private javax.swing.JCheckBox chkPrintPhrases;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JList<String> lstChapOrder;
     private javax.swing.JTextPane txtForeword;
     private javax.swing.JTextField txtImageLocation;
     private javax.swing.JTextField txtSavePath;
     private javax.swing.JTextField txtSubtitle;
     private javax.swing.JTextField txtTitle;
     // End of variables declaration//GEN-END:variables
+
+    public class PrintOrderNode {
+        public final String text;
+        public final int index;
+        private final JCheckBox checkBox;
+        
+        public PrintOrderNode(String _text, int _index, JCheckBox _checkBox) {
+            text = _text;
+            index = _index;
+            checkBox = _checkBox;
+        }
+        
+        @Override
+        public String toString() {
+            return text;
+        }
+        
+        public boolean isSelected() {
+            return checkBox.isSelected();
+        }
+    }
 }

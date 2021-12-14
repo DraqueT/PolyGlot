@@ -240,7 +240,7 @@ public class ScrPhrasebook extends PFrame {
 
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel1 = new javax.swing.JPanel();
-        txtGloss = new PTextField(core, true, "-- Gloss --");
+        txtGloss = new PTextField(core, true, "Gloss");
         jScrollPane1 = new javax.swing.JScrollPane();
         txtLocalPhrase = new PTextPane(core, true, "-- Local Phrase --");
         jScrollPane3 = new javax.swing.JScrollPane();

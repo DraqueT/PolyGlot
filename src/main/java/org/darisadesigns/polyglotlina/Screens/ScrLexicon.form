@@ -229,7 +229,7 @@
                         <Property name="toolTipText" type="java.lang.String" value="Constructed language word value"/>
                       </Properties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, false, &quot;-- ConWord --&quot;)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, false, &quot;Conlang Word&quot;)"/>
                       </AuxValues>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtLocalWord">
@@ -237,7 +237,7 @@
                         <Property name="toolTipText" type="java.lang.String" value="Synonym for conword in local natural language"/>
                       </Properties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- &quot; + core.localLabel() + &quot; Word --&quot;)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, core.localLabel() + &quot; Word&quot;)"/>
                       </AuxValues>
                     </Component>
                     <Component class="javax.swing.JComboBox" name="cmbType">
@@ -251,7 +251,7 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmbTypeActionPerformed"/>
                       </Events>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal())"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), &quot;Part of Speech&quot;)"/>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Object&gt;"/>
                       </AuxValues>
                     </Component>
@@ -260,7 +260,7 @@
                         <Property name="toolTipText" type="java.lang.String" value="The word&apos;s pronunciation"/>
                       </Properties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- Pronunciation --&quot;)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;Pronunciation&quot;)"/>
                       </AuxValues>
                     </Component>
                     <Component class="javax.swing.JCheckBox" name="chkProcOverride">

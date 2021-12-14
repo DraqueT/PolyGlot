@@ -264,9 +264,9 @@ public class PToolTipUI extends ToolTipUI
     }
 
     /**
-     * Invoked when the <code>JComponent</code> associated with the
+     * Invoked when the {@code JComponent} associated with the
      * <code>JToolTip</code> has changed, or at initialization time. This
-     * should update any state dependant upon the <code>JComponent</code>.
+     * should update any state dependant upon the {@code JComponent}.
      *
      * @param c the JToolTip the JComponent has changed on.
      */

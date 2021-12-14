@@ -131,7 +131,7 @@
             <Property name="toolTipText" type="java.lang.String" value="Part of Speech to filter on (if any)"/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox&lt;TypeNode&gt;( ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), &quot;-- Part of Speech --&quot;)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox&lt;TypeNode&gt;( ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), &quot;Part of Speech&quot;)"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;TypeNode&gt;"/>
           </AuxValues>
         </Component>

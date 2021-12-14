@@ -292,7 +292,9 @@ public class DictCore {
             public void run() {
                 String reportContents = PLanguageStats.buildWordReport(core, progress);
                 
-                core.getOSHandler().openLanguageReport(reportContents);
+                if (!reportContents.isBlank()) {
+                    core.getOSHandler().openLanguageReport(reportContents);
+                }
             }
         }.start();
     }

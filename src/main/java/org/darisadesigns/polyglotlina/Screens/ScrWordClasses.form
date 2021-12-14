@@ -206,7 +206,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Name of property"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- Name --&quot;)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;Name&quot;)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="btnAddValue">

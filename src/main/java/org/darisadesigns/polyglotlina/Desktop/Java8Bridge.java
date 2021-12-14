@@ -76,6 +76,7 @@ public final class Java8Bridge {
             boolean printWordEtymologies,
             boolean printAllConjugations,
             boolean printPhrases,
+            String chapterOrder,
             DictCore core) throws IOException {
         
         errorIfJavaUnavailableInTerminal();
@@ -106,7 +107,7 @@ public final class Java8Bridge {
             tmpConFontFileLocation = "";
         }
         
-        if (tmpLocalFontFileLocation.length() < 500) {
+        if (tmpLocalFontFile.length() < 500) {
             tmpLocalFontFileLocation = "";
         }
         
@@ -131,7 +132,8 @@ public final class Java8Bridge {
             tmpConFontFileLocation,
             PGTUtil.PGT_VERSION,
             (printPhrases ? PGTUtil.TRUE : PGTUtil.FALSE),
-            tmpLocalFontFileLocation
+            tmpLocalFontFileLocation,
+            chapterOrder
         };
         
         String[] results = DesktopIOHandler.getInstance().runAtConsole(command, true);

@@ -77,7 +77,7 @@ public class PListLexiconCellRenderer extends DefaultListCellRenderer {
             if (!printValue.isBlank()) {
                 g.setColor(Color.blue);
                 g.drawLine(wordEnd + 10, 0, wordEnd + 10, height);
-                g.setColor(Color.black);
+                g.setColor(Color.darkGray);
                 g.drawString(printValue, wordEnd + 15, dropPosition);
             }
         }

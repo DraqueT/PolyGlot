@@ -70,9 +70,9 @@ public final class ScrQuizGenDialog extends PFrame {
         chkProcQuiz.setFont(propMan.getFontLocal());
         chkTypeQuiz.setFont(propMan.getFontLocal());
         
-        ((PTextField)txtFilterConWord).setDefaultValue("-- " + core.conLabel() + " Filter --");
+        ((PTextField)txtFilterConWord).setDefaultValue(core.conLabel() + " Filter");
         ((PTextField)txtFilterConWord).setDefault();
-        ((PTextField)txtFilterLocalWord).setDefaultValue("-- " + core.localLabel()+ " Filter --");
+        ((PTextField)txtFilterLocalWord).setDefaultValue(core.localLabel()+ " Filter");
         ((PTextField)txtFilterLocalWord).setDefault();
         
         populateDropdowns();
@@ -86,6 +86,7 @@ public final class ScrQuizGenDialog extends PFrame {
         }
         
         cmbFilterType.setModel(model);
+        ((PComboBox)cmbFilterType).setDefaultText("Part of Speech");
     }
 
     private void takeQuiz() {
@@ -155,10 +156,10 @@ public final class ScrQuizGenDialog extends PFrame {
         btnQuiz = new PButton(nightMode, menuFontSize);
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        txtFilterConWord = new PTextField(core, false, "-- " + core.conLabel() + " Filter --");
-        txtFilterLocalWord = new PTextField(core, true, "-- " + core.localLabel() + " Filter --");
+        txtFilterConWord = new PTextField(core, false, core.conLabel() + " Filter");
+        txtFilterLocalWord = new PTextField(core, true, core.localLabel() + " Filter");
         cmbFilterType = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
-        txtFilterProc = new PTextField(core, true, "-- Pronunciation Filter --");
+        txtFilterProc = new PTextField(core, true, "Pronunciation Filter");
         btnClearFilter = new PButton(nightMode, menuFontSize);
         jLabel1 = new PLabel("", menuFontSize);
         jLabel2 = new PLabel("", menuFontSize);

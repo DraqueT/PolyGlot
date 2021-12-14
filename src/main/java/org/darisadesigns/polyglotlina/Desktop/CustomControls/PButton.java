@@ -31,6 +31,7 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import javax.swing.Icon;
 import javax.swing.JButton;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -161,5 +162,16 @@ public class PButton extends JButton implements MouseListener {
         mouseEntered = false;
         setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         repaint();
+    }
+
+    @Override
+    public void setText(String text) {
+        super.setText(text);
+        
+        if (text.equals("↑") || text.equals("↓")) {
+            
+            
+            setFont(PGTUtil.CHARIS_UNICODE.deriveFont((float)PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize()));
+        }
     }
 }

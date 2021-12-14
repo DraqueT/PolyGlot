@@ -733,7 +733,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
     /**
      * Returns list of conlang words nodes
      *
-     * @return List<ConWord>
+     * @return List of ConWords
      */
     public List<ConWord> getWordNodesList() {
         List<ConWord> retList = new ArrayList<>(nodeMap.values());

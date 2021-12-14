@@ -136,15 +136,15 @@ public final class ScrLexicon extends PFrame {
     public ScrLexicon(DictCore _core, ScrMainMenu _menuParent) {
         super(_core);
         
-        defTypeValue.setValue("-- Part of Speech --");
+        defTypeValue.setValue("Part of Speech");
         defTypeValue.setId(-1);
 
-        defRootValue.setValue("-- Root --");
+        defRootValue.setValue("Root");
         defRootValue.setId(-1);
 
         menuParent = _menuParent;
         fxPanel = new JFXPanel();
-        txtRom = new PTextField(core, true, "-- Romanization --");
+        txtRom = new PTextField(core, true, "Romanization");
         txtRom.setToolTipText("Romanized representation of word");
         initComponents();
 
@@ -385,7 +385,7 @@ public final class ScrLexicon extends PFrame {
             final int classId = curProp.getId();
 
             if (curProp.isFreeText()) {
-                final PTextField classText = new PTextField(core, false, "--" + curProp.getValue() + "--");
+                final PTextField classText = new PTextField(core, false, curProp.getValue());
                 classText.setToolTipText(curProp.getValue() + " value");
 
                 classText.getDocument().addDocumentListener(new DocumentListener() {
@@ -422,7 +422,7 @@ public final class ScrLexicon extends PFrame {
                 final PComboBox<Object> classBox = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
                 DefaultComboBoxModel<Object> comboModel = new DefaultComboBoxModel<>();
                 classBox.setModel(comboModel);
-                classBox.setDefaultText("-- " + curProp.getValue() + " --");
+                classBox.setDefaultText(curProp.getValue());
                 
                 comboModel.addElement(" ");
                 
@@ -451,10 +451,11 @@ public final class ScrLexicon extends PFrame {
                 pnlClasses.add(classBox, gbc);
                 classPropMap.put(curProp.getId(), classBox); // combobox mapped to related class ID.
             } else {
-                final JComboBox<Object> classBox = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
+                final PComboBox<Object> classBox = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
                 DefaultComboBoxModel<Object> comboModel = new DefaultComboBoxModel<>();
                 classBox.setModel(comboModel);
-                comboModel.addElement("-- " + curProp.getValue() + " --");
+                classBox.setDefaultText(curProp.getValue());
+                comboModel.addElement(" ");
 
                 // populate class dropdown
                 curProp.getValues().forEach((value) -> {
@@ -687,8 +688,10 @@ public final class ScrLexicon extends PFrame {
 
         if (cmbTypeSrc.getValue().equals(defTypeValue)) {
             posFilter = 0;
+        } else if (cmbTypeSrc.getValue() instanceof TypeNode typeNode){
+            posFilter = typeNode.getId();
         } else {
-            posFilter = ((TypeNode) cmbTypeSrc.getValue()).getId();
+            posFilter = 0;
         }
         
         saveValuesTo(getCurrentWord());
@@ -783,7 +786,7 @@ public final class ScrLexicon extends PFrame {
             testWord.setId(origWordId);
             int typeId = 0;
             Object selectedType = cmbType.getSelectedItem();
-            if (selectedType != null && !selectedType.equals(defTypeValue)) {
+            if (selectedType != null && !((PComboBox)cmbType).isDefaultValue()) {
                 typeId = ((TypeNode) cmbType.getSelectedItem()).getId();
             }
 
@@ -1028,7 +1031,7 @@ public final class ScrLexicon extends PFrame {
         txtLocalSrc.setText("");
         txtProcSrc.setText("");
         txtDefSrc.setText("");
-        cmbTypeSrc.getSelectionModel().select(defTypeValue);
+        cmbTypeSrc.getSelectionModel().select(0);
         cmbRootSrc.getSelectionModel().select(defRootValue);
         cmbRootSrc.setStyle("-fx-font: "
                 + localFont.getSize() + "px \""
@@ -1273,7 +1276,10 @@ public final class ScrLexicon extends PFrame {
      */
     private void setupComboBoxesSwing() {
         cmbType.removeAllItems();
-        cmbType.addItem(defTypeValue);
+        var defNode = new TypeNode();
+        defNode.setValue("");
+        defNode.setId(-1);
+        cmbType.addItem(defNode);
         for (TypeNode curNode : core.getTypes().getNodes()) {
             cmbType.addItem(curNode);
         }
@@ -1302,7 +1308,7 @@ public final class ScrLexicon extends PFrame {
                 ((PTextField) txtLocalWord).setDefault();
                 ((PTextField) txtProc).setDefault();
                 ((PTextPane) txtDefinition).setDefault();
-                cmbType.setSelectedItem(defTypeValue);
+                cmbType.setSelectedIndex(0);
                 chkProcOverride.setSelected(false);
                 chkRuleOverride.setSelected(false);
                 setPropertiesEnabled(false);
@@ -1324,7 +1330,12 @@ public final class ScrLexicon extends PFrame {
                             ? ((PTextField) txtProc).getDefaultValue() : curWord.getPronunciation());
                 }
                 TypeNode type = curWord.getWordTypeId() == 0 ? null : core.getTypes().getNodeById(curWord.getWordTypeId());
-                cmbType.setSelectedItem(type == null ? defTypeValue : type);
+                if (type == null) {
+                    cmbType.setSelectedIndex(0);
+                } else {
+                    cmbType.setSelectedItem(type);
+                }
+                
                 chkProcOverride.setSelected(curWord.isProcOverride());
                 chkRuleOverride.setSelected(curWord.isRulesOverride());
                 setupClassPanel(curWord.getWordTypeId());
@@ -1384,7 +1395,7 @@ public final class ScrLexicon extends PFrame {
      */
     private void setupComboBoxesFX() {
         cmbTypeSrc.getItems().clear();
-        cmbTypeSrc.getItems().add(defTypeValue);
+        cmbTypeSrc.getItems().add("");
         cmbTypeSrc.getSelectionModel().selectFirst();
         cmbTypeSrc.getItems().addAll(Arrays.asList(core.getTypes().getNodes()));
 
@@ -1486,7 +1497,7 @@ public final class ScrLexicon extends PFrame {
         saveWord.setRulesOverride(chkRuleOverride.isSelected());
         Object curType = cmbType.getSelectedItem();
         if (curType != null) {
-            if (curType.equals(defTypeValue)) {
+            if (((PComboBox)cmbType).isDefaultValue()) {
                 saveWord.setWordTypeId(0);
             } else {
                 saveWord.setWordTypeId(((TypeNode) curType).getId());
@@ -1653,10 +1664,10 @@ public final class ScrLexicon extends PFrame {
         jPanel2 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel3 = new javax.swing.JPanel();
-        txtConWord = new PTextField(core, false, "-- ConWord --");
-        txtLocalWord = new PTextField(core, true, "-- " + core.localLabel() + " Word --");
-        cmbType = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
-        txtProc = new PTextField(core, true, "-- Pronunciation --");
+        txtConWord = new PTextField(core, false, "Conlang Word");
+        txtLocalWord = new PTextField(core, true, core.localLabel() + " Word");
+        cmbType = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), "Part of Speech");
+        txtProc = new PTextField(core, true, "Pronunciation");
         chkProcOverride = new PCheckBox(nightMode, menuFontSize);
         chkRuleOverride = new PCheckBox(nightMode, menuFontSize);
         btnDeclensions = new PButton(nightMode, menuFontSize);

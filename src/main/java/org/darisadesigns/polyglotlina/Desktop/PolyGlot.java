@@ -241,6 +241,7 @@ public final class PolyGlot {
                         + e.getMessage() + "\n"
                         + "Problem with top level PolyGlot arguments.");
             } catch (Exception e) { // split up for logical clarity... might want to differentiate
+                // e.printStackTrace();
                 DesktopIOHandler.getInstance().writeErrorLog(e);
                 polyGlot.getOSHandler().getInfoBox().error("Unable to start", "Unable to open PolyGlot main frame: \n"
                         + e.getMessage() + "\n"
@@ -249,6 +250,8 @@ public final class PolyGlot {
                 if (s != null) {
                     s.dispose();
                 }
+                
+                System.exit(0);
             }
             catch (Throwable t) {
                 cInfoBox.error("PolyGlot Error", "A serious error has occurred: " + t.getLocalizedMessage());

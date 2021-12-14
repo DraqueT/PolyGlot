@@ -26,13 +26,26 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.ListCellRenderer;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
+import org.darisadesigns.polyglotlina.Nodes.ConWord;
 
 /**
  *
@@ -43,14 +56,12 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
     private SwingWorker worker = null;
     private boolean mouseOver = false;
     private String defaultText = "";
+    private List<E> baseObjects;
+    private boolean filterActive = false;
+    private Object lastSetValue = null;
 
     public PComboBox(Font font) {
-        setupListeners();
-        super.setFont(font);
-        var cellRenderer = new PListCellRenderer();
-        cellRenderer.setAddLocalExtraText(PolyGlot.getPolyGlot().getCore().getPropertiesManager().isExpandedLexListDisplay());
-        cellRenderer.setFont(font);
-        this.setRenderer(cellRenderer);
+        doSetup(font, "");
     }
     
     /**
@@ -60,15 +71,111 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
      * @param _defaultText default selection text (no value)
      */
     public PComboBox(Font font, String _defaultText) {
+        doSetup(font, _defaultText);
+    }
+    
+    private void doSetup(Font font, String _defaultText) {
         setupListeners();
         super.setFont(font);
+        var cellRenderer = new PListCellRenderer();
+        cellRenderer.setAddLocalExtraText(PolyGlot.getPolyGlot().getCore().getPropertiesManager().isExpandedLexListDisplay());
+        cellRenderer.setFont(font);
+        this.setRenderer(cellRenderer);
+        ((JTextField)this.getEditor().getEditorComponent()).setHorizontalAlignment(JTextField.CENTER);
         defaultText = _defaultText;
-        this.setRenderer(new PListCellRenderer());
+    }
+    
+    private void refreshFromDataModel(ComboBoxModel<E> model) {
+        if (filterActive) {
+            return; // never refresh this value during a filter
+        }
+        
+        baseObjects.clear();
+        
+        for (int i = 0; i < model.getSize(); i++) {
+            baseObjects.add(model.getElementAt(i));
+        }
     }
     
     @Override
-    public final void setRenderer(ListCellRenderer r) {
-        super.setRenderer(r);
+    public void setModel(final ComboBoxModel<E> model) {
+        super.setModel(model);
+        
+        model.addListDataListener(new ListDataListener(){
+            @Override
+            public void intervalAdded(ListDataEvent e) {
+                refreshFromDataModel(model);
+            }
+
+            @Override
+            public void intervalRemoved(ListDataEvent e) {
+                refreshFromDataModel(model);
+            }
+
+            @Override
+            public void contentsChanged(ListDataEvent e) {
+                refreshFromDataModel(model);
+            }
+        });
+        
+        if (baseObjects == null) {
+            baseObjects = new ArrayList<>();
+        }
+        
+        refreshFromDataModel(model);
+    }
+    
+    @Override
+    public void addItem(E item) {
+        super.addItem(item);
+        baseObjects.add(item);
+    }
+    
+    @Override
+    public void removeItemAt(int itemIndex) {
+        super.removeItemAt(itemIndex);
+        baseObjects.remove(itemIndex);
+    }
+    
+    @Override
+    public void removeItem(Object item) {
+        super.removeItem(item);
+        baseObjects.remove((E)item);
+    }
+    
+    @Override
+    public void removeAllItems() {
+        super.removeAllItems();
+        baseObjects.clear();
+    }
+    
+    private void comboFilter(String filter, String ignoreText) {
+        List<E> filterArray = new ArrayList<>();
+        var textfield = (JTextField) this.getEditor().getEditorComponent();
+        var curText = textfield.getText();
+        var caretPosition = textfield.getCaretPosition();
+        
+        if (!filter.isBlank() && !filter.equals(ignoreText) && !filter.equals(defaultText)) {
+            filterActive = true;
+            for (var item : baseObjects) {
+                if (item.toString().startsWith(filter)) {
+                    filterArray.add(item);
+                }
+            }
+        } else {
+            filterActive = false;
+            filterArray = baseObjects;
+        }
+        
+        setModel(new DefaultComboBoxModel(filterArray.toArray()));
+        textfield.setText(curText);
+        textfield.setCaretPosition(caretPosition);
+        
+        if (filterArray.size() > 0) {
+            showPopup();
+        } else {
+            hidePopup();
+        }
     }
 
     /**
@@ -82,8 +189,89 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
             worker.execute();
         }
     }
+
+    @Override
+    public void setSelectedIndex(int i) {
+        super.setSelectedIndex(i);
+        lastSetValue = getItemAt(i);
+    }
+    
+    @Override
+    public void setSelectedItem(Object o) {
+        super.setSelectedItem(o);
+        lastSetValue = o;
+    }
     
     private void setupListeners() {
+        final JTextField textField = (JTextField) this.getEditor().getEditorComponent();
+        final PComboBox self = this;
+
+        this.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                self.setEditable(true);
+                if (lastSetValue != null) {
+                    textField.setText(lastSetValue.toString());
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                // do nothing
+            }
+        });
+        
+        textField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                self.showPopup();
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                self.setEditable(false);
+                var text = textField.getText();
+                var priorSelection = self.getSelectedItem();
+                
+                for (var i = 0; i < self.getItemCount(); i++) {
+                    var item = self.getItemAt(i);
+                    if (text.equals(item.toString())) {
+                        self.setSelectedItem(item);
+                        return;
+                    }
+                }
+                
+                if (priorSelection != null) {
+                    textField.setText(priorSelection.toString());
+                } else {
+                    textField.setText("");
+                    comboFilter("", defaultText);
+                    hidePopup();
+                }
+                
+                self.setSelectedItem(priorSelection);
+            }
+        });
+        
+        textField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent ke) {
+                // no arrow keys are only selection events
+                var keyCode = ke.getKeyCode();
+                if ((keyCode & KeyEvent.VK_DOWN) == KeyEvent.VK_DOWN 
+                        || (keyCode & KeyEvent.VK_UP) == KeyEvent.VK_UP
+                        || (keyCode & KeyEvent.VK_RIGHT) == KeyEvent.VK_RIGHT
+                        || (keyCode & KeyEvent.VK_LEFT) == KeyEvent.VK_LEFT) {
+                    return;
+                }
+                final var priorSelection = self.getSelectedItem();
+                SwingUtilities.invokeLater(() -> {
+                    var priorString = priorSelection == null ? "" : priorSelection.toString();
+                    comboFilter(textField.getText(), priorString);
+                });
+            }
+        });
+        
         addMouseListener(this);
     }
     
@@ -123,11 +311,10 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         if (text.isBlank() && this.getSelectedIndex() == 0) {
             text = getDefaultText();
             antiAlias.setColor(Color.decode("#909090"));
-            defaultMenuFont = PGTUtil.MENU_FONT.deriveFont((float)PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+            defaultMenuFont = ((DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager()).getFontLocal();
         }
         
         if (!text.isEmpty()) { // 0 length text makes bounding box explode
-            this.setFont(defaultMenuFont);
             FontMetrics fm = antiAlias.getFontMetrics(defaultMenuFont);
             antiAlias.setFont(defaultMenuFont);
             Rectangle2D rec = fm.getStringBounds(text, antiAlias);
@@ -155,6 +342,45 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
             antiAlias.setColor(Color.lightGray);
         }
         antiAlias.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, 5, 5);
+        
+        // draw local word if appropriate
+        var core = PolyGlot.getPolyGlot().getCore();
+        if (!filterActive && core.getPropertiesManager().isExpandedLexListDisplay()
+                && getSelectedItem() instanceof ConWord word) {
+            Font localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
+            Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
+            FontMetrics localMetrics = g.getFontMetrics(localFont);
+            FontMetrics conMetrics = g.getFontMetrics(conFont);
+            
+            var printValue = word.getLocalWord();
+            var drawPosition = (conMetrics.stringWidth(word.getValue()) / 2) 
+                    + (getWidth()/2);
+            g.setFont(localFont);
+            
+            if (!printValue.isBlank()) {
+                g.setColor(Color.blue);
+                g.drawLine(drawPosition + 10, 5, drawPosition + 10, conMetrics.getHeight());
+                g.setColor(Color.darkGray);
+                g.drawString(printValue, drawPosition + 15, localMetrics.getHeight());
+            }
+        }
+        
+        // draw default text if appropriate
+        if (!defaultText.isBlank() && !isDefaultValue()) {
+            var localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
+            var thisFont = getFont();
+            var localMetrics = g.getFontMetrics(localFont);
+            var conMetrics = g.getFontMetrics(thisFont);
+            var drawPosition = (getWidth() / 2) 
+                    - (conMetrics.stringWidth(text) / 2)
+                    - localMetrics.stringWidth(defaultText)
+                    - 10;
+            
+            g.setFont(localFont);
+            g.setColor(Color.lightGray);
+            
+            g.drawString(defaultText, drawPosition - 10, localMetrics.getHeight());
+        }
     }
     
     @Override
@@ -169,12 +395,12 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
     
     @Override
     public void mouseClicked(MouseEvent e) {
-        // do nothing
+        comboFilter("", defaultText);
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        // do nothing
+        comboFilter("", defaultText);
     }
 
     @Override

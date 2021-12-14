@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -66,6 +66,10 @@ public final class PLanguageStats {
      * @return
      */
     public static String buildWordReport(DictCore core, PLanguageStatsProgress _progress) {
+        if (!testCanRun(core)) {
+            return "";
+        }
+        
         final String[] ret = new String[1]; // using array so I can set value in a thread...
         ret[0] = "";
 
@@ -90,10 +94,9 @@ public final class PLanguageStats {
 
     private String buildWordReport() {
         String ret = "<!doctype html>\n"
-                + "<html>"
-                + "<meta charset=utf-8>\n";
-
-        ret += core.getPropertiesManager().buildPropertiesReportTitle();
+                + "<html>\n<head>\n"
+                + "<meta charset=utf-8>\n"
+                + "<title>LANGUAGE STAT REPORT</title>\n";
 
         collectValuesFromWords();
 
@@ -126,12 +129,12 @@ public final class PLanguageStats {
                 count = (double) letterCount.get(character);
             }
 
-            charStatBar.addVal(new String[]{character}, new Double[]{starting, count});
+            charStatBar.addVal(new String[]{WebInterface.encodeHTML(character)}, new Double[]{starting, count});
         }
 
         ret += "\n"
-                + "    <script type=\"text/javascript\" src=\"https://www.gstatic.com/charts/loader.js\"></script>\n"
-                + "    <script type=\"text/javascript\">\n"
+                + "    <script src=\"https://www.gstatic.com/charts/loader.js\"></script>\n"
+                + "    <script>\n"
                 + "      google.charts.load('current', {'packages':['corechart']});\n"
                 + "      google.charts.load('current', {'packages':['corechart', 'bar']});\n"
                 + "      google.charts.setOnLoadCallback(" + typesPie.getFunctionName() + ");\n"
@@ -141,8 +144,9 @@ public final class PLanguageStats {
         ret += typesPie.getBuildHTML();
         ret += charStatBar.getBuildHTML();
 
-        ret += "    </script>\n"
-                + "  <body style=\"font-family:" + core.getPropertiesManager().getFontLocalFamily() + ";\">\n"
+        ret += "    </script>\n</head>"
+                + "  <body style=\"font-family:" + core.getPropertiesManager().getFontLocalFamily() + "\">\n"
+                + core.getPropertiesManager().buildPropertiesReportTitle()
                 + "    <center>---LANGUAGE STAT REPORT---</center><br><br>";
 
         ret += formatPlain("Count of words in conlang lexicon: " + wordList.length + "<br><br>", core);
@@ -178,10 +182,32 @@ public final class PLanguageStats {
             ret += buildPhonemeTable();
             ret += buildPhonemeCount();
         }
+        
+        ret += "</body>\n</html>";
 
         progress.iterateTask("DONE!");
 
         return ret;
+    }
+    
+    private String[] htmlSanitizeArray (String[] sanitize) {
+        String[] ret = new String[sanitize.length];
+        
+        for (int i = 0; i < sanitize.length; i++) {
+            ret[i] = WebInterface.encodeHTML(sanitize[i]);
+        }
+        
+        return ret;
+    }
+    
+    private static boolean testCanRun(DictCore core) {
+        if (!core.getPropertiesManager().isAlphabetComplete()) {
+            core.getOSHandler().infoBox.warning("Unable to Calculate Statistics", 
+                    "Please complete aphabetic order before runing statistical analysis.");
+            return false;
+        }
+        
+        return true;
     }
     
     private String buildLetterComboTable() {
@@ -218,7 +244,7 @@ public final class PLanguageStats {
                 String comboStringCleaned = WebInterface.encodeHTML(x + y);
                 ret += "<td bgcolor=\"#" + String.format(format, red)
                         + String.format(format, blue)
-                        + String.format(format, blue) + "\")>"
+                        + String.format(format, blue) + "\">"
                         + formatCon(comboStringCleaned, core) + formatPlain(":"
                         + comboValue, core) + "</td>";
 
@@ -370,7 +396,6 @@ public final class PLanguageStats {
      * multi-character) it begins with
      *
      * @param word
-     * @param alphabet
      * @return
      */
     private String startsWith(String word) {
@@ -391,7 +416,6 @@ public final class PLanguageStats {
      * multi-character) it begins with
      *
      * @param word
-     * @param alphabet
      * @return
      */
     private String endsWith(String word) {
@@ -460,7 +484,6 @@ public final class PLanguageStats {
     /**
      * Gets every combination of characters and returns as an array
      *
-     * @param combinations
      * @return
      */
     private String[] getAllCombinations() {

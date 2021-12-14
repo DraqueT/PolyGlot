@@ -266,6 +266,12 @@ public class PGTUtil {
     public static final String JAVA8_PDFCOMMAND = "pdf-export";
     public static final String JAVA8_EXCELTOCVSCOMMAND = "excel-to-cvs";
     public static final String JAVA8_EXPORTTOEXCELCOMMAND = "export-to-excel";
+    public static final int CHAP_ORTHOGRAPHY = 0;
+    public static final int CHAP_GLOSSKEY = 1;
+    public static final int CHAP_CONTOLOCAL = 2;
+    public static final int CHAP_LOCALTOCON = 3;
+    public static final int CHAP_PHRASEBOOK = 4;
+    public static final int CHAP_GRAMMAR = 5;
 
     // string constants
     public static final String LANG_FILE_NAME = "PGDictionary.xml";
