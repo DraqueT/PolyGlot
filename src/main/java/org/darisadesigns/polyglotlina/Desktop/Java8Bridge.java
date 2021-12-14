@@ -107,7 +107,7 @@ public final class Java8Bridge {
             tmpConFontFileLocation = "";
         }
         
-        if (tmpLocalFontFileLocation.length() < 500) {
+        if (tmpLocalFontFile.length() < 500) {
             tmpLocalFontFileLocation = "";
         }
         
