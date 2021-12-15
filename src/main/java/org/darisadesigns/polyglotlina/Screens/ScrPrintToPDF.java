@@ -30,6 +30,7 @@ import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import java.awt.Cursor;
 import java.awt.Desktop;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -41,6 +42,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PList;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.Java8Bridge;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
@@ -66,9 +68,26 @@ public class ScrPrintToPDF extends PDialog {
         
         setupOrderList();
         setupListeners();
+        setupMenuFonts();
         setModal(true);
     }
 
+    private void setupMenuFonts() {
+        Font local = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
+        
+        chkConLocal.setFont(local);
+        chkEtymology.setFont(local);
+        chkGloss.setFont(local);
+        chkGrammar.setFont(local);
+        chkLocalCon.setFont(local);
+        chkLogographs.setFont(local);
+        chkOrtho.setFont(local);
+        chkPageNum.setFont(local);
+        chkPrintConjugations.setFont(local);
+        chkPrintPhrases.setFont(local);
+        lstChapOrder.setFont(local);
+    }
+    
     private void setupOrderList() {
         DefaultListModel model = new DefaultListModel();
         
