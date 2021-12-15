@@ -32,6 +32,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -279,6 +280,34 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         return this.getSelectedIndex() == 0 && !defaultText.isEmpty();
     }
     
+    public void paint(Graphics g) {
+        Graphics2D antiAlias = (Graphics2D) g;
+        antiAlias.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        
+        super.paint(g);
+        
+        // paint selection box no right of dropdown menu
+        if (this.isEnabled()) {
+            if (this.isPopupVisible()) {
+                antiAlias.setColor(PGTUtil.COLOR_SELECTED_BG);
+            } else {
+                antiAlias.setColor(PGTUtil.COLOR_ENABLED_BG);
+            }
+        } else {
+            antiAlias.setColor(Color.decode("#d0d0d0"));
+        }
+        antiAlias.fillRect(getWidth() - 20, 1, 20, getHeight() - 1);
+        
+        // paint down arrow
+        Path2D myPath = new Path2D.Double();
+        myPath.moveTo(getWidth() - 15, 12);
+        myPath.lineTo(getWidth() - 5, 12);
+        myPath.lineTo(getWidth() - 10, getHeight() - 12);
+        myPath.closePath();
+        antiAlias.setColor(Color.black);
+        antiAlias.fill(myPath);
+    }
+    
     @Override
     public void paintComponent(Graphics g) {
         final int buttonWidth = 20;
@@ -326,13 +355,6 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         
         antiAlias.setFont(tmpFont);
         this.setFont(tmpFont);
-        
-        if (enabled) {
-            antiAlias.setColor(PGTUtil.COLOR_ENABLED_BG);
-        } else {
-            antiAlias.setColor(Color.decode("#d0d0d0"));
-        }
-        antiAlias.fillRect(getWidth() - buttonWidth, 1, buttonWidth, getHeight() - 1);
         
         // draw outline
         if ((mouseOver || this.hasFocus()) && enabled) {
