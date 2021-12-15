@@ -91,7 +91,7 @@ public class ScrPrintToPDF extends PDialog {
     private void setupOrderList() {
         DefaultListModel model = new DefaultListModel();
         
-        model.addElement(new PrintOrderNode("Orthogrphy", PGTUtil.CHAP_ORTHOGRAPHY, chkOrtho));
+        model.addElement(new PrintOrderNode("Orthography", PGTUtil.CHAP_ORTHOGRAPHY, chkOrtho));
         model.addElement(new PrintOrderNode("Gloss Key", PGTUtil.CHAP_GLOSSKEY, chkGloss));
         model.addElement(new PrintOrderNode(core.conLabel() + " -> " + core.localLabel() + " Dictionary", PGTUtil.CHAP_CONTOLOCAL, chkConLocal));
         model.addElement(new PrintOrderNode(core.localLabel() + " -> " + core.conLabel() + " Dictionary", PGTUtil.CHAP_LOCALTOCON, chkLocalCon));
