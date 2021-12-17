@@ -237,7 +237,7 @@ public final class ScrFontImportDialog extends PDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
-        String fileName = txtFontLocation.getText();
+        var fileName = txtFontLocation.getText();
         
         try {
             var propertiesManager = ((DesktopPropertiesManager)core.getPropertiesManager());

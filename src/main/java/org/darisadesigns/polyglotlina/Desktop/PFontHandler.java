@@ -79,27 +79,21 @@ public class PFontHandler extends org.darisadesigns.polyglotlina.PFontHandler {
                         }
 
                         try {
-                            Font font = Font.createFont(Font.TRUETYPE_FONT, tempFile);
-
-                            if (font == null) {
-                                return;
-                            }
-
                             byte[] cachedFont = core.getOSHandler().getIOHandler().getByteArrayFromFile(tempFile);
 
                             if (isConFont) {
-                                ((DesktopPropertiesManager) core.getPropertiesManager()).setFontConRaw(font);
+                                ((DesktopPropertiesManager) core.getPropertiesManager())
+                                        .setFontFromFile(tempFile.getAbsolutePath());
                                 core.getPropertiesManager().setCachedFont(cachedFont);
                             } else {
-                                ((DesktopPropertiesManager) core.getPropertiesManager()).setLocalFont(font);
+                                ((DesktopPropertiesManager) core.getPropertiesManager())
+                                        .setFontFromFile(tempFile.getAbsolutePath());
                                 core.getPropertiesManager().setCachedLocalFont(cachedFont);
                             }
-                        }
-                        catch (FontFormatException e) {
+                        } catch (FontFormatException e) {
                             core.getOSHandler().getIOHandler().writeErrorLog(e);
                             throw new Exception("Could not load language font. Possible incompatible font: " + e.getMessage());
-                        }
-                        catch (IOException e) {
+                        } catch (IOException e) {
                             throw new IOException("Could not load language font. I/O exception: " + e.getMessage(), e);
                         }
                     }
@@ -429,6 +423,7 @@ public class PFontHandler extends org.darisadesigns.polyglotlina.PFontHandler {
      * @param conFont true if using the conlang font, false if using the local language font
      * @return 
      */
+    @Override
     public boolean canStringBeRendered(String value, boolean conFont) {
         Font font = conFont ?
                 ((DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager()).getFontCon() :

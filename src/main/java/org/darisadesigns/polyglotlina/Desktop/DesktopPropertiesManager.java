@@ -118,6 +118,22 @@ public class DesktopPropertiesManager extends PropertiesManager {
         return ret;
     }
     
+    /**
+     * Sets conlang font and nulls cached font value.
+     * This is to be used only by the CustHandlerFactory and internally, as it sets the font as its raw
+     * value rather than by first searching for an appropriate file beforehand.
+     *
+     * @param fontCon the fontCon to set
+     */
+    public void setFontConRaw(Font fontCon) {
+        // null cached font if being set to new font
+        if (conFont != null && !conFont.getFamily().equals(fontCon.getFamily())) {
+            cachedConFont = null;
+        }
+
+        conFont = fontCon == null ? PGTUtil.CHARIS_UNICODE : fontCon;
+    }
+    
     public void setFontFromFile(String fontPath) throws IOException, FontFormatException {
         setFontCon(PFontHandler.getFontFromFile(fontPath)
                 .deriveFont(conFontStyle, (float)conFontSize), conFontStyle, (float)conFontSize);
@@ -209,22 +225,6 @@ public class DesktopPropertiesManager extends PropertiesManager {
         return retFont == null ? 
                 PGTUtil.CHARIS_UNICODE.deriveFont((float)PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize()) : 
                 retFont.deriveFont(conFontStyle, (float)conFontSize);
-    }
-
-    /**
-     * Sets conlang font and nulls cached font value.
-     * This is to be used only by the CustHandlerFactory and internally, as it sets the font as its raw
-     * value rather than by first searching for an appropriate file beforehand.
-     *
-     * @param fontCon the fontCon to set
-     */
-    public void setFontConRaw(Font fontCon) {
-        // null cached font if being set to new font
-        if (conFont != null && !conFont.getFamily().equals(fontCon.getFamily())) {
-            cachedConFont = null;
-        }
-
-        conFont = fontCon == null ? PGTUtil.CHARIS_UNICODE : fontCon;
     }
     
     /**
