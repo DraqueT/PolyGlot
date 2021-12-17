@@ -55,6 +55,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -150,15 +151,29 @@ public final class ScrLexicon extends PFrame {
 
         lstLexicon.setModel(new PListModelLexicon());
 
-        setupFilterMenu();
+        setupLongRunningTasks();
         setupComboBoxesSwing();
-        setDefaultValues();
         populateLexicon();
         lstLexicon.setSelectedIndex(0);
         populateProperties();
-        setupListeners();
         setCustomLabels();
         setupForm();
+    }
+    
+    /**
+     * Performs setup actions that take a particularly long time to complete
+     */
+    private void setupLongRunningTasks() {
+        try {
+            new Thread(()->{
+                setupFilterMenu();
+                setDefaultValues();
+                setupListeners();
+            }).start();
+        } catch (Exception e) {
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            new DesktopInfoBox().error("Startup Error", "Unable to initialize filter menu.");
+        }
     }
     
     private void setupForm() {

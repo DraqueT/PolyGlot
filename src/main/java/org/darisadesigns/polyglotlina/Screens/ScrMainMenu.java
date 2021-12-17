@@ -142,17 +142,26 @@ public final class ScrMainMenu extends PFrame {
 
         updateAllValues(core);
         genTitle();
-        setupButtonPopouts();
-        setupAccelerators();
-        setupToDo();
-        populateRecentOpened();
-        populateExampleLanguages();
-        populateSwadeshMenu();
+        longRunningSetup();
         checkJavaVersion();
         super.setSize(super.getPreferredSize());
         addBindingsToPanelComponents(this.getRootPane());
         setupStartButtonPositining();
         setupForm();
+    }
+    
+    /**
+     * Starts separate thread for long running menu setups to speed PolyGlot boot
+     */
+    private void longRunningSetup() {
+        new Thread(() -> {
+            setupButtonPopouts();
+            setupAccelerators();
+            setupToDo();
+            populateRecentOpened();
+            populateExampleLanguages();
+            populateSwadeshMenu();
+        }).start();
     }
     
     private void setupForm() {
@@ -1206,7 +1215,6 @@ public final class ScrMainMenu extends PFrame {
         core = _core;
 
         updateAllChildValues(_core);
-        populateSwadeshMenu();
     }
 
     private void updateAllChildValues(DictCore _core) {
