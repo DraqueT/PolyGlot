@@ -24,6 +24,8 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
@@ -38,8 +40,15 @@ import org.darisadesigns.polyglotlina.Screens.ScrPrintToPDF.PrintOrderNode;
  * @author draque
  */
 public class PListCellRenderer extends DefaultListCellRenderer {
+    private Font localFont;
+    private FontMetrics localMetrics;
+    private FontMetrics conMetrics;
     private boolean addLocalExtraText = false;
     private Object curVal = null;
+    private int wordEnd;
+    private int dropPosition;
+    private int height;
+    private String printValue = "";
     
     @Override
     public String getToolTipText() {
@@ -61,6 +70,9 @@ public class PListCellRenderer extends DefaultListCellRenderer {
     
     @Override
     public void paint(Graphics g) {
+        ((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                            RenderingHints.VALUE_ANTIALIAS_ON);
+        
         if (curVal instanceof PrintOrderNode orderNode) {
             if (orderNode.isSelected()) {
                 this.setForeground(Color.black);
@@ -89,23 +101,20 @@ public class PListCellRenderer extends DefaultListCellRenderer {
         
         // prints expanded word display if set in properties
         if (this.addLocalExtraText && curVal instanceof ConWord word) {
-            DictCore core = PolyGlot.getPolyGlot().getCore();
-            Font localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
-            Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
-            FontMetrics localMetrics = g.getFontMetrics(localFont);
-            FontMetrics conMetrics = g.getFontMetrics(conFont);
-
-            int wordEnd;
-            int dropPosition;
-            int height;
-            String printValue;
-
-            printValue = word.getLocalWord();
+            var newPrintValue = word.getLocalWord();
             
-            if (!printValue.isBlank()) {
-                wordEnd = conMetrics.stringWidth(word.getValue());
-                dropPosition = (localMetrics.getHeight() * 6) / 7;
-                height = conMetrics.getHeight();
+            if (!newPrintValue.isBlank()) {
+                if (conMetrics == null) {
+                    setupFontMetrics(g);
+                }
+                
+                if (!printValue.equals(newPrintValue)) {
+                    printValue = newPrintValue;
+                    wordEnd = conMetrics.stringWidth(word.getValue());
+                    dropPosition = (localMetrics.getHeight() * 6) / 7;
+                    height = conMetrics.getHeight();
+                }
+                
                 g.setFont(localFont);
                 g.setColor(Color.blue);
                 g.drawLine(wordEnd + 10, 5, wordEnd + 10, height);
@@ -113,6 +122,14 @@ public class PListCellRenderer extends DefaultListCellRenderer {
                 g.drawString(printValue, wordEnd + 15, dropPosition);
             }
         }
+    }
+    
+    private void setupFontMetrics(Graphics g) {
+        DictCore core = PolyGlot.getPolyGlot().getCore();
+        Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
+        conMetrics = g.getFontMetrics(conFont);
+        localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
+        localMetrics = g.getFontMetrics(localFont);
     }
 
     public boolean isAddLocalExtraText() {
