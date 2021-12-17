@@ -46,4 +46,9 @@ public abstract class PFontHandler {
      * @return 
      */
     public abstract boolean canStringBeRendered(String value, boolean conFont);
+    
+    /**
+     * Pushes local font to any relevant objects
+     */
+    public abstract void updateLocalFont();
 }

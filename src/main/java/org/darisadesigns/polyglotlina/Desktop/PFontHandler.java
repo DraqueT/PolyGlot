@@ -520,4 +520,10 @@ public class PFontHandler extends org.darisadesigns.polyglotlina.PFontHandler {
 
         return ret;
     }
+    
+    @Override
+    public void updateLocalFont() {
+        Font local = ((DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager()).getFontLocal();
+        PolyGlot.getPolyGlot().getRootWindow().getToDoTree().setFont(local);
+    }
 }

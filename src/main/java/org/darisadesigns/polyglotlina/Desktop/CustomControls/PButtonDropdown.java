@@ -89,7 +89,6 @@ public class PButtonDropdown extends PButton{
     public void addActionListener(ActionListener listener) {
         final var self = this;
         super.addActionListener((ActionEvent e) -> {
-            System.out.println(dropDownPosition + ":" + curMouseRelativeX);
             if (curMouseRelativeX > dropDownPosition) {
                 popupMenu.show(PButtonDropdown.this, 0, getHeight()); // force width to render
                 var position = self.getWidth() - popupMenu.getWidth();
