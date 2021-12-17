@@ -40,6 +40,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.ToolTipUI;
 import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.text.View;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
@@ -48,16 +49,24 @@ import org.darisadesigns.polyglotlina.PGTUtil;
  * manner)
  * @author DThompson
  */
-public class PToolTipUI extends ToolTipUI
-{
+public class PToolTipUI extends ToolTipUI {
+
     private static final PToolTipUI SHARED_INSTANCE = new PToolTipUI();
     private static PropertyChangeListener sharedPropertyChangedListener;
     private PropertyChangeListener propertyChangeListener;
     
+    private Font font;
+    private String lastTextRendered = "";
+    private int height = 0;
+    private int width = 0;
+    private int fontHeight;
+    private Rectangle textRectangle;
+    private FontMetrics metrics;
+    
     public PToolTipUI() {
         super();
     }
-
+    
     public static ComponentUI createUI(JComponent c) {
         return SHARED_INSTANCE;
     }
@@ -102,8 +111,7 @@ public class PToolTipUI extends ToolTipUI
     }
 
     protected void installListeners(JComponent c) {
-        propertyChangeListener = createPropertyChangeListener(c);
-
+        propertyChangeListener = createPropertyChangeListener();
         c.addPropertyChangeListener(propertyChangeListener);
     }
 
@@ -115,7 +123,7 @@ public class PToolTipUI extends ToolTipUI
 
     /* Unfortunately this has to remain private until we can make API additions.
      */
-    private PropertyChangeListener createPropertyChangeListener(JComponent c) {
+    private PropertyChangeListener createPropertyChangeListener() {
         if (sharedPropertyChangedListener == null) {
             sharedPropertyChangedListener = new PropertyChangeHandler();
         }
@@ -130,50 +138,79 @@ public class PToolTipUI extends ToolTipUI
      */
     @Override
     public void paint(Graphics g, JComponent c) {
+        ((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         String tipText = ((JToolTip)c).getTipText();
         tipText = getFormattedTipText(tipText);
         String[] tipLines = tipText.split("\n");
-        Font font = c.getFont();
+        Insets insets = c.getInsets();
         
-        g.setFont(font);
+        // recalculate size values only if necessary
+        if (font == null || !font.getFamily().equals(c.getFont().getFamily()) || !lastTextRendered.equals(tipText)) {
+            setRenderingDetails(c);
+        }
         
-        FontMetrics metrics = g.getFontMetrics();
-        int fontHeight = metrics.getHeight();
-        int height = (fontHeight * tipLines.length) + 2;
-        int width = this.getWidestStringText(tipLines, metrics) + 10;
-        
-        int fontSize = font.getSize();
-        fontSize = fontSize == 0 ? PGTUtil.DEFAULT_FONT_SIZE.intValue() : fontSize;
-        c.setFont(font.deriveFont(fontSize));
         ((JToolTip)c).setTipText(tipText);
         
-        
-        Dimension size = new Dimension(width, height);
-        
-        c.setSize(size);
-        c.getParent().setSize(size);
-        
-        Insets insets = c.getInsets();
-        Rectangle paintTextR = new Rectangle(
-            insets.left,
-            insets.top,
-            size.width - (insets.left + insets.right),
-            size.height - (insets.top + insets.bottom));
-        
-        ((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        c.setSize(width, height);
+        c.getParent().setSize(width, height);
         
         g.setColor(Color.black);
         g.fillRect(insets.left,
             insets.top,
-            size.width - (insets.left + insets.right),
-            size.height - (insets.top + insets.bottom));
+            width - (insets.left + insets.right),
+            height - (insets.top + insets.bottom));
         
         g.setColor(Color.white);
         
         for (int i = 0 ; i < tipLines.length; i++) {
-            g.drawString(tipLines[i], paintTextR.x + 5,
-                    paintTextR.y + metrics.getAscent() + (i * (fontHeight)));
+            g.drawString(tipLines[i], textRectangle.x + 5,
+                    textRectangle.y + metrics.getAscent() + (i * (fontHeight)));
         }
+        
+        c.setSize(width, height);
+        componentChanged(c);
+    }
+    
+    @Override
+    public Dimension getPreferredSize(JComponent c) {
+        if (width == 1) {
+            setRenderingDetails(c);
+        }
+        
+        return new Dimension(width, height);
+    }
+    
+    /**
+     * Sets up all measurements needed for rendering (slightly expensive, do not call more than necessary)
+     */
+    private void setRenderingDetails(JComponent c) {
+        Graphics g = c.getGraphics() == null 
+                ? PolyGlot.getPolyGlot().getRootWindow().getGraphics() 
+                : c.getGraphics();
+        String tipText = ((JToolTip)c).getTipText();
+        tipText = getFormattedTipText(tipText);
+        String[] tipLines = tipText.split("\n");
+        Insets insets = c.getInsets();
+        lastTextRendered = tipText;
+            
+        font = c.getFont();
+
+        g.setFont(font);
+
+        metrics = g.getFontMetrics();
+        fontHeight = metrics.getHeight();
+        height = (fontHeight * tipLines.length) + 2;
+        width = this.getWidestStringText(tipLines, metrics) + 10;
+
+        int fontSize = font.getSize();
+        fontSize = fontSize == 0 ? PGTUtil.DEFAULT_FONT_SIZE.intValue() : fontSize;
+        textRectangle = new Rectangle(
+            insets.left,
+            insets.top,
+            width - (insets.left + insets.right),
+            height - (insets.top + insets.bottom));
+
+        c.setFont(font.deriveFont(fontSize));
     }
     
     /**
@@ -209,7 +246,7 @@ public class PToolTipUI extends ToolTipUI
             lines.add(curLine);
         }
         
-        return lines.stream().collect(Collectors.joining("\n"));
+        return lines.stream().collect(Collectors.joining("\n")).trim();
     }
     
     /**
@@ -225,22 +262,6 @@ public class PToolTipUI extends ToolTipUI
         }
         
         return ret;
-    }
-
-    @Override
-    public Dimension getPreferredSize(JComponent c) {
-        FontMetrics fm = c.getFontMetrics(c.getFont());
-        Insets insets = c.getInsets();
-
-        Dimension prefSize = new Dimension(insets.left+insets.right,
-                                           insets.top+insets.bottom);
-        String text = ((JToolTip)c).getTipText();
-
-        if (text != null && !text.isEmpty()) {
-            prefSize.width += fm.stringWidth(text);
-            prefSize.height += fm.getHeight();
-        }
-        return prefSize;
     }
 
     @Override

@@ -41,24 +41,21 @@ public class PListCellRenderer extends DefaultListCellRenderer {
     Object curVal = null;
     
     @Override
-    public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-        String tip = "";
-        curVal = value;
+    public String getToolTipText() {
+        String tip = super.getToolTipText();
         
-        if (value instanceof ConWord conWord) {
+        if (curVal instanceof ConWord conWord) {
             try {
                 tip = conWord.getWordSummaryValue(true);
             } catch (Exception e) {
                 // user is informed of this elsewhere. Simply default to stringified value
                 tip = conWord.toString();
             }
-        } else if (value != null) {
-            tip = value.toString();
+        } else if (curVal != null) {
+            tip = curVal.toString();
         }
         
-        setToolTipText(tip);
-        
-        return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+        return tip;
     }
     
     @Override
