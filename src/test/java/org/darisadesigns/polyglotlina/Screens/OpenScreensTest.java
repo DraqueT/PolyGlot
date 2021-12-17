@@ -287,7 +287,12 @@ public class OpenScreensTest {
         }
         
         List<LexiconProblemNode> problemNodes = new ArrayList<>();
-        problemNodes.add(new LexiconProblemNode(new ConWord(), "PROBLEM", LexiconProblemNode.ProblemType.ConWord));
+        problemNodes.add(new LexiconProblemNode(
+                new ConWord(), 
+                "PROBLEM", 
+                LexiconProblemNode.ProblemType.ConWord,
+                LexiconProblemNode.SEVARITY_ERROR
+        ));
         ScrLanguageProblemDisplay s = new ScrLanguageProblemDisplay(problemNodes, core);
         s.dispose();
         

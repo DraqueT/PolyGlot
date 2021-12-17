@@ -29,7 +29,9 @@ import javax.swing.JList;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
+import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 import org.darisadesigns.polyglotlina.Screens.ScrPrintToPDF.PrintOrderNode;
 
 /**
@@ -38,7 +40,7 @@ import org.darisadesigns.polyglotlina.Screens.ScrPrintToPDF.PrintOrderNode;
  */
 public class PListCellRenderer extends DefaultListCellRenderer {
     private boolean addLocalExtraText = false;
-    Object curVal = null;
+    private Object curVal = null;
     
     @Override
     public String getToolTipText() {
@@ -65,6 +67,22 @@ public class PListCellRenderer extends DefaultListCellRenderer {
                 this.setForeground(Color.black);
             } else {
                 this.setForeground(Color.gray);
+            }
+        } else if (curVal instanceof LexiconProblemNode problemNode) {
+            if (!problemNode.useConFont) {
+                this.setFont(((DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager()).getFontLocal());
+            }
+            
+            switch (problemNode.severity) {
+                case LexiconProblemNode.SEVARITY_INFO -> {
+                    this.setForeground(Color.black);
+                }
+                case LexiconProblemNode.SEVARITY_WARNING -> {
+                    this.setForeground(Color.orange);
+                }
+                case LexiconProblemNode.SEVARITY_ERROR -> {
+                    this.setForeground(Color.red);
+                }
             }
         }
         
@@ -104,5 +122,18 @@ public class PListCellRenderer extends DefaultListCellRenderer {
 
     public void setAddLocalExtraText(boolean addLocalExtraText) {
         this.addLocalExtraText = addLocalExtraText;
+    }
+    
+    @Override
+    public Component getListCellRendererComponent(
+        JList<?> list,
+        Object value,
+        int index,
+        boolean isSelected,
+        boolean cellHasFocus)
+    {
+        curVal = value;
+        
+        return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
     }
 }

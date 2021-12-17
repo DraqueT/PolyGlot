@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -26,6 +26,7 @@ import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode.*;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PListCellRenderer;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
@@ -48,6 +49,7 @@ public class ScrLanguageProblemDisplay extends PDialog {
         
         DefaultListModel<LexiconProblemNode> model = new DefaultListModel<>();
         jList1.setModel(model);
+        jList1.setCellRenderer(new PListCellRenderer());
         
         problems.forEach((problem) -> {
             model.addElement(problem);
