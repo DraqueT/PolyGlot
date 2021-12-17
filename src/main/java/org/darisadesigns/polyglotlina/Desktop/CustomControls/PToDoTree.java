@@ -22,6 +22,7 @@ package org.darisadesigns.polyglotlina.Desktop.CustomControls;
 import org.darisadesigns.polyglotlina.Nodes.ToDoNode;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -50,6 +51,7 @@ public final class PToDoTree extends JTree {
     private TreePath clickedPath;
     private final boolean nightMode;
     private final double fontSize;
+    private final CheckBoxCellRenderer checkCellRenderer;
 
     public PToDoTree(boolean _nightMode, double _fontSize) {
         super();
@@ -58,8 +60,8 @@ public final class PToDoTree extends JTree {
         
         // Disabling toggling by double-click
         this.setToggleClickCount(0);
-        // Overriding cell renderer by new one defined above
-        this.setCellRenderer(new CheckBoxCellRenderer());
+        checkCellRenderer = new CheckBoxCellRenderer();
+        this.setCellRenderer(checkCellRenderer);
 
         // Overriding selection model by an empty one
         DefaultTreeSelectionModel dtsm = new DefaultTreeSelectionModel() {      
@@ -174,11 +176,20 @@ public final class PToDoTree extends JTree {
             }           
         });
     }
+    
+    @Override
+    public void setFont(Font font) {
+        super.setFont(font);
+        
+        if (checkCellRenderer != null) {
+            checkCellRenderer.setFont(font);
+        }
+    }
 
     public static class CheckChangeEvent extends EventObject {
         public CheckChangeEvent(Object _source) {
             super(_source);
-        }       
+        }
     }
 
     public static TreePath getTreePath(TreeNode treeNode) {
@@ -268,6 +279,13 @@ public final class PToDoTree extends JTree {
             checkBox = new PCheckBox(nightMode, fontSize);
             add(checkBox, BorderLayout.CENTER);
             setOpaque(false);
+        }
+        
+        @Override
+        public void setFont(Font font) {
+            if (checkBox != null) {
+                checkBox.setFont(font);
+            }
         }
 
         @Override

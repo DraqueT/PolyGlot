@@ -254,9 +254,10 @@ public final class PolyGlot {
                 System.exit(0);
             }
             catch (Throwable t) {
+                // t.printStackTrace();
                 cInfoBox.error("PolyGlot Error", "A serious error has occurred: " + t.getLocalizedMessage());
                 DesktopIOHandler.getInstance().writeErrorLog(t);
-                throw t;
+                System.exit(0);
             }
         });
     }

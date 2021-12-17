@@ -897,6 +897,10 @@ public final class ScrMainMenu extends PFrame {
         toDoTree.setModel(new PToDoTreeModel(ToDoTreeNode.createToDoTreeNode(core.getToDoManager().getRoot())));
         ((DefaultTreeModel) toDoTree.getModel()).nodeStructureChanged((ToDoTreeNode) toDoTree.getModel().getRoot());
     }
+    
+    public PToDoTree getToDoTree() {
+        return toDoTree;
+    }
 
     private void setupEasterEgg() {
         final Window self = this;

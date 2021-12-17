@@ -256,10 +256,10 @@ public final class ScrLexicon extends PFrame {
 
             ConWord curWord = getCurrentWord();
             saveValuesTo(curWord);
-            Font listFont = core.getPropertiesManager().isUseLocalWordLex() ?
-                    ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal() :
-                    ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
-            lstLexicon.setFont(listFont);
+            Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
+            Font localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
+            lstLexicon.setFont(core.getPropertiesManager().isUseLocalWordLex() ? localFont : conFont);
+            cmbType.setFont(localFont);
             setupComboBoxesSwing();
             curPopulating = localPopulating;
             forceUpdate = false;
@@ -2018,7 +2018,7 @@ public final class ScrLexicon extends PFrame {
         populateProperties();
 
         // if looking for illegals, always check legality value of word, otherwise let it slide for user convenience
-        if (chkFindBad.isSelected()) {
+        if (chkFindBad != null && chkFindBad.isSelected()) {
             setWordLegality();
         }
     }//GEN-LAST:event_lstLexiconValueChanged
