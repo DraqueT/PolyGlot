@@ -190,8 +190,8 @@ public class IOHandlerTest {
     }
     
     @Test
-    public void iniFile() {
-        System.out.println("IOHandlerTest.iniFile");
+    public void testIniFile() {
+        System.out.println("IOHandlerTest.testIniFile");
         
         try {
             String testScreenName = "Silly Sergal Merp Screen";
@@ -203,6 +203,7 @@ public class IOHandlerTest {
             Point expectedScreenPosition = new Point(13, 42);
             Dimension expectedScreenDimension = new Dimension(69, 420);
             int toDoBarPositionExpected = 666;
+            int autoSavMs = 12345678;
 
             // create test core to set values in...
             DictCore core = DummyCore.newCore();
@@ -217,6 +218,7 @@ public class IOHandlerTest {
             opt.setToDoBarPosition(toDoBarPositionExpected);
             opt.setMaximized(true);
             opt.setDividerPosition(testScreenName, toDoBarPositionExpected);
+            opt.setMsBetweenSaves(autoSavMs);
 
             // save values to disk...
             DesktopIOHandler.getInstance().writeOptionsIni(core.getWorkingDirectory().getAbsolutePath(), opt);
@@ -237,6 +239,7 @@ public class IOHandlerTest {
             assertEquals(toDoBarPositionExpected, opt.getToDoBarPosition());
             assertEquals(toDoBarPositionExpected, opt.getDividerPosition(testScreenName));
             assertTrue(opt.isMaximized());
+            assertEquals(autoSavMs, opt.getMsBetweenSaves());
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             fail(e);

@@ -548,7 +548,7 @@ public final class PolyGlot {
                     autoSave();
                 }
             }
-        }, PGTUtil.SECONDS_BETWEEN_AUTO_SAVES);
+        }, polyGlot.getOptionsManager().getMsBetweenSaves());
     }
     
     /**

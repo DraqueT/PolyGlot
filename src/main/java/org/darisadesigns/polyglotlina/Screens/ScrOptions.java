@@ -54,20 +54,8 @@ public final class ScrOptions extends PDialog {
         // TODO: Either finish night mode or remove references to it.
         chkNightMode.setVisible(false);
         
-        txtRevisionNumbers.setInputVerifier(new InputVerifier() {
-            @Override
-            public boolean verify(JComponent input) {
-                try {
-                    Integer.parseInt(((JTextField)input).getText());
-                } catch (NumberFormatException e) {
-                    // user error
-                    // IOHandler.writeErrorLog(e);
-                    new DesktopInfoBox(optionsParent).warning("Bad Input", "Please provide an integer (number) value.");
-                    return false;
-                }
-                return true;
-            }
-        });
+        ((PlainDocument)txtRevisionNumbers.getDocument()).setDocumentFilter(new PTextFieldFilter());
+        ((PlainDocument)txtAutoSave.getDocument()).setDocumentFilter(new PTextFieldFilter());
     }
 
     @Override
@@ -80,11 +68,14 @@ public final class ScrOptions extends PDialog {
             boolean nightModeOriginal = options.isNightMode();
             int maxReversion = Integer.parseInt(txtRevisionNumbers.getText());
             maxReversion = maxReversion > -1 ? maxReversion : 1;
+            int autoSaveInteral = (int) 
+                    (Float.parseFloat(txtAutoSave.getText()) * 60000); // multiply to get val in MS
             
             options.setAnimateWindows(chkResize.isSelected());
             options.setNightMode(chkNightMode.isSelected());
             options.setMenuFontSize(fontSize);
             options.setMaxReversionCount(maxReversion);
+            options.setMsBetweenSaves(autoSaveInteral);
             
             // only refresh if font size changed or night mode setting switched
             if (fontSizeOriginal != fontSize|| nightModeOriginal != chkNightMode.isSelected()) {
@@ -137,6 +128,8 @@ public final class ScrOptions extends PDialog {
         jLabel2 = new PLabel("", menuFontSize);
         txtRevisionNumbers = new javax.swing.JTextField();
         btnResetOptions = new PButton();
+        jLabel3 = new PLabel("", menuFontSize);
+        txtAutoSave = new javax.swing.JTextField();
         btnOk = new PButton();
 
         setTitle("PolyGlot Options");
@@ -151,7 +144,9 @@ public final class ScrOptions extends PDialog {
         chkResize.setText("Auto Resize Window");
         chkResize.setToolTipText("Resize window to last size of given module automatically");
 
-        jLabel1.setText("Default Font Size");
+        jLabel1.setText("Menu Font Size");
+
+        txtTextFontSize.setToolTipText(" Size of menu text (not optimized for alternate values)");
 
         chkNightMode.setText("Night Mode");
 
@@ -168,30 +163,38 @@ public final class ScrOptions extends PDialog {
             }
         });
 
+        jLabel3.setText("Autosave Frequency");
+
+        txtAutoSave.setToolTipText("Frequency in minutes between saving to temp recovery file");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(btnResetOptions)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(chkResize, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(chkNightMode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtTextFontSize, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtTextFontSize, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtRevisionNumbers, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 148, Short.MAX_VALUE))
-                    .addComponent(chkNightMode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(txtRevisionNumbers, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtAutoSave, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 148, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(btnResetOptions)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -208,7 +211,11 @@ public final class ScrOptions extends PDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtRevisionNumbers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 95, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtAutoSave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
                 .addComponent(btnResetOptions))
         );
 
@@ -255,6 +262,7 @@ public final class ScrOptions extends PDialog {
         chkNightMode.setSelected(mgr.isNightMode());
         txtTextFontSize.setText(Double.toString(mgr.getMenuFontSize()));
         txtRevisionNumbers.setText(Integer.toString(mgr.getMaxReversionCount()));
+        txtAutoSave.setText(Float.toString(mgr.getMsBetweenSaves()/60000.0f));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -264,7 +272,9 @@ public final class ScrOptions extends PDialog {
     private javax.swing.JCheckBox chkResize;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField txtAutoSave;
     private javax.swing.JTextField txtRevisionNumbers;
     private javax.swing.JTextField txtTextFontSize;
     // End of variables declaration//GEN-END:variables

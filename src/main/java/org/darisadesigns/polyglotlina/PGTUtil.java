@@ -54,7 +54,7 @@ public class PGTUtil {
     public static final String BUILD_DATE_TIME_LOCATION = "/assets/org/DarisaDesigns/buildDate";
     public static final String[] SWADESH_LISTS = {"Original_Swadesh", "Modern_Swadesh"};
     public static final int WINDOWS_CLIPBOARD_DELAY = 15;
-    public static final int SECONDS_BETWEEN_AUTO_SAVES = 300000; // 5 minutes in microsecnds
+    public static final int DEFAULT_MS_BETWEEN_AUTO_SAVES = 300000; // 5 minutes in microsecnds
     public static final int MAX_TOOLTIP_LENGTH = 55;
     public static final String AUTO_SAVE_FILE_NAME = ".pgtAutoSave.bak";
     public static final String TROUBLE_TICKET_URL = "https://github.com/DraqueT/PolyGlot/issues/new";
@@ -254,6 +254,7 @@ public class PGTUtil {
     public static final String OPTIONS_TODO_DIV_LOCATION = "ToDoDividerLocation";
     public static final String OPTIONS_DIVIDER_POSITION = "OptionsDividerPosition";
     public static final String OPTIONS_MAXIMIZED = "OptionsMaximized";
+    public static final String OPTIONS_MSBETWEENSAVES = "MsBetweenSaves";
 
     // Java 8 bridge constants
     public static final String JAVA8_JAVA_COMMAND = "java";

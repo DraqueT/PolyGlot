@@ -50,8 +50,10 @@ public class DesktopOptionsManager {
     private int toDoBarPosition = -1;
     private final DictCore core;
     private javafx.scene.text.Font menuFontFX;
+    private int msBetweenSaves;
 
     public DesktopOptionsManager(DictCore _core) {
+        msBetweenSaves = PGTUtil.DEFAULT_MS_BETWEEN_AUTO_SAVES;
         core = _core;
         this.setupFXMenuFont();
     }
@@ -295,5 +297,13 @@ public class DesktopOptionsManager {
     private void setupFXMenuFont() {
         InputStream is = this.getClass().getResourceAsStream(PGTUtil.BUTTON_FONT_LOCATION);
         this.menuFontFX = javafx.scene.text.Font.loadFont(is, menuFontSize);
+    }
+
+    public int getMsBetweenSaves() {
+        return msBetweenSaves;
+    }
+
+    public void setMsBetweenSaves(int msBetweenSaves) {
+        this.msBetweenSaves = msBetweenSaves;
     }
 }

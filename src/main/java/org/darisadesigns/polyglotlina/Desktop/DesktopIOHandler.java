@@ -429,6 +429,9 @@ public final class DesktopIOHandler implements IOHandler {
                             opMan.setDividerPosition(splitSet[0], position);
                         }
                     }
+                    case PGTUtil.OPTIONS_MSBETWEENSAVES -> {
+                        opMan.setMsBetweenSaves(Integer.parseInt(bothVal[1]));
+                    }
                     case PGTUtil.OPTIONS_AUTO_RESIZE ->
                         opMan.setAnimateWindows(bothVal[1].equals(PGTUtil.TRUE));
                     case PGTUtil.OPTIONS_MAXIMIZED ->
@@ -1055,7 +1058,6 @@ public final class DesktopIOHandler implements IOHandler {
      * @throws IOException on failure or lack of permission to write
      */
     public void writeOptionsIni(String workingDirectory, DesktopOptionsManager opMan) throws IOException {
-
         try ( Writer f0 = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(workingDirectory
                         + File.separator + PGTUtil.POLYGLOT_INI), StandardCharsets.UTF_8))) {
@@ -1132,6 +1134,9 @@ public final class DesktopIOHandler implements IOHandler {
             for (Entry<String, Integer> location : opMan.getDividerPositions().entrySet()) {
                 nextLine += ("," + location.getKey() + ":" + location.getValue());
             }
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_MSBETWEENSAVES + "=" + opMan.getMsBetweenSaves();
             f0.write(nextLine + newLine);
         }
     }
