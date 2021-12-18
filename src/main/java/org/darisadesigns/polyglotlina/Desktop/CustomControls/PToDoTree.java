@@ -184,6 +184,10 @@ public final class PToDoTree extends JTree {
         if (checkCellRenderer != null) {
             checkCellRenderer.setFont(font);
         }
+        var model = (DefaultTreeModel)getModel();
+        if (model != null) {
+            model.reload((TreeNode)model.getRoot());
+        }
     }
 
     public static class CheckChangeEvent extends EventObject {
@@ -277,6 +281,7 @@ public final class PToDoTree extends JTree {
 
             this.setLayout(new BorderLayout());
             checkBox = new PCheckBox(nightMode, fontSize);
+            checkBox.setFont(getFont());
             add(checkBox, BorderLayout.CENTER);
             setOpaque(false);
         }
@@ -286,6 +291,8 @@ public final class PToDoTree extends JTree {
             if (checkBox != null) {
                 checkBox.setFont(font);
             }
+            
+            super.setFont(font);
         }
 
         @Override

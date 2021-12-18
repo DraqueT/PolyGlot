@@ -87,7 +87,7 @@ public class PFontHandler extends org.darisadesigns.polyglotlina.PFontHandler {
                                 core.getPropertiesManager().setCachedFont(cachedFont);
                             } else {
                                 ((DesktopPropertiesManager) core.getPropertiesManager())
-                                        .setFontFromFile(tempFile.getAbsolutePath());
+                                        .setLocalFontFromFile(tempFile.getAbsolutePath());
                                 core.getPropertiesManager().setCachedLocalFont(cachedFont);
                             }
                         } catch (FontFormatException e) {

@@ -890,6 +890,8 @@ public final class ScrMainMenu extends PFrame {
         }
 
         populateToDo();
+        // force update of todo's font
+        PolyGlot.getPolyGlot().getOSHandler().getPFontHandler().updateLocalFont();
     }
 
     private void populateToDo() {
