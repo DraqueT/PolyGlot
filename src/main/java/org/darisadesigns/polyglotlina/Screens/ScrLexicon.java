@@ -178,6 +178,7 @@ public final class ScrLexicon extends PFrame {
                 populateProperties();
                 setCustomLabels();
                 setupForm();
+                setupListeners();
             }).start();
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
@@ -651,7 +652,7 @@ public final class ScrLexicon extends PFrame {
             populateProperties();
         });
 
-        Platform.runLater(filterThread::start);
+        Platform.runLater(filterThread);
         gridTitlePane.setExpanded(false);
     }
     
@@ -682,19 +683,19 @@ public final class ScrLexicon extends PFrame {
                 && txtProcSrc != null 
                 && cmbRootSrc != null 
                 && cmbRootSrc.getValue() != null) {
-            int filterType = 0;
+            int filterType = -1;
             if (cmbTypeSrc != null
                     && cmbTypeSrc.getValue() != null 
-                    && cmbTypeSrc.getValue().equals(defTypeValue)) {
+                    && !cmbTypeSrc.getValue().equals(defTypeValue)) {
                 filterType = ((TypeNode) cmbTypeSrc.getValue()).getId();
             }
-
-            ret = txtConSrc.getText().isEmpty()
-                    && txtDefSrc.getText().isEmpty()
-                    && txtLocalSrc.getText().isEmpty()
-                    && txtProcSrc.getText().isEmpty()
-                    && filterType == defTypeValue.getId()
-                    && cmbRootSrc.getValue().toString().equals(defRootValue.getValue());
+            
+            ret = txtConSrc.getText().isEmpty();
+            ret = ret && txtDefSrc.getText().isEmpty();
+            ret = ret && txtLocalSrc.getText().isEmpty();
+            ret = ret && txtProcSrc.getText().isEmpty();
+            ret = ret && filterType == defTypeValue.getId();
+            ret = ret && cmbRootSrc.getValue().toString().equals(defRootValue.getValue());
         }
         
         return ret;
@@ -702,6 +703,7 @@ public final class ScrLexicon extends PFrame {
 
     /**
      * Filters lexicon. Call RunFilter() instead of this, which runs on a timed session to prevent overlapping filters.
+     * Note: MUST be run from Platform.runLater() due to JFX object manipulation
      */
     private void filterLexicon() {
         if (curPopulating) {
@@ -1419,7 +1421,7 @@ public final class ScrLexicon extends PFrame {
      */
     private void setupComboBoxesFX() {
         cmbTypeSrc.getItems().clear();
-        cmbTypeSrc.getItems().add("");
+        cmbTypeSrc.getItems().add(defTypeValue);
         cmbTypeSrc.getSelectionModel().selectFirst();
         cmbTypeSrc.getItems().addAll(Arrays.asList(core.getTypes().getNodes()));
 
