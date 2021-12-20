@@ -59,6 +59,7 @@ public class PGTUtil {
     public static final int MAX_MS_MENU_STARTUP_WAIT = 5000; // 5 seconds in microseconds
     public static final String AUTO_SAVE_FILE_NAME = ".pgtAutoSave.bak";
     public static final String TROUBLE_TICKET_URL = "https://github.com/DraqueT/PolyGlot/issues/new";
+    public static final String ERROR_LOG_SPEARATOR = "\n-=-=-=-=-=-=-\n";
 
     // properties on words
     public static final String LEXICON_XID = "lexicon";

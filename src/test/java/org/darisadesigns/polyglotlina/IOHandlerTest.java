@@ -109,7 +109,8 @@ public class IOHandlerTest {
             int systemInfoLength = DesktopIOHandler.getInstance().getSystemInformation().length();
 
             // off by one due to concatenation effect when adding system info (newline)
-            assertEquals(logLength, PGTUtil.MAX_LOG_CHARACTERS + systemInfoLength + 1);
+            assertEquals(logLength, PGTUtil.MAX_LOG_CHARACTERS 
+                    + systemInfoLength + PGTUtil.ERROR_LOG_SPEARATOR.length());
         } catch (FileNotFoundException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
@@ -443,6 +444,22 @@ public class IOHandlerTest {
             resultFile.delete();
             assertFalse(resultFile.exists());
         } catch (IOException e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testMultipleErrorLogs() {
+        IOHandler ioHandler = DesktopIOHandler.getInstance();
+        
+        ioHandler.writeErrorLog(new Exception("testError"));
+        ioHandler.writeErrorLog(new Exception("testError"));
+        
+        try {
+            String errorLog = ioHandler.getErrorLog();
+            assertEquals(errorLog.indexOf(PGTUtil.ERROR_LOG_SPEARATOR),
+                    errorLog.lastIndexOf(PGTUtil.ERROR_LOG_SPEARATOR));
+        } catch (FileNotFoundException e) {
             fail(e);
         }
     }

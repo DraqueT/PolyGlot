@@ -135,9 +135,10 @@ public final class ScrLexicon extends PFrame {
      */
     public ScrLexicon(DictCore _core, ScrMainMenu _menuParent) {
         super(_core);
+        menuParent = _menuParent;
         
         // Lexicon must always wait until menu load is complete
-        if (!_menuParent.isMenuReady()) {
+        if (menuParent != null && !menuParent.isMenuReady()) {
             try {
                 _menuParent.getSetupThread().join(PGTUtil.MAX_MS_MENU_STARTUP_WAIT);
             } catch (InterruptedException e) {
@@ -152,7 +153,6 @@ public final class ScrLexicon extends PFrame {
         defRootValue.setValue("Root");
         defRootValue.setId(-1);
 
-        menuParent = _menuParent;
         fxPanel = new JFXPanel();
         txtRom = new PTextField(core, true, "Romanization");
         txtRom.setToolTipText("Romanized representation of word");

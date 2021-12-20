@@ -1237,6 +1237,14 @@ public final class DesktopIOHandler implements IOHandler {
             if (errorLog.exists()) {
                 try ( Scanner logScanner = new Scanner(errorLog).useDelimiter("\\Z")) {
                     curContents = logScanner.hasNext() ? logScanner.next() : "";
+                    
+                    // wipe old system info if it still exists
+                    if (curContents.contains(PGTUtil.ERROR_LOG_SPEARATOR)) {
+                        curContents = curContents.substring(
+                                curContents.indexOf(PGTUtil.ERROR_LOG_SPEARATOR) 
+                                        + PGTUtil.ERROR_LOG_SPEARATOR.length());
+                    }
+                    
                     int length = curContents.length();
                     int newLength = length + errorMessage.length();
 
@@ -1247,7 +1255,8 @@ public final class DesktopIOHandler implements IOHandler {
             }
 
             try ( BufferedWriter writer = new BufferedWriter(new FileWriter(errorLog))) {
-                String output = getSystemInformation() + "\n" + curContents + errorMessage + "\n";
+                String output = getSystemInformation() + PGTUtil.ERROR_LOG_SPEARATOR
+                        + curContents + errorMessage + "\n";
 //                System.out.println("Writing error to: " + errorLog.getAbsolutePath());
                 writer.write(output);
             }
