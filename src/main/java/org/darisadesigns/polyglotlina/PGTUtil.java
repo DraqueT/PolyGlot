@@ -56,6 +56,7 @@ public class PGTUtil {
     public static final int WINDOWS_CLIPBOARD_DELAY = 15;
     public static final int DEFAULT_MS_BETWEEN_AUTO_SAVES = 300000; // 5 minutes in microsecnds
     public static final int MAX_TOOLTIP_LENGTH = 55;
+    public static final int MAX_MS_MENU_STARTUP_WAIT = 5000; // 5 seconds in microseconds
     public static final String AUTO_SAVE_FILE_NAME = ".pgtAutoSave.bak";
     public static final String TROUBLE_TICKET_URL = "https://github.com/DraqueT/PolyGlot/issues/new";
 

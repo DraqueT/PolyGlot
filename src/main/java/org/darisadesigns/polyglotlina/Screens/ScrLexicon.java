@@ -55,7 +55,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -137,6 +136,16 @@ public final class ScrLexicon extends PFrame {
     public ScrLexicon(DictCore _core, ScrMainMenu _menuParent) {
         super(_core);
         
+        // Lexicon must always wait until menu load is complete
+        if (!_menuParent.isMenuReady()) {
+            try {
+                _menuParent.getSetupThread().join(PGTUtil.MAX_MS_MENU_STARTUP_WAIT);
+            } catch (InterruptedException e) {
+                DesktopIOHandler.getInstance().writeErrorLog(e);
+                new DesktopInfoBox().error("Setup Error", "Error setting up lexicon: " + e.getLocalizedMessage());
+            }
+        }
+        
         defTypeValue.setValue("Part of Speech");
         defTypeValue.setId(-1);
 
@@ -151,24 +160,24 @@ public final class ScrLexicon extends PFrame {
 
         lstLexicon.setModel(new PListModelLexicon());
 
-        setupLongRunningTasks();
-        setupComboBoxesSwing();
-        populateLexicon();
-        lstLexicon.setSelectedIndex(0);
-        populateProperties();
-        setCustomLabels();
-        setupForm();
+        performLongRunningSetupTasks();
     }
     
     /**
      * Performs setup actions that take a particularly long time to complete
      */
-    private void setupLongRunningTasks() {
+    private void performLongRunningSetupTasks() {
         try {
             new Thread(()->{
                 setupFilterMenu();
+                setupComboBoxesSwing();
                 setDefaultValues();
-                setupListeners();
+                forceUpdate = true; // prevent change listener from firing during load
+                populateLexicon();
+                forceUpdate = false;
+                populateProperties();
+                setCustomLabels();
+                setupForm();
             }).start();
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);

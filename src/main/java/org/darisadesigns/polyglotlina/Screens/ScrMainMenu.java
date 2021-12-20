@@ -102,6 +102,10 @@ import org.darisadesigns.polyglotlina.WebInterface;
  */
 public final class ScrMainMenu extends PFrame {
 
+    public boolean isMenuReady() {
+        return menuReady;
+    }
+
     private final JMenuItem accelPublish = new JMenuItem();
     private final JMenuItem accelSave = new JMenuItem();
     private final JMenuItem accelNew = new JMenuItem();
@@ -112,6 +116,8 @@ public final class ScrMainMenu extends PFrame {
     private final ScrLexicon cacheLexicon;
     private Image backGround;
     private final List<Window> childWindows = new ArrayList<>();
+    private Thread longRunningSetup;
+    private boolean menuReady = false;
 
     /**
      * Creates new form ScrMainMenu
@@ -123,8 +129,8 @@ public final class ScrMainMenu extends PFrame {
     @SuppressWarnings("LeakingThisInConstructor")
     public ScrMainMenu(DictCore _core) {
         super(_core);
-
         initComponents();
+        longRunningSetup();
 
         toDoTree = new PToDoTree(nightMode, menuFontSize);
         cacheLexicon = ScrLexicon.run(core, this);
@@ -142,7 +148,6 @@ public final class ScrMainMenu extends PFrame {
 
         updateAllValues(core);
         genTitle();
-        longRunningSetup();
         checkJavaVersion();
         super.setSize(super.getPreferredSize());
         addBindingsToPanelComponents(this.getRootPane());
@@ -153,15 +158,21 @@ public final class ScrMainMenu extends PFrame {
     /**
      * Starts separate thread for long running menu setups to speed PolyGlot boot
      */
-    private void longRunningSetup() {
-        new Thread(() -> {
+    private synchronized void longRunningSetup() {
+        longRunningSetup = new Thread(() -> {
             setupButtonPopouts();
             setupAccelerators();
             setupToDo();
             populateRecentOpened();
             populateExampleLanguages();
             populateSwadeshMenu();
-        }).start();
+            menuReady = true;
+        });
+        longRunningSetup.start();
+    }
+    
+    public Thread getSetupThread() {
+        return longRunningSetup;
     }
     
     private void setupForm() {
