@@ -24,6 +24,7 @@ Any value defined here will override the pom.xml file value but is only applicab
         <word>conwords</word>
         <word>html</word>
         <word>javafx</word>
+        <word>Quickentry</word>
         <word>quicksaving</word>
         <word>Swadesh</word>
         <word>tooltiptext</word>

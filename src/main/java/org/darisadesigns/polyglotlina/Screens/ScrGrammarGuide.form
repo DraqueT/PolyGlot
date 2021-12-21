@@ -96,7 +96,7 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- Name --&quot;)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;Name&quot;)"/>
               </AuxValues>
             </Component>
             <Container class="javax.swing.JPanel" name="jPanel3">
@@ -536,7 +536,7 @@
             </Container>
             <Component class="javax.swing.JTextField" name="txtSearch">
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- Search --&quot;)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;Search&quot;)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel1">
