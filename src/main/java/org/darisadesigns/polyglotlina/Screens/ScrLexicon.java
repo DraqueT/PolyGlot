@@ -894,10 +894,6 @@ public final class ScrLexicon extends PFrame {
 
             txtErrorBox.setText(txtErrorBox.getText() + message);
             element.setBackground(hColor);
-            if (element instanceof PComboBox eleComb) {
-                eleComb.makeFlash(hColor, false);
-            }
-
             ret = false;
         }
 
