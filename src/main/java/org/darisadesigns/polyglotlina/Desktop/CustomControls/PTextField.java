@@ -293,9 +293,13 @@ public final class PTextField extends JTextField implements CoreUpdateSubscripti
         if (skipRepaint || core == null) {
             return;
         }
-        
-        //setupLook();
 
+        if (isDefaultText()) {
+            setForeground(Color.lightGray);
+        } else {
+            setForeground(Color.black);
+        }
+        
         try {
             DesktopPropertiesManager propMan = ((DesktopPropertiesManager)core.getPropertiesManager());
             skipRepaint = true;
