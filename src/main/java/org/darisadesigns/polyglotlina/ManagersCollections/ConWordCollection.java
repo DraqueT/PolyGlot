@@ -178,7 +178,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         }
 
         if (word.getWordTypeId() == 0 && core.getPropertiesManager().isTypesMandatory()) {
-            ret.typeError = "Types set to mandatory.";
+            ret.typeError = "Part of Speech set to mandatory.";
         }
 
         if (word.getLocalWord().isEmpty() && core.getPropertiesManager().isLocalMandatory()) {

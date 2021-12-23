@@ -71,7 +71,7 @@ public class CheckLanguageErrorsTest {
         
         curWord = problems[2];
         assertEquals(curWord.problemWord.getValue(), "missing-POS-and-alphabet");
-        assertTrue(curWord.description.contains("Types set to mandatory."));
+        assertTrue(curWord.description.contains("Part of Speech set to mandatory."));
         assertTrue(curWord.description.contains("Word contains characters undefined in alphabet settings"));
         assertTrue(curWord.description.contains("Suspect characters:\"POS\""));
         assertTrue(curWord.description.contains("Word pronunciation cannot be generated properly (missing regex pattern)."));

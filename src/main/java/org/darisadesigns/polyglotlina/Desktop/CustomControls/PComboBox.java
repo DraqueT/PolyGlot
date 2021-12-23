@@ -93,7 +93,6 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         }
         
         baseObjects.clear();
-        
         for (int i = 0; i < model.getSize(); i++) {
             baseObjects.add(model.getElementAt(i));
         }
@@ -125,12 +124,6 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         }
         
         refreshFromDataModel(model);
-    }
-    
-    @Override
-    public void addItem(E item) {
-        super.addItem(item);
-        baseObjects.add(item);
     }
     
     @Override
