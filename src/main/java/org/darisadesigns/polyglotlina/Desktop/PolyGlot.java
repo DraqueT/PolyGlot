@@ -569,8 +569,8 @@ public final class PolyGlot {
      * @throws java.lang.Exception 
      */
     public static void setTestPolyGlot(PolyGlot _polyGlot) throws Exception {
-        if (!PGTUtil.isInJUnitTest()) {
-            throw new Exception("ONLY TO BE RUN AS SETUP FOR JUNIT TESTING");
+        if (!PGTUtil.isInJUnitTest() && !PGTUtil.isUITestingMode()) {
+            throw new Exception("ONLY TO BE RUN AS SETUP FOR TESTING");
         }
         
         PolyGlot.polyGlot = _polyGlot;

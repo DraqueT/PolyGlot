@@ -488,6 +488,7 @@ public class PGTUtil {
     // ENVIRONMENT VARIABLES
     private static File errorDirectory = null;
     private static boolean forceSuppressDialogs = false;
+    private static boolean uiTestingMode = false;
     
     // OS CONSTANTS
     public static String OSX_FINDER_INFO_VALUE_DIC_FILES = "574443444D535350000000000000000000000000000000000000000000000000";
@@ -640,6 +641,21 @@ public class PGTUtil {
                 return false;
         }
         return true;
+    }
+    
+    /**
+     * For development purposes only
+     */
+    public static void enterUITestingMode() {
+        uiTestingMode = true;
+    }
+    
+    /**
+     * returns true if currently in UI testing mode
+     * @return 
+     */
+    public static boolean isUITestingMode() {
+        return uiTestingMode;
     }
 
     protected PGTUtil() {}
