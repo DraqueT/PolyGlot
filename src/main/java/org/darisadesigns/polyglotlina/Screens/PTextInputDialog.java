@@ -122,7 +122,7 @@ public final class PTextInputDialog extends PDialog {
     
     private Dimension initialSize() {
         return new Dimension(this.getPreferredSize().width, txtDialog.getPreferredSize().height 
-                + pnlTextFields.getPreferredSize().height + jButton1.getPreferredSize().height * 2 + 5);
+                + pnlTextFields.getPreferredSize().height + jButton1.getPreferredSize().height * 2 + 20);
     }
     
     /**
