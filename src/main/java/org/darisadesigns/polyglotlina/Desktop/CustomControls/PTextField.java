@@ -335,16 +335,19 @@ public final class PTextField extends JTextField implements CoreUpdateSubscripti
                 refreshFontRender = false;
             }
             
-            if (!lastRenderedValue.equals(getText())) {
-                lastRenderedValue = getText();
+            var curText = getText();
+            
+            if (curText.isBlank() && this.isFocusOwner()) { // initial selection w/ empty text
+                drawPosition = (getWidth() / 2) - localMetrics.stringWidth(defText);
+            } else if (!lastRenderedValue.equals(curText)) { // recalc width only if text changed (expensive)
+                lastRenderedValue = curText;
                 drawPosition = (getWidth() / 2) 
-                    - (conMetrics.stringWidth(getText()) / 2)
+                    - (conMetrics.stringWidth(lastRenderedValue) / 2)
                     - localMetrics.stringWidth(defText);
             }
             
             g.setFont(localFont);
             g.setColor(Color.lightGray);
-            
             g.drawString(defText, drawPosition - 10, conMetrics.getHeight());
         }
     }
