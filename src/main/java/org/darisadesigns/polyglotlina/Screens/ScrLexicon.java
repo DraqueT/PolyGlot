@@ -1302,7 +1302,9 @@ public final class ScrLexicon extends PFrame {
         defNode.setValue("");
         defNode.setId(-1);
         cmbType.addItem(defNode);
-        for (TypeNode curNode : core.getTypes().getNodes()) {
+        var posNodes = core.getTypes().getNodes();
+        cmbType.setEnabled(posNodes.length > 0); // disable if none exist for clarity
+        for (TypeNode curNode : posNodes) {
             cmbType.addItem(curNode);
         }
     }
@@ -1388,14 +1390,19 @@ public final class ScrLexicon extends PFrame {
             txtLocalWord.setEnabled(enable);
             txtProc.setEnabled(enable);
             txtRom.setEnabled(enable);
-            cmbType.setEnabled(enable);
+            cmbType.setEnabled(enable && core.getTypes().getNodes().length > 0);
             chkProcOverride.setEnabled(enable);
             chkRuleOverride.setEnabled(enable);
             btnDeclensions.setEnabled(enable);
             btnLogographs.setEnabled(enable && btnLogoShouldEnable());
             btnEtymology.setEnabled(enable);
             classPropMap.values().forEach((classComp) -> {
-                classComp.setEnabled(enable);
+                if (classComp instanceof PComboBox classCombo) {
+                    System.out.println(classCombo.getModel().getSize());
+                    classCombo.setEnabled(enable && classCombo.getModel().getSize() > 1);
+                } else {
+                    classComp.setEnabled(enable);
+                }
             });
         };
         SwingUtilities.invokeLater(runnable);

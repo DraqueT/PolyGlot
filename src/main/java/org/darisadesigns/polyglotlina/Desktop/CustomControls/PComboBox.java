@@ -166,7 +166,7 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         textfield.setText(curText);
         textfield.setCaretPosition(caretPosition);
         
-        if (filterArray.size() > 0) {
+        if (filterArray.size() > 0 && this.isEnabled()) {
             showPopup();
         } else {
             hidePopup();
@@ -205,9 +205,11 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         this.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                self.setEditable(true);
-                if (lastSetValue != null) {
-                    textField.setText(lastSetValue.toString());
+                if (self.isEnabled()) {
+                    self.setEditable(true);
+                    if (lastSetValue != null) {
+                        textField.setText(lastSetValue.toString());
+                    }
                 }
             }
 
@@ -220,32 +222,36 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         textField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                self.showPopup();
+                if (self.isEnabled()) {
+                    self.showPopup();
+                }
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                self.setEditable(false);
-                var text = textField.getText();
-                var priorSelection = self.getSelectedItem();
-                
-                for (var i = 0; i < self.getItemCount(); i++) {
-                    var item = self.getItemAt(i);
-                    if (text.equals(item.toString())) {
-                        self.setSelectedItem(item);
-                        return;
+                if (self.isEnabled()) {
+                    self.setEditable(false);
+                    var text = textField.getText();
+                    var priorSelection = self.getSelectedItem();
+
+                    for (var i = 0; i < self.getItemCount(); i++) {
+                        var item = self.getItemAt(i);
+                        if (text.equals(item.toString())) {
+                            self.setSelectedItem(item);
+                            return;
+                        }
                     }
+
+                    if (priorSelection != null) {
+                        textField.setText(priorSelection.toString());
+                    } else {
+                        textField.setText("");
+                        comboFilter("", defaultText);
+                        hidePopup();
+                    }
+
+                    self.setSelectedItem(priorSelection);
                 }
-                
-                if (priorSelection != null) {
-                    textField.setText(priorSelection.toString());
-                } else {
-                    textField.setText("");
-                    comboFilter("", defaultText);
-                    hidePopup();
-                }
-                
-                self.setSelectedItem(priorSelection);
             }
         });
         
