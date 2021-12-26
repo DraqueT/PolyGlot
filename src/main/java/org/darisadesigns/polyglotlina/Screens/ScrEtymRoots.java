@@ -37,6 +37,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.Box;
@@ -117,7 +119,7 @@ public final class ScrEtymRoots extends PDialog {
         
         // Cycle through existing external parents and add them to the display
         List<EtyExternalParent> parents = Arrays.asList(core.getEtymologyManager().getWordExternalParents(word.getId()));
-        parents.stream().map((extPar) -> {
+        parents.stream().map((final var extPar) -> {
             JPanel miniPanel = new JPanel();
             final PTextField p = new PTextField(core, true, "");
             PButton delButton = new PButton(nightMode, menuFontSize);
@@ -136,6 +138,54 @@ public final class ScrEtymRoots extends PDialog {
                 toolTipString += " - " + extPar.getDefinition();
             }
             p.setToolTipText(toolTipString);
+            final Window parentScreen = this;
+            p.addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    // do nothing
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    PTextInputDialog dialog = new PTextInputDialog(parentScreen, core,
+                    "New External Parent", "Please enter details for the new external parent.");
+                        dialog.addField("External Word", 
+                                true, 
+                                "This is the word in an external language which is the etymological root of your invented word.", 
+                                extPar.getValue());
+                        dialog.addField("Origin Language", 
+                                true, 
+                                "This is the language where the root originates.", 
+                                extPar.getExternalLanguage());
+                        dialog.addField("Brief Definition", 
+                                true,
+                                "This is a brief text description of the root's definition.",
+                                extPar.getDefinition());
+                        dialog.setVisible(true);
+                        var result = dialog.getOrderedFields();
+                        
+                        extPar.setValue(result[0].getText());
+                        extPar.setExternalLanguage(result[1].getText());
+                        extPar.setDefinition(result[2].getText());
+                        
+                        setupExternalParentsPanel();
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    // do nothing
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    // do nothing
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    // do nothing
+                }
+            });
             delButton.setText("-");
             delButton.setToolTipText("Remove external parent from etymological lineage");
             delButton.addActionListener((ActionEvent e) -> {
@@ -160,9 +210,9 @@ public final class ScrEtymRoots extends PDialog {
         addButton.addActionListener((ActionEvent e) -> {
             PTextInputDialog dialog = new PTextInputDialog(parentScreen, core,
                     "New External Parent", "Please enter details for the new external parent.");
-            dialog.addField("External Word", true, "This is the word in an external language which is the etymological root of your invented word.");
-            dialog.addField("Origin Language", true, "This is the language where the root originates.");
-            dialog.addField("Brief Definition", true, "This is a brief text description of the root's definition.");
+            dialog.addField("External Word", true, "This is the word in an external language which is the etymological root of your invented word.", "");
+            dialog.addField("Origin Language", true, "This is the language where the root originates.", "");
+            dialog.addField("Brief Definition", true, "This is a brief text description of the root's definition.", "");
             dialog.setVisible(true);
             addNewExtParent(dialog.getOrderedFields());
             setupExternalParentsPanel();
