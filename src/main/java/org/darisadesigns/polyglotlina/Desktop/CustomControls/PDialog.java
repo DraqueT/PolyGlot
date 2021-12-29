@@ -26,6 +26,7 @@ import org.darisadesigns.polyglotlina.Desktop.PGTUtil.WindowMode;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.FocusEvent;
@@ -52,13 +53,19 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
     protected final boolean nightMode;
        
     public PDialog(DictCore _core) {
-        core = _core;
-        menuFontSize = PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();
-        nightMode = PolyGlot.getPolyGlot().getOptionsManager().isNightMode();
-        this.setupOS();
+        this(_core, true);
+    }
+    
+    public PDialog(DictCore _core, Frame owner) {
+        this(_core, true, owner);
     }
     
     public PDialog(DictCore _core, boolean _firstVisible) {
+        this(_core, _firstVisible, PolyGlot.getPolyGlot().getRootWindow());
+    }
+    
+    public PDialog(DictCore _core, boolean _firstVisible, Frame owner) {
+        super(owner);
         core = _core;
         firstVisible = _firstVisible;
         menuFontSize = PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();
