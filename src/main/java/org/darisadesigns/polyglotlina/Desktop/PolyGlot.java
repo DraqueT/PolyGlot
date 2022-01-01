@@ -338,7 +338,10 @@ public final class PolyGlot {
             autoSaveFile.delete();
         }
         
-        System.exit(0);
+        // allow JUnit to handle this state itself
+        if (!PGTUtil.isInJUnitTest()) {
+            System.exit(0);
+        }
     }
 
     public DictCore getNewCore() {
