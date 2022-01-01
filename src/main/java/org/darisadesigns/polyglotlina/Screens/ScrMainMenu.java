@@ -148,7 +148,6 @@ public final class ScrMainMenu extends PFrame {
 
         updateAllValues(core);
         genTitle();
-        checkJavaVersion();
         super.setSize(super.getPreferredSize());
         addBindingsToPanelComponents(this.getRootPane());
         setupStartButtonPositining();
@@ -385,27 +384,6 @@ public final class ScrMainMenu extends PFrame {
         }
 
         childWindows.clear();
-    }
-
-    /**
-     * Checks to make certain Java is a high enough version. Informs user and
-     * quits otherwise.
-     */
-    private void checkJavaVersion() {
-        String javaVersion = System.getProperty("java.version");
-
-        if (javaVersion.startsWith("1.0")
-                || javaVersion.startsWith("1.1")
-                || javaVersion.startsWith("1.2")
-                || javaVersion.startsWith("1.3")
-                || javaVersion.startsWith("1.4")
-                || javaVersion.startsWith("1.5")
-                || javaVersion.startsWith("1.6")) {
-            core.getOSHandler().getInfoBox().error("Please Upgrade Java", "Java " + javaVersion
-                    + " must be upgraded to run PolyGlot. Version 1.7 or higher is required.\n\n"
-                    + "Please upgrade at https://java.com/en/download/.");
-            System.exit(0);
-        }
     }
 
     /**
