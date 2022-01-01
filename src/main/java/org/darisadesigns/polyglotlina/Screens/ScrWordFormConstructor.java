@@ -280,7 +280,7 @@ public class ScrWordFormConstructor extends PFrame {
         
         @Override
         public String toString() {
-            return label;
+            return label.isEmpty() ? " " : label;
         }
     }
 
