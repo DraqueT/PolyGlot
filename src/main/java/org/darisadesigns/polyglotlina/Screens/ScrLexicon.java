@@ -48,6 +48,7 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
@@ -87,6 +88,8 @@ import javax.swing.InputMap;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.ListModel;
@@ -94,6 +97,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButtonDropdown;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.Nodes.DictNode;
@@ -126,6 +130,7 @@ public final class ScrLexicon extends PFrame {
     private final ScrMainMenu menuParent;
     private final PTextField txtRom;
     private boolean enableProcGen = true;
+    private ScrWordFormConstructor formConstructor = null;
 
     /**
      * Creates new form scrLexicon
@@ -1088,6 +1093,9 @@ public final class ScrLexicon extends PFrame {
             saveAllValues();
             killLogoChild();
             PolyGlot.getPolyGlot().getOptionsManager().setDividerPosition(getClass().getName(), jSplitPane1.getDividerLocation());
+            if (formConstructor != null && !formConstructor.isDisposed()) {
+                formConstructor.dispose();
+            }
             super.dispose();
         }
     }
@@ -1398,9 +1406,8 @@ public final class ScrLexicon extends PFrame {
             btnEtymology.setEnabled(enable);
             classPropMap.values().forEach((classComp) -> {
                 if (classComp instanceof PComboBox classCombo) {
-                    System.out.println(classCombo.getModel().getSize());
                     classCombo.setEnabled(enable && classCombo.getModel().getSize() > 1);
-                } else {
+                } else if (classComp != null) {
                     classComp.setEnabled(enable);
                 }
             });
@@ -1680,6 +1687,35 @@ public final class ScrLexicon extends PFrame {
             Platform.runLater(r);
         });
     }
+    
+    private void openFormHelper() {
+        if (formConstructor == null || formConstructor.isDisposed()) {
+            formConstructor = new ScrWordFormConstructor(core, getCurrentWord());
+            formConstructor.setVisible(true);
+        } else if (!formConstructor.isDisposed()) {
+            formConstructor.toFront();
+        }
+    }
+    
+    private JPopupMenu getConjPopupMenu() {
+        var menu = new JPopupMenu();
+        var allConj = new JMenuItem("Open Conjugations");
+        allConj.setToolTipText("Edit or view declined/conjugated forms of your words here.");
+        allConj.addActionListener((ActionEvent e) -> {
+            viewDeclensions();
+            setWordLegality();
+        });
+        var formHelper = new JMenuItem("Form Composition Helper");
+        formHelper.setToolTipText("Opens Form Composition Helper (very helpful for agglutinative languages)");
+        formHelper.addActionListener((ActionEvent e) -> {
+            openFormHelper();
+        });
+        
+        menu.add(allConj);
+        menu.add(formHelper);
+        
+        return menu;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -1699,7 +1735,7 @@ public final class ScrLexicon extends PFrame {
         txtProc = new PTextField(core, true, "Pronunciation");
         chkProcOverride = new PCheckBox(nightMode, menuFontSize);
         chkRuleOverride = new PCheckBox(nightMode, menuFontSize);
-        btnDeclensions = new PButton(nightMode, menuFontSize);
+        btnDeclensions = new PButtonDropdown(getConjPopupMenu());
         btnLogographs = new PButton(nightMode, menuFontSize);
         jScrollPane1 = new javax.swing.JScrollPane();
         txtErrorBox = new javax.swing.JTextPane();
@@ -1843,9 +1879,6 @@ public final class ScrLexicon extends PFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlClasses, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(txtProc, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(chkRuleOverride)
-                .addContainerGap(333, Short.MAX_VALUE))
             .addComponent(txtLocalWord)
             .addComponent(cmbType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(txtConWord)
@@ -1853,14 +1886,15 @@ public final class ScrLexicon extends PFrame {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(chkRuleOverride)
                     .addComponent(chkProcOverride)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(btnDeclensions)
+                        .addComponent(btnDeclensions, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnEtymology)
+                        .addComponent(btnEtymology, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnLogographs)))
-                .addGap(0, 91, Short.MAX_VALUE))
+                .addContainerGap(118, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2024,6 +2058,10 @@ public final class ScrLexicon extends PFrame {
                     && index < lstLexicon.getModel().getSize()) {
                 ConWord saveWord = lstLexicon.getModel().getElementAt(index).getConWord();
                 saveValuesTo(saveWord);
+            }
+            
+            if (selected != -1 && formConstructor != null && !formConstructor.isDisposed()) {
+                formConstructor.setWord(lstLexicon.getModel().getElementAt(selected).getConWord());
             }
             
             txtErrorBox.setText("");

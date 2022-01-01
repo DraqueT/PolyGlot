@@ -22,8 +22,11 @@ Any value defined here will override the pom.xml file value but is only applicab
         <word>conlang</word>
         <word>conword</word>
         <word>conwords</word>
+        <word>dropdown</word>
+        <word>dropoff</word>
         <word>html</word>
         <word>javafx</word>
+        <word>monosylables</word>
         <word>Quickentry</word>
         <word>quicksaving</word>
         <word>Swadesh</word>

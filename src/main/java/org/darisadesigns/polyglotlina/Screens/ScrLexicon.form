@@ -168,10 +168,6 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="pnlClasses" alignment="1" max="32767" attributes="0"/>
                           <Component id="txtProc" alignment="1" max="32767" attributes="0"/>
-                          <Group type="102" attributes="0">
-                              <Component id="chkRuleOverride" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="333" max="32767" attributes="0"/>
-                          </Group>
                           <Component id="txtLocalWord" alignment="0" max="32767" attributes="0"/>
                           <Component id="cmbType" alignment="0" max="32767" attributes="0"/>
                           <Component id="txtConWord" alignment="0" max="32767" attributes="0"/>
@@ -179,16 +175,17 @@
                           <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="chkRuleOverride" min="-2" max="-2" attributes="0"/>
                                   <Component id="chkProcOverride" min="-2" max="-2" attributes="0"/>
                                   <Group type="102" attributes="0">
-                                      <Component id="btnDeclensions" min="-2" max="-2" attributes="0"/>
+                                      <Component id="btnDeclensions" min="-2" pref="116" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="btnEtymology" min="-2" max="-2" attributes="0"/>
+                                      <Component id="btnEtymology" min="-2" pref="95" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="btnLogographs" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace min="0" pref="91" max="32767" attributes="0"/>
+                              <EmptySpace pref="118" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -293,7 +290,7 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDeclensionsActionPerformed"/>
                       </Events>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize)"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButtonDropdown(getConjPopupMenu())"/>
                       </AuxValues>
                     </Component>
                     <Component class="javax.swing.JButton" name="btnLogographs">

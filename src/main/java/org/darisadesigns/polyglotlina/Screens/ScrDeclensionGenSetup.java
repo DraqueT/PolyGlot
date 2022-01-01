@@ -52,7 +52,7 @@ public final class ScrDeclensionGenSetup extends PDialog {
      * @param _typeId
      */
     public ScrDeclensionGenSetup(DictCore _core, int _typeId) {
-        super(_core);
+        super(_core, true, null);
         
         typeId = _typeId;
         initComponents();

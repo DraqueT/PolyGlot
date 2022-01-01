@@ -38,7 +38,7 @@ import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
  * A version of PButton which supports dropdown functionality
  * @author draque
  */
-public class PButtonDropdown extends PButton{
+public class PButtonDropdown extends PButton {
     GeneralPath arrow;
     JPopupMenu popupMenu;
     boolean firstTime = true;
