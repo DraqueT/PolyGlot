@@ -144,7 +144,7 @@ public final class ScrFontImportDialog extends PDialog {
             public void setCurrentDirectory(File dir) {
                 super.setCurrentDirectory(dir);
                 if (dir != null 
-                        && dir.getAbsolutePath().endsWith(System.getenv("windir") + "/Fonts")
+                        && dir.getAbsolutePath().endsWith(System.getenv("windir") + "\\Fonts")
                         && curDialog != null
                         && !alreadyRun) {
                     alreadyRun = true;
