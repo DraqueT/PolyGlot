@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2021-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -39,8 +39,8 @@ import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
  * @author draque
  */
 public class PButtonDropdown extends PButton {
-    GeneralPath arrow;
-    JPopupMenu popupMenu;
+    private GeneralPath arrow;
+    private final JPopupMenu popupMenu;
     boolean firstTime = true;
     int dropDownPosition;
     int curMouseRelativeX;
@@ -117,7 +117,7 @@ public class PButtonDropdown extends PButton {
         dropDownPosition = (int)xOffset - 5;
         
         if(firstTime) {
-            createArrow(xOffset, getHeight());
+            createArrow(xOffset - 3, getHeight());
             firstTime = false;
         }
         
