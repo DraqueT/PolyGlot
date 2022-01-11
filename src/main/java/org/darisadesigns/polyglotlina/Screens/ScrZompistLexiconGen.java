@@ -563,6 +563,12 @@ public class ScrZompistLexiconGen extends PFrame {
     
     private void importValues() {
         var valueCount = lstImport.getModel().getSize();
+        
+        if (valueCount == 0) {
+            new DesktopInfoBox(this).warning("No Values to Import", "Please pull some values to import into the import list first!");
+            return;
+        }
+        
         var choice = new DesktopInfoBox(this).yesNoCancel("Import Values?", "Import " + valueCount + " values into your language?");
         
         if (choice == JOptionPane.YES_OPTION) {
