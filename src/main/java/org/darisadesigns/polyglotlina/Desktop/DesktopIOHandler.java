@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -587,16 +587,14 @@ public final class DesktopIOHandler implements IOHandler {
                 DictCore test = new DictCore(new DesktopPropertiesManager(), osHandler, new PGTUtil(), new DesktopGrammarManager());
                 PolyGlot.getTestShell(test);
                 test.readFile(tmpSaveLocation.getAbsolutePath());
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 throw new IOException(ex);
             }
 
             try {
                 copyFile(tmpSaveLocation.toPath(), finalFile.toPath(), true);
                 tmpSaveLocation.delete(); // wipe temp file if successful
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 throw new IOException("Unable to save file: " + e.getMessage(), e);
             }
 
@@ -685,6 +683,11 @@ public final class DesktopIOHandler implements IOHandler {
     public void copyFile(Path fromLocation, Path toLocation, boolean replaceExisting) throws IOException {
         StandardCopyOption option = replaceExisting ? StandardCopyOption.REPLACE_EXISTING : StandardCopyOption.ATOMIC_MOVE;
         Files.copy(fromLocation, toLocation, option);
+        
+        if (!new File(toLocation.toString()).exists()) {
+            throw new IOException("File " + toLocation.toString() + " could not be written to its target destination.\n"
+                + "Please try another location or change destination permissions.");
+        }
     }
 
     private String writePriorStatesToArchive(ZipOutputStream out, DictCore core) throws IOException {
