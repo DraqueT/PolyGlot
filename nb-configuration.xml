@@ -29,7 +29,9 @@ Any value defined here will override the pom.xml file value but is only applicab
         <word>monosylables</word>
         <word>Quickentry</word>
         <word>quicksaving</word>
+        <word>Rosenfelder</word>
         <word>Swadesh</word>
         <word>tooltiptext</word>
+        <word>Zompist</word>
     </spellchecker-wordlist>
 </project-shared-configuration>

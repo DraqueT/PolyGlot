@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -71,6 +71,14 @@ public final class PTextField extends JTextField implements CoreUpdateSubscripti
     private FontMetrics localMetrics;
     private FontMetrics conMetrics;
     private int drawPosition;
+    
+    public PTextField(String _defText) {
+        this(true, _defText);
+    }
+    
+    public PTextField(boolean _overrideFont, String _defText) {
+        this(PolyGlot.getPolyGlot().getCore(), _overrideFont, _defText);
+    }
     
     /**
      * Init for PDialogs

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -208,7 +208,7 @@ public final class ScrMainMenu extends PFrame {
             nextList.setToolTipText("Loads words from " + menuName + " into your lexicon.");
             nextList.addActionListener((ActionEvent evt)-> {
                 URL swadUrl = ScrMainMenu.class.getResource(finalLocation);
-                try ( BufferedInputStream bs = new BufferedInputStream(swadUrl.openStream())) {
+                try (BufferedInputStream bs = new BufferedInputStream(swadUrl.openStream())) {
                     finalCore.getWordCollection().loadSwadesh(bs, true);
                     updateAllValues(finalCore);
                 } catch (Exception ex) {
@@ -225,7 +225,7 @@ public final class ScrMainMenu extends PFrame {
         customImport.addActionListener((ActionEvent e) -> {
             JFileChooser chooser = new JFileChooser();
             chooser.setMultiSelectionEnabled(false);
-            chooser.setDialogTitle("Select line delimited Swadesh list.");
+            chooser.setDialogTitle("Select line delimited Swadesh list file.");
             
             if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                 File file = chooser.getSelectedFile();
@@ -843,6 +843,7 @@ public final class ScrMainMenu extends PFrame {
 
     private void deselectButtons() {
         ((PButton) btnProp).setActiveSelected(false);
+        ((PButton) btnZompistWordGenerator).setActiveSelected(false);
         ((PButton) btnPos).setActiveSelected(false);
         ((PButton) btnLogos).setActiveSelected(false);
         ((PButton) btnLexicon).setActiveSelected(false);
@@ -1026,32 +1027,35 @@ public final class ScrMainMenu extends PFrame {
     private void setupButtonPopouts() {
         // not all buttons support this feature, but those that don't should still display it in grey
         setupDropdownMenu((PButton) btnLexicon, () -> {
-            return null;
-        }, HelpHandler.LEXICON_HELP, false);
+                return null;
+            }, HelpHandler.LEXICON_HELP, false);
         setupDropdownMenu((PButton) btnPos, () -> {
-            return ScrTypes.run(core);
-        }, HelpHandler.PARTSOFSPEECH_HELP, true);
+                return ScrTypes.run(core);
+            }, HelpHandler.PARTSOFSPEECH_HELP, true);
+        setupDropdownMenu((PButton) btnZompistWordGenerator, () -> {
+                return null;
+            }, HelpHandler.ZOMPIST_HELP, false);
         setupDropdownMenu((PButton) btnClasses, () -> {
-            return new ScrWordClasses(core);
-        }, HelpHandler.LEXICALCLASSES_HELP, true);
+                return new ScrWordClasses(core);
+            }, HelpHandler.LEXICALCLASSES_HELP, true);
         setupDropdownMenu((PButton) btnGrammar, () -> {
-            return new ScrGrammarGuide(core);
-        }, HelpHandler.GRAMMAR_HELP, true);
+                return new ScrGrammarGuide(core);
+            }, HelpHandler.GRAMMAR_HELP, true);
         setupDropdownMenu((PButton) btnLogos, () -> {
-            return new ScrLogoDetails(core);
-        }, HelpHandler.LOGOGRAPHS_HELP, true);
+                return new ScrLogoDetails(core);
+            }, HelpHandler.LOGOGRAPHS_HELP, true);
         setupDropdownMenu((PButton) btnPhonology, () -> {
-            return new ScrPhonology(core);
-        }, HelpHandler.PHONOLOGY_HELP, true);
+                return new ScrPhonology(core);
+            }, HelpHandler.PHONOLOGY_HELP, true);
         setupDropdownMenu((PButton) btnProp, () -> {
-            return new ScrLangProps(core);
-        }, HelpHandler.LANGPROPERTIES_HELP, true);
+                return new ScrLangProps(core);
+            }, HelpHandler.LANGPROPERTIES_HELP, true);
         setupDropdownMenu((PButton) btnQuiz, () -> {
-            return null;
-        }, HelpHandler.QUIZGENERATOR_HELP, false);
+                return null;
+            }, HelpHandler.QUIZGENERATOR_HELP, false);
         setupDropdownMenu((PButton) btnPhrasebook, () -> {
-            return new ScrPhrasebook(core);
-        }, HelpHandler.PHRASEBOOK_HELP, true);
+                return new ScrPhrasebook(core);
+            }, HelpHandler.PHRASEBOOK_HELP, true);
     }
 
     /**
@@ -1478,6 +1482,7 @@ public final class ScrMainMenu extends PFrame {
         btnPhonology = new PButton(nightMode, menuFontSize);
         btnQuiz = new PButton(nightMode, menuFontSize);
         btnPhrasebook = new PButton(nightMode, menuFontSize);
+        btnZompistWordGenerator = new PButton();
         pnlMain = new javax.swing.JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -1561,7 +1566,7 @@ public final class ScrMainMenu extends PFrame {
         pnlToDo.setLayout(pnlToDoLayout);
         pnlToDoLayout.setHorizontalGroup(
             pnlToDoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 117, Short.MAX_VALUE)
+            .addGap(0, 1, Short.MAX_VALUE)
         );
         pnlToDoLayout.setVerticalGroup(
             pnlToDoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1646,29 +1651,40 @@ public final class ScrMainMenu extends PFrame {
             }
         });
 
+        btnZompistWordGenerator.setText("Word Generator");
+        btnZompistWordGenerator.setToolTipText("An adaptation of the Zompist word generator, which can create words for your lexicon based on your rules and import them against swadesh values (or blank)");
+        btnZompistWordGenerator.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnZompistWordGeneratorActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlSideButtonsLayout = new javax.swing.GroupLayout(pnlSideButtons);
         pnlSideButtons.setLayout(pnlSideButtonsLayout);
         pnlSideButtonsLayout.setHorizontalGroup(
             pnlSideButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlSideButtonsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pnlSideButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(pnlSideButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnZompistWordGenerator, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnLexicon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnPos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnClasses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnProp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnLogos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnGrammar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnLogos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnPhonology, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnQuiz, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnPhrasebook, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnPhrasebook, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnProp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnQuiz, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         pnlSideButtonsLayout.setVerticalGroup(
             pnlSideButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlSideButtonsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnLexicon, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnZompistWordGenerator)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnPos, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1685,7 +1701,7 @@ public final class ScrMainMenu extends PFrame {
                 .addComponent(btnProp, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnQuiz)
-                .addContainerGap(123, Short.MAX_VALUE))
+                .addContainerGap(88, Short.MAX_VALUE))
         );
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
@@ -1761,7 +1777,7 @@ public final class ScrMainMenu extends PFrame {
         pnlMain.setLayout(pnlMainLayout);
         pnlMainLayout.setHorizontalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 616, Short.MAX_VALUE)
             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(pnlStartButtons, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -2360,6 +2376,11 @@ public final class ScrMainMenu extends PFrame {
         packLanguage();
     }//GEN-LAST:event_mnuPackLanguageActionPerformed
 
+    private void btnZompistWordGeneratorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZompistWordGeneratorActionPerformed
+        var zompist = new ScrZompistLexiconGen(core);
+        changeScreen(zompist, zompist.getWindow(), (PButton) evt.getSource());
+    }//GEN-LAST:event_btnZompistWordGeneratorActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClasses;
     private javax.swing.JButton btnGrammar;
@@ -2373,6 +2394,7 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JButton btnPos;
     private javax.swing.JButton btnProp;
     private javax.swing.JButton btnQuiz;
+    private javax.swing.JButton btnZompistWordGenerator;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

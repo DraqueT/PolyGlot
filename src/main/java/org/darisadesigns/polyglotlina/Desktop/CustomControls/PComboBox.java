@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -62,6 +62,13 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
     private Object lastSetValue = null;
     private Color lastBg = this.getBackground();
 
+    public PComboBox(boolean useConFont) {
+        this(useConFont ?
+                ((DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager()).getFontCon() :
+                ((DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager()).getFontLocal()
+        );
+    }
+    
     public PComboBox(Font font) {
         doSetup(font, "");
     }

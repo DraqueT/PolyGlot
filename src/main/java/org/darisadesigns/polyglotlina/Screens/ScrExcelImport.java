@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -70,6 +70,151 @@ public class ScrExcelImport extends PDialog {
     public void updateAllValues(DictCore _core) {
         // does nothing
     }
+    
+    /**
+     * @param _core the dictionary core
+     * @param _parent main menu form
+     * @return 
+     */
+    public static ScrExcelImport run(DictCore _core, ScrMainMenu _parent) {
+        ScrExcelImport s = new ScrExcelImport(_core, _parent);
+
+        s.setModal(true);
+        s.toFront();
+        s.setVisible(true);
+        
+        return s;
+    }
+
+    private void browseFile() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(core.getWorkingDirectory());
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel/CSV Documents", "xls", "xlsx", "xlsm", "csv", "txt", "tsv");
+        chooser.setFileFilter(filter);
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            txtFileName.setText(chooser.getSelectedFile().getAbsolutePath());
+        }
+    }
+
+    private void importFile() {
+        File file = new File(txtFileName.getText());
+
+        if (!file.exists()) {
+            core.getOSHandler().getInfoBox().error("File Error", "File does not exist: " + txtFileName.getText());
+            return;
+        }
+        try {
+            ImportFileHelper reader = new ImportFileHelper(core);
+            CSVFormat format = ((Delimiter) cmbPreferences.getSelectedItem()).getFormat();
+            String quotOpt = ((QuoteOptions)cmbQuoteChar.getSelectedItem()).getValue();
+            DuplicateOption dupOpt = DuplicateOption.IMPORT_ALL;
+            
+            if (rdoIgnrDups.isSelected()) {
+                dupOpt = DuplicateOption.IGNORE_DUPES;
+            } else if (rdoOverwDups.isSelected()) {
+                dupOpt = DuplicateOption.OVERWRITE_DUPES;
+            }
+            
+            reader.setOptions(txtConWord.getText(), 
+                    txtLocalWord.getText(),
+                    txtType.getText(), 
+                    txtClass.getText(),
+                    txtDefinition.getText(), 
+                    txtPronunciation.getText(), 
+                    format,
+                    chkFirstLabels.isSelected(), 
+                    true, 
+                    quotOpt,
+                    dupOpt);
+            reader.importFile(txtFileName.getText(), Integer.parseInt(txtExcelSheet.getText()));
+
+            if (parent != null) {
+                parent.updateAllValues(core);
+                new DesktopInfoBox(this).info("Success!", txtFileName.getText() + " imported successfully!");
+
+                // if everything has completed without error, close the window and open Lexicon
+                dispose();
+                parent.openLexicon(true);
+            }
+        } catch (NumberFormatException e) {
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            new DesktopInfoBox(this).error("Import Error", "All column fields and sheet field must contain "
+                    + "numeric values only:\n" + e.getLocalizedMessage());
+        } catch (IllegalStateException e) {
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            new DesktopInfoBox(this).error("Import Error", "Could not import from file " + txtFileName.getText()
+                    + ".\n The text encoding is not supported. Please open the import file in a "
+                    + "text editor and save with encoding: " + Charset.defaultCharset().displayName());
+        } catch (Exception e) {
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            new DesktopInfoBox(this).error("Import Error", "Could not import from file " + txtFileName.getText()
+                    + windowsError()
+                    + ".\n Check to make certain that column mappings are correct "
+                    + "(nothing above max cell value) and that the file is not corrupt:\n"
+                    + e.getLocalizedMessage());
+        }
+    }
+    
+    private String windowsError() {
+        String ret = "";
+        
+        if (PGTUtil.IS_WINDOWS) {
+            ret += "\nIf the file is open in Excel, please close Excel.";
+        }
+        
+        return ret;
+    }
+
+    public enum Delimiter {
+        comma("Comma", CSVFormat.DEFAULT),
+        semicolon("Semicolon", CSVFormat.newFormat(';')),
+        tab("Tab", CSVFormat.TDF);
+
+        private final String name;
+        private final CSVFormat format;
+
+        Delimiter(String s, CSVFormat _format) {
+            name = s;
+            format = _format;
+        }
+
+        public boolean equalsName(String otherName) {
+            return name.equals(otherName);
+        }
+
+        @Override
+        public String toString() {
+            return this.name;
+        }
+        
+        public CSVFormat getFormat() {
+            return this.format;
+        }
+    }
+    
+    public enum QuoteOptions {
+        none("None", ""),
+        doubleQuotes("Double Quotes", "\""),
+        singleQuotes("Single Quotes", "'");
+        
+        
+        private final String name;
+        private final String quote;
+        
+        QuoteOptions(String _name, String _quote) {
+            name = _name;
+            quote = _quote;
+        }
+        
+        public String getValue() {
+            return quote;
+        }
+        
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -111,12 +256,9 @@ public class ScrExcelImport extends PDialog {
         btnCancel = new PButton(nightMode, menuFontSize);
         jPanel2 = new javax.swing.JPanel();
         jLabel13 = new PLabel("Duplicate Handling", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
-        rdoImpAll = new PRadioButton(core,
-            PolyGlot.getPolyGlot().getOptionsManager().isNightMode());
-        rdoIgnrDups = new PRadioButton(core,
-            PolyGlot.getPolyGlot().getOptionsManager().isNightMode());
-        rdoOverwDups = new PRadioButton(core,
-            PolyGlot.getPolyGlot().getOptionsManager().isNightMode());
+        rdoImpAll = new PRadioButton();
+        rdoIgnrDups = new PRadioButton();
+        rdoOverwDups = new PRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Import From External Format");
@@ -409,152 +551,6 @@ public class ScrExcelImport extends PDialog {
     private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
         browseFile();
     }//GEN-LAST:event_btnBrowseActionPerformed
-
-    /**
-     * @param _core the dictionary core
-     * @param _parent main menu form
-     * @return 
-     */
-    public static ScrExcelImport run(DictCore _core, ScrMainMenu _parent) {
-        ScrExcelImport s = new ScrExcelImport(_core, _parent);
-
-        s.setModal(true);
-        s.toFront();
-        s.setVisible(true);
-        
-        return s;
-    }
-
-    private void browseFile() {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setCurrentDirectory(core.getWorkingDirectory());
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel/CSV Documents", "xls", "xlsx", "xlsm", "csv", "txt", "tsv");
-        chooser.setFileFilter(filter);
-        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            txtFileName.setText(chooser.getSelectedFile().getAbsolutePath());
-        }
-    }
-
-    private void importFile() {
-        File file = new File(txtFileName.getText());
-
-        if (!file.exists()) {
-            core.getOSHandler().getInfoBox().error("File Error", "File does not exist: " + txtFileName.getText());
-            return;
-        }
-        try {
-            ImportFileHelper reader = new ImportFileHelper(core);
-            CSVFormat format = ((Delimiter) cmbPreferences.getSelectedItem()).getFormat();
-            String quotOpt = ((QuoteOptions)cmbQuoteChar.getSelectedItem()).getValue();
-            DuplicateOption dupOpt = DuplicateOption.IMPORT_ALL;
-            
-            if (rdoIgnrDups.isSelected()) {
-                dupOpt = DuplicateOption.IGNORE_DUPES;
-            } else if (rdoOverwDups.isSelected()) {
-                dupOpt = DuplicateOption.OVERWRITE_DUPES;
-            }
-            
-            reader.setOptions(txtConWord.getText(), 
-                    txtLocalWord.getText(),
-                    txtType.getText(), 
-                    txtClass.getText(),
-                    txtDefinition.getText(), 
-                    txtPronunciation.getText(), 
-                    format,
-                    chkFirstLabels.isSelected(), 
-                    true, 
-                    quotOpt,
-                    dupOpt);
-            reader.importFile(txtFileName.getText(), Integer.parseInt(txtExcelSheet.getText()));
-
-            if (parent != null) {
-                parent.updateAllValues(core);
-                new DesktopInfoBox(this).info("Success!", txtFileName.getText() + " imported successfully!");
-
-                // if everything has completed without error, close the window and open Lexicon
-                dispose();
-                parent.openLexicon(true);
-            }
-        } catch (NumberFormatException e) {
-            DesktopIOHandler.getInstance().writeErrorLog(e);
-            new DesktopInfoBox(this).error("Import Error", "All column fields and sheet field must contain "
-                    + "numeric values only:\n" + e.getLocalizedMessage());
-        } catch (IllegalStateException e) {
-            DesktopIOHandler.getInstance().writeErrorLog(e);
-            new DesktopInfoBox(this).error("Import Error", "Could not import from file " + txtFileName.getText()
-                    + ".\n The text encoding is not supported. Please open the import file in a "
-                    + "text editor and save with encoding: " + Charset.defaultCharset().displayName());
-        } catch (Exception e) {
-            DesktopIOHandler.getInstance().writeErrorLog(e);
-            new DesktopInfoBox(this).error("Import Error", "Could not import from file " + txtFileName.getText()
-                    + windowsError()
-                    + ".\n Check to make certain that column mappings are correct "
-                    + "(nothing above max cell value) and that the file is not corrupt:\n"
-                    + e.getLocalizedMessage());
-        }
-    }
-    
-    private String windowsError() {
-        String ret = "";
-        
-        if (PGTUtil.IS_WINDOWS) {
-            ret += "\nIf the file is open in Excel, please close Excel.";
-        }
-        
-        return ret;
-    }
-
-    public enum Delimiter {
-        comma("Comma", CSVFormat.DEFAULT),
-        semicolon("Semicolon", CSVFormat.newFormat(';')),
-        tab("Tab", CSVFormat.TDF);
-
-        private final String name;
-        private final CSVFormat format;
-
-        Delimiter(String s, CSVFormat _format) {
-            name = s;
-            format = _format;
-        }
-
-        public boolean equalsName(String otherName) {
-            return name.equals(otherName);
-        }
-
-        @Override
-        public String toString() {
-            return this.name;
-        }
-        
-        public CSVFormat getFormat() {
-            return this.format;
-        }
-    }
-    
-    public enum QuoteOptions {
-        none("None", ""),
-        doubleQuotes("Double Quotes", "\""),
-        singleQuotes("Single Quotes", "'");
-        
-        
-        private final String name;
-        private final String quote;
-        
-        QuoteOptions(String _name, String _quote) {
-            name = _name;
-            quote = _quote;
-        }
-        
-        public String getValue() {
-            return quote;
-        }
-        
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnCancel;

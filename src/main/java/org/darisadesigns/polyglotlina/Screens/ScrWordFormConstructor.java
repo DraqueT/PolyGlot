@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2021-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -27,7 +27,6 @@ import java.awt.FontMetrics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -49,7 +48,7 @@ import org.darisadesigns.polyglotlina.Nodes.ConWord;
  */
 public class ScrWordFormConstructor extends PFrame {
     private ConWord word;
-    private List<PComboBox> dimensionalValues;
+    private final List<PComboBox> dimensionalValues;
     
     public ScrWordFormConstructor(DictCore _core, ConWord _word) {
         super(_core);
@@ -110,12 +109,8 @@ public class ScrWordFormConstructor extends PFrame {
                     dimensionDropdown.setSelectedIndex(0);
                 }
                 
-                dimensionDropdown.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        composeWord();
-                    }
-                    
+                dimensionDropdown.addActionListener((ActionEvent e) -> {
+                    composeWord();
                 });
                 
                 pnlDimensions.add(dimensionDropdown, gbc);

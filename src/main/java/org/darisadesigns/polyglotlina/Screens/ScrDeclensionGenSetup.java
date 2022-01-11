@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020, Draque Thompson
+ * Copyright (c) 2019-2022, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -87,7 +87,6 @@ public final class ScrDeclensionGenSetup extends PDialog {
         bGroup.add(rdoClassic);
         bGroup.add(rdoSimplified);
 
-        final PDialog parent = this;
         ActionListener clicked = (ActionEvent e) -> {
             boolean simplifiedSelected = rdoSimplified.isSelected();
             boolean rulesExist = core.getConjugationManager().getConjugationRulesForType(typeId).length != 0;
@@ -267,8 +266,8 @@ public final class ScrDeclensionGenSetup extends PDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        rdoClassic = new PRadioButton(core, nightMode);
-        rdoSimplified = new PRadioButton(core, nightMode);
+        rdoClassic = new PRadioButton();
+        rdoSimplified = new PRadioButton();
         btnTestWord = new PButton(nightMode, menuFontSize);
         jPanel2 = new javax.swing.JPanel();
         btnOK = new PButton(nightMode, menuFontSize);

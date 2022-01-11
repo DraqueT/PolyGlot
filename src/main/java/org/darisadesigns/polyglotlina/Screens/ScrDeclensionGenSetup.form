@@ -87,7 +87,7 @@
             <Property name="toolTipText" type="java.lang.String" value="Use the classic autodeclension setup window. This is highly powerful, but complex."/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PRadioButton(core, nightMode)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PRadioButton()"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JRadioButton" name="rdoSimplified">
@@ -96,7 +96,7 @@
             <Property name="toolTipText" type="java.lang.String" value="Use the simplified autoconjugation setup. If you have only one pattern per wordform, this is easier to use."/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PRadioButton(core, nightMode)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PRadioButton()"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="btnTestWord">

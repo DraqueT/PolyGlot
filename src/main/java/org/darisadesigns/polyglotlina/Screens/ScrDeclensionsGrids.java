@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2018-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -48,6 +48,7 @@ import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
  * @author DThompson
  */
 public final class ScrDeclensionsGrids extends PDialog {
+
     private final List<String> combDecIds = new ArrayList<>();
     private final ConWord word;
     private final ConjugationManager decMan;
@@ -55,15 +56,16 @@ public final class ScrDeclensionsGrids extends PDialog {
     private boolean closeWithoutSave = false;
     private boolean autoPopulated = false;
     private Window depVals = null;
-    
+
     /**
      * Creates new form ScrDeclensionsGrids
+     *
      * @param _core
      * @param _word
      */
     public ScrDeclensionsGrids(DictCore _core, ConWord _word) {
         super(_core);
-        
+
         word = _word;
         decMan = core.getConjugationManager();
 
@@ -74,46 +76,48 @@ public final class ScrDeclensionsGrids extends PDialog {
         buildWindowBody();
         setupListeners();
         chkAutogenOverride.setSelected(word.isOverrideAutoConjugate() || !autoPopulated);
-}
-    
+        btnOk.requestFocus();
+    }
+
     /**
      * Creates new declension grid window. Returns null if cannot open.
+     *
      * @param core
      * @param word
-     * @return 
+     * @return
      */
     public static ScrDeclensionsGrids run(DictCore core, ConWord word) {
         ScrDeclensionsGrids ret = null;
-        
+
         if (canOpen(core, word)) {
             ret = new ScrDeclensionsGrids(core, word);
         }
-        
+
         return ret;
     }
-    
+
     public static boolean canOpen(DictCore core, ConWord word) {
         boolean ret = true;
         int typeId = word.getWordTypeId();
         ConjugationManager decMan = core.getConjugationManager();
-        
+
         if (typeId == 0) {
-            core.getOSHandler().getInfoBox().info("Missing Part of Speech", 
+            core.getOSHandler().getInfoBox().info("Missing Part of Speech",
                     "Word must have a part of Speech set and the part of speech must have declensions defined before using this feature.");
             ret = false;
         } else if ((decMan.getDimensionalConjugationListTemplate(typeId) == null
-                    || decMan.getDimensionalConjugationListTemplate(typeId).length == 0)
+                || decMan.getDimensionalConjugationListTemplate(typeId).length == 0)
                 && decMan.getDimensionalConjugationListWord(word.getId()).length == 0
                 && decMan.getSingletonCombinedIds(typeId).length == 0) {
             core.getOSHandler().getInfoBox().info("Declensions", "No declensions for part of speech: " + word.getWordTypeDisplay()
                     + " set. Declensions can be created per part of speech under the Part of Speech menu by clicking the "
-                            + "Declensions button.");
+                    + "Declensions button.");
             ret = false;
         }
-        
+
         return ret;
     }
-    
+
     private void setupListeners() {
         cmbDimX.addActionListener((ActionEvent ae) -> {
             buildWindowBody();
@@ -122,54 +126,60 @@ public final class ScrDeclensionsGrids extends PDialog {
             buildWindowBody();
         });
     }
-    
+
     private void populateDecIdToValues() {
         ConjugationPair[] decTemplateList = decMan.getDimensionalCombinedIds(word.getWordTypeId());
-        
+
         for (ConjugationPair curPair : decTemplateList) {
             // skip forms that have been suppressed
             if (decMan.isCombinedConjlSurpressed(curPair.combinedId, word.getWordTypeId())) {
                 continue;
             }
-            
+
             combDecIds.add(curPair.combinedId);
             labelMap.put(curPair.combinedId, curPair.label);
         }
     }
-    
+
     private void setupDimDropdowns() {
         ConjugationNode[] declensionNodes = decMan.getDimensionalConjugationListTemplate(word.getWordTypeId());
         DefaultComboBoxModel<ConjugationNode> modelX = new DefaultComboBoxModel<>();
         DefaultComboBoxModel<ConjugationNode> modelY = new DefaultComboBoxModel<>();
         cmbDimX.setModel(modelX);
         cmbDimY.setModel(modelY);
-        
+
         for (ConjugationNode node : declensionNodes) {
             modelX.addElement(node);
             modelY.addElement(node);
         }
-        
+
         if (declensionNodes.length > 1) {
             cmbDimX.setSelectedIndex(0);
             cmbDimY.setSelectedIndex(1);
         }
     }
-    
+
     private void buildWindowBody() {
-        ConjugationNode dimX = (ConjugationNode)cmbDimX.getSelectedItem();
-        ConjugationNode dimY = (ConjugationNode)cmbDimY.getSelectedItem();
-        
+        ConjugationNode dimX = (ConjugationNode) cmbDimX.getSelectedItem();
+        ConjugationNode dimY = (ConjugationNode) cmbDimY.getSelectedItem();
+
         pnlTabDeclensions.removeAll();
-        
+
         // only renders as dimensional if there are at least two dimensional declensions. Renders as list otherwise.
         if (shouldRenderDimensional()) {
             if (dimX == dimY) {
-                    new DesktopInfoBox(this).warning("Dimension Selection", "Please select differing Row and Column values.");
-            }
-            else {
+                new DesktopInfoBox(this).warning("Dimension Selection", "Please select differing Row and Column values.");
+                if (cmbDimY.getSelectedIndex() == 0) {
+                    cmbDimX.setSelectedIndex(1);
+                } else {
+                    cmbDimX.setSelectedIndex(0);
+                }
+                buildWindowBody();
+                return;
+            } else {
                 // get all partial dim ID patterns (sans X & Y dims)/feed to grid panel class
-                getPanelPartialDimIds().forEach((partialDim)->{
-                    PDeclensionGridPanel gridPanel 
+                getPanelPartialDimIds().forEach((partialDim) -> {
+                    PDeclensionGridPanel gridPanel
                             = new PDeclensionGridPanel(partialDim, dimX, dimY, word.getWordTypeId(), core, word);
                     pnlTabDeclensions.addTab(gridPanel.getTabName(), gridPanel);
                     autoPopulated = autoPopulated || gridPanel.isAutoPopulated();
@@ -189,68 +199,67 @@ public final class ScrDeclensionsGrids extends PDialog {
             jLabel1.setVisible(false);
             jLabel2.setVisible(false);
             ConjugationPair[] completeList = decMan.getAllCombinedIds(word.getWordTypeId());
-            PDeclensionListPanel listPanel 
+            PDeclensionListPanel listPanel
                     = new PDeclensionListPanel(completeList, core, word, true);
-            
+
             pnlTabDeclensions.addTab(listPanel.getTabName(), listPanel);
             autoPopulated = listPanel.isAutoPopulated();
         }
-        
+
         btnDeprecated.setVisible(decMan.wordHasDeprecatedForms(word));
     }
-    
+
     private boolean shouldRenderDimensional() {
         return decMan.getDimensionalConjugationListTemplate(word.getWordTypeId()).length > 1;
     }
-    
+
     private String replaceDimensionByIndex(String dimensions, int index, String replacement) {
-        String[] dimArray = dimensions.split(","); 
+        String[] dimArray = dimensions.split(",");
         dimArray = Arrays.copyOfRange(dimArray, 1, dimArray.length); // first value always empty
         String ret = ",";
-        
+
         // rebuild dimensionID, replacing the index values as appropriate
         for (int i = 0; i < dimArray.length; i++) {
             ret += (i == index ? replacement : dimArray[i]) + ",";
         }
-        
+
         return ret;
     }
-    
+
     /**
-     * Gets partial dim ids to be fed to grid panels
-     * Positions containing the values of the dimensions selected by the user
-     * replaced with "X" and "Y" respectively
-     * Filters out null values (values for disabled word forms)
+     * Gets partial dim ids to be fed to grid panels Positions containing the
+     * values of the dimensions selected by the user replaced with "X" and "Y"
+     * respectively Filters out null values (values for disabled word forms)
      */
     private List<String> getPanelPartialDimIds() {
         List<String> partialIds = new ArrayList<>();
-        int xNode = decMan.getDimensionTemplateIndex(word.getWordTypeId(), (ConjugationNode)cmbDimX.getSelectedItem());
-        int yNode = decMan.getDimensionTemplateIndex(word.getWordTypeId(), (ConjugationNode)cmbDimY.getSelectedItem());
-        
+        int xNode = decMan.getDimensionTemplateIndex(word.getWordTypeId(), (ConjugationNode) cmbDimX.getSelectedItem());
+        int yNode = decMan.getDimensionTemplateIndex(word.getWordTypeId(), (ConjugationNode) cmbDimY.getSelectedItem());
+
         for (String dimId : combDecIds) {
             if (dimId == null) {
                 continue;
             }
-            
+
             String partialDecId = replaceDimensionByIndex(dimId, xNode, "X");
             partialDecId = replaceDimensionByIndex(partialDecId, yNode, "Y");
-            
+
             if (!partialIds.contains(partialDecId)) {
                 partialIds.add(partialDecId);
             }
         }
-        
+
         return partialIds;
     }
-    
+
     private void saveValues() {
         core.getConjugationManager().clearAllConjugationsWord(word.getId());
-        
+
         if (chkAutogenOverride.isSelected()) {
             int count = pnlTabDeclensions.getTabCount();
             for (int i = 0; i < count; i++) {
-                PDeclensionPanelInterface comp = (PDeclensionPanelInterface)pnlTabDeclensions.getComponentAt(i);
-                
+                PDeclensionPanelInterface comp = (PDeclensionPanelInterface) pnlTabDeclensions.getComponentAt(i);
+
                 for (Entry<String, String> entry : comp.getAllDecValues().entrySet()) {
                     ConjugationNode saveNode = new ConjugationNode(-1, core.getConjugationManager());
 
@@ -263,10 +272,10 @@ public final class ScrDeclensionsGrids extends PDialog {
                 }
             }
         }
-        
+
         word.setOverrideAutoConjugate(chkAutogenOverride.isSelected());
     }
-    
+
     @Override
     public void dispose() {
         if (isDisposed()) {
@@ -290,14 +299,15 @@ public final class ScrDeclensionsGrids extends PDialog {
             }
         }
     }
-    
+
     public void setCloseWithoutSave(boolean _closeWithoutSave) {
         closeWithoutSave = _closeWithoutSave;
     }
 
     /**
-     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
-     * content of this method is always regenerated by the Form Editor.
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -410,7 +420,7 @@ public final class ScrDeclensionsGrids extends PDialog {
     private void btnDeprecatedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeprecatedActionPerformed
         depVals = ScrDeprecatedDeclensions.run(core, word);
     }//GEN-LAST:event_btnDeprecatedActionPerformed
-    
+
     @Override
     public void updateAllValues(DictCore _core) {
         // DOES NOTHING IN THIS WINDOW
