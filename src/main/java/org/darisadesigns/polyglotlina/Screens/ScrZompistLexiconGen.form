@@ -564,7 +564,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="btnHelp" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnSampleText" min="-2" max="-2" attributes="0"/>
                           <EmptySpace pref="43" max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -579,7 +579,7 @@
                               <Component id="btnHelp" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="btnIpa" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="btnDefaults" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnSampleText" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
@@ -644,13 +644,13 @@
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton()"/>
                   </AuxValues>
                 </Component>
-                <Component class="javax.swing.JButton" name="jButton1">
+                <Component class="javax.swing.JButton" name="btnSampleText">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Sample Text"/>
                     <Property name="toolTipText" type="java.lang.String" value="Generates random sample text. Zero grammar, just what a sampling of your words might look like in text."/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSampleTextActionPerformed"/>
                   </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton()"/>

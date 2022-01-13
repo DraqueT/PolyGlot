@@ -21,6 +21,7 @@
 package org.darisadesigns.polyglotlina.Screens;
 
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -37,6 +38,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
@@ -375,7 +377,8 @@ public class ScrZompistLexiconGen extends PFrame {
                 txtCategories.getText(),
                 txtSyllableTypes.getText(),
                 txtRewriteRules.getText(),
-                txtIllegalClusters.getText()
+                txtIllegalClusters.getText(),
+                core.getOSHandler()
         );
     }
     
@@ -561,6 +564,33 @@ public class ScrZompistLexiconGen extends PFrame {
         btnImport.setEnabled(enable);
     }
     
+    private void generateValues() {
+        pnlTop.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        setEnableMenuButtons(false);
+        
+        SwingUtilities.invokeLater(() ->{
+            if (rdoGenWords.isSelected()) {
+                genWords();
+                setEnableWordImport(true);
+            } else {
+                genSyllables();
+                setEnableWordImport(false);
+            }
+        
+            pnlTop.setCursor(Cursor.getDefaultCursor());
+            setEnableMenuButtons(true);
+        });
+    }
+    
+    private void setEnableMenuButtons(boolean enable) {
+        btnClear.setEnabled(enable);
+        btnDefaults.setEnabled(enable);
+        btnGenerate.setEnabled(enable);
+        btnHelp.setEnabled(enable);
+        btnIpa.setEnabled(enable);
+        btnSampleText.setEnabled(enable);
+    }
+    
     private void importValues() {
         var valueCount = lstImport.getModel().getSize();
         
@@ -635,7 +665,7 @@ public class ScrZompistLexiconGen extends PFrame {
         btnHelp = new PButton();
         btnIpa = new PButton();
         btnDefaults = new PButton();
-        jButton1 = new PButton();
+        btnSampleText = new PButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtSyllableTypes = new javax.swing.JTextArea();
@@ -931,11 +961,11 @@ public class ScrZompistLexiconGen extends PFrame {
             }
         });
 
-        jButton1.setText("Sample Text");
-        jButton1.setToolTipText("Generates random sample text. Zero grammar, just what a sampling of your words might look like in text.");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnSampleText.setText("Sample Text");
+        btnSampleText.setToolTipText("Generates random sample text. Zero grammar, just what a sampling of your words might look like in text.");
+        btnSampleText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnSampleTextActionPerformed(evt);
             }
         });
 
@@ -954,7 +984,7 @@ public class ScrZompistLexiconGen extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnHelp)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addComponent(btnSampleText)
                 .addContainerGap(43, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
@@ -967,7 +997,7 @@ public class ScrZompistLexiconGen extends PFrame {
                     .addComponent(btnHelp)
                     .addComponent(btnIpa)
                     .addComponent(btnDefaults)
-                    .addComponent(jButton1))
+                    .addComponent(btnSampleText))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1124,13 +1154,7 @@ public class ScrZompistLexiconGen extends PFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateActionPerformed
-        if (rdoGenWords.isSelected()) {
-            genWords();
-            setEnableWordImport(true);
-        } else {
-            genSyllables();
-            setEnableWordImport(false);
-        }
+        generateValues();
     }//GEN-LAST:event_btnGenerateActionPerformed
 
     private void btnDefaultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDefaultsActionPerformed
@@ -1178,7 +1202,7 @@ public class ScrZompistLexiconGen extends PFrame {
         importValues();
     }//GEN-LAST:event_btnImportActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnSampleTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSampleTextActionPerformed
         try {
             var generator = this.getGenerator();
             new ScrSimpleTextDisplay(core, "Generated Sentences Example", generator.createText(), false)
@@ -1187,7 +1211,7 @@ public class ScrZompistLexiconGen extends PFrame {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             new DesktopInfoBox(this).error("Text Generation Error", "Unable to generate text: " + e.getLocalizedMessage());
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnSampleTextActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSwadesh;
@@ -1202,11 +1226,11 @@ public class ScrZompistLexiconGen extends PFrame {
     private javax.swing.JButton btnHelp;
     private javax.swing.JButton btnImport;
     private javax.swing.JButton btnIpa;
+    private javax.swing.JButton btnSampleText;
     private javax.swing.JCheckBox chkShowSyllables;
     private javax.swing.JCheckBox chkSlowSyllableDropoff;
     private javax.swing.JComboBox<SwadeshObject> cmbSwadesh;
     private javax.swing.ButtonGroup grpValueChoice;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

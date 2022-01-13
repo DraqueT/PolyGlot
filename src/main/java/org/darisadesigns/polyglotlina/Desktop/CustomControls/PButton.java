@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 - 2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017 - 2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -21,7 +21,6 @@ package org.darisadesigns.polyglotlina.Desktop.CustomControls;
 
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -160,15 +159,12 @@ public class PButton extends JButton implements MouseListener {
     @Override
     public void mouseEntered(MouseEvent e) {
         mouseEntered = true;
-        setCursor(new Cursor(Cursor.HAND_CURSOR));
-
         repaint();
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
         mouseEntered = false;
-        setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         repaint();
     }
 

@@ -19,8 +19,10 @@
 package org.darisadesigns.polyglotlina;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import javax.swing.JOptionPane;
 
 /**
  * Derived from the Zompist Vocab Generator.
@@ -36,13 +38,15 @@ public class ZompistVocabGenerator {
     private final String[] rewriteValues;
     private final boolean slowSyllables;
     private final String[] categories;
-    private int categoryCount; // distinct from array size
+    private int categoryCount; // mutable under certain circumstances
     private final String categoryIndex;
     private final String[] userSyllables;
     private final int sylableDropoffRate;
     private final boolean syllableBreaks; // adds dot breaks between sylables  
-    private final List<String> results = new ArrayList<>();
+    private final Set<String> results = new LinkedHashSet<>();
     private final String[] illegalClusters;
+    private final OSHandler osHandler;
+    private boolean abort = false;
     
     /**
      * @param _slowSyllables Slow syllable (default = false)
@@ -56,6 +60,7 @@ public class ZompistVocabGenerator {
      * @param rawSyllables - from text box
      * @param rawRewriteValues - from text box
      * @param rawIllegalClusters -- illegal clusters to disallow from generation
+     * @param _osHandler
      * @throws java.lang.Exception on malformed input
      */
     public ZompistVocabGenerator(
@@ -66,7 +71,8 @@ public class ZompistVocabGenerator {
             String rawCategories,
             String rawSyllables,
             String rawRewriteValues,
-            String rawIllegalClusters) throws Exception {
+            String rawIllegalClusters,
+            OSHandler _osHandler) throws Exception {
         slowSyllables = _slowSyllables;
         syllableBreaks = _syllableBreaks;
         monosyllableRarity = _monosyllableRarity;
@@ -78,20 +84,24 @@ public class ZompistVocabGenerator {
         rewriteValues = rawRewriteValues.split("\n");
         sylableDropoffRate = getSyllableDropoffRate(slowSyllables, userSyllables.length);
         illegalClusters = getIllegalClusters(rawIllegalClusters);
+        osHandler = _osHandler;
 
         if (categoryCount <= 0 || userSyllables.length <= 0) {
             throw new Exception("You must have both categories and syllables to generate text.");
         }
     }
 
-    public List<String> genAllSyllables() {
+    public String[] genAllSyllables() {
         results.clear();
         for (String syllable : userSyllables) {
+            if (abort) {
+                return new String[0];
+            }
+            
             genall("", syllable);
         }
 
-        Collections.sort(results);
-        return results;
+        return results.toArray(new String[0]);
     }
 
     /**
@@ -100,13 +110,17 @@ public class ZompistVocabGenerator {
      * @return 
      * @throws java.lang.Exception 
      */
-    public List<String> genWords(int lexiconLength) throws Exception {
+    public String[] genWords(int lexiconLength) throws Exception {
         results.clear();
         for (int w = 0; w < lexiconLength; w++) {
+            if (abort) {
+                return new String[0];
+            }
+            
             genNewWord();
         }
         
-        return results;
+        return results.toArray(new String[0]);
     }
     
     /**
@@ -318,10 +332,10 @@ public class ZompistVocabGenerator {
         }
         
         // once value is complete, make final inspection for illegal clusters and retry if appropriate
-        if (containsIllegalCluster(curVal)) {
+        if (containsIllegalCluster(curVal) || results.contains(curVal)) {
             genNewWordRecurse(level + 1);
         } else {
-            results.add(curVal);
+            this.addToResults(curVal);
         }
         
         return curVal;
@@ -338,8 +352,7 @@ public class ZompistVocabGenerator {
      * @param pattern
      */
     private void genall(String initial, String pattern) {
-
-        if (pattern.length() == 0) {
+        if (pattern.length() == 0 || abort) {
             return;
         }
 
@@ -351,30 +364,47 @@ public class ZompistVocabGenerator {
         if (ix == -1) {
             // Not a category, just output it straight
             if (lastOne) {
-                String newSyllable = applyRewriteRule(initial + theCat);
-                
-                if (!results.contains(newSyllable) && !containsIllegalCluster(newSyllable)) {
-                    results.add(newSyllable);
-                }
+                addToResults(applyRewriteRule(initial + theCat));
             } else {
                 genall(initial + theCat, pattern.substring(1));
             }
         } else {
-            // It's a category; iterate over the members
+            // It's a category; iterate over its members
             String members = categories[ix].substring(2);
 
             for (int i = 0; i < members.length(); i++) {
                 String m = members.substring(i, i + 1);
                 if (lastOne) {
-                    String newSyllable = applyRewriteRule(initial + m);
-                    
-                    if (!results.contains(newSyllable) && !containsIllegalCluster(newSyllable)) {
-                        results.add(newSyllable);
-                    }
+                    addToResults(applyRewriteRule(initial + m));
                 } else {
                     genall(initial + m, pattern.substring(1));
                 }
             }
+        }
+    }
+    
+    private void addToResults(String value) {
+        int count = results.size();
+        
+        // At key points, ask if user wishes to continue. After 10M they're on their own journey to hell.
+        if (count == 1000000
+                || count == 5000000
+                || count == 10000000) {
+            String dialog = "At " + count + " values. Continue?";
+            
+            if (count == 10000000) {
+                dialog += "\nSeriouslty, last warning. It'll just go until it's done after this. PolyGlot might freeze.";
+            }
+            
+            InfoBox info = osHandler.getInfoBox();
+            if (info.yesNoCancel("Long Process", dialog)
+                    != JOptionPane.YES_OPTION) {
+                abort = true;
+            };
+        }
+        
+        if (!containsIllegalCluster(value)) {
+            results.add(value);
         }
     }
     

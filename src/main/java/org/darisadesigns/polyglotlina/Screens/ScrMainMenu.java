@@ -510,7 +510,7 @@ public final class ScrMainMenu extends PFrame {
         boolean cleanSave = false;
         String curFileName = core.getCurFileName();
 
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
         try {
             core.writeFile(_fileName, true);
@@ -522,7 +522,7 @@ public final class ScrMainMenu extends PFrame {
                     + curFileName + "\n\n" + e.getMessage());
         }
 
-        setCursor(Cursor.getDefaultCursor());
+        pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
 
         if (cleanSave) {
             core.getOSHandler().getInfoBox().info("Success", "Language saved to: "
@@ -1194,11 +1194,11 @@ public final class ScrMainMenu extends PFrame {
     }
     
     public void openProperties() {
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         saveAllValues();
         ScrLangProps s = new ScrLangProps(core);
         changeScreen(s, s.getWindow(), (PButton)btnProp);
-        setCursor(Cursor.getDefaultCursor());
+        pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
     }
 
     @Override
@@ -1482,7 +1482,7 @@ public final class ScrMainMenu extends PFrame {
         btnPhonology = new PButton(nightMode, menuFontSize);
         btnQuiz = new PButton(nightMode, menuFontSize);
         btnPhrasebook = new PButton(nightMode, menuFontSize);
-        btnZompistWordGenerator = new PButton();
+        btnZompistWordGenerator = new PButton(nightMode, menuFontSize);
         pnlMain = new javax.swing.JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -2104,9 +2104,9 @@ public final class ScrMainMenu extends PFrame {
     }//GEN-LAST:event_btnPosActionPerformed
 
     private void mnuNewLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNewLocalActionPerformed
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         newFile(true);
-        setCursor(Cursor.getDefaultCursor());
+        pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuNewLocalActionPerformed
 
     private void mnuSaveLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSaveLocalActionPerformed
@@ -2120,9 +2120,9 @@ public final class ScrMainMenu extends PFrame {
     }//GEN-LAST:event_mnuSaveAsActionPerformed
 
     private void mnuOpenLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuOpenLocalActionPerformed
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         open();
-        setCursor(Cursor.getDefaultCursor());
+        pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
         updateAllValues(core);
     }//GEN-LAST:event_mnuOpenLocalActionPerformed
 
@@ -2135,16 +2135,16 @@ public final class ScrMainMenu extends PFrame {
     }//GEN-LAST:event_mnuExitActionPerformed
 
     private void mnuImportFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportFileActionPerformed
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ScrExcelImport.run(core, this);
         cacheLexicon.refreshWordList(-1);
-        setCursor(Cursor.getDefaultCursor());
+        pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuImportFileActionPerformed
 
     private void mnuExportToExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportToExcelActionPerformed
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         exportToExcel();
-        setCursor(Cursor.getDefaultCursor());
+        pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuExportToExcelActionPerformed
 
     private void mnuExportFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportFontActionPerformed
