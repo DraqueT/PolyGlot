@@ -30,7 +30,7 @@ import javax.swing.JOptionPane;
  */
 public class ZompistVocabGenerator {
 
-    private static final int MAX_RECURSE = 20;
+    private static final int MAX_RECURSE = 30;
     private static final int SENTENCE_GEN_COUNT = 30;
     private static final String PUNCTUATION = ".?!";
     private final float monosyllableRarity;
@@ -305,7 +305,9 @@ public class ZompistVocabGenerator {
         String curVal = "";
         
         if (level > MAX_RECURSE) {
-            throw new Exception("Illegal Clusters settings too restrictive. Unable to generate requested vocabulary.");
+            throw new Exception(
+                    "Illegal Clusters settings too restrictive or too few possible combinations to generate desired number of entries.\n"
+                            +"Try playing with settings to allow for more posibilities or reducing the target number.");
         }
 
         int nw = 1;
