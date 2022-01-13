@@ -615,7 +615,7 @@ public class ScrZompistLexiconGen extends PFrame {
             }
         }
         
-        PolyGlot.getPolyGlot().getRootWindow().openLexicon(true);
+        PolyGlot.getPolyGlot().getRootWindow().changeToLexicon();
     }
 
     /** This method is called from within the constructor to
