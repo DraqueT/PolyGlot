@@ -429,9 +429,8 @@ public final class DesktopIOHandler implements IOHandler {
                             opMan.setDividerPosition(splitSet[0], position);
                         }
                     }
-                    case PGTUtil.OPTIONS_MSBETWEENSAVES -> {
+                    case PGTUtil.OPTIONS_MSBETWEENSAVES ->
                         opMan.setMsBetweenSaves(Integer.parseInt(bothVal[1]));
-                    }
                     case PGTUtil.OPTIONS_AUTO_RESIZE ->
                         opMan.setAnimateWindows(bothVal[1].equals(PGTUtil.TRUE));
                     case PGTUtil.OPTIONS_MAXIMIZED ->

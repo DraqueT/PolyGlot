@@ -880,14 +880,16 @@ public final class ScrMainMenu extends PFrame {
         }
 
         populateToDo();
-        // force update of todo's font
-        PolyGlot.getPolyGlot().getOSHandler().getPFontHandler().updateLocalFont();
     }
 
     private void populateToDo() {
         toDoTree.setRootVisible(false);
         toDoTree.setModel(new PToDoTreeModel(ToDoTreeNode.createToDoTreeNode(core.getToDoManager().getRoot())));
         ((DefaultTreeModel) toDoTree.getModel()).nodeStructureChanged((ToDoTreeNode) toDoTree.getModel().getRoot());
+        
+        SwingUtilities.invokeLater(() -> {
+            PolyGlot.getPolyGlot().getOSHandler().getPFontHandler().updateLocalFont();
+        });
     }
     
     public PToDoTree getToDoTree() {
