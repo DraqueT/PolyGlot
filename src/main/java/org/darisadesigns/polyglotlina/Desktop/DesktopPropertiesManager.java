@@ -157,6 +157,11 @@ public class DesktopPropertiesManager extends PropertiesManager {
      */
     public boolean syncCachedFontCon() throws Exception {
         File fontFile = PFontHandler.getFontFile(conFont.getFamily());
+        
+        if (fontFile == null) {
+            return false;
+        }
+        
         cachedConFont = null;
         if (fontFile.getName().toLowerCase().endsWith("ttc")) {
             throw new Exception("PolyGlot does not currently support ttc (true type collection) caching or ligatures.");

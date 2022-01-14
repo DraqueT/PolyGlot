@@ -24,6 +24,7 @@ import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.awt.font.TextAttribute;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -150,7 +151,16 @@ public class PFontHandler extends org.darisadesigns.polyglotlina.PFontHandler {
                         System.getProperty("user.home") + "/Library/Fonts/");
             }
         } else if (System.getProperty("os.name").startsWith("Win")) {
-            ret = getFontFromLocation(fontFamily, System.getenv("WINDIR") + "\\Fonts");
+            var fontFiles = searchForFonts(new File(System.getenv("windir") + "/WinSxS"));
+            
+            for (var fontFile : fontFiles) {
+                var test = loadFont(fontFile.getAbsolutePath(), fontFamily);
+                
+                if (test!= null) {
+                    ret = test;
+                    break;
+                }
+            }
         } else if (System.getProperty("os.name").indexOf("nix") > 0
                 || System.getProperty("os.name").indexOf("bunt") > 0
                 || System.getProperty("os.name").indexOf("fed") > 0
@@ -161,6 +171,45 @@ public class PFontHandler extends org.darisadesigns.polyglotlina.PFontHandler {
         }
 
         return ret;
+    }
+    
+    /**
+     * Recursively searches target directory for fonts
+     * @param targetDirectory
+     * @return 
+     */
+    public static List<File> searchForFonts(File targetDirectory) {
+        var foundFonts = new ArrayList<File>();
+        
+        searchForFonts(targetDirectory, foundFonts);
+        
+        return foundFonts;
+    }
+    
+    /**
+     * Populates passed list via side effect to more easily allow for recursion
+     * @param target
+     * @param foundFonts 
+     */
+    private static void searchForFonts(File target, List<File> foundFonts) {
+        if (target.exists()) {
+            FileFilter filter = (File file1) -> {
+                java.lang.String name1 = file1.getName();
+                return (file1.isDirectory() && name1.toLowerCase().contains("font")) 
+                        || name1.toLowerCase().endsWith("ttf") 
+                        || name1.toLowerCase().endsWith("otf") 
+                        || name1.toLowerCase().endsWith("ttc") 
+                        || name1.toLowerCase().endsWith("dfont");
+            };
+
+            for (File search : target.listFiles(filter)) {
+                if (search.isDirectory()) {
+                    searchForFonts(search, foundFonts);
+                } else {
+                    foundFonts.add(search);
+                }
+            }
+        }
     }
 
     /**

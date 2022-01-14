@@ -22,12 +22,10 @@ package org.darisadesigns.polyglotlina.Screens;
 
 import java.awt.Frame;
 import java.io.File;
-import java.io.FileFilter;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.DefaultListModel;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 
 /**
@@ -45,36 +43,14 @@ public class ScrWinFontFolderSelector extends PDialog {
     }
     
     private void populateFonts() {
-        var fontFiles = new ArrayList<File>();
-        searchForFonts(new File(System.getenv("windir") + "/WinSxS"), fontFiles);
-        
+        var fontFiles = PFontHandler.searchForFonts(new File(System.getenv("windir") + "/WinSxS"));
+
         var model = new DefaultListModel();
         for (File file : fontFiles) {
             model.addElement(new FontFileWrapper(file));
         }
         
         lstFonts.setModel(model);
-    }
-    
-    private void searchForFonts(File file, List<File> foundFonts) {
-        if (file.exists()) {
-            FileFilter filter = (File file1) -> {
-                java.lang.String name1 = file1.getName();
-                return (file1.isDirectory() && name1.toLowerCase().contains("font")) 
-                        || name1.toLowerCase().endsWith("ttf") 
-                        || name1.toLowerCase().endsWith("otf") 
-                        || name1.toLowerCase().endsWith("ttc") 
-                        || name1.toLowerCase().endsWith("dfont");
-            };
-
-            for (File search : file.listFiles(filter)) {
-                if (search.isDirectory()) {
-                    searchForFonts(search, foundFonts);
-                } else {
-                    foundFonts.add(search);
-                }
-            }
-        }
     }
     
     /**
