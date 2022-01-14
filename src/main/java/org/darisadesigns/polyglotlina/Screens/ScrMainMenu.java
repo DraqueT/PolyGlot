@@ -129,7 +129,6 @@ public final class ScrMainMenu extends PFrame {
      *
      * @param _core DictCore menus run on
      */
-    @SuppressWarnings("LeakingThisInConstructor")
     public ScrMainMenu(DictCore _core) {
         super(_core);
         initComponents();

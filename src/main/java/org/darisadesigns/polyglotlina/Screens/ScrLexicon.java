@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -624,7 +624,9 @@ public final class ScrLexicon extends PFrame {
     private void setDefaultValues() {
         chkProcOverride.setSelected(false);
         chkRuleOverride.setSelected(false);
-        cmbType.setSelectedIndex(0);
+        if (cmbType.getModel().getSize() > 0) {
+            cmbType.setSelectedIndex(0);
+        }
         Platform.setImplicitExit(false);
         Platform.runLater(() -> {
             txtConSrc.setText("");

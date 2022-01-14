@@ -475,7 +475,7 @@ public final class ScrGrammarGuide extends PFrame {
     public void savePropsToNode(DefaultMutableTreeNode node) {
         if (node instanceof GrammarSectionNode secNode) {
             secNode.setName(txtName.getText());
-            secNode.setRecording(soundRecorder.getSound());
+            //secNode.setRecording(soundRecorder.getSound());
             try {
                 secNode.setSectionText(FormattedTextHelper.storageFormat(txtSection));
             } catch (Exception e) {
@@ -588,12 +588,9 @@ public final class ScrGrammarGuide extends PFrame {
             try {
                 byte[] sound = secNode.getRecording();
                 
-                if (sound == null) {
-                    btnPlayPauseAudio.setEnabled(false);
-                    btnDeleteRecordedAudio.setEnabled(false);
-                }
-                
-                soundRecorder.setSound(secNode.getRecording());
+                btnPlayPauseAudio.setEnabled(sound != null);
+                btnDeleteRecordedAudio.setEnabled(sound != null);   
+                soundRecorder.setSound(sound);
             } catch (Exception e) {
                 core.getOSHandler().getIOHandler().writeErrorLog(e);
                 core.getOSHandler().getInfoBox().error("Recording Load Failure", "Unable to load recording: "
@@ -770,6 +767,7 @@ public final class ScrGrammarGuide extends PFrame {
         try {
             if (soundRecorder.isRecording()) {
                 btnDeleteRecordedAudio.setEnabled(true);
+                btnPlayPauseAudio.setEnabled(true);
                 soundRecorder.endRecording();
             } else {
                 if (soundRecorder.getSound() != null) { // confirm overwrite of existing data
