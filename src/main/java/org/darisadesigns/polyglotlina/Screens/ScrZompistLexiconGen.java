@@ -40,6 +40,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.PlainDocument;
@@ -76,8 +78,8 @@ public class ScrZompistLexiconGen extends PFrame {
         super(_core);
         initComponents();
         populateSwadeshList();
+        loadValues();
         setupListeners();
-        setDefaultValues();
         setupMenus();
     }
     
@@ -89,10 +91,9 @@ public class ScrZompistLexiconGen extends PFrame {
         txtGenerationNum.setFont(localFont);
         txtRewriteRules.setFont(conFont);
         txtSyllableTypes.setFont(conFont);
-        txtIllegalClusters.setFont(localFont);
-        tblGeneratedValues.setFont(conFont);
+        txtIllegalClusters.setFont(conFont);
         tblGeneratedValues.setModel(new DefaultTableModel());
-        tblGeneratedValues.setFont(localFont);
+        tblGeneratedValues.setFont(conFont);
         tblSwadesh.setModel(new DefaultTableModel());
         tblSwadesh.setFont(localFont);
         lstImport.setModel(new DefaultListModel<>());
@@ -102,8 +103,26 @@ public class ScrZompistLexiconGen extends PFrame {
                 .setDocumentFilter(new PTextFieldFilter());
     }
     
-    private void setDefaultValues() { 
+    private void loadValues() {
+        var categoriesStr = core.getPropertiesManager().getZompistCategories();
+        var illegalsStr = core.getPropertiesManager().getZompistIllegalClusters();
+        var rewriteStr = core.getPropertiesManager().getZompistRewriteRules();
+        var syllablesStr = core.getPropertiesManager().getZompistSyllableTypes();
         
+        setDefaultValues();
+        
+        if (!categoriesStr.isBlank() 
+                || !illegalsStr.isBlank() 
+                || !rewriteStr.isBlank() 
+                || !syllablesStr.isBlank()) {
+            txtCategories.setText(categoriesStr);
+            txtIllegalClusters.setText(illegalsStr);
+            txtRewriteRules.setText(rewriteStr);
+            txtSyllableTypes.setText(syllablesStr);
+        }
+    }
+    
+    private void setDefaultValues() {    
         String defaultPhonotacticConstraints = "pw\nfw\nbw\ntl\ndl\nθl\ngw\nmb\nmv";
         switch (curDefaults) {
             case 0 -> {
@@ -249,6 +268,74 @@ public class ScrZompistLexiconGen extends PFrame {
         
         rdoGenSyllables.addActionListener((ActionEvent e) -> {
             setWordGenerationControlsEnables(false);
+        });
+        
+        txtCategories.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                core.getPropertiesManager().setZompistCategories(txtCategories.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                core.getPropertiesManager().setZompistCategories(txtCategories.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                core.getPropertiesManager().setZompistCategories(txtCategories.getText());
+            }
+        });
+        
+        txtIllegalClusters.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                core.getPropertiesManager().setZompistIllegalClusters(txtIllegalClusters.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                core.getPropertiesManager().setZompistIllegalClusters(txtIllegalClusters.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                core.getPropertiesManager().setZompistIllegalClusters(txtIllegalClusters.getText());
+            }
+        });
+        
+        txtRewriteRules.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                core.getPropertiesManager().setZompistRewriteRules(txtRewriteRules.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                core.getPropertiesManager().setZompistRewriteRules(txtRewriteRules.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                core.getPropertiesManager().setZompistRewriteRules(txtRewriteRules.getText());
+            }
+        });
+        
+        txtSyllableTypes.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                core.getPropertiesManager().setZompistSyllableTypes(txtSyllableTypes.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                core.getPropertiesManager().setZompistSyllableTypes(txtSyllableTypes.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                core.getPropertiesManager().setZompistSyllableTypes(txtSyllableTypes.getText());
+            }
         });
     }
     
@@ -509,8 +596,10 @@ public class ScrZompistLexiconGen extends PFrame {
             new DesktopInfoBox(this).warning("No Word Selected", "Please select a generated word value.");
             return;
         }
-        
-        word.setValue((String)tblGeneratedValues.getValueAt(wordIndex, 0));
+
+        // do not import syllable breaks
+        var conValue = ((String)tblGeneratedValues.getValueAt(wordIndex, 0)).replaceAll("˙", "");
+        word.setValue(conValue);
         deleteSelectedWord();
         
         if (swadeshIndex != -1) {

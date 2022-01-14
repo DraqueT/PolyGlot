@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -78,6 +78,7 @@ public class PGTUtil {
     public static final String WORD_CLASS_TEXT_VAL_COLLECTION_XID = "wordClassTextValueCollection";
     public static final String WORD_CLASS_TEXT_VAL_XID = "wordClassTextValue";
     public static final String WORD_ETY_NOTES_XID = "wordEtymologyNotes";
+    
 
     // properties for types/parts of speech
     public static final String POS_COLLECTION_XID = "partsOfSpeech";
@@ -113,6 +114,10 @@ public class PGTUtil {
     public static final String LANG_PROP_OVERRIDE_REGEX_FONT_XID = "langPropOverrideRegexFont";
     public static final String LANG_PROP_USE_SIMPLIFIED_CONJ = "langPropUseSimplifiedConjugations";
     public static final String LANG_PROP_EXPANDED_LEX_LIST_DISP = "expandedLexListDisplay";
+    public static final String LANG_PROP_ZOMPIST_CATEGORIES = "zompistCategories";
+    public static final String LANG_PROP_ZOMPIST_ILLEGAL_CLUSTERS = "zompistIllegalClusters";
+    public static final String LANG_PROP_ZOMPIST_REWRITE_RULES = "zompistRewriteRules";
+    public static final String LANG_PROP_ZOMPIST_SYLLABLES = "zompistSyllables";
 
     // character replacement pair values
     public static final String LANG_PROP_CHAR_REP_CONTAINER_XID = "langPropCharRep";

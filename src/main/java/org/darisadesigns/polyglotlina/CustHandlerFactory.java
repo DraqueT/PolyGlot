@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -191,7 +191,6 @@ public final class CustHandlerFactory {
             boolean bgrammarSecName = false;
             boolean bgrammarSecRecId = false;
             boolean bgrammarSecText = false;
-            //boolean bclassNode = false;
             boolean bclassId = false;
             boolean bclassName = false;
             boolean bclassApplyTypes = false;
@@ -225,6 +224,10 @@ public final class CustHandlerFactory {
             boolean bphraseNotes = false;
             boolean bphraseOrder = false;
             boolean bexpandedLexListDisp = false;
+            boolean bzompistCategories = false;
+            boolean bzompistIllegals = false;
+            boolean bzompistRewrite = false;
+            boolean bzompistSyllables = false;
             
             int wId;
             int wCId;
@@ -235,7 +238,7 @@ public final class CustHandlerFactory {
             final ConjugationManager conjugationMgr = core.getConjugationManager();
             final PronunciationMgr pronuncMgr = core.getPronunciationMgr();
             final RomanizationManager romanizationMgr = core.getRomManager();
-            final PropertiesManager propertiesManager = core.getPropertiesManager();
+            final PropertiesManager propMan = core.getPropertiesManager();
             final FamilyManager famMgr = core.getFamManager();
             final PhraseManager phraseManager = core.getPhraseManager();
 
@@ -291,8 +294,7 @@ public final class CustHandlerFactory {
                     bfontSize = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_LOCAL_FONT_SIZE_XID)) {
                     bfontLocalSize = true;
-                }
-                else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_FONT_STYLE_XID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_FONT_STYLE_XID)) {
                     bfontStyle = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ALPHA_ORDER_XID)) {
                     tmpString = "";
@@ -496,6 +498,14 @@ public final class CustHandlerFactory {
                     bphrasegloss = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_ORDER_XID)) {
                     bphraseOrder = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ZOMPIST_CATEGORIES)) {
+                    bzompistCategories = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ZOMPIST_ILLEGAL_CLUSTERS)) {
+                    bzompistIllegals = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ZOMPIST_REWRITE_RULES)) {
+                    bzompistRewrite = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ZOMPIST_SYLLABLES)) {
+                    bzompistSyllables = true;
                 }
             }
 
@@ -613,7 +623,7 @@ public final class CustHandlerFactory {
                     bfontStyle = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ALPHA_ORDER_XID)) {
                     try {
-                        propertiesManager.setAlphaOrder(tmpString);
+                        propMan.setAlphaOrder(tmpString);
                     } catch (Exception e) {
                         throw new SAXException("Load error: " + e.getLocalizedMessage(), e);
                     }
@@ -867,6 +877,14 @@ public final class CustHandlerFactory {
                     bphrasegloss = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_ORDER_XID)) {
                     bphraseOrder = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ZOMPIST_CATEGORIES)) {
+                    bzompistCategories = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ZOMPIST_ILLEGAL_CLUSTERS)) {
+                    bzompistIllegals = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ZOMPIST_REWRITE_RULES)) {
+                    bzompistRewrite = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ZOMPIST_SYLLABLES)) {
+                    bzompistSyllables = false;
                 }
             }
 
@@ -928,7 +946,7 @@ public final class CustHandlerFactory {
                     bwordoverAutoDec = false;
                 } else if (bfontcon && core.getPropertiesManager().getCachedFont() == null) {
                     try {
-                        propertiesManager.setFontCon(new String(ch, start, length));
+                        propMan.setFontCon(new String(ch, start, length));
                     } catch (Exception e) {
                         core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nFont load error: " + e.getLocalizedMessage();
@@ -974,18 +992,18 @@ public final class CustHandlerFactory {
                 } else if (bgenderNotes) {
                     // Deprecated
                 } else if (blangName) {
-                    propertiesManager.setLangName(propertiesManager.getLangName()
+                    propMan.setLangName(propMan.getLangName()
                             + new String(ch, start, length));
                 } else if (blangRegexFontOvr) {
-                    propertiesManager.setOverrideRegexFont(new String(ch, start, length).equals(PGTUtil.TRUE));
+                    propMan.setOverrideRegexFont(new String(ch, start, length).equals(PGTUtil.TRUE));
                 } else if (bfontSize) {
-                    propertiesManager.setFontSize(Double.valueOf(new String(ch, start, length)));
+                    propMan.setFontSize(Double.valueOf(new String(ch, start, length)));
                     bfontSize = false;
                 } else if (bfontStyle) {
-                    propertiesManager.setFontStyle(Integer.parseInt(new String(ch, start, length)));
+                    propMan.setFontStyle(Integer.parseInt(new String(ch, start, length)));
                     bfontStyle = false;
                 } else if (bfontLocalSize) {
-                    propertiesManager.setLocalFontSize(Double.parseDouble(new String(ch, start, length)));
+                    propMan.setLocalFontSize(Double.parseDouble(new String(ch, start, length)));
                 }
                 else if (balphaOrder) {
                     tmpString += new String(ch, start, length);
@@ -1030,31 +1048,31 @@ public final class CustHandlerFactory {
                     core.getTypes().getBufferType().setDefMandatory(new String(ch, start, length).equals(PGTUtil.TRUE));
                     bwordClassDefMan = false;
                 } else if (blangPropLocalUniqueness) {
-                    propertiesManager.setLocalUniqueness(new String(ch, start, length).equals(PGTUtil.TRUE));
+                    propMan.setLocalUniqueness(new String(ch, start, length).equals(PGTUtil.TRUE));
                     blangPropLocalUniqueness = false;
                 } else if (blangPropUseLocalLex) {
-                    propertiesManager.setUseLocalWordLex(new String(ch, start, length).equals(PGTUtil.TRUE));
+                    propMan.setUseLocalWordLex(new String(ch, start, length).equals(PGTUtil.TRUE));
                 } else if (blangPropWordUniqueness) {
-                    propertiesManager.setWordUniqueness(new String(ch, start, length).equals(PGTUtil.TRUE));
+                    propMan.setWordUniqueness(new String(ch, start, length).equals(PGTUtil.TRUE));
                     blangPropWordUniqueness = false;
                 } else if (blangPropLocalMandatory) {
-                    propertiesManager.setLocalMandatory(new String(ch, start, length).equals(PGTUtil.TRUE));
+                    propMan.setLocalMandatory(new String(ch, start, length).equals(PGTUtil.TRUE));
                     blangPropLocalMandatory = false;
                 } else if (blangPropTypeMandatory) {
-                    propertiesManager.setTypesMandatory(new String(ch, start, length).equals(PGTUtil.TRUE));
+                    propMan.setTypesMandatory(new String(ch, start, length).equals(PGTUtil.TRUE));
                     blangPropTypeMandatory = false;
                 } else if (blangPropEnforceRTL) {
-                    propertiesManager.setEnforceRTL(new String(ch, start, length).equals(PGTUtil.TRUE));
+                    propMan.setEnforceRTL(new String(ch, start, length).equals(PGTUtil.TRUE));
                     blangPropEnforceRTL = false;
                 } else if (blangPropAuthCopyright) {
-                    propertiesManager.setCopyrightAuthorInfo(propertiesManager.getCopyrightAuthorInfo()
+                    propMan.setCopyrightAuthorInfo(propMan.getCopyrightAuthorInfo()
                             + new String(ch, start, length));
                 } else if (blangPropSimpConj) {
-                    propertiesManager.setUseSimplifiedConjugations(new String(ch, start, length).equals(PGTUtil.TRUE));
+                    propMan.setUseSimplifiedConjugations(new String(ch, start, length).equals(PGTUtil.TRUE));
                 } else if (bexpandedLexListDisp) {
-                    propertiesManager.setExpandedLexListDisplay(new String(ch, start, length).equals(PGTUtil.TRUE));
+                    propMan.setExpandedLexListDisplay(new String(ch, start, length).equals(PGTUtil.TRUE));
                 } else if (blangPropLocalLangName) {
-                    propertiesManager.setLocalLangName(propertiesManager.getLocalLangName()
+                    propMan.setLocalLangName(propMan.getLocalLangName()
                             + new String(ch, start, length));
                 } else if (bdimId) {
                     conjugationMgr.getBuffer().getBuffer().setId(Integer.parseInt(new String(ch, start, length)));
@@ -1278,6 +1296,14 @@ public final class CustHandlerFactory {
                 } else if (bphraseOrder) {
                     int orderId = Integer.parseInt(new String(ch, start, length));
                     phraseManager.getBuffer().setOrderId(orderId);
+                } else if (bzompistCategories) {
+                    propMan.setZompistCategories(propMan.getZompistCategories() + new String(ch, start, length));
+                } else if (bzompistIllegals) {
+                    propMan.setZompistIllegalClusters(propMan.getZompistIllegalClusters() + new String(ch, start, length));
+                } else if (bzompistRewrite) {
+                    propMan.setZompistRewriteRules(propMan.getZompistRewriteRules() + new String(ch, start, length));
+                } else if (bzompistSyllables) {
+                    propMan.setZompistSyllableTypes(propMan.getZompistSyllableTypes() + new String(ch, start, length));
                 }
             }
             

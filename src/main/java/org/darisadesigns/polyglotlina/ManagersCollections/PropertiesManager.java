@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -45,6 +45,10 @@ public abstract class PropertiesManager {
     private String langName = "";
     private String localLangName = "";
     private String copyrightAuthorInfo = "";
+    private String zompistCategories = "";
+    private String zompistIllegalClusters = "";
+    private String zompistRewriteRules = "";
+    private String zompistSyllableTypes = "";
     private boolean typesMandatory = false;
     private boolean localMandatory = false;
     private boolean wordUniqueness = false;
@@ -512,6 +516,26 @@ public abstract class PropertiesManager {
         wordValue.appendChild(doc.createTextNode(expandedLexListDisplay ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
         
+        // store Zompist categories setup
+        wordValue = doc.createElement(PGTUtil.LANG_PROP_ZOMPIST_CATEGORIES);
+        wordValue.appendChild(doc.createTextNode(zompistCategories));
+        propContainer.appendChild(wordValue);
+        
+        // store Zompist illegal clusters setup
+        wordValue = doc.createElement(PGTUtil.LANG_PROP_ZOMPIST_ILLEGAL_CLUSTERS);
+        wordValue.appendChild(doc.createTextNode(zompistIllegalClusters));
+        propContainer.appendChild(wordValue);
+        
+        // store Zompist rewrite rules setup
+        wordValue = doc.createElement(PGTUtil.LANG_PROP_ZOMPIST_REWRITE_RULES);
+        wordValue.appendChild(doc.createTextNode(zompistRewriteRules));
+        propContainer.appendChild(wordValue);
+        
+        // store Zompist syllables setup
+        wordValue = doc.createElement(PGTUtil.LANG_PROP_ZOMPIST_SYLLABLES);
+        wordValue.appendChild(doc.createTextNode(zompistSyllableTypes));
+        propContainer.appendChild(wordValue);
+        
         // store all replacement pairs
         wordValue = doc.createElement(PGTUtil.LANG_PROP_CHAR_REP_CONTAINER_XID);
         for (Entry<String, String> pair : getAllCharReplacements()) {
@@ -708,6 +732,38 @@ public abstract class PropertiesManager {
         return orderedVals;
     }
     
+    public String getZompistCategories() {
+        return zompistCategories;
+    }
+
+    public void setZompistCategories(String zompistCategories) {
+        this.zompistCategories = zompistCategories;
+    }
+
+    public String getZompistIllegalClusters() {
+        return zompistIllegalClusters;
+    }
+
+    public void setZompistIllegalClusters(String zompistIllegalClusters) {
+        this.zompistIllegalClusters = zompistIllegalClusters;
+    }
+
+    public String getZompistRewriteRules() {
+        return zompistRewriteRules;
+    }
+
+    public void setZompistRewriteRules(String zompistRewriteRules) {
+        this.zompistRewriteRules = zompistRewriteRules;
+    }
+
+    public String getZompistSyllableTypes() {
+        return zompistSyllableTypes;
+    }
+
+    public void setZompistSyllableTypes(String zompistSyllableTypes) {
+        this.zompistSyllableTypes = zompistSyllableTypes;
+    }
+    
     @Override
     public boolean equals(Object comp) {
         boolean ret = false;
@@ -736,6 +792,10 @@ public abstract class PropertiesManager {
             ret = ret && kerningSpace.equals(prop.kerningSpace);
             ret = ret && useSimplifiedConjugations == prop.useSimplifiedConjugations;
             ret = ret && expandedLexListDisplay == prop.expandedLexListDisplay;
+            ret = ret && zompistCategories.equals(prop.zompistCategories);
+            ret = ret && zompistIllegalClusters.equals(prop.zompistIllegalClusters);
+            ret = ret && zompistRewriteRules.equals(prop.zompistRewriteRules);
+            ret = ret && zompistSyllableTypes.equals(prop.zompistSyllableTypes);
         }
         
         return ret;
