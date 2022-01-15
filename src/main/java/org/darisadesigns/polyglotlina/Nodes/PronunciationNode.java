@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -30,6 +30,7 @@ import org.w3c.dom.Element;
  */
 public class PronunciationNode extends DictNode {
     private String pronunciation = "";
+    private String originPattern = "";
     
     public PronunciationNode() {
     }
@@ -61,6 +62,7 @@ public class PronunciationNode extends DictNode {
         PronunciationNode node = (PronunciationNode) _node;
         
         this.pronunciation = node.pronunciation;
+        this.originPattern = node.originPattern;
         this.setValue(node.getValue());
         this.setId(node.getId());
     }
@@ -97,5 +99,13 @@ public class PronunciationNode extends DictNode {
     @Override
     public int hashCode() {
         return super.hashCode();
+    }
+
+    public String getOriginPattern() {
+        return originPattern;
+    }
+
+    public void setOriginPattern(String originPattern) {
+        this.originPattern = originPattern;
     }
 }

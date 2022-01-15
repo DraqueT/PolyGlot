@@ -147,6 +147,9 @@ public class PGTUtil {
     public static final String PRO_GUIDE_BASE_XID = "proGuideBase";
     public static final String PRO_GUIDE_PHON_XID = "proGuidePhon";
     public static final String PRO_GUIDE_RECURSIVE_XID = "proGuideRecurse";
+    public static final String PRO_GUIDE_SYLLABLES_LIST = "proFGFuideSyllableList";
+    public static final String PRO_GUIDE_SYLLABLE = "proGuideSyllable";
+    public static final String PRO_GUIDE_COMPOSITION_SYLLABLE = "proGuideSyllableComposition";
 
     // romanization properties
     public static final String ROM_GUIDE_XID = "romGuide";

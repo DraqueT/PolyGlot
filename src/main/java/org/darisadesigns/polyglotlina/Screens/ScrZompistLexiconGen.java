@@ -73,6 +73,7 @@ import org.darisadesigns.polyglotlina.ZompistVocabGenerator;
 public class ScrZompistLexiconGen extends PFrame {
     
     private int curDefaults = 0;
+    private boolean isWordImport = true;
 
     public ScrZompistLexiconGen(DictCore _core) {
         super(_core);
@@ -651,19 +652,27 @@ public class ScrZompistLexiconGen extends PFrame {
         btnCopyFromImport.setEnabled(enable);
         lstImport.setEnabled(enable);
         btnImport.setEnabled(enable);
+        btnImport.setText("Import Words");
+    }
+    
+    private void setEnableSyllableImport(boolean enable) {
+        setEnableWordImport(false);
+        btnImport.setText("Import Syllables");
+        btnImport.setEnabled(enable);
     }
     
     private void generateValues() {
         pnlTop.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         setEnableMenuButtons(false);
+        isWordImport = rdoGenWords.isSelected();
         
         SwingUtilities.invokeLater(() ->{
-            if (rdoGenWords.isSelected()) {
+            if (isWordImport) {
                 genWords();
                 setEnableWordImport(true);
             } else {
                 genSyllables();
-                setEnableWordImport(false);
+                setEnableSyllableImport(true);
             }
         
             pnlTop.setCursor(Cursor.getDefaultCursor());
@@ -681,18 +690,26 @@ public class ScrZompistLexiconGen extends PFrame {
     }
     
     private void importValues() {
+        if (isWordImport) {
+            importValuesWords();
+        } else {
+            importValuesSyllables();
+        }
+    }
+    
+    private void importValuesWords() {
         var valueCount = lstImport.getModel().getSize();
         
-        if (valueCount == 0) {
+        if (valueCount <= 0) {
             new DesktopInfoBox(this).warning("No Values to Import", "Please pull some values to import into the import list first!");
             return;
         }
         
-        var choice = new DesktopInfoBox(this).yesNoCancel("Import Values?", "Import " + valueCount + " values into your language?");
+        var choice = new DesktopInfoBox(this).yesNoCancel("Import Words?", "Import " + valueCount + " words into your language?");
         
         if (choice == JOptionPane.YES_OPTION) {
             var model = lstImport.getModel();
-            
+
             try {
                 for (int i = 0; i < model.getSize(); i++) {
                     var word = model.getElementAt(i).getConWord();
@@ -702,9 +719,42 @@ public class ScrZompistLexiconGen extends PFrame {
             } catch (Exception e) {
                 new DesktopInfoBox(this).error("Import Error", "Unable to import values!\n" + e.getLocalizedMessage());
             }
+
+            PolyGlot.getPolyGlot().getRootWindow().changeToLexicon();
+        }
+    }
+    
+    private void importValuesSyllables() {
+        if (core.getPronunciationMgr().isRecurse()) {
+            new DesktopInfoBox(this).warning("Unable to Import", "Please disable Recurse Patterns under "
+                    + "Phonemic Orthography to import syllables.\nThe features are incompatible).");
+            return;
         }
         
-        PolyGlot.getPolyGlot().getRootWindow().changeToLexicon();
+        var valueCount = tblGeneratedValues.getModel().getRowCount();
+        
+        if (valueCount <= 0) {
+            new DesktopInfoBox(this).warning("No Values to Import", "Please pull some values to import into the import list first!");
+            return;
+        }
+        
+        var choice = new DesktopInfoBox(this).yesNoCancel("Import Syllables?", "Import " + valueCount + " syllables into your language?\n" 
+                + "This will populate syllable composition and enable the feature when generating pronunciations.");
+        
+        if (choice == JOptionPane.YES_OPTION) {
+            var procMan = core.getPronunciationMgr();
+            var model = tblGeneratedValues.getModel();
+            var rowCount = model.getRowCount();
+
+            procMan.clearSyllables();
+            procMan.setSyllableCompositionEnabled(true);
+            for (int i = 0; i < rowCount; i++) {
+                procMan.addSyllable((String)model.getValueAt(i, 0));
+            }
+
+            new DesktopInfoBox().info("Syllable Import", "Imported " + rowCount
+                    + " syllable values. Syllable composition in pronunciation generation activated.");
+        }
     }
 
     /** This method is called from within the constructor to

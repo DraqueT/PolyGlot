@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -25,12 +25,14 @@ import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
 import org.darisadesigns.polyglotlina.IPAHandler;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -44,9 +46,40 @@ public class PronunciationMgr {
     private final DictCore core;
     protected boolean recurse = false;
     private List<PronunciationNode> pronunciations = new ArrayList<>();
+    private Set<String> syllables = new HashSet<>();
+    private boolean syllableCompositionEnabled = false;
     
     public PronunciationMgr(DictCore _core) {
         core = _core;
+    }
+    
+    public void addSyllable(String syllable) {
+        syllables.add(syllable);
+    }
+    
+    public boolean isSyllable(String testSyllable) {
+        return syllables.contains(testSyllable);
+    }
+    
+    public void clearSyllables() {
+        syllables.clear();
+    }
+    
+    public boolean isSyllableCompositionEnabled() {
+        return syllableCompositionEnabled;
+    }
+    
+    /**
+     * Returns all stored compositional syllable values.
+     * Order not guaranteed.
+     * @return 
+     */
+    public String[] getSyllables() {
+        return syllables.toArray(new String[0]);
+    }
+    
+    public void setSyllableCompositionEnabled(boolean _syllableCompositionEnabled) {
+        syllableCompositionEnabled = _syllableCompositionEnabled;
     }
 
     /**
@@ -144,13 +177,64 @@ public class PronunciationMgr {
     private String getPronunciationInternal(String base) throws Exception {
         String ret = "";
 
+        int[] syllableBreaks = new int[0];
+        if (syllableCompositionEnabled) {
+            syllableBreaks = this.getSyllableBreaks(base);
+        }
+        
         // -base.length() fed as initial depth to ensure that longer words cannot be artificially labeled as breaking max depth
         List<PronunciationNode> procCycle = getPronunciationElements(base, -base.length(), true);
+        int charCount = 0;
         for (PronunciationNode curProc : procCycle) {
             ret += curProc.getPronunciation();
+            
+            charCount += curProc.getOriginPattern().length();
+            final int godDamnIt = charCount;
+            if (syllableCompositionEnabled && IntStream.of(syllableBreaks).anyMatch(x -> x == godDamnIt)) {
+                ret += "˙";
+            }
         }
 
         return ret;
+    }
+    
+    /**
+     * Generates and returns locations within string where syllable breaks
+     * may be placed based on populated syllables. Returns empty array if 
+     * no valid breakup possible
+     * @param base
+     * @return 
+     */
+    private int[] getSyllableBreaks(String base) {
+        return getSyllableBreaksRecurse(base, 0);
+    }
+    
+    private int[] getSyllableBreaksRecurse(String base, int cur) {
+        for (int i = 1; i <= base.length(); i++) {
+            if (syllables.contains(base.substring(0, i))) {
+                // syllables ending the word do not need demarkation
+                if (i == base.length()) {
+                    int[] ending = {-1};
+                    return ending;
+                }
+                
+                int[] subSearch = getSyllableBreaksRecurse(base.substring(i), cur + i);
+                
+                // length > 0 means the subsearch was a success, continue otherwise
+                if (subSearch.length > 0) {
+                    int[] myLocation = {i + cur};
+                    return concatIntArrays(myLocation, subSearch);
+                }
+            }
+        }
+        
+        return new int[0];
+    }
+    
+    private int[] concatIntArrays(int [] array1, int[] array2) {
+        int[] result = Arrays.copyOf(array1, array1.length + array2.length);
+        System.arraycopy(array2, 0, result, array1.length, array2.length);
+        return result;
     }
 
     /**
@@ -203,14 +287,13 @@ public class PronunciationMgr {
      */
     private List<PronunciationNode> getPronunciationElements(String base, int depth, boolean beginning) throws Exception {
         List<PronunciationNode> ret;
-        Iterator<PronunciationNode> finder = pronunciations.iterator();
 
         if (depth > PGTUtil.MAX_PROC_RECURSE) {
             throw new Exception("Max recursions for " + getToolLabel() + " exceeded.");
         }
         
         // return blank for empty string
-        if (base.isEmpty() || !finder.hasNext()) {
+        if (base.isEmpty() || pronunciations.isEmpty()) {
             ret = new ArrayList<>();
         } else {
             // split logic here to use recursion, string comparison, or regex matching
@@ -264,6 +347,7 @@ public class PronunciationMgr {
                         PronunciationNode finalNode = new PronunciationNode();
                         finalNode.setEqual(curNode);
                         finalNode.setPronunciation(leadingChars.replaceAll(origPattern, curNode.getPronunciation()));
+                        finalNode.setOriginPattern(leadingChars);
                         ret.add(finalNode);
                         ret.addAll(temp);
                         break;
@@ -300,7 +384,10 @@ public class PronunciationMgr {
 
                     // if lengths are equal, success! return. If unequal and no further match found-failure
                     if (pattern.length() == base.length() || !temp.isEmpty()) {
-                        ret.add(curNode);
+                        PronunciationNode newNode = new PronunciationNode();
+                        newNode.setEqual(curNode);
+                        newNode.setOriginPattern(pattern);
+                        ret.add(newNode);
                         ret.addAll(temp);
                         break;
                     }
@@ -338,6 +425,19 @@ public class PronunciationMgr {
         Element collection = doc.createElement(PGTUtil.ETYMOLOGY_COLLECTION_XID);
         
         rootElement.appendChild(collection);
+        
+        Element syllableList = doc.createElement(PGTUtil.PRO_GUIDE_SYLLABLES_LIST);
+        for (String syllable : syllables) {
+            Element syllableNode = doc.createElement(PGTUtil.PRO_GUIDE_SYLLABLE);
+            syllableNode.appendChild(doc.createTextNode(syllable));
+            syllableList.appendChild(syllableNode);
+        }
+        collection.appendChild(syllableList);
+        
+        Element syllableComposition = doc.createElement(PGTUtil.PRO_GUIDE_COMPOSITION_SYLLABLE);
+        syllableComposition.appendChild(doc.createTextNode(syllableCompositionEnabled ?
+                PGTUtil.TRUE : PGTUtil.FALSE));
+        collection.appendChild(syllableComposition);
         
         Element recurseNode = doc.createElement(PGTUtil.PRO_GUIDE_RECURSIVE_XID);
         recurseNode.appendChild(doc.createTextNode(recurse ?
