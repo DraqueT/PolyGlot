@@ -30,6 +30,7 @@ import javax.swing.JOptionPane;
  */
 public class ZompistVocabGenerator {
 
+    public final static String INTERPUNCT = "·";
     private static final int MAX_RECURSE = 30;
     private static final int SENTENCE_GEN_COUNT = 30;
     private static final String PUNCTUATION = ".?!";
@@ -321,7 +322,7 @@ public class ZompistVocabGenerator {
             curVal = createSyllable(curVal);
             
             if (syllableBreaks && w < nw - 1) {
-                curVal += "˙";
+                curVal += INTERPUNCT;
             }
         }
 
@@ -402,7 +403,7 @@ public class ZompistVocabGenerator {
             if (info.yesNoCancel("Long Process", dialog)
                     != JOptionPane.YES_OPTION) {
                 abort = true;
-            };
+            }
         }
         
         if (!containsIllegalCluster(value)) {
@@ -412,7 +413,7 @@ public class ZompistVocabGenerator {
     
     private boolean containsIllegalCluster(String test) {
         for (String illegalCluster : illegalClusters) {
-            if (test.contains(illegalCluster)) {
+            if (test.matches(illegalCluster)) {
                 return true;
             }
         }

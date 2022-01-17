@@ -55,6 +55,7 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PListLexicon;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PRadioButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTable;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextFieldFilter;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
@@ -599,7 +600,7 @@ public class ScrZompistLexiconGen extends PFrame {
         }
 
         // do not import syllable breaks
-        var conValue = ((String)tblGeneratedValues.getValueAt(wordIndex, 0)).replaceAll("˙", "");
+        var conValue = ((String)tblGeneratedValues.getValueAt(wordIndex, 0)).replaceAll(ZompistVocabGenerator.INTERPUNCT, "");
         word.setValue(conValue);
         deleteSelectedWord();
         
@@ -773,7 +774,7 @@ public class ScrZompistLexiconGen extends PFrame {
         btnAddWord = new PAddRemoveButton("+");
         btnDelWord = new PAddRemoveButton("-");
         jScrollPane4 = new javax.swing.JScrollPane();
-        tblGeneratedValues = new javax.swing.JTable();
+        tblGeneratedValues = new PTable();
         txtItemCount = new PTextField("Item Count");
         jLabel5 = new PLabel();
         cmbSwadesh = new PComboBox<SwadeshObject>(false);

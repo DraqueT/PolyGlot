@@ -217,6 +217,9 @@
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" value="Values generated: values can be edited, deleted, or created"/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTable()"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
