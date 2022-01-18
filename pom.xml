@@ -26,19 +26,19 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>14</version>
+            <version>17.0.1</version>
         </dependency>
         
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
-            <version>14</version>
+            <version>17.0.1</version>
         </dependency>
         
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-swing</artifactId>
-            <version>14</version>
+            <version>17.0.1</version>
         </dependency>
         
         <dependency>
@@ -59,6 +59,7 @@
             <version>1.14.3</version>
         </dependency>
         
+        <!--only needed for jsoup-->
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
@@ -80,28 +81,28 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.6.0</version>
+            <version>5.8.2</version>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.6.0</version>
+            <version>5.8.2</version>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
-            <version>5.6.0</version>
+            <version>5.8.2</version>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.6.0</version>
+            <version>5.8.2</version>
             <scope>test</scope>
         </dependency>
         
@@ -109,7 +110,7 @@
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <scope>test</scope>
-            <version>3.141.59</version>
+            <version>4.1.1</version>
         </dependency>
         
         <dependency>
@@ -129,41 +130,12 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
-            <version>4.13.1</version>
+            <version>4.13.2</version>
         </dependency>
     </dependencies>
     
     <build>
         <plugins>
-            <!-- Only use for analysis. Messes with Windows and Linux builds. -->
-            <!--            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.5</version>
-                <configuration>
-                    <excludes>
-                        <exclude>**/*ExternalCode/*</exclude>
-                        Consider how UI testing might be added in the future...
-                        <exclude>**/*Screens/*</exclude>
-                        <exclude>**/*CustomControls/*</exclude>
-                        Consider how UI testing might be added in the future...
-                    </excludes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>-->
             <!--ASSEMBLY PLUGIN-->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
