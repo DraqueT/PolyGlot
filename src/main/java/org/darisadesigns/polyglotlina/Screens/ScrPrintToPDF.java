@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -30,6 +30,7 @@ import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import java.awt.Cursor;
 import java.awt.Desktop;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -41,6 +42,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PList;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.Java8Bridge;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
@@ -66,9 +68,26 @@ public class ScrPrintToPDF extends PDialog {
         
         setupOrderList();
         setupListeners();
+        setupMenuFonts();
         setModal(true);
     }
 
+    private void setupMenuFonts() {
+        Font local = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
+        
+        chkConLocal.setFont(local);
+        chkEtymology.setFont(local);
+        chkGloss.setFont(local);
+        chkGrammar.setFont(local);
+        chkLocalCon.setFont(local);
+        chkLogographs.setFont(local);
+        chkOrtho.setFont(local);
+        chkPageNum.setFont(local);
+        chkPrintConjugations.setFont(local);
+        chkPrintPhrases.setFont(local);
+        lstChapOrder.setFont(local);
+    }
+    
     private void setupOrderList() {
         DefaultListModel model = new DefaultListModel();
         
@@ -276,21 +295,20 @@ public class ScrPrintToPDF extends PDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(chkGloss)
-                        .addComponent(chkPageNum)
-                        .addComponent(chkEtymology)
-                        .addComponent(chkPrintConjugations)
-                        .addComponent(chkPrintPhrases)
-                        .addComponent(chkConLocal, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(chkLogographs)
-                        .addComponent(chkOrtho))
-                    .addComponent(chkLocalCon)
-                    .addComponent(chkGrammar))
-                .addGap(18, 18, 18)
+                    .addComponent(chkOrtho, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(chkGloss, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(chkLocalCon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(chkConLocal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(chkPrintPhrases, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(chkGrammar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(chkLogographs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(chkPageNum, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(chkPrintConjugations, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(chkEtymology, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnMoveUp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -461,7 +479,7 @@ public class ScrPrintToPDF extends PDialog {
             return;
         }
         
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        jPanel1.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try{
             // prevent printing if etymology is selected but there are illegal loops present
             if (core.getEtymologyManager().checkAllForIllegalLoops().length > 0) {
@@ -507,7 +525,7 @@ public class ScrPrintToPDF extends PDialog {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             core.getOSHandler().getInfoBox().error("Save Error", e.getMessage());
         } finally {
-            setCursor(Cursor.getDefaultCursor());
+            jPanel1.setCursor(Cursor.getDefaultCursor());
         }
     }//GEN-LAST:event_btnPrintActionPerformed
 

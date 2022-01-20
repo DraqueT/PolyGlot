@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -56,6 +56,10 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
     private boolean useConFont;
     private FocusListener componentFocusListener = null;
     private final DictCore core;
+    
+    public PCellEditor(boolean _useConFont) {
+        this(_useConFont, PolyGlot.getPolyGlot().getCore());
+    }
 
     public PCellEditor(boolean _useConFont, DictCore _core) {
         core = _core;
@@ -97,6 +101,10 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
         ((JTextField) component).setText((String) value);
         component.setFont(myFont);
 
+        return component;
+    }
+    
+    public Component getComponent() {
         return component;
     }
     

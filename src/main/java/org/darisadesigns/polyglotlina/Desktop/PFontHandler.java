@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -24,6 +24,7 @@ import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.awt.font.TextAttribute;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -79,27 +80,21 @@ public class PFontHandler extends org.darisadesigns.polyglotlina.PFontHandler {
                         }
 
                         try {
-                            Font font = Font.createFont(Font.TRUETYPE_FONT, tempFile);
-
-                            if (font == null) {
-                                return;
-                            }
-
                             byte[] cachedFont = core.getOSHandler().getIOHandler().getByteArrayFromFile(tempFile);
 
                             if (isConFont) {
-                                ((DesktopPropertiesManager) core.getPropertiesManager()).setFontConRaw(font);
+                                ((DesktopPropertiesManager) core.getPropertiesManager())
+                                        .setFontFromFile(tempFile.getAbsolutePath());
                                 core.getPropertiesManager().setCachedFont(cachedFont);
                             } else {
-                                ((DesktopPropertiesManager) core.getPropertiesManager()).setLocalFont(font);
+                                ((DesktopPropertiesManager) core.getPropertiesManager())
+                                        .setLocalFontFromFile(tempFile.getAbsolutePath());
                                 core.getPropertiesManager().setCachedLocalFont(cachedFont);
                             }
-                        }
-                        catch (FontFormatException e) {
+                        } catch (FontFormatException e) {
                             core.getOSHandler().getIOHandler().writeErrorLog(e);
                             throw new Exception("Could not load language font. Possible incompatible font: " + e.getMessage());
-                        }
-                        catch (IOException e) {
+                        } catch (IOException e) {
                             throw new IOException("Could not load language font. I/O exception: " + e.getMessage(), e);
                         }
                     }
@@ -156,7 +151,16 @@ public class PFontHandler extends org.darisadesigns.polyglotlina.PFontHandler {
                         System.getProperty("user.home") + "/Library/Fonts/");
             }
         } else if (System.getProperty("os.name").startsWith("Win")) {
-            ret = getFontFromLocation(fontFamily, System.getenv("WINDIR") + "\\Fonts");
+            var fontFiles = searchForFonts(new File(System.getenv("windir") + "/WinSxS"));
+            
+            for (var fontFile : fontFiles) {
+                var test = loadFont(fontFile.getAbsolutePath(), fontFamily);
+                
+                if (test!= null) {
+                    ret = test;
+                    break;
+                }
+            }
         } else if (System.getProperty("os.name").indexOf("nix") > 0
                 || System.getProperty("os.name").indexOf("bunt") > 0
                 || System.getProperty("os.name").indexOf("fed") > 0
@@ -167,6 +171,45 @@ public class PFontHandler extends org.darisadesigns.polyglotlina.PFontHandler {
         }
 
         return ret;
+    }
+    
+    /**
+     * Recursively searches target directory for fonts
+     * @param targetDirectory
+     * @return 
+     */
+    public static List<File> searchForFonts(File targetDirectory) {
+        var foundFonts = new ArrayList<File>();
+        
+        searchForFonts(targetDirectory, foundFonts);
+        
+        return foundFonts;
+    }
+    
+    /**
+     * Populates passed list via side effect to more easily allow for recursion
+     * @param target
+     * @param foundFonts 
+     */
+    private static void searchForFonts(File target, List<File> foundFonts) {
+        if (target.exists()) {
+            FileFilter filter = (File file1) -> {
+                java.lang.String name1 = file1.getName();
+                return (file1.isDirectory() && name1.toLowerCase().contains("font")) 
+                        || name1.toLowerCase().endsWith("ttf") 
+                        || name1.toLowerCase().endsWith("otf") 
+                        || name1.toLowerCase().endsWith("ttc") 
+                        || name1.toLowerCase().endsWith("dfont");
+            };
+
+            for (File search : target.listFiles(filter)) {
+                if (search.isDirectory()) {
+                    searchForFonts(search, foundFonts);
+                } else {
+                    foundFonts.add(search);
+                }
+            }
+        }
     }
 
     /**
@@ -429,6 +472,7 @@ public class PFontHandler extends org.darisadesigns.polyglotlina.PFontHandler {
      * @param conFont true if using the conlang font, false if using the local language font
      * @return 
      */
+    @Override
     public boolean canStringBeRendered(String value, boolean conFont) {
         Font font = conFont ?
                 ((DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager()).getFontCon() :
@@ -524,5 +568,14 @@ public class PFontHandler extends org.darisadesigns.polyglotlina.PFontHandler {
         }
 
         return ret;
+    }
+    
+    @Override
+    public void updateLocalFont() {
+        var scrMain = PolyGlot.getPolyGlot().getRootWindow();
+        if (scrMain != null) {
+            var local = ((DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager()).getFontLocal();
+            scrMain.getToDoTree().setFont(local);
+        }
     }
 }

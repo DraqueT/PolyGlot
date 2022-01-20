@@ -272,8 +272,13 @@ public class OpenScreensTest {
             return;
         }
         
-        ScrLexicon s = new ScrLexicon(core, null);
-        s.dispose();
+        try {
+            ScrLexicon s = new ScrLexicon(core, null);
+            s.dispose();
+        } catch (Exception e) {
+            // e.printStackTrace();
+            fail(e);
+        }
         
         testExceptions(new Object() {}.getClass().getEnclosingMethod().getName());
     }
@@ -287,7 +292,12 @@ public class OpenScreensTest {
         }
         
         List<LexiconProblemNode> problemNodes = new ArrayList<>();
-        problemNodes.add(new LexiconProblemNode(new ConWord(), "PROBLEM", LexiconProblemNode.ProblemType.ConWord));
+        problemNodes.add(new LexiconProblemNode(
+                new ConWord(), 
+                "PROBLEM", 
+                LexiconProblemNode.ProblemType.ConWord,
+                LexiconProblemNode.SEVARITY_ERROR
+        ));
         ScrLanguageProblemDisplay s = new ScrLanguageProblemDisplay(problemNodes, core);
         s.dispose();
         

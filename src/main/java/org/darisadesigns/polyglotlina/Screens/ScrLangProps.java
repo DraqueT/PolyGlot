@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -487,10 +487,9 @@ public class ScrLangProps extends PFrame {
                         "Unable to locate physical font file. If your font uses ligatures, they may not appear correctly.\n"
                         + "To address this, please load your font manually via Tools->Import Font");
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             core.getOSHandler().getInfoBox().error("Font Caching Error",
-                    "Unable to locate physical font file. If your font uses ligatures, they may not appear correctly.\n"
+                    "Unable to locate physical font file or font file incompatible with java. If your font uses ligatures, they may not appear correctly.\n"
                     + "To address this, please load your font manually via Tools->Import Font\n\nError: " + e.getLocalizedMessage());
         }
 

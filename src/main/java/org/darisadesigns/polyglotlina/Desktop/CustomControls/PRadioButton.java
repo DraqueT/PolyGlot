@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2020, Draque Thompson
+ * Copyright (c) 2016-2022, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -37,11 +37,9 @@ public final class PRadioButton extends JRadioButton {
     private DictNode value = null;
     private QuestionType type;
     private final DictCore core;
-    private final boolean nightMode;
-
-    public PRadioButton(DictCore _core, boolean _nightMode) { // nightmode left for future enhancements
-        nightMode = _nightMode;
-        core = _core;
+    
+    public PRadioButton() {
+        core = PolyGlot.getPolyGlot().getCore();
         this.setFont(PGTUtil.MENU_FONT.deriveFont((float)PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize()));
     }
     
@@ -65,27 +63,18 @@ public final class PRadioButton extends JRadioButton {
         
         if (!(type == null || value == null)) {
             switch (type) {
-                case ConEquiv:
-                case PoS:
-                case Classes:
-                    ret = value.getValue();
-                    break;
-                case Local:
-                    ret = ((ConWord)value).getLocalWord();
-                    break;
-                case Proc:
+                case ConEquiv, PoS, Classes -> ret = value.getValue();
+                case Local -> ret = ((ConWord)value).getLocalWord();
+                case Proc -> {
                     try {
                         ret = ((ConWord)value).getPronunciation();
                     } catch (Exception e) {
                         DesktopIOHandler.getInstance().writeErrorLog(e);
                         ret = "<ERROR>";
                     }
-                    break;
-                case Def:
-                    ret = ((ConWord)value).getDefinition();
-                    break;
-                default:
-                    ret = "UNHANDLED TYPE";
+                }
+                case Def -> ret = ((ConWord)value).getDefinition();
+                default -> ret = "UNHANDLED TYPE";
             }
         }
         

@@ -369,7 +369,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="117" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="1" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -419,18 +419,19 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="btnLexicon" alignment="0" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="btnZompistWordGenerator" max="32767" attributes="0"/>
+                              <Component id="btnLexicon" max="32767" attributes="0"/>
                               <Component id="btnPos" alignment="0" max="32767" attributes="0"/>
                               <Component id="btnClasses" alignment="0" max="32767" attributes="0"/>
-                              <Component id="btnProp" alignment="0" max="32767" attributes="0"/>
-                              <Component id="btnLogos" alignment="0" max="32767" attributes="0"/>
                               <Component id="btnGrammar" alignment="0" max="32767" attributes="0"/>
-                              <Component id="btnPhonology" max="32767" attributes="0"/>
-                              <Component id="btnQuiz" max="32767" attributes="0"/>
-                              <Component id="btnPhrasebook" max="32767" attributes="0"/>
+                              <Component id="btnLogos" alignment="0" max="32767" attributes="0"/>
+                              <Component id="btnPhonology" alignment="0" max="32767" attributes="0"/>
+                              <Component id="btnPhrasebook" alignment="0" max="32767" attributes="0"/>
+                              <Component id="btnProp" max="32767" attributes="0"/>
+                              <Component id="btnQuiz" alignment="0" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -439,6 +440,8 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="btnLexicon" min="-2" pref="28" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="btnZompistWordGenerator" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="btnPos" min="-2" pref="28" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -455,7 +458,7 @@
                           <Component id="btnProp" min="-2" pref="28" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="btnQuiz" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="123" max="32767" attributes="0"/>
+                          <EmptySpace pref="88" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -572,6 +575,18 @@
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize)"/>
                   </AuxValues>
                 </Component>
+                <Component class="javax.swing.JButton" name="btnZompistWordGenerator">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Word Generator"/>
+                    <Property name="toolTipText" type="java.lang.String" value="An adaptation of the Zompist word generator, which can create words for your lexicon based on your rules and import them against swadesh values (or blank)"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnZompistWordGeneratorActionPerformed"/>
+                  </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize)"/>
+                  </AuxValues>
+                </Component>
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="pnlMain">
@@ -590,7 +605,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jLabel2" pref="500" max="32767" attributes="0"/>
+                      <Component id="jLabel2" pref="616" max="32767" attributes="0"/>
                       <Component id="jLabel3" alignment="0" max="32767" attributes="0"/>
                       <Component id="jLabel1" alignment="0" max="32767" attributes="0"/>
                       <Component id="pnlStartButtons" alignment="1" max="32767" attributes="0"/>

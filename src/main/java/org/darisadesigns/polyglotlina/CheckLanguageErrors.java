@@ -28,6 +28,7 @@ import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationGenRule;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationGenTransform;
+import org.darisadesigns.polyglotlina.Nodes.DictNode;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode.ProblemType;
 import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
@@ -68,6 +69,9 @@ public class CheckLanguageErrors {
 
                     // Check Phonology
                     checkPhonology(core, problems);
+                    
+                    // Check Alphabet
+                    checkAlphabet(core, problems);
                 }
             };
 
@@ -89,6 +93,32 @@ public class CheckLanguageErrors {
 
         return problems.toArray(new LexiconProblemNode[0]);
     }
+    
+    private static void checkAlphabet(DictCore core, List<LexiconProblemNode> problems) {
+        String[] alpha = core.getPropertiesManager().getOrderedAlphaList();
+        
+        // checks for ambiguity in alphabet
+        for (int i = 0; i < alpha.length; i++) {
+            for (int j = 0; j < alpha.length; j++) {
+                if (i == j) {
+                    continue;
+                }
+                
+                if (alpha[i].startsWith(alpha[j]) || alpha[i].endsWith(alpha[j])) {
+                    var problem = new LexiconProblemNode(
+                            new AlphaProblem(alpha[i], alpha[j]), 
+                            "Your alphabet creates ambiguity. The characters representing " +
+                                    "one letter are a prefix or suffix to another, which may " +
+                                    "lead to things like inconsistent alphabetic order.",
+                            ProblemType.Alphabet,
+                            LexiconProblemNode.SEVARITY_WARNING
+                    );
+                    
+                    problems.add(problem);
+                }
+            }
+        }
+    }
 
     private static void checkPhonology(DictCore core, List<LexiconProblemNode> problems) {
         for (PronunciationNode node : core.getPronunciationMgr().getPronunciations()) {
@@ -103,7 +133,14 @@ public class CheckLanguageErrors {
             }
             
             if (!core.getPGTUtil().isBlank(problemDescription)) {
-                problems.add(new LexiconProblemNode(node, problemDescription, ProblemType.Phonology));
+                problems.add(
+                        new LexiconProblemNode(
+                                node, 
+                                problemDescription, 
+                                ProblemType.Phonology, 
+                                LexiconProblemNode.SEVARITY_ERROR
+                        )
+                );
             }
         }
         
@@ -119,7 +156,12 @@ public class CheckLanguageErrors {
             }
             
             if (!core.getPGTUtil().isBlank(problemDescription)) {
-                problems.add(new LexiconProblemNode(node, problemDescription, ProblemType.Phonology));
+                problems.add(new LexiconProblemNode(
+                        node, 
+                        problemDescription, 
+                        ProblemType.Phonology,
+                        LexiconProblemNode.SEVARITY_ERROR
+                ));
             }
         }
     }
@@ -152,9 +194,12 @@ public class CheckLanguageErrors {
                 }
 
                 if (!core.getPGTUtil().isBlank(problemDescription)) {
-                    problems.add(new LexiconProblemNode(pos,
+                    problems.add(new LexiconProblemNode(
+                            pos,
                             problemDescription,
-                            ProblemType.PoS));
+                            ProblemType.PoS, 
+                            LexiconProblemNode.SEVARITY_ERROR
+                    ));
                 }
             }
         }
@@ -163,9 +208,11 @@ public class CheckLanguageErrors {
     private static void checkPos(DictCore core, List<LexiconProblemNode> problems) {
         for (TypeNode node : core.getTypes().getAllValues()) {
             if (!RegexTools.isRegexLegal(node.getPattern())) {
-                problems.add(new LexiconProblemNode(node,
+                problems.add(new LexiconProblemNode(
+                        node,
                         "Illegal regex value: \"" + node.getPattern() + "\"",
-                        ProblemType.PoS
+                        ProblemType.PoS, 
+                        LexiconProblemNode.SEVARITY_ERROR
                 ));
             }
         }
@@ -173,10 +220,12 @@ public class CheckLanguageErrors {
 
     private static void checkEtyLoops(DictCore core, List<LexiconProblemNode> problems) {
         for (ConWord loopWord : core.getEtymologyManager().checkAllForIllegalLoops()) {
-            problems.add(new LexiconProblemNode(loopWord,
+            problems.add(new LexiconProblemNode(
+                    loopWord,
                     "This word is included in an illegal etymological loop. "
                     + "Select the word in the lexicon then click the Etymology button to correct.",
-                    ProblemType.ConWord
+                    ProblemType.ConWord,
+                    LexiconProblemNode.SEVARITY_ERROR
             ));
         }
     }
@@ -236,11 +285,47 @@ public class CheckLanguageErrors {
 
             // record results of each for report
             if (!problemString.trim().isEmpty()) {
-                problems.add(new LexiconProblemNode(curWord,
+                problems.add(new LexiconProblemNode(
+                        curWord,
                         problemString.trim(),
-                        ProblemType.ConWord
+                        ProblemType.ConWord, 
+                        LexiconProblemNode.SEVARITY_ERROR
                 ));
             }
         }
+    }
+    
+    public static class AlphaProblem extends DictNode {
+        private String secondVal;
+        
+        public AlphaProblem(String _value, String _secondVal) {
+            value = _value;
+            secondVal = _secondVal;
+        }
+        
+        public String getSecondVal() {
+            return secondVal;
+        }
+
+        @Override
+        public boolean equals(Object comp) {
+            if (comp instanceof AlphaProblem) {
+                AlphaProblem alphaComp = (AlphaProblem)comp;
+                
+                return value.equals(alphaComp.value) 
+                        && secondVal.equals(((AlphaProblem) comp).secondVal);
+            }
+            
+            return false;
+        }
+
+        @Override
+        public void setEqual(DictNode _node) throws ClassCastException {
+            AlphaProblem node = (AlphaProblem)_node;
+            
+            value = node.value;
+            secondVal = node.secondVal;
+        }
+        
     }
 }

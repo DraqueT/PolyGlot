@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-202, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -504,8 +504,8 @@ public final class ScrGrammarGuide extends PFrame {
             grammarChapNode.setName(name);
         }
         
-        btnAddChapter.setEnabled(!name.isEmpty());
-        btnAddSection.setEnabled(!name.isEmpty());
+        btnAddChapter.setEnabled(!name.isEmpty() || selection == null);
+        btnAddSection.setEnabled(!name.isEmpty() || selection == null);
         treChapList.setEnabled(!name.isEmpty());
 
         treChapList.repaint();
@@ -583,17 +583,14 @@ public final class ScrGrammarGuide extends PFrame {
             btnRecordAudio.setEnabled(true);
             btnDeleteRecordedAudio.setEnabled(true);
             sldSoundPosition.setValue(0);
-            sldSoundPosition.setEnabled(true);
+            sldSoundPosition.setEnabled(false);
             txtTimer.setText(defTime);
             try {
                 byte[] sound = secNode.getRecording();
                 
-                if (sound == null) {
-                    btnPlayPauseAudio.setEnabled(false);
-                    btnDeleteRecordedAudio.setEnabled(false);
-                }
-                
-                soundRecorder.setSound(secNode.getRecording());
+                btnPlayPauseAudio.setEnabled(sound != null);
+                btnDeleteRecordedAudio.setEnabled(sound != null);   
+                soundRecorder.setSound(sound);
             } catch (Exception e) {
                 core.getOSHandler().getIOHandler().writeErrorLog(e);
                 core.getOSHandler().getInfoBox().error("Recording Load Failure", "Unable to load recording: "
@@ -722,6 +719,9 @@ public final class ScrGrammarGuide extends PFrame {
         treChapList.setSelectionPath(new TreePath(model.getPathToRoot(newNode)));
         txtName.setText("");
         txtName.setForeground(Color.gray);
+        
+        btnAddChapter.setEnabled(false);
+        btnAddSection.setEnabled(false);
     }
 
     private void addSection() {
@@ -736,12 +736,16 @@ public final class ScrGrammarGuide extends PFrame {
             model.insertNodeInto(newNode, parent, index + 1);
             model.reload();
             treChapList.setSelectionPath(new TreePath(model.getPathToRoot(newNode)));
+            btnAddChapter.setEnabled(false);
+            btnAddSection.setEnabled(false);
         } else if (selection instanceof DesktopGrammarChapNode parent) {
             DesktopGrammarSectionNode newNode = gramMan.getNewSection();
             newNode.setName("NEW SECTION");
             parent.add(newNode);
             model.reload();
             treChapList.setSelectionPath(new TreePath(model.getPathToRoot(newNode)));
+            btnAddChapter.setEnabled(false);
+            btnAddSection.setEnabled(false);
         } else {
             core.getOSHandler().getInfoBox().warning("Section Creation", "Select a chapter in which to create a section.");
         }
@@ -763,6 +767,7 @@ public final class ScrGrammarGuide extends PFrame {
         try {
             if (soundRecorder.isRecording()) {
                 btnDeleteRecordedAudio.setEnabled(true);
+                btnPlayPauseAudio.setEnabled(true);
                 soundRecorder.endRecording();
             } else {
                 if (soundRecorder.getSound() != null) { // confirm overwrite of existing data
@@ -860,7 +865,7 @@ public final class ScrGrammarGuide extends PFrame {
 
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel2 = new javax.swing.JPanel();
-        txtName = new PTextField(core, true, "-- Name --");
+        txtName = new PTextField(core, true, "Name");
         jPanel3 = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
         cmbFonts = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
@@ -880,7 +885,7 @@ public final class ScrGrammarGuide extends PFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         treChapList = new PTree(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize, nightMode);
-        txtSearch = new PTextField(core, true, "-- Search --");
+        txtSearch = new PTextField(core, true, "Search");
         jLabel1 = new PLabel("", menuFontSize);
         btnAddSection = new PAddRemoveButton("+");
         btnDelete = new PAddRemoveButton("-");
@@ -1262,14 +1267,10 @@ public final class ScrGrammarGuide extends PFrame {
 
     private void btnAddChapterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddChapterActionPerformed
         addChapter();
-        btnAddChapter.setEnabled(false);
-        btnAddSection.setEnabled(false);
     }//GEN-LAST:event_btnAddChapterActionPerformed
 
     private void btnAddSectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSectionActionPerformed
         addSection();
-        btnAddChapter.setEnabled(false);
-        btnAddSection.setEnabled(false);
     }//GEN-LAST:event_btnAddSectionActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed

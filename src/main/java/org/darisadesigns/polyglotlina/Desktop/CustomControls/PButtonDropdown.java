@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2021-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -38,9 +38,9 @@ import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
  * A version of PButton which supports dropdown functionality
  * @author draque
  */
-public class PButtonDropdown extends PButton{
-    GeneralPath arrow;
-    JPopupMenu popupMenu;
+public class PButtonDropdown extends PButton {
+    private GeneralPath arrow;
+    private final JPopupMenu popupMenu;
     boolean firstTime = true;
     int dropDownPosition;
     int curMouseRelativeX;
@@ -89,7 +89,6 @@ public class PButtonDropdown extends PButton{
     public void addActionListener(ActionListener listener) {
         final var self = this;
         super.addActionListener((ActionEvent e) -> {
-            System.out.println(dropDownPosition + ":" + curMouseRelativeX);
             if (curMouseRelativeX > dropDownPosition) {
                 popupMenu.show(PButtonDropdown.this, 0, getHeight()); // force width to render
                 var position = self.getWidth() - popupMenu.getWidth();
@@ -118,7 +117,7 @@ public class PButtonDropdown extends PButton{
         dropDownPosition = (int)xOffset - 5;
         
         if(firstTime) {
-            createArrow(xOffset, getHeight());
+            createArrow(xOffset - 3, getHeight());
             firstTime = false;
         }
         

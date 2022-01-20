@@ -254,9 +254,10 @@ public final class PolyGlot {
                 System.exit(0);
             }
             catch (Throwable t) {
+                // t.printStackTrace();
                 cInfoBox.error("PolyGlot Error", "A serious error has occurred: " + t.getLocalizedMessage());
                 DesktopIOHandler.getInstance().writeErrorLog(t);
-                throw t;
+                System.exit(0);
             }
         });
     }
@@ -337,7 +338,10 @@ public final class PolyGlot {
             autoSaveFile.delete();
         }
         
-        System.exit(0);
+        // allow JUnit to handle this state itself
+        if (!PGTUtil.isInJUnitTest()) {
+            System.exit(0);
+        }
     }
 
     public DictCore getNewCore() {
@@ -547,7 +551,7 @@ public final class PolyGlot {
                     autoSave();
                 }
             }
-        }, PGTUtil.SECONDS_BETWEEN_AUTO_SAVES);
+        }, polyGlot.getOptionsManager().getMsBetweenSaves());
     }
     
     /**
@@ -568,8 +572,8 @@ public final class PolyGlot {
      * @throws java.lang.Exception 
      */
     public static void setTestPolyGlot(PolyGlot _polyGlot) throws Exception {
-        if (!PGTUtil.isInJUnitTest()) {
-            throw new Exception("ONLY TO BE RUN AS SETUP FOR JUNIT TESTING");
+        if (!PGTUtil.isInJUnitTest() && !PGTUtil.isUITestingMode()) {
+            throw new Exception("ONLY TO BE RUN AS SETUP FOR TESTING");
         }
         
         PolyGlot.polyGlot = _polyGlot;

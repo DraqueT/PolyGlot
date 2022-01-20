@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -65,6 +65,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
@@ -102,6 +104,10 @@ import org.darisadesigns.polyglotlina.WebInterface;
  */
 public final class ScrMainMenu extends PFrame {
 
+    public boolean isMenuReady() {
+        return menuReady;
+    }
+
     private final JMenuItem accelPublish = new JMenuItem();
     private final JMenuItem accelSave = new JMenuItem();
     private final JMenuItem accelNew = new JMenuItem();
@@ -109,66 +115,109 @@ public final class ScrMainMenu extends PFrame {
     private final JMenuItem accelOpen = new JMenuItem();
     private PToDoTree toDoTree;
     private PFrame curWindow = null;
-    private final ScrLexicon cacheLexicon;
+    private ScrLexicon cacheLexicon;
     private Image backGround;
     private final List<Window> childWindows = new ArrayList<>();
+    private Thread longRunningSetup;
+    private boolean menuReady = false;
 
     /**
      * Creates new form ScrMainMenu
      *
-     * Note: Single time setup per app run requires handing self to other objects
-     * 
+     * Note: Single time setup per app run requires handing self to other
+     * objects
+     *
      * @param _core DictCore menus run on
      */
-    @SuppressWarnings("LeakingThisInConstructor")
     public ScrMainMenu(DictCore _core) {
         super(_core);
-
         initComponents();
-
-        toDoTree = new PToDoTree(nightMode, menuFontSize);
-        cacheLexicon = ScrLexicon.run(core, this);
-
-        setupEasterEgg();
-
-        try {
-            backGround = ImageIO.read(getClass().getResource(PGTUtil.MAIN_MENU_IMAGE));
-            jLabel1.setFont(PGTUtil.MENU_FONT.deriveFont(45f));
-        } catch (IOException e) {
-            DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getOSHandler().getInfoBox().error("Resource Error",
-                    "Unable to load internal resource: " + e.getLocalizedMessage());
-        }
-
-        updateAllValues(core);
-        genTitle();
-        setupButtonPopouts();
-        setupAccelerators();
-        setupToDo();
-        populateRecentOpened();
-        populateExampleLanguages();
-        populateSwadeshMenu();
-        checkJavaVersion();
-        super.setSize(super.getPreferredSize());
-        addBindingsToPanelComponents(this.getRootPane());
-        setupStartButtonPositining();
-        setupForm();
+        longRunningSetup();
+        dependantSetup();
     }
-    
+
+    /**
+     * This runs setup processes which may depend on threads which have not yet
+     * completed due to race conditions. Retry twice, then give up if still
+     * failing, informing user of irrecoverable error and to try restarting
+     * PolyGlot.
+     */
+    private void dependantSetup() {
+        final var maxRetry = 3;
+
+        for (var i = 0;; i++) {
+            try {
+                toDoTree = new PToDoTree(nightMode, menuFontSize);
+                cacheLexicon = ScrLexicon.run(core, this);
+
+                setupEasterEgg();
+
+                try {
+                    backGround = ImageIO.read(getClass().getResource(PGTUtil.MAIN_MENU_IMAGE));
+                    jLabel1.setFont(PGTUtil.MENU_FONT.deriveFont(45f));
+                }
+                catch (IOException e) {
+                    DesktopIOHandler.getInstance().writeErrorLog(e);
+                    core.getOSHandler().getInfoBox().error("Resource Error",
+                            "Unable to load internal resource: " + e.getLocalizedMessage());
+                }
+
+                updateAllValues(core);
+                genTitle();
+                super.setSize(super.getPreferredSize());
+                addBindingsToPanelComponents(this.getRootPane());
+                setupStartButtonPositining();
+                setupForm();
+                break;
+            } catch (Exception e) {
+                DesktopIOHandler.getInstance().writeErrorLog(e);
+                try { Thread.sleep(500); } catch (InterruptedException ex) { /* do nothing*/ }
+                
+                if (i > maxRetry) {
+                    core.getOSHandler().getInfoBox().error("Initialization Error",
+                            "PolyGlot has experienced a serious error. Please restart.\n" + e.getLocalizedMessage());
+                    this.dispose(true);
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Starts separate thread for long running menu setups to speed PolyGlot
+     * boot
+     */
+    private synchronized void longRunningSetup() {
+        longRunningSetup = new Thread(() -> {
+            setupButtonPopouts();
+            setupAccelerators();
+            setupToDo();
+            populateRecentOpened();
+            populateExampleLanguages();
+            populateSwadeshMenu();
+            menuReady = true;
+        });
+        longRunningSetup.start();
+    }
+
+    public Thread getSetupThread() {
+        return longRunningSetup;
+    }
+
     private void setupForm() {
         if (PolyGlot.getPolyGlot().getOptionsManager().isMaximized()) {
             setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         }
     }
-    
+
     /**
      * ensures buttons are positioned in a way that doesn't look stupid
      */
     private void setupStartButtonPositining() {
-        pnlStartButtons.addComponentListener(new ComponentAdapter(){
+        pnlStartButtons.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                btnNewLang.setLocation((pnlStartButtons.getWidth() - btnNewLang.getSize().width)/2, btnNewLang.getLocation().y);
+                btnNewLang.setLocation((pnlStartButtons.getWidth() - btnNewLang.getSize().width) / 2, btnNewLang.getLocation().y);
             }
         });
     }
@@ -187,12 +236,13 @@ public final class ScrMainMenu extends PFrame {
 
             JMenuItem nextList = new JMenuItem("Load " + menuName);
             nextList.setToolTipText("Loads words from " + menuName + " into your lexicon.");
-            nextList.addActionListener((ActionEvent evt)-> {
+            nextList.addActionListener((ActionEvent evt) -> {
                 URL swadUrl = ScrMainMenu.class.getResource(finalLocation);
                 try ( BufferedInputStream bs = new BufferedInputStream(swadUrl.openStream())) {
                     finalCore.getWordCollection().loadSwadesh(bs, true);
                     updateAllValues(finalCore);
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                     new DesktopInfoBox(curWindow).error("Unable to load internal resource: ", finalLocation);
                     DesktopIOHandler.getInstance().writeErrorLog(ex, "Resource read error on open.");
                 }
@@ -206,14 +256,15 @@ public final class ScrMainMenu extends PFrame {
         customImport.addActionListener((ActionEvent e) -> {
             JFileChooser chooser = new JFileChooser();
             chooser.setMultiSelectionEnabled(false);
-            chooser.setDialogTitle("Select line delimited Swadesh list.");
-            
+            chooser.setDialogTitle("Select line delimited Swadesh list file.");
+
             if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                 File file = chooser.getSelectedFile();
                 try ( InputStream is = new FileInputStream(file);  BufferedInputStream bs = new BufferedInputStream(is)) {
                     finalCore.getWordCollection().loadSwadesh(bs, true);
                     updateAllValues(finalCore);
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                     new DesktopInfoBox(this).error("Swadesh Load Error",
                             "Could not load selected Swadesh List. Please make certain it is formatted correctly (newline separated)");
                     DesktopIOHandler.getInstance().writeErrorLog(ex, "Swadesh load error");
@@ -243,14 +294,15 @@ public final class ScrMainMenu extends PFrame {
                         if (!saveOrCancelTest()) {
                             return;
                         }
-                        
+
                         setFile(location);
                     });
 
                     mnuExLex.add(mnuExample);
                 }
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             new DesktopInfoBox(this).error("Resource Error", "Failed to load example dictionaries.");
             DesktopIOHandler.getInstance().writeErrorLog(e, "Failed to load example dictionaries.");
         }
@@ -332,21 +384,21 @@ public final class ScrMainMenu extends PFrame {
 
         if (doExit) { // skip saving options if not exiting program...
             DesktopOptionsManager opMan = PolyGlot.getPolyGlot().getOptionsManager();
-            
+
             // Note: this only applies to Windows - Mac OS requires reflection or implementing mac only class on form classes (no)
             boolean isMaximized = (this.getExtendedState() & JFrame.MAXIMIZED_BOTH) == JFrame.MAXIMIZED_BOTH;
             opMan.setMaximized(isMaximized);
-            
+
             // do not overwerite last windowed size if maximized
             if (!isMaximized) {
                 opMan.setScreenPosition(getClass().getName(), getLocation());
                 opMan.setToDoBarPosition(pnlToDoSplit.getDividerLocation());
             }
-            
 
             try {
                 PolyGlot.getPolyGlot().saveOptionsIni();
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 // save error likely due to inability to write to disk, disable logging
                 // IOHandler.writeErrorLog(e);
                 core.getOSHandler().getInfoBox().warning("INI Save Error", e.getLocalizedMessage());
@@ -365,27 +417,6 @@ public final class ScrMainMenu extends PFrame {
         }
 
         childWindows.clear();
-    }
-
-    /**
-     * Checks to make certain Java is a high enough version. Informs user and
-     * quits otherwise.
-     */
-    private void checkJavaVersion() {
-        String javaVersion = System.getProperty("java.version");
-
-        if (javaVersion.startsWith("1.0")
-                || javaVersion.startsWith("1.1")
-                || javaVersion.startsWith("1.2")
-                || javaVersion.startsWith("1.3")
-                || javaVersion.startsWith("1.4")
-                || javaVersion.startsWith("1.5")
-                || javaVersion.startsWith("1.6")) {
-            core.getOSHandler().getInfoBox().error("Please Upgrade Java", "Java " + javaVersion
-                    + " must be upgraded to run PolyGlot. Version 1.7 or higher is required.\n\n"
-                    + "Please upgrade at https://java.com/en/download/.");
-            System.exit(0);
-        }
     }
 
     /**
@@ -413,7 +444,7 @@ public final class ScrMainMenu extends PFrame {
                 setFile(curFile);
                 populateRecentOpened();
             });
-            
+
             mnuRecents.add(lastFile);
             mdlRecentOpened.addElement(new RecentFile(fileName, curFile));
         }
@@ -430,12 +461,14 @@ public final class ScrMainMenu extends PFrame {
                 cacheLexicon.updateAllValues(core);
                 changeScreen(cacheLexicon, cacheLexicon.getWindow(), null);
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             core = PolyGlot.getPolyGlot().getNewCore(); // don't allow partial loads
             core.getOSHandler().getInfoBox().error("File Read Error", "Could not read file: " + fileName
                     + "\n\n " + e.getMessage());
-        } catch (IllegalStateException e) {
+        }
+        catch (IllegalStateException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             core.getOSHandler().getInfoBox().warning("File Read Problems", "Problems reading file:\n"
                     + e.getLocalizedMessage());
@@ -512,19 +545,20 @@ public final class ScrMainMenu extends PFrame {
         boolean cleanSave = false;
         String curFileName = core.getCurFileName();
 
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
         try {
             core.writeFile(_fileName, true);
             cleanSave = true;
-        } catch (IOException | ParserConfigurationException
+        }
+        catch (IOException | ParserConfigurationException
                 | TransformerException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             core.getOSHandler().getInfoBox().error("Save Error", "Unable to save to file: "
                     + curFileName + "\n\n" + e.getMessage());
         }
 
-        setCursor(Cursor.getDefaultCursor());
+        pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
 
         if (cleanSave) {
             core.getOSHandler().getInfoBox().info("Success", "Language saved to: "
@@ -659,10 +693,11 @@ public final class ScrMainMenu extends PFrame {
 
         genTitle();
     }
-    
+
     /**
      * Opens a file from a given path
-     * @param path 
+     *
+     * @param path
      */
     public void openFileFromPath(String path) {
         setFile(path);
@@ -682,7 +717,8 @@ public final class ScrMainMenu extends PFrame {
             public void run() {
                 try {
                     ScrUpdateAlert.run(verbose, core);
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     DesktopIOHandler.getInstance().writeErrorLog(e);
                     if (verbose) {
                         core.getOSHandler().getInfoBox().error("Update Problem",
@@ -721,7 +757,7 @@ public final class ScrMainMenu extends PFrame {
         }
 
         if (!new File(fileName).exists()
-                || new DesktopInfoBox(this).actionConfirmation("Overwrite File?", 
+                || new DesktopInfoBox(this).actionConfirmation("Overwrite File?",
                         "File with this name and location already exists. Continue/Overwrite?")) {
             try {
                 Java8Bridge.exportExcelDict(fileName, core,
@@ -736,7 +772,8 @@ public final class ScrMainMenu extends PFrame {
                 } else {
                     core.getOSHandler().getInfoBox().info("Export Status", "Language exported to " + fileName + ".");
                 }
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
                 core.getOSHandler().getInfoBox().info("Export Problem", e.getLocalizedMessage());
             }
@@ -782,7 +819,8 @@ public final class ScrMainMenu extends PFrame {
                 DesktopIOHandler.getInstance().exportConFont(fileName, core.getCurFileName());
             }
             core.getOSHandler().getInfoBox().info("Export Success", "Font exported to: " + fileName);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             core.getOSHandler().getInfoBox().error("Export Error", "Unable to export font: " + e.getMessage());
         }
@@ -845,6 +883,7 @@ public final class ScrMainMenu extends PFrame {
 
     private void deselectButtons() {
         ((PButton) btnProp).setActiveSelected(false);
+        ((PButton) btnZompistWordGenerator).setActiveSelected(false);
         ((PButton) btnPos).setActiveSelected(false);
         ((PButton) btnLogos).setActiveSelected(false);
         ((PButton) btnLexicon).setActiveSelected(false);
@@ -887,13 +926,22 @@ public final class ScrMainMenu extends PFrame {
         toDoTree.setRootVisible(false);
         toDoTree.setModel(new PToDoTreeModel(ToDoTreeNode.createToDoTreeNode(core.getToDoManager().getRoot())));
         ((DefaultTreeModel) toDoTree.getModel()).nodeStructureChanged((ToDoTreeNode) toDoTree.getModel().getRoot());
+
+        SwingUtilities.invokeLater(() -> {
+            PolyGlot.getPolyGlot().getOSHandler().getPFontHandler().updateLocalFont();
+        });
+    }
+
+    public PToDoTree getToDoTree() {
+        return toDoTree;
     }
 
     private void setupEasterEgg() {
         final Window self = this;
-        
+
         class EnterKeyListener implements KeyEventPostProcessor {
-            String lastChars = "------------------------------"; 
+
+            String lastChars = "------------------------------";
 
             @Override
             public boolean postProcessKeyEvent(KeyEvent e) {
@@ -923,11 +971,11 @@ public final class ScrMainMenu extends PFrame {
         KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         manager.addKeyEventPostProcessor(new EnterKeyListener());
     }
-    
+
     private String genFursona() {
-        String[] descriptor = {"stinky","stimky","silly","horny","bouncy","candy","puppet","piñiata","dank","scaly","shiny","multi","fuzzy","grody","hypno","latex","horned","maned","shaved","leggy","beefy","spotted"};
-        String[] species ={"skink","lion","wolf","fox","dragon","kukun (lucky you!)","protogen","skunk","possum","owl","secretary bird","tiger","sheep","ram","unidentifiable craature","lamb","deer","mouse","rabbit","hyena","gopher","sergal","sparkledog","llama","frog","horse","snake","shark","weasil","gryphon","skink","hamster","bat"};
-        
+        String[] descriptor = {"stinky", "stimky", "silly", "horny", "bouncy", "candy", "puppet", "piñiata", "dank", "scaly", "shiny", "multi", "fuzzy", "grody", "hypno", "latex", "horned", "maned", "shaved", "leggy", "beefy", "spotted"};
+        String[] species = {"skink", "lion", "wolf", "fox", "dragon", "kukun (lucky you!)", "protogen", "skunk", "possum", "owl", "secretary bird", "tiger", "sheep", "ram", "unidentifiable craature", "lamb", "deer", "mouse", "rabbit", "hyena", "gopher", "sergal", "sparkledog", "llama", "frog", "horse", "snake", "shark", "weasil", "gryphon", "skink", "hamster", "bat"};
+
         return descriptor[new Random().nextInt(descriptor.length)] + " " + species[new Random().nextInt(species.length)];
     }
 
@@ -950,7 +998,7 @@ public final class ScrMainMenu extends PFrame {
             newScreen.dispose();
             return;
         }
-        
+
         // the search menu causes problems with cached Lexicon if left open
         if (curWindow instanceof ScrLexicon scrLexicon) {
             scrLexicon.closeAndClearSearchPanel();
@@ -1018,7 +1066,7 @@ public final class ScrMainMenu extends PFrame {
     public void selectFirstAvailableButton() {
         openLexicon();
     }
-    
+
     private void setupButtonPopouts() {
         // not all buttons support this feature, but those that don't should still display it in grey
         setupDropdownMenu((PButton) btnLexicon, () -> {
@@ -1027,6 +1075,9 @@ public final class ScrMainMenu extends PFrame {
         setupDropdownMenu((PButton) btnPos, () -> {
             return ScrTypes.run(core);
         }, HelpHandler.PARTSOFSPEECH_HELP, true);
+        setupDropdownMenu((PButton) btnZompistWordGenerator, () -> {
+            return null;
+        }, HelpHandler.ZOMPIST_HELP, false);
         setupDropdownMenu((PButton) btnClasses, () -> {
             return new ScrWordClasses(core);
         }, HelpHandler.LEXICALCLASSES_HELP, true);
@@ -1058,9 +1109,9 @@ public final class ScrMainMenu extends PFrame {
      * @param _enable
      */
     private void setupDropdownMenu(
-            final PButton button, 
-            Supplier<Window> setNewWindow, 
-            String helpLocation, 
+            final PButton button,
+            Supplier<Window> setNewWindow,
+            String helpLocation,
             boolean _enable
     ) {
         final JPopupMenu buttonMenu = new JPopupMenu();
@@ -1074,7 +1125,7 @@ public final class ScrMainMenu extends PFrame {
         } else {
             popOut.setToolTipText(button.getText() + " cannot be popped out.");
         }
-        
+
         help.setToolTipText("Open readme to relevant section.");
 
         popOut.addActionListener((ActionEvent e) -> {
@@ -1084,63 +1135,63 @@ public final class ScrMainMenu extends PFrame {
                 @Override
                 public void windowOpened(WindowEvent ex) {
                 }
-                
+
                 @Override
                 public void windowClosing(WindowEvent ex) {
                 }
-                
+
                 @Override
                 public void windowClosed(WindowEvent ex) {
                     childWindows.remove(w);
                     button.setEnabled(true);
                 }
-                
+
                 @Override
                 public void windowIconified(WindowEvent ex) {
                 }
-                
+
                 @Override
                 public void windowDeiconified(WindowEvent ex) {
                 }
-                
+
                 @Override
                 public void windowActivated(WindowEvent ex) {
                 }
-                
+
                 @Override
                 public void windowDeactivated(WindowEvent ex) {
                 }
             });
-            
+
             if (w instanceof PFrame pFrame) {
                 pFrame.addWindowFocusListener(new WindowFocusListener() {
                     @Override
                     public void windowGainedFocus(WindowEvent e) {
-                        
+
                     }
-                    
+
                     @Override
                     public void windowLostFocus(WindowEvent e) {
                         pFrame.saveAllValues();
                     }
                 });
             }
-            
+
             w.setVisible(true);
             w.toFront();
             childWindows.add(w);
-            
+
             if (button.isActiveSelected()) {
                 selectFirstAvailableButton();
             }
         });
 
         buttonMenu.add(popOut);
-        
+
         help.addActionListener((ActionEvent e) -> {
             new DesktopHelpHandler().openHelpToLocation(helpLocation);
         });
-        
+
         buttonMenu.add(help);
 
         button.addMouseListener(new MouseListener() {
@@ -1184,13 +1235,13 @@ public final class ScrMainMenu extends PFrame {
         cacheLexicon.updateAllValues(core);
         changeScreen(cacheLexicon, cacheLexicon.getWindow(), (PButton) btnLexicon);
     }
-    
+
     public void openProperties() {
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         saveAllValues();
         ScrLangProps s = new ScrLangProps(core);
-        changeScreen(s, s.getWindow(), (PButton)btnProp);
-        setCursor(Cursor.getDefaultCursor());
+        changeScreen(s, s.getWindow(), (PButton) btnProp);
+        pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
     }
 
     @Override
@@ -1206,7 +1257,6 @@ public final class ScrMainMenu extends PFrame {
         core = _core;
 
         updateAllChildValues(_core);
-        populateSwadeshMenu();
     }
 
     private void updateAllChildValues(DictCore _core) {
@@ -1288,36 +1338,37 @@ public final class ScrMainMenu extends PFrame {
             accelPublish.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | KeyEvent.CTRL_DOWN_MASK));
         }
     }
-    
+
     @Override
     public DictCore getCore() {
         return core;
     }
-    
+
     /**
      * This scales UI elements for the welcome window
      */
     private void scaleWelcomWindow() {
         if (pnlStartButtons != null && btnNewLang != null) {
-            btnNewLang.setLocation((pnlStartButtons.getWidth() - btnNewLang.getSize().width)/2, btnNewLang.getLocation().y);
+            btnNewLang.setLocation((pnlStartButtons.getWidth() - btnNewLang.getSize().width) / 2, btnNewLang.getLocation().y);
         }
     }
-    
+
     @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);
         scaleWelcomWindow();
     }
-    
+
     private class RecentFile {
+
         public final String fileName;
         public final String path;
-        
+
         public RecentFile(String _fileName, String _path) {
             fileName = _fileName;
             path = _path;
         }
-        
+
         @Override
         public String toString() {
             return fileName;
@@ -1334,7 +1385,7 @@ public final class ScrMainMenu extends PFrame {
             populateRecentOpened();
         }
     }
-    
+
     private void ExportDictionaryFile() {
         JFileChooser chooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Dictionary File", "dic");
@@ -1368,7 +1419,7 @@ public final class ScrMainMenu extends PFrame {
                     return;
                 }
             }
-            
+
             ExportSpellingDictionary export = new ExportSpellingDictionary(core);
             try {
                 export.ExportSpellingDictionary(fileName);
@@ -1376,27 +1427,28 @@ public final class ScrMainMenu extends PFrame {
             }
             catch (IOException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                new DesktopInfoBox(this).error("File Write Error", "Unable to export dictionary to: " 
+                new DesktopInfoBox(this).error("File Write Error", "Unable to export dictionary to: "
                         + curFileName + "\n\n" + e.getLocalizedMessage());
             }
         }
     }
-    
+
     private void OpenBugReport() {
         try {
             DesktopOSHandler.browseToLocation(PGTUtil.TROUBLE_TICKET_URL);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             core.getOSHandler().getInfoBox().info("Location Unreachable", "Unable to open ticket site. Please check web connection.");
         }
     }
-    
+
     private void unpackLanguage() {
         String curFileName = core.getCurFileName();
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Unpack Language File");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Languages", "pgd");
         chooser.setFileFilter(filter);
-        
+
         if (curFileName.isEmpty()) {
             chooser.setCurrentDirectory(core.getWorkingDirectory());
         } else {
@@ -1406,28 +1458,29 @@ public final class ScrMainMenu extends PFrame {
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             String originFile = chooser.getSelectedFile().getAbsolutePath();
             String unpackTo = originFile.replace(".pgd", "");
-            
+
             try {
                 File targetDir = new File(unpackTo);
-                
+
                 for (int i = 1; targetDir.exists(); i++) {
                     targetDir = new File(unpackTo + "_" + i);
                 }
-                
+
                 DesktopIOHandler.getInstance().unzipFileToDir(originFile, targetDir.toPath());
                 new DesktopInfoBox(this).info("Language Unpacked", "Unpacked languge to folder: \n" + targetDir.getAbsolutePath());
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 new DesktopInfoBox(this).error("Unpacking Error", "Unable to unpack langauge file: " + e.getLocalizedMessage());
             }
         }
     }
-    
+
     private void packLanguage() {
         String curFileName = core.getCurFileName();
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Pack Language Dirctory to PGD File");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        
+
         if (curFileName.isEmpty()) {
             chooser.setCurrentDirectory(core.getWorkingDirectory());
         } else {
@@ -1437,22 +1490,23 @@ public final class ScrMainMenu extends PFrame {
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             String origin = chooser.getSelectedFile().getAbsolutePath();
             String packTo = origin + ".pgd";
-            
+
             try {
                 File targetFile = new File(packTo);
 
                 for (int i = 1; targetFile.exists(); i++) {
                     targetFile = new File(origin + "_" + i + ".pgd");
                 }
-                
+
                 DesktopIOHandler.packDirectoryToZip(origin, targetFile.getAbsolutePath(), true);
                 new DesktopInfoBox(this).info("Language Packed", "Packed languge to file: \n" + targetFile.getAbsolutePath());
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 new DesktopInfoBox(this).error("Packing Error", "Unable to unpack langauge file: " + e.getLocalizedMessage());
             }
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -1475,6 +1529,7 @@ public final class ScrMainMenu extends PFrame {
         btnPhonology = new PButton(nightMode, menuFontSize);
         btnQuiz = new PButton(nightMode, menuFontSize);
         btnPhrasebook = new PButton(nightMode, menuFontSize);
+        btnZompistWordGenerator = new PButton(nightMode, menuFontSize);
         pnlMain = new javax.swing.JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -1558,7 +1613,7 @@ public final class ScrMainMenu extends PFrame {
         pnlToDo.setLayout(pnlToDoLayout);
         pnlToDoLayout.setHorizontalGroup(
             pnlToDoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 117, Short.MAX_VALUE)
+            .addGap(0, 1, Short.MAX_VALUE)
         );
         pnlToDoLayout.setVerticalGroup(
             pnlToDoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1643,29 +1698,40 @@ public final class ScrMainMenu extends PFrame {
             }
         });
 
+        btnZompistWordGenerator.setText("Word Generator");
+        btnZompistWordGenerator.setToolTipText("An adaptation of the Zompist word generator, which can create words for your lexicon based on your rules and import them against swadesh values (or blank)");
+        btnZompistWordGenerator.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnZompistWordGeneratorActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlSideButtonsLayout = new javax.swing.GroupLayout(pnlSideButtons);
         pnlSideButtons.setLayout(pnlSideButtonsLayout);
         pnlSideButtonsLayout.setHorizontalGroup(
             pnlSideButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlSideButtonsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pnlSideButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(pnlSideButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnZompistWordGenerator, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnLexicon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnPos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnClasses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnProp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnLogos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnGrammar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnLogos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnPhonology, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnQuiz, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnPhrasebook, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnPhrasebook, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnProp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnQuiz, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         pnlSideButtonsLayout.setVerticalGroup(
             pnlSideButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlSideButtonsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnLexicon, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnZompistWordGenerator)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnPos, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1682,7 +1748,7 @@ public final class ScrMainMenu extends PFrame {
                 .addComponent(btnProp, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnQuiz)
-                .addContainerGap(123, Short.MAX_VALUE))
+                .addContainerGap(88, Short.MAX_VALUE))
         );
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
@@ -1758,7 +1824,7 @@ public final class ScrMainMenu extends PFrame {
         pnlMain.setLayout(pnlMainLayout);
         pnlMainLayout.setHorizontalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 616, Short.MAX_VALUE)
             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(pnlStartButtons, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -2085,9 +2151,9 @@ public final class ScrMainMenu extends PFrame {
     }//GEN-LAST:event_btnPosActionPerformed
 
     private void mnuNewLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNewLocalActionPerformed
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         newFile(true);
-        setCursor(Cursor.getDefaultCursor());
+        pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuNewLocalActionPerformed
 
     private void mnuSaveLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSaveLocalActionPerformed
@@ -2101,9 +2167,9 @@ public final class ScrMainMenu extends PFrame {
     }//GEN-LAST:event_mnuSaveAsActionPerformed
 
     private void mnuOpenLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuOpenLocalActionPerformed
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         open();
-        setCursor(Cursor.getDefaultCursor());
+        pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
         updateAllValues(core);
     }//GEN-LAST:event_mnuOpenLocalActionPerformed
 
@@ -2116,16 +2182,16 @@ public final class ScrMainMenu extends PFrame {
     }//GEN-LAST:event_mnuExitActionPerformed
 
     private void mnuImportFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportFileActionPerformed
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ScrExcelImport.run(core, this);
         cacheLexicon.refreshWordList(-1);
-        setCursor(Cursor.getDefaultCursor());
+        pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuImportFileActionPerformed
 
     private void mnuExportToExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportToExcelActionPerformed
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         exportToExcel();
-        setCursor(Cursor.getDefaultCursor());
+        pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuExportToExcelActionPerformed
 
     private void mnuExportFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportFontActionPerformed
@@ -2141,7 +2207,7 @@ public final class ScrMainMenu extends PFrame {
             if (!WebInterface.isInternetConnected()) {
                 new DesktopInfoBox(this).warning("No Net Connection", "No network connection detected. Google generated graphs will not be rendered.");
             }
-            
+
             try {
                 int wordCount = core.getWordCollection().getWordCount();
                 ScrProgressMenu progress = ScrProgressMenu.createScrProgressMenu("Generating Language Stats", wordCount + 5, true, true);
@@ -2160,7 +2226,7 @@ public final class ScrMainMenu extends PFrame {
 
             // test whether con-font family is installed on computer
             GraphicsEnvironment g = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            String conFontFamily = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon().getFamily();
+            String conFontFamily = ((DesktopPropertiesManager) core.getPropertiesManager()).getFontCon().getFamily();
             if (!Arrays.asList(g.getAvailableFontFamilyNames()).contains(conFontFamily)) {
                 // prompt user to install font (either Charis or their chosen con-font) if not currently on system
                 new DesktopInfoBox(this).warning("Font Not Installed",
@@ -2187,7 +2253,8 @@ public final class ScrMainMenu extends PFrame {
     private void mnuAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAboutActionPerformed
         try {
             openHelp();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             new DesktopInfoBox(this).error("Help Error", "Unable to open help file: " + e.getLocalizedMessage());
         }
     }//GEN-LAST:event_mnuAboutActionPerformed
@@ -2357,6 +2424,11 @@ public final class ScrMainMenu extends PFrame {
         packLanguage();
     }//GEN-LAST:event_mnuPackLanguageActionPerformed
 
+    private void btnZompistWordGeneratorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZompistWordGeneratorActionPerformed
+        var zompist = new ScrZompistLexiconGen(core);
+        changeScreen(zompist, zompist.getWindow(), (PButton) evt.getSource());
+    }//GEN-LAST:event_btnZompistWordGeneratorActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClasses;
     private javax.swing.JButton btnGrammar;
@@ -2370,6 +2442,7 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JButton btnPos;
     private javax.swing.JButton btnProp;
     private javax.swing.JButton btnQuiz;
+    private javax.swing.JButton btnZompistWordGenerator;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

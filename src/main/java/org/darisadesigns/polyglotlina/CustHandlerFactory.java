@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -191,7 +191,6 @@ public final class CustHandlerFactory {
             boolean bgrammarSecName = false;
             boolean bgrammarSecRecId = false;
             boolean bgrammarSecText = false;
-            //boolean bclassNode = false;
             boolean bclassId = false;
             boolean bclassName = false;
             boolean bclassApplyTypes = false;
@@ -225,6 +224,12 @@ public final class CustHandlerFactory {
             boolean bphraseNotes = false;
             boolean bphraseOrder = false;
             boolean bexpandedLexListDisp = false;
+            boolean bzompistCategories = false;
+            boolean bzompistIllegals = false;
+            boolean bzompistRewrite = false;
+            boolean bzompistSyllables = false;
+            boolean bsyllableNode = false;
+            boolean bsyllableComposition = false;
             
             int wId;
             int wCId;
@@ -233,11 +238,11 @@ public final class CustHandlerFactory {
             String tmpString; // placeholder for building serialized values that are guaranteed processed in a single pass
 
             final ConjugationManager conjugationMgr = core.getConjugationManager();
-            final PronunciationMgr pronuncMgr = core.getPronunciationMgr();
+            final PronunciationMgr procMan = core.getPronunciationMgr();
             final RomanizationManager romanizationMgr = core.getRomManager();
-            final PropertiesManager propertiesManager = core.getPropertiesManager();
-            final FamilyManager famMgr = core.getFamManager();
-            final PhraseManager phraseManager = core.getPhraseManager();
+            final PropertiesManager propMan = core.getPropertiesManager();
+            final FamilyManager famMan = core.getFamManager();
+            final PhraseManager phraseMan = core.getPhraseManager();
 
             @Override
             public void startElement(String uri, String localName, String qName, Attributes attributes) {
@@ -291,8 +296,7 @@ public final class CustHandlerFactory {
                     bfontSize = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_LOCAL_FONT_SIZE_XID)) {
                     bfontLocalSize = true;
-                }
-                else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_FONT_STYLE_XID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_FONT_STYLE_XID)) {
                     bfontStyle = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ALPHA_ORDER_XID)) {
                     tmpString = "";
@@ -363,7 +367,7 @@ public final class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.FAM_NAME_XID)) {
                     bfamName = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.FAM_NODE_XID)) {
-                    famMgr.buildNewBuffer();
+                    famMan.buildNewBuffer();
                 } else if (qName.equalsIgnoreCase(PGTUtil.FAM_NOTES_XID)) {
                     bfamNotes = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.FAM_WORD_XID)) {
@@ -496,6 +500,19 @@ public final class CustHandlerFactory {
                     bphrasegloss = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_ORDER_XID)) {
                     bphraseOrder = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ZOMPIST_CATEGORIES)) {
+                    bzompistCategories = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ZOMPIST_ILLEGAL_CLUSTERS)) {
+                    bzompistIllegals = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ZOMPIST_REWRITE_RULES)) {
+                    bzompistRewrite = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ZOMPIST_SYLLABLES)) {
+                    bzompistSyllables = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_SYLLABLE)) {
+                    bsyllableNode = true;
+                    tmpString = "";
+                } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_COMPOSITION_SYLLABLE)) {
+                    bsyllableComposition = true;
                 }
             }
 
@@ -519,7 +536,7 @@ public final class CustHandlerFactory {
                         throw new SAXException("Type insertion error: " + e.getLocalizedMessage(), e);
                     }
                 } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_XID)) {
-                    pronuncMgr.addPronunciation(proBuffer);
+                    procMan.addPronunciation(proBuffer);
                 } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_NODE_XID)) {
                     romanizationMgr.addPronunciation(romBuffer);
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_XID)) {
@@ -613,7 +630,7 @@ public final class CustHandlerFactory {
                     bfontStyle = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ALPHA_ORDER_XID)) {
                     try {
-                        propertiesManager.setAlphaOrder(tmpString);
+                        propMan.setAlphaOrder(tmpString);
                     } catch (Exception e) {
                         throw new SAXException("Load error: " + e.getLocalizedMessage(), e);
                     }
@@ -674,7 +691,7 @@ public final class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.FAM_NAME_XID)) {
                     bfamName = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.FAM_NODE_XID)) {
-                    famMgr.bufferDone();
+                    famMan.bufferDone();
                 } else if (qName.equalsIgnoreCase(PGTUtil.FAM_NOTES_XID)) {
                     FamNode node = core.getFamManager().getBuffer();
                     try {
@@ -842,14 +859,14 @@ public final class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.PHRASEBOOK_XID)) {
                     bphraseBook = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_NODE_XID)) {
-                    PhraseNode buffer = phraseManager.getBuffer();
+                    PhraseNode buffer = phraseMan.getBuffer();
                     try {
-                        phraseManager.insert(buffer.getId(), buffer);
+                        phraseMan.insert(buffer.getId(), buffer);
                     } catch (Exception e) {
                         core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nPhrase load error: " + e.getLocalizedMessage();
                     }
-                    phraseManager.clear();
+                    phraseMan.clear();
                     bphraseNode = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_ID_XID)) {
                     bphraseid = false;
@@ -867,6 +884,19 @@ public final class CustHandlerFactory {
                     bphrasegloss = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_ORDER_XID)) {
                     bphraseOrder = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ZOMPIST_CATEGORIES)) {
+                    bzompistCategories = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ZOMPIST_ILLEGAL_CLUSTERS)) {
+                    bzompistIllegals = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ZOMPIST_REWRITE_RULES)) {
+                    bzompistRewrite = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ZOMPIST_SYLLABLES)) {
+                    bzompistSyllables = false;
+                }  else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_SYLLABLE)) {
+                    bsyllableNode = false;
+                    procMan.addSyllable(tmpString);
+                } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_COMPOSITION_SYLLABLE)) {
+                    bsyllableComposition = false;
                 }
             }
 
@@ -928,7 +958,7 @@ public final class CustHandlerFactory {
                     bwordoverAutoDec = false;
                 } else if (bfontcon && core.getPropertiesManager().getCachedFont() == null) {
                     try {
-                        propertiesManager.setFontCon(new String(ch, start, length));
+                        propMan.setFontCon(new String(ch, start, length));
                     } catch (Exception e) {
                         core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nFont load error: " + e.getLocalizedMessage();
@@ -974,18 +1004,18 @@ public final class CustHandlerFactory {
                 } else if (bgenderNotes) {
                     // Deprecated
                 } else if (blangName) {
-                    propertiesManager.setLangName(propertiesManager.getLangName()
+                    propMan.setLangName(propMan.getLangName()
                             + new String(ch, start, length));
                 } else if (blangRegexFontOvr) {
-                    propertiesManager.setOverrideRegexFont(new String(ch, start, length).equals(PGTUtil.TRUE));
+                    propMan.setOverrideRegexFont(new String(ch, start, length).equals(PGTUtil.TRUE));
                 } else if (bfontSize) {
-                    propertiesManager.setFontSize(Double.valueOf(new String(ch, start, length)));
+                    propMan.setFontSize(Double.valueOf(new String(ch, start, length)));
                     bfontSize = false;
                 } else if (bfontStyle) {
-                    propertiesManager.setFontStyle(Integer.parseInt(new String(ch, start, length)));
+                    propMan.setFontStyle(Integer.parseInt(new String(ch, start, length)));
                     bfontStyle = false;
                 } else if (bfontLocalSize) {
-                    propertiesManager.setLocalFontSize(Double.parseDouble(new String(ch, start, length)));
+                    propMan.setLocalFontSize(Double.parseDouble(new String(ch, start, length)));
                 }
                 else if (balphaOrder) {
                     tmpString += new String(ch, start, length);
@@ -1030,31 +1060,31 @@ public final class CustHandlerFactory {
                     core.getTypes().getBufferType().setDefMandatory(new String(ch, start, length).equals(PGTUtil.TRUE));
                     bwordClassDefMan = false;
                 } else if (blangPropLocalUniqueness) {
-                    propertiesManager.setLocalUniqueness(new String(ch, start, length).equals(PGTUtil.TRUE));
+                    propMan.setLocalUniqueness(new String(ch, start, length).equals(PGTUtil.TRUE));
                     blangPropLocalUniqueness = false;
                 } else if (blangPropUseLocalLex) {
-                    propertiesManager.setUseLocalWordLex(new String(ch, start, length).equals(PGTUtil.TRUE));
+                    propMan.setUseLocalWordLex(new String(ch, start, length).equals(PGTUtil.TRUE));
                 } else if (blangPropWordUniqueness) {
-                    propertiesManager.setWordUniqueness(new String(ch, start, length).equals(PGTUtil.TRUE));
+                    propMan.setWordUniqueness(new String(ch, start, length).equals(PGTUtil.TRUE));
                     blangPropWordUniqueness = false;
                 } else if (blangPropLocalMandatory) {
-                    propertiesManager.setLocalMandatory(new String(ch, start, length).equals(PGTUtil.TRUE));
+                    propMan.setLocalMandatory(new String(ch, start, length).equals(PGTUtil.TRUE));
                     blangPropLocalMandatory = false;
                 } else if (blangPropTypeMandatory) {
-                    propertiesManager.setTypesMandatory(new String(ch, start, length).equals(PGTUtil.TRUE));
+                    propMan.setTypesMandatory(new String(ch, start, length).equals(PGTUtil.TRUE));
                     blangPropTypeMandatory = false;
                 } else if (blangPropEnforceRTL) {
-                    propertiesManager.setEnforceRTL(new String(ch, start, length).equals(PGTUtil.TRUE));
+                    propMan.setEnforceRTL(new String(ch, start, length).equals(PGTUtil.TRUE));
                     blangPropEnforceRTL = false;
                 } else if (blangPropAuthCopyright) {
-                    propertiesManager.setCopyrightAuthorInfo(propertiesManager.getCopyrightAuthorInfo()
+                    propMan.setCopyrightAuthorInfo(propMan.getCopyrightAuthorInfo()
                             + new String(ch, start, length));
                 } else if (blangPropSimpConj) {
-                    propertiesManager.setUseSimplifiedConjugations(new String(ch, start, length).equals(PGTUtil.TRUE));
+                    propMan.setUseSimplifiedConjugations(new String(ch, start, length).equals(PGTUtil.TRUE));
                 } else if (bexpandedLexListDisp) {
-                    propertiesManager.setExpandedLexListDisplay(new String(ch, start, length).equals(PGTUtil.TRUE));
+                    propMan.setExpandedLexListDisplay(new String(ch, start, length).equals(PGTUtil.TRUE));
                 } else if (blangPropLocalLangName) {
-                    propertiesManager.setLocalLangName(propertiesManager.getLocalLangName()
+                    propMan.setLocalLangName(propMan.getLocalLangName()
                             + new String(ch, start, length));
                 } else if (bdimId) {
                     conjugationMgr.getBuffer().getBuffer().setId(Integer.parseInt(new String(ch, start, length)));
@@ -1064,15 +1094,15 @@ public final class CustHandlerFactory {
                     dimBuffer.setValue(dimBuffer.getValue()
                             + new String(ch, start, length));
                 } else if (bfamName) {
-                    FamNode famBuffer = famMgr.getBuffer();
+                    FamNode famBuffer = famMan.getBuffer();
                     famBuffer.setValue(famBuffer.getValue()
                             + new String(ch, start, length));
                 } else if (bfamNotes) {
-                    FamNode node = famMgr.getBuffer();
+                    FamNode node = famMan.getBuffer();
                     node.setNotes(node.getNotes() + new String(ch, start, length));
                 } else if (bfamWord) {
                     try {
-                        famMgr.getBuffer().addWord(core.getWordCollection().getNodeById(
+                        famMan.getBuffer().addWord(core.getWordCollection().getNodeById(
                                 Integer.parseInt(new String(ch, start, length))));
                     } catch (NumberFormatException e) {
                         core.getOSHandler().getIOHandler().writeErrorLog(e);
@@ -1247,37 +1277,49 @@ public final class CustHandlerFactory {
                     bphraseNode = false; // set false here so not to consume action from subnodes
                 } else if (bphraseid) {
                     int id = Integer.parseInt(new String(ch, start, length));
-                    phraseManager.getBuffer().setId(id);
+                    phraseMan.getBuffer().setId(id);
                 } else if (bphrasegloss) {
-                    PhraseNode buffer = phraseManager.getBuffer();
+                    PhraseNode buffer = phraseMan.getBuffer();
                     String gloss = buffer.getGloss();
                     gloss += new String(ch, start, length);
                     buffer.setGloss(gloss);
                 } else if (bconPhrase) {
-                    PhraseNode buffer = phraseManager.getBuffer();
+                    PhraseNode buffer = phraseMan.getBuffer();
                     String conPhrase = buffer.getConPhrase();
                     conPhrase += new String(ch, start, length);
                     buffer.setConPhrase(conPhrase);
                 } else if (blocalPhrase) {
-                    PhraseNode buffer = phraseManager.getBuffer();
+                    PhraseNode buffer = phraseMan.getBuffer();
                     String localPhrase = buffer.getLocalPhrase();
                     localPhrase += new String(ch, start, length);
                     buffer.setLocalPhrase(localPhrase);
                 } else if (bphrasePronunciation) {
-                    PhraseNode buffer = phraseManager.getBuffer();
+                    PhraseNode buffer = phraseMan.getBuffer();
                     String proc = buffer.getPronunciation();
                     proc += new String(ch, start, length);
                     buffer.setPronunciation(proc);
                 } else if (bphrasePronunciationOverride) {
-                    phraseManager.getBuffer().setProcOverride(new String(ch, start, length).equals(PGTUtil.TRUE));
+                    phraseMan.getBuffer().setProcOverride(new String(ch, start, length).equals(PGTUtil.TRUE));
                 } else if (bphraseNotes) {
-                    PhraseNode buffer = phraseManager.getBuffer();
+                    PhraseNode buffer = phraseMan.getBuffer();
                     String notes = buffer.getNotes();
                     notes += new String(ch, start, length);
                     buffer.setNotes(notes);
                 } else if (bphraseOrder) {
                     int orderId = Integer.parseInt(new String(ch, start, length));
-                    phraseManager.getBuffer().setOrderId(orderId);
+                    phraseMan.getBuffer().setOrderId(orderId);
+                } else if (bzompistCategories) {
+                    propMan.setZompistCategories(propMan.getZompistCategories() + new String(ch, start, length));
+                } else if (bzompistIllegals) {
+                    propMan.setZompistIllegalClusters(propMan.getZompistIllegalClusters() + new String(ch, start, length));
+                } else if (bzompistRewrite) {
+                    propMan.setZompistRewriteRules(propMan.getZompistRewriteRules() + new String(ch, start, length));
+                } else if (bzompistSyllables) {
+                    propMan.setZompistSyllableTypes(propMan.getZompistSyllableTypes() + new String(ch, start, length));
+                } else if (bsyllableNode) {
+                    tmpString += new String(ch, start, length);
+                } else if (bsyllableComposition) {
+                    procMan.setSyllableCompositionEnabled(new String(ch, start, length).equals(PGTUtil.TRUE));
                 }
             }
             

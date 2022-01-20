@@ -496,34 +496,34 @@ public class ConWord extends DictNode {
         String summary = "";
         
         try {
-            summary = core.getPronunciationMgr().getPronunciation(this.getValue());
+            summary = core.getPronunciationMgr().getPronunciation(this.getValue()).trim();
             
             if (summary.isEmpty()) {
                 // allow for pronunciation overrides
-                summary = this.getPronunciation();
+                summary = this.getPronunciation().trim();
             }
         } catch (Exception ex) {
             // User is informed of this elsewhere.
         }
             
         if (summary.isEmpty()) {
-            summary = this.getLocalWord();
+            summary = this.getLocalWord().trim();
         }
         
         if (summary.isEmpty()) {
-            summary = this.getValue();
+            summary = this.getValue().trim();
         }
         
         if (curType != null && (curType.getId() != 0 || core.getPropertiesManager().isTypesMandatory())) {
             summary += " : " + (curType.getGloss().isEmpty()
-                    ? curType.getValue() : curType.getGloss());
+                    ? curType.getValue().trim() : curType.getGloss().trim());
         }
         
         if (!this.getDefinition().isEmpty()) {
-            summary += " : " + WebInterface.getTextFromHtml(this.getDefinition());
+            summary += " : " + WebInterface.getTextFromHtml(this.getDefinition()).trim();
         }
         
-        return summary;
+        return summary.replaceAll("\n", " ");
     }
 
     /**

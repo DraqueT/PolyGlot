@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -32,6 +32,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +60,15 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
     private List<E> baseObjects;
     private boolean filterActive = false;
     private Object lastSetValue = null;
+    private Color lastBg = this.getBackground();
 
+    public PComboBox(boolean useConFont) {
+        this(useConFont ?
+                ((DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager()).getFontCon() :
+                ((DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager()).getFontLocal()
+        );
+    }
+    
     public PComboBox(Font font) {
         doSetup(font, "");
     }
@@ -91,7 +100,6 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         }
         
         baseObjects.clear();
-        
         for (int i = 0; i < model.getSize(); i++) {
             baseObjects.add(model.getElementAt(i));
         }
@@ -123,12 +131,6 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         }
         
         refreshFromDataModel(model);
-    }
-    
-    @Override
-    public void addItem(E item) {
-        super.addItem(item);
-        baseObjects.add(item);
     }
     
     @Override
@@ -171,7 +173,7 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         textfield.setText(curText);
         textfield.setCaretPosition(caretPosition);
         
-        if (filterArray.size() > 0) {
+        if (filterArray.size() > 0 && this.isEnabled()) {
             showPopup();
         } else {
             hidePopup();
@@ -184,7 +186,8 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
      * @param isBack whether display color is background (rather than foreground)
      */
     public void makeFlash(Color _flashColor, boolean isBack) {
-        if (worker == null || worker.isDone() && ! this.isFocusOwner()) {
+        if ((worker == null || worker.isDone() || worker.isCancelled()) && ! this.isFocusOwner()) {
+            lastBg = this.getBackground();
             worker = PGTUtil.getFlashWorker(this, _flashColor, isBack);
             worker.execute();
         }
@@ -209,9 +212,11 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         this.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                self.setEditable(true);
-                if (lastSetValue != null) {
-                    textField.setText(lastSetValue.toString());
+                if (self.isEnabled()) {
+                    self.setEditable(true);
+                    if (lastSetValue != null) {
+                        textField.setText(lastSetValue.toString());
+                    }
                 }
             }
 
@@ -224,32 +229,36 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         textField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                self.showPopup();
+                if (self.isEnabled()) {
+                    self.showPopup();
+                }
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                self.setEditable(false);
-                var text = textField.getText();
-                var priorSelection = self.getSelectedItem();
-                
-                for (var i = 0; i < self.getItemCount(); i++) {
-                    var item = self.getItemAt(i);
-                    if (text.equals(item.toString())) {
-                        self.setSelectedItem(item);
-                        return;
+                if (self.isEnabled()) {
+                    self.setEditable(false);
+                    var text = textField.getText();
+                    var priorSelection = self.getSelectedItem();
+
+                    for (var i = 0; i < self.getItemCount(); i++) {
+                        var item = self.getItemAt(i);
+                        if (text.equals(item.toString())) {
+                            self.setSelectedItem(item);
+                            return;
+                        }
                     }
+
+                    if (priorSelection != null) {
+                        textField.setText(priorSelection.toString());
+                    } else {
+                        textField.setText("");
+                        comboFilter("", defaultText);
+                        hidePopup();
+                    }
+
+                    self.setSelectedItem(priorSelection);
                 }
-                
-                if (priorSelection != null) {
-                    textField.setText(priorSelection.toString());
-                } else {
-                    textField.setText("");
-                    comboFilter("", defaultText);
-                    hidePopup();
-                }
-                
-                self.setSelectedItem(priorSelection);
             }
         });
         
@@ -277,6 +286,35 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
     
     public boolean isDefaultValue() {
         return this.getSelectedIndex() == 0 && !defaultText.isEmpty();
+    }
+    
+    @Override
+    public void paint(Graphics g) {
+        Graphics2D antiAlias = (Graphics2D) g;
+        antiAlias.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        
+        super.paint(g);
+        
+        // paint selection box no right of dropdown menu
+        if (this.isEnabled()) {
+            if (this.isPopupVisible()) {
+                antiAlias.setColor(PGTUtil.COLOR_SELECTED_BG);
+            } else {
+                antiAlias.setColor(PGTUtil.COLOR_ENABLED_BG);
+            }
+        } else {
+            antiAlias.setColor(Color.decode("#d0d0d0"));
+        }
+        antiAlias.fillRect(getWidth() - 20, 1, 20, getHeight() - 1);
+        
+        // paint down arrow
+        Path2D myPath = new Path2D.Double();
+        myPath.moveTo(getWidth() - 15, 12);
+        myPath.lineTo(getWidth() - 5, 12);
+        myPath.lineTo(getWidth() - 10, getHeight() - 12);
+        myPath.closePath();
+        antiAlias.setColor(Color.black);
+        antiAlias.fill(myPath);
     }
     
     @Override
@@ -326,13 +364,6 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         
         antiAlias.setFont(tmpFont);
         this.setFont(tmpFont);
-        
-        if (enabled) {
-            antiAlias.setColor(PGTUtil.COLOR_ENABLED_BG);
-        } else {
-            antiAlias.setColor(Color.decode("#d0d0d0"));
-        }
-        antiAlias.fillRect(getWidth() - buttonWidth, 1, buttonWidth, getHeight() - 1);
         
         // draw outline
         if ((mouseOver || this.hasFocus()) && enabled) {
@@ -386,6 +417,13 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
     @Override
     public void mouseEntered(MouseEvent e) {
         mouseOver = true;
+        
+        // if user wants to select field, kill flashing
+        if (worker != null && !worker.isCancelled() && !worker.isDone()) {
+            worker.cancel(true);
+            setBackground(lastBg);
+            setEnabled(true);
+        }
     }
 
     @Override

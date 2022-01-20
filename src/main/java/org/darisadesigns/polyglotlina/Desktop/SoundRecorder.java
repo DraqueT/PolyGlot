@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2021, Draque Thompson
+ * Copyright (c) 2015-2022, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -163,7 +163,9 @@ public class SoundRecorder {
 
     public void setSound(byte[] _sound) {
         sound = _sound;
-        playPauseBut.setIcon(_sound == null ? playUp : playDown);
+        createSoundThread();
+        playPauseBut.setIcon(_sound == null || _sound.length == 0 ? playUp : playDown);
+        slider.setValue(0);
     }
 
     /**
@@ -234,6 +236,7 @@ public class SoundRecorder {
                 }
 
                 recordBut.setIcon(recUp);
+                playPauseBut.setIcon(playDown);
 
                 out.close();
             } catch (LineUnavailableException | IOException e) {
@@ -288,21 +291,40 @@ public class SoundRecorder {
             return;
         }
 
-        final DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
-
         if (soundThread != null) {
-            String testThread = soundThread.toString();
             if (soundThread.isAlive()
-                    && testThread.equals(playThread)) {
+                    && soundThread.toString().equals(playThread)) {
                 playing = !playing;
                 return;
             }
         }
+        
+        killPlay = true;
+                try {
+                    Thread.sleep(TIME_TO_DIE);
+                }
+                catch (InterruptedException ex) {
+                    new DesktopInfoBox().error("Playback Error", "Playback Interrupted.");
+                }
+        killPlay = false;
 
         playing = true;
+        createSoundThread();
+        playThread = soundThread.toString();
+        soundThread.start();
+    }
+    
+    private void createSoundThread() {
+        final DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+        
+        killPlay = true;
+        try {
+            Thread.sleep(TIME_TO_DIE);
+        } catch (InterruptedException ex) {
+          new DesktopInfoBox().error("Playback Error", "Playback error: process interrupted.");
+        }
         killPlay = false;
-        playPauseBut.setIcon(playDown);
-
+        
         soundThread = new Thread(() -> {
             try (InputStream input = new ByteArrayInputStream(sound);
                     AudioInputStream ais = new AudioInputStream(input, format, sound.length / format.getFrameSize());  
@@ -320,25 +342,19 @@ public class SoundRecorder {
                         = ais.read(buffer, 0, buffer.length)) != -1) {
                     if (count > 0) {
                         while (!playing) { // if paused, wait until unpaused
-                            // suppression for this warning is nonfunctional. Very annoying.
                             Thread.sleep(TIME_TO_DIE);
-                            playPauseBut.setIcon(playUp);
+                            
 
                             if (killPlay) { // immediately ends playing process
                                 killPlay = false;
                                 playing = false;
-                                sourceLine.drain();
                                 return;
                             }
                         }
 
-                        playPauseBut.setIcon(playDown);
-
                         if (killPlay) { // immediately ends playing process
                             killPlay = false;
                             playing = false;
-                            sourceLine.drain();
-                            playPauseBut.setIcon(playUp);
                             return;
                         }
 
@@ -369,12 +385,7 @@ public class SoundRecorder {
                 new DesktopInfoBox(parentWindow).error("Play Error", "Unable to play audio: "
                         + e.getLocalizedMessage());
             }
-
-            playPauseBut.setIcon(playUp);
         });
-
-        playThread = soundThread.toString();
-        soundThread.start();
     }
 
     /**

@@ -32,6 +32,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -47,6 +48,10 @@ public final class PTable extends JTable {
     private RenderController rendererController = (r,x,y)->{};
     private EditorController editorController = (e,x,y)->{};
     private boolean useConFont = false;
+    
+    public PTable() {
+        this(PolyGlot.getPolyGlot().getCore());
+    }
 
     public PTable(DictCore _core) {
         core = _core;

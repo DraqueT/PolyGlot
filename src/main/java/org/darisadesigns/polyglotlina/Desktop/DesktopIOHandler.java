@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -429,6 +429,8 @@ public final class DesktopIOHandler implements IOHandler {
                             opMan.setDividerPosition(splitSet[0], position);
                         }
                     }
+                    case PGTUtil.OPTIONS_MSBETWEENSAVES ->
+                        opMan.setMsBetweenSaves(Integer.parseInt(bothVal[1]));
                     case PGTUtil.OPTIONS_AUTO_RESIZE ->
                         opMan.setAnimateWindows(bothVal[1].equals(PGTUtil.TRUE));
                     case PGTUtil.OPTIONS_MAXIMIZED ->
@@ -584,16 +586,14 @@ public final class DesktopIOHandler implements IOHandler {
                 DictCore test = new DictCore(new DesktopPropertiesManager(), osHandler, new PGTUtil(), new DesktopGrammarManager());
                 PolyGlot.getTestShell(test);
                 test.readFile(tmpSaveLocation.getAbsolutePath());
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 throw new IOException(ex);
             }
 
             try {
                 copyFile(tmpSaveLocation.toPath(), finalFile.toPath(), true);
                 tmpSaveLocation.delete(); // wipe temp file if successful
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 throw new IOException("Unable to save file: " + e.getMessage(), e);
             }
 
@@ -682,6 +682,11 @@ public final class DesktopIOHandler implements IOHandler {
     public void copyFile(Path fromLocation, Path toLocation, boolean replaceExisting) throws IOException {
         StandardCopyOption option = replaceExisting ? StandardCopyOption.REPLACE_EXISTING : StandardCopyOption.ATOMIC_MOVE;
         Files.copy(fromLocation, toLocation, option);
+        
+        if (!new File(toLocation.toString()).exists()) {
+            throw new IOException("File " + toLocation.toString() + " could not be written to its target destination.\n"
+                + "Please try another location or change destination permissions.");
+        }
     }
 
     private String writePriorStatesToArchive(ZipOutputStream out, DictCore core) throws IOException {
@@ -1055,7 +1060,6 @@ public final class DesktopIOHandler implements IOHandler {
      * @throws IOException on failure or lack of permission to write
      */
     public void writeOptionsIni(String workingDirectory, DesktopOptionsManager opMan) throws IOException {
-
         try ( Writer f0 = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(workingDirectory
                         + File.separator + PGTUtil.POLYGLOT_INI), StandardCharsets.UTF_8))) {
@@ -1132,6 +1136,9 @@ public final class DesktopIOHandler implements IOHandler {
             for (Entry<String, Integer> location : opMan.getDividerPositions().entrySet()) {
                 nextLine += ("," + location.getKey() + ":" + location.getValue());
             }
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_MSBETWEENSAVES + "=" + opMan.getMsBetweenSaves();
             f0.write(nextLine + newLine);
         }
     }
@@ -1232,6 +1239,14 @@ public final class DesktopIOHandler implements IOHandler {
             if (errorLog.exists()) {
                 try ( Scanner logScanner = new Scanner(errorLog).useDelimiter("\\Z")) {
                     curContents = logScanner.hasNext() ? logScanner.next() : "";
+                    
+                    // wipe old system info if it still exists
+                    if (curContents.contains(PGTUtil.ERROR_LOG_SPEARATOR)) {
+                        curContents = curContents.substring(
+                                curContents.indexOf(PGTUtil.ERROR_LOG_SPEARATOR) 
+                                        + PGTUtil.ERROR_LOG_SPEARATOR.length());
+                    }
+                    
                     int length = curContents.length();
                     int newLength = length + errorMessage.length();
 
@@ -1242,7 +1257,8 @@ public final class DesktopIOHandler implements IOHandler {
             }
 
             try ( BufferedWriter writer = new BufferedWriter(new FileWriter(errorLog))) {
-                String output = getSystemInformation() + "\n" + curContents + errorMessage + "\n";
+                String output = getSystemInformation() + PGTUtil.ERROR_LOG_SPEARATOR
+                        + curContents + errorMessage + "\n";
 //                System.out.println("Writing error to: " + errorLog.getAbsolutePath());
                 writer.write(output);
             }

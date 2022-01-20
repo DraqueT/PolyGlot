@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -26,6 +26,8 @@ import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.VisualStyleManager;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
@@ -63,6 +65,20 @@ public final class PTextField extends JTextField implements CoreUpdateSubscripti
     private EventListenerList tmpListenerList = null;
     private Integer contentId = -1;
     private Object associatedObject = null;
+    private Font localFont;
+    private boolean refreshFontRender = true;
+    private String lastRenderedValue = "";
+    private FontMetrics localMetrics;
+    private FontMetrics conMetrics;
+    private int drawPosition;
+    
+    public PTextField(String _defText) {
+        this(true, _defText);
+    }
+    
+    public PTextField(boolean _overrideFont, String _defText) {
+        this(PolyGlot.getPolyGlot().getCore(), _overrideFont, _defText);
+    }
     
     /**
      * Init for PDialogs
@@ -285,9 +301,13 @@ public final class PTextField extends JTextField implements CoreUpdateSubscripti
         if (skipRepaint || core == null) {
             return;
         }
-        
-        //setupLook();
 
+        if (isDefaultText()) {
+            setForeground(Color.lightGray);
+        } else {
+            setForeground(Color.black);
+        }
+        
         try {
             DesktopPropertiesManager propMan = ((DesktopPropertiesManager)core.getPropertiesManager());
             skipRepaint = true;
@@ -316,17 +336,26 @@ public final class PTextField extends JTextField implements CoreUpdateSubscripti
         
         // paint default text if appropriate
         if (!defText.isBlank() && !isDefaultText()) {
-            var localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
-            var thisFont = getFont();
-            var localMetrics = g.getFontMetrics(localFont);
-            var conMetrics = g.getFontMetrics(thisFont);
-            var drawPosition = (getWidth() / 2) 
-                    - (conMetrics.stringWidth(getText()) / 2)
+            if (refreshFontRender) {
+                localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
+                localMetrics = g.getFontMetrics(localFont);
+                conMetrics = g.getFontMetrics(getFont());
+                refreshFontRender = false;
+            }
+            
+            var curText = getText();
+            
+            if (curText.isBlank() && this.isFocusOwner()) { // initial selection w/ empty text
+                drawPosition = (getWidth() / 2) - localMetrics.stringWidth(defText);
+            } else if (!lastRenderedValue.equals(curText)) { // recalc width only if text changed (expensive)
+                lastRenderedValue = curText;
+                drawPosition = (getWidth() / 2) 
+                    - (conMetrics.stringWidth(lastRenderedValue) / 2)
                     - localMetrics.stringWidth(defText);
+            }
             
             g.setFont(localFont);
             g.setColor(Color.lightGray);
-            
             g.drawString(defText, drawPosition - 10, conMetrics.getHeight());
         }
     }
@@ -338,6 +367,12 @@ public final class PTextField extends JTextField implements CoreUpdateSubscripti
      */
     public boolean isSettingText() {
         return curSetText;
+    }
+    
+    @Override
+    public void setFont(Font font) {
+        super.setFont(font);
+        refreshFontRender = true;
     }
 
     @Override

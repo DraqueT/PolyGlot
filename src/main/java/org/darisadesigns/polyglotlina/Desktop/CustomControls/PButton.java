@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 - 2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017 - 2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -21,7 +21,7 @@ package org.darisadesigns.polyglotlina.Desktop.CustomControls;
 
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import java.awt.Color;
-import java.awt.Cursor;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -41,6 +41,10 @@ public class PButton extends JButton implements MouseListener {
     private boolean mouseEntered = false;
     private boolean mousePressed = false;
     private boolean activeSelected = false;
+    private FontMetrics fontMetrics = null;
+    Rectangle2D textRectangle;
+    int stringW;
+    int stringH;
     
     public PButton() {
         super();
@@ -82,6 +86,10 @@ public class PButton extends JButton implements MouseListener {
         boolean enabled = isEnabled();
         Color bgColor;
         Color fontColor;
+        
+        // turn on anti-alias mode
+        Graphics2D antiAlias = (Graphics2D) g;
+        antiAlias.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         final int thisHeight = this.getHeight();
         final int thisWidth = this.getWidth();
@@ -101,10 +109,6 @@ public class PButton extends JButton implements MouseListener {
             g.setColor(Color.black);
             g.fillRect(0, 0, getWidth(), getHeight());
         }
-        
-        // turn on anti-alias mode
-        Graphics2D antiAlias = (Graphics2D) g;
-        antiAlias.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         g.setColor(bgColor);
         
@@ -119,11 +123,14 @@ public class PButton extends JButton implements MouseListener {
         g.setColor(fontColor);
         g.setFont(getFont());
         
+        if (fontMetrics == null) {
+            fontMetrics = g.getFontMetrics(getFont());
+            textRectangle = fontMetrics.getStringBounds(getText(), g);
+            stringW = (int) Math.round(textRectangle.getWidth());
+            stringH = (int) Math.round(textRectangle.getHeight());
+        }
+        
         char[] text = getText().toCharArray();
-        FontMetrics fm = g.getFontMetrics(getFont());
-        Rectangle2D rec = fm.getStringBounds(getText(), g);
-        int stringW = (int) Math.round(rec.getWidth());
-        int stringH = (int) Math.round(rec.getHeight());
         g.drawChars(text, 0, text.length, (thisWidth/2) - (stringW/2), thisHeight/2 + stringH/4);
         
         Icon icon = this.getIcon();
@@ -152,15 +159,12 @@ public class PButton extends JButton implements MouseListener {
     @Override
     public void mouseEntered(MouseEvent e) {
         mouseEntered = true;
-        setCursor(new Cursor(Cursor.HAND_CURSOR));
-
         repaint();
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
         mouseEntered = false;
-        setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         repaint();
     }
 
@@ -169,9 +173,17 @@ public class PButton extends JButton implements MouseListener {
         super.setText(text);
         
         if (text.equals("↑") || text.equals("↓")) {
-            
-            
             setFont(PGTUtil.CHARIS_UNICODE.deriveFont((float)PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize()));
         }
+        
+        // force recalc of text size
+        fontMetrics = null;
+    }
+    
+    @Override
+    public void setFont(Font font) {
+        super.setFont(font);
+        // force recalc of text size
+        fontMetrics = null;
     }
 }

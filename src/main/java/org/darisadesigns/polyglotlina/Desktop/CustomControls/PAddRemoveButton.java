@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 - 2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015 - 2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -116,7 +116,6 @@ public class PAddRemoveButton extends JButton {
         setText("");
         setBorder(null);
         setBorderPainted(false);
-        setCursor(new Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setFocusPainted(false);
         setFocusTraversalKeysEnabled(false);
         setFocusable(false);
