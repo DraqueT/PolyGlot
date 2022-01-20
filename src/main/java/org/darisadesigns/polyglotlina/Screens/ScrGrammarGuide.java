@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-202, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -583,7 +583,7 @@ public final class ScrGrammarGuide extends PFrame {
             btnRecordAudio.setEnabled(true);
             btnDeleteRecordedAudio.setEnabled(true);
             sldSoundPosition.setValue(0);
-            sldSoundPosition.setEnabled(true);
+            sldSoundPosition.setEnabled(false);
             txtTimer.setText(defTime);
             try {
                 byte[] sound = secNode.getRecording();
