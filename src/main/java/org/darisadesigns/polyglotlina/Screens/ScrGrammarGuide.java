@@ -475,7 +475,7 @@ public final class ScrGrammarGuide extends PFrame {
     public void savePropsToNode(DefaultMutableTreeNode node) {
         if (node instanceof GrammarSectionNode secNode) {
             secNode.setName(txtName.getText());
-            //secNode.setRecording(soundRecorder.getSound());
+            secNode.setRecording(soundRecorder.getSound());
             try {
                 secNode.setSectionText(FormattedTextHelper.storageFormat(txtSection));
             } catch (Exception e) {

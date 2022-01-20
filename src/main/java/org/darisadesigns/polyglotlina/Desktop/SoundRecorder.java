@@ -164,7 +164,7 @@ public class SoundRecorder {
     public void setSound(byte[] _sound) {
         sound = _sound;
         createSoundThread();
-        playPauseBut.setIcon(_sound == null ? playUp : playDown);
+        playPauseBut.setIcon(_sound == null || _sound.length == 0 ? playUp : playDown);
         slider.setValue(0);
     }
 
@@ -236,6 +236,7 @@ public class SoundRecorder {
                 }
 
                 recordBut.setIcon(recUp);
+                playPauseBut.setIcon(playDown);
 
                 out.close();
             } catch (LineUnavailableException | IOException e) {
