@@ -78,13 +78,13 @@ public class ZompistVocabGenerator {
         syllableBreaks = _syllableBreaks;
         monosyllableRarity = _monosyllableRarity;
         dropoff = _dropoff;
-        categories = rawCategories.split("\n");
+        categories = rawCategories.replace(" ", "").split("\n");
         categoryCount = categories.length;
         categoryIndex = getCategoryIndex();
-        userSyllables = rawSyllables.split("\n");
-        rewriteValues = rawRewriteValues.split("\n");
+        userSyllables = rawSyllables.replace(" ", "").split("\n");
+        rewriteValues = rawRewriteValues.replace(" ", "").split("\n");
         sylableDropoffRate = getSyllableDropoffRate(slowSyllables, userSyllables.length);
-        illegalClusters = getIllegalClusters(rawIllegalClusters);
+        illegalClusters = getIllegalClusters(rawIllegalClusters.replace(" ", ""));
         osHandler = _osHandler;
 
         if (categoryCount <= 0 || userSyllables.length <= 0) {
@@ -215,9 +215,10 @@ public class ZompistVocabGenerator {
         String newVal = s;
         
         for (String rwString : rewriteValues) {
-            if (rwString.length() > 2 && rwString.contains("|")) {
-                String[] parse = rwString.split("|");
-                newVal = newVal.replaceAll(parse[0], parse[1]);
+            if (rwString.length() > 1 && rwString.contains("|")) {
+                String[] parse = rwString.split("\\|");
+                String replacement = parse.length > 1 ? parse[1] : "";
+                newVal = newVal.replaceAll(parse[0], replacement);
             }
         }
 
@@ -325,14 +326,8 @@ public class ZompistVocabGenerator {
                 curVal += INTERPUNCT;
             }
         }
-
-        // rewrite rules
-        for (String rew1 : rewriteValues) {
-            if (rew1.length() > 2 && rew1.contains("|")) {
-                java.lang.String[] parse = rew1.split("\\|");
-                curVal = curVal.replaceAll(parse[0], parse[1]);
-            }
-        }
+        
+        curVal = applyRewriteRule(curVal);
         
         // once value is complete, make final inspection for illegal clusters and retry if appropriate
         if (containsIllegalCluster(curVal) || results.contains(curVal)) {
@@ -406,7 +401,7 @@ public class ZompistVocabGenerator {
             }
         }
         
-        if (!containsIllegalCluster(value)) {
+        if (value.trim().length() != 0 && !containsIllegalCluster(value)) {
             results.add(value);
         }
     }

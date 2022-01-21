@@ -99,6 +99,8 @@ public class ScrZompistLexiconGen extends PFrame {
         tblSwadesh.setModel(new DefaultTableModel());
         tblSwadesh.setFont(localFont);
         lstImport.setModel(new DefaultListModel<>());
+        setDropoffLabel();
+        setMonosyllableLabel();
         tableValuesUpdated();
         
         ((PlainDocument) txtGenerationNum.getDocument())
@@ -162,6 +164,43 @@ public class ScrZompistLexiconGen extends PFrame {
                 txtRewriteRules.setText("ki|či");
                 txtIllegalClusters.setText(defaultPhonotacticConstraints);
             }
+            case 5-> {
+                // Original default
+                txtCategories.setText("C=tknsmrh\n" +
+                        "V=aioeu\n" +
+                        "U=auoāēū\n" +
+                        "L=āīōēū");
+                txtSyllableTypes.setText("CV\n" +
+                        "CVn\n" +
+                        "CL\n" +
+                        "CLn\n" +
+                        "CyU\n" +
+                        "CyUn\n" +
+                        "Vn\n" +
+                        "Ln\n" +
+                        "CVq\n" +
+                        "CLq\n" +
+                        "yU\n" +
+                        "yUn\n" +
+                        "wa\n" +
+                        "L\n" +
+                        "V");
+                txtRewriteRules.setText("hu|fu\n" +
+                        "hū|fū\n" +
+                        "si|shi\n" +
+                        "sī|shī\n" +
+                        "sy|sh\n" +
+                        "ti|chi\n" +
+                        "tī|chī\n" +
+                        "ty|ch\n" +
+                        "tu|tsu\n" +
+                        "tū|tsū\n" +
+                        "qk|kk\n" +
+                        "qp|pp\n" +
+                        "qt|tt\n" +
+                        "q[^ptk]|");
+                txtIllegalClusters.setText(defaultPhonotacticConstraints);
+            }
             default -> {
                 // something weird happened, just use 0 value and reset
                 curDefaults = 0;
@@ -176,19 +215,18 @@ public class ScrZompistLexiconGen extends PFrame {
         rdoGenWords.setSelected(true);
         chkShowSyllables.setSelected(false);
         chkSlowSyllableDropoff.setSelected(false);
-        sldDropoff.setValue(7);
+        sldDropoff.setValue(31);
         sldMonoSyllables.setValue(15);
         
-        curDefaults = (curDefaults + 1) % 5;
+        curDefaults = (curDefaults + 1) % 6;
     }
     
-    private void setupListeners() {
-        sldDropoff.addChangeListener((ChangeEvent e) -> {
-            String dropOffLabel = "Dropoff: ";
+    private void setDropoffLabel() {
+        String dropOffLabel = "Dropoff: ";
             
             int dropOffVal = sldDropoff.getValue();
             
-            if (dropOffVal == 45) {
+            if (dropOffVal >= 40) {
                 dropOffLabel += "Fast";
             } else if (dropOffVal > 30) {
                 dropOffLabel += "Medium";
@@ -201,10 +239,10 @@ public class ScrZompistLexiconGen extends PFrame {
             }
             
             lblDropoff.setText(dropOffLabel);
-        });
-        
-        sldMonoSyllables.addChangeListener((ChangeEvent e) -> {
-            String monoSylLabel = "Monosylable Frequency: ";
+    }
+    
+    private void setMonosyllableLabel() {
+        String monoSylLabel = "Monosylable Frequency: ";
             
             int monoSylVal = sldMonoSyllables.getValue();
             
@@ -221,6 +259,15 @@ public class ScrZompistLexiconGen extends PFrame {
             }
             
             lblMonoSyllables.setText(monoSylLabel);
+    }
+    
+    private void setupListeners() {
+        sldDropoff.addChangeListener((ChangeEvent e) -> {
+            setDropoffLabel();
+        });
+        
+        sldMonoSyllables.addChangeListener((ChangeEvent e) -> {
+            setMonosyllableLabel();
         });
         
         cmbSwadesh.addActionListener((ActionEvent e) -> {
@@ -412,6 +459,7 @@ public class ScrZompistLexiconGen extends PFrame {
             });
             tblGeneratedValues.getColumnModel().getColumn(0).setCellEditor(cellEditor);
         } catch (Exception e) {
+            // e.printStackTrace();
             new DesktopInfoBox().error("Generation error:", e.getLocalizedMessage());
         }
     }
