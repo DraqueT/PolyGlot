@@ -960,7 +960,10 @@ public final class ScrMainMenu extends PFrame {
                         ScrEasterEgg.run(PolyGlot.getPolyGlot().getRootWindow());
                     } else if (lastChars.endsWith("uuddlrlrba")) {
                         new DesktopInfoBox(self).info("コナミコマンド", "30の命を与えます。");
-                    } else if (lastChars.toLowerCase().endsWith("owo what's this")) {
+                    } else if (lastChars.toLowerCase().endsWith("owo what's this")
+                            || lastChars.toLowerCase().endsWith("owo whats this")
+                            || lastChars.toLowerCase().endsWith("uwu what's this")
+                            || lastChars.toLowerCase().endsWith("uwu whats this")) {
                         new DesktopInfoBox(self).info("It's too late.", "You have been assigned a fursona: " + genFursona());
                     }
                 }
