@@ -7,7 +7,8 @@ module org.darisadesigns.polyglotlina.polyglot {
     requires java.desktop;
     requires java.logging;
     requires org.apache.commons.lang3; //AUT - fixed with module injector
-    requires org.jsoup; // AUT - fixed with module injector
+    requires jsr305; //AUT - fixed with module injector - only needed for jsoup
+    requires org.jsoup; //AUT - fixed with module injector
 
     exports org.darisadesigns.polyglotlina;
     exports org.darisadesigns.polyglotlina.CustomControls;

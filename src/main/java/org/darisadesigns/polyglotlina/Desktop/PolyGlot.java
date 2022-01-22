@@ -88,7 +88,7 @@ public final class PolyGlot {
      * in chunks if spaces in path
      */
     public static void main(final String[] args) {
-        DesktopInfoBox cInfoBox = new DesktopInfoBox(null);
+        DesktopInfoBox cInfoBox = new DesktopInfoBox();
         try {
             // must be set before accessing System to test OS (values will simply be ignored for other OSes
             if (PGTUtil.IS_OSX) {
@@ -241,6 +241,7 @@ public final class PolyGlot {
                         + e.getMessage() + "\n"
                         + "Problem with top level PolyGlot arguments.");
             } catch (Exception e) { // split up for logical clarity... might want to differentiate
+                // e.printStackTrace();
                 DesktopIOHandler.getInstance().writeErrorLog(e);
                 polyGlot.getOSHandler().getInfoBox().error("Unable to start", "Unable to open PolyGlot main frame: \n"
                         + e.getMessage() + "\n"
@@ -249,11 +250,14 @@ public final class PolyGlot {
                 if (s != null) {
                     s.dispose();
                 }
+                
+                System.exit(0);
             }
             catch (Throwable t) {
+                // t.printStackTrace();
                 cInfoBox.error("PolyGlot Error", "A serious error has occurred: " + t.getLocalizedMessage());
                 DesktopIOHandler.getInstance().writeErrorLog(t);
-                throw t;
+                System.exit(0);
             }
         });
     }
@@ -315,7 +319,7 @@ public final class PolyGlot {
                     osHandler.getInfoBox().info("Recovery Cancelled", "Recovery Cancelled. Restart PolyGlot to be prompted again.");
                 }
             } else {
-                if (polyGlot.getOSHandler().getInfoBox().yesNoCancel("Archive Recovery File", "Archive the recovery file, then?") == JOptionPane.YES_OPTION) {
+                if (polyGlot.getOSHandler().getInfoBox().yesNoCancel("Archive Recovery File", "Archive the recovery file, then? (stops this dialog from appearing)") == JOptionPane.YES_OPTION) {
                     DesktopIOHandler.getInstance().archiveFile(recovery, core.getWorkingDirectory());
                 }
 
@@ -334,7 +338,10 @@ public final class PolyGlot {
             autoSaveFile.delete();
         }
         
-        System.exit(0);
+        // allow JUnit to handle this state itself
+        if (!PGTUtil.isInJUnitTest()) {
+            System.exit(0);
+        }
     }
 
     public DictCore getNewCore() {
@@ -354,7 +361,7 @@ public final class PolyGlot {
      */
     private static void conditionalBetaSetup() {
         if (PGTUtil.IS_BETA && !PGTUtil.isInJUnitTest()) { // This requires user interaction and is not covered by the test
-            new DesktopInfoBox(null).warning("BETA BUILD", "This is a pre-release, beta build of PolyGlot. Please use with care.\n\nBuild Date: " + PGTUtil.BUILD_DATE_TIME);
+            new DesktopInfoBox().warning("BETA BUILD", "This is a pre-release, beta build of PolyGlot. Please use with care.\n\nBuild Date: " + PGTUtil.BUILD_DATE_TIME);
         }
     }
 
@@ -544,7 +551,7 @@ public final class PolyGlot {
                     autoSave();
                 }
             }
-        }, PGTUtil.SECONDS_BETWEEN_AUTO_SAVES);
+        }, polyGlot.getOptionsManager().getMsBetweenSaves());
     }
     
     /**
@@ -565,8 +572,8 @@ public final class PolyGlot {
      * @throws java.lang.Exception 
      */
     public static void setTestPolyGlot(PolyGlot _polyGlot) throws Exception {
-        if (!PGTUtil.isInJUnitTest()) {
-            throw new Exception("ONLY TO BE RUN AS SETUP FOR JUNIT TESTING");
+        if (!PGTUtil.isInJUnitTest() && !PGTUtil.isUITestingMode()) {
+            throw new Exception("ONLY TO BE RUN AS SETUP FOR TESTING");
         }
         
         PolyGlot.polyGlot = _polyGlot;

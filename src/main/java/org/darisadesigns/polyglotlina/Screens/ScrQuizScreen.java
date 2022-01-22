@@ -174,7 +174,7 @@ public final class ScrQuizScreen extends PFrame {
             gbc.weightx = 9999;
 
             for (DictNode choiceNode : question.getChoices()) {
-                final PRadioButton choice = new PRadioButton(core, nightMode);
+                final PRadioButton choice = new PRadioButton();
                 choice.setValue(choiceNode);
                 choice.setType(question.getType());
                 

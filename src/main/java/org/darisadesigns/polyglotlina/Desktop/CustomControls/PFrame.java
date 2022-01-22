@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 - 2019, Draque Thompson - draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson - draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -290,7 +290,7 @@ public abstract class PFrame extends JFrame implements FocusListener {
                 }
 
                 if (core == null && !(this instanceof ScrMainMenu)) {
-                    new DesktopInfoBox(null).error("Dict Core Null", "Dictionary core not set in new window.");
+                    new DesktopInfoBox().error("Dict Core Null", "Dictionary core not set in new window.");
                 }
             }
 

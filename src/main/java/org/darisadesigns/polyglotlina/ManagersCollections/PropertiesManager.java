@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -24,6 +24,7 @@ import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -41,10 +42,13 @@ public abstract class PropertiesManager {
     protected double conFontSize = 12;
     protected double localFontSize = 12;
     private final PAlphaMap<String, Integer> alphaOrder;
-    private String alphaPlainText = "";
     private String langName = "";
     private String localLangName = "";
     private String copyrightAuthorInfo = "";
+    private String zompistCategories = "";
+    private String zompistIllegalClusters = "";
+    private String zompistRewriteRules = "";
+    private String zompistSyllableTypes = "";
     private boolean typesMandatory = false;
     private boolean localMandatory = false;
     private boolean wordUniqueness = false;
@@ -265,20 +269,16 @@ public abstract class PropertiesManager {
      * @throws java.lang.Exception
      */
     public void setAlphaOrder(String order, boolean overrideDupe) throws Exception {
-        alphaPlainText = order;
         String error = "";
 
         alphaOrder.clear();
 
-        // if comma delimited, alphabet may contain multiple character values
+        // Some older files may not be comma delimited - left for compatibility
         if (order.contains(",")) {
-            String[] orderVals = order.split(",");
+            String[] orderVals = getCommaDelimitedValuesAsArray(order);
             
             for (int i = 0; i < orderVals.length; i++) {
-                String newEntry = orderVals[i].trim();
-                if (newEntry.isEmpty()) {
-                    continue;
-                }
+                String newEntry = orderVals[i];
                 
                 if (alphaOrder.containsKey(newEntry) && ! overrideDupe) {
                     error += "Alphabet contains duplicate entry: " + newEntry;
@@ -292,7 +292,7 @@ public abstract class PropertiesManager {
                 String newEntry = order.substring(i, i+1);
                 
                 if (alphaOrder.containsKey(newEntry) && !overrideDupe) {
-                    error += "Alphabet contains duplicate entry: " + newEntry;
+                    error += "Alphabet contains duplicate entry: " + newEntry + "\n";
                 }
                 else {
                     alphaOrder.put(newEntry, i);
@@ -304,12 +304,24 @@ public abstract class PropertiesManager {
             throw new Exception(error.trim());
         }
     }
-       
+    
     /**
-     * @return the alphaPlainText
+     * Fetches comma delimited values with empty values removed
+     * @param input
+     * @return 
      */
-    public String getAlphaPlainText() {
-        return alphaPlainText;
+    public String[] getCommaDelimitedValuesAsArray(String input) {
+        List<String> ret = new ArrayList<>();
+        
+        for(String cur : input.split(",")) {
+            cur = cur.trim();
+            
+            if (!cur.isEmpty()) {
+                ret.add(cur);
+            }
+        }
+        
+        return ret.toArray(new String[0]);
     }
 
     /**
@@ -431,7 +443,7 @@ public abstract class PropertiesManager {
 
         // store alpha order for conlang
         wordValue = doc.createElement(PGTUtil.LANG_PROP_ALPHA_ORDER_XID);
-        wordValue.appendChild(doc.createTextNode(alphaPlainText));
+        wordValue.appendChild(doc.createTextNode(String.join(",", getOrderedAlphaList())));
         propContainer.appendChild(wordValue);
 
         // store option for mandatory Types
@@ -502,6 +514,26 @@ public abstract class PropertiesManager {
         // store option whether to display both conword and local word in lexicon list
         wordValue = doc.createElement(PGTUtil.LANG_PROP_EXPANDED_LEX_LIST_DISP);
         wordValue.appendChild(doc.createTextNode(expandedLexListDisplay ? PGTUtil.TRUE : PGTUtil.FALSE));
+        propContainer.appendChild(wordValue);
+        
+        // store Zompist categories setup
+        wordValue = doc.createElement(PGTUtil.LANG_PROP_ZOMPIST_CATEGORIES);
+        wordValue.appendChild(doc.createTextNode(zompistCategories));
+        propContainer.appendChild(wordValue);
+        
+        // store Zompist illegal clusters setup
+        wordValue = doc.createElement(PGTUtil.LANG_PROP_ZOMPIST_ILLEGAL_CLUSTERS);
+        wordValue.appendChild(doc.createTextNode(zompistIllegalClusters));
+        propContainer.appendChild(wordValue);
+        
+        // store Zompist rewrite rules setup
+        wordValue = doc.createElement(PGTUtil.LANG_PROP_ZOMPIST_REWRITE_RULES);
+        wordValue.appendChild(doc.createTextNode(zompistRewriteRules));
+        propContainer.appendChild(wordValue);
+        
+        // store Zompist syllables setup
+        wordValue = doc.createElement(PGTUtil.LANG_PROP_ZOMPIST_SYLLABLES);
+        wordValue.appendChild(doc.createTextNode(zompistSyllableTypes));
         propContainer.appendChild(wordValue);
         
         // store all replacement pairs
@@ -690,6 +722,48 @@ public abstract class PropertiesManager {
         this.useSimplifiedConjugations = _useSimplifiedConjugations;
     }
     
+    public String[] getOrderedAlphaList() {
+        String[] orderedVals = new String[alphaOrder.getDelegate().size()];
+
+        for (String key : alphaOrder.keySet()) { 
+            orderedVals[alphaOrder.get(key)] = key;
+        }
+        
+        return orderedVals;
+    }
+    
+    public String getZompistCategories() {
+        return zompistCategories;
+    }
+
+    public void setZompistCategories(String zompistCategories) {
+        this.zompistCategories = zompistCategories;
+    }
+
+    public String getZompistIllegalClusters() {
+        return zompistIllegalClusters;
+    }
+
+    public void setZompistIllegalClusters(String zompistIllegalClusters) {
+        this.zompistIllegalClusters = zompistIllegalClusters;
+    }
+
+    public String getZompistRewriteRules() {
+        return zompistRewriteRules;
+    }
+
+    public void setZompistRewriteRules(String zompistRewriteRules) {
+        this.zompistRewriteRules = zompistRewriteRules;
+    }
+
+    public String getZompistSyllableTypes() {
+        return zompistSyllableTypes;
+    }
+
+    public void setZompistSyllableTypes(String zompistSyllableTypes) {
+        this.zompistSyllableTypes = zompistSyllableTypes;
+    }
+    
     @Override
     public boolean equals(Object comp) {
         boolean ret = false;
@@ -701,7 +775,7 @@ public abstract class PropertiesManager {
             ret = conFontStyle.equals(prop.conFontStyle);
             ret = ret && conFontSize == prop.conFontSize;
             ret = ret && localFontSize == prop.localFontSize;
-            ret = ret && alphaPlainText.equals(prop.alphaPlainText);
+            ret = ret && alphaOrder.equals(prop.alphaOrder);
             ret = ret && langName.equals(prop.langName);
             ret = ret && localLangName.equals(prop.localLangName);
             ret = ret && copyrightAuthorInfo.equals(prop.copyrightAuthorInfo);
@@ -718,6 +792,10 @@ public abstract class PropertiesManager {
             ret = ret && kerningSpace.equals(prop.kerningSpace);
             ret = ret && useSimplifiedConjugations == prop.useSimplifiedConjugations;
             ret = ret && expandedLexListDisplay == prop.expandedLexListDisplay;
+            ret = ret && zompistCategories.equals(prop.zompistCategories);
+            ret = ret && zompistIllegalClusters.equals(prop.zompistIllegalClusters);
+            ret = ret && zompistRewriteRules.equals(prop.zompistRewriteRules);
+            ret = ret && zompistSyllableTypes.equals(prop.zompistSyllableTypes);
         }
         
         return ret;

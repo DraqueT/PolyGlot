@@ -76,6 +76,7 @@ public final class Java8Bridge {
             boolean printWordEtymologies,
             boolean printAllConjugations,
             boolean printPhrases,
+            String chapterOrder,
             DictCore core) throws IOException {
         
         errorIfJavaUnavailableInTerminal();
@@ -88,7 +89,7 @@ public final class Java8Bridge {
         tmpLocalFontFile.deleteOnExit();
         
         String tmpConFontFileLocation = tmpConFontFile.getCanonicalPath();
-        String tmlLocalFontFileLocation = tmpLocalFontFile.getCanonicalPath();
+        String tmpLocalFontFileLocation = tmpLocalFontFile.getCanonicalPath();
         
         try {
             DesktopIOHandler.getInstance().exportConFont(tmpConFontFileLocation, core.getCurFileName());
@@ -97,9 +98,17 @@ public final class Java8Bridge {
         }
         
         try {
-            DesktopIOHandler.getInstance().exportLocalFont(tmpConFontFileLocation, core.getCurFileName());
+            DesktopIOHandler.getInstance().exportLocalFont(tmpLocalFontFileLocation, core.getCurFileName());
         } catch (IOException e) {
-            tmlLocalFontFileLocation = "";
+            tmpLocalFontFileLocation = "";
+        }
+        
+        if (tmpConFontFile.length() == 500) {
+            tmpConFontFileLocation = "";
+        }
+        
+        if (tmpLocalFontFile.length() < 500) {
+            tmpLocalFontFileLocation = "";
         }
         
         String[] command = {PGTUtil.JAVA8_JAVA_COMMAND,
@@ -123,7 +132,8 @@ public final class Java8Bridge {
             tmpConFontFileLocation,
             PGTUtil.PGT_VERSION,
             (printPhrases ? PGTUtil.TRUE : PGTUtil.FALSE),
-            tmlLocalFontFileLocation
+            tmpLocalFontFileLocation,
+            chapterOrder
         };
         
         String[] results = DesktopIOHandler.getInstance().runAtConsole(command, true);
@@ -147,7 +157,8 @@ public final class Java8Bridge {
         }
         
         if (!warningString.isBlank()) {
-            new DesktopInfoBox(null).warning("PDF Print Warnings", 
+            
+            new DesktopInfoBox().warning("PDF Print Warnings", 
                     "The following warnings were generated in the print process:\n" + warningString);
         }
         

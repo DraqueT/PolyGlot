@@ -109,7 +109,8 @@ public class IOHandlerTest {
             int systemInfoLength = DesktopIOHandler.getInstance().getSystemInformation().length();
 
             // off by one due to concatenation effect when adding system info (newline)
-            assertEquals(logLength, PGTUtil.MAX_LOG_CHARACTERS + systemInfoLength + 1);
+            assertEquals(logLength, PGTUtil.MAX_LOG_CHARACTERS 
+                    + systemInfoLength + PGTUtil.ERROR_LOG_SPEARATOR.length());
         } catch (FileNotFoundException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
@@ -190,8 +191,8 @@ public class IOHandlerTest {
     }
     
     @Test
-    public void iniFile() {
-        System.out.println("IOHandlerTest.iniFile");
+    public void testIniFile() {
+        System.out.println("IOHandlerTest.testIniFile");
         
         try {
             String testScreenName = "Silly Sergal Merp Screen";
@@ -203,6 +204,7 @@ public class IOHandlerTest {
             Point expectedScreenPosition = new Point(13, 42);
             Dimension expectedScreenDimension = new Dimension(69, 420);
             int toDoBarPositionExpected = 666;
+            int autoSavMs = 12345678;
 
             // create test core to set values in...
             DictCore core = DummyCore.newCore();
@@ -217,6 +219,7 @@ public class IOHandlerTest {
             opt.setToDoBarPosition(toDoBarPositionExpected);
             opt.setMaximized(true);
             opt.setDividerPosition(testScreenName, toDoBarPositionExpected);
+            opt.setMsBetweenSaves(autoSavMs);
 
             // save values to disk...
             DesktopIOHandler.getInstance().writeOptionsIni(core.getWorkingDirectory().getAbsolutePath(), opt);
@@ -237,6 +240,7 @@ public class IOHandlerTest {
             assertEquals(toDoBarPositionExpected, opt.getToDoBarPosition());
             assertEquals(toDoBarPositionExpected, opt.getDividerPosition(testScreenName));
             assertTrue(opt.isMaximized());
+            assertEquals(autoSavMs, opt.getMsBetweenSaves());
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             fail(e);
@@ -439,9 +443,74 @@ public class IOHandlerTest {
             assertFalse(archiveFile.exists());
             resultFile.delete();
             assertFalse(resultFile.exists());
-        } catch (Exception e) {
+        } catch (IOException e) {
             fail(e);
         }
+    }
+    
+    @Test
+    public void testMultipleErrorLogs() {
+        IOHandler ioHandler = DesktopIOHandler.getInstance();
+        
+        ioHandler.writeErrorLog(new Exception("testError"));
+        ioHandler.writeErrorLog(new Exception("testError"));
+        
+        try {
+            String errorLog = ioHandler.getErrorLog();
+            assertEquals(errorLog.indexOf(PGTUtil.ERROR_LOG_SPEARATOR),
+                    errorLog.lastIndexOf(PGTUtil.ERROR_LOG_SPEARATOR));
+        } catch (FileNotFoundException e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testUnpackRepackLanguage() {
+        System.out.println("IOHandlerTest.testUnpackRepackLanguage");
+        
+        File tmpLangFile = new File(PGTUtil.TESTRESOURCES + "tmpPackedLang");
+        File tmpDir = new File(PGTUtil.TESTRESOURCES + "tmpExtractedLang");
+        
+        try {
+            String originFilePath = PGTUtil.TESTRESOURCES + "test_equality.pgd";
+            DictCore origin = DummyCore.newCore();
+            DictCore target = DummyCore.newCore();
+
+            origin.readFile(originFilePath);
+            
+            DesktopIOHandler.getInstance().unzipFileToDir(originFilePath, tmpDir.toPath());
+            DesktopIOHandler.packDirectoryToZip(tmpDir.getPath(), tmpLangFile.getPath(), true);
+            target.readFile(tmpLangFile.getPath());
+            
+            assertEquals(origin, target);
+        } catch (Exception e) {
+//            e.printStackTrace();
+//            System.out.println(e.getMessage());
+            fail(e);
+        } finally {
+            if (tmpLangFile.exists()) {
+                tmpLangFile.delete();
+            }
+            
+            if (tmpDir.exists()) {
+                deleteDirectory(tmpDir);
+            }
+        }
+    }
+    
+    /**
+     * Recursively deletes directory
+     * @param directoryToBeDeleted 
+     */
+    private void deleteDirectory(File directoryToBeDeleted) {
+        File[] allContents = directoryToBeDeleted.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                deleteDirectory(file);
+            }
+        }
+        
+        directoryToBeDeleted.delete();
     }
     
     /**

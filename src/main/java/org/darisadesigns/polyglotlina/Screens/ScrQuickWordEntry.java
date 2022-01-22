@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -156,7 +156,7 @@ public final class ScrQuickWordEntry extends PDialog {
         } catch (Exception e) {
             // user error
             // IOHandler.writeErrorLog(e);
-            new DesktopInfoBox(this).error("Regex Error", "Unable to generate pronunciation: " 
+            new DesktopInfoBox().error("Regex Error", "Unable to generate pronunciation: " 
                     + e.getLocalizedMessage());
         }
 
@@ -176,6 +176,7 @@ public final class ScrQuickWordEntry extends PDialog {
         cmbType.removeAllItems();
         final String defLabel = "-- Part of Speech --";
         cmbType.addItem(defLabel);
+        ((PComboBox)cmbType).setDefaultText("Part of Speech");
 
         for (TypeNode curNode : core.getTypes().getNodes()) {
             cmbType.addItem(curNode);
@@ -253,7 +254,7 @@ public final class ScrQuickWordEntry extends PDialog {
         }
 
         if (!testResults.isEmpty()) {
-            new DesktopInfoBox(this).warning("Illegal Values", "Word contains illegal values:\n\n"
+            new DesktopInfoBox().warning("Illegal Values", "Word contains illegal values:\n\n"
                     + testResults);
             return;
         }
@@ -266,7 +267,7 @@ public final class ScrQuickWordEntry extends PDialog {
             parent.refreshWordList(wordId);
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            new DesktopInfoBox(this).error("Word Error", "Unable to insert word: " + e.getMessage());
+            new DesktopInfoBox().error("Word Error", "Unable to insert word: " + e.getMessage());
         }
     }
 
@@ -310,7 +311,7 @@ public final class ScrQuickWordEntry extends PDialog {
         // create dropdown for each class that applies to the current word
         for (WordClass curProp : propList) {
             if (curProp.isFreeText()) {
-                PTextField textField = new PTextField(core, false, "-- " + curProp.getValue() + " --");
+                PTextField textField = new PTextField(core, false, curProp.getValue());
                 textField.setEnabled(chkClasses.isSelected());
                 textField.addActionListener((ActionEvent e) -> {
                     tryRecord();
@@ -325,6 +326,7 @@ public final class ScrQuickWordEntry extends PDialog {
                 DefaultComboBoxModel<Object> comboModel = new DefaultComboBoxModel<>();
                 classBox.setModel(comboModel);
                 comboModel.addElement("-- " + curProp.getValue() + " --");
+                classBox.setDefaultText(curProp.getValue());
 
                 // populate class dropdown
                 curProp.getValues().forEach((value) -> {
@@ -395,10 +397,10 @@ public final class ScrQuickWordEntry extends PDialog {
         chkDefinition = new javax.swing.JCheckBox();
         chkClasses = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
-        txtConWord = new PTextField(core, false, "-- " + core.conLabel() + " word --");
-        txtLocalWord = new PTextField(core, true, "-- " + core.localLabel() + " word --");
+        txtConWord = new PTextField(core, false, core.conLabel() + " word");
+        txtLocalWord = new PTextField(core, true, core.localLabel() + " word");
         cmbType = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
-        txtProc = new PTextField(core, true, "-- Pronunciation --");
+        txtProc = new PTextField(core, true, "Pronunciation");
         pnlClasses = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtDefinition = new PTextPane(core, true, "-- Definition --");

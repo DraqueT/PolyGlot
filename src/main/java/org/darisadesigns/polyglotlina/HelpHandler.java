@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -28,6 +28,7 @@ import java.io.IOException;
 public interface HelpHandler {
     
     public static String LEXICON_HELP = "BASIC_FUNCTIONALITY";
+    public static String ZOMPIST_HELP = "ZOMPGEN";
     public static String PARTSOFSPEECH_HELP = "-_Word_Types";
     public static String LEXICALCLASSES_HELP = "CLASSES";
     public static String GRAMMAR_HELP = "LODENKUR_-_an_example_language";
@@ -35,6 +36,7 @@ public interface HelpHandler {
     public static String PHONOLOGY_HELP = "PHONOLOGY";
     public static String LANGPROPERTIES_HELP = "-_Language_Properties";
     public static String QUIZGENERATOR_HELP = "QUIZ";
+    public static String PHRASEBOOK_HELP = "-_Phrasebook";
 
     public void openHelp();
 

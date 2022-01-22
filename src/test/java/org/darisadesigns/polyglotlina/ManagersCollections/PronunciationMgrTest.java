@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -308,6 +308,99 @@ public class PronunciationMgrTest {
             }
         } catch (IOException | IllegalStateException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testSyllableGeneration_goodWord() {
+        String testWord = "šösinpükɛh";
+        String expectedProc = "šö˙sin˙pü˙kɛh";
+        
+        System.out.println("PronunciationMgtTest.testSyllableGeneration_goodWord");
+        
+        try {
+            DictCore core = DummyCore.newCore();
+            core.readFile(PGTUtil.TESTRESOURCES + "testSyllableGen.pgd");
+            
+            String result = core.getPronunciationMgr().getPronunciation(testWord);
+            assertEquals(expectedProc, result);
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testSyllableGeneration_badWord() {
+        String testWord = "šösinpükɛh!";
+        String expectedProc = "";
+        
+        System.out.println("PronunciationMgtTest.testSyllableGeneration_goodWord");
+        
+        try {
+            DictCore core = DummyCore.newCore();
+            core.readFile(PGTUtil.TESTRESOURCES + "testSyllableGen.pgd");
+            
+            String result = core.getPronunciationMgr().getPronunciation(testWord);
+            assertEquals(expectedProc, result);
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testSyllableGeneration_goodWord_regexDisabled() {
+        String testWord = "šösinpükɛh";
+        String expectedProc = "šö˙sin˙pü˙kɛh";
+        
+        System.out.println("PronunciationMgtTest.testSyllableGeneration_goodWord");
+        
+        try {
+            DictCore core = DummyCore.newCore();
+            core.readFile(PGTUtil.TESTRESOURCES + "testSyllableGen.pgd");
+            core.getPropertiesManager().setDisableProcRegex(true);
+            
+            String result = core.getPronunciationMgr().getPronunciation(testWord);
+            assertEquals(expectedProc, result);
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testSyllableGeneration_badWord_regexDisabled() {
+        String testWord = "šösinpükɛh!";
+        String expectedProc = "";
+        
+        System.out.println("PronunciationMgtTest.testSyllableGeneration_goodWord");
+        
+        try {
+            DictCore core = DummyCore.newCore();
+            core.readFile(PGTUtil.TESTRESOURCES + "testSyllableGen.pgd");
+            core.getPropertiesManager().setDisableProcRegex(true);
+            
+            String result = core.getPronunciationMgr().getPronunciation(testWord);
+            assertEquals(expectedProc, result);
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testSyllableGeneration_systemDisabled() {
+        String testWord = "šösinpükɛh";
+        String expectedProc = "šösinpükɛh";
+        
+        System.out.println("PronunciationMgtTest.testSyllableGeneration_goodWord");
+        
+        try {
+            DictCore core = DummyCore.newCore();
+            core.readFile(PGTUtil.TESTRESOURCES + "testSyllableGen.pgd");
+            core.getPronunciationMgr().setSyllableCompositionEnabled(false);
+            
+            String result = core.getPronunciationMgr().getPronunciation(testWord);
+            assertEquals(expectedProc, result);
+        } catch (Exception e) {
             fail(e);
         }
     }

@@ -46,7 +46,6 @@ import javax.swing.JTextPane;
 import javax.swing.SwingWorker;
 import org.darisadesigns.polyglotlina.CustomControls.CoreUpdateSubscriptionInterface;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -123,7 +122,7 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
                     bGr.drawImage(imageObject, 0, 0, null);
                     bGr.dispose();
                 } else {
-                    new DesktopInfoBox(null).error("Paste Error", "Unable to paste image. Object is null.");
+                    new DesktopInfoBox().error("Paste Error", "Unable to paste image. Object is null.");
                 }
                 
                 if (image != null) {
@@ -137,6 +136,15 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
         } else {
             super.paste();
         }
+    }
+    
+    /**
+     * Takes raw text and sets it as html
+     * @param t 
+     */
+    public void setHtmlTextFromRaw(String t) {
+        var html = t.replaceAll("\n", "<br>");
+        setText(html);
     }
 
     @Override
@@ -425,8 +433,7 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
      * @return
      */
     public String getNakedText() {
-        String ret;  
-        ret = WebInterface.getTextFromHtml(getSuperText()).trim();
+        var ret = WebInterface.getTextFromHtml(getSuperText()).trim();
   
         if (ret.equals(defText)) {
             ret = "";

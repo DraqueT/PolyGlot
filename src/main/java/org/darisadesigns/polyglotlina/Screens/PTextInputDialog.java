@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -92,13 +92,15 @@ public final class PTextInputDialog extends PDialog {
      * @param defaultText default (gray) text for the field
      * @param overrideText false if conlang font to be used, true if otherwise
      * @param toolTipText tooltiptext for field
+     * @param text text to populate the field with
      */
-    public void addField(String defaultText, boolean overrideText, String toolTipText) {
+    public void addField(String defaultText, boolean overrideText, String toolTipText, String text) {
         PTextField newField = new PTextField(core, overrideText, defaultText);
         newField.setMinimumSize(new Dimension(1, newField.getPreferredSize().height));
         newField.setMaximumSize(new Dimension(9999, newField.getPreferredSize().height));
         newField.setPreferredSize(new Dimension(9999, newField.getPreferredSize().height));
         newField.setToolTipText(toolTipText);
+        newField.setText(text);
         pnlTextFields.add(newField, gbc);
         orderedFields.add(newField);
     }
@@ -122,7 +124,7 @@ public final class PTextInputDialog extends PDialog {
     
     private Dimension initialSize() {
         return new Dimension(this.getPreferredSize().width, txtDialog.getPreferredSize().height 
-                + pnlTextFields.getPreferredSize().height + jButton1.getPreferredSize().height * 2 + 5);
+                + pnlTextFields.getPreferredSize().height + jButton1.getPreferredSize().height * 2 + 20);
     }
     
     /**

@@ -217,7 +217,7 @@ public final class ScrTypes extends PFrame {
             lstTypes.ensureIndexIsVisible(0);
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            new DesktopInfoBox(this).error("Type Population Error", "Unable to populate types: "
+            new DesktopInfoBox().error("Type Population Error", "Unable to populate types: "
                     + e.getLocalizedMessage());
         }
     }
@@ -419,17 +419,17 @@ public final class ScrTypes extends PFrame {
 
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel1 = new javax.swing.JPanel();
-        txtName = new PTextField(core, true, "-- Part of Speech Name --");
+        txtName = new PTextField(core, true, "Part of Speech Name");
         txtTypePattern = new PTextField(core,
             core.getPropertiesManager().isOverrideRegexFont(),
-            "-- Type Pattern --");
+            "Type Pattern");
         btnSetup = new PButton(nightMode, menuFontSize);
         btnAutogen = new PButton(nightMode, menuFontSize);
         txtErrorBox = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         chkDefMand = new PCheckBox(nightMode, menuFontSize);
         chkProcMand = new PCheckBox(nightMode, menuFontSize);
-        txtGloss = new PTextField(core, true, "-- Part of Speech Gloss --");
+        txtGloss = new PTextField(core, true, "Part of Speech Gloss");
         jScrollPane3 = new javax.swing.JScrollPane();
         txtNotes = new PTextPane(core, true, "-- Notes --");
         jPanel2 = new javax.swing.JPanel();
@@ -599,8 +599,6 @@ public final class ScrTypes extends PFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSplitPane1)
         );
-
-        getAccessibleContext().setAccessibleName("Parts of Speech");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

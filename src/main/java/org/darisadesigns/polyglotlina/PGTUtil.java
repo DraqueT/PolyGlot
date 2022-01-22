@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -54,9 +54,12 @@ public class PGTUtil {
     public static final String BUILD_DATE_TIME_LOCATION = "/assets/org/DarisaDesigns/buildDate";
     public static final String[] SWADESH_LISTS = {"Original_Swadesh", "Modern_Swadesh"};
     public static final int WINDOWS_CLIPBOARD_DELAY = 15;
-    public static final int SECONDS_BETWEEN_AUTO_SAVES = 300000; // 5 minutes in microsecnds
+    public static final int DEFAULT_MS_BETWEEN_AUTO_SAVES = 300000; // 5 minutes in microsecnds
+    public static final int MAX_TOOLTIP_LENGTH = 55;
+    public static final int MAX_MS_MENU_STARTUP_WAIT = 5000; // 5 seconds in microseconds
     public static final String AUTO_SAVE_FILE_NAME = ".pgtAutoSave.bak";
     public static final String TROUBLE_TICKET_URL = "https://github.com/DraqueT/PolyGlot/issues/new";
+    public static final String ERROR_LOG_SPEARATOR = "\n-=-=-=-=-=-=-\n";
 
     // properties on words
     public static final String LEXICON_XID = "lexicon";
@@ -75,6 +78,7 @@ public class PGTUtil {
     public static final String WORD_CLASS_TEXT_VAL_COLLECTION_XID = "wordClassTextValueCollection";
     public static final String WORD_CLASS_TEXT_VAL_XID = "wordClassTextValue";
     public static final String WORD_ETY_NOTES_XID = "wordEtymologyNotes";
+    
 
     // properties for types/parts of speech
     public static final String POS_COLLECTION_XID = "partsOfSpeech";
@@ -110,6 +114,10 @@ public class PGTUtil {
     public static final String LANG_PROP_OVERRIDE_REGEX_FONT_XID = "langPropOverrideRegexFont";
     public static final String LANG_PROP_USE_SIMPLIFIED_CONJ = "langPropUseSimplifiedConjugations";
     public static final String LANG_PROP_EXPANDED_LEX_LIST_DISP = "expandedLexListDisplay";
+    public static final String LANG_PROP_ZOMPIST_CATEGORIES = "zompistCategories";
+    public static final String LANG_PROP_ZOMPIST_ILLEGAL_CLUSTERS = "zompistIllegalClusters";
+    public static final String LANG_PROP_ZOMPIST_REWRITE_RULES = "zompistRewriteRules";
+    public static final String LANG_PROP_ZOMPIST_SYLLABLES = "zompistSyllables";
 
     // character replacement pair values
     public static final String LANG_PROP_CHAR_REP_CONTAINER_XID = "langPropCharRep";
@@ -139,6 +147,9 @@ public class PGTUtil {
     public static final String PRO_GUIDE_BASE_XID = "proGuideBase";
     public static final String PRO_GUIDE_PHON_XID = "proGuidePhon";
     public static final String PRO_GUIDE_RECURSIVE_XID = "proGuideRecurse";
+    public static final String PRO_GUIDE_SYLLABLES_LIST = "proFGFuideSyllableList";
+    public static final String PRO_GUIDE_SYLLABLE = "proGuideSyllable";
+    public static final String PRO_GUIDE_COMPOSITION_SYLLABLE = "proGuideSyllableComposition";
 
     // romanization properties
     public static final String ROM_GUIDE_XID = "romGuide";
@@ -253,6 +264,7 @@ public class PGTUtil {
     public static final String OPTIONS_TODO_DIV_LOCATION = "ToDoDividerLocation";
     public static final String OPTIONS_DIVIDER_POSITION = "OptionsDividerPosition";
     public static final String OPTIONS_MAXIMIZED = "OptionsMaximized";
+    public static final String OPTIONS_MSBETWEENSAVES = "MsBetweenSaves";
 
     // Java 8 bridge constants
     public static final String JAVA8_JAVA_COMMAND = "java";
@@ -265,6 +277,12 @@ public class PGTUtil {
     public static final String JAVA8_PDFCOMMAND = "pdf-export";
     public static final String JAVA8_EXCELTOCVSCOMMAND = "excel-to-cvs";
     public static final String JAVA8_EXPORTTOEXCELCOMMAND = "export-to-excel";
+    public static final int CHAP_ORTHOGRAPHY = 0;
+    public static final int CHAP_GLOSSKEY = 1;
+    public static final int CHAP_CONTOLOCAL = 2;
+    public static final int CHAP_LOCALTOCON = 3;
+    public static final int CHAP_PHRASEBOOK = 4;
+    public static final int CHAP_GRAMMAR = 5;
 
     // string constants
     public static final String LANG_FILE_NAME = "PGDictionary.xml";
@@ -452,7 +470,7 @@ public class PGTUtil {
             try (BufferedReader br = new BufferedReader(new InputStreamReader(version.openStream(), StandardCharsets.UTF_8))) {
                 return br.readLine();
             } catch (IOException e) {
-                // TODO: Find a way to call OSHandler
+                // inappropriate to log here
                 // DesktopIOHandler.getInstance().writeErrorLog(e, "Unable to fetch version at startup");
             }
         }
@@ -467,7 +485,7 @@ public class PGTUtil {
             try (BufferedReader br = new BufferedReader(new InputStreamReader(buildDate.openStream(), StandardCharsets.UTF_8))) {
                 return br.readLine();
             } catch (IOException e) {
-                // TODO: Find a way to call OSHandler
+                // Inappropriate to throw exception here
                 // DesktopIOHandler.getInstance().writeErrorLog(e, "Unable to fetch build date at startup");
             }
         }
@@ -478,6 +496,7 @@ public class PGTUtil {
     // ENVIRONMENT VARIABLES
     private static File errorDirectory = null;
     private static boolean forceSuppressDialogs = false;
+    private static boolean uiTestingMode = false;
     
     // OS CONSTANTS
     public static String OSX_FINDER_INFO_VALUE_DIC_FILES = "574443444D535350000000000000000000000000000000000000000000000000";
@@ -630,6 +649,21 @@ public class PGTUtil {
                 return false;
         }
         return true;
+    }
+    
+    /**
+     * For development purposes only
+     */
+    public static void enterUITestingMode() {
+        uiTestingMode = true;
+    }
+    
+    /**
+     * returns true if currently in UI testing mode
+     * @return 
+     */
+    public static boolean isUITestingMode() {
+        return uiTestingMode;
     }
 
     protected PGTUtil() {}

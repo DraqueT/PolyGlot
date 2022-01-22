@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -438,7 +438,7 @@ public final class ScrFamilies extends PFrame {
         jLabel1 = new PLabel("", menuFontSize);
         btnAddWord = new PAddRemoveButton("+");
         btnDelWord = new PAddRemoveButton("-");
-        txtFamName = new PTextField(core, true, "-- Name --");
+        txtFamName = new PTextField(core, true, "Name");
         jScrollPane2 = new javax.swing.JScrollPane();
         txtNotes = new PTextPane(core, true, "-- Notes --");
         btnAddFamily = new PAddRemoveButton("+");

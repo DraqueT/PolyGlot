@@ -132,7 +132,7 @@ public class PGTUtil extends org.darisadesigns.polyglotlina.PGTUtil {
         try {
             tmpFont = PFontHandler.getMenuFont();
         } catch (IOException e) {
-            new DesktopInfoBox(null).error("PolyGlot Load Error", "Unable to load default button font.");
+            new DesktopInfoBox().error("PolyGlot Load Error", "Unable to load default button font.");
             DesktopIOHandler.getInstance().writeErrorLog(e, "Initilization error (PGTUtil)");
             tmpFont = javax.swing.UIManager.getDefaults().getFont("Label.font");
         }
@@ -141,7 +141,7 @@ public class PGTUtil extends org.darisadesigns.polyglotlina.PGTUtil {
         try {
             tmpFont = PFontHandler.getCharisUnicodeFontInitial();
         } catch (IOException e) {
-            new DesktopInfoBox(null).error("PolyGlot Load Error", "Unable to load Charis Unicode.");
+            new DesktopInfoBox().error("PolyGlot Load Error", "Unable to load Charis Unicode.");
             DesktopIOHandler.getInstance().writeErrorLog(e, "Initilization error (PGTUtil)");
             tmpFont = javax.swing.UIManager.getDefaults().getFont("Label.font");
         }

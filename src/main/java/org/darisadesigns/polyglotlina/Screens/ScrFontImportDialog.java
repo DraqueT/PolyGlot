@@ -19,9 +19,13 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.HeadlessException;
+import java.io.File;
 import java.io.IOException;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -54,7 +58,10 @@ public final class ScrFontImportDialog extends PDialog {
         super(_core);
         this.setModal(true);
         initComponents();
-
+        setupListeners();
+    }
+    
+    private void setupListeners() {
         txtFontSize.setText(Double.toString(core.getPropertiesManager().getFontSize()));
         ((PlainDocument) txtFontSize.getDocument())
                 .setDocumentFilter(new PTextFieldFilter());
@@ -92,6 +99,118 @@ public final class ScrFontImportDialog extends PDialog {
             }
         });
     }
+    
+    public void setLocalSelected() {
+        rdoConlang.setSelected(false);
+        rdoLocal.setSelected(true);
+    }
+    
+    public void setConSelected() {
+        rdoLocal.setSelected(false);
+        rdoConlang.setSelected(true);
+    }
+    
+    private void selectFont() {
+        var chooser = getWinCaseJFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Font Files", "ttf", "otf", "ttc", "dfont");
+
+        chooser.setDialogTitle("Select Font File");
+        chooser.setFileFilter(filter);
+        chooser.setCurrentDirectory(core.getWorkingDirectory());
+        chooser.setApproveButtonText("Open");
+
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            txtFontLocation.setText(chooser.getSelectedFile().getAbsolutePath());
+        }
+    }
+    
+    /**
+     * Generates a special JFileChooser that accounts for the awfulness of the 
+     * Windows Fonts folder
+     * @return 
+     */
+    public JFileChooser getWinCaseJFileChooser() {
+        return new JFileChooser() {
+            JDialog curDialog = null;
+            boolean alreadyRun = false;
+            
+            @Override
+            protected JDialog createDialog(Component parent) throws HeadlessException {
+                curDialog = super.createDialog(parent);
+                return curDialog;
+            }
+            
+            @Override
+            public void setCurrentDirectory(File dir) {
+                super.setCurrentDirectory(dir);
+                if (dir != null 
+                        && dir.getAbsolutePath().endsWith(System.getenv("windir") + "\\Fonts")
+                        && curDialog != null
+                        && !alreadyRun) {
+                    alreadyRun = true;
+                    var winFonts = new ScrWinFontFolderSelector(core, PolyGlot.getPolyGlot().getRootWindow());
+                    curDialog.setVisible(false);
+                    winFonts.pack();
+                    winFonts.setModal(true);
+                    winFonts.setVisible(true);
+                    winFonts.toFront();
+                    
+                    File result = winFonts.getSeletedFont();
+                    this.setSelectedFile(result);
+                    
+                    if (result == null) {
+                        this.cancelSelection();
+                    } else {
+                        this.approveSelection();
+                    }
+                    
+                    curDialog.dispose();
+                }
+            }
+        };
+    }
+    
+    private void updateDisplayFont() {
+        if (!txtFontLocation.getText().isBlank()) {
+            try {
+                Font newFont = PFontHandler.getFontFromFile(txtFontLocation.getText());
+                txtDemoText.setFont(newFont.deriveFont(Float.parseFloat(txtFontSize.getText())));
+            } catch (FontFormatException | IOException e) {
+                new DesktopInfoBox(this).error("Font Load Error", "Unable to load font: " + e.getLocalizedMessage());
+            }
+        }
+    }
+    
+    private void closeOk() {
+        var fileName = txtFontLocation.getText();
+        
+        try {
+            var propertiesManager = ((DesktopPropertiesManager)core.getPropertiesManager());
+            var size = Double.valueOf(txtFontSize.getText());
+            
+            if (rdoConlang.isSelected()) {
+                propertiesManager.setFontFromFile(fileName);
+                propertiesManager.setFontSize(size);
+            } else {
+                propertiesManager.setLocalFontFromFile(fileName);
+                propertiesManager.setLocalFontSize(size);
+            }
+            
+            PolyGlot.getPolyGlot().getRootWindow().openProperties();
+            dispose();
+        } catch (IOException e) {
+            core.getOSHandler().getInfoBox().error("IO Error", "Unable to open " + fileName + " due to: " + e.getLocalizedMessage());
+        } catch (FontFormatException e) {
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            new DesktopInfoBox(this).error("Font Format Error", "Unable to read " + fileName + " due to: "
+                    + e.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public void updateAllValues(DictCore _core) {
+        // nothing to update
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -106,8 +225,8 @@ public final class ScrFontImportDialog extends PDialog {
         btnOk = new PButton();
         btnCancel = new PButton();
         jPanel1 = new javax.swing.JPanel();
-        txtFontLocation = new PTextField(core, true, "-- Font File --");
-        btnSelectFOnt = new PButton();
+        txtFontLocation = new PTextField(core, true, "Font File");
+        btnSelectFont = new PButton();
         jLabel1 = new PLabel("Font Size", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
         txtFontSize = new PTextField(core, true, "");
         txtDemoText = new PTextField(core, false, "");
@@ -135,10 +254,10 @@ public final class ScrFontImportDialog extends PDialog {
 
         txtFontLocation.setEditable(false);
 
-        btnSelectFOnt.setText("Select Font");
-        btnSelectFOnt.addActionListener(new java.awt.event.ActionListener() {
+        btnSelectFont.setText("Select Font");
+        btnSelectFont.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSelectFOntActionPerformed(evt);
+                btnSelectFontActionPerformed(evt);
             }
         });
 
@@ -159,7 +278,7 @@ public final class ScrFontImportDialog extends PDialog {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(txtFontLocation)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSelectFOnt))
+                                .addComponent(btnSelectFont))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -174,7 +293,7 @@ public final class ScrFontImportDialog extends PDialog {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtFontLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSelectFOnt))
+                    .addComponent(btnSelectFont))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -224,69 +343,21 @@ public final class ScrFontImportDialog extends PDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
-        String fileName = txtFontLocation.getText();
-
-        try {
-            var propertiesManager = ((DesktopPropertiesManager)core.getPropertiesManager());
-            var size = Double.valueOf(txtFontSize.getText());
-            
-            if (rdoConlang.isSelected()) {
-                propertiesManager.setFontFromFile(fileName);
-                propertiesManager.setFontSize(size);
-            } else {
-                propertiesManager.setLocalFontFromFile(fileName);
-                propertiesManager.setLocalFontSize(size);
-            }
-            
-            PolyGlot.getPolyGlot().getRootWindow().selectFirstAvailableButton();
-            dispose();
-        } catch (IOException e) {
-            core.getOSHandler().getInfoBox().error("IO Error", "Unable to open " + fileName + " due to: " + e.getLocalizedMessage());
-        } catch (FontFormatException e) {
-            DesktopIOHandler.getInstance().writeErrorLog(e);
-            new DesktopInfoBox(this).error("Font Format Error", "Unable to read " + fileName + " due to: "
-                    + e.getLocalizedMessage());
-        }
+        closeOk();
     }//GEN-LAST:event_btnOkActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
-    private void btnSelectFOntActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectFOntActionPerformed
-        JFileChooser chooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Font Files", "ttf", "otf", "ttc", "dfont");
-
-        chooser.setDialogTitle("Select Font File");
-        chooser.setFileFilter(filter);
-        chooser.setCurrentDirectory(core.getWorkingDirectory());
-        chooser.setApproveButtonText("Open");
-
-        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            txtFontLocation.setText(chooser.getSelectedFile().getAbsolutePath());
-        }
-    }//GEN-LAST:event_btnSelectFOntActionPerformed
-
-    private void updateDisplayFont() {
-        if (!txtFontLocation.getText().isBlank()) {
-            try {
-                Font newFont = PFontHandler.getFontFromFile(txtFontLocation.getText());
-                txtDemoText.setFont(newFont.deriveFont(Float.parseFloat(txtFontSize.getText())));
-            } catch (FontFormatException | IOException e) {
-                new DesktopInfoBox(this).error("Font Load Error", "Unable to load font: " + e.getLocalizedMessage());
-            }
-        }
-    }
-
-    @Override
-    public void updateAllValues(DictCore _core) {
-        // nothing to update
-    }
+    private void btnSelectFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectFontActionPerformed
+        selectFont();
+    }//GEN-LAST:event_btnSelectFontActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnOk;
-    private javax.swing.JButton btnSelectFOnt;
+    private javax.swing.JButton btnSelectFont;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

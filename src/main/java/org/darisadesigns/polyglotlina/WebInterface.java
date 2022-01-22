@@ -34,7 +34,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 
 /**
  * This class handles all web communication to and from PolyGlot
@@ -91,7 +91,19 @@ public class WebInterface {
      * @return
      */
     public static String getTextFromHtml(String text) {
-        return Jsoup.parse(text).text();
+        org.jsoup.nodes.Document.OutputSettings outputSettings 
+                = new org.jsoup.nodes.Document.OutputSettings();
+        outputSettings.prettyPrint(false);
+        
+        // jsoup is not great with preservartion of linebraks...
+        if (text.contains("<body>")) {
+            text = text.substring(text.indexOf("<body>"), text.indexOf("</body>") + 7);
+        }
+        
+        text = text.replaceAll("<p>", "\n").replaceAll("</p>", "").replaceAll("<br>", "\n");
+        String strWithNewLines = org.jsoup.Jsoup.clean(text, "", Safelist.none(), outputSettings);
+        
+        return strWithNewLines;
     }
 
     /**

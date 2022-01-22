@@ -165,10 +165,8 @@
                               <Component id="btnDelValue" min="-2" pref="40" max="-2" attributes="0"/>
                           </Group>
                           <Component id="chkFreeText" alignment="1" max="32767" attributes="0"/>
-                          <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="txtName" alignment="1" pref="117" max="32767" attributes="0"/>
-                              <Component id="jScrollPane3" pref="0" max="32767" attributes="0"/>
-                          </Group>
+                          <Component id="txtName" alignment="1" max="32767" attributes="0"/>
+                          <Component id="jScrollPane3" alignment="0" pref="0" max="32767" attributes="0"/>
                           <Component id="chkAssociative" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -208,7 +206,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Name of property"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- Name --&quot;)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;Name&quot;)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="btnAddValue">

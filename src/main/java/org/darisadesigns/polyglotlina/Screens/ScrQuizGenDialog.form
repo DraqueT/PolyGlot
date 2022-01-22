@@ -196,7 +196,7 @@
                     <Property name="toolTipText" type="java.lang.String" value="Filter by conword here"/>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, false, &quot;-- &quot; + core.conLabel() + &quot; Filter --&quot;)"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, false, core.conLabel() + &quot; Filter&quot;)"/>
                   </AuxValues>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtFilterLocalWord">
@@ -204,7 +204,7 @@
                     <Property name="toolTipText" type="java.lang.String" value="Filter by local word here"/>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- &quot; + core.localLabel() + &quot; Filter --&quot;)"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, core.localLabel() + &quot; Filter&quot;)"/>
                   </AuxValues>
                 </Component>
                 <Component class="javax.swing.JComboBox" name="cmbFilterType">
@@ -229,7 +229,7 @@
                     <Property name="toolTipText" type="java.lang.String" value="Filter by pronunciation here"/>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;-- Pronunciation Filter --&quot;)"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;Pronunciation Filter&quot;)"/>
                   </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnClearFilter">

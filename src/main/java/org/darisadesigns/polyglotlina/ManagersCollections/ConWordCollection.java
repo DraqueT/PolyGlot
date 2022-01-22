@@ -178,7 +178,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         }
 
         if (word.getWordTypeId() == 0 && core.getPropertiesManager().isTypesMandatory()) {
-            ret.typeError = "Types set to mandatory.";
+            ret.typeError = "Part of Speech set to mandatory.";
         }
 
         if (word.getLocalWord().isEmpty() && core.getPropertiesManager().isLocalMandatory()) {
@@ -733,7 +733,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
     /**
      * Returns list of conlang words nodes
      *
-     * @return List<ConWord>
+     * @return List of ConWords
      */
     public List<ConWord> getWordNodesList() {
         List<ConWord> retList = new ArrayList<>(nodeMap.values());

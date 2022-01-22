@@ -49,7 +49,7 @@ public class DesktopHelpHandler implements HelpHandler {
         }
         catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            new DesktopInfoBox(null).error("Help File Error", "Unable to open help file.");
+            new DesktopInfoBox().error("Help File Error", "Unable to open help file.");
         }
     }
 
@@ -63,7 +63,7 @@ public class DesktopHelpHandler implements HelpHandler {
         } else if (PGTUtil.IS_LINUX) {
             Desktop.getDesktop().open(readmeFile);
         } else {
-            new DesktopInfoBox(null).warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
+            new DesktopInfoBox().warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
                     + "http://draquet.github.io/PolyGlot/readme.html\n(copied to clipboard for convenience)");
             new ClipboardHandler().setClipboardContents("http://draquet.github.io/PolyGlot/readme.html");
         }

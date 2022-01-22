@@ -57,6 +57,7 @@ public class DesktopPropertiesManager extends PropertiesManager {
     
     public void setLocalFont(Font _localFont) {
         setLocalFont(_localFont, localFontSize);
+        PolyGlot.getPolyGlot().getOSHandler().getPFontHandler().updateLocalFont();
     }
     
     public void setLocalFont(Font _localFont, double size) {
@@ -67,11 +68,13 @@ public class DesktopPropertiesManager extends PropertiesManager {
         
         localFont = _localFont; 
         localFontSize = size;
+        PolyGlot.getPolyGlot().getOSHandler().getPFontHandler().updateLocalFont();
     }
     
     @Override
     public void setLocalFontSize(double size) {
         localFontSize = size;
+        PolyGlot.getPolyGlot().getOSHandler().getPFontHandler().updateLocalFont();
     }
     
     public double getLocalFontSize() {
@@ -118,6 +121,22 @@ public class DesktopPropertiesManager extends PropertiesManager {
         return ret;
     }
     
+    /**
+     * Sets conlang font and nulls cached font value.
+     * This is to be used only by the CustHandlerFactory and internally, as it sets the font as its raw
+     * value rather than by first searching for an appropriate file beforehand.
+     *
+     * @param fontCon the fontCon to set
+     */
+    public void setFontConRaw(Font fontCon) {
+        // null cached font if being set to new font
+        if (conFont != null && !conFont.getFamily().equals(fontCon.getFamily())) {
+            cachedConFont = null;
+        }
+
+        conFont = fontCon == null ? PGTUtil.CHARIS_UNICODE : fontCon;
+    }
+    
     public void setFontFromFile(String fontPath) throws IOException, FontFormatException {
         setFontCon(PFontHandler.getFontFromFile(fontPath)
                 .deriveFont(conFontStyle, (float)conFontSize), conFontStyle, (float)conFontSize);
@@ -138,6 +157,11 @@ public class DesktopPropertiesManager extends PropertiesManager {
      */
     public boolean syncCachedFontCon() throws Exception {
         File fontFile = PFontHandler.getFontFile(conFont.getFamily());
+        
+        if (fontFile == null) {
+            return false;
+        }
+        
         cachedConFont = null;
         if (fontFile.getName().toLowerCase().endsWith("ttc")) {
             throw new Exception("PolyGlot does not currently support ttc (true type collection) caching or ligatures.");
@@ -210,22 +234,6 @@ public class DesktopPropertiesManager extends PropertiesManager {
                 PGTUtil.CHARIS_UNICODE.deriveFont((float)PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize()) : 
                 retFont.deriveFont(conFontStyle, (float)conFontSize);
     }
-
-    /**
-     * Sets conlang font and nulls cached font value.
-     * This is to be used only by the CustHandlerFactory and internally, as it sets the font as its raw
-     * value rather than by first searching for an appropriate file beforehand.
-     *
-     * @param fontCon the fontCon to set
-     */
-    public void setFontConRaw(Font fontCon) {
-        // null cached font if being set to new font
-        if (conFont != null && !conFont.getFamily().equals(fontCon.getFamily())) {
-            cachedConFont = null;
-        }
-
-        conFont = fontCon == null ? PGTUtil.CHARIS_UNICODE : fontCon;
-    }
     
     /**
      * @param _fontStyle the fontStyle to set
@@ -243,8 +251,9 @@ public class DesktopPropertiesManager extends PropertiesManager {
      */
     @Override
     public void setFontSize(double _fontSize) {
+        var curFont = this.getFontCon();
         conFontSize = _fontSize < 0 ? 12 : _fontSize;
-        conFont = conFont.deriveFont(conFontStyle, (float)conFontSize);
+        conFont = curFont.deriveFont(conFontStyle, (float)conFontSize);
     }
     
     /**

@@ -19,26 +19,52 @@
  */
 package org.darisadesigns.polyglotlina.Nodes;
 
+import org.darisadesigns.polyglotlina.CheckLanguageErrors.AlphaProblem;
+
 /**
  *
  * @author draque
  */
 public class LexiconProblemNode implements Comparable<LexiconProblemNode>{
+    public final static int SEVARITY_INFO = 0;
+    public final static int SEVARITY_WARNING = 1;
+    public final static int SEVARITY_ERROR = 2;
     public final DictNode problemWord;
     public final String description;
     public final ProblemType problemType;
     public final String shortDescription;
+    public final int severity;
+    public final boolean useConFont;
     
-    public LexiconProblemNode(DictNode _problemWord, String _description, ProblemType _problemType) {
+    public LexiconProblemNode(DictNode _problemWord, String _description, ProblemType _problemType, int _severity ) {
         problemWord = _problemWord;
         description = _description;
         problemType = _problemType;
+        severity = _severity;
         
         switch (_problemType) {
-            case ConWord: shortDescription = _problemWord.getValue(); break;
-            case PoS: shortDescription = "Part of Speech: " + _problemWord.getValue(); break;
-            case Phonology: shortDescription = "Phonology Problem"; break;
-            default: shortDescription = "UNDEFINED VALUE";
+            case ConWord -> {
+                shortDescription = _problemWord.getValue();
+                useConFont = true;
+            }
+            case PoS -> {
+                shortDescription = "Part of Speech: " + _problemWord.getValue();
+                useConFont = true;
+            }
+            case Phonology -> {
+                shortDescription = "Phonology Problem";
+                useConFont = true;
+            }
+            case Alphabet -> {
+                AlphaProblem problem = (AlphaProblem)_problemWord;
+                shortDescription = "The following character combinations cause amiguity: " 
+                        + problem.getValue() + " " + problem.getSecondVal();
+                useConFont = false;
+            }
+            default -> {
+                shortDescription = "UNDEFINED VALUE";
+                useConFont = false;
+            }
         }
     }
     
@@ -63,7 +89,8 @@ public class LexiconProblemNode implements Comparable<LexiconProblemNode>{
     public enum ProblemType {
         ConWord(0),
         PoS(1),
-        Phonology(2);
+        Phonology(2),
+        Alphabet(3);
         
         public final int value;
         

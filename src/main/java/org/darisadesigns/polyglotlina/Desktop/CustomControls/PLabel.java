@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -34,6 +34,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.JToolTip;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  * Extends Labels with some useful functionality. If resize set to true, ensures
@@ -42,6 +43,10 @@ import javax.swing.JToolTip;
  * @author draque.thompson
  */
 public final class PLabel extends JLabel {
+    
+    public PLabel() {
+        this("", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+    }
     
     public PLabel(String text, double fontSize) {
         super(text);

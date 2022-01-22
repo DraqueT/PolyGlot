@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -20,6 +20,7 @@
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
 import TestResources.DummyCore;
+import java.util.Arrays;
 import org.darisadesigns.polyglotlina.CustomControls.PAlphaMap;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
@@ -197,12 +198,12 @@ public class PropertiesManagerTest {
     public void testGetAlphaPlainText() {
         System.out.println("PropertiesManagerTest.getAlphaPlainText");
         PropertiesManager instance = core.getPropertiesManager();
-        String expResult = "a,b,c,d,e";
+        String[] expResult = {"a", "b", "c", "d", "e"};
         
         try {
-            instance.setAlphaOrder(expResult);
-            String result = instance.getAlphaPlainText();
-            assertEquals(expResult, result);
+            instance.setAlphaOrder(String.join(",", expResult));
+            String[] result = instance.getOrderedAlphaList();
+            assertTrue(Arrays.equals(expResult, result));
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);

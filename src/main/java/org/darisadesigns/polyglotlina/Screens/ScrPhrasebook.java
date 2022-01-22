@@ -144,7 +144,7 @@ public class ScrPhrasebook extends PFrame {
             lstPhrases.ensureIndexIsVisible(0);
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            new DesktopInfoBox(this).error("Type Population Error", "Unable to populate types: "
+            new DesktopInfoBox().error("Type Population Error", "Unable to populate types: "
                     + e.getLocalizedMessage());
         } finally {
             isCurPopulating = localPopulating;
@@ -160,10 +160,10 @@ public class ScrPhrasebook extends PFrame {
         try {
             if (phrase != null) {
                 txtGloss.setText(phrase.getGloss());
-                ((PTextPane)txtConPhrase).setText(phrase.getConPhrase());
-                ((PTextPane)txtLocalPhrase).setText(phrase.getLocalPhrase());
-                ((PTextPane)txtPronunciation).setText(phrase.getPronunciation());
-                ((PTextPane)txtNotes).setText(phrase.getNotes());
+                ((PTextPane)txtConPhrase).setHtmlTextFromRaw(phrase.getConPhrase());
+                ((PTextPane)txtLocalPhrase).setHtmlTextFromRaw(phrase.getLocalPhrase());
+                ((PTextPane)txtPronunciation).setHtmlTextFromRaw(phrase.getPronunciation());
+                ((PTextPane)txtNotes).setHtmlTextFromRaw(phrase.getNotes());
                 chkOverrideProc.setSelected(phrase.isProcOverride());
                 
                 setEnableAttributeEdit(true);
@@ -240,7 +240,7 @@ public class ScrPhrasebook extends PFrame {
 
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel1 = new javax.swing.JPanel();
-        txtGloss = new PTextField(core, true, "-- Gloss --");
+        txtGloss = new PTextField(core, true, "Gloss");
         jScrollPane1 = new javax.swing.JScrollPane();
         txtLocalPhrase = new PTextPane(core, true, "-- Local Phrase --");
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -432,7 +432,7 @@ public class ScrPhrasebook extends PFrame {
             lstPhrases.setSelectedValue(phraseManager.getNodeById(newPhraseId), true);
             populatePhraseAttributes();
         } catch(Exception e) {
-            new DesktopInfoBox(this).error("Phrase Creation Error", "Unable to create phrase due to: " + e.getMessage());
+            new DesktopInfoBox().error("Phrase Creation Error", "Unable to create phrase due to: " + e.getMessage());
         }
     }//GEN-LAST:event_btnAddActionPerformed
 
@@ -447,7 +447,7 @@ public class ScrPhrasebook extends PFrame {
                 lstPhrases.setSelectedIndex(listIndex > 1 ? listIndex - 1 : 0);
                 populatePhraseAttributes();
             } catch (Exception e) {
-                new DesktopInfoBox(this).error("Phrase Deletion Error", "Unable to delete phrase due to: " + e.getMessage());
+                new DesktopInfoBox().error("Phrase Deletion Error", "Unable to delete phrase due to: " + e.getMessage());
             }
         }
     }//GEN-LAST:event_btnDeleteActionPerformed

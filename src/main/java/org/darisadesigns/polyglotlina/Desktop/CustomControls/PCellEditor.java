@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -25,6 +25,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -49,20 +50,24 @@ import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 public final class PCellEditor extends AbstractCellEditor implements TableCellEditor, Cloneable {
     private final JComponent component = new JTextField();
     private Font myFont;
-    private Color background = Color.white;
+    private final Color background = Color.white;
     private DocumentListener docListener;
     private boolean ignoreListenerSilencing = false;
     private boolean useConFont;
+    private FocusListener componentFocusListener = null;
     private final DictCore core;
+    
+    public PCellEditor(boolean _useConFont) {
+        this(_useConFont, PolyGlot.getPolyGlot().getCore());
+    }
 
     public PCellEditor(boolean _useConFont, DictCore _core) {
         core = _core;
         this.setUseConFont(_useConFont);
-
-        final JTextField setupText = (JTextField) component;
-
+        var setupText = (JTextField) component;
+        
+        setupText.setHorizontalAlignment(JTextField.CENTER);
         setupRightClickMenu(setupText);
-
         setupText.setBorder(BorderFactory.createBevelBorder(1));
 
         this.setupTextFieldListener(setupText);
@@ -81,6 +86,7 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
         myFont = PGTUtil.addFontAttribute(TextAttribute.SIZE, (float)fontSize, defFont);
         component.setFont(myFont);
     }
+    
     public boolean isUseConFont() {
         return useConFont;
     }
@@ -95,6 +101,10 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
         ((JTextField) component).setText((String) value);
         component.setFont(myFont);
 
+        return component;
+    }
+    
+    public Component getComponent() {
         return component;
     }
     
@@ -170,6 +180,10 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
      * @param textField
      */
     private void setupTextFieldListener(final JTextField textField) {
+        if (componentFocusListener != null) {
+            textField.addFocusListener(componentFocusListener);
+        }
+        
         // handle character replacement
         textField.addKeyListener(new KeyListener() {
             @Override
@@ -249,5 +263,14 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
 
     public Color getBackground() {
         return background;
+    }
+
+    public FocusListener getComponentFocusListener() {
+        return componentFocusListener;
+    }
+
+    public void setComponentFocusListener(FocusListener componentFocusListener) {
+        this.componentFocusListener = componentFocusListener;
+        ((JTextField) component).addFocusListener(componentFocusListener);
     }
 }

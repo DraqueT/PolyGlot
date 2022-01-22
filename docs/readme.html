@@ -13,7 +13,7 @@
         <link rel="icon" href="favicon.ico">
 
         <link rel="shortcut icon" href="favicon.png">
-        <title>PolyGlot Help File</title>
+        <title>PolyGlot Help</title>
 
 
         <!-- Bootstrap core CSS --> 
@@ -27,7 +27,7 @@
         <!-- Static navbar -->
         <div class="navbar navbar-inverse navbar-static-top">
             <div class="container">
-                <div class="navbar-header"> <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> <a class="navbar-brand" href="index.html">PolyGlot v 3.2</a> </div>
+                <div class="navbar-header"> <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> <a class="navbar-brand" href="index.html">PolyGlot v 3.5</a> </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="https://github.com/DraqueT/PolyGlot">GitHub Page</a><br>
@@ -49,7 +49,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-10 col-lg-offset-1 centered"> <img src="assets/PolyGlot%20Logo.png" alt="PolyGlot">
-                        <h1>Version 3.2</h1>
+                        <h1>Version 3.5</h1>
                         <!-- POLYGLOT STUFF START -->
 
                         <table style="width:100%">
@@ -62,20 +62,24 @@
                                     <a href="#BASIC_FUNCTIONALITY">2---- Basic Functionality</a><br>
                                     &nbsp;&nbsp;&nbsp; <a href="#-_Word_Types">- Parts of Speech</a><br>
                                     &nbsp;&nbsp;&nbsp; <a href="#-_ConjugationsDeclensions">- Conjugations/Declensions</a><br>
+                                    &nbsp;&nbsp;&nbsp; <a href="#-_Swadesh_Lists">- Importing Swadesh Lists</a><br>
+                                    &nbsp;&nbsp;&nbsp; <a href="#-ZOMPGEN">- Zompist Word Generator</a><br>
                                     &nbsp;&nbsp;&nbsp; <a href="#-_Autogeneration_of">- Auto-generation of Conjugations/Declensions</a><br>
+                                    &nbsp;&nbsp;&nbsp; <a href="#-_WordformConstructor">- Word Form Composition Helper</a><br>
                                     &nbsp;&nbsp;&nbsp; <a href="#CLASSES">- Word Classes</a><br>
                                     &nbsp;&nbsp;&nbsp; <a href="#-_Word_Quickentry">- Word Quickentry</a><br>
                                     &nbsp;&nbsp;&nbsp; <a href="#-SavingOpeningNew">- Saving</a><br>
                                     &nbsp;&nbsp;&nbsp; <a href="#-_Language_Properties">- Language Properties</a><br>
+                                    &nbsp;&nbsp;&nbsp; <a href="#-_Phrasebook">- Phrasebook</a><br>
                                     &nbsp;&nbsp;&nbsp; <a href="#PHONOLOGY">- Phonology</a><br>
                                     &nbsp;&nbsp;&nbsp; <a href="#ROMANIZATION">- Romanization</a><br>
                                     &nbsp;&nbsp;&nbsp; <a href="#-_IPA_Conversion">- IPA Conversion Tool</a><br>
                                     &nbsp;&nbsp;&nbsp; <a href="#-_Images">- Images in Text</a><br>
-                                    &nbsp;&nbsp;&nbsp; <a href="#-_Family_Window">- Family Window</a><br>
+                                    &nbsp;&nbsp;&nbsp; <a href="#-_Todo_Menu">- TODO Menu</a><br>
                                     &nbsp;&nbsp;&nbsp; <a href="#-_Check_Lexicon">- Using the Check Language Tool</a><br>
-                                    &nbsp;&nbsp;&nbsp; <a href="#-_Swadesh_Lists">- Importing Swadesh Lists</a><br>
                                     &nbsp;&nbsp;&nbsp; <a href="#EXPORT_SPELLCHECK_DIC">- Exporting Spellcheck Dictionary</a><br>
                                     &nbsp;&nbsp;&nbsp; <a href="#OPTIONS_MENU">- Options Menu</a><br>
+                                    &nbsp;&nbsp;&nbsp; <a href="#-_Family_Window">- Family Window</a><br>
                                     <a href="#IMPORTING_FROM_EXCEL">3---- Importing and Exporting to/from Excel or CSV</a><br>
                                     <a href="#ETYMOLOGY">4---- Etymology Engine</a><br>
                                     <a href="#STATISTICS_REPORT">5---- Statistics Report</a><br>
@@ -95,8 +99,7 @@
                         </table>
 
                         <h1><a name="WELCOMEOVERVIEW"></a>WELCOME/OVERVIEW</h1><br>
-                        <div align ="left">Welcome to PolyGlot, an <a href="https://github.com/DraqueT/PolyGlot">open
-                                source</a>
+                        <div align ="left">Welcome to PolyGlot, an <a href="https://github.com/DraqueT/PolyGlot">open source</a>
                             tool set that helps to build constructed languages! PolyGlot
                             is a project that I have been working on for some time, and it
                             continues to become more stable and capable with each release. If you
@@ -105,58 +108,90 @@
                             post them on <a href="https://github.com/DraqueT/PolyGlot/issues">PolyGlot's issues page</a>!</div>
 
                         <h1><a name="-----_ii_-----"></a>WHAT’S NEW</h1>
-                        <div align ="left"><br>Heyo, all! Welcome to version 3.3 of PolyGlot! This release is going to be the last
-                            for a while, so with any luck, stability will be nice and solid for this one! There are a few minor new 
-                            features to PolyGlot this time around, but more than anything, this is a release that includes a bunch 
-                            of bug-fixes that I have been needing to get out for the last few months. Please enjoy!
+                        <div align ="left"><br>Heyo, all! Welcome to version 3.5 of PolyGlot! This is a <b>massive</b> release! First, 
+                            I want to give a huge shout out to TrapinchO over on GitHub, who gave an enormous amount of help with 
+                            testing this time around, and just has killer ideas in general! It includes a long list of upgrades and
+                            bug fixes. This also represents a significant step toward an Android release of PolyGlot, which has been 
+                            much requested and a long time coming.<br><br>
+                            
+                            Among the most exciting upgrades are the complete integration of the Zompist word generator (algorithm
+                            and original design go to Mark Rosenfelder there), a complete overhaul of how graphics are painted (no
+                            more CPU fans going nuts), a revamped lexicon look (local language synonyms now displayed in the list
+                            by their conword counterparts), automatic syllable composition when generating pronunciations, and many, 
+                            <i>many</i> quality of life improvements (full list below). And that is on top of a ton of bug fixes!<br><br>
+                            
+                            Please enjoy, everyone!
                             <br><br>
 
                         </div>
                         NEW FEATURES:
                         <div align ="left"><ul>
-                                <li>Language evolution can now be applied to conjugated forms and rules</li>
-                                <li>Supports export of dictionary file for conlang spellchecks</li>
-                                <li>Check Language feature now checks validity of all regex used</li>
-                                <li>Window state (including divider position) now saved with greater granularity</li>
-                                <li>Reset Preferences option now available in options menu</li>
+                                <li>Full integration of the Zompist Word Generator</li>
+                                <li>Automatic syllable composition in pronunciation</li>
+                                <li>Word form constructor tool added for greater ease with agglutinative languages</li>
+                                <li>PolyGlot can now import local language fonts as with conlang fonts.</li>
+                                <li>Push updates to mass autodeclension rules updated</li>
+                                <li>Delete audio recording button added to grammar section</li>
+                                <li>Packer/unpacker feature added for advanced users</li>
+                                <li>Alphabetic Order feature reworked</li>
+                                <li>Open Ticket menu item added</li>
+                                <li>Regex now supported in language filter</li>
+                                <li>Relational word classes added to PolyGlot</li>
+                                <li>Phrase Book window added - compatible with print to PDF</li>
+                                <li>Lexicon now defaults to show both Conword and local word equivalent</li>
+                                <li>PDF Chapters can now be reordered</li>
+                                <li>Text fields and dropdowns upgraded to show labels more clearly</li>
+                                <li>PolyGlot update detection now based on more stable host</li>
+                                <li>Autosave feature added - every 5 minutes (can be changed in options)</li>
+                                <li>Deprecated conjugation rules now given more helpful names</li>
+                                <li>Dropdown menus with Conlang words now have hover text and the local word appearing next to them</li>
+                                <li>Check Language upgrade - checks for ambiguities in alphabet and for unsupported characters in lexicon</li>
+                                <li>PDF printing now accepts/uses local language font</li>
+                                <li>If present, romanized forms of words will export to Excel</li>
+                                <li>Tooltips now automatically format in a way that is much nicer to look at</li>
+                                <li>Font compatibility in PDF printing significantly improved</li>
+                                <li>Reworked printing of word class values to PDF </li>
+                                <li>Upgraded combobox displays</li>
+                                <li>Dropdowns now filter as you begin to type</li>
+                                <li>BIG update to core functionality to allow for development of Android app</li>
+                                <li>Upgraded to Java 17 - Long Term Home for PolyGlot (no more upgrdes for a good bit)</li>
+                                <li>New easter egg added. :3</li>
                                 <!––Secret Codes:
                                 what did you see last tuesday
                                 Who is Draque
                                 this is the forest primeval
                                 it can't outlast you
                                 uuddlrlrba
+                                owo what's this
                                 ––>
                             </ul></div>
                         <br><br>
                         BUGS FIXED:
                         <div align="left">
                             <ul>
-                                <li>Windows Stats Page does not generate in UTF-8</li>
-                                <li>Delete button in lexicon search just cancelling search without doing anything</li>
-                                <li>Import from excel broken in Windows</li>
-                                <li>Language Stats fails on multi-character alphabetic entries</li>
-                                <li>Language Stats Fails on HTML unsafe characters</li>
-                                <li>Phoneme frequency calculates based on letter frequency</li>
-                                <li>Stats Page Crash on no IPA</li>
-                                <li>If you have a part of speech with exclusively non-dimensional conjugations, the menu will not allow you to access these from the lexicon.</li>
-                                <li>Malformed regex values can soft-lock you on the Lexicon screen</li>
-                                <li>character replacement did not function on the IPA converter screen</li>
-                                <li>Warning not given to Windows user when trying to import excel which is still open in excel</li>
-                                
-                                
-                                <li>OS X File associations finally fixed!</li>
-                                <li>Simplified conjugation setup does not scroll properly</li>
-                                <li>Alphabet check not properly updating until navigating away from Language Properties</li>
-                                <li>Uniqueness enforcement (Language Properties) broken</li>
-                                <li>Recursing Etymologies cause PDF print of etymology trees to crash PolyGlot</li>
-                                <li>Heat Map Of Letter Combinations Hot For single instance</li>
-                                <li>Printing of etymology images sometimes too wide for columns</li>
-                                <li>Some save file dialogs had misleading labels</li>
-                                <li>"New language" button is offset when hovered</li>
-                                <li>More ligature problems</li>
-                                <li>Deletion of To-do nodes does not save</li>
-                                <li>File path error when double clicking file to open language file</li>
-                                <li>Local font not respected in definition field of Lexicon</li>
+                                <li>Ligatures loaded initially, but failed to re-load from saved PolyGlot archive</li>
+                                <li>Broken multi-delete in conjugations menu fixed</li>
+                                <li>Graphical artifacting and "shadows" appeared sometimes in etymology window</li>
+                                <li>Broken multi-delete in conjugations menu fixed</li>
+                                <li>Excel import bugs corrected (false success report)</li>
+                                <li>Quickentry image insertion caused PolyGlot to freeze</li>
+                                <li>Quiz could make copies of the correct answer (with copies being "wrong")</li>
+                                <li>Local languge sizing failed to function properly in menus</li>
+                                <li>IPA Conversion tool converted text with HTML interspersed</li>
+                                <li>If no alphabet is defined at all, "check language" feature crashes program</li>
+                                <li>Under certain circumstances, text boxes could be mistakenly set to the conlang font</li>
+                                <li>Search menu populates font and size options from wrong place</li>
+                                <li>Hitting the filter button while is already applied did nothing</li>
+                                <li>Deletion of top level etymological parent caused unhandled exception</li>
+                                <li>Excel export applied conjugation transforms without regard to rules</li>
+                                <li>Excel export did not properly set conlang font on conjugated wordform cells</li>
+                                <li>Excel export sometimes printed empty tabs</li>
+                                <li>Deleting an internal etymological parent resized elements of the etymology window</li>
+                                <li>If you had too many word classes, it would break the autodeclension setup menu</li>
+                                <li>Deleting an entry in the phonemic orthography menu would also delete any entries with the same values</li>
+                                <li>Elements of the conjugation menu were failing to render in the appropriate font</li>
+                                <li>The grammar chapter section could become persistently wonky if multiple chapters without names were added in a row</li>
+                                <li>Fixed menus that could display user text but which did not use local language font (possible tofu characters)</li>
                             </ul>
                         </div>
 
@@ -164,9 +199,16 @@
                         <a name="INSTALLATION"></a>
                         <h1>INSTALLATION</h1><br>
                         <div align ="left">As of version 3.0, the installation of PolyGlot has become mostly automated. Simply 
-                            download the appropriate installer for your operating system (Windows: exe, Linux: deb, OSX:dmg) and open 
+                            download the appropriate installer for your operating system (Windows: exe, Linux: deb, macOS:dmg) and open 
                             to install! PolyGlot no longer has a frontend, and to run the base program, there is no need to install 
-                            Java at all (although for some features, a java runtime may be required).</div>
+                            Java at all (although for some features, a java runtime may be required).<br><br>
+                            
+                            <i>Windows Note</i>: Windows will complain bitterly about PolyGlot not being properly registered with Microsoft. 
+                            It is safe to install, but registration costs money and PolyGlot is free.<br><br>
+                        
+                            <i>macOS Note</i>: On the initial run, you will have to right click th Application from Finder, select "open" and grant it permission to run, 
+                            despite not being registered with Apple. It is safe to run, but registration costs money and PolyGlot is free.
+                        </div>
                         <br><br>
 
                         <a name="BASIC_FUNCTIONALITY"></a><h1>BASIC FUNCTIONALITY</h1>
@@ -238,12 +280,14 @@
                         <img src="assets/Lex3.png" alt=""><br>
                         <br>
                         <div align ="left">If you click the Search/Filter bar along the top of the Lexicon window,
-                            a filter menu slides down (shown above). Here, you can filter words by
-                            any of their main properties. The ConWord filter field will filter not
-                            only on words' base forms, but also any declensions/conjugations of words.
-                            Fields are compatible with regex expressions. Only word roots that have been used
-                            in the etymology engine will show up in the drop-down. Once all filter criteria are
-                            entered, hit enter or click the Filter button to apply it to the Lexicon.<br></div>
+                            a filter menu slides down (shown above). Here, you can filter words by any of their
+                            main properties. The ConWord filter field will filter not only on words' base forms,
+                            but also any declensions/conjugations of words. Fields are compatible with regex
+                            expressions. Only word roots that have been used in the etymology engine will show up
+                            in the drop-down. Once all filter criteria are entered, hit enter or click the Filter
+                            button to apply it to the Lexicon. Most fields in the filter are regex compatible.
+                            <br>
+                        </div>
                         <br>
                         <br>
                         <a name="-_Word_Types"></a>- Parts of Speech<br>
@@ -313,8 +357,20 @@
                             the image, or simply copy/paste it in!<br><br></div>
 
                         <img alt="" src="assets/Image2.png"><br>
-                        <div align ="left">The image will appear in the text box and save in your language file.</div>
+                        <div align ="left">
+                            The image will appear in the text box and save in your language file.
+                        </div><br>
 
+                        <a name="-_Todo_Menu"></a><h1>Todo Menu</h1>
+                        <br>
+                        <img alt="" src="assets/todo01.png" width="600"><br>
+                        <br>
+                        <div align="left">
+                            The To Do menu can be useful for remembering tasks that you would like to complete in your 
+                            language. To create a new To Do item, simply right click and enter a title. You can also right 
+                            click on existing To Do tasks and create subtasks! If all subtasks are completed, a parent
+                        </div><br>
+                        
                         <p><a name="-_ConjugationsDeclensions"></a><h1>Conjugations/Declensions</h1>
                         <br>
                         <div align ="left">Conjugations and declensions are one of
@@ -582,7 +638,57 @@
                             the application and results of every transformation, allowing you to see exactly how your final word
                             form was generated.
                         </div>
-
+                        <h2>Advanced Rule Manipulation</h2><br>
+                        <div align="left">
+                            Some languages have significant complexity involved with their conjugation and declension. To help manage
+                            these more easily, right click on a rule (or selection of rules) to bring up the advanced rule manipulation
+                            menu.
+                        </div>
+                        <br>
+                        <img src="assets/advConj01.png" alt="" width=600>
+                        <br>
+                        <div align="left">
+                            Copy and Paste work as you would expect, allowing you to copy one or more rules and paste them into another
+                            conjugation. Simply right click in the second conjugation's rule field and click paste to insert them. Bulk
+                            Delete Rule will delete all matching rules in your entire conlang. Bulk Update Rule will use the currently
+                            selected rule as a template and force all other rules within the conlang to exactly match it.
+                        </div>
+                        <br>
+                        <img src="assets/advConj02.png" alt="" width=600>
+                        <br>
+                        <div align="left">
+                            Under Push To Dimension, you will find a list of all conjugations with one or more matching dimensions to
+                            the one currently selected. Clicking on one will copy the currently selected rule to all conjugated forms
+                            which include this dimension.
+                        </div>
+                        <br>
+                        <img src="assets/advConj03.png" alt="" width=600>
+                        <br>
+                        <div align="left">
+                            Under Delete From Dimension, you will find a list of all conjugations with one or more matching dimensions to
+                            the one currently selected. Clicking on one will delete rules matching the one currently selected from all
+                            conjugated forms which include this dimension.
+                        </div>
+                        <br>
+                        
+                        <a name ="-_WordformConstructor"></a><h1>Word Form Composition Helper</h1><br>
+                        <img src="assets/wordformhelper01.png" alt="" width=600><br><br>
+                        <div align ="left">
+                            When translating texts into your language, it can be cumbersome to open the conjugation table for each individual
+                            word that you need to find a form for. To help with this, PolyGlot includes the Form Composition Helper, which can 
+                            be accessed by clicking the dropdown arrow on the Conjugations buttons below the definition of a word, then 
+                            clicking Form Composition Helper.
+                            
+                            For agglutinative languages in particular, this can be very helpful (example of agglutinative language setup 
+                            available under help menu).
+                        </div><br>
+                        <img src="assets/wordformhelper02.png" alt="" width=600><br><br>
+                        <div align="left">
+                            Using the drop down menus, the word can be composed into any given form. The window does not need to be closed 
+                            as you navigate the lexicon. It will update as new words are chosen for ease of use.
+                        </div>
+                        
+                        
                         <a name ="CLASSES"></a><h1>Word Classes</h1><br>
                         <div align ="left">
                             Word class is most familiar as grammatical gender. Classes can be added to words by 
@@ -592,21 +698,27 @@
                             automatically be converted to a word class, and you will notice no difference in your 
                             language.<br><br></div>
 
-                        <img src="assets/wordClass01.png"><br>
+                        <img src="assets/wordClass01.png" width=600 alt=""><br>
                         <div align ="left">
                             In this example, I have added two classes, gender and distance. To the distance class, 
                             I have added three values: touching, near, and far. To the right, all of the parts 
                             of speech for this language are listed. Only nouns are checked, so the distance class will 
                             only be applied to nouns.<br><br></div>
-                        <img src="assets/wordClass05.png"><br>
+                        <img src="assets/wordClass05.png" width=600 alt=""><br>
                         <div align ="left">Next, I create another class called "secret word." I'm making a language here
-                            where some words can have secret synonyms that only some people know. I need an extra text field
+                            where some words can have secret meanings that only some people know. I need an extra text field
                             to store this value in. Notice in the picture above, that the Free Text Field value is selected 
                             for the secret word class.<br><br></div>
-                        <img src="assets/wordClass02.png"><br>
-                        <div align ="left">If I create a noun in the Lexicon now, we will see the relevant classes
-                            appear in the word's properties, as seen above. I can change the gender or distance to any
-                            of their class' values, and I can put whatever text I like in the secret word field.<br><br></div>
+                        <img src="assets/wordClass06.png" width=600 alt=""><br>
+                        <div align ="left">Last, I create a class called "antonym" and select the Associative checkbox. This
+                            creates a dropdown which is populated with all other words in your lexicon, allowing you to 
+                            directly associate a word with its paired antonym (or whatever other associative feature your
+                            language might have).<br><br></div>
+                        <img src="assets/wordClass02.png" width=600 alt=""><br>
+                        <div align ="left">If I create a verb in the Lexicon now, we will see the relevant classes
+                            appear in the word's properties. The "distance" class does <i>not</i> appear, as that class was set
+                            to apply only to nouns. Gender has been set to male, its antonym has been selected from a list of all
+                            other words, and its "secret word" value is set to arbitrary text.<br><br></div>
 
                         <a name="-_Word_Quickentry"></a><h1>Word Quickentry</h1>
                         <br>
@@ -654,9 +766,33 @@
                             these tasks from anywhere in the program. Recently opened files are
                             listed here as well.<br></div>
 
+                        <a name="-_Phrasebook"></a><h1>Phrasebook</h1>
+                        <br>
+                        <img style="width: 700px; height: 600px;" alt="" src="assets/phrasebook_01.png"><br>
+                        <div align ="left">
+                            The Phrasebook window can be found in the buttons on the left side of PoolyGlot's 
+                            main screen. This is a useful tool for organizing common phrases in a language. 
+                            Full fluency is desirable, but quick access to "Where is the bathroom?" or "Why 
+                            am being arrested?" can be useful!
+                            <br><br>
+                            The phrasebook works in a similar fashion to most other menus in PolyGlot. To the
+                            left is a list of existing phrases. Phrases can be added and deleted via the + and 
+                            - buttons below this list. They can be reordered using the arrow buttons to its 
+                            right. The first text field on the right is the phrase's gloss. This is what will 
+                            appear in the list as its label. Then there is the local language version of the 
+                            phrase, its conlang translation, a transcription of its pronunciation, and relevant 
+                            notes.
+                            <br><br>
+                            The pronunciation will be automatically generated if you have this feature set up 
+                            in the Phonology & Text section of your language. It may also be overridden if 
+                            the phrase contains words with pronunciation rule exceptions.
+                            <br><br>
+                            When printing to PDF, phrases may be included if the option is checked.
+                        </div>
+                        
                         <a name="-_Language_Properties"></a><h1>Language Properties</h1>
                         <br>
-                        <img alt="" src="assets/prop.png"><br>
+                        <img alt="" src="assets/prop.png" width=700><br>
                         <div align ="left">This screen allows various properties of the ConLang to be modified.
                             Below are explanations for each.<br>
                             <br>
@@ -675,58 +811,34 @@
                             your language, including personal contact information, copyright
                             information, etc.<br>
                             <br>
-                            - Conlang Font<br>
+                            - Conlang/Local Fonts<br>
 
                             Many ConLangs use nonstandard character sets, and it is sometimes
                             easiest to simply create a font yourself and map these characters to
                             standard Unicode characters. To load a font, click the Conlang Font
-                            button and select from the list of locally installed fonts. All Conlang
-                            fields will appear in the appropriate font. As a note, if you wish to
-                            send your saved dictionary to a friend who is also using PolyGlot, you
-                            must also send them the font, or they will receive an error message
-                            when they load your dictionary, and see standard characters, rather
-                            than your custom font.<br>
+                            button and select the file of your desired font. All Conlang
+                            fields will appear in the appropriate font.<br>
+                            NOTE: In the past, PolyGlot supported OS font selection. This can
+                            still be accessed by selecting the dropdown menu and clicking through
+                            the warning. Be advised that this functionality is no longer fully
+                            supported, and may lead to ligatures not being rendered properly.
                             <br>
-                            If you would prefer to directly import your conlang font file, or if
-                            you are having versioning issues with it (see warning below), you
-                            can import them directly from the menu. Simply click Tools->Import 
-                            Font, and PolyGlot will load it without the need to install it to your 
-                            OS at all.<br><br>
-                            <span style="font-weight:bold; color:red">LINUX WARNING:</span><br>
-                            If you use a font with ligatures, please use the manual load option
-                            (tools->import font) to import your font. Due to a persistent bug in
-                            Java, loading in the typical way will cause your ligatures to be 
-                            ignored. This will be addressed in future releases of PolyGlot.
-                            <br><br>
-                            <b>NOTE:</b> Not all fonts are freely licensed for commercial use. If you're working on a language 
-                            you intent to use commercially, please check that the font you're using is free to use in that context. 
-                            Link to a good source of free fonts at the bottom of this document.
-                            <br><br>
-                            <b>NOTE 2:</b> The Noto Fonts sets from Google are an excellent resource if you are looking for interesting
+                            <br>
+                            <b>NOTE:</b> The Noto Fonts sets from Google are an excellent resource if you are looking for interesting
                             collections of well designed characters. They can be downloaded for free <a href="https://www.google.com/get/noto/">here</a>.
                             <br><br>
-                            - Local Font<br>
-                            This will allow you to change the font that your local language is 
-                            displayed in. In some cases, certain diacritic marks are useful to
-                            have access to when creating romanizations or other scenarios.
-                            <br><br>
-                            - Refresh Fonts<br>
-                            If you install a new version of a font, this button will need to be 
-                            clicked to refresh which version PolyGlot uses. This is because fonts
-                            are embedded into languages (ensuring that friends you send your 
-                            language to will be able to see them properly even without installing
-                            your fonts).
-                            <br><br>
                             - Alphabetical Order<br>
-                            This allows you to create a custom
-                            alphabetical order for the
-                            characters used in your language. Simply list the characters in your
-                            alphabetical order in this text box, and PolyGlot will respect it when
-                            reordering words in the dictionary. Any characters not provided here
-                            will be ordered in standard fashion (as decided by your operating
-                            system). Here, I have set the alphabetic order to follow qwerty. This
-                            will order the dictionary and any alphabetically ordered fields with
-                            the order you provide.<br>
+                            This allows you to create a custom alphabetical order for the
+                            characters used in your language. Simply add characters to the list
+                            on the left of the Properties screen in the order which you wish.
+                            Letters may be reordered using the arrows to the side of the list.
+                            Letters may be represented by multiple characters, but be wary of
+                            ambiguity you may create in ordering if you use this (for example,
+                            if "a", "ab", abd "b" are all separate letters, ordering may be 
+                            inconsistent). If your alphabet does not include all of the characters
+                            appearing in your lexicon, it will be highlighted in red, and
+                            Polyglot will be unable to use your alphabetic ordering.
+                            <br>
                             <br>
                             - Kerning<br>
                             The default value for kerning is set to 0. Making this larger or smaller 
@@ -763,7 +875,9 @@
                                     make instances of your conlang appear/be written in the correct direction through the program.</li>
                                 <li>If you check the <span style="font-weight: bold;">Override Regex Font</span> box, all fields which can accept regex values
                                     will use the local language font, allowing you to create more complex regex values without worrying about how particular 
-                                    symbols are displayed on your screen.</li>  
+                                    symbols are displayed on your screen.</li> 
+                                <li><span style="font-weight: bold;">Expanded Lexicon List Text</span> controls whether local/conlang synonyms are 
+                                    displayed next to their counterparts in menus. On by default.</li>
                             </ul>
                             If you create a word that violates any rules that
                             you have chosen to enforce, PolyGlot will prevent you from selecting
@@ -875,6 +989,112 @@
                             these files must be delimited by a new line or carriage return between each word to be imported).
                         </div>
                         
+                        <a name="-ZOMPGEN"></a><h1>Zompist Word Generator</h1>
+                        <div align="left">
+                            The Zompist generator section of PolyGlot is an adaptation of the tool originally written by Mark Rosenfelder.
+                            This section of the manual is largely an modification of his original instructions. Additional functionality has
+                            been added, but the core logic and algorithm has not been changed.
+                        </div><br>
+                        <br> <img style="" alt="" src="assets/lexgen01.png" width="800"> <br>
+                        <div align="left">
+                            Above is the top half of the word generator window. This is where the controls live. 
+                            When this menu first opens, you'll see default settings in place. Simply click the Generate Values button and 150
+                            new words will be generated for you in the output list below. If you would like to see an example of what text 
+                            written in the patterns generated above, just click the Sample Text button With the default settings, you’ll get a 
+                            pseudo-text, like this: <br>
+                            <blockquote>
+                                A gatri tu te ee kope. Eudrotri pli ki itupe ki ii. Obudrotia peke pi tea pi pi? Atoi pi ka iekribe eupi ape? Kle 
+                                dru iplo ki gipotu i. Pi ke brikaibe ble do brou. Ta glikipro e teakatre piu u. Be kipe pa pa pi tepipliita. Tikiii 
+                                topu epatripu i o po? Pe uuta dru opi gii ki. Ti pepate bi bi a e? I gia kitidu eproplu ple kitle. Kii pitre ko e 
+                                iipoga a. E o popate ku kritra pi. Tu pe titepee dro kee ekiplu. Ti ti ki te gra a. Ia tle biitapo oi pri epoi? Ti 
+                                opikli be po betle e. Igribliia tipi tloka ple ko plubla. Ge pita tidleki to pri ti. Ategoki e a plu topipi kiipe. 
+                                Priklu kro ai tepeplea pu e. A tapa kite pubo ti du. Bipro begitebi kaaete gi tipo ko. E kipretopua pika glotro di 
+                                bu. Pepe tebo iikepoplo i tru gi. Gike da e ipia tripi ia. Bi bikli pate dlite e dligu? I pididi kra pabaka e o. 
+                                Ipoidipi a ti i ba geka! 
+                            </blockquote><br><br>
+                            <h4>Categories</h4>
+                            These are your phonological classes, defined by enumeration. For instance, I might define my fricatives like this:
+                            <br>
+                            F=tvszšž<br>
+                            That means that any time gen wants to output an F from the syllables list, it will randomly pick one of f, v, s, z, š, ž. 
+                            The phonemes in a category have to be single characters, but we’ll see how to output digraphs below.<br>
+
+                            Order here determines the probability. The program runs through the phonemes in a category, with the default Medium setting
+                            giving 30% chance of stopping after each subsequent character. The example F definition above is set up for t to occur a 
+                            frequently and ž not that very infrequently. <br>
+
+                            The main corollary: Put the sounds you like first! Don’t list them in place of articulation order unless you really like 
+                            labials. Try varying the order and hitting Generate to see how changing the order changes the output.<br>
+
+                            Don’t overdo the classes. This tool doesn’t know any phonology, and will be perfectly happy with a single class C for all 
+                            consonants. You define a class for two reasons:<br>
+
+                            1) To control probabilities. E.g. we usually want stops to occur more than fricatives.<br>
+                            2) To enforce phonotactics. E.g. if the only initial clusters you allow are stop + liquid, then you need classes for stops 
+                            and liquids. <br><br>
+                            
+                            <h4>Illegal Clusters</h4>
+                            Within the illegal clusters box, you can define clusters of characters which are illegal. The generator will not create any
+                            words or syllables which contain these character combinations. These rules are applied <i>after</i> the rewrite rules are
+                            applied.<br><br>
+                            
+                            <h4>Rewrite Rules</h4>
+                            This is optional functionality which can add be used to add multicharacter patterns to the output, transform special cases of
+                            clusters into a single, unified character, etc. by applying global substitutions to the output. The simplest form is to replace 
+                            a single character:<br>
+                            θ|th <br>
+                            That tells the tool to replace every occurrence of θ in the output with th. You can also handle combinations. E.g. maybe ti 
+                            always changes to či. You'd write that as<br>
+                            ti|či <br>
+                            The rewrite rules are regex compatible. For example you could change both br and bl to bj with the formula<br>
+                            b[rl]|bj<br>
+                            Rules are applied in order. Take care that one intended rewrite will not simply be consumed by a later one.<br><br>
+
+                            
+                            <b>Output settings:</b> You can choose either to generate words based on the rules you define or all possible syllables.
+                            Generating words will give you a randomized list of constructed words (they will not be the same if generated twice). If 
+                            you generate all syllables, every possible combination of characters will be generated. This process is not random, as it
+                            hits each possibility once. The syllables can be imported to allow automated pronunciation generation to separate syllables
+                            automatically.<br>
+                            <b>Show Syllables:</b> Selecting this will separate the syllables of each word by division dots. This option is available 
+                            only for word generation.<br>
+                            <b>Dropoff:</b> Under the categories definitions, characters appearing later will appear less frequently. Dropoff determines 
+                            quickly this declines. If you have C=ptkbdg, then when outputing a C, normally p will appear most frequently, t a but less,
+                            and so on, with g appearing the lease. If fast dropoff is selected, the probabilities will stack even more in favor of the 
+                            first character (p here). With slow selected, a more even distribution will be applied. Sliding it entirely to the side will
+                            make all choices equiprobable.This option is available only for word
+                            generation.<br>
+                            <b>Slow Syllable Dropoff:</b> The Dropoff control doesn't affect the selection of syllable types. You can choose a more even 
+                            distribution by checking this. This option is available  only for word generation.<br>
+                            <b>Monosyllables:</b> This slider controls how much of the output should be monosyllabic. This might be set to Always for an 
+                            isolating language, for instance. This option is available  only for word generation.<br>
+                            <b>Target:</b> This controls the target number of words to generate. This option is available only for word generation.
+                        </div><br><br>
+                        <img style="" alt="" src="assets/lexgen02.png" width="800"> <br>
+                        <div align="left">
+                            This is the bottom half of the word generator after a set of words has been generated. This is the section of the tool used to 
+                            import words into your language. Rather than simply copying words wholesale, I recommend that you take the time to sort through
+                            them, finding those whose sounds and feel you like, then pairing them with an appropriate meaning.<br>
+                            <b>Generated Words:</b> This is where all generated words are placed. You may select and edit them as you like. Using the + and -
+                            keys below, you may delete lines or add in new ones if the idea for a similar sounding word to one you are keeping comes to you.<br>
+                            <b>Swadesh List:</b> This is an optional feature which helps to pair generated words with very basic definitions. There are two 
+                            default <a href="https://en.wikipedia.org/wiki/Swadesh_list">Swadesh lists</a> that can be selected in addition to the option of 
+                            loading your own, custom list (if you choose to load your own, it is simply a line delimited list of words). Words in the Swadesh
+                            list may be edited, deleted, or new lines inserted via the + and - buttons below.<br>
+                            <b>Words to Import:</b> This is a list of words which are ready to import into your language. To add a word, simply select an entry
+                            in the Generated Words list, select a value in the Swadesh list (optionally), and click the > button. To move an entry out again,
+                            select it in the Import list and click the < button. This will return the word and Swadesh value to their respective lists.<br>
+                            <b>Import Words:</b> Once you have decided on which words you would like to import, click this to add them to your lexicon. The 
+                            lexicon screen will open immediately so you can begin to fill the entries out more fully.
+                        </div><br><br>
+                        <img style="" alt="" src="assets/lexgen03.png" width="800"> <br>
+                        <div align="left">
+                            This is the bottom half of the generator after all possible syllables have been generated. Most is inactive, with only the list of
+                            syllables showing. You can click the Import button on the bottom right to pull them into your language file. This will automatically
+                            enable the Syllable Composition feature (found under the Phonology menu). If you have your language set up to automatically generate
+                            word pronunciations, this will add an interpunct mark (·) between syllables as detected by PolyGlot.
+                        </div><br>
+                        
                         <a name="EXPORT_SPELLCHECK_DIC"></a><h1>Export Spellcheck Dictionary</h1>
                         <div align="left">
                             This tool within PolyGlot can generate a .dic file which is consumable as a spellcheck dictionary. This file can be used 
@@ -886,8 +1106,8 @@
                         </div>
 
                         <a name="OPTIONS_MENU"></a><h1>Options Menu</h1>
+                        <img src="assets/options_01.png" alt="" width="600"><br>
                         <div align="left">
-                            <img src="assets/options_01.png" alt=""><br><br>
                             The options window allows you to control behaviors of PolyGlot not associated with any given language. These options
                             will persist when you load different language files.
 
@@ -902,6 +1122,10 @@
                             Versions older than this will be discarded. The value 0 means that PolyGlot will not limit the number of saved versions. 
                             Take care when setting the value to 0. If you have a large language file and save frequently, this can make the size of 
                             your language save file balloon quickly, so take care.<br><br>
+                            
+                            <b>Auto-save Frequency</b>: PolyGlot will create a temporary save file every 10 minutes by default. This is deleted when PolyGlot properly shuts down,
+                            but can be recovered from if it or your system crash unexpectedly. You can change the frequency of saves here in minutes.
+                            Note that autosaves will not affect the revision points feature in PolyGlot that are typically created each save.<br><br>
 
                             The <b>Reset Options</b> button allows you to reset all option data within PolyGlot. This <i>includes</i> data which is
                             not typically visible, such as window position, window sizes, and prior files opened.
@@ -924,9 +1148,7 @@
                             This will likely be changed in the future, but if you use this functionality without
                             Java 8 installed, you will be prompted to install it.<br><br>
                         </div>
-                        <img alt="" src="assets/excelImport.png"><br>
-                        <br>
-                        <br>
+                        <img alt="" src="assets/excelImport.png" width="600"><br><br>
                         <div align ="left">- Import File<br>
                             <br>
                             This is the Excel/CSV file that you are importing
@@ -987,17 +1209,17 @@
                         </div>
 
                         <a name="ETYMOLOGY"></a><h1>Etymology Engine</h1><br>
-                        <br>
+                        <img src='assets/ety01.png' alt=''><br>
                         <div align='left'>
-                            <img src='assets/ety01.png' alt=''><br><br>
-
                             The Etymology Engine allows you to create and visually graph complex 
                             systems of etymology and lexical lineage within your language. To access
                             it, select the word you would like to work on in the Lexicon section
                             of PolyGlot and click the Etymology button (pictured above).<br><br>
+                        </div>
+                            
+                        <img src='assets/ety02.png' alt=''><br>
 
-                            <img src='assets/ety02.png' alt=''><br><br>
-
+                        <div align='left'>
                             On the screen above, we can enter etymological parents to our selected word. 
                             The top left menu for Internal Parents allows parents to be added from within
                             your language. The dropdown will populate with all the words from your language.
@@ -1138,8 +1360,8 @@
                         <img src="assets/stats2.png"><br><br>
 
                         <a name="LANGUAGE_EVOLUTION"></a><h1>Language Evolution Tool</h1>
+                        <img style="" alt="" src="assets/lang_evol_01.png" width="600">
                         <div align="left">
-                            <img style="" alt="" src="assets/lang_evol_01.png">
                             <br><br>
                             The Language Evolution Tool can be used to create linguistic drift in your lexicon. With it, you can
                             automatically transform large segments of vocabulary based on pattern matching. This can be particularly
@@ -1169,7 +1391,8 @@
                             Below this is a radio button controlling what within your language file will be targeted.<br>
                             <ul>
                                 <li>Lexicon: Apply transformations exclusively to lexicon entries</li>
-                                <li>Conjugation Patterns: Apply transformation exclusively to generation patterns (warning: applies regex transformation to regex patterns here, be aware)</li>
+                                <li>Conjugation Patterns: Apply transformation exclusively to generation patterns (warning: applies regex 
+                                    transformation to regex patterns here, be aware)</li>
                                 <li>Both: Apply transformation to both</li>
                             </ul>
                             
@@ -1178,6 +1401,14 @@
                             
                             To apply the evolution to your language, simply click OK, and accept the dialog that follows. After it has been 
                             applied, a chart will appear, displaying the prior and current versions of each word that was modified.
+                        </div><br>
+                        <img style="" alt="" src="assets/lang_evol_02.png" width="600"><br>
+                        <div align ="left">
+                            One the evolution tool has completed its run, the evolution report will display. This shows how words have evolved and
+                            allows you to take stock of changes. This is particularly useful when incorporating randomness, and only modifying a
+                            percentage of your lexicon. If there are errors generated by any of the words for any reason, their row will be displayed
+                            in red, with the Notes column containing the problem with the word's evolution. These words will be reverted to their 
+                            original forms.
                         </div>
                         
 
@@ -1450,7 +1681,7 @@
                                 grammar to users. To access it, click the Grammar button on the main
                                 menu.<br>
                                 <br>
-                                <img alt="" src="assets/grammar1.png"><br>
+                                <img alt="" src="assets/grammar1.png" width=700><br>
                                 <br>
 
                                 This window is one of the more complex elements of PolyGlot, but also
@@ -1475,7 +1706,8 @@
                                 The Spoken Example menu allows you to record and play back speech in
                                 your conlang. This is especially useful when your language uses
                                 particular tones or inflections that it is difficult to describe in
-                                simple text.<br>
+                                simple text. To delete the spoken record, the trashcan icon to the
+                                right can be clicked.<br>
 
                                 <div>
                                     <a name="TROUBLESHOOTING"></a><h1>Troubleshooting</h1>
@@ -1542,29 +1774,25 @@
                                         Info</h1>
                                     <br>
 
-                                    This program is copyright(©) Draque Thompson 2014-2019. <br>
-                                    <br>
-                                    <br>Additional assistance and design of the todo list: Joseph Cramsey josephcsoftware@gmail.com https://joeycramsey.bandcamp.com<br>
-                                    PolyGlot uses the open source library Apache POI for excel
-                                    parsing/writing.<br>
+                                    This program is copyright(©) Draque Thompson 2014-2022. <br>
+                                    <br><br>
+                                    Shoutout to user TrapinchO on Github, who has provided <b>invaluable</b> testing, feedback, and code checking.<br>
+                                    Additional assistance and design of the todo list: Joseph Cramsey josephcsoftware@gmail.com https://joeycramsey.bandcamp.com<br>
+                                    PolyGlot uses the open source library Apache POI for excel parsing/writing.<br>
                                     PolyGlot uses the Masahiko SAWAI Font Chooser.<br>
                                     PolyGlot uses font Digital7 by Style7 (http://www.styleseven.com/)<br>
-                                    PolyGlot uses IPA pronunciations sounds from the Wikimedia Commons,
-                                    created by Peter Isotalo, User:Denelson83, UCLA Phonetics Lab Archive
-                                    2003, User:Halibutt, User:Pmx and User:Octane, and covered under the
-                                    GNU Free Documentation
-                                    License<br>
-                                    PolyGlot uses IPA pronunciations from the Wikimedia Commons (referenced and linked 
-                                    <a href="https://en.wikipedia.org/wiki/International_Phonetic_Alphabet">here</a>)<br>
-                                    PolyGlot uses font Charis, Copyright (c) 1997-2014, SIL International
-                                    (http://scripts.sil.org/) with Reserved Font Names "Charis" and "SIL"<br>
-                                    PolyGlot uses iText7, which is created and owned by iText Software
-                                    (http://itextpdf.com) and licensed under the AGPL license<br>
+                                    PolyGlot uses IPA pronunciations sounds from the Wikimedia Commons, created by Peter Isotalo, User:Denelson83, UCLA Phonetics Lab Archive
+                                    2003, User:Halibutt, User:Pmx and User:Octane, and covered under the GNU Free Documentation License<br>
+                                    PolyGlot uses IPA pronunciations from the Wikimedia Commons (referenced and linked <a href="https://en.wikipedia.org/wiki/International_Phonetic_Alphabet">here</a>)<br>
+                                    PolyGlot uses font Charis, Copyright (c) 1997-2014, SIL International (http://scripts.sil.org/) with Reserved Font Names "Charis" and "SIL"<br>
+                                    PolyGlot uses iText7, which is created and owned by iText Software (http://itextpdf.com) and licensed under the AGPL license<br>
                                     PolyGlot uses glyph manipulating code written by Stanislav Lapitsky 
                                     (http://java-sl.com/) <br>
                                     PolyGlot uses the HTML parsing library <a href="https://jsoup.org/">jsoup</a> by Jonathan Hedley
                                     <br>
                                     PolyGlot uses the <a href="https://super-csv.github.io/super-csv/index.html">SuperCSV</a> library (dev led by Kasper Graversen)
+                                    <br>
+                                    PolyGlot uses the <a href="https://github.com/m-abboud/FontVerter">FontVerter</a> library
                                     <br><br>
                                     This program is free to distribute. Neither it nor its internal code may be sold for a profit or bundled with
                                     for profit software. Basically, don't be a dick about this.<br>

@@ -99,7 +99,7 @@ public class ConWordCollectionTest {
         core.getPropertiesManager().setTypesMandatory(true);
         ConWord results = core.getWordCollection().testWordLegality(test);
         
-        assertEquals(results.typeError, "Types set to mandatory.");
+        assertEquals(results.typeError, "Part of Speech set to mandatory.");
     }
     
     @Test

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -48,6 +48,7 @@ public final class PCellRenderer implements TableCellRenderer {
     private final DictCore core;
     private boolean useConFont;
     private double fontSize;
+    private String curDisplayedValue = "";
 
     public PCellRenderer(boolean _useConFont, DictCore _core) {
         core = _core;
@@ -58,14 +59,20 @@ public final class PCellRenderer implements TableCellRenderer {
         background = _background;
     }
     
+    public String getStringContents() {
+        return curDisplayedValue;
+    }
+    
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        final JTextField editor = new JTextField();
+        var editor = new JTextField();
         
+        editor.setHorizontalAlignment(JTextField.CENTER);
         editor.setBackground(background);
         
         if (value != null) {
-            editor.setText(value.toString());
+            curDisplayedValue = value.toString();
+            editor.setText(curDisplayedValue);
         }
         
         if (myFont != null) {
@@ -105,6 +112,8 @@ public final class PCellRenderer implements TableCellRenderer {
                 // do nothing
             }
         });
+        
+        editor.setFont(myFont);
         
         return editor;
     }
