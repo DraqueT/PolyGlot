@@ -1,27 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <PolyGlotUpdate>
-<Version>3.3</Version>
+<Version>3.6</Version>
 <VersionText>
-Version 3.3
+Version 3.6
 &lt;br&gt;&lt;br&gt;
-Heyo, all! This is version 3.3 of PolyGlot! This release is going to be the last for a while, so with any luck, stability will be nice and solid for this one! There are a few minor new features to PolyGlot this time around, but more than anything, this is a release that includes a bunch of bug-fixes that I have been needing to get out for the last few months. Please enjoy!
+TEST TEST TEST
 
 &lt;br&gt;&lt;br&gt;
 &lt;br&gt;&lt;br&gt;
 ENHANCEMENTS:&lt;br&gt;
-- Language evolution can now be applied to conjugated forms and rules&lt;br&gt;
-- Supports export of dictionary file for conlang spellchecks&lt;br&gt;
-- Check Language feature now checks validity of all regex used&lt;br&gt;
-- Window state (including divider position) now saved with greater granularity&lt;br&gt;
+- BLEEP BLOOP LETS EAT BUGS&lt;br&gt;
 &lt;br&gt;&lt;br&gt;
 BUGS FIXED:&lt;br&gt;
-- Windows Stats Page does not generate in UTF-8&lt;br&gt;
-- Delete button in lexicon search just cancelling search without doing anything&lt;br&gt;
-- Import from excel broken in Windows&lt;br&gt;
-- Language Stats fails on multi-character alphabetic entries&lt;br&gt;
-- Language Stats Fails on HTML unsafe characters&lt;br&gt;
-- Phoneme frequency calculates based on letter frequency&lt;br&gt;
-- Stats Page Crash on no IPA&lt;br&gt;
+- ATE A BIG SPIDER EW GROSS&lt;br&gt;
   
 &lt;br&gt;
 Homepage: http://draquet.github.io/PolyGlot/
