@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -400,6 +400,7 @@ public final class PPanelDrawEtymology extends JPanel {
      */
     public void paintComponent(Graphics g) {
         this.removeAll();
+        super.paintComponent(g);
 
         // turn on anti-alias mode
         Graphics2D antiAlias = (Graphics2D) g;
@@ -484,13 +485,5 @@ public final class PPanelDrawEtymology extends JPanel {
      */
     private int getCalcWidth() {
         return columnWidth.values().stream().mapToInt(Number::intValue).sum();
-    }
-    
-    /**
-     * Calculates and returns minimum appropriate width for panel
-     * @return minimum width
-     */
-    private int getCalcHeight() {
-        return curYDepth;
     }
 }
