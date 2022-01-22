@@ -13,7 +13,7 @@
         <link rel="icon" href="favicon.ico">
 
         <link rel="shortcut icon" href="favicon.png">
-        <title>PolyGlot Help File</title>
+        <title>PolyGlot Help</title>
 
 
         <!-- Bootstrap core CSS --> 
@@ -99,8 +99,7 @@
                         </table>
 
                         <h1><a name="WELCOMEOVERVIEW"></a>WELCOME/OVERVIEW</h1><br>
-                        <div align ="left">Welcome to PolyGlot, an <a href="https://github.com/DraqueT/PolyGlot">open
-                                source</a>
+                        <div align ="left">Welcome to PolyGlot, an <a href="https://github.com/DraqueT/PolyGlot">open source</a>
                             tool set that helps to build constructed languages! PolyGlot
                             is a project that I have been working on for some time, and it
                             continues to become more stable and capable with each release. If you
@@ -109,16 +108,27 @@
                             post them on <a href="https://github.com/DraqueT/PolyGlot/issues">PolyGlot's issues page</a>!</div>
 
                         <h1><a name="-----_ii_-----"></a>WHAT’S NEW</h1>
-                        <div align ="left"><br>Heyo, all! Welcome to version 3.5 of PolyGlot! This is a pretty big release! It
-                            includes a long list of upgrades and bug fixes. This also represents a significant step toward an
-                            Android release of PolyGlot, which has been much requested and a long time coming. Also, want to
-                            give a big shoud out to TrapinchO over on GitHub, who gave an enormous amount of help with testing
-                            this time around! Please enjoy, everyone!
+                        <div align ="left"><br>Heyo, all! Welcome to version 3.5 of PolyGlot! This is a <b>massive</b> release! First, 
+                            I want to give a huge shout out to TrapinchO over on GitHub, who gave an enormous amount of help with 
+                            testing this time around, and just has killer ideas in general! It includes a long list of upgrades and
+                            bug fixes. This also represents a significant step toward an Android release of PolyGlot, which has been 
+                            much requested and a long time coming.<br><br>
+                            
+                            Among the most exciting upgrades are the complete integration of the Zompist word generator (algorithm
+                            and original design go to Mark Rosenfelder there), a complete overhaul of how graphics are painted (no
+                            more CPU fans going nuts), a revamped lexicon look (local language synonyms now displayed in the list
+                            by their conword counterparts), automatic syllable composition when generating pronunciations, and many, 
+                            <i>many</i> quality of life improvements (full list below). And that is on top of a ton of bug fixes!<br><br>
+                            
+                            Please enjoy, everyone!
                             <br><br>
 
                         </div>
                         NEW FEATURES:
                         <div align ="left"><ul>
+                                <li>Full integration of the Zompist Word Generator</li>
+                                <li>Automatic syllable composition in pronunciation</li>
+                                <li>Word form constructor tool added for greater ease with agglutinative languages</li>
                                 <li>PolyGlot can now import local language fonts as with conlang fonts.</li>
                                 <li>Push updates to mass autodeclension rules updated</li>
                                 <li>Delete audio recording button added to grammar section</li>
@@ -159,6 +169,9 @@
                         BUGS FIXED:
                         <div align="left">
                             <ul>
+                                <li>Ligatures loaded initially, but failed to re-load from saved PolyGlot archive</li>
+                                <li>Broken multi-delete in conjugations menu fixed</li>
+                                <li>Graphical artifacting and "shadows" appeared sometimes in etymology window</li>
                                 <li>Broken multi-delete in conjugations menu fixed</li>
                                 <li>Excel import bugs corrected (false success report)</li>
                                 <li>Quickentry image insertion caused PolyGlot to freeze</li>
@@ -186,13 +199,15 @@
                         <a name="INSTALLATION"></a>
                         <h1>INSTALLATION</h1><br>
                         <div align ="left">As of version 3.0, the installation of PolyGlot has become mostly automated. Simply 
-                            download the appropriate installer for your operating system (Windows: exe, Linux: deb, OSX:dmg) and open 
+                            download the appropriate installer for your operating system (Windows: exe, Linux: deb, macOS:dmg) and open 
                             to install! PolyGlot no longer has a frontend, and to run the base program, there is no need to install 
                             Java at all (although for some features, a java runtime may be required).<br><br>
+                            
+                            <i>Windows Note</i>: Windows will complain bitterly about PolyGlot not being properly registered with Microsoft. 
+                            It is safe to install, but registration costs money and PolyGlot is free.<br><br>
                         
-                            The only note for OSX is that the first time it is run, you may have to right click th Application from
-                            Finder, select "open" and grant it permission to run, despite not being registered with Apple. Registration
-                            costs money and PolyGlot is free.
+                            <i>macOS Note</i>: On the initial run, you will have to right click th Application from Finder, select "open" and grant it permission to run, 
+                            despite not being registered with Apple. It is safe to run, but registration costs money and PolyGlot is free.
                         </div>
                         <br><br>
 
