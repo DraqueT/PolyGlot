@@ -144,9 +144,9 @@ public class IOHandlerTest {
         System.out.println("IOHandlerTest.testGoodConsoleCommand");
         
         
-        String[] result = DesktopIOHandler.getInstance().runAtConsole(new String[]{"java", "--version"}, false);
+        String[] result = DesktopIOHandler.getInstance().runAtConsole(new String[]{"echo", "bloop"}, false);
 
-        assertTrue(!result[0].isEmpty()); // various versions of Java return every damned thing you can imagine... just test that it's SOMETHING
+        assertTrue(!result[0].isEmpty());
         assertTrue(result[1].isEmpty());
     }
     
