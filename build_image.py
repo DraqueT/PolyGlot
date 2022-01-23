@@ -224,7 +224,7 @@ def dist():
 
 def buildLinux():
     print('cleaning/testing/compiling...')
-    os.system('mvn clean package')
+    os.system('﻿/usr/lib/jvm/apache-maven-3.8.4/bin/mvn clean package')
 
 def cleanLinux():
     print('cleaning build paths...')
