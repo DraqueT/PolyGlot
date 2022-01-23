@@ -11,7 +11,7 @@ CONST_RELEASE="-release"
 CONST_WIN="win"
 CONST_WIN_VIRTUAL="WinDev2001Eval"
 CONST_LINUX="lin"
-CONST_LINUX_VIRTUAL="PolyGlotBuildUbuntu"
+CONST_LINUX_VIRTUAL="PolyGlotUbuntu_Nov_2021"
 CONST_OSX="osx"
 
 # ensure java home properly defined
