@@ -233,7 +233,7 @@ public final class PolyGlot {
                     polyGlot.getRootWindow().openLexicon(true);
                 }
                 
-                // only begin autosave loop once checks for rrecovery files are complete
+                // only begin autosave loop once checks for recovery files are complete
                 polyGlot.autoSave();
             } catch (ArrayIndexOutOfBoundsException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e, "Problem with top level PolyGlot arguments.");
