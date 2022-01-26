@@ -92,13 +92,11 @@ public final class PolyGlot {
         try {
             // must be set before accessing System to test OS (values will simply be ignored for other OSes
             if (PGTUtil.IS_OSX) {
-                // set program icon
                 Taskbar.getTaskbar().setIconImage(PGTUtil.POLYGLOT_ICON.getImage());
+                System.setProperty("apple.laf.useScreenMenuBar", "true");
+                System.setProperty("apple.awt.application.name", PGTUtil.DISPLAY_NAME);
+                System.setProperty("com.apple.mrj.application.apple.menu.about.name", PGTUtil.DISPLAY_NAME);
             }
-
-            System.setProperty("apple.laf.useScreenMenuBar", "true");
-            System.setProperty("apple.awt.application.name", PGTUtil.DISPLAY_NAME);
-            System.setProperty("com.apple.mrj.application.apple.menu.about.name", PGTUtil.DISPLAY_NAME);
 
             setupNimbus();
             setupCustomUI();
