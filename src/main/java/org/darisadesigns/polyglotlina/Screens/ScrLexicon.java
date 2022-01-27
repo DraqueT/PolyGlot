@@ -318,6 +318,10 @@ public final class ScrLexicon extends PFrame {
     private void populateClassPanel() {
         ConWord curWord = getCurrentWord();
 
+        if (curWord == null) {
+            return;
+        }
+        
         curWord.getClassValues().stream()
                 .filter((curProp) -> (classPropMap.containsKey(curProp.getKey())))
                 .forEachOrdered((curProp) -> {
