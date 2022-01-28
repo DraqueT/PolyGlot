@@ -142,11 +142,19 @@ public class IOHandlerTest {
     @Test
     public void testGoodConsoleCommand() {
         System.out.println("IOHandlerTest.testGoodConsoleCommand");
+        String expectedValue = "bloop";
         
+        String[] command = new String[]{"echo", expectedValue};
         
-        String[] result = DesktopIOHandler.getInstance().runAtConsole(new String[]{"echo", "bloop"}, false);
+        if (PGTUtil.IS_WINDOWS) {
+            command = new String[]{"cmd.exe", "/C", "echo", expectedValue};
+        } else if (PGTUtil.IS_LINUX) {
+            command = new String[]{"sh", "-c", "cmd.exe", "/C", "echo", expectedValue};
+        }
+        
+        String[] result = DesktopIOHandler.getInstance().runAtConsole(command, false);
 
-        assertTrue(!result[0].isEmpty());
+        assertEquals(result[0], expectedValue);
         assertTrue(result[1].isEmpty());
     }
     

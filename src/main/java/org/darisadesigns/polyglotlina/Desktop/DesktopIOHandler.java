@@ -1529,8 +1529,7 @@ public final class DesktopIOHandler implements IOHandler {
                     error += line;
                 }
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             error = e.getLocalizedMessage();
         }
 
