@@ -169,8 +169,25 @@ public class IOHandlerTest {
     }
     
     @Test
-    public void textIsJavaAvailable() {
+    public void textIsJavaAvailable_true() {
         System.out.println("IOHandlerTest.textIsJavaAvailable");
+        
+        if (!System.getenv().containsKey("JAVA_HOME")) {
+            // dump in test value if none present
+            System.getenv().put("HAVA_HOME", "/usr/lib/omg/here/ur/java");
+        }
+        
+        assertTrue(DesktopIOHandler.getInstance().isJavaAvailable());
+    }
+    
+    @Test
+    public void textIsJavaAvailable_false() {
+        System.out.println("IOHandlerTest.textIsJavaAvailable");
+        
+        if (System.getenv().containsKey("JAVA_HOME")) {
+            System.getenv().remove("JAVA_HOME");
+        }
+        
         assertTrue(DesktopIOHandler.getInstance().isJavaAvailable());
     }
     
