@@ -43,28 +43,28 @@ public class LexiconProblemNode implements Comparable<LexiconProblemNode>{
         severity = _severity;
         
         switch (_problemType) {
-            case ConWord -> {
+            case ConWord:
                 shortDescription = _problemWord.getValue();
                 useConFont = true;
-            }
-            case PoS -> {
+                break;
+            case PoS:
                 shortDescription = "Part of Speech: " + _problemWord.getValue();
                 useConFont = true;
-            }
-            case Phonology -> {
+                break;
+            case Phonology:
                 shortDescription = "Phonology Problem";
                 useConFont = true;
-            }
-            case Alphabet -> {
+                break;
+            case Alphabet:
                 AlphaProblem problem = (AlphaProblem)_problemWord;
                 shortDescription = "The following character combinations cause amiguity: " 
                         + problem.getValue() + " " + problem.getSecondVal();
                 useConFont = false;
-            }
-            default -> {
+                break;
+            default:
                 shortDescription = "UNDEFINED VALUE";
                 useConFont = false;
-            }
+                break;
         }
     }
     

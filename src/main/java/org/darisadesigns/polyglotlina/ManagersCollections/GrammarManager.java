@@ -47,6 +47,10 @@ public abstract class GrammarManager {
     public void setCore(DictCore _core) {
         core = _core;
     }
+
+    public DictCore getCore() {
+        return this.core;
+    }
     
     /**
      * Fetches buffer chapter node
