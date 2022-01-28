@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -169,10 +169,9 @@ public class IOHandlerTest {
     }
     
     @Test
-    public void textIsJavaAvailableInTerminal() {
-        System.out.println("IOHandlerTest.textIsJavaAvailableInTerminal");
-        
-        assertTrue(DesktopIOHandler.getInstance().isJavaAvailableInTerminal());
+    public void textIsJavaAvailable() {
+        System.out.println("IOHandlerTest.textIsJavaAvailable");
+        assertTrue(DesktopIOHandler.getInstance().isJavaAvailable());
     }
     
     @Test

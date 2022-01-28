@@ -1575,8 +1575,8 @@ public final class DesktopIOHandler implements IOHandler {
      * @return
      */
     @Override
-    public boolean isJavaAvailableInTerminal() {
-        return !getTerminalJavaVersion().isEmpty();
+    public boolean isJavaAvailable() {
+        return System.getenv("JAVA_HOME") != null;
     }
 
     /**
