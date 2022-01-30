@@ -187,7 +187,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
 
         if (core.getPropertiesManager().isWordUniqueness() 
                 && wordCount.containsKey(word.getValue())
-                && wordCount.get(word.getValue()) >= 1) {
+                && (wordCount.containsKey("") || wordCount.get(word.getValue()) > 1)) {
             ret.setValue(ret.getValue() + (ret.getValue().isEmpty() ? "" : "\n")
                     + core.conLabel() + " words set to enforced unique: this conword exists elsewhere.");
         }
@@ -196,7 +196,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         if (core.getPropertiesManager().isLocalUniqueness() 
                 && !localWord.isEmpty()
                 && localCount.containsKey(localWord)
-                && localCount.get(localWord) >= 1) {
+                && (localCount.containsKey("") || localCount.get(localWord) > 1)) {
             ret.setLocalWord(ret.getLocalWord() + (ret.getLocalWord().isEmpty() ? "" : "\n")
                     + core.localLabel() + " words set to enforced unique: this local exists elsewhere.");
         }
