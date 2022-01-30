@@ -1529,8 +1529,7 @@ public final class DesktopIOHandler implements IOHandler {
                     error += line;
                 }
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             error = e.getLocalizedMessage();
         }
 
@@ -1575,8 +1574,8 @@ public final class DesktopIOHandler implements IOHandler {
      * @return
      */
     @Override
-    public boolean isJavaAvailableInTerminal() {
-        return !getTerminalJavaVersion().isEmpty();
+    public boolean isJavaAvailable() {
+        return System.getenv("JAVA_HOME") != null;
     }
 
     /**

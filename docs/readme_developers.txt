@@ -4,10 +4,12 @@ If you're looking to work on PolyGlot independently or to contribute, here's how
 
 1) Download Open JDK 17 (or higher)
 	- Copy to appropriate directory
-	- add environment variables (JAVA_HOME and bin directory to path)
-2) Install Maven
+1.5) Download JDK 1.8
+        - add environment variables (JAVA_HOME and bin directory to path) for testing of Java8 bridge functionality
+2) Install Maven (3.8.1 or higher)
         - Copy to appropriate directory
         - add environment variable (MAVEN_HOME)
+        - Add line specifying JDK 17 as java to use for maven
 3) Download/install Netbeans 12 or newer
 	- remember to set the jdk path as appropriate on install if asked (might not auto-populate)
 4) Install git (not strictly necessary, but command line git is more powerful than the UI based stuff you can do in Netbeans)
@@ -27,7 +29,7 @@ This will show you how to package PolyGlot for OSX, Windows, and Linux.
 
 1) Open build_image.py in a text editor.
 3) ONLY IF YOUR MAVEN USES A CUSTOM DEPENDENCY DIRECTORY - Change the value of JAVAFX_LOCATION_<OS> to wherever jfx got dumped (you can get this by looking at the properties of any of the jfx dependencies)
-	- the end of the location should read "openjfx." Do NOT copy the full path of one of the dependencies, or it will not work.
+        - the end of the location should read "openjfx." Do NOT copy the full path of one of the dependencies, or it will not work.
         - there are separate variables for each OS, as I presume the directory structures of the environments you build on will differ.
 5) In a terminal, navigate to the PolyGlot project folder.
 5.5) (Windows only) Download and install WiX Toolset: https://wixtoolset.org/releases/

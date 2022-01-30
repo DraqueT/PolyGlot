@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -32,6 +32,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
@@ -163,7 +164,9 @@ public final class Java8Bridge {
         }
         
         if (!new File(target).exists()) {
-            throw new IOException("Unable to print to PDF for unknown reasons. Please contact developer.");
+            String resultsString = String.join("\n", results);
+            DesktopIOHandler.getInstance().writeErrorLog(new Exception(), resultsString);
+            throw new IOException("Unable to print to PDF for unknown reasons. Please contact developer with details:\n" + resultsString);
         }
     }
 
@@ -272,8 +275,8 @@ public final class Java8Bridge {
      * @throws IOException 
      */
     private static void errorIfJavaUnavailableInTerminal() throws IOException {
-        if (!DesktopIOHandler.getInstance().isJavaAvailableInTerminal()) {
-            throw new IOException("The Java runtime is required for this feature.\nPlease install from: www.java.com");
+        if (!DesktopIOHandler.getInstance().isJavaAvailable()) {
+            throw new IOException("An external Java runtime is required for this feature.\nPlease install from: www.java.com");
         }
     }
 

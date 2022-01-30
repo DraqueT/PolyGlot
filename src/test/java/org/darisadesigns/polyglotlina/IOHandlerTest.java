@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -142,11 +142,19 @@ public class IOHandlerTest {
     @Test
     public void testGoodConsoleCommand() {
         System.out.println("IOHandlerTest.testGoodConsoleCommand");
+        String expectedValue = "bloop";
         
+        String[] command = new String[]{"echo", expectedValue};
         
-        String[] result = DesktopIOHandler.getInstance().runAtConsole(new String[]{"java", "--version"}, false);
+        if (PGTUtil.IS_WINDOWS) {
+            command = new String[]{"cmd.exe", "/C", "echo", expectedValue};
+        } else if (PGTUtil.IS_LINUX) {
+            command = new String[]{"sh", "-c", "cmd.exe", "/C", "echo", expectedValue};
+        }
+        
+        String[] result = DesktopIOHandler.getInstance().runAtConsole(command, false);
 
-        assertTrue(!result[0].isEmpty()); // various versions of Java return every damned thing you can imagine... just test that it's SOMETHING
+        assertEquals(result[0], expectedValue);
         assertTrue(result[1].isEmpty());
     }
     
@@ -169,10 +177,31 @@ public class IOHandlerTest {
     }
     
     @Test
-    public void textIsJavaAvailableInTerminal() {
-        System.out.println("IOHandlerTest.textIsJavaAvailableInTerminal");
+    public void textIsJavaAvailable_true() {
+        // windows and linux build in headless environemnts where this breaks
+        Assumptions.assumeTrue(!PGTUtil.IS_WINDOWS && !PGTUtil.IS_LINUX);
+        System.out.println("IOHandlerTest.textIsJavaAvailable");
         
-        assertTrue(DesktopIOHandler.getInstance().isJavaAvailableInTerminal());
+        
+        if (!System.getenv().containsKey("JAVA_HOME")) {
+            // dump in test value if none present
+            System.getenv().put("HAVA_HOME", "/usr/lib/omg/here/ur/java");
+        }
+        
+        assertTrue(DesktopIOHandler.getInstance().isJavaAvailable());
+    }
+    
+    @Test
+    public void textIsJavaAvailable_false() {
+        // windows and linux build in headless environemnts where this breaks
+        Assumptions.assumeTrue(!PGTUtil.IS_WINDOWS && !PGTUtil.IS_LINUX);
+        System.out.println("IOHandlerTest.textIsJavaAvailable");
+        
+        if (System.getenv().containsKey("JAVA_HOME")) {
+            System.getenv().remove("JAVA_HOME");
+        }
+        
+        assertTrue(DesktopIOHandler.getInstance().isJavaAvailable());
     }
     
     @Test

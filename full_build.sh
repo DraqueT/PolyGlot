@@ -11,7 +11,7 @@ CONST_RELEASE="-release"
 CONST_WIN="win"
 CONST_WIN_VIRTUAL="WinDev2001Eval"
 CONST_LINUX="lin"
-CONST_LINUX_VIRTUAL="PolyGlotBuildUbuntu"
+CONST_LINUX_VIRTUAL="PolyGlotUbuntu_Nov_2021"
 CONST_OSX="osx"
 
 # ensure java home properly defined
@@ -46,9 +46,8 @@ if [ "$#" -eq 0 ] || [ "$1" == "$CONST_WIN" ] || [ "$1" == "$CONST_RELEASE" ]; t
 #    sleep 5
 
     if [ $(vboxmanage showvminfo "$CONST_WIN_VIRTUAL" | grep -c "running .since") == 0 ] ; then
-        echo "Windows must be running to be built due to limitations in jpackage for Windows."
+        echo -e "\x1B[41mWindows must be running to be built due to limitations in jpackage for Windows.\x1B[0m"
         sleep 5
-        exit
     else
         if [ "$BUILD_STEP" == "" ] ; then
             VBoxManage guestcontrol "$CONST_WIN_VIRTUAL" \
@@ -57,10 +56,10 @@ if [ "$#" -eq 0 ] || [ "$1" == "$CONST_WIN" ] || [ "$1" == "$CONST_RELEASE" ]; t
                 --passwordfile /Users/draque/NetBeansProjects/polyglotvmpass
         else
             VBoxManage guestcontrol "$CONST_WIN_VIRTUAL" \
-                run --exe "C:\Users\polyglot\Documents\NetBeansProjects\auto_polyglot_build.bat" \
-                --username polyglot \
-                --passwordfile /Users/draque/NetBeansProjects/polyglotvmpass \
-                -- auto_polyglot_build.bat/arg0 "$BUILD_STEP"
+                run --exe "cmd.exe" \
+                    --username polyglot \
+                    --passwordfile /Users/draque/NetBeansProjects/polyglotvmpass \
+                    -- cmd.exe/arg0  /c C:\\Users\\polyglot\\Documents\\NetBeansProjects\\auto_polyglot_build.bat "$CONST_RELEASE"
         fi
 
         VBoxManage guestcontrol "$CONST_WIN_VIRTUAL" \
@@ -106,7 +105,7 @@ if [ "$#" -eq 0 ] || [ "$1" == "$CONST_LINUX" ] || [ "$1" == "$CONST_RELEASE" ];
             run --exe "/home/polyglot/NetBeansProjects/auto_polyglot_build.sh" \
             --username polyglot \
             --passwordfile /Users/draque/NetBeansProjects/polyglotvmpass \
-            -- auto_polyglot_build.bat/arg0 "$BUILD_STEP"
+            -- auto_polyglot_build.sh/arg0 "$BUILD_STEP"
     fi
     echo "Waiting for Ubuntu machine to power down..."
     until $(VBoxManage showvminfo --machinereadable PolyGlotBuildUbuntu | grep -q ^VMState=.poweroff.)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -344,7 +344,7 @@ public interface IOHandler {
      *
      * @return
      */
-    public boolean isJavaAvailableInTerminal();
+    public boolean isJavaAvailable();
 
     /**
      * Does what it says on the tin.Clear those carriage returns away.
