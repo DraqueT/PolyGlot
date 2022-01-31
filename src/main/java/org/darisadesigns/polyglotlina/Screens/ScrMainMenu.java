@@ -144,6 +144,10 @@ public final class ScrMainMenu extends PFrame {
                             + "\n";
                 }
                 path += "Loc: " + PolyGlot.class.getProtectionDomain().getCodeSource().getLocation().toURI().toString();
+                path += "\nExec: " + ProcessHandle.current()
+                    .info()
+                    .command()
+                    .orElseThrow();
                 
                 new DesktopInfoBox().info("BLOOP", path);
             } catch(Exception e){
