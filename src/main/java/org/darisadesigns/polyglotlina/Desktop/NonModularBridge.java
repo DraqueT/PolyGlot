@@ -276,7 +276,9 @@ public final class NonModularBridge {
         String macOSEnvVar = "DYLD_LIBRARY_PATH";
         String path = PGTUtil.JAVA_JAVA_COMMAND; // java
         
-        if (PGTUtil.IS_OSX) {
+        if (PGTUtil.isInJUnitTest() || PGTUtil.isInJUnitTest()) {
+            return path;
+        } else if (PGTUtil.IS_OSX) {
             if (System.getenv().containsKey(macOSEnvVar)) {
                 // ":Applications/PolyGlot.app/Contents/app" -> Applications/PolyGlot.app/Contents/runtime/Contents/Home/bin/java"
                 path = System.getenv(macOSEnvVar).substring(1).replaceAll("/app", "/runtime/Contents/Home/bin") + "/" + path;
