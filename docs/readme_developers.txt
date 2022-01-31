@@ -4,8 +4,6 @@ If you're looking to work on PolyGlot independently or to contribute, here's how
 
 1) Download Open JDK 17 (or higher)
 	- Copy to appropriate directory
-1.5) Download JDK 1.8
-        - add environment variables (JAVA_HOME and bin directory to path) for testing of Java8 bridge functionality
 2) Install Maven (3.8.1 or higher)
         - Copy to appropriate directory
         - add environment variable (MAVEN_HOME)

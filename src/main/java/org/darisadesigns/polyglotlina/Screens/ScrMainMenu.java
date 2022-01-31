@@ -63,6 +63,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.function.Supplier;
 import javax.imageio.ImageIO;
@@ -87,7 +88,7 @@ import org.darisadesigns.polyglotlina.Desktop.DesktopHelpHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopOSHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.HelpHandler;
-import org.darisadesigns.polyglotlina.Desktop.Java8Bridge;
+import org.darisadesigns.polyglotlina.Desktop.NonModularBridge;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.ToolsHelpers.ExportSpellingDictionary;
@@ -132,6 +133,22 @@ public final class ScrMainMenu extends PFrame {
         initComponents();
         longRunningSetup();
         dependantSetup();
+        
+        // TODO: Remove this, obviously
+        if (!PGTUtil.isInJUnitTest() && !PGTUtil.isUITestingMode()) {
+            try {
+                String path = "";
+                
+                for (Entry entry : System.getenv().entrySet()) {
+                    path += entry.getKey() + " : " + entry.getValue()
+                            + "\n";
+                }
+                new DesktopInfoBox().info("BLOOP", path);
+                //new DesktopInfoBox().info("BLOOP", org.darisadesigns.polyglotlina.PolyGlot.class.getProtectionDomain().getCodeSource().getLocation().toString());
+            } catch(Exception e){
+                new DesktopInfoBox().error("WHUPPS", e.getLocalizedMessage());
+            }
+        }
     }
 
     /**
@@ -758,7 +775,7 @@ public final class ScrMainMenu extends PFrame {
                 || new DesktopInfoBox(this).actionConfirmation("Overwrite File?",
                         "File with this name and location already exists. Continue/Overwrite?")) {
             try {
-                Java8Bridge.exportExcelDict(fileName, core,
+                NonModularBridge.exportExcelDict(fileName, core,
                         core.getOSHandler().getInfoBox().actionConfirmation("Excel Export",
                                 "Export all declensions? (Separates parts of speech into individual tabs)"));
 

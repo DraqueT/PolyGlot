@@ -34,6 +34,10 @@ import org.junit.jupiter.api.Assumptions;
  * @author draque
  */
 public class IPAHandlerTest {
+    
+    public IPAHandlerTest() {
+        PGTUtil.enterUITestingMode();
+    }
 
     @Test
     public void testPlaySounds() {

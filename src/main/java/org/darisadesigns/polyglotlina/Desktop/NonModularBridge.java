@@ -32,35 +32,34 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
  *
  * @author draque
  */
-public final class Java8Bridge {
+public final class NonModularBridge {
     
-    private static File java8BridgeLocation = null;
+    private static File nonModularBridgeLocation = null;
     
     /**
-     * Gets Java8 bridge class location. Caches value.
+     * Gets non modular java bridge class location. Caches value.
      *
      * @return
      * @throws java.io.IOException
      */
-    public static File getJava8BridgeLocation() throws IOException {
-        if (java8BridgeLocation == null || !java8BridgeLocation.exists()) {
-            java8BridgeLocation = Java8Bridge.getNewJavaBridgeLocation();
+    public static File getNonModularBridgeLocation() throws IOException {
+        if (nonModularBridgeLocation == null || !nonModularBridgeLocation.exists()) {
+            nonModularBridgeLocation = NonModularBridge.getNewNonModularBridgeLocation();
         }
 
-        return java8BridgeLocation;
+        return nonModularBridgeLocation;
     }
 
-    public static File getNewJavaBridgeLocation() throws IOException {
+    public static File getNewNonModularBridgeLocation() throws IOException {
         Path tmpDirectory = Files.createTempDirectory("PolyGlot");
-        DesktopIOHandler.getInstance().unzipResourceToDir(PGTUtil.JAVA8_BRIDGERESOURCE, tmpDirectory);
-        return new File(tmpDirectory + File.separator + PGTUtil.JAVA8_JAR_FOLDER + File.separator + PGTUtil.JAVA8_JAR);
+        DesktopIOHandler.getInstance().unzipResourceToDir(PGTUtil.JAVA_BRIDGERESOURCE, tmpDirectory);
+        return new File(tmpDirectory + File.separator + PGTUtil.JAVA_JAR_FOLDER + File.separator + PGTUtil.JAVA_JAR);
     }
 
     public static void exportPdf(String target,
@@ -80,9 +79,7 @@ public final class Java8Bridge {
             String chapterOrder,
             DictCore core) throws IOException {
         
-        errorIfJavaUnavailableInTerminal();
-        
-        File bridge = Java8Bridge.getJava8BridgeLocation();
+        File bridge = NonModularBridge.getNonModularBridgeLocation();
         File tmpLangFile = createTmpLangFile(core);
         File tmpConFontFile = File.createTempFile("PolyGlotConFont", ".ttf", core.getWorkingDirectory());
         File tmpLocalFontFile = File.createTempFile("PolyGlotLocalFont", ".ttf", core.getWorkingDirectory());
@@ -112,10 +109,11 @@ public final class Java8Bridge {
             tmpLocalFontFileLocation = "";
         }
         
-        String[] command = {PGTUtil.JAVA8_JAVA_COMMAND,
-            PGTUtil.JAVA8_JAR_ARG,
+        String[] command = {
+            getJavaExecutablePath(),
+            PGTUtil.JAVA_JAR_ARG,
             bridge.getAbsolutePath(),
-            PGTUtil.JAVA8_PDFCOMMAND,
+            PGTUtil.JAVA_PDFCOMMAND,
             tmpLangFile.getAbsolutePath(),
             target,
             titleText,
@@ -180,16 +178,14 @@ public final class Java8Bridge {
     public static File excelToCvs(String excelFile, int sheetNumber)
             throws IOException {
         
-        errorIfJavaUnavailableInTerminal();
-        
-        File bridge = Java8Bridge.getJava8BridgeLocation();
+        File bridge = NonModularBridge.getNonModularBridgeLocation();
         File tmpTarget = File.createTempFile("PolyGlotTmp", ".csv");
         
         String[] command = {
-            PGTUtil.JAVA8_JAVA_COMMAND,
-            PGTUtil.JAVA8_JAR_ARG,
+            getJavaExecutablePath(),
+            PGTUtil.JAVA_JAR_ARG,
             bridge.getAbsolutePath(),
-            PGTUtil.JAVA8_EXCELTOCVSCOMMAND,
+            PGTUtil.JAVA_EXCELTOCVSCOMMAND,
             excelFile,
             tmpTarget.getAbsolutePath(),
             Integer.toString(sheetNumber),
@@ -218,16 +214,14 @@ public final class Java8Bridge {
     public static void exportExcelDict(String fileName, DictCore core,
             boolean separateDeclensions) throws IOException {
         
-        errorIfJavaUnavailableInTerminal();
-        
-        File bridge = Java8Bridge.getJava8BridgeLocation();
+        File bridge = NonModularBridge.getNonModularBridgeLocation();
         File tmpLangFile = createTmpLangFile(core);
         
         String[] command = {
-            PGTUtil.JAVA8_JAVA_COMMAND, // java
-            PGTUtil.JAVA8_JAR_ARG, // -jar
+            getJavaExecutablePath(),
+            PGTUtil.JAVA_JAR_ARG, // -jar
             bridge.getAbsolutePath(), // path to bridge
-            PGTUtil.JAVA8_EXPORTTOEXCELCOMMAND, // export command 
+            PGTUtil.JAVA_EXPORTTOEXCELCOMMAND, // export command 
             tmpLangFile.getAbsolutePath(), // language file
             fileName, // target file
             (separateDeclensions ? PGTUtil.TRUE : PGTUtil.FALSE) // separate declensions
@@ -270,15 +264,30 @@ public final class Java8Bridge {
         return ret;
     }
     
+    // TODO: Test that the location of java is valid on program startup (since this cannot be done in pre-compiled testing)
     /**
-     * Throws error if no Java available in terminal.
-     * @throws IOException 
+     * Gets executable location of java - differs per OS
+     * When in dev mode, it may be presumed that a valid version
+     * of Java is on the system path
+     * @return 
      */
-    private static void errorIfJavaUnavailableInTerminal() throws IOException {
-        if (!DesktopIOHandler.getInstance().isJavaAvailable()) {
-            throw new IOException("An external Java runtime is required for this feature.\nPlease install from: www.java.com");
+    private static String getJavaExecutablePath() {
+        String macOSEnvVar = "DYLD_LIBRARY_PATH";
+        String path = PGTUtil.JAVA_JAVA_COMMAND; // java
+        
+        if (PGTUtil.IS_OSX) {
+            if (System.getenv().containsKey(macOSEnvVar)) {
+                // ":Applications/PolyGlot.app/Contents/app" -> Applications/PolyGlot.app/Contents/runtime/Contents/Home/bin/java"
+                path = System.getenv(macOSEnvVar).substring(1).replaceAll("/app", "/runtime/Contents/Home/bin") + "/" + path;
+            }
+        } else if(PGTUtil.IS_LINUX) {
+            
+        } else if (PGTUtil.IS_WINDOWS) {
+            
         }
+        
+        return path;
     }
 
-    private Java8Bridge() {}
+    private NonModularBridge() {}
 }
