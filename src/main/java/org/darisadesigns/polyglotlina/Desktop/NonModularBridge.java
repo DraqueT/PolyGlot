@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
@@ -283,7 +284,14 @@ public final class NonModularBridge {
         } else if(PGTUtil.IS_LINUX) {
             
         } else if (PGTUtil.IS_WINDOWS) {
-            
+            // try to get executable's location, otherwise use default install location
+            try {
+                String programPath = PolyGlot.class.getProtectionDomain().getCodeSource().getLocation().toURI().toString();
+                path = programPath.replaceAll("PolyGlot.exe", "﻿runtime\\bin\\java.exe");
+            } catch (URISyntaxException e) {
+                DesktopIOHandler.getInstance().writeErrorLog(e);
+                path = "C:\\Program Files\\PolyGlot\\﻿runtime\\bin\\java.exe";
+            }
         }
         
         return path;
