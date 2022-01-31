@@ -143,8 +143,9 @@ public final class ScrMainMenu extends PFrame {
                     path += entry.getKey() + " : " + entry.getValue()
                             + "\n";
                 }
+                path += "Loc: " + PolyGlot.class.getProtectionDomain().getCodeSource().getLocation().toURI().toString();
+                
                 new DesktopInfoBox().info("BLOOP", path);
-                //new DesktopInfoBox().info("BLOOP", org.darisadesigns.polyglotlina.PolyGlot.class.getProtectionDomain().getCodeSource().getLocation().toString());
             } catch(Exception e){
                 new DesktopInfoBox().error("WHUPPS", e.getLocalizedMessage());
             }
