@@ -63,7 +63,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Random;
 import java.util.function.Supplier;
 import javax.imageio.ImageIO;
@@ -133,28 +132,6 @@ public final class ScrMainMenu extends PFrame {
         initComponents();
         longRunningSetup();
         dependantSetup();
-        
-        // TODO: Remove this, obviously
-        if (!PGTUtil.isInJUnitTest() && !PGTUtil.isUITestingMode()) {
-            try {
-                String path = "";
-                
-                for (Entry entry : System.getenv().entrySet()) {
-                    path += entry.getKey() + " : " + entry.getValue()
-                            + "\n";
-                }
-                path += "Loc: " + PolyGlot.class.getProtectionDomain().getCodeSource().getLocation().toURI().toString();
-                path += "\nExec: " + ProcessHandle.current()
-                    .info()
-                    .command()
-                    .orElseThrow();
-                path += "\nDebug: " + (Boolean.getBoolean("debug") ? "true" : "false");
-                
-                new DesktopInfoBox().info("BLOOP", path);
-            } catch(Exception e){
-                new DesktopInfoBox().error("WHUPPS", e.getLocalizedMessage());
-            }
-        }
     }
 
     /**
