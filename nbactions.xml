@@ -10,8 +10,11 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath org.darisadesigns.polyglotlina.Desktop.PolyGlot</exec.args>
+                <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.executable>java</exec.executable>
+                <exec.vmArgs>-Ddebug=true</exec.vmArgs>
+                <exec.appArgs></exec.appArgs>
+                <exec.mainClass>org.darisadesigns.polyglotlina.Desktop.PolyGlot</exec.mainClass>
             </properties>
         </action>
         <action>
@@ -24,9 +27,12 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:exec</goal>
             </goals>
             <properties>
-                <exec.args>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath org.darisadesigns.polyglotlina.Desktop.PolyGlot</exec.args>
+                <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.executable>java</exec.executable>
                 <jpda.listen>true</jpda.listen>
+                <exec.vmArgs>-Ddebug=true -agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address}</exec.vmArgs>
+                <exec.appArgs></exec.appArgs>
+                <exec.mainClass>org.darisadesigns.polyglotlina.Desktop.PolyGlot</exec.mainClass>
             </properties>
         </action>
         <action>
@@ -39,8 +45,11 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath org.darisadesigns.polyglotlina.Desktop.PolyGlot</exec.args>
+                <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.executable>java</exec.executable>
+                <exec.vmArgs>-Ddebug=true</exec.vmArgs>
+                <exec.appArgs></exec.appArgs>
+                <exec.mainClass>org.darisadesigns.polyglotlina.Desktop.PolyGlot</exec.mainClass>
             </properties>
         </action>
     </actions>

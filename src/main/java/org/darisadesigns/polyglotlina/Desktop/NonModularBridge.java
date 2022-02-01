@@ -272,7 +272,7 @@ public final class NonModularBridge {
      * of Java is on the system path
      * @return 
      */
-    private static String getJavaExecutablePath() {
+    public static String getJavaExecutablePath() {
         String macOSEnvVar = "DYLD_LIBRARY_PATH";
         String path = PGTUtil.JAVA_JAVA_COMMAND; // java
         
@@ -284,7 +284,12 @@ public final class NonModularBridge {
                 path = System.getenv(macOSEnvVar).substring(1).replaceAll("/app", "/runtime/Contents/Home/bin") + "/" + path;
             }
         } else if(PGTUtil.IS_LINUX) {
+            String programPath = ProcessHandle.current()
+                .info()
+                .command()
+                .orElseThrow();
             
+            path = programPath.replace("bin/PolyGlot", "lib/runtime/bin/java");
         } else if (PGTUtil.IS_WINDOWS) {
             String programPath = ProcessHandle.current()
                 .info()

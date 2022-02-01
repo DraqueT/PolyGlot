@@ -148,6 +148,7 @@ public final class ScrMainMenu extends PFrame {
                     .info()
                     .command()
                     .orElseThrow();
+                path += "\nDebug: " + (Boolean.getBoolean("debug") ? "true" : "false");
                 
                 new DesktopInfoBox().info("BLOOP", path);
             } catch(Exception e){

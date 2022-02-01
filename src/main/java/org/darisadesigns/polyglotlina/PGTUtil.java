@@ -47,6 +47,7 @@ public class PGTUtil {
     public static final String VERSION_LOCATION = "/assets/org/DarisaDesigns/version";
     public static final String PGT_VERSION;
     public static final boolean IS_BETA;
+    public static final boolean IS_DEV_MODE;
     public static final String HELP_FILE_ARCHIVE_LOCATION = "/assets/org/DarisaDesigns/readme.zip";
     public static final String EXAMPLE_LANGUAGE_ARCHIVE_LOCATION = "/assets/org/DarisaDesigns/exlex.zip";
     public static final String HELP_FILE_NAME = "readme.html";
@@ -395,6 +396,7 @@ public class PGTUtil {
         IS_OSX = isOSX();
         IS_WINDOWS = isWindows();
         IS_LINUX = isLinux();
+        IS_DEV_MODE = isDev();
         
         // sets version number and beta status
         String version = getVersion();
@@ -526,6 +528,10 @@ public class PGTUtil {
     
     private static boolean isLinux() {
         return System.getProperty("os.name").contains("Linux");
+    }
+    
+    private static boolean isDev() {
+        return Boolean.getBoolean("debug");
     }
 
     /**
