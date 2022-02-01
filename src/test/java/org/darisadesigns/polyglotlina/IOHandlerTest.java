@@ -149,7 +149,7 @@ public class IOHandlerTest {
         if (PGTUtil.IS_WINDOWS) {
             command = new String[]{"cmd.exe", "/C", "echo", expectedValue};
         } else if (PGTUtil.IS_LINUX) {
-            command = new String[]{"/bin/bash", "-c", "echo", expectedValue};
+            command = new String[]{"/bin/bash", "-c", "echo " + expectedValue};
         }
         
         String[] result = DesktopIOHandler.getInstance().runAtConsole(command, false);
