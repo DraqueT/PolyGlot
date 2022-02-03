@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -53,6 +53,10 @@ public class TypeCollection extends DictionaryCollection<TypeNode> {
         // only push update if not core loading file
         if (!core.isCurLoading()) {
             core.pushUpdate();
+        }
+        
+        if (nodeMap.isEmpty()) {
+            core.getPropertiesManager().setTypesMandatory(false);
         }
     }
 
