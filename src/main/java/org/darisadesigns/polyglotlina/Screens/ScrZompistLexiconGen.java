@@ -215,8 +215,8 @@ public class ScrZompistLexiconGen extends PFrame {
         rdoGenWords.setSelected(true);
         chkShowSyllables.setSelected(false);
         chkSlowSyllableDropoff.setSelected(false);
-        sldDropoff.setValue(31);
-        sldMonoSyllables.setValue(15);
+        sldDropoff.setValue(core.getPropertiesManager().getZompistDropoffRate());
+        sldMonoSyllables.setValue(core.getPropertiesManager().getZompistMonosylableFrequency());
         
         curDefaults = (curDefaults + 1) % 6;
     }
@@ -264,10 +264,12 @@ public class ScrZompistLexiconGen extends PFrame {
     private void setupListeners() {
         sldDropoff.addChangeListener((ChangeEvent e) -> {
             setDropoffLabel();
+            core.getPropertiesManager().setZompistDropoffRate(sldDropoff.getValue());
         });
         
         sldMonoSyllables.addChangeListener((ChangeEvent e) -> {
             setMonosyllableLabel();
+            core.getPropertiesManager().setZompistMonosylableFrequency(sldMonoSyllables.getValue());
         });
         
         cmbSwadesh.addActionListener((ActionEvent e) -> {

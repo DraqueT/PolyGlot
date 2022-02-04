@@ -119,6 +119,8 @@ public class PGTUtil {
     public static final String LANG_PROP_ZOMPIST_ILLEGAL_CLUSTERS = "zompistIllegalClusters";
     public static final String LANG_PROP_ZOMPIST_REWRITE_RULES = "zompistRewriteRules";
     public static final String LANG_PROP_ZOMPIST_SYLLABLES = "zompistSyllables";
+    public static final String LANG_PROP_ZOMPIST_DROPOFF_RATE = "zompistDropoffRate";
+    public static final String LANG_PROP_ZOMPIST_MONOSYLLABLE_FREQUENCY = "zompistMonosyllableFrequency";
 
     // character replacement pair values
     public static final String LANG_PROP_CHAR_REP_CONTAINER_XID = "langPropCharRep";
