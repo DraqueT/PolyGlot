@@ -107,7 +107,7 @@ public class ImportFileHelper {
     }
 
     private void importExcel(String inputFile, int sheetNum) throws Exception {
-        File csvFile = Java8Bridge.excelToCvs(inputFile, sheetNum);
+        File csvFile = NonModularBridge.excelToCvs(inputFile, sheetNum);
         quoteChar = "\"";
         importCSV(csvFile.getAbsolutePath(), CSVFormat.EXCEL);
     }

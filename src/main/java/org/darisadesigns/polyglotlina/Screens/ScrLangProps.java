@@ -93,6 +93,7 @@ public class ScrLangProps extends PFrame {
         Font charis = PGTUtil.CHARIS_UNICODE.deriveFont(fontSize);
         btnAlphaUp.setFont(charis);
         btnAlphaDown.setFont(charis);
+        chkTypesMandatory.setEnabled(!core.getTypes().getAllValues().isEmpty());
         
         super.getRootPane().getContentPane().setBackground(Color.white);
         this.setupListeners();

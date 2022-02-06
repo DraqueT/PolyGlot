@@ -149,12 +149,12 @@ public class IOHandlerTest {
         if (PGTUtil.IS_WINDOWS) {
             command = new String[]{"cmd.exe", "/C", "echo", expectedValue};
         } else if (PGTUtil.IS_LINUX) {
-            command = new String[]{"sh", "-c", "cmd.exe", "/C", "echo", expectedValue};
+            command = new String[]{"/bin/bash", "-c", "echo " + expectedValue};
         }
         
         String[] result = DesktopIOHandler.getInstance().runAtConsole(command, false);
 
-        assertEquals(result[0], expectedValue);
+        assertEquals(expectedValue, result[0]);
         assertTrue(result[1].isEmpty());
     }
     
@@ -167,41 +167,6 @@ public class IOHandlerTest {
 
         assertTrue(result[0].isEmpty());
         assertTrue(!result[1].isEmpty()); // different errors for different systems, but should be SOMETHING
-    }
-    
-    @Test
-    public void testGetTerminalJavaVersion() {
-        System.out.println("IOHandlerTest.testGetTerminalJavaVersion");
-        
-        assertFalse(DesktopIOHandler.getInstance().getTerminalJavaVersion().isEmpty());
-    }
-    
-    @Test
-    public void textIsJavaAvailable_true() {
-        // windows and linux build in headless environemnts where this breaks
-        Assumptions.assumeTrue(!PGTUtil.IS_WINDOWS && !PGTUtil.IS_LINUX);
-        System.out.println("IOHandlerTest.textIsJavaAvailable");
-        
-        
-        if (!System.getenv().containsKey("JAVA_HOME")) {
-            // dump in test value if none present
-            System.getenv().put("HAVA_HOME", "/usr/lib/omg/here/ur/java");
-        }
-        
-        assertTrue(DesktopIOHandler.getInstance().isJavaAvailable());
-    }
-    
-    @Test
-    public void textIsJavaAvailable_false() {
-        // windows and linux build in headless environemnts where this breaks
-        Assumptions.assumeTrue(!PGTUtil.IS_WINDOWS && !PGTUtil.IS_LINUX);
-        System.out.println("IOHandlerTest.textIsJavaAvailable");
-        
-        if (System.getenv().containsKey("JAVA_HOME")) {
-            System.getenv().remove("JAVA_HOME");
-        }
-        
-        assertTrue(DesktopIOHandler.getInstance().isJavaAvailable());
     }
     
     @Test

@@ -87,7 +87,7 @@ import org.darisadesigns.polyglotlina.Desktop.DesktopHelpHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopOSHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.HelpHandler;
-import org.darisadesigns.polyglotlina.Desktop.Java8Bridge;
+import org.darisadesigns.polyglotlina.Desktop.NonModularBridge;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.ToolsHelpers.ExportSpellingDictionary;
@@ -758,7 +758,7 @@ public final class ScrMainMenu extends PFrame {
                 || new DesktopInfoBox(this).actionConfirmation("Overwrite File?",
                         "File with this name and location already exists. Continue/Overwrite?")) {
             try {
-                Java8Bridge.exportExcelDict(fileName, core,
+                NonModularBridge.exportExcelDict(fileName, core,
                         core.getOSHandler().getInfoBox().actionConfirmation("Excel Export",
                                 "Export all declensions? (Separates parts of speech into individual tabs)"));
 

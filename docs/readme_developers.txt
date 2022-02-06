@@ -4,8 +4,6 @@ If you're looking to work on PolyGlot independently or to contribute, here's how
 
 1) Download Open JDK 17 (or higher)
 	- Copy to appropriate directory
-1.5) Download JDK 1.8
-        - add environment variables (JAVA_HOME and bin directory to path) for testing of Java8 bridge functionality
 2) Install Maven (3.8.1 or higher)
         - Copy to appropriate directory
         - add environment variable (MAVEN_HOME)
@@ -51,7 +49,7 @@ PolyGlot will now build itself into a platform specific application for you! Thi
 
 
 
-	-----------		OPTIONAL STEPS TO BUILDING THE JAVA 8 BRIDGE			-----------
+	-----------		OPTIONAL STEPS TO BUILDING THE NON MODULAR BRIDGE			-----------
 
 So. Some parts of PolyGlot rely on libraries that are pretty fundamentally rooted in Java 8. This was a bummer to deal with. Hopefully they will be modularized in the future and I can get rid of this hack, but for now, this is unfortunately how it is. Users WILL have to have some version of Java installed on their machine to use these features. The include: PDF Generation, Import from Excel, Export to Excel. If you want to modify this functionality, follow these steps.
 
@@ -61,4 +59,4 @@ So. Some parts of PolyGlot rely on libraries that are pretty fundamentally roote
 4) Build the project.
 5) Copy the newly created "java_8_bridge.zip" file into the assets/assets/org/DarisaDesigns folder inside of the primary PolyGlot application's project folder.
 
-This will replace the Java 8 dependencies that run these select functions in PolyGlot.
+This will replace the non modular dependencies that run these select functions in PolyGlot.

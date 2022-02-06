@@ -228,6 +228,8 @@ public final class CustHandlerFactory {
             boolean bzompistIllegals = false;
             boolean bzompistRewrite = false;
             boolean bzompistSyllables = false;
+            boolean bzompistDropoff = false;
+            boolean bzompistMonosyllables = false;
             boolean bsyllableNode = false;
             boolean bsyllableComposition = false;
             
@@ -508,6 +510,10 @@ public final class CustHandlerFactory {
                     bzompistRewrite = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ZOMPIST_SYLLABLES)) {
                     bzompistSyllables = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ZOMPIST_DROPOFF_RATE)) {
+                    bzompistDropoff = true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ZOMPIST_MONOSYLLABLE_FREQUENCY)) {
+                    bzompistMonosyllables = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_SYLLABLE)) {
                     bsyllableNode = true;
                     tmpString = "";
@@ -892,6 +898,10 @@ public final class CustHandlerFactory {
                     bzompistRewrite = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ZOMPIST_SYLLABLES)) {
                     bzompistSyllables = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ZOMPIST_DROPOFF_RATE)) {
+                    bzompistDropoff = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_ZOMPIST_MONOSYLLABLE_FREQUENCY)) {
+                    bzompistMonosyllables = false;
                 }  else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_SYLLABLE)) {
                     bsyllableNode = false;
                     procMan.addSyllable(tmpString);
@@ -1316,6 +1326,10 @@ public final class CustHandlerFactory {
                     propMan.setZompistRewriteRules(propMan.getZompistRewriteRules() + new String(ch, start, length));
                 } else if (bzompistSyllables) {
                     propMan.setZompistSyllableTypes(propMan.getZompistSyllableTypes() + new String(ch, start, length));
+                } else if (bzompistDropoff) {
+                    propMan.setZompistDropoffRate(Integer.parseInt(new String(ch, start, length)));
+                } else if (bzompistMonosyllables) {
+                    propMan.setZompistMonosylableFrequency(Integer.parseInt(new String(ch, start, length)));
                 } else if (bsyllableNode) {
                     tmpString += new String(ch, start, length);
                 } else if (bsyllableComposition) {

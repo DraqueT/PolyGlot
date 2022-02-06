@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -19,7 +19,7 @@
  */
 package org.darisadesigns.polyglotlina;
 
-import org.darisadesigns.polyglotlina.Desktop.Java8Bridge;
+import org.darisadesigns.polyglotlina.Desktop.NonModularBridge;
 import TestResources.DummyCore;
 import java.io.BufferedReader;
 import java.io.File;
@@ -37,11 +37,11 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author draque
  */
-public class Java8BridgeTest {
+public class NonModularBridgeTest {
     private DictCore core;
     private static final String OUTPUT = "testFile";
     
-    public Java8BridgeTest() {
+    public NonModularBridgeTest() {
         core = DummyCore.newCore();
     }
 
@@ -52,10 +52,10 @@ public class Java8BridgeTest {
 
     @Test
     public void testGetNewJavaBridgeLocation() {
-        System.out.println("Java8BridgeTest.getNewJavaBridgeLocation");
+        System.out.println("NonModularBridgeTest.getNewJavaBridgeLocation");
         
         try {
-            File result = Java8Bridge.getNewJavaBridgeLocation();
+            File result = NonModularBridge.getNewNonModularBridgeLocation();
             assertTrue(result.exists());
         } catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
@@ -66,7 +66,7 @@ public class Java8BridgeTest {
     @Test
     public void testExportPdf() {
         // no current way to open/test contents of PDF, so just make sure it is created without error
-        System.out.println("Java8BridgeTest.exportPdf");
+        System.out.println("NonModularBridgeTest.exportPdf");
         String coverImage = PGTUtil.TESTRESOURCES + "test.jpg";
         String foreward = "blap";
         boolean printConLocal = false;
@@ -82,7 +82,7 @@ public class Java8BridgeTest {
         boolean printPhrases = false;
         
         try {
-            Java8Bridge.exportPdf(
+            NonModularBridge.exportPdf(
                     OUTPUT, 
                     coverImage, 
                     foreward, 
@@ -109,7 +109,7 @@ public class Java8BridgeTest {
 
     @Test
     public void testExcelToCvs() {
-        System.out.println("Java8BridgeTest.excelToCvs");
+        System.out.println("NonModularBridgeTest.excelToCvs");
         String expectedContents = "\"COL 1\",\"COL 2\",\"COL 3\"\n" +
             "\"A\",\"AA\",\"AAA\"\n" +
             "\"B\"\n" +
@@ -124,7 +124,7 @@ public class Java8BridgeTest {
         int sheetNumber = 0;
         
         try {
-            File result = Java8Bridge.excelToCvs(excelFile, sheetNumber);
+            File result = NonModularBridge.excelToCvs(excelFile, sheetNumber);
             String outputContents = readFile(result.getAbsolutePath());
 
             assertTrue(result.exists());
@@ -137,18 +137,18 @@ public class Java8BridgeTest {
  
     @Test
     public void testExportExcelDict() {
-        System.out.println("Java8BridgeTest.exportExcelDict");
+        System.out.println("NonModularBridgeTest.exportExcelDict");
         String os = System.getProperty("os.name").toLowerCase();
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "excel_exp_test.pgd");
             boolean separateDeclensions = true;
-            Java8Bridge.exportExcelDict(OUTPUT, core, separateDeclensions);
+            NonModularBridge.exportExcelDict(OUTPUT, core, separateDeclensions);
             File tmpExcel = new File(OUTPUT);
 
             for (int i = 0 ; i < 6; i++) {
                 File expectedFile = new File(PGTUtil.TESTRESOURCES + "excel_export_check_" + i + ".csv");
-                File result = Java8Bridge.excelToCvs(tmpExcel.getAbsolutePath(), i);
+                File result = NonModularBridge.excelToCvs(tmpExcel.getAbsolutePath(), i);
                 
                 // On modification of bridge functionality, check output, then uncomment below to update test files if good
 //                expectedFile.delete();

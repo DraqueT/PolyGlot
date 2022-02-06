@@ -43,7 +43,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PList;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
-import org.darisadesigns.polyglotlina.Desktop.Java8Bridge;
+import org.darisadesigns.polyglotlina.Desktop.NonModularBridge;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
@@ -490,7 +490,7 @@ public class ScrPrintToPDF extends PDialog {
                 new DesktopInfoBox(this).warning("Etymology Problem", message);
             }
             
-            Java8Bridge.exportPdf(txtSavePath.getText(), 
+            NonModularBridge.exportPdf(txtSavePath.getText(), 
                     txtImageLocation.getText(), 
                     ((PTextPane)txtForeword).getNakedText(), 
                     chkConLocal.isSelected(), 

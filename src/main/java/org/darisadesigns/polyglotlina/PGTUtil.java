@@ -47,6 +47,7 @@ public class PGTUtil {
     public static final String VERSION_LOCATION = "/assets/org/DarisaDesigns/version";
     public static final String PGT_VERSION;
     public static final boolean IS_BETA;
+    public static final boolean IS_DEV_MODE;
     public static final String HELP_FILE_ARCHIVE_LOCATION = "/assets/org/DarisaDesigns/readme.zip";
     public static final String EXAMPLE_LANGUAGE_ARCHIVE_LOCATION = "/assets/org/DarisaDesigns/exlex.zip";
     public static final String HELP_FILE_NAME = "readme.html";
@@ -118,6 +119,8 @@ public class PGTUtil {
     public static final String LANG_PROP_ZOMPIST_ILLEGAL_CLUSTERS = "zompistIllegalClusters";
     public static final String LANG_PROP_ZOMPIST_REWRITE_RULES = "zompistRewriteRules";
     public static final String LANG_PROP_ZOMPIST_SYLLABLES = "zompistSyllables";
+    public static final String LANG_PROP_ZOMPIST_DROPOFF_RATE = "zompistDropoffRate";
+    public static final String LANG_PROP_ZOMPIST_MONOSYLLABLE_FREQUENCY = "zompistMonosyllableFrequency";
 
     // character replacement pair values
     public static final String LANG_PROP_CHAR_REP_CONTAINER_XID = "langPropCharRep";
@@ -267,16 +270,14 @@ public class PGTUtil {
     public static final String OPTIONS_MSBETWEENSAVES = "MsBetweenSaves";
 
     // Java 8 bridge constants
-    public static final String JAVA8_JAVA_COMMAND = "java";
-    public static final String JAVA8_JAR_ARG = "-jar";
-    public static final String JAVA8_VERSION_ARG = "-version";
-    public static final String JAVA9P_VERSION_ARG = "--version";
-    public static final String JAVA8_BRIDGERESOURCE = "/assets/org/DarisaDesigns/java_8_bridge.zip";
-    public static final String JAVA8_JAR = "PolyGlot_J8_Bridge.jar";
-    public static final String JAVA8_JAR_FOLDER = "dist";
-    public static final String JAVA8_PDFCOMMAND = "pdf-export";
-    public static final String JAVA8_EXCELTOCVSCOMMAND = "excel-to-cvs";
-    public static final String JAVA8_EXPORTTOEXCELCOMMAND = "export-to-excel";
+    public static final String JAVA_JAVA_COMMAND = "java";
+    public static final String JAVA_JAR_ARG = "-jar";
+    public static final String JAVA_BRIDGERESOURCE = "/assets/org/DarisaDesigns/java_8_bridge.zip";
+    public static final String JAVA_JAR = "PolyGlot_J8_Bridge.jar";
+    public static final String JAVA_JAR_FOLDER = "dist";
+    public static final String JAVA_PDFCOMMAND = "pdf-export";
+    public static final String JAVA_EXCELTOCVSCOMMAND = "excel-to-cvs";
+    public static final String JAVA_EXPORTTOEXCELCOMMAND = "export-to-excel";
     public static final int CHAP_ORTHOGRAPHY = 0;
     public static final int CHAP_GLOSSKEY = 1;
     public static final int CHAP_CONTOLOCAL = 2;
@@ -397,6 +398,7 @@ public class PGTUtil {
         IS_OSX = isOSX();
         IS_WINDOWS = isWindows();
         IS_LINUX = isLinux();
+        IS_DEV_MODE = isDev();
         
         // sets version number and beta status
         String version = getVersion();
@@ -528,6 +530,10 @@ public class PGTUtil {
     
     private static boolean isLinux() {
         return System.getProperty("os.name").contains("Linux");
+    }
+    
+    private static boolean isDev() {
+        return Boolean.getBoolean("debug");
     }
 
     /**

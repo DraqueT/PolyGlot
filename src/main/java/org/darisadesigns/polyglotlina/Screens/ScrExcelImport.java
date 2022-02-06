@@ -329,6 +329,7 @@ public class ScrExcelImport extends PDialog {
         cmbPreferences.setModel(new javax.swing.DefaultComboBoxModel<>(new Delimiter[] { Delimiter.comma, Delimiter.semicolon, Delimiter.tab }));
         cmbPreferences.setToolTipText("Set the delimiter to comma, semicolon, or tab (only matters for CSV imports)");
 
+        jTextPane1.setEditable(false);
         jTextPane1.setContentType("text/html"); // NOI18N
         jTextPane1.setText("<html>Columns may be addressed numerically or alphabetically. <b>If numerically, begin with 0.</b>  <br><br>Map the columns within the target Excel/CSV file to their related fields within the conlang dictionary.   <br><br>If the “First row is labels” box is selected, the first row of the grid will be ignored.  <br><br>To map multiple columns to a single field (generally multiple to definition), simply add the row numbers separated by a comma.  <br><br>The delimiter is the character separating entries if you are importing from a CSV. Leave blank to default to a comma.  <br><br>If you don't know what \"Excel Sheet\" means, or are using a CSV leave it at 0. </html>");
         jTextPane1.setToolTipText("");

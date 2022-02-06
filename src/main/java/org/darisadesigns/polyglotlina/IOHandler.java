@@ -333,20 +333,6 @@ public interface IOHandler {
     public String[] runAtConsole(String[] arguments, boolean addSpaces);
 
     /**
-     * Tests whether Java is available at the system/terminal level
-     *
-     * @return current version of Java, or blank if none available
-     */
-    public String getTerminalJavaVersion();
-
-    /**
-     * Tests whether Java can be called at the terminal
-     *
-     * @return
-     */
-    public boolean isJavaAvailable();
-
-    /**
      * Does what it says on the tin.Clear those carriage returns away.
      *
      * @param filthyWithWindows

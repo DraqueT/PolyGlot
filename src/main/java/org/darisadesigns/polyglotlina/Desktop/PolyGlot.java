@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -101,6 +101,7 @@ public final class PolyGlot {
             setupNimbus();
             setupCustomUI();
             conditionalBetaSetup();
+            testNonModularBridge();
             setupOSSpecificCutCopyPaste();
         }
         catch (Exception e) {
@@ -258,6 +259,25 @@ public final class PolyGlot {
                 System.exit(0);
             }
         });
+    }
+    
+    /**
+     * Tests to make certain PolyGlot can access its own java runtime on disk
+     * for use with non-modularized components
+     * NOTE: Only runs for linked/deployed executions, not in dev or tests
+     */
+    private static void testNonModularBridge() {
+        if (PGTUtil.IS_DEV_MODE || PGTUtil.isInJUnitTest() || PGTUtil.isUITestingMode()) {
+            return;
+        }
+        
+        String javaPath = NonModularBridge.getJavaExecutablePath();
+        
+        if (!new File(javaPath).exists()) {
+            new DesktopInfoBox().warning("Runtime Location Error", 
+                    "Unable to access external java runtime. Certain features such as Print to PDF may not function properly.");
+            DesktopIOHandler.getInstance().writeErrorLog(new Exception("Missing external jave runtime: " + javaPath));
+        }
     }
 
     /**

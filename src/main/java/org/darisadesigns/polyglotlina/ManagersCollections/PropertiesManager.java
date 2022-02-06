@@ -49,6 +49,8 @@ public abstract class PropertiesManager {
     private String zompistIllegalClusters = "";
     private String zompistRewriteRules = "";
     private String zompistSyllableTypes = "";
+    private int zompistDropoffRate = -1;
+    private int zompistMonosylableFrequency = -1;
     private boolean typesMandatory = false;
     private boolean localMandatory = false;
     private boolean wordUniqueness = false;
@@ -401,6 +403,22 @@ public abstract class PropertiesManager {
 
         return ret;
     }
+    
+    public int getZompistDropoffRate() {
+        return zompistDropoffRate == -1 ? 31 : zompistDropoffRate;
+    }
+
+    public void setZompistDropoffRate(int zompistDropoffRate) {
+        this.zompistDropoffRate = zompistDropoffRate;
+    }
+
+    public int getZompistMonosylableFrequency() {
+        return zompistMonosylableFrequency == -1 ? 15 : zompistMonosylableFrequency;
+    }
+
+    public void setZompistMonosylableFrequency(int zompistMonosylableFrequency) {
+        this.zompistMonosylableFrequency = zompistMonosylableFrequency;
+    }
 
     /**
      * Writes all dictionary properties to XML document
@@ -534,6 +552,16 @@ public abstract class PropertiesManager {
         // store Zompist syllables setup
         wordValue = doc.createElement(PGTUtil.LANG_PROP_ZOMPIST_SYLLABLES);
         wordValue.appendChild(doc.createTextNode(zompistSyllableTypes));
+        propContainer.appendChild(wordValue);
+        
+        // store Zompist syllables setup
+        wordValue = doc.createElement(PGTUtil.LANG_PROP_ZOMPIST_DROPOFF_RATE);
+        wordValue.appendChild(doc.createTextNode(Integer.toString(zompistDropoffRate)));
+        propContainer.appendChild(wordValue);
+        
+        // store Zompist syllables setup
+        wordValue = doc.createElement(PGTUtil.LANG_PROP_ZOMPIST_MONOSYLLABLE_FREQUENCY);
+        wordValue.appendChild(doc.createTextNode(Integer.toString(zompistMonosylableFrequency)));
         propContainer.appendChild(wordValue);
         
         // store all replacement pairs
@@ -796,6 +824,8 @@ public abstract class PropertiesManager {
             ret = ret && zompistIllegalClusters.equals(prop.zompistIllegalClusters);
             ret = ret && zompistRewriteRules.equals(prop.zompistRewriteRules);
             ret = ret && zompistSyllableTypes.equals(prop.zompistSyllableTypes);
+            ret = ret && zompistDropoffRate == prop.zompistDropoffRate;
+            ret = ret && zompistMonosylableFrequency == prop.zompistMonosylableFrequency;
         }
         
         return ret;
