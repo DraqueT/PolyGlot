@@ -105,6 +105,7 @@ public class ScrZompistLexiconGen extends PFrame {
         
         ((PlainDocument) txtGenerationNum.getDocument())
                 .setDocumentFilter(new PTextFieldFilter());
+        checkFormatting();
     }
     
     private void loadValues() {
@@ -261,6 +262,55 @@ public class ScrZompistLexiconGen extends PFrame {
             lblMonoSyllables.setText(monoSylLabel);
     }
     
+    /**
+     * Checks formatting of inputs and creates warnings if necessary
+     */
+    private void checkFormatting() {
+        String catToolTip = "Word category definitions";
+        String illegalClustersToolTip = "Illegal clusters: words with these clusters will not be generated.";
+        String rewriteRulesToolTip = "Rewrite rules: (accepts regex)";
+        String syllableTypesToolTip = "Syllable types, constructed from categories";
+        
+        if (!ZompistVocabGenerator.checkCatFormattingCorrect(txtCategories.getText())) {
+            catToolTip += " - FORMAT ERROR: Please format lines as one of the below (commas may be used)"
+                    + "\nA=qwertyuiop"
+                    + "\nA=qu,er,t,y,o,p";
+            txtCategories.setBackground(PGTUtil.COLOR_ERROR_FIELD);
+        } else {
+            catToolTip += " (comma delimitation of multicharacter symbols accepted)";
+            txtCategories.setBackground(PGTUtil.COLOR_TEXT_BG);
+        }
+        
+        if (!ZompistVocabGenerator.checkIllegalsFormattingCorrect(txtIllegalClusters.getText())) {
+            illegalClustersToolTip += "\n ERROR: This cannot be comma delimited.";
+            txtIllegalClusters.setBackground(PGTUtil.COLOR_ERROR_FIELD);
+        } else {
+            txtIllegalClusters.setBackground(PGTUtil.COLOR_TEXT_BG);
+        }
+        
+        if (!ZompistVocabGenerator.checkRewriteRules(txtRewriteRules.getText())) {
+            rewriteRulesToolTip += "\nERROR: Lines must be formatted as below, and cannot be comma delimited"
+                    + "a|ä";
+            txtRewriteRules.setBackground(PGTUtil.COLOR_ERROR_FIELD);
+        } else {
+            txtRewriteRules.setBackground(PGTUtil.COLOR_TEXT_BG);
+        }
+        
+        String syllableCheck = ZompistVocabGenerator.checkSyllableRules(txtCategories.getText(), txtSyllableTypes.getText());
+        
+        if (!syllableCheck.isBlank()) {
+            syllableTypesToolTip += "\n" + syllableCheck;
+            txtSyllableTypes.setBackground(PGTUtil.COLOR_WARNING_FIELD);
+        } else {
+            txtSyllableTypes.setBackground(PGTUtil.COLOR_TEXT_BG);
+        }
+        
+        txtCategories.setToolTipText(catToolTip);
+        txtIllegalClusters.setToolTipText(illegalClustersToolTip);
+        txtRewriteRules.setToolTipText(rewriteRulesToolTip);
+        txtSyllableTypes.setToolTipText(syllableTypesToolTip);
+    }
+    
     private void setupListeners() {
         sldDropoff.addChangeListener((ChangeEvent e) -> {
             setDropoffLabel();
@@ -325,16 +375,19 @@ public class ScrZompistLexiconGen extends PFrame {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 core.getPropertiesManager().setZompistCategories(txtCategories.getText());
+                checkFormatting();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 core.getPropertiesManager().setZompistCategories(txtCategories.getText());
+                checkFormatting();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
                 core.getPropertiesManager().setZompistCategories(txtCategories.getText());
+                checkFormatting();
             }
         });
         
@@ -342,16 +395,19 @@ public class ScrZompistLexiconGen extends PFrame {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 core.getPropertiesManager().setZompistIllegalClusters(txtIllegalClusters.getText());
+                checkFormatting();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 core.getPropertiesManager().setZompistIllegalClusters(txtIllegalClusters.getText());
+                checkFormatting();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
                 core.getPropertiesManager().setZompistIllegalClusters(txtIllegalClusters.getText());
+                checkFormatting();
             }
         });
         
@@ -359,16 +415,19 @@ public class ScrZompistLexiconGen extends PFrame {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 core.getPropertiesManager().setZompistRewriteRules(txtRewriteRules.getText());
+                checkFormatting();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 core.getPropertiesManager().setZompistRewriteRules(txtRewriteRules.getText());
+                checkFormatting();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
                 core.getPropertiesManager().setZompistRewriteRules(txtRewriteRules.getText());
+                checkFormatting();
             }
         });
         
@@ -376,16 +435,19 @@ public class ScrZompistLexiconGen extends PFrame {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 core.getPropertiesManager().setZompistSyllableTypes(txtSyllableTypes.getText());
+                checkFormatting();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 core.getPropertiesManager().setZompistSyllableTypes(txtSyllableTypes.getText());
+                checkFormatting();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
                 core.getPropertiesManager().setZompistSyllableTypes(txtSyllableTypes.getText());
+                checkFormatting();
             }
         });
     }
@@ -1230,7 +1292,7 @@ public class ScrZompistLexiconGen extends PFrame {
         txtSyllableTypes.setColumns(20);
         txtSyllableTypes.setLineWrap(true);
         txtSyllableTypes.setRows(5);
-        txtSyllableTypes.setToolTipText("Syllable types, constructed from categories");
+        txtSyllableTypes.setToolTipText("");
         txtSyllableTypes.setWrapStyleWord(true);
         txtSyllableTypes.setMaximumSize(new java.awt.Dimension(170, 2147483647));
         jScrollPane1.setViewportView(txtSyllableTypes);
@@ -1238,7 +1300,7 @@ public class ScrZompistLexiconGen extends PFrame {
         txtRewriteRules.setColumns(20);
         txtRewriteRules.setLineWrap(true);
         txtRewriteRules.setRows(5);
-        txtRewriteRules.setToolTipText("Rewrite rules: (accepts regex)");
+        txtRewriteRules.setToolTipText("");
         txtRewriteRules.setWrapStyleWord(true);
         txtRewriteRules.setMaximumSize(new java.awt.Dimension(170, 2147483647));
         jScrollPane2.setViewportView(txtRewriteRules);
@@ -1251,13 +1313,13 @@ public class ScrZompistLexiconGen extends PFrame {
 
         txtCategories.setColumns(20);
         txtCategories.setRows(5);
-        txtCategories.setToolTipText("Word category definitions");
+        txtCategories.setToolTipText("");
         jScrollPane3.setViewportView(txtCategories);
 
         txtIllegalClusters.setColumns(20);
         txtIllegalClusters.setLineWrap(true);
         txtIllegalClusters.setRows(5);
-        txtIllegalClusters.setToolTipText("Illegal clusters: words with these clusters will not be generated.");
+        txtIllegalClusters.setToolTipText("");
         txtIllegalClusters.setWrapStyleWord(true);
         jScrollPane5.setViewportView(txtIllegalClusters);
 

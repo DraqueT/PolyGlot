@@ -154,6 +154,87 @@ public class ZompistVocabGenerator {
         return text;
     }
     
+    /**
+     * Checks formatting of category rules
+     * @param categories
+     * @return 
+     */
+    public static boolean checkCatFormattingCorrect(String categories) {
+        for (String line : categories.split("\n")) {
+            if (line.trim().isEmpty()) {
+                continue;
+            }
+            
+            if (!line.trim().matches("^[A-Z]=[^=]+$")) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Returns true if the illegal clusters input is legit
+     * @param illegals
+     * @return 
+     */
+    public static boolean checkIllegalsFormattingCorrect(String illegals) {
+        return !illegals.contains(",");
+    }
+    
+    /**
+     * Checks formatting of rewrite rules
+     * @param rewrites
+     * @return 
+     */
+    public static boolean checkRewriteRules(String rewrites) {
+        for (String line : rewrites.split("\n")) {
+            if (line.trim().isEmpty()) {
+                continue;
+            }
+            
+            if (!line.trim().matches("^[^\\|]+\\|[^\\|]*$") || line.contains(",")) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Technically, nothing is illegal here, but warn if users enter constants
+     * @param categories
+     * @param rules
+     * @return 
+     */
+    public static String checkSyllableRules(String categories, String rules) {
+        if (!checkCatFormattingCorrect(categories)) {
+            return "Cannot check syllables while categories misformatted.";
+        }
+        
+        String reducedRules = rules.trim();
+        
+        for (String catLine : categories.split("\n")) {
+            String curCat = catLine.substring(0, catLine.indexOf("="));
+            reducedRules = reducedRules.replaceAll(curCat, "").trim();
+        }
+        
+        if (reducedRules.isEmpty()) {
+            return "";
+        }
+        
+        List<String> constants = new ArrayList<>();
+        
+        while (!reducedRules.isEmpty()) {
+            String targetChar = reducedRules.substring(0, 1);
+            constants.add(targetChar);
+            reducedRules = reducedRules.replace(targetChar, "").trim();
+        }
+        
+        return "WARNING: The following constant values are found in your syllable types: "
+                + String.join(", ", constants);
+    }
+    
     private String[] getIllegalClusters(String rawIllegalClusters) {
         List<String> illegalClustersSet = new ArrayList<>();
         

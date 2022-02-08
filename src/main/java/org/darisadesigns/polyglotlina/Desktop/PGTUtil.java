@@ -77,6 +77,7 @@ public class PGTUtil extends org.darisadesigns.polyglotlina.PGTUtil {
     public static final Color COLOR_CHECKBOX_FIELD_BACK_DISABLED;
     public static final Color COLOR_REQUIRED_LEX_COLOR;
     public static final Color COLOR_ERROR_FIELD;
+    public static final Color COLOR_WARNING_FIELD;
     
     // Fonts stored here to cache values single time
     public static final Font MENU_FONT;
@@ -126,6 +127,7 @@ public class PGTUtil extends org.darisadesigns.polyglotlina.PGTUtil {
         COLOR_CHECKBOX_FIELD_BACK_DISABLED = Color.gray;
         COLOR_REQUIRED_LEX_COLOR = new Color(255, 204, 204);
         COLOR_ERROR_FIELD = new Color(255, 204, 204);
+        COLOR_WARNING_FIELD = new Color( 255, 195, 0);
         
         // loads default font on system error (never came up, but for completeness...)
         Font tmpFont;
