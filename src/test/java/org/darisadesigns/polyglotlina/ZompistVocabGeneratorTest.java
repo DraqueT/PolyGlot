@@ -91,7 +91,7 @@ public class ZompistVocabGeneratorTest {
     
     @Test
     public void testGenAllSyllables_withCommas() {
-        System.out.println("ZompistVocabGeneratorTest.genAllSyllables_noCommas");
+        System.out.println("ZompistVocabGeneratorTest.genAllSyllables_withCommas");
         
         String categories = "C=p,b,mz\n" +
             "V=auie\n" +
@@ -111,10 +111,6 @@ public class ZompistVocabGeneratorTest {
             ZompistVocabGenerator instance = new ZompistVocabGenerator(false, false, 1, 1, categories, syllables, rewrites, illegals, null);
             String[] expResult = getTestSyllables_withCommas();
             String[] result = instance.genAllSyllables();
-            
-            for (String s : result) {
-                System.out.println(s);
-            }
             
             assertArrayEquals(expResult, result);
         } catch (Exception e) {
