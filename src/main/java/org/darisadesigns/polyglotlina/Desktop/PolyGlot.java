@@ -250,13 +250,18 @@ public final class PolyGlot {
                     s.dispose();
                 }
                 
-                System.exit(0);
+                if (!PGTUtil.isInJUnitTest() && !PGTUtil.isUITestingMode()) {
+                    System.exit(0);
+                }
             }
             catch (Throwable t) {
                 // t.printStackTrace();
                 cInfoBox.error("PolyGlot Error", "A serious error has occurred: " + t.getLocalizedMessage());
                 DesktopIOHandler.getInstance().writeErrorLog(t);
-                System.exit(0);
+                
+                if (!PGTUtil.isInJUnitTest() && !PGTUtil.isUITestingMode()) {
+                    System.exit(0);
+                }
             }
         });
     }
@@ -357,7 +362,7 @@ public final class PolyGlot {
         }
         
         // allow JUnit to handle this state itself
-        if (!PGTUtil.isInJUnitTest()) {
+        if (!PGTUtil.isInJUnitTest() && !PGTUtil.isUITestingMode()) {
             System.exit(0);
         }
     }

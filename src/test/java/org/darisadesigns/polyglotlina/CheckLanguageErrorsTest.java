@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 - 2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020 - 2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -21,7 +21,6 @@ package org.darisadesigns.polyglotlina;
 
 import TestResources.DummyCore;
 import java.io.IOException;
-import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode.ProblemType;
 import static org.junit.jupiter.api.Assertions.*;
