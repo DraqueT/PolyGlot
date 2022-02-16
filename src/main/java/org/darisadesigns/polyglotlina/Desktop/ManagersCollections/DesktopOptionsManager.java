@@ -51,6 +51,7 @@ public class DesktopOptionsManager {
     private final DictCore core;
     private javafx.scene.text.Font menuFontFX;
     private int msBetweenSaves;
+    private double uiScale = 1.0;
 
     public DesktopOptionsManager(DictCore _core) {
         msBetweenSaves = PGTUtil.DEFAULT_MS_BETWEEN_AUTO_SAVES;
@@ -305,5 +306,13 @@ public class DesktopOptionsManager {
 
     public void setMsBetweenSaves(int msBetweenSaves) {
         this.msBetweenSaves = msBetweenSaves;
+    }
+
+    public double getUiScale() {
+        return uiScale;
+    }
+
+    public void setUiScale(double uiScale) {
+        this.uiScale = uiScale;
     }
 }

@@ -12,7 +12,7 @@
             <properties>
                 <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.executable>java</exec.executable>
-                <exec.vmArgs>-Ddebug=true -Dsun.java2d.dpiaware=false -Dsun.java2d.uiScale=2</exec.vmArgs>
+                <exec.vmArgs>-Ddebug=true</exec.vmArgs>
                 <exec.appArgs></exec.appArgs>
                 <exec.mainClass>org.darisadesigns.polyglotlina.Desktop.PolyGlot</exec.mainClass>
             </properties>
@@ -30,7 +30,7 @@
                 <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.executable>java</exec.executable>
                 <jpda.listen>true</jpda.listen>
-                <exec.vmArgs>-Ddebug=true -Dsun.java2d.dpiaware=false -Dsun.java2d.uiScale=2 -agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address}</exec.vmArgs>
+                <exec.vmArgs>-Ddebug=true -agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address}</exec.vmArgs>
                 <exec.appArgs></exec.appArgs>
                 <exec.mainClass>org.darisadesigns.polyglotlina.Desktop.PolyGlot</exec.mainClass>
             </properties>
@@ -47,7 +47,7 @@
             <properties>
                 <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.executable>java</exec.executable>
-                <exec.vmArgs>-Ddebug=true -Dsun.java2d.dpiaware=false -Dsun.java2d.uiScale=2</exec.vmArgs>
+                <exec.vmArgs>-Ddebug=true</exec.vmArgs>
                 <exec.appArgs></exec.appArgs>
                 <exec.mainClass>org.darisadesigns.polyglotlina.Desktop.PolyGlot</exec.mainClass>
             </properties>

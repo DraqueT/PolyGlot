@@ -81,6 +81,7 @@ public final class PolyGlot {
         autoSaveFile = this.getNewAutoSaveFile();
         ((DesktopIOHandler)osHandler.getIOHandler()).loadOptionsIni(optionsManager, getWorkingDirectory().getAbsolutePath());
         refreshUiDefaults();
+        System.setProperty("sun.java2d.uiScale", Double.toString(optionsManager.getUiScale()));
     }
 
     /**
@@ -103,6 +104,7 @@ public final class PolyGlot {
             conditionalBetaSetup();
             testNonModularBridge();
             setupOSSpecificCutCopyPaste();
+            System.setProperties("sun.java2d.uiScale", );
         }
         catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, "Startup Exception");

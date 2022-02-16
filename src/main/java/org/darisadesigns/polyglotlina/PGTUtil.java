@@ -268,6 +268,8 @@ public class PGTUtil {
     public static final String OPTIONS_DIVIDER_POSITION = "OptionsDividerPosition";
     public static final String OPTIONS_MAXIMIZED = "OptionsMaximized";
     public static final String OPTIONS_MSBETWEENSAVES = "MsBetweenSaves";
+    public static final String OPTIONS_UI_SCALE = "UiScale";
+    
 
     // Java 8 bridge constants
     public static final String JAVA_JAVA_COMMAND = "java";

@@ -443,6 +443,8 @@ public final class DesktopIOHandler implements IOHandler {
                         opMan.setMaxReversionCount(Integer.parseInt(bothVal[1]));
                     case PGTUtil.OPTIONS_TODO_DIV_LOCATION ->
                         opMan.setToDoBarPosition(Integer.parseInt(bothVal[1]));
+                    case PGTUtil.OPTIONS_UI_SCALE ->
+                        opMan.setUiScale(Double.parseDouble(bothVal[1]));
                     case "\n" -> {
                     }
                     default ->
@@ -1139,6 +1141,9 @@ public final class DesktopIOHandler implements IOHandler {
             f0.write(nextLine + newLine);
             
             nextLine = PGTUtil.OPTIONS_MSBETWEENSAVES + "=" + opMan.getMsBetweenSaves();
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_UI_SCALE + "=" + opMan.getUiScale();
             f0.write(nextLine + newLine);
         }
     }
