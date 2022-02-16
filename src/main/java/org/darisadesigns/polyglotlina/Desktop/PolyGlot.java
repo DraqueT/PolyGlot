@@ -104,7 +104,6 @@ public final class PolyGlot {
             conditionalBetaSetup();
             testNonModularBridge();
             setupOSSpecificCutCopyPaste();
-            System.setProperties("sun.java2d.uiScale", );
         }
         catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, "Startup Exception");
