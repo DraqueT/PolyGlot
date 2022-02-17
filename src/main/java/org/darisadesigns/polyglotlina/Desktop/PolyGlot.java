@@ -94,7 +94,7 @@ public final class PolyGlot {
      * in chunks if spaces in path
      */
     public static void main(final String[] args) {
-        System.setProperty("sun.java2d.uiScale", "4.0");
+        System.setProperty("sun.java2d.uiScale", "4");
         var cInfoBox = new DesktopInfoBox();
         var helpHandler = new DesktopHelpHandler();
         var fontHandler = new PFontHandler();
