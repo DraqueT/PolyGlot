@@ -94,7 +94,6 @@ public final class PolyGlot {
      * in chunks if spaces in path
      */
     public static void main(final String[] args) {
-        System.setProperty("sun.java2d.uiScale", "4");
         var cInfoBox = new DesktopInfoBox();
         var helpHandler = new DesktopHelpHandler();
         var fontHandler = new PFontHandler();
@@ -108,8 +107,8 @@ public final class PolyGlot {
             ioHandler.writeErrorLog(e, "Startup config file failure.");
         }
         
-        //System.setProperty("sun.java2d.uiScale", Double.toString(opMan.getUiScale()));
-        cInfoBox.info("Scale", "Scale: " + Double.toString(opMan.getUiScale()));
+        System.setProperty("sun.java2d.uiScale", Integer.toString(opMan.getUiScale()));
+        cInfoBox.info("Scale", "Scale: " + Integer.toString(opMan.getUiScale()));
         
         try {
             // must be set before accessing System to test OS (values will simply be ignored for other OSes

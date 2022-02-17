@@ -444,7 +444,7 @@ public final class DesktopIOHandler implements IOHandler {
                     case PGTUtil.OPTIONS_TODO_DIV_LOCATION ->
                         opMan.setToDoBarPosition(Integer.parseInt(bothVal[1]));
                     case PGTUtil.OPTIONS_UI_SCALE ->
-                        opMan.setUiScale(Double.parseDouble(bothVal[1]));
+                        opMan.setUiScale(Integer.parseInt(bothVal[1]));
                     case "\n" -> {
                     }
                     default ->
