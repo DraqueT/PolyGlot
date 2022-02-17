@@ -453,7 +453,7 @@ public final class DesktopIOHandler implements IOHandler {
             }
 
             if (!loadProblems.isEmpty()) {
-                throw new Exception("Problems loading ini file: \n" + loadProblems);
+                throw new Exception("Problems loading configuration file: \n" + loadProblems);
             }
         }
     }

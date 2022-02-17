@@ -73,15 +73,20 @@ public final class PolyGlot {
     private FileReadListener fileReadListener;
     private final File autoSaveFile;
 
-    public PolyGlot(String overridePath, DictCore _core, DesktopOSHandler _osHandler) throws Exception {
+    public PolyGlot(DictCore _core, DesktopOSHandler _osHandler) throws Exception {
+        this(_core, _osHandler, new DesktopOptionsManager(_core));
+    }
+    
+    public PolyGlot(
+            DictCore _core, 
+            DesktopOSHandler _osHandler, 
+            DesktopOptionsManager _optionsManager
+    ) throws Exception {
         core = _core;
         osHandler = _osHandler;
-        osHandler.setWorkingDirectory(overridePath); // TODO: In the future, figure out how this might be better set. In options?
-        optionsManager = new DesktopOptionsManager(core);
+        optionsManager = _optionsManager;
         autoSaveFile = this.getNewAutoSaveFile();
-        ((DesktopIOHandler)osHandler.getIOHandler()).loadOptionsIni(optionsManager, getWorkingDirectory().getAbsolutePath());
         refreshUiDefaults();
-        System.setProperty("sun.java2d.uiScale", Double.toString(optionsManager.getUiScale()));
     }
 
     /**
@@ -89,7 +94,22 @@ public final class PolyGlot {
      * in chunks if spaces in path
      */
     public static void main(final String[] args) {
-        DesktopInfoBox cInfoBox = new DesktopInfoBox();
+        var cInfoBox = new DesktopInfoBox();
+        var helpHandler = new DesktopHelpHandler();
+        var fontHandler = new PFontHandler();
+        var ioHandler = DesktopIOHandler.getInstance();
+        var osHandler = new DesktopOSHandler(ioHandler, cInfoBox, helpHandler, fontHandler);
+        var opMan = new DesktopOptionsManager();
+        
+        try {
+            ioHandler.loadOptionsIni(opMan, osHandler.getWorkingDirectory().getAbsolutePath());
+        } catch (Exception e) {
+            ioHandler.writeErrorLog(e, "Startup config file failure.");
+        }
+        
+        System.setProperty("sun.java2d.uiScale", Double.toString(opMan.getUiScale()));
+        cInfoBox.info("Scale", "Scale: " + Double.toString(opMan.getUiScale()));
+        
         try {
             // must be set before accessing System to test OS (values will simply be ignored for other OSes
             if (PGTUtil.IS_OSX) {
@@ -117,10 +137,6 @@ public final class PolyGlot {
             // catch all top level application killing throwables (and bubble up directly to ensure reasonable behavior)
             try {
                 // separated due to serious nature of Throwable vs Exception
-                DesktopHelpHandler helpHandler = new DesktopHelpHandler();
-                PFontHandler fontHandler = new PFontHandler();
-                var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), cInfoBox, helpHandler, fontHandler);
-
                 DictCore core = new DictCore(
                         new DesktopPropertiesManager(), 
                         osHandler, 
@@ -128,7 +144,7 @@ public final class PolyGlot {
                         new DesktopGrammarManager()
                 );
                 
-                PolyGlot.polyGlot = new PolyGlot("", core, osHandler);
+                PolyGlot.polyGlot = new PolyGlot(core, osHandler, opMan);
                 
                 s = new ScrMainMenu(core);
                 polyGlot.setRootWindow(s);
@@ -515,7 +531,10 @@ public final class PolyGlot {
                 new DesktopHelpHandler(),
                 new PFontHandler()
         );
-        return new PolyGlot(Files.createTempDirectory("POLYGLOT").toFile().getAbsolutePath(), _core, osHandler);
+        
+        osHandler.setWorkingDirectory(Files.createTempDirectory("POLYGLOT").toFile().getAbsolutePath());
+        
+        return new PolyGlot(_core, osHandler);
     }
 
     public DictCore getCore() {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -49,13 +49,13 @@ public class DummyCore extends DictCore {
             DesktopHelpHandler helpHandler = new DesktopHelpHandler();
             PFontHandler fontHandler = new PFontHandler();
             DesktopOSHandler osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), infoBox, helpHandler, fontHandler);
-            Constructor constructor = PolyGlot.class.getDeclaredConstructor(new Class[]{String.class, DictCore.class, DesktopOSHandler.class});
+            osHandler.setWorkingDirectory(PGTUtil.TESTRESOURCES);
+            Constructor constructor = PolyGlot.class.getDeclaredConstructor(new Class[]{DictCore.class, DesktopOSHandler.class});
             constructor.setAccessible(true);
             DesktopPropertiesManager propsManager = new DesktopPropertiesManager();
             DummyCore core = new DummyCore(propsManager, osHandler);
-            // Is this now really needed to be constructed?
             // Some screens use new PolyGlot static instance
-            PolyGlot polyGlot = new PolyGlot(PGTUtil.TESTRESOURCES, (DictCore)core, osHandler);
+            PolyGlot polyGlot = new PolyGlot((DictCore)core, osHandler);
             PolyGlot.setTestPolyGlot(polyGlot);
             return core;
         } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {

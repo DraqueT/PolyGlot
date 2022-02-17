@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -48,15 +48,23 @@ public class DesktopOptionsManager {
     private final List<String> screensUp = new ArrayList<>();
     private Double menuFontSize = 0.0;
     private int toDoBarPosition = -1;
-    private final DictCore core;
+    private DictCore core;
     private javafx.scene.text.Font menuFontFX;
     private int msBetweenSaves;
     private double uiScale = 1.0;
 
-    public DesktopOptionsManager(DictCore _core) {
+    public DesktopOptionsManager() {
         msBetweenSaves = PGTUtil.DEFAULT_MS_BETWEEN_AUTO_SAVES;
-        core = _core;
         this.setupFXMenuFont();
+    }
+    
+    public DesktopOptionsManager(DictCore _core) {
+        this();
+        core = _core;
+    }
+    
+    public void setCore(DictCore _core) {
+        core = _core;
     }
     
     /**
@@ -70,8 +78,11 @@ public class DesktopOptionsManager {
         screenSize.clear();
         screensUp.clear();
         menuFontSize = 0.0;
-        core.getReversionManager().setMaxReversionCount(PGTUtil.DEFAULT_MAX_ROLLBACK_NUM);
         toDoBarPosition = -1;
+        
+        if (core != null) {
+            core.getReversionManager().setMaxReversionCount(PGTUtil.DEFAULT_MAX_ROLLBACK_NUM);
+        }
     }
     
     public double getMenuFontSize() {
@@ -262,11 +273,13 @@ public class DesktopOptionsManager {
     }
 
     public int getMaxReversionCount() {
-        return core.getReversionManager().getMaxReversionsCount();
+        return core == null ? 0 : core.getReversionManager().getMaxReversionsCount();
     }
 
     public void setMaxReversionCount(int maxRollbackVersions) {
-        core.getReversionManager().setMaxReversionCount(maxRollbackVersions, true);
+        if (core != null) {
+            core.getReversionManager().setMaxReversionCount(maxRollbackVersions, true);
+        }
     }
 
     public int getToDoBarPosition() {

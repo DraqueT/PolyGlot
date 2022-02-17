@@ -546,7 +546,7 @@ public class PGTUtil {
     public static File getDefaultDirectory() {
         String defaultDirectoryPath = System.getProperty("user.home") + File.separator + POLYGLOT_WORKINGDIRECTORY;
         
-        // for my own sanity, this keeps test stuff from overwriting options and stuff
+        // for my own sanity, this keeps test stuff from overwriting options and whatnot
         if (PGTUtil.isInJUnitTest()) {
             defaultDirectoryPath += "_TEST";
         }
