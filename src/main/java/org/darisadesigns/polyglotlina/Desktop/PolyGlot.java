@@ -94,21 +94,21 @@ public final class PolyGlot {
      * in chunks if spaces in path
      */
     public static void main(final String[] args) {
-        var cInfoBox = new DesktopInfoBox();
-        var helpHandler = new DesktopHelpHandler();
-        var fontHandler = new PFontHandler();
         var ioHandler = DesktopIOHandler.getInstance();
-        var osHandler = new DesktopOSHandler(ioHandler, cInfoBox, helpHandler, fontHandler);
         var opMan = new DesktopOptionsManager();
         
         try {
-            ioHandler.loadOptionsIni(opMan, osHandler.getWorkingDirectory().getAbsolutePath());
+            ioHandler.loadOptionsIni(opMan, PGTUtil.getDefaultDirectory().getAbsolutePath());
         } catch (Exception e) {
             ioHandler.writeErrorLog(e, "Startup config file failure.");
         }
         
-        System.setProperty("sun.java2d.uiScale", Integer.toString(opMan.getUiScale()));
-        cInfoBox.info("Scale", "Scale: " + Integer.toString(opMan.getUiScale()));
+        System.setProperty("sun.java2d.uiScale", Integer.toString(opMan.getUiScale()).trim());
+        
+        var cInfoBox = new DesktopInfoBox();
+        var helpHandler = new DesktopHelpHandler();
+        var fontHandler = new PFontHandler();
+        var osHandler = new DesktopOSHandler(ioHandler, cInfoBox, helpHandler, fontHandler);
         
         try {
             // must be set before accessing System to test OS (values will simply be ignored for other OSes
