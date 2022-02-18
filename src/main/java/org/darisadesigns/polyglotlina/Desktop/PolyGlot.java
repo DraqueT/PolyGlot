@@ -170,18 +170,6 @@ public final class PolyGlot {
                 osHandler.setCoreUpdatedListener(polyGlot.coreUpdatedListener);
                 osHandler.setFileReadListener(polyGlot.fileReadListener);
 
-                try {
-                    DesktopIOHandler.getInstance()
-                            .loadOptionsIni(PolyGlot.polyGlot.optionsManager, 
-                                    polyGlot.getWorkingDirectory().getAbsolutePath());
-                }
-                catch (Exception ex) {
-                    DesktopIOHandler.getInstance().writeErrorLog(ex);
-                    polyGlot.getOSHandler().getInfoBox().error("Options Load Error", "Unable to load options file or file corrupted:\n"
-                            + ex.getLocalizedMessage());
-                    DesktopIOHandler.getInstance().deleteIni(polyGlot.getWorkingDirectory().getAbsolutePath());
-                }
-
                 // runs additional integration if on OSX system
                 if (PGTUtil.IS_OSX) {
                     Desktop desk = Desktop.getDesktop();
