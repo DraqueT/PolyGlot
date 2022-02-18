@@ -94,21 +94,30 @@ public final class PolyGlot {
      * in chunks if spaces in path
      */
     public static void main(final String[] args) {
-        var ioHandler = DesktopIOHandler.getInstance();
         var opMan = new DesktopOptionsManager();
+        Exception iniException = null;
         
+        // This is done before absolutely everything else to allow for the setting of 
+        // scaling prior to any graphical calls (when it becomes finalized)
         try {
-            ioHandler.loadOptionsIni(opMan, PGTUtil.getDefaultDirectory().getAbsolutePath());
+            opMan.loadOptionsIni(org.darisadesigns.polyglotlina.PGTUtil.getDefaultDirectory().getAbsolutePath());
+            System.setProperty("sun.java2d.uiScale", Integer.toString(opMan.getUiScale()).trim());
         } catch (Exception e) {
-            ioHandler.writeErrorLog(e, "Startup config file failure.");
+            iniException = e;
         }
         
-        System.setProperty("sun.java2d.uiScale", Integer.toString(opMan.getUiScale()).trim());
-        
+        var ioHandler = DesktopIOHandler.getInstance();
         var cInfoBox = new DesktopInfoBox();
         var helpHandler = new DesktopHelpHandler();
         var fontHandler = new PFontHandler();
         var osHandler = new DesktopOSHandler(ioHandler, cInfoBox, helpHandler, fontHandler);
+        
+        if (iniException != null) {
+            ioHandler.writeErrorLog(iniException, "Startup config file failure.");
+            cInfoBox.warning("Config Load Failure", "Unable to load options file or file corrupted:\n" 
+                    + iniException.getLocalizedMessage());
+            DesktopIOHandler.getInstance().deleteIni(polyGlot.getWorkingDirectory().getAbsolutePath());
+        }
         
         try {
             // must be set before accessing System to test OS (values will simply be ignored for other OSes

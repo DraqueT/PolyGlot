@@ -24,7 +24,11 @@ import org.darisadesigns.polyglotlina.PGTUtil;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -327,5 +331,123 @@ public class DesktopOptionsManager {
 
     public void setUiScale(int uiScale) {
         this.uiScale = uiScale;
+    }
+    
+    /**
+     * Loads all option data from ini file, if none, ignore.One will be created
+     * on exit.
+     *
+     * @param workingDirectory
+     * @throws java.lang.Exception
+     */
+    public void loadOptionsIni(String workingDirectory) throws Exception {
+        File f = new File(workingDirectory + File.separator + org.darisadesigns.polyglotlina.Desktop.PGTUtil.POLYGLOT_INI);
+        if (!f.exists() || f.isDirectory()) {
+            return;
+        }
+
+        try ( BufferedReader br = new BufferedReader(new FileReader(
+                workingDirectory + File.separator + org.darisadesigns.polyglotlina.Desktop.PGTUtil.POLYGLOT_INI, StandardCharsets.UTF_8))) {
+            String loadProblems = "";
+
+            for (String line; (line = br.readLine()) != null;) {
+                String[] bothVal = line.split("=");
+
+                // if no value set, move on
+                if (bothVal.length == 1) {
+                    continue;
+                }
+
+                // if multiple values, something has gone wrong
+                if (bothVal.length != 2) {
+                    throw new Exception("PolyGlot.ini corrupt or unreadable.");
+                }
+
+                switch (bothVal[0]) {
+                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_LAST_FILES -> {
+                        for (String last : bothVal[1].split(",")) {
+                            pushRecentFile(last);
+                        }
+                    }
+                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_SCREENS_OPEN -> {
+                        for (String screen : bothVal[1].split(",")) {
+                            addScreenUp(screen);
+                        }
+                    }
+                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_SCREEN_POS -> {
+                        for (String curPosSet : bothVal[1].split(",")) {
+                            if (curPosSet.isEmpty()) {
+                                continue;
+                            }
+
+                            String[] splitSet = curPosSet.split(":");
+
+                            if (splitSet.length != 3) {
+                                loadProblems += "Malformed Screen Position: " + curPosSet + "\n";
+                                continue;
+                            }
+                            Point p = new Point(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
+                            setScreenPosition(splitSet[0], p);
+                        }
+                    }
+                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_SCREENS_SIZE -> {
+                        for (String curSizeSet : bothVal[1].split(",")) {
+                            if (curSizeSet.isEmpty()) {
+                                continue;
+                            }
+
+                            String[] splitSet = curSizeSet.split(":");
+
+                            if (splitSet.length != 3) {
+                                loadProblems += "Malformed Screen Size: " + curSizeSet + "\n";
+                                continue;
+                            }
+                            Dimension d = new Dimension(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
+                            setScreenSize(splitSet[0], d);
+                        }
+                    }
+                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_DIVIDER_POSITION -> {
+                        for (String curPosition : bothVal[1].split(",")) {
+                            if (curPosition.isEmpty()) {
+                                continue;
+                            }
+
+                            String[] splitSet = curPosition.split(":");
+
+                            if (splitSet.length != 2) {
+                                loadProblems += "Malformed divider position: " + curPosition + "\n";
+                                continue;
+                            }
+                            Integer position = Integer.parseInt(splitSet[1]);
+                            setDividerPosition(splitSet[0], position);
+                        }
+                    }
+                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_MSBETWEENSAVES ->
+                        setMsBetweenSaves(Integer.parseInt(bothVal[1]));
+                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_AUTO_RESIZE ->
+                        setAnimateWindows(bothVal[1].equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.TRUE));
+                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_MAXIMIZED ->
+                        setMaximized(bothVal[1].equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.TRUE));
+                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_MENU_FONT_SIZE ->
+                        setMenuFontSize(Double.parseDouble(bothVal[1]));
+                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_NIGHT_MODE ->
+                        setNightMode(bothVal[1].equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.TRUE));
+                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_REVERSIONS_COUNT ->
+                        setMaxReversionCount(Integer.parseInt(bothVal[1]));
+                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_TODO_DIV_LOCATION ->
+                        setToDoBarPosition(Integer.parseInt(bothVal[1]));
+                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_UI_SCALE ->
+                        setUiScale(Integer.parseInt(bothVal[1]));
+                    case "\n" -> {
+                    }
+                    default ->
+                        loadProblems += "Unrecognized value: " + bothVal[0] + " in PolyGlot.ini." + "\n";
+                }
+            }
+
+            if (!loadProblems.isEmpty()) {
+                throw new Exception("Problems loading configuration file: \n" + loadProblems);
+            }
+        }
     }
 }
