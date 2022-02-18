@@ -32,6 +32,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import javax.swing.InputMap;
 import javax.swing.JFileChooser;
@@ -94,28 +95,22 @@ public final class PolyGlot {
      * in chunks if spaces in path
      */
     public static void main(final String[] args) {
+        // must be done before absolutely anything else
+        setupScaling();
+        
         var opMan = new DesktopOptionsManager();
-        Exception iniException = null;
-        
-        // This is done before absolutely everything else to allow for the setting of 
-        // scaling prior to any graphical calls (when it becomes finalized)
-        try {
-            opMan.loadOptionsIni(org.darisadesigns.polyglotlina.PGTUtil.getDefaultDirectory().getAbsolutePath());
-            System.setProperty("sun.java2d.uiScale", Integer.toString(opMan.getUiScale()).trim());
-        } catch (Exception e) {
-            iniException = e;
-        }
-        
         var ioHandler = DesktopIOHandler.getInstance();
         var cInfoBox = new DesktopInfoBox();
         var helpHandler = new DesktopHelpHandler();
         var fontHandler = new PFontHandler();
         var osHandler = new DesktopOSHandler(ioHandler, cInfoBox, helpHandler, fontHandler);
         
-        if (iniException != null) {
-            ioHandler.writeErrorLog(iniException, "Startup config file failure.");
+        try {
+            opMan.loadOptionsIni(org.darisadesigns.polyglotlina.PGTUtil.getDefaultDirectory().getAbsolutePath());
+        } catch (Exception e) {
+            ioHandler.writeErrorLog(e, "Startup config file failure.");
             cInfoBox.warning("Config Load Failure", "Unable to load options file or file corrupted:\n" 
-                    + iniException.getLocalizedMessage());
+                    + e.getLocalizedMessage());
             DesktopIOHandler.getInstance().deleteIni(polyGlot.getWorkingDirectory().getAbsolutePath());
         }
         
@@ -278,6 +273,29 @@ public final class PolyGlot {
                 }
             }
         });
+    }
+    
+    private static void setupScaling() {
+        Path p = Path.of(org.darisadesigns.polyglotlina.Desktop.PGTUtil.getDefaultDirectory()
+                + File.separator + org.darisadesigns.polyglotlina.Desktop.PGTUtil.POLYGLOT_INI);
+        if (!p.toFile().exists() || p.toFile().isDirectory()) {
+            return;
+        }
+        
+        try {
+        String ini = Files.readString(p);
+        int loc = ini.indexOf("UiScale=");
+        
+        if (loc == -1) {
+            return;
+        }
+        
+        String value = ini.substring(loc + 8, loc + 9);
+        
+        System.setProperty("sun.java2d.uiScale", value);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
     
     /**
