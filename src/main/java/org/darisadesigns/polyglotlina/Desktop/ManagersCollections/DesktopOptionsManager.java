@@ -55,7 +55,7 @@ public class DesktopOptionsManager {
     private DictCore core;
     private javafx.scene.text.Font menuFontFX;
     private int msBetweenSaves;
-    private int uiScale = 1;
+    private int uiScale = 2;
 
     public DesktopOptionsManager() {
         msBetweenSaves = PGTUtil.DEFAULT_MS_BETWEEN_AUTO_SAVES;
@@ -83,6 +83,7 @@ public class DesktopOptionsManager {
         screensUp.clear();
         menuFontSize = 0.0;
         toDoBarPosition = -1;
+        uiScale = 2;
         
         if (core != null) {
             core.getReversionManager().setMaxReversionCount(PGTUtil.DEFAULT_MAX_ROLLBACK_NUM);
