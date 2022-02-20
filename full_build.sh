@@ -108,7 +108,7 @@ if [ "$#" -eq 0 ] || [ "$1" == "$CONST_LINUX" ] || [ "$1" == "$CONST_RELEASE" ];
             -- auto_polyglot_build.sh/arg0 "$BUILD_STEP"
     fi
     echo "Waiting for Ubuntu machine to power down..."
-    until $(VBoxManage showvminfo --machinereadable PolyGlotBuildUbuntu | grep -q ^VMState=.poweroff.)
+    until $(VBoxManage showvminfo --machinereadable "$CONST_LINUX_VIRTUAL" | grep -q ^VMState=.poweroff.)
     do
         sleep 2
     done

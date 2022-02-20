@@ -116,10 +116,10 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtTypePattern">
               <Properties>
-                <Property name="toolTipText" type="java.lang.String" value="Regex pattern which words of this type must conform to"/>
+                <Property name="toolTipText" type="java.lang.String" value="Regex pattern which words of this part of speech must conform to"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core,&#xa;    core.getPropertiesManager().isOverrideRegexFont(),&#xa;    &quot;Type Pattern&quot;)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core,&#xa;    core.getPropertiesManager().isOverrideRegexFont(),&#xa;    &quot;Enforced Pattern&quot;)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="btnSetup">
@@ -196,7 +196,7 @@
                 <Component class="javax.swing.JCheckBox" name="chkDefMand">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Definition Mandatory"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Select to enforce definition text for this par of speech."/>
+                    <Property name="toolTipText" type="java.lang.String" value="Select to enforce definition text for this part of speech."/>
                   </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
@@ -205,7 +205,7 @@
                 <Component class="javax.swing.JCheckBox" name="chkProcMand">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Pronunciation Mandatory"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Select to enforce pronunciation text for this par of speech."/>
+                    <Property name="toolTipText" type="java.lang.String" value="Select to enforce pronunciation text for this part of speech."/>
                   </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>

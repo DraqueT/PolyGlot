@@ -20,7 +20,6 @@
 package org.darisadesigns.polyglotlina.Screens;
 
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
@@ -31,6 +30,7 @@ import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import javax.swing.text.PlainDocument;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
+import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
  *
@@ -49,7 +49,14 @@ public final class ScrOptions extends PDialog {
         initComponents();
         setOptions();
         setupListeners();
-        lblUiScaling.setText("UI Scaling: " + sldUiScaling.getValue());
+        
+        if (PGTUtil.IS_OSX) {
+            lblUiScaling.setEnabled(false);
+            sldUiScaling.setEnabled(false);
+            sldUiScaling.setToolTipText("UI scaling unavailable on macOS");
+        } else {
+            lblUiScaling.setText("UI Scaling: " + sldUiScaling.getValue());
+        }
         
         ((PlainDocument)txtRevisionNumbers.getDocument()).setDocumentFilter(new PTextFieldFilter());
         ((PlainDocument)txtAutoSave.getDocument()).setDocumentFilter(new PTextFieldFilter());

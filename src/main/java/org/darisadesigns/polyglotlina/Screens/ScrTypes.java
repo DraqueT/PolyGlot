@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2021, Draque Thompson
+ * Copyright (c) 2015-2022, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -179,15 +179,7 @@ public final class ScrTypes extends PFrame {
             return;
         }
 
-        if (((PTextField) txtName).isDefaultText() || txtName.getText().isEmpty()) {
-            txtErrorBox.setText("Types must have name populated.");
-            txtName.setBackground(PGTUtil.COLOR_REQUIRED_LEX_COLOR);
-            lstTypes.setEnabled(false);
-        } else {
-            txtErrorBox.setText("");
-            lstTypes.setEnabled(true);
-            ((PTextField)txtName).setupLook();
-        }
+        updateLegal();
 
         if (updatingName || curNode == null) {
             return;
@@ -199,6 +191,18 @@ public final class ScrTypes extends PFrame {
         populateTypes();
         lstTypes.setSelectedValue(curNode, true);
         updatingName = false;
+    }
+    
+    private void updateLegal() {
+        if (((PTextField) txtName).isDefaultText() || txtName.getText().isEmpty()) {
+            txtErrorBox.setText("Types must have name populated.");
+            txtName.setBackground(PGTUtil.COLOR_REQUIRED_LEX_COLOR);
+            lstTypes.setEnabled(false);
+        } else {
+            txtErrorBox.setText("");
+            lstTypes.setEnabled(true);
+            ((PTextField)txtName).setupLook();
+        }
     }
 
     /**
@@ -336,6 +340,8 @@ public final class ScrTypes extends PFrame {
         
         setListeningActive(true);
         ignoreUpdate = false;
+        
+        updateLegal();
     }
 
     /**
@@ -422,7 +428,7 @@ public final class ScrTypes extends PFrame {
         txtName = new PTextField(core, true, "Part of Speech Name");
         txtTypePattern = new PTextField(core,
             core.getPropertiesManager().isOverrideRegexFont(),
-            "Type Pattern");
+            "Enforced Pattern");
         btnSetup = new PButton(nightMode, menuFontSize);
         btnAutogen = new PButton(nightMode, menuFontSize);
         txtErrorBox = new javax.swing.JTextField();
@@ -451,7 +457,7 @@ public final class ScrTypes extends PFrame {
 
         txtName.setToolTipText("Part of speech name");
 
-        txtTypePattern.setToolTipText("Regex pattern which words of this type must conform to");
+        txtTypePattern.setToolTipText("Regex pattern which words of this part of speech must conform to");
 
         btnSetup.setText("Conjugations/Declensions Setup");
         btnSetup.setToolTipText("Create declension and conjugation dimensins here.");
@@ -478,10 +484,10 @@ public final class ScrTypes extends PFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         chkDefMand.setText("Definition Mandatory");
-        chkDefMand.setToolTipText("Select to enforce definition text for this par of speech.");
+        chkDefMand.setToolTipText("Select to enforce definition text for this part of speech.");
 
         chkProcMand.setText("Pronunciation Mandatory");
-        chkProcMand.setToolTipText("Select to enforce pronunciation text for this par of speech.");
+        chkProcMand.setToolTipText("Select to enforce pronunciation text for this part of speech.");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
