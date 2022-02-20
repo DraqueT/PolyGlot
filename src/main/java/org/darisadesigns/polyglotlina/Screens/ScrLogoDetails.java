@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -85,6 +85,7 @@ import javax.swing.table.TableColumn;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
@@ -158,6 +159,16 @@ public class ScrLogoDetails extends PFrame {
         setupFilterMenu();
         setupListeners();
         super.getRootPane().getContentPane().setBackground(Color.white);
+    }
+    
+    private void setLegal() {
+        if (txtName.getText().isBlank() && lstLogos.getModel().getSize() > 0) {
+            txtName.setBackground(PGTUtil.COLOR_REQUIRED_LEX_COLOR);
+            btnAddLogo.setEnabled(false);
+        } else {
+            txtName.setBackground(PGTUtil.COLOR_TEXT_BG);
+            btnAddLogo.setEnabled(true);
+        }
     }
     
     private void setupFilterMenu() {
@@ -344,16 +355,19 @@ public class ScrLogoDetails extends PFrame {
             @Override
             public void changedUpdate(DocumentEvent e) {
                 updateName();
+                setLegal();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 updateName();
+                setLegal();
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
                 updateName();
+                setLegal();
             }
         });
         txtNotes.getDocument().addDocumentListener(new DocumentListener() {
@@ -1439,6 +1453,7 @@ public class ScrLogoDetails extends PFrame {
      */
     private void btnAddLogoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLogoActionPerformed
         addLogo();
+        setLegal();
     }//GEN-LAST:event_btnAddLogoActionPerformed
 
     private void lstLogosValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstLogosValueChanged
@@ -1481,6 +1496,7 @@ public class ScrLogoDetails extends PFrame {
 
     private void btnDelLogoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelLogoActionPerformed
         deleteLogo();
+        setLegal();
     }//GEN-LAST:event_btnDelLogoActionPerformed
 
     private void btnDelReadingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelReadingActionPerformed

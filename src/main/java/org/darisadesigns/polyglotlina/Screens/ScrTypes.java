@@ -194,13 +194,15 @@ public final class ScrTypes extends PFrame {
     }
     
     private void updateLegal() {
-        if (((PTextField) txtName).isDefaultText() || txtName.getText().isEmpty()) {
+        if (txtName.getText().isEmpty() && lstTypes.getModel().getSize() > 0) {
             txtErrorBox.setText("Types must have name populated.");
             txtName.setBackground(PGTUtil.COLOR_REQUIRED_LEX_COLOR);
             lstTypes.setEnabled(false);
+            btnAddType.setEnabled(false);
         } else {
             txtErrorBox.setText("");
             lstTypes.setEnabled(true);
+            btnAddType.setEnabled(true);
             ((PTextField)txtName).setupLook();
         }
     }
