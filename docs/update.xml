@@ -4,15 +4,27 @@
 <VersionText>
 Version 3.6
 &lt;br&gt;&lt;br&gt;
-TEST TEST TEST
+Minor release here that cleans up a few things from the last big release and adds a few features I had wanted to include with 3.5 in the first place.
+&lt;br&gt;&lt;br&gt;
+Enjoy, everyone!
 
 &lt;br&gt;&lt;br&gt;
 &lt;br&gt;&lt;br&gt;
 ENHANCEMENTS:&lt;br&gt;
-- BLEEP BLOOP LETS EAT BUGS&lt;br&gt;
+- Java 8 no longer needed for Excel features and PDF generation&lt;br&gt;
+- Revised invalid entry display in some menus&lt;br&gt;
+- Added ability to scale UI in Windows and Linux&lt;br&gt;
+- Word generator now compatible with comma delimited lists to allow for multi symbol characters&lt;br&gt;
+- Word generator now has visual feedback to help with input formatting&lt;br&gt;
+- Word generator now saves settings rather than discarding on close of window&lt;br&gt;
 &lt;br&gt;&lt;br&gt;
 BUGS FIXED:&lt;br&gt;
-- ATE A BIG SPIDER EW GROSS&lt;br&gt;
+- Tooltips were severely broken on Windows/Linux, not functioning at all&lt;br&gt;
+- Under certain circumstances, add part of speech button could become temporarily disabled&lt;br&gt;
+- UI scaling in HD environments was broken&lt;br&gt;
+- Part of Speech mandatory can no longer be set if none are defined&lt;br&gt;
+- Import menu was not static&lt;br&gt;
+- Error message occasionally/popped on startup for null ConWord value&lt;br&gt;
   
 &lt;br&gt;
 Homepage: http://draquet.github.io/PolyGlot/
