@@ -27,7 +27,7 @@
         <!-- Static navbar -->
         <div class="navbar navbar-inverse navbar-static-top">
             <div class="container">
-                <div class="navbar-header"> <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> <a class="navbar-brand" href="index.html">PolyGlot v 3.5</a> </div>
+                <div class="navbar-header"> <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> <a class="navbar-brand" href="index.html">PolyGlot v 3.5.1</a> </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="https://github.com/DraqueT/PolyGlot">GitHub Page</a><br>
@@ -49,7 +49,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-10 col-lg-offset-1 centered"> <img src="assets/PolyGlot%20Logo.png" alt="PolyGlot">
-                        <h1>Version 3.5</h1>
+                        <h1>Version 3.5.1</h1>
                         <!-- POLYGLOT STUFF START -->
 
                         <table style="width:100%">
@@ -108,54 +108,21 @@
                             post them on <a href="https://github.com/DraqueT/PolyGlot/issues">PolyGlot's issues page</a>!</div>
 
                         <h1><a name="-----_ii_-----"></a>WHAT’S NEW</h1>
-                        <div align ="left"><br>Heyo, all! Welcome to version 3.5 of PolyGlot! This is a <b>massive</b> release! First, 
-                            I want to give a huge shout out to TrapinchO over on GitHub, who gave an enormous amount of help with 
-                            testing, and just has killer ideas in general! 3.5 includes a long list of upgrades and
-                            bug fixes. This also represents a significant step toward an Android release of PolyGlot, which has been 
-                            much requested and a long time coming.<br><br>
-                            
-                            Among the most exciting upgrades are the complete integration of the Zompist word generator (algorithm
-                            and original design by Mark Rosenfelder there), a complete overhaul of how graphics are painted (no
-                            more CPU fans going nuts), a revamped lexicon look (local language synonyms now displayed in the list
-                            by their conword counterparts), automatic syllable composition when generating pronunciations, and many, 
-                            <i>many</i> quality of life improvements (full list below). And that is on top of a ton of bug fixes!<br><br>
-                            
-                            Please enjoy, everyone!
+                        <div align ="left"><br>Minor release here that cleans up a few things from the last big release and adds a few 
+                            features I had wanted to include with 3.5 in the first place.<br><br>
+
+                            Enjoy, everyone!
                             <br><br>
 
                         </div>
                         NEW FEATURES:
                         <div align ="left"><ul>
-                                <li>Full integration of the Zompist Word Generator</li>
-                                <li>Automatic syllable composition in pronunciation</li>
-                                <li>Word form constructor tool added for greater ease with agglutinative languages</li>
-                                <li>PolyGlot can now import local language fonts as with conlang fonts.</li>
-                                <li>Push updates to mass autodeclension rules updated</li>
-                                <li>Delete audio recording button added to grammar section</li>
-                                <li>Packer/unpacker feature added for advanced users</li>
-                                <li>Alphabetic Order feature reworked</li>
-                                <li>Open Ticket menu item added</li>
-                                <li>Regex now supported in language filter</li>
-                                <li>Relational word classes added to PolyGlot</li>
-                                <li>Phrase Book window added - compatible with print to PDF</li>
-                                <li>Lexicon now defaults to show both Conword and local word equivalent</li>
-                                <li>PDF Chapters can now be reordered</li>
-                                <li>Text fields and dropdowns upgraded to show labels more clearly</li>
-                                <li>PolyGlot update detection now based on more stable host</li>
-                                <li>Autosave feature added - every 5 minutes (can be changed in options)</li>
-                                <li>Deprecated conjugation rules now given more helpful names</li>
-                                <li>Dropdown menus with Conlang words now have hover text and the local word appearing next to them</li>
-                                <li>Check Language upgrade - checks for ambiguities in alphabet and for unsupported characters in lexicon</li>
-                                <li>PDF printing now accepts/uses local language font</li>
-                                <li>If present, romanized forms of words will export to Excel</li>
-                                <li>Tooltips now automatically format in a way that is much nicer to look at</li>
-                                <li>Font compatibility in PDF printing significantly improved</li>
-                                <li>Reworked printing of word class values to PDF </li>
-                                <li>Upgraded combobox displays</li>
-                                <li>Dropdowns now filter as you begin to type</li>
-                                <li>BIG update to core functionality to allow for development of Android app</li>
-                                <li>Upgraded to Java 17 - Long Term Home for PolyGlot (no more upgrdes for a good bit)</li>
-                                <li>New easter egg added. :3</li>
+                                <li>Java 8 no longer needed for Excel features and PDF generation</li>
+                                <li>Revised invalid entry display in some menus</li>
+                                <li>Added ability to scale UI in Windows and Linux</li>
+                                <li>Word generator now compatible with comma delimited lists to allow for multi symbol characters</li>
+                                <li>Word generator now has visual feedback to help with input formatting</li>
+                                <li>Word generator now saves settings rather than discarding on close of window</li>
                                 <!––Secret Codes:
                                 what did you see last tuesday
                                 Who is Draque
@@ -169,29 +136,12 @@
                         BUGS FIXED:
                         <div align="left">
                             <ul>
-                                <li>Ligatures loaded initially, but failed to re-load from saved PolyGlot archive</li>
-                                <li>Broken multi-delete in conjugations menu fixed</li>
-                                <li>Graphical artifacting and "shadows" appeared sometimes in etymology window</li>
-                                <li>Broken multi-delete in conjugations menu fixed</li>
-                                <li>Excel import bugs corrected (false success report)</li>
-                                <li>Quickentry image insertion caused PolyGlot to freeze</li>
-                                <li>Quiz could make copies of the correct answer (with copies being "wrong")</li>
-                                <li>Local languge sizing failed to function properly in menus</li>
-                                <li>IPA Conversion tool converted text with HTML interspersed</li>
-                                <li>If no alphabet is defined at all, "check language" feature crashes program</li>
-                                <li>Under certain circumstances, text boxes could be mistakenly set to the conlang font</li>
-                                <li>Search menu populates font and size options from wrong place</li>
-                                <li>Hitting the filter button while is already applied did nothing</li>
-                                <li>Deletion of top level etymological parent caused unhandled exception</li>
-                                <li>Excel export applied conjugation transforms without regard to rules</li>
-                                <li>Excel export did not properly set conlang font on conjugated wordform cells</li>
-                                <li>Excel export sometimes printed empty tabs</li>
-                                <li>Deleting an internal etymological parent resized elements of the etymology window</li>
-                                <li>If you had too many word classes, it would break the autodeclension setup menu</li>
-                                <li>Deleting an entry in the phonemic orthography menu would also delete any entries with the same values</li>
-                                <li>Elements of the conjugation menu were failing to render in the appropriate font</li>
-                                <li>The grammar chapter section could become persistently wonky if multiple chapters without names were added in a row</li>
-                                <li>Fixed menus that could display user text but which did not use local language font (possible tofu characters)</li>
+                                <li>Tooltips were severely broken on Windows/Linux, not functioning at all</li>
+                                <li>Under certain circumstances, add part of speech button could become temporarily disabled</li>
+                                <li>UI scaling in HD environments was broken</li>
+                                <li>Part of Speech mandatory can no longer be set if none are defined</li>
+                                <li>Import menu was not static</li>
+                                <li>Error message occasionally/popped on startup for null ConWord value</li>
                             </ul>
                         </div>
 
@@ -200,14 +150,14 @@
                         <h1>INSTALLATION</h1><br>
                         <div align ="left">As of version 3.0, the installation of PolyGlot has become mostly automated. Simply 
                             download the appropriate installer for your operating system (Windows: exe, Linux: deb, macOS:dmg) and open 
-                            to install! PolyGlot no longer has a frontend, and to run the base program, there is no need to install 
-                            Java at all (although for some features, a java runtime may be required).<br><br>
+                            to install!<br><br>
                             
                             <i>Windows Note</i>: Windows will complain bitterly about PolyGlot not being properly registered with Microsoft. 
                             It is safe to install, but registration costs money and PolyGlot is free.<br><br>
                         
-                            <i>macOS Note</i>: On the initial run, you will have to right click th Application from Finder, select "open" and grant it permission to run, 
-                            despite not being registered with Apple. It is safe to run, but registration costs money and PolyGlot is free.
+                            <i>macOS Note</i>: On the initial run, you will have to right click th Application from Finder, select "open" and grant it permission to run. It is safe to run, but registration costs money and PolyGlot is free.<br><br>
+                            
+                            <i>Linux Note:</i>: Depending on screen resolution, you may have to tweak the UI scaling setting under options for the display to render at an appropriate size.
                         </div>
                         <br><br>
 
@@ -1128,7 +1078,11 @@
                             Note that autosaves will not affect the revision points feature in PolyGlot that are typically created each save.<br><br>
 
                             The <b>Reset Options</b> button allows you to reset all option data within PolyGlot. This <i>includes</i> data which is
-                            not typically visible, such as window position, window sizes, and prior files opened.
+                            not typically visible, such as window position, window sizes, and prior files opened.<br><br>
+                            
+                            <b>UI Scaling</b> controls the size of PolyGlot's overall screens. This can be useful as a setting if you are having trouble
+                            seeing the menus or if your OS has improperly scaled it for your screen resolution. Default value is a scale of 2, and can be
+                            set from 1 to 4.
                         </div>
 
 
