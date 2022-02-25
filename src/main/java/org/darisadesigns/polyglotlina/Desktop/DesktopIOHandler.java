@@ -47,7 +47,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -745,9 +744,7 @@ public final class DesktopIOHandler implements IOHandler {
                     img = ImageIO.read(imageStream);
                     ImageNode imageNode = new ImageNode(PolyGlot.getPolyGlot().getCore());
                     imageNode.setId(imageId);
-                    imageNode.setImageBytes(
-                            DesktopIOHandler.getInstance().loadImageBytesFromImage(img)
-                    );
+                    imageNode.setImageBytes(loadImageBytesFromImage(img));
                     imageCollection.getBuffer().setEqual(imageNode);
                     imageCollection.insert(imageId);
                 }
@@ -768,22 +765,17 @@ public final class DesktopIOHandler implements IOHandler {
             String fileName) throws Exception {
         try ( ZipFile zipFile = new ZipFile(fileName)) {
             for (LogoNode curNode : logoCollection.getAllLogos()) {
-                if (curNode.getLogoBytes() != null
-                        && curNode.getLogoBytes().length != 0) {
-                    continue;
-                }
                 ZipEntry imgEntry = zipFile.getEntry(PGTUtil.LOGOGRAPH_SAVE_PATH
                         + curNode.getId() + ".png");
                 
                 if (imgEntry == null) {
-                    throw new IOException("PGD file corrupt. Unable to read required file from archive: " + PGTUtil.LOGOGRAPH_SAVE_PATH);
+                    continue;
                 }
 
-                byte[] img;
-                try ( InputStream imageStream = zipFile.getInputStream(imgEntry)) {
-                    img = this.loadImageBytesFromStream(imageStream);
+                try (InputStream imageStream = zipFile.getInputStream(imgEntry)) {
+                    var img = ImageIO.read(imageStream);
+                    curNode.setLogoBytes(loadImageBytesFromImage(img));
                 }
-                curNode.setLogoBytes(img);
             }
         }
     }
@@ -1482,15 +1474,6 @@ public final class DesktopIOHandler implements IOHandler {
 
         loadBlank.paintIcon(null, g, 0, 0);
         g.dispose();
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(image, "jpg", baos);
-        baos.flush();
-        return baos.toByteArray();
-    }
-
-    public byte[] loadImageBytesFromStream(InputStream stream) throws IOException {
-        BufferedImage image = ImageIO.read(stream);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(image, "jpg", baos);
