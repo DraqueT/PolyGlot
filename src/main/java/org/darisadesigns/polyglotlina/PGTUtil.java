@@ -464,6 +464,7 @@ public class PGTUtil {
         VERSION_HIERARCHY.put("3.3.5", 47);
         VERSION_HIERARCHY.put("3.5", 48);
         VERSION_HIERARCHY.put("3.5.1", 49);
+        VERSION_HIERARCHY.put("3.5.2", 50);
         
         BUILD_DATE_TIME = getBuildDate();
     }
