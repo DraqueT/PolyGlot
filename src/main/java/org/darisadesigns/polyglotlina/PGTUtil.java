@@ -591,7 +591,7 @@ public class PGTUtil {
     
     public static void validateVersion() throws Exception {
         if (!VERSION_HIERARCHY.containsKey(PGT_VERSION)) {
-            throw new Exception("ERROR: CURRENT VERSION NOT ACCOUNTED FOR IN VERSION HISTORY.");
+            throw new Exception("ERROR: CURRENT VERSION NOT ACCOUNTED FOR IN VERSION HISTORY: " + PGT_VERSION);
         }
     }
     
