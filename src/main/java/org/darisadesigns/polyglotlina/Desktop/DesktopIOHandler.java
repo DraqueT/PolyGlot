@@ -55,7 +55,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -419,7 +418,7 @@ public final class DesktopIOHandler implements IOHandler {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
 
-        try ( StringWriter writer = new StringWriter()) {
+        try (StringWriter writer = new StringWriter()) {
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
 
             StringBuilder sb = new StringBuilder();
@@ -427,36 +426,12 @@ public final class DesktopIOHandler implements IOHandler {
             byte[] xmlData = sb.toString().getBytes(StandardCharsets.UTF_8);
 
             final File tmpSaveLocation = makeTempSaveFile(workingDirectory);
+            
+            writeLog = writeRawFileOutput(tmpSaveLocation, xmlData, core);
 
-            try ( FileOutputStream fileOutputStream = new FileOutputStream(tmpSaveLocation)) {
-                try ( ZipOutputStream out = new ZipOutputStream(fileOutputStream, StandardCharsets.UTF_8)) {
-                    ZipEntry e = new ZipEntry(PGTUtil.LANG_FILE_NAME);
-                    out.putNextEntry(e);
-
-                    out.write(xmlData, 0, xmlData.length);
-
-                    out.closeEntry();
-
-                    writeLog += PFontHandler.writeFont(out,
-                            ((DesktopPropertiesManager) core.getPropertiesManager()).getFontCon(),
-                            core.getPropertiesManager().getCachedFont(),
-                            core,
-                            true);
-
-                    writeLog += PFontHandler.writeFont(out,
-                            ((DesktopPropertiesManager) core.getPropertiesManager()).getFontLocal(),
-                            core.getPropertiesManager().getCachedLocalFont(),
-                            core,
-                            false);
-
-                    writeLog += writeLogoNodesToArchive(out, core);
-                    writeLog += writeImagesToArchive(out, core);
-                    writeLog += writeWavToArchive(out, core);
-                    writeLog += writePriorStatesToArchive(out, core);
-
-                    out.finish();
-                }
-            }
+            // copy tmp file to final location folder
+            var tmpSaveFinalLocation = new File(finalFile.getParent() + File.separator + tmpSaveLocation.getName());
+            copyFile(tmpSaveLocation.toPath(), tmpSaveFinalLocation.toPath(), true);
 
             // attempt to open file in dummy core. On success, copy file to end
             // destination, on fail, delete file and inform user by bubbling error
@@ -467,17 +442,21 @@ public final class DesktopIOHandler implements IOHandler {
                 var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), new DummyInfoBox(), helpHandler, fontHandler);
                 DictCore test = new DictCore(new DesktopPropertiesManager(), osHandler, new PGTUtil(), new DesktopGrammarManager());
                 PolyGlot.getTestShell(test);
-                test.readFile(tmpSaveLocation.getAbsolutePath());
+                test.readFile(tmpSaveFinalLocation.getAbsolutePath());
+                
+                if (!core.equals(test)) {
+                    throw new Exception("Written file does not match file in memory.");
+                }
             } catch (Exception ex) {
                 throw new IOException(ex);
             }
-
-            try {
-                copyFile(tmpSaveLocation.toPath(), finalFile.toPath(), true);
-                tmpSaveLocation.delete(); // wipe temp file if successful
-            } catch (IOException e) {
-                throw new IOException("Unable to save file: " + e.getMessage(), e);
+            
+            if (finalFile.exists()) {
+                finalFile.delete();
             }
+            
+            tmpSaveFinalLocation.renameTo(finalFile);
+            tmpSaveLocation.delete(); // wipe temp file if successful
 
             if (writeToReversionMgr) {
                 core.getReversionManager().addVersion(xmlData, saveTime);
@@ -487,6 +466,45 @@ public final class DesktopIOHandler implements IOHandler {
         if (!writeLog.isEmpty()) {
             new DesktopInfoBox().warning("File Save Issues", "Problems encountered when saving file " + _fileName + writeLog);
         }
+    }
+    
+    /**
+     * Creates raw output file (processed for safety/security upstream)
+     */
+    private String writeRawFileOutput(File tmpSaveLocation, byte[] xmlData, DictCore core) throws FileNotFoundException, IOException {
+        String writeLog = "";
+        
+        try (FileOutputStream fileOutputStream = new FileOutputStream(tmpSaveLocation)) {
+            try ( ZipOutputStream out = new ZipOutputStream(fileOutputStream, StandardCharsets.UTF_8)) {
+                ZipEntry e = new ZipEntry(PGTUtil.LANG_FILE_NAME);
+                out.putNextEntry(e);
+
+                out.write(xmlData, 0, xmlData.length);
+
+                out.closeEntry();
+
+                writeLog = PFontHandler.writeFont(out,
+                        ((DesktopPropertiesManager) core.getPropertiesManager()).getFontCon(),
+                        core.getPropertiesManager().getCachedFont(),
+                        core,
+                        true);
+
+                writeLog += PFontHandler.writeFont(out,
+                        ((DesktopPropertiesManager) core.getPropertiesManager()).getFontLocal(),
+                        core.getPropertiesManager().getCachedLocalFont(),
+                        core,
+                        false);
+
+                writeLog += writeLogoNodesToArchive(out, core);
+                writeLog += writeImagesToArchive(out, core);
+                writeLog += writeWavToArchive(out, core);
+                writeLog += writePriorStatesToArchive(out, core);
+
+                out.finish();
+            }
+        }
+        
+        return writeLog;
     }
 
     /**
@@ -551,11 +569,7 @@ public final class DesktopIOHandler implements IOHandler {
                 + "_" + source.getName()
                 + ".archive");
 
-        try ( FileChannel sourceChannel = new FileInputStream(source).getChannel();  FileChannel destChannel = new FileOutputStream(dest).getChannel()) {
-            destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
-        }
-
-        source.delete();
+        source.renameTo(dest);
 
         return dest;
     }

@@ -338,7 +338,7 @@ public class DesktopPropertiesManager extends PropertiesManager {
             ret = true;
         } else if (comp instanceof DesktopPropertiesManager) {
             DesktopPropertiesManager prop = (DesktopPropertiesManager) comp;
-            ret = ((conFont == null) && (prop.conFont == null)) || conFont.equals(prop.conFont);
+            ret = getFontCon().equals(prop.getFontCon());
             ret = ret && conFontStyle.equals(prop.conFontStyle);
             ret = ret && conFontSize == prop.conFontSize;
             ret = ret && localFontSize == prop.localFontSize;

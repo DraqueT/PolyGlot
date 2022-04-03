@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -444,7 +444,7 @@ public class ConjugationGenRule implements Comparable<ConjugationGenRule> {
             ret = ret && (combinationId == null && compRule.combinationId == null) 
                     || combinationId.equals(compRule.combinationId);
             ret = ret && regex.equals(compRule.regex);
-            ret = ret && name.equals(compRule.name);
+            ret = ret && name.trim().equals(compRule.name.trim());
             ret = ret && transformations.equals(compRule.transformations);
             ret = ret && applyToClasses.equals(compRule.applyToClasses);
         }

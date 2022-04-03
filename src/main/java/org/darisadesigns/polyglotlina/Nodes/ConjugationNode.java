@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -37,7 +37,7 @@ import org.w3c.dom.Element;
  * @author draque
  */
 public class ConjugationNode extends DictNode {
-    private ConjugationManager manager;
+    private final ConjugationManager manager;
     private String notes = "";
     private String combinedDimId = "";
     private boolean dimensionless = false;
@@ -291,8 +291,8 @@ public class ConjugationNode extends DictNode {
         } else if (comp != null && getClass() == comp.getClass()) {
             ConjugationNode c = (ConjugationNode)comp;
             
-            ret = value.equals(c.value);
-            ret = ret && notes.equals(c.notes);
+            ret = value.trim().equals(c.value.trim());
+            ret = ret && WebInterface.getTextFromHtml(notes).equals(WebInterface.getTextFromHtml(c.notes));
             ret = ret && combinedDimId.equals(c.combinedDimId);
             ret = ret && dimensionless == c.dimensionless;
             ret = ret && highestDimension == c.highestDimension;

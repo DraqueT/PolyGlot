@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import org.darisadesigns.polyglotlina.WebInterface;
 
 /**
  *
@@ -221,10 +222,10 @@ public class FamNode extends DictNode {
         } else if (comp != null && getClass() == comp.getClass()) {
             FamNode c = (FamNode)comp;
             
-            ret = value.equals(c.value);
+            ret = value.trim().equals(c.value.trim());
             ret = ret && subNodes.equals(c.subNodes);
             ret = ret && words.equals(c.words);
-            ret = ret && notes.equals(c.notes);
+            ret = ret && WebInterface.getTextFromHtml(notes).equals(WebInterface.getTextFromHtml(c.notes));
         }
         
         return ret;

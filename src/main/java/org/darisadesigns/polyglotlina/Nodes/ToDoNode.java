@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -190,7 +190,7 @@ public class ToDoNode {
             ToDoNode compNode = (ToDoNode)comp;
             
             ret = isDone == compNode.isDone;
-            ret = ret && value.equals(compNode.value);
+            ret = ret && value.trim().equals(compNode.value.trim());
             ret = ret && children.equals(compNode.children);
         }
         

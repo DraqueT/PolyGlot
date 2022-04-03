@@ -804,9 +804,9 @@ public abstract class PropertiesManager {
             ret = ret && conFontSize == prop.conFontSize;
             ret = ret && localFontSize == prop.localFontSize;
             ret = ret && alphaOrder.equals(prop.alphaOrder);
-            ret = ret && langName.equals(prop.langName);
-            ret = ret && localLangName.equals(prop.localLangName);
-            ret = ret && copyrightAuthorInfo.equals(prop.copyrightAuthorInfo);
+            ret = ret && langName.trim().equals(prop.langName.trim());
+            ret = ret && localLangName.trim().equals(prop.localLangName.trim());
+            ret = ret && WebInterface.getTextFromHtml(copyrightAuthorInfo).equals(WebInterface.getTextFromHtml(prop.copyrightAuthorInfo));
             ret = ret && typesMandatory == prop.typesMandatory;
             ret = ret && localMandatory == prop.localMandatory;
             ret = ret && wordUniqueness == prop.wordUniqueness;
@@ -820,10 +820,10 @@ public abstract class PropertiesManager {
             ret = ret && kerningSpace.equals(prop.kerningSpace);
             ret = ret && useSimplifiedConjugations == prop.useSimplifiedConjugations;
             ret = ret && expandedLexListDisplay == prop.expandedLexListDisplay;
-            ret = ret && zompistCategories.equals(prop.zompistCategories);
-            ret = ret && zompistIllegalClusters.equals(prop.zompistIllegalClusters);
-            ret = ret && zompistRewriteRules.equals(prop.zompistRewriteRules);
-            ret = ret && zompistSyllableTypes.equals(prop.zompistSyllableTypes);
+            ret = ret && zompistCategories.trim().equals(prop.zompistCategories.trim());
+            ret = ret && zompistIllegalClusters.trim().equals(prop.zompistIllegalClusters.trim());
+            ret = ret && zompistRewriteRules.trim().equals(prop.zompistRewriteRules.trim());
+            ret = ret && zompistSyllableTypes.trim().equals(prop.zompistSyllableTypes.trim());
             ret = ret && zompistDropoffRate == prop.zompistDropoffRate;
             ret = ret && zompistMonosylableFrequency == prop.zompistMonosylableFrequency;
         }

@@ -50,6 +50,7 @@ import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammar
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.VisualStyleManager;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.OSHandler;
 import org.darisadesigns.polyglotlina.OSHandler.CoreUpdatedListener;
 import org.darisadesigns.polyglotlina.OSHandler.FileReadListener;
 import org.darisadesigns.polyglotlina.Screens.ScrAbout;
@@ -167,57 +168,7 @@ public final class PolyGlot {
 
                 // runs additional integration if on OSX system
                 if (PGTUtil.IS_OSX) {
-                    Desktop desk = Desktop.getDesktop();
-                    final ScrMainMenu staticScr = s;
-
-                    desk.setOpenFileHandler(e -> {
-                        List<File> files = e.getFiles();
-
-                        if (files.size() <= 0) {
-                            return;
-                        } else if (files.size() > 1) {
-                            polyGlot.getOSHandler().getInfoBox().info("File Limit", 
-                                    "PolyGlot can only open a single file at once.\nOpening first selected file:"
-                                    + files.get(0).getName());
-                        }
-
-                        try {
-                            // saveOrCancelTest to prevent accidental failure to save open languages
-                            if (polyGlot.getRootWindow().saveOrCancelTest()) {
-                                String filePath = files.get(0).getCanonicalPath();
-                                polyGlot.getRootWindow().openFileFromPath(filePath);
-                            }
-                        }
-                        catch (IOException | IllegalStateException ex) {
-                            polyGlot.getOSHandler().getInfoBox().error("File Read Error", 
-                                    "Unable to open file due to error:\n"
-                                    + ex.getLocalizedMessage());
-                        }
-                    });
-
-                    desk.setQuitHandler((QuitEvent e, QuitResponse response) -> {
-                        staticScr.dispose();
-                    });
-
-                    desk.setPreferencesHandler((PreferencesEvent e) -> {
-                        staticScr.showOptions();
-                    });
-
-                    desk.setAboutHandler((AboutEvent e) -> {
-                        DictCore _core = new DictCore(
-                                new DesktopPropertiesManager(), 
-                                osHandler, 
-                                new PGTUtil(), 
-                                new DesktopGrammarManager()
-                        );
-                        
-                        polyGlot.setCore(_core);
-                        ScrAbout.run(_core);
-                    });
-
-                    desk.setPrintFileHandler((PrintFilesEvent e) -> {
-                        staticScr.printToPdf();
-                    });
+                    setupMacOs(osHandler, s);
                 }
 
                 // if a recovery file exists, query user for action
@@ -275,6 +226,62 @@ public final class PolyGlot {
         });
     }
     
+    /**
+     * Sets up Mac OS integration
+     */
+    private static void setupMacOs(OSHandler osHandler, final ScrMainMenu staticScr) {
+        Desktop desk = Desktop.getDesktop();
+
+        desk.setOpenFileHandler(e -> {
+            List<File> files = e.getFiles();
+
+            if (files.size() <= 0) {
+                return;
+            } else if (files.size() > 1) {
+                polyGlot.getOSHandler().getInfoBox().info("File Limit", 
+                        "PolyGlot can only open a single file at once.\nOpening first selected file:"
+                        + files.get(0).getName());
+            }
+
+            try {
+                // saveOrCancelTest to prevent accidental failure to save open languages
+                if (polyGlot.getRootWindow().saveOrCancelTest()) {
+                    String filePath = files.get(0).getCanonicalPath();
+                    polyGlot.getRootWindow().openFileFromPath(filePath);
+                }
+            }
+            catch (IOException | IllegalStateException ex) {
+                polyGlot.getOSHandler().getInfoBox().error("File Read Error", 
+                        "Unable to open file due to error:\n"
+                        + ex.getLocalizedMessage());
+            }
+        });
+
+        desk.setQuitHandler((QuitEvent e, QuitResponse response) -> {
+            staticScr.dispose();
+        });
+
+        desk.setPreferencesHandler((PreferencesEvent e) -> {
+            staticScr.showOptions();
+        });
+
+        desk.setAboutHandler((AboutEvent e) -> {
+            DictCore _core = new DictCore(
+                    new DesktopPropertiesManager(), 
+                    osHandler, 
+                    new PGTUtil(), 
+                    new DesktopGrammarManager()
+            );
+
+            polyGlot.setCore(_core);
+            ScrAbout.run(_core);
+        });
+
+        desk.setPrintFileHandler((PrintFilesEvent e) -> {
+            staticScr.printToPdf();
+        });
+    }
+    
     private static void setupScaling() {
         Path p = Path.of(org.darisadesigns.polyglotlina.Desktop.PGTUtil.getDefaultDirectory()
                 + File.separator + org.darisadesigns.polyglotlina.Desktop.PGTUtil.POLYGLOT_INI);
@@ -283,17 +290,17 @@ public final class PolyGlot {
         }
         
         try {
-        String ini = Files.readString(p);
-        int loc = ini.indexOf("UiScale=");
-        
-        if (loc == -1) {
-            return;
-        }
-        
-        String value = ini.substring(loc + 8, loc + 9);
-        
-        System.setProperty("sun.java2d.uiScale", value);
-        } catch (Exception e) {
+            String ini = Files.readString(p);
+            int loc = ini.indexOf("UiScale=");
+
+            if (loc == -1) {
+                return;
+            }
+
+            String value = ini.substring(loc + 8, loc + 9);
+
+            System.setProperty("sun.java2d.uiScale", value);
+        } catch (IOException e) {
             System.out.println(e.getMessage());
         }
     }

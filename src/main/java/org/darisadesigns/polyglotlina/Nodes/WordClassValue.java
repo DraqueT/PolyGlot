@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -61,7 +61,7 @@ public class WordClassValue extends DictNode {
             ret = true;
         } else if (comp != null && getClass() == comp.getClass()) {
             WordClassValue c = (WordClassValue)comp;
-            ret = value.equals(c.value);
+            ret = value.trim().equals(c.value.trim());
         }
         
         return ret;

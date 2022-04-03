@@ -19,8 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-// TODO: Most of these tests
-
 import TestResources.DummyCore;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
@@ -84,6 +82,7 @@ public class ScrMainMenuTest {
                 | SecurityException | InvocationTargetException | ParserConfigurationException 
                 | TransformerException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
+            // e.printStackTrace();
             fail(e);
         } finally {
             File testFile = new File(testFileName);

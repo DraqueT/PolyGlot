@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -123,7 +123,7 @@ public class DesktopGrammarSectionNode extends DefaultMutableTreeNode implements
         } else if (comp instanceof DesktopGrammarSectionNode compSec) {
             DictCore core = PolyGlot.getPolyGlot().getCore();
             ret = WebInterface.archiveHTML(sectionText, core).equals(WebInterface.archiveHTML(compSec.sectionText, core));
-            ret = ret && name.equals(compSec.name);
+            ret = ret && name.trim().equals(compSec.name.trim());
             ret = ret && recordingId == compSec.recordingId;
         }
         
