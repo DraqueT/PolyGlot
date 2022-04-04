@@ -393,8 +393,7 @@ public final class PTextField extends JTextField implements CoreUpdateSubscripti
         }
 
         if (isDefaultText() && !defText.isEmpty()) {
-            float menuFontSize = (float)PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();
-            setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal().deriveFont(menuFontSize));
+            setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
             setForeground(Color.lightGray);
         } else {
             if (!overrideFont) {

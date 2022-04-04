@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2021, Draque Thompson
+ * Copyright (c) 2017-2022, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -27,8 +27,8 @@ import javax.swing.JTree;
  * @author draque.thompson
  */
 public class PTree extends JTree {
-    public PTree(Font menuFont, double fontSize, boolean nightMode) { // nightmode included for future expansion
-        super.setFont(menuFont.deriveFont((float)fontSize));
+    public PTree(Font menuFont, boolean nightMode) { // nightmode included for future expansion
+        super.setFont(menuFont);
         super.setCellRenderer(new PGTreeCellRenderer());
     }
 }

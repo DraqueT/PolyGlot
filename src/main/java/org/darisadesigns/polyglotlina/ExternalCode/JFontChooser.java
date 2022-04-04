@@ -511,15 +511,15 @@ public class JFontChooser extends JComponent
             int i;
             switch (e.getKeyCode())
             {
-                case KeyEvent.VK_UP:
+                case KeyEvent.VK_UP -> {
                     i = targetList.getSelectedIndex() - 1;
                     if (i < 0)
                     {
                         i = 0;
                     }
                     targetList.setSelectedIndex(i);
-                    break;
-                case KeyEvent.VK_DOWN:
+                }
+                case KeyEvent.VK_DOWN -> {
                     int listSize = targetList.getModel().getSize();
                     i = targetList.getSelectedIndex() + 1;
                     if (i >= listSize)
@@ -527,9 +527,9 @@ public class JFontChooser extends JComponent
                         i = listSize - 1;
                     }
                     targetList.setSelectedIndex(i);
-                    break;
-                default:
-                    break;
+                }
+                default -> {
+                }
             }
         }
     }
@@ -667,7 +667,6 @@ public class JFontChooser extends JComponent
 
     protected JDialog createDialog(Component parent)
     {
-        double menuFontSize = PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();
         boolean nightMode = PolyGlot.getPolyGlot().getOptionsManager().isNightMode();
         Frame frame = parent instanceof Frame ? (Frame) parent
             : (Frame) SwingUtilities.getAncestorOfClass(Frame.class, parent);
@@ -677,10 +676,10 @@ public class JFontChooser extends JComponent
         Action okAction = new DialogOKAction(dialog);
         Action cancelAction = new DialogCancelAction(dialog);
 
-        PButton okButton = new PButton(nightMode, menuFontSize);
+        PButton okButton = new PButton(nightMode);
         okButton.setAction(okAction);
         okButton.setFont(DEFAULT_FONT);
-        PButton cancelButton = new PButton(nightMode, menuFontSize);
+        PButton cancelButton = new PButton(nightMode);
         cancelButton.setAction(cancelAction);
         cancelButton.setFont(DEFAULT_FONT);
 

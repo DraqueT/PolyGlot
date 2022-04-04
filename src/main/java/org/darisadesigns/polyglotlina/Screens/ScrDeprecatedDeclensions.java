@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -89,7 +89,7 @@ public final class ScrDeprecatedDeclensions extends PDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnOk = new PButton(nightMode, menuFontSize);
+        btnOk = new PButton(nightMode);
         scrDeclensions = new javax.swing.JScrollPane();
         pnlDeclensions = new javax.swing.JPanel();
 

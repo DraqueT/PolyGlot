@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -210,12 +210,12 @@ public class ScrDeclensionGenSimple extends PDialog {
         jPanel2 = new javax.swing.JPanel();
         txtRegex = new PTextField(core, core.getPropertiesManager().isOverrideRegexFont(), "Replacement Regex");
         txtReplace = new PTextField(core, core.getPropertiesManager().isOverrideRegexFont(), "Replacement Text");
-        btnPrefix = new PButton(nightMode, menuFontSize);
-        btnPostfix = new PButton(nightMode, menuFontSize);
-        chkDisableForm = new PCheckBox(nightMode, menuFontSize);
+        btnPrefix = new PButton(nightMode);
+        btnPostfix = new PButton(nightMode);
+        chkDisableForm = new PCheckBox(nightMode);
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstCombinedDec = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
+        lstCombinedDec = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 

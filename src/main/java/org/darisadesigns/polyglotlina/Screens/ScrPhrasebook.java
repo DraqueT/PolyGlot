@@ -33,9 +33,7 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
-import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.ManagersCollections.PhraseManager;
 import org.darisadesigns.polyglotlina.Nodes.PhraseNode;
@@ -143,8 +141,7 @@ public class ScrPhrasebook extends PFrame {
             }
         });
         
-        float fontSize = (float)((DesktopOptionsManager)PolyGlot.getPolyGlot().getOptionsManager()).getMenuFontSize();
-        Font charis = PGTUtil.CHARIS_UNICODE.deriveFont(fontSize);
+        Font charis = PGTUtil.CHARIS_UNICODE;
         btnUp.setFont(charis);
         btnDown.setFont(charis);
     }
@@ -280,12 +277,12 @@ public class ScrPhrasebook extends PFrame {
         txtPronunciation = new PTextPane(core, true, "-- Pronunciation Guide --");
         jScrollPane5 = new javax.swing.JScrollPane();
         txtNotes = new PTextPane(core, true, "-- Phrase Notes --");
-        chkOverrideProc = new PCheckBox(nightMode, menuFontSize);
+        chkOverrideProc = new PCheckBox(nightMode);
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         lstPhrases = new javax.swing.JList<>();
-        btnUp = new PButton(false, (((DesktopOptionsManager)PolyGlot.getPolyGlot().getOptionsManager()).getMenuFontSize()));
-        btnDown = new PButton(false, (((DesktopOptionsManager)PolyGlot.getPolyGlot().getOptionsManager()).getMenuFontSize()));
+        btnUp = new PButton(false);
+        btnDown = new PButton(false);
         btnAdd = new PAddRemoveButton("+");
         btnDelete = new PAddRemoveButton("-");
 

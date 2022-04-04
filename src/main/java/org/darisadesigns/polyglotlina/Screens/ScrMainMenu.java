@@ -145,7 +145,7 @@ public final class ScrMainMenu extends PFrame {
 
         for (var i = 0;; i++) {
             try {
-                toDoTree = new PToDoTree(nightMode, menuFontSize);
+                toDoTree = new PToDoTree(nightMode);
                 cacheLexicon = ScrLexicon.run(core, this);
 
                 setupEasterEgg();
@@ -896,7 +896,7 @@ public final class ScrMainMenu extends PFrame {
         int toDoPosition = PolyGlot.getPolyGlot().getOptionsManager().getToDoBarPosition();
 
         javax.swing.JScrollPane jScrollPane = new javax.swing.JScrollPane();
-        toDoTree = new PToDoTree(nightMode, menuFontSize);
+        toDoTree = new PToDoTree(nightMode);
         toDoTree.setToolTipText("To-Do list. Right click to add, remove, or rename tasks. Tasks can contain subtasks.");
 
         toDoTree.setSelectionModel(null);
@@ -1521,16 +1521,16 @@ public final class ScrMainMenu extends PFrame {
         pnlToDo = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         pnlSideButtons = new javax.swing.JPanel();
-        btnLexicon = new PButton(nightMode, menuFontSize);
-        btnPos = new PButton(nightMode, menuFontSize);
-        btnClasses = new PButton(nightMode, menuFontSize);
-        btnGrammar = new PButton(nightMode, menuFontSize);
-        btnLogos = new PButton(nightMode, menuFontSize);
-        btnProp = new PButton(nightMode, menuFontSize);
-        btnPhonology = new PButton(nightMode, menuFontSize);
-        btnQuiz = new PButton(nightMode, menuFontSize);
-        btnPhrasebook = new PButton(nightMode, menuFontSize);
-        btnZompistWordGenerator = new PButton(nightMode, menuFontSize);
+        btnLexicon = new PButton(nightMode);
+        btnPos = new PButton(nightMode);
+        btnClasses = new PButton(nightMode);
+        btnGrammar = new PButton(nightMode);
+        btnLogos = new PButton(nightMode);
+        btnProp = new PButton(nightMode);
+        btnPhonology = new PButton(nightMode);
+        btnQuiz = new PButton(nightMode);
+        btnPhrasebook = new PButton(nightMode);
+        btnZompistWordGenerator = new PButton(nightMode);
         pnlMain = new javax.swing.JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -1540,13 +1540,13 @@ public final class ScrMainMenu extends PFrame {
                 }
             }
         };
-        jLabel1 = new PLabel("", menuFontSize);
+        jLabel1 = new PLabel("");
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         pnlStartButtons = new javax.swing.JPanel();
-        btnOpenLang = new PButton(nightMode, menuFontSize);
-        btnOpenManual = new PButton(nightMode, menuFontSize);
-        btnNewLang = new PButton(nightMode, menuFontSize) {
+        btnOpenLang = new PButton(nightMode);
+        btnOpenManual = new PButton(nightMode);
+        btnNewLang = new PButton(nightMode) {
             @Override
             public void repaint() {
                 scaleWelcomWindow();

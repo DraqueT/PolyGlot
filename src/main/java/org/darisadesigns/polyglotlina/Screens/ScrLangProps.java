@@ -59,9 +59,7 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellRenderer;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTable;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextFieldFilter;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
-import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -89,8 +87,7 @@ public class ScrLangProps extends PFrame {
         populateProperties();
         setAlphaLegal();
         
-        float fontSize = (float)((DesktopOptionsManager)PolyGlot.getPolyGlot().getOptionsManager()).getMenuFontSize();
-        Font charis = PGTUtil.CHARIS_UNICODE.deriveFont(fontSize);
+        Font charis = PGTUtil.CHARIS_UNICODE;
         btnAlphaUp.setFont(charis);
         btnAlphaDown.setFont(charis);
         chkTypesMandatory.setEnabled(!core.getTypes().getAllValues().isEmpty());
@@ -628,19 +625,19 @@ public class ScrLangProps extends PFrame {
         btnChangeFont = new PButtonDropdown(getConFontPopupMenu());
         txtFont = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
-        chkTypesMandatory = new PCheckBox(nightMode, menuFontSize);
-        chkLocalMandatory = new PCheckBox(nightMode, menuFontSize);
-        chkWordUniqueness = new PCheckBox(nightMode, menuFontSize);
-        chkLocalUniqueness = new PCheckBox(nightMode, menuFontSize);
-        chkIgnoreCase = new PCheckBox(nightMode, menuFontSize);
-        chkDisableProcRegex = new PCheckBox(nightMode, menuFontSize);
-        chkEnforceRTL = new PCheckBox(nightMode, menuFontSize);
-        jLabel2 = new PLabel("", menuFontSize);
-        chkOverrideRegexFont = new PCheckBox(nightMode, menuFontSize);
-        chkUseLocalWordLex = new PCheckBox(nightMode, menuFontSize);
-        chkExpandedLexList = new PCheckBox(nightMode, menuFontSize);
+        chkTypesMandatory = new PCheckBox(nightMode);
+        chkLocalMandatory = new PCheckBox(nightMode);
+        chkWordUniqueness = new PCheckBox(nightMode);
+        chkLocalUniqueness = new PCheckBox(nightMode);
+        chkIgnoreCase = new PCheckBox(nightMode);
+        chkDisableProcRegex = new PCheckBox(nightMode);
+        chkEnforceRTL = new PCheckBox(nightMode);
+        jLabel2 = new PLabel("");
+        chkOverrideRegexFont = new PCheckBox(nightMode);
+        chkUseLocalWordLex = new PCheckBox(nightMode);
+        chkExpandedLexList = new PCheckBox(nightMode);
         jPanel4 = new javax.swing.JPanel();
-        jLabel1 = new PLabel("", menuFontSize);
+        jLabel1 = new PLabel("");
         txtKerning = new javax.swing.JFormattedTextField(decimalFormat);
         btnFontLocal = new PButtonDropdown(getLocalFontPopupMenu());
         txtLocalFont = new javax.swing.JTextField();
@@ -656,9 +653,9 @@ public class ScrLangProps extends PFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblAlphabet = new PTable(core);
-        jLabel4 = new javax.swing.JLabel();
-        btnAlphaUp = new PButton(nightMode, menuFontSize);
-        btnAlphaDown = new PButton(nightMode, menuFontSize);
+        jLabel4 = new PLabel("");
+        btnAlphaUp = new PButton(nightMode);
+        btnAlphaDown = new PButton(nightMode);
         btnDeleteAlpha = new PAddRemoveButton("-");
         btnAddAlpha = new PAddRemoveButton("+");
 

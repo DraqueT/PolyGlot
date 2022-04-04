@@ -229,7 +229,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Select to enforce selection of a part of speech on each created word."/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkLocalMandatory">
@@ -238,7 +238,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Select to enforce mandatory values for local word equivalents."/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkWordUniqueness">
@@ -247,7 +247,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Select to enforce mandatory uniqueness of each word"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkLocalUniqueness">
@@ -256,7 +256,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Select to enforce mandatory uniqueness for local word equivalents."/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkIgnoreCase">
@@ -268,7 +268,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkIgnoreCaseActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkDisableProcRegex">
@@ -280,7 +280,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkDisableProcRegexActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkEnforceRTL">
@@ -292,7 +292,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkEnforceRTLActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel2">
@@ -301,7 +301,7 @@
                 <Property name="text" type="java.lang.String" value="Language Toggles"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkOverrideRegexFont">
@@ -310,7 +310,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="This overrides the font of all display elements within PolyGlot to show a default font (if your script makes regexes hard to work with)"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkUseLocalWordLex">
@@ -319,7 +319,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Display the local word rather than the conlang word in the lexicon display"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkExpandedLexList">
@@ -328,7 +328,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Show both the conword and local definition side by side in the lexicon list display"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize);"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode)"/>
               </AuxValues>
             </Component>
           </SubComponents>
@@ -375,7 +375,7 @@
                 <Property name="text" type="java.lang.String" value="Kerning"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JFormattedTextField" name="txtKerning">
@@ -586,6 +586,9 @@
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" value="Alphabetic Order"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;)"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="btnAlphaUp">
           <Properties>
@@ -599,7 +602,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAlphaUpActionPerformed"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode)"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="btnAlphaDown">
@@ -611,7 +614,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAlphaDownActionPerformed"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode)"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="btnDeleteAlpha">

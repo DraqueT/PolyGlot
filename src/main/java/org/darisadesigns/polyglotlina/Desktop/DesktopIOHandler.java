@@ -414,7 +414,7 @@ public final class DesktopIOHandler implements IOHandler {
     )
             throws IOException, TransformerException {
         File finalFile = new File(_fileName);
-        String writeLog = "";
+        String writeLog;
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
 
@@ -472,7 +472,7 @@ public final class DesktopIOHandler implements IOHandler {
      * Creates raw output file (processed for safety/security upstream)
      */
     private String writeRawFileOutput(File tmpSaveLocation, byte[] xmlData, DictCore core) throws FileNotFoundException, IOException {
-        String writeLog = "";
+        String writeLog;
         
         try (FileOutputStream fileOutputStream = new FileOutputStream(tmpSaveLocation)) {
             try ( ZipOutputStream out = new ZipOutputStream(fileOutputStream, StandardCharsets.UTF_8)) {
@@ -1003,9 +1003,6 @@ public final class DesktopIOHandler implements IOHandler {
 
             nextLine = PGTUtil.OPTIONS_AUTO_RESIZE + "="
                     + (opMan.isAnimateWindows() ? PGTUtil.TRUE : PGTUtil.FALSE);
-            f0.write(nextLine + newLine);
-
-            nextLine = PGTUtil.OPTIONS_MENU_FONT_SIZE + "=" + opMan.getMenuFontSize();
             f0.write(nextLine + newLine);
 
             nextLine = PGTUtil.OPTIONS_NIGHT_MODE + "="

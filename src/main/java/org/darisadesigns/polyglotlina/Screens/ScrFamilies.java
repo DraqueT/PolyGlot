@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -430,12 +430,12 @@ public final class ScrFamilies extends PFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        treFam = new PTree(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize, nightMode);
+        treFam = new PTree(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), nightMode);
         jPanel1 = new javax.swing.JPanel();
-        chkInclSubFam = new PCheckBox(nightMode, menuFontSize);
+        chkInclSubFam = new PCheckBox(nightMode);
         jScrollPane3 = new javax.swing.JScrollPane();
         lstWords = new javax.swing.JList<>();
-        jLabel1 = new PLabel("", menuFontSize);
+        jLabel1 = new PLabel("");
         btnAddWord = new PAddRemoveButton("+");
         btnDelWord = new PAddRemoveButton("-");
         txtFamName = new PTextField(core, true, "Name");

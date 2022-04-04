@@ -61,7 +61,7 @@ public final class ExampleCheckboxDropdown extends JPanel {
         p.add(new JComboBox<>(m));
         p.add(Box.createVerticalStrut(20));
         p.add(new JLabel("CheckedComboBox:"));
-        p.add(new PCheckedComboBox<>(new PDefaultComboBoxModel<>(m), false, 12));
+        p.add(new PCheckedComboBox<>(new PDefaultComboBoxModel<>(m), false));
 
         add(p, BorderLayout.NORTH);
         setPreferredSize(new Dimension(320, 240));

@@ -81,7 +81,6 @@ public class DesktopOptionsManagerTest {
 
             opt.setAnimateWindows(animatedExpected);
             opt.setMaxReversionCount(reversionCountExpected);
-            opt.setMenuFontSize(menuFontExpected);
             opt.setNightMode(nightModeExpected);
             opt.setScreenPosition(testScreenName, expectedScreenPosition);
             opt.setScreenSize(testScreenName, expectedScreenDimension);
@@ -102,7 +101,6 @@ public class DesktopOptionsManagerTest {
             
             assertEquals(animatedExpected, opt.isAnimateWindows());
             assertEquals(reversionCountExpected, opt.getMaxReversionCount());
-            assertEquals(menuFontExpected, opt.getMenuFontSize());
             assertEquals(nightModeExpected, opt.isNightMode());
             assertEquals(expectedScreenPosition, opt.getScreenPosition(testScreenName));
             assertEquals(expectedScreenDimension, opt.getScreenSize(testScreenName));

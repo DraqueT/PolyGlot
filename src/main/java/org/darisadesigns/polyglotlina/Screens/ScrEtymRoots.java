@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -122,7 +122,7 @@ public final class ScrEtymRoots extends PDialog {
         parents.stream().map((final var extPar) -> {
             JPanel miniPanel = new JPanel();
             final PTextField p = new PTextField(core, true, "");
-            PButton delButton = new PButton(nightMode, menuFontSize);
+            PButton delButton = new PButton(nightMode);
             p.setEditable(false);
             if (extPar.getExternalLanguage().isEmpty()) {
                 p.setText(extPar.getValue());
@@ -203,7 +203,7 @@ public final class ScrEtymRoots extends PDialog {
         });
 
         // create and add button to add new external parents
-        PButton addButton = new PButton(nightMode, menuFontSize);
+        PButton addButton = new PButton(nightMode);
         addButton.setText("+");
         addButton.setToolTipText("Add new etymological parent to lineage");
         final Window parentScreen = this;
@@ -288,7 +288,7 @@ public final class ScrEtymRoots extends PDialog {
         for (Integer parentId : core.getEtymologyManager().getWordParentsIds(word.getId())) {
             JPanel miniPanel = new JPanel();
             final PTextField textField = new PTextField(core, false, "");
-            PButton delButton = new PButton(nightMode, menuFontSize);
+            PButton delButton = new PButton(nightMode);
 
             // this field holds the text from a parent value
             textField.setEditable(false);
@@ -370,24 +370,24 @@ public final class ScrEtymRoots extends PDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblWord = new PLabel(word.getValue(), menuFontSize);
-        jLabel1 = new PLabel("", menuFontSize);
+        lblWord = new PLabel(word.getValue());
+        jLabel1 = new PLabel("");
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtEtyFamily = new javax.swing.JTextArea();
-        jLabel4 = new PLabel("", menuFontSize);
+        jLabel4 = new PLabel("");
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtNotes = new PTextPane(core, true, "-- Etymological Notes --");
         jSplitPane2 = new javax.swing.JSplitPane();
         jPanel3 = new javax.swing.JPanel();
-        jLabel2 = new PLabel("", menuFontSize);
+        jLabel2 = new PLabel("");
         pnlParentsInt = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        jLabel3 = new PLabel("", menuFontSize);
+        jLabel3 = new PLabel("");
         pnlParentsExt = new javax.swing.JPanel();
-        btnOK = new PButton(nightMode, menuFontSize);
+        btnOK = new PButton(nightMode);
 
         setTitle("Etymology Setup and Graphical Tree");
         setMinimumSize(new java.awt.Dimension(0, 425));

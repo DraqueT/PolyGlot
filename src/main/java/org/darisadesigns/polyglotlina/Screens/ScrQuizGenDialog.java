@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -153,24 +153,24 @@ public final class ScrQuizGenDialog extends PFrame {
     private void initComponents() {
 
         jPanel3 = new javax.swing.JPanel();
-        btnQuiz = new PButton(nightMode, menuFontSize);
+        btnQuiz = new PButton(nightMode);
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         txtFilterConWord = new PTextField(core, false, core.conLabel() + " Filter");
         txtFilterLocalWord = new PTextField(core, true, core.localLabel() + " Filter");
         cmbFilterType = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         txtFilterProc = new PTextField(core, true, "Pronunciation Filter");
-        btnClearFilter = new PButton(nightMode, menuFontSize);
-        jLabel1 = new PLabel("", menuFontSize);
-        jLabel2 = new PLabel("", menuFontSize);
+        btnClearFilter = new PButton(nightMode);
+        jLabel1 = new PLabel("");
+        jLabel2 = new PLabel("");
         txtNumQuestions = new javax.swing.JTextField();
-        jLabel3 = new PLabel("", menuFontSize);
-        chkDefQuiz = new PCheckBox(nightMode, menuFontSize);
-        chkProcQuiz = new PCheckBox(nightMode, menuFontSize);
-        chkClassQuiz = new PCheckBox(nightMode, menuFontSize);
-        chkTypeQuiz = new PCheckBox(nightMode, menuFontSize);
-        chkLocalQuiz = new PCheckBox(nightMode, menuFontSize);
-        chkConlangQuiz = new PCheckBox(nightMode, menuFontSize);
+        jLabel3 = new PLabel("");
+        chkDefQuiz = new PCheckBox(nightMode);
+        chkProcQuiz = new PCheckBox(nightMode);
+        chkClassQuiz = new PCheckBox(nightMode);
+        chkTypeQuiz = new PCheckBox(nightMode);
+        chkLocalQuiz = new PCheckBox(nightMode);
+        chkConlangQuiz = new PCheckBox(nightMode);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Quiz Generator");

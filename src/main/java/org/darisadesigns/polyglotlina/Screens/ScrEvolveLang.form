@@ -104,7 +104,7 @@
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize())"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;)"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="txtConWordFilter">
@@ -192,7 +192,7 @@
             <Property name="text" type="java.lang.String" value="Options"/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize())"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;)"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JSlider" name="sldApplyTo">
@@ -213,7 +213,7 @@
             <Property name="text" type="java.lang.String" value="Apply to: 100% of words"/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize())"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;)"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JComboBox" name="cmbTransformOptions">
@@ -264,7 +264,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
       </Events>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(false, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize())"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(false)"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="jButton2">
@@ -276,7 +276,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
       </Events>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(false, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize())"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(false)"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
@@ -284,7 +284,7 @@
         <Property name="text" type="java.lang.String" value="This tool allows you to create linguistic drift."/>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;Use this tool to simulate linguistic drift.&quot;, PLabel.CENTER, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize())"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;Use this tool to simulate linguistic drift.&quot;)"/>
       </AuxValues>
     </Component>
     <Container class="javax.swing.JPanel" name="jPanel3">
@@ -344,7 +344,7 @@
             <Property name="text" type="java.lang.String" value="Transformation Pattern and Replacement Text"/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize())"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;)"/>
           </AuxValues>
         </Component>
       </SubComponents>

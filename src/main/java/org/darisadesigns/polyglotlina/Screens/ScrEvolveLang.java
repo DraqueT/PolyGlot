@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -113,25 +113,25 @@ public final class ScrEvolveLang extends PDialog {
 
         rdoGrpApplyTo = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new PLabel("", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        jLabel1 = new PLabel("");
         txtConWordFilter = new PTextField(core, false, "ConWord Filter");
         txtLocalWordFilter = new PTextField(core, true, core.getPropertiesManager().getLocalLangName() + " Filter");
         cmbPoS = new PComboBox<TypeNode>( ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), "Part of Speech");
         jPanel2 = new javax.swing.JPanel();
-        jLabel2 = new PLabel("", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        jLabel2 = new PLabel("");
         sldApplyTo = new javax.swing.JSlider();
-        lblApplyTo = new PLabel("", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        lblApplyTo = new PLabel("");
         cmbTransformOptions = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         rdoLexicon = new javax.swing.JRadioButton();
         rdoConjpatterns = new javax.swing.JRadioButton();
         rdoBoth = new javax.swing.JRadioButton();
-        jButton1 = new PButton(false, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
-        jButton2 = new PButton(false, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
-        jLabel4 = new PLabel("Use this tool to simulate linguistic drift.", PLabel.CENTER, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        jButton1 = new PButton(false);
+        jButton2 = new PButton(false);
+        jLabel4 = new PLabel("Use this tool to simulate linguistic drift.");
         jPanel3 = new javax.swing.JPanel();
         txtReplace = new PTextField(core, false, "Replacement");
         txtPattern = new PTextField(core, false, "Target Pattern");
-        jLabel3 = new PLabel("", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        jLabel3 = new PLabel("");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);

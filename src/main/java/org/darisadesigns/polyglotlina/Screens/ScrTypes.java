@@ -431,18 +431,18 @@ public final class ScrTypes extends PFrame {
         txtTypePattern = new PTextField(core,
             core.getPropertiesManager().isOverrideRegexFont(),
             "Enforced Pattern");
-        btnSetup = new PButton(nightMode, menuFontSize);
-        btnAutogen = new PButton(nightMode, menuFontSize);
+        btnSetup = new PButton(nightMode);
+        btnAutogen = new PButton(nightMode);
         txtErrorBox = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
-        chkDefMand = new PCheckBox(nightMode, menuFontSize);
-        chkProcMand = new PCheckBox(nightMode, menuFontSize);
+        chkDefMand = new PCheckBox(nightMode);
+        chkProcMand = new PCheckBox(nightMode);
         txtGloss = new PTextField(core, true, "Part of Speech Gloss");
         jScrollPane3 = new javax.swing.JScrollPane();
         txtNotes = new PTextPane(core, true, "-- Notes --");
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstTypes = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
+        lstTypes = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
         btnAddType = new PAddRemoveButton("+");
         btnDelType = new PAddRemoveButton("-");
 

@@ -20,20 +20,17 @@
 package org.darisadesigns.polyglotlina.Desktop.ManagersCollections;
 
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.PGTUtil;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.UIManager;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 
 /**
  * This contains, loads and saves the options for PolyGlot (NOT for individual languages)
@@ -50,16 +47,16 @@ public class DesktopOptionsManager {
     private final Map<String, Integer> dividerPosition = new HashMap<>();
     private boolean maximized = false;
     private final List<String> screensUp = new ArrayList<>();
-    private Double menuFontSize = 0.0;
     private int toDoBarPosition = -1;
     private DictCore core;
-    private javafx.scene.text.Font menuFontFX;
+    private final javafx.scene.text.Font menuFontFX;
     private int msBetweenSaves;
     private int uiScale = 2;
 
     public DesktopOptionsManager() {
         msBetweenSaves = PGTUtil.DEFAULT_MS_BETWEEN_AUTO_SAVES;
-        this.setupFXMenuFont();
+        java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(PGTUtil.MENU_FONT);
+        menuFontFX = javafx.scene.text.Font.font(PGTUtil.MENU_FONT.getFamily(), PGTUtil.DEFAULT_FONT_SIZE);
     }
     
     public DesktopOptionsManager(DictCore _core) {
@@ -81,34 +78,11 @@ public class DesktopOptionsManager {
         screenPos.clear();
         screenSize.clear();
         screensUp.clear();
-        menuFontSize = 0.0;
         toDoBarPosition = -1;
         uiScale = 2;
         
         if (core != null) {
             core.getReversionManager().setMaxReversionCount(PGTUtil.DEFAULT_MAX_ROLLBACK_NUM);
-        }
-    }
-    
-    public double getMenuFontSize() {
-        return menuFontSize == 0.0 ? PGTUtil.DEFAULT_FONT_SIZE : menuFontSize;
-    }
-    
-    public void setMenuFontSize(double _size) {
-        menuFontSize = _size;
-        setDefaultJavaFontSize(_size);
-        this.setupFXMenuFont();
-    }
-    
-    private void setDefaultJavaFontSize(double size) {
-        java.util.Enumeration keys = UIManager.getDefaults().keys();
-        while (keys.hasMoreElements()) {
-            Object key = keys.nextElement();
-            Font newFont = UIManager.getFont(key);
-            
-            if (newFont != null) {
-                UIManager.put(key, newFont.deriveFont((float)size));
-            }
         }
     }
     
@@ -311,12 +285,6 @@ public class DesktopOptionsManager {
     public javafx.scene.text.Font getFXMenuFont() {
         return menuFontFX;
     }
-    
-    
-    private void setupFXMenuFont() {
-        InputStream is = this.getClass().getResourceAsStream(PGTUtil.BUTTON_FONT_LOCATION);
-        this.menuFontFX = javafx.scene.text.Font.loadFont(is, menuFontSize);
-    }
 
     public int getMsBetweenSaves() {
         return msBetweenSaves;
@@ -429,8 +397,6 @@ public class DesktopOptionsManager {
                         setAnimateWindows(bothVal[1].equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.TRUE));
                     case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_MAXIMIZED ->
                         setMaximized(bothVal[1].equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.TRUE));
-                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_MENU_FONT_SIZE ->
-                        setMenuFontSize(Double.parseDouble(bothVal[1]));
                     case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_NIGHT_MODE ->
                         setNightMode(bothVal[1].equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.TRUE));
                     case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_REVERSIONS_COUNT ->
@@ -439,10 +405,7 @@ public class DesktopOptionsManager {
                         setToDoBarPosition(Integer.parseInt(bothVal[1]));
                     case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_UI_SCALE ->
                         setUiScale(Integer.parseInt(bothVal[1]));
-                    case "\n" -> {
-                    }
-                    default ->
-                        loadProblems += "Unrecognized value: " + bothVal[0] + " in PolyGlot.ini." + "\n";
+                    default -> {}
                 }
             }
 

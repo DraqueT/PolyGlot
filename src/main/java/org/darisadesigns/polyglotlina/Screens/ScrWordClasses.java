@@ -158,7 +158,7 @@ public final class ScrWordClasses extends PFrame {
         gbc.weighty = 1;
         
         if (types.length > 0) {
-            final PCheckBox checkAll = new PCheckBox(nightMode, menuFontSize);
+            final PCheckBox checkAll = new PCheckBox(nightMode);
             checkAll.setText("All");
 
             checkAll.addItemListener(new ItemListener() {
@@ -193,7 +193,7 @@ public final class ScrWordClasses extends PFrame {
 
         for (TypeNode curNode : types) {
             final int typeId = curNode.getId();
-            final PCheckBox checkType = new PCheckBox(nightMode, menuFontSize);
+            final PCheckBox checkType = new PCheckBox(nightMode);
             
             checkType.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
             checkType.setText(curNode.getValue());
@@ -442,7 +442,7 @@ public final class ScrWordClasses extends PFrame {
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstProperties = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
+        lstProperties = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
         btnAddProp = new PAddRemoveButton("+");
         btnDelProp = new PAddRemoveButton("-");
         jPanel1 = new javax.swing.JPanel();
@@ -452,8 +452,8 @@ public final class ScrWordClasses extends PFrame {
         pnlTypes = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblValues = new javax.swing.JTable();
-        chkFreeText = new PCheckBox(nightMode, menuFontSize);
-        chkAssociative = new PCheckBox(false, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        chkFreeText = new PCheckBox(nightMode);
+        chkAssociative = new PCheckBox(false);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Word Classes");

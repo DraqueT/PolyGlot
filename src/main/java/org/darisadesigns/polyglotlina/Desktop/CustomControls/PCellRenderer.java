@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -34,7 +34,6 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableCellRenderer;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -135,7 +134,7 @@ public final class PCellRenderer implements TableCellRenderer {
                 ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
         fontSize = useConFont ? 
                 preSize :
-                PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();
+                PGTUtil.DEFAULT_FONT_SIZE;
         
         myFont = PGTUtil.addFontAttribute(TextAttribute.SIZE, (float)fontSize, selectedFont);
     }

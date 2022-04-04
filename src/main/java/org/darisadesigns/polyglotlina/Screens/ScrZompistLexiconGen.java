@@ -903,8 +903,8 @@ public class ScrZompistLexiconGen extends PFrame {
         jPanel4 = new javax.swing.JPanel();
         rdoGenWords = new PRadioButton();
         rdoGenSyllables = new PRadioButton();
-        chkShowSyllables = new PCheckBox(false, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
-        chkSlowSyllableDropoff = new PCheckBox(false, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        chkShowSyllables = new PCheckBox(false);
+        chkSlowSyllableDropoff = new PCheckBox(false);
         jPanel5 = new javax.swing.JPanel();
         lblDropoff = new PLabel();
         sldDropoff = new javax.swing.JSlider();

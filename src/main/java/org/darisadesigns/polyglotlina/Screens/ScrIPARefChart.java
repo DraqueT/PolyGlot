@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -34,7 +34,6 @@ import java.util.Map;
 import javax.swing.JComponent;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.PGTUtil;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -149,16 +148,16 @@ public final class ScrIPARefChart extends PFrame {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        lblVowels = new PLabel("", 0);
+        lblVowels = new PLabel("");
         jPanel2 = new javax.swing.JPanel();
-        lblPulmonicConsonants = new PLabel("",0);
+        lblPulmonicConsonants = new PLabel("");
         jPanel3 = new javax.swing.JPanel();
-        lblNonPulmonicConsonants = new PLabel("",0);
+        lblNonPulmonicConsonants = new PLabel("");
         jPanel4 = new javax.swing.JPanel();
-        lblOtherSymbols = new PLabel("",0);
+        lblOtherSymbols = new PLabel("");
         txtIPAChars = new javax.swing.JTextField();
         cmbIpaLibSelect = new PComboBox<IPALibrary>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
-        lblHover = new PLabel("Hover over an IPA character to display which characters in your language express it.", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        lblHover = new PLabel("Hover over an IPA character to display which characters in your language express it.");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("IPA Pronunciation/Character Guide");

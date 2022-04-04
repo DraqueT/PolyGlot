@@ -30,7 +30,6 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import javax.swing.JCheckBox;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.VisualStyleManager;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  * Custom PolyGlot implementation of checkbox
@@ -42,12 +41,12 @@ public class PCheckBox extends JCheckBox implements MouseListener {
     private final boolean nightMode;
     
     public PCheckBox() {
-        this(false, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        this(false);
     }
     
-    public PCheckBox(boolean _nightMode, double fontSize) {
+    public PCheckBox(boolean _nightMode) {
         nightMode = _nightMode;
-        super.setFont(PGTUtil.MENU_FONT.deriveFont((float)fontSize));
+        super.setFont(PGTUtil.MENU_FONT);
         setupListeners();
     }
     

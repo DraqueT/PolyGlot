@@ -871,7 +871,7 @@ public final class ScrGrammarGuide extends PFrame {
         cmbFonts = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
         txtFontSize = new javax.swing.JTextField();
         cmbFontColor = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
-        btnApply = new PButton(nightMode, menuFontSize);
+        btnApply = new PButton(nightMode);
         panSection = new javax.swing.JScrollPane();
         txtSection = new PGrammarPane(core);
         jPanel4 = new javax.swing.JPanel();
@@ -884,12 +884,12 @@ public final class ScrGrammarGuide extends PFrame {
         btnDeleteRecordedAudio = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        treChapList = new PTree(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize, nightMode);
+        treChapList = new PTree(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), nightMode);
         txtSearch = new PTextField(core, true, "Search");
-        jLabel1 = new PLabel("", menuFontSize);
+        jLabel1 = new PLabel("");
         btnAddSection = new PAddRemoveButton("+");
         btnDelete = new PAddRemoveButton("-");
-        btnAddChapter = new PButton(nightMode, menuFontSize);
+        btnAddChapter = new PButton(nightMode);
         btnMoveNodeDown = new PButton();
         btnMoveNodeUp = new PButton();
 

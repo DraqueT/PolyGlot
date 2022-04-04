@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson - draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson - draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -62,12 +62,10 @@ public abstract class PFrame extends JFrame implements FocusListener {
     protected int frameState = -1;
     private boolean firstVisible = true;
     private boolean curResizing;
-    protected final double menuFontSize;
     protected final boolean nightMode;
 
     protected PFrame(DictCore _core) {
         core = _core;
-        menuFontSize = PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();
         nightMode = PolyGlot.getPolyGlot().getOptionsManager().isNightMode();
         this.addWindowStateListener(this::setWindowState);
         this.setupOS();
@@ -76,7 +74,6 @@ public abstract class PFrame extends JFrame implements FocusListener {
     protected PFrame(DictCore _core, WindowMode _mode) {
         core = _core;
         mode = _mode;
-        menuFontSize = PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();
         nightMode = PolyGlot.getPolyGlot().getOptionsManager().isNightMode();
         this.addWindowStateListener(this::setWindowState);
         this.setupOS();

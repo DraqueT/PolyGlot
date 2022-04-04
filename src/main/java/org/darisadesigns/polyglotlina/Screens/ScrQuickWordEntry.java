@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -44,6 +44,8 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 
@@ -391,11 +393,11 @@ public final class ScrQuickWordEntry extends PDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        chkLocal = new javax.swing.JCheckBox();
-        chkType = new javax.swing.JCheckBox();
-        chkProc = new javax.swing.JCheckBox();
-        chkDefinition = new javax.swing.JCheckBox();
-        chkClasses = new javax.swing.JCheckBox();
+        chkLocal = new PCheckBox();
+        chkType = new PCheckBox();
+        chkProc = new PCheckBox();
+        chkDefinition = new PCheckBox();
+        chkClasses = new PCheckBox();
         jPanel2 = new javax.swing.JPanel();
         txtConWord = new PTextField(core, false, core.conLabel() + " word");
         txtLocalWord = new PTextField(core, true, core.localLabel() + " word");
@@ -404,8 +406,8 @@ public final class ScrQuickWordEntry extends PDialog {
         pnlClasses = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtDefinition = new PTextPane(core, true, "-- Definition --");
-        btnDone = new PButton(nightMode, menuFontSize);
-        jLabel7 = new javax.swing.JLabel();
+        btnDone = new PButton(nightMode);
+        jLabel7 = new PLabel("");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Word Quickentry");

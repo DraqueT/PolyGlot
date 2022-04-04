@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2018-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -51,7 +51,6 @@ public class PClassCheckboxPanel extends JPanel {
     private PCheckBox allCheckBox = null;
     private final boolean includeAll;
     private final boolean nightMode;
-    private final double fontSize;
     private final Font checkBoxFont;
     
     /**
@@ -64,7 +63,6 @@ public class PClassCheckboxPanel extends JPanel {
         type = _type;
         includeAll = _includeAll;
         nightMode = PolyGlot.getPolyGlot().getOptionsManager().isNightMode();
-        fontSize = PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();
         checkBoxFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
         this.init(core);
     }
@@ -86,7 +84,7 @@ public class PClassCheckboxPanel extends JPanel {
             gbc.gridy = 0;
             gbc.anchor = GridBagConstraints.NORTH;
 
-            PLabel label = new PLabel("Match by Class Value", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+            PLabel label = new PLabel("Match by Class Value");
             label.setSize(30, 20);
             label.setVerticalAlignment(javax.swing.SwingConstants.TOP);
             label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -129,7 +127,7 @@ public class PClassCheckboxPanel extends JPanel {
                     -1, -1);
         } else {
             // if not used, set to dummy value which is not in menu
-            allCheckBox = new PCheckBox(nightMode, fontSize);
+            allCheckBox = new PCheckBox(nightMode);
         }
 
         for (WordClass wordClass : core.getWordClassCollection().getClassesForType(type.getId())) {
@@ -170,7 +168,7 @@ public class PClassCheckboxPanel extends JPanel {
         gbc.weightx = 1;
         gbc.gridx = 0;
         
-        final PCheckBox check = new PCheckBox(nightMode, fontSize) {
+        final PCheckBox check = new PCheckBox(nightMode) {
             @Override
             public void repaint() {
                 this.setSize(parent.getWidth(), 20);

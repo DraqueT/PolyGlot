@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -48,9 +48,7 @@ import javax.swing.table.TableColumn;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
-import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.ManagersCollections.PronunciationMgr;
 
 /**
@@ -119,8 +117,7 @@ public final class ScrPhonology extends PFrame {
     }
 
     private void setupButtons() {
-        float fontSize = (float)((DesktopOptionsManager)PolyGlot.getPolyGlot().getOptionsManager()).getMenuFontSize();
-        Font charis = PGTUtil.CHARIS_UNICODE.deriveFont(fontSize);
+        Font charis = PGTUtil.CHARIS_UNICODE;
         btnDownProc.setFont(charis);
         btnDownRom.setFont(charis);
         btnUpProc.setFont(charis);
@@ -680,26 +677,26 @@ public final class ScrPhonology extends PFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         pnlBasicTab = new javax.swing.JPanel();
         pnlRomanization = new javax.swing.JPanel();
-        jLabel2 = new PLabel("", menuFontSize);
+        jLabel2 = new PLabel("");
         btnAddRom = new PAddRemoveButton("+");
         btnDelRom = new PAddRemoveButton("-");
-        btnUpRom = new PButton(nightMode, menuFontSize);
+        btnUpRom = new PButton(nightMode);
         jScrollPane3 = new javax.swing.JScrollPane();
         tblRom = new javax.swing.JTable();
-        btnDownRom = new PButton(nightMode, menuFontSize);
-        chkEnableRom = new PCheckBox(nightMode, menuFontSize);
-        chkRomRecurse = new PCheckBox(nightMode, menuFontSize);
+        btnDownRom = new PButton(nightMode);
+        chkEnableRom = new PCheckBox(nightMode);
+        chkRomRecurse = new PCheckBox(nightMode);
         pnlOrthography = new javax.swing.JPanel();
-        jLabel1 = new PLabel("", menuFontSize);
+        jLabel1 = new PLabel("");
         btnAddProc = new PAddRemoveButton("+");
         btnDelProc = new PAddRemoveButton("-");
-        btnUpProc = new PButton(nightMode, menuFontSize);
+        btnUpProc = new PButton(nightMode);
         jScrollPane2 = new javax.swing.JScrollPane();
         tblProcs = new javax.swing.JTable();
-        btnDownProc = new PButton(nightMode, menuFontSize);
-        chkPhonRecurse = new PCheckBox(nightMode, menuFontSize);
+        btnDownProc = new PButton(nightMode);
+        chkPhonRecurse = new PCheckBox(nightMode);
         pnlCharacterReplacement = new javax.swing.JPanel();
-        jLabel3 = new PLabel("", menuFontSize);
+        jLabel3 = new PLabel("");
         jScrollPane1 = new javax.swing.JScrollPane();
         tblRep = new javax.swing.JTable();
         btnAddCharRep = new PAddRemoveButton("+");
@@ -1080,7 +1077,7 @@ public final class ScrPhonology extends PFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1)
         );
 
         pack();

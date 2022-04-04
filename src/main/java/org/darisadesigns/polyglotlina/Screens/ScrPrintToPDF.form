@@ -139,7 +139,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSelectSavePathActionPerformed"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode)"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="txtImageLocation">
@@ -162,7 +162,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSelectImagePathActionPerformed"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode)"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
@@ -170,7 +170,7 @@
             <Property name="text" type="java.lang.String" value="Print Options"/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;, menuFontSize)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;&quot;)"/>
           </AuxValues>
         </Component>
         <Container class="javax.swing.JPanel" name="jPanel2">
@@ -264,7 +264,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Select to include a dictionary with lookup by native words"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkConLocal">
@@ -274,7 +274,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Select to include a dictionary with lookup by constructed words"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkOrtho">
@@ -284,7 +284,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Include character and pronunciation guides"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkGrammar">
@@ -294,7 +294,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Include text from the grammar section of your library"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkLogographs">
@@ -304,7 +304,7 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkPageNum">
@@ -314,7 +314,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Prints page number on each page of PDF"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkGloss">
@@ -324,7 +324,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Prints a key for part of speech glosses"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkEtymology">
@@ -333,7 +333,7 @@
                 <Property name="text" type="java.lang.String" value="Print Etymology Trees"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkPrintConjugations">
@@ -342,7 +342,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="If checked, words will have a list of all conjugated forms printed under their definitions."/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="chkPrintPhrases">
@@ -352,7 +352,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Prints a phrasebook section within the PDF"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode)"/>
               </AuxValues>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane1">
@@ -386,7 +386,7 @@
                 <Property name="text" type="java.lang.String" value="Chapter Order"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;Chapter Order&quot;, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize())"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;Chapter Order&quot;)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="btnMoveUp">
@@ -397,7 +397,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMoveUpActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="btnMoveDown">
@@ -408,7 +408,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMoveDownActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode)"/>
               </AuxValues>
             </Component>
           </SubComponents>
@@ -454,7 +454,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPrintActionPerformed"/>
       </Events>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize)"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode)"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="btnCancel">
@@ -466,7 +466,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCancelActionPerformed"/>
       </Events>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode, menuFontSize)"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode)"/>
       </AuxValues>
     </Component>
   </SubComponents>

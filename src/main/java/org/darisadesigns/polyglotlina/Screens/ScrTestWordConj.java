@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -111,7 +111,7 @@ public final class ScrTestWordConj extends PDialog {
         pnlClasses = new PClassCheckboxPanel(core, core.getTypes().getNodeById(typeId), false);
         txtTestWord = new PTextField(core, false, "base test word");
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new PButton(nightMode, menuFontSize);
+        jButton1 = new PButton(nightMode);
         txtTestForm = new PTextField(core, false, "generated wordform");
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDebug = new javax.swing.JTextPane();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2018-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -60,7 +60,7 @@ public final class ScrReversion extends PDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new PButton(nightMode, menuFontSize);
+        jButton1 = new PButton(nightMode);
         jScrollPane1 = new javax.swing.JScrollPane();
         lstReversions = new javax.swing.JList<>();
 
