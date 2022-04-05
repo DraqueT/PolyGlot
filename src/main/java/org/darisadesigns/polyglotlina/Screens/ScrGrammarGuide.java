@@ -21,7 +21,6 @@ package org.darisadesigns.polyglotlina.Screens;
 
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Desktop.FormattedTextHelper;
-import org.darisadesigns.polyglotlina.ExternalCode.GlyphVectorPainter;
 import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
 import java.awt.Color;
 import java.awt.Component;
@@ -331,7 +330,7 @@ public final class ScrGrammarGuide extends PFrame {
         if (cmbFonts.getSelectedIndex() == 0) {
             StyleConstants.setFontFamily(aset, natFont.getFamily());
         } else {
-            aset.addAttribute(GlyphVectorPainter.KEY_KERNING, core.getPropertiesManager().getKerningSpace() * 10);
+            // TODO: Will this even set the font at all if it's not installed locally? This is terrible.
             StyleConstants.setFontFamily(aset, conFont.getFamily());
         }
 

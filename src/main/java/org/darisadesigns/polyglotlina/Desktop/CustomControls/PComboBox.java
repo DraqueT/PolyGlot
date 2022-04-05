@@ -70,7 +70,7 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
     }
     
     public PComboBox(Font font) {
-        doSetup(font, "");
+        this(font, "");
     }
     
     /**
@@ -80,10 +80,6 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
      * @param _defaultText default selection text (no value)
      */
     public PComboBox(Font font, String _defaultText) {
-        doSetup(font, _defaultText);
-    }
-    
-    private void doSetup(Font font, String _defaultText) {
         setupListeners();
         super.setFont(font);
         var cellRenderer = new PListCellRenderer();
@@ -346,7 +342,7 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         Font defaultMenuFont = tmpFont;
         
         // display default text if appropriate
-        if (text.isBlank() && this.getSelectedIndex() == 0) {
+        if ((text.isBlank() && this.getSelectedIndex() == 0) || text.equals(defaultText)) {
             text = getDefaultText();
             antiAlias.setColor(Color.decode("#909090"));
             defaultMenuFont = ((DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager()).getFontLocal();

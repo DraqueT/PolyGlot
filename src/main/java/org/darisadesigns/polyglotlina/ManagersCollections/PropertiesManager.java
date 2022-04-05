@@ -65,7 +65,6 @@ public abstract class PropertiesManager {
     protected byte[] cachedLocalFont = null;
     private final Map<String, String> charRep = new HashMap<>();
     protected DictCore core;
-    protected Double kerningSpace = 0.0;
     private boolean useSimplifiedConjugations = false;
 
     public PropertiesManager() {
@@ -519,11 +518,6 @@ public abstract class PropertiesManager {
         wordValue.appendChild(doc.createTextNode(localLangName));
         propContainer.appendChild(wordValue);
         
-        // store kerning value (default 0)
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_KERN_VAL_XID);
-        wordValue.appendChild(doc.createTextNode(kerningSpace.toString()));
-        propContainer.appendChild(wordValue);
-        
         // store option to use simplified conjugation autogeneration
         wordValue = doc.createElement(PGTUtil.LANG_PROP_USE_SIMPLIFIED_CONJ);
         wordValue.appendChild(doc.createTextNode(useSimplifiedConjugations ? PGTUtil.TRUE : PGTUtil.FALSE));
@@ -608,20 +602,6 @@ public abstract class PropertiesManager {
      */
     public void setCopyrightAuthorInfo(String _copyrightAuthorInfo) {
         this.copyrightAuthorInfo = _copyrightAuthorInfo;
-    }
-
-    /**
-     * @return the kerningSpace
-     */
-    public Double getKerningSpace() {
-        return kerningSpace;
-    }
-
-    /**
-     * @param _kerningSpace the kerningSpace to set
-     */
-    public void setKerningSpace(Double _kerningSpace) {
-        this.kerningSpace = _kerningSpace;
     }
     
     /**
@@ -817,7 +797,6 @@ public abstract class PropertiesManager {
             ret = ret && enforceRTL == prop.enforceRTL;
             ret = ret && useLocalWordLex == prop.useLocalWordLex;
             ret = ret && charRep.equals(prop.charRep);
-            ret = ret && kerningSpace.equals(prop.kerningSpace);
             ret = ret && useSimplifiedConjugations == prop.useSimplifiedConjugations;
             ret = ret && expandedLexListDisplay == prop.expandedLexListDisplay;
             ret = ret && zompistCategories.trim().equals(prop.zompistCategories.trim());

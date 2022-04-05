@@ -80,13 +80,14 @@ public final class ScrQuizGenDialog extends PFrame {
     
     private void populateDropdowns() {
         DefaultComboBoxModel<Object> model = new DefaultComboBoxModel<>();
-        model.addElement("-- Part of Speech --");
+        String defaultText = "-- Part of Speech --";
+        model.addElement(defaultText);
         for (TypeNode curNode : core.getTypes().getNodes()) {
             model.addElement(curNode);
         }
         
         cmbFilterType.setModel(model);
-        ((PComboBox)cmbFilterType).setDefaultText("Part of Speech");
+        ((PComboBox)cmbFilterType).setDefaultText(defaultText);
     }
 
     private void takeQuiz() {

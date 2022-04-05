@@ -201,7 +201,6 @@ public final class CustHandlerFactory {
             boolean bclassValueName = false;
             boolean bcharRepChar = false;
             boolean bcharRepValue = false;
-            boolean bKerningValue = false;
             boolean bromRecurse = false;
             boolean bprocRecurse = false;
             boolean betyIntRelationNode = false;
@@ -454,8 +453,6 @@ public final class CustHandlerFactory {
                     bcharRepChar = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_CHAR_REP_VAL_XID)) {
                     bcharRepValue = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_KERN_VAL_XID)) {
-                    bKerningValue = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_RECURSIVE_XID)) {
                     bprocRecurse = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_RECURSE_XID)) {
@@ -832,8 +829,6 @@ public final class CustHandlerFactory {
                     bcharRepChar = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_CHAR_REP_VAL_XID)) {
                     bcharRepValue = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_KERN_VAL_XID)) {
-                    bKerningValue = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_LOCAL_FONT_SIZE_XID)) {
                     bfontLocalSize = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_RECURSIVE_XID)) {
@@ -1241,13 +1236,6 @@ public final class CustHandlerFactory {
                     charRepCharBuffer = new String(ch, start, length);
                 } else if (bcharRepValue) {
                     charRepValBuffer += new String(ch, start, length);
-                } else if (bKerningValue) {
-                    try {
-                        core.getPropertiesManager().setKerningSpace(Double.parseDouble(new String(ch, start, length)));
-                    } catch (NumberFormatException e) {
-                        core.getOSHandler().getIOHandler().writeErrorLog(e);
-                        warningLog += "\nProblem loading kerning value: " + e.getLocalizedMessage();
-                    }
                 } else if (bprocRecurse) {
                     core.getPronunciationMgr().setRecurse(
                             new String(ch, start, length).equals(PGTUtil.TRUE));

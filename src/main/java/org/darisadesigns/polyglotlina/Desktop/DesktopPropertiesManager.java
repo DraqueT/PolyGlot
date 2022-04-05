@@ -22,7 +22,6 @@ package org.darisadesigns.polyglotlina.Desktop;
 import org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager;
 import java.awt.Font;
 import java.awt.FontFormatException;
-import java.awt.font.TextAttribute;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -225,10 +224,6 @@ public class DesktopPropertiesManager extends PropertiesManager {
         if (conFontSize == 0) {
             conFontSize = 12;
         }
-
-        if (retFont != null && kerningSpace != 0.0) {
-            retFont = PGTUtil.addFontAttribute(TextAttribute.TRACKING, kerningSpace, conFont);
-        }
         
         return retFont == null ? 
                 PGTUtil.CHARIS_UNICODE.deriveFont(conFontStyle, (float)conFontSize) : 
@@ -343,7 +338,6 @@ public class DesktopPropertiesManager extends PropertiesManager {
             ret = ret && conFontSize == prop.conFontSize;
             ret = ret && localFontSize == prop.localFontSize;
             ret = ret && localFont.equals(prop.localFont);
-            ret = ret && kerningSpace.equals(prop.kerningSpace);
             ret = ret && super.equals(comp);
         }
         

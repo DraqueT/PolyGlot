@@ -178,7 +178,7 @@ public final class ScrQuickWordEntry extends PDialog {
         cmbType.removeAllItems();
         final String defLabel = "-- Part of Speech --";
         cmbType.addItem(defLabel);
-        ((PComboBox)cmbType).setDefaultText("Part of Speech");
+        ((PComboBox)cmbType).setDefaultText(defLabel);
 
         for (TypeNode curNode : core.getTypes().getNodes()) {
             cmbType.addItem(curNode);

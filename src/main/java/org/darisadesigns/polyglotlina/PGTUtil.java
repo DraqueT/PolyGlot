@@ -111,7 +111,6 @@ public class PGTUtil {
     public static final String LANG_PROP_AUTH_COPYRIGHT_XID = "langPropAuthorCopyright";
     public static final String LANG_PROP_LOCAL_NAME_XID = "langPropLocalLangName";
     public static final String LANG_PROP_USE_LOCAL_LEX_XID = "langPropUseLocalLexicon";
-    public static final String LANG_PROP_KERN_VAL_XID = "langPropKerningValue";
     public static final String LANG_PROP_OVERRIDE_REGEX_FONT_XID = "langPropOverrideRegexFont";
     public static final String LANG_PROP_USE_SIMPLIFIED_CONJ = "langPropUseSimplifiedConjugations";
     public static final String LANG_PROP_EXPANDED_LEX_LIST_DISP = "expandedLexListDisplay";
