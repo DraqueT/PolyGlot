@@ -511,7 +511,7 @@ public class ZompistVocabGenerator {
     
     private boolean containsIllegalCluster(String test) {
         for (String illegalCluster : illegalClusters) {
-            if (test.matches(illegalCluster)) {
+            if (test.matches(illegalCluster) || test.contains(illegalCluster)) {
                 return true;
             }
         }
