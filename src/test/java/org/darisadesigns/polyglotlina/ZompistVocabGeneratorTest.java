@@ -286,12 +286,12 @@ public class ZompistVocabGeneratorTest {
     private String[] getTestSyllables_noCommas() {
         return ("pu\npi\npe\npo\nta\ntu\nti\nte\nto\nka\nku\nki\nke\nko\nna\nnu\nni\nne\nno\nla\nlu\nli\nle\nlo\nsa\nsu\nsi\nse\nso\nma\nmu\nmi\nme\nmo\nša\nšu\nši\n" +
             "še\nšo\nya\nyu\nyi\nye\nyo\nwa\nwu\nwi\nwe\nwo\nča\nču\nči\nče\nčo\nha\nhu\nhi\nhe\nho\nfa\nfu\nfi\nfe\nfo\nŋa\nŋu\nŋi\nŋe\nŋo\npʰa\npʰu\npʰi\npʰe\npʰo\n" +
-            "tʰa\ntʰu\ntʰi\ntʰe\ntʰo\nkʰa\nkʰu\nkʰi\nkʰe\nkʰo\nčʰa\nčʰu\nčʰi\nčʰe\nčʰo\npai\npao\npui\npuo\npiu\npio\npei\npeo\npoi\npou\ntai\ntao\ntui\ntuo\ntiu\n" +
+            "tʰa\ntʰu\ntʰi\ntʰe\ntʰo\nkʰa\nkʰu\nkʰi\nkʰe\nkʰo\nčʰa\nčʰu\nčʰi\nčʰe\nčʰo\npui\npuo\npiu\npio\npei\npeo\npoi\npou\ntai\ntao\ntui\ntuo\ntiu\n" +
             "tio\ntei\nteo\ntoi\ntou\nkai\nkao\nkui\nkuo\nkiu\nkio\nkei\nkeo\nkoi\nkou\nnai\nnao\nnui\nnuo\nniu\nnio\nnei\nneo\nnoi\nnou\nlai\nlao\nlui\nluo\nliu\n" +
             "lio\nlei\nleo\nloi\nlou\nsai\nsao\nsui\nsuo\nsiu\nsio\nsei\nseo\nsoi\nsou\nmai\nmao\nmui\nmuo\nmiu\nmio\nmei\nmeo\nmoi\nmou\nšai\nšao\nšui\nšuo\nšiu\n" +
             "šio\nšei\nšeo\nšoi\nšou\nyai\nyao\nyui\nyuo\nyiu\nyio\nyei\nyeo\nyoi\nyou\nwai\nwao\nwui\nwuo\nwiu\nwio\nwei\nweo\nwoi\nwou\nčai\nčao\nčui\nčuo\nčiu\n" +
             "čio\nčei\nčeo\nčoi\nčou\nhai\nhao\nhui\nhuo\nhiu\nhio\nhei\nheo\nhoi\nhou\nfai\nfao\nfui\nfuo\nfiu\nfio\nfei\nfeo\nfoi\nfou\nŋai\nŋao\nŋui\nŋuo\nŋiu\n" +
-            "ŋio\nŋei\nŋeo\nŋoi\nŋou\npan\npaŋ\npam\npak\npat\npap\npun\npuŋ\npum\npuk\nput\npup\npin\npiŋ\npim\npik\npit\npip\npen\npeŋ\npem\npek\npet\npep\npon\npoŋ\n" +
+            "ŋio\nŋei\nŋeo\nŋoi\nŋou\npun\npuŋ\npum\npuk\nput\npup\npin\npiŋ\npim\npik\npit\npip\npen\npeŋ\npem\npek\npet\npep\npon\npoŋ\n" +
             "pom\npok\npot\npop\ntan\ntaŋ\ntam\ntak\ntat\ntap\ntun\ntuŋ\ntum\ntuk\ntut\ntup\ntin\ntiŋ\ntim\ntik\ntit\ntip\nten\nteŋ\ntem\ntek\ntet\ntep\nton\ntoŋ\n" +
             "tom\ntok\ntot\ntop\nkan\nkaŋ\nkam\nkak\nkat\nkap\nkun\nkuŋ\nkum\nkuk\nkut\nkup\nkin\nkiŋ\nkim\nkik\nkit\nkip\nken\nkeŋ\nkem\nkek\nket\nkep\nkon\nkoŋ\n" +
             "kom\nkok\nkot\nkop\nnan\nnaŋ\nnam\nnak\nnat\nnap\nnun\nnuŋ\nnum\nnuk\nnut\nnup\nnin\nniŋ\nnim\nnik\nnit\nnip\nnen\nneŋ\nnem\nnek\nnet\nnep\nnon\n" +
@@ -314,7 +314,7 @@ public class ZompistVocabGeneratorTest {
     }
     
     private String[] getTestSyllables_withCommas() {
-        return ("pu\npi\npe\nba\nbu\nbi\nbe\nmza\nmzu\nmzi\nmze\npar\npal\npay\npur\npul\npuy\npir\npil\npiy\nper\npel\npey\nbar\nbal\nbay\n" +
+        return ("pu\npi\npe\nba\nbu\nbi\nbe\nmza\nmzu\nmzi\nmze\npur\npul\npuy\npir\npil\npiy\nper\npel\npey\nbar\nbal\nbay\n" +
             "bur\nbul\nbuy\nbir\nbil\nbiy\nber\nbel\nbey\nmzar\nmzal\nmzay\nmzur\nmzul\nmzuy\nmzir\nmzil\nmziy\nmzer\nmzel\nmzey\nra\nru\nri\nre\nla\n" +
             "lu\nli\nle\nya\nyu\nyi\nye\npra\npru\npri\npre\npla\nplu\npli\nple\npya\npyu\npyi\npye\nbra\nbru\nbri\nbre\nbla\nblu\nbli\nble\nbya\nbyu\nbyi\n" +
             "bye\nmzra\nmzru\nmzri\nmzre\nmzla\nmzlu\nmzli\nmzle\nmzya\nmzyu\nmzyi\nmzye").split("\n");

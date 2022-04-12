@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020, Draque Thompson
+ * Copyright (c) 2019-2022, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -66,15 +66,17 @@ public class ConWordCollectionTest {
     @Test
     public void testMissingLocalWordWithRequirement() {
         System.out.println("ConWordCollectionTest.testMissingLocalWordWithRequirement");
+        String expectedResult = "Local word set to mandatory.";
         
         DictCore core = DummyCore.newCore();
         ConWord test = new ConWord();
         
         core.getPropertiesManager().setLocalMandatory(true);
         test.setValue("TEST");
-        ConWord results = core.getWordCollection().testWordLegality(test);
+        ConWord resultWord = core.getWordCollection().testWordLegality(test);
+        String result = resultWord.getLocalWord();
         
-        assertEquals(results.getLocalWord(), "Local Lang word set to mandatory.");
+        assertEquals(expectedResult, result);
     }
     
     @Test

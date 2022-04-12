@@ -59,25 +59,25 @@ public class CheckLanguageErrorsTest {
         assertEquals(expectedProblems, problems.length);
         
         LexiconProblemNode curWord = problems[0];
-        assertEquals(curWord.problemWord.getValue(), "bad-pattern");
-        assertEquals(curWord.description, "Word does not match enforced pattern for type: noun.");
+        assertEquals("bad-pattern", curWord.problemWord.getValue());
+        assertEquals("Word does not match enforced pattern for type: noun.", curWord.description);
         
         curWord = problems[1];
-        assertEquals(curWord.problemWord.getValue(), "bad-romanization-1-noun");
+        assertEquals("bad-romanization-1-noun", curWord.problemWord.getValue());
         assertTrue(curWord.description.contains("Word contains characters undefined in alphabet settings."));
         assertTrue(curWord.description.contains("Suspect characters:\"1\""));
         assertTrue(curWord.description.contains("Word cannot be romanized properly (missing regex pattern)."));
         
         curWord = problems[2];
-        assertEquals(curWord.problemWord.getValue(), "missing-POS-and-alphabet");
+        assertEquals("missing-POS-and-alphabet", curWord.problemWord.getValue());
         assertTrue(curWord.description.contains("Part of Speech set to mandatory."));
         assertTrue(curWord.description.contains("Word contains characters undefined in alphabet settings"));
         assertTrue(curWord.description.contains("Suspect characters:\"POS\""));
         assertTrue(curWord.description.contains("Word pronunciation cannot be generated properly (missing regex pattern)."));
         
         curWord = problems[3];
-        assertEquals(curWord.problemWord.getValue(), "missing-local-noun");
-        assertEquals(curWord.description, "Local Lang word set to mandatory.");
+        assertEquals("missing-local-noun", curWord.problemWord.getValue());
+        assertEquals("Local word set to mandatory.", curWord.description);
     }
     
     @Test

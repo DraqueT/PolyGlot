@@ -312,6 +312,7 @@ public final class CustHandlerFactory {
                     bexpandedLexListDisp = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_LOCAL_NAME_XID)) {
                     blangPropLocalLangName = true;
+                    tmpString = "";
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_AUTODECLOVERRIDE_XID)) {
                     bwordoverAutoDec = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_XID)) {
@@ -649,6 +650,7 @@ public final class CustHandlerFactory {
                     bexpandedLexListDisp = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_LOCAL_NAME_XID)) {
                     blangPropLocalLangName = false;
+                    propMan.setLocalLangName(tmpString);
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_ID_XID)) {
                     bDecId = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_TEXT_XID)) {
@@ -1089,6 +1091,7 @@ public final class CustHandlerFactory {
                 } else if (bexpandedLexListDisp) {
                     propMan.setExpandedLexListDisplay(new String(ch, start, length).equals(PGTUtil.TRUE));
                 } else if (blangPropLocalLangName) {
+                    tmpString += new String(ch, start, length);
                     propMan.setLocalLangName(propMan.getLocalLangName()
                             + new String(ch, start, length));
                 } else if (bdimId) {
