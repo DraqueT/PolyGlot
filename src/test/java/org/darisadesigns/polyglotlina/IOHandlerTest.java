@@ -310,55 +310,6 @@ public class IOHandlerTest {
     }
     
     @Test
-    public void testWriteOSXMetadataAttributeHex() {
-        Assumptions.assumeTrue(PGTUtil.IS_OSX);
-        
-        System.out.println("IOHandlerTest.testWriteOSXMetadataAttributeHex");
-        
-        String expectedEnd = "com.apple.FinderInfo:00000000  57 44 43 44 4D 53 53 50 00 00 00 00 00 00 00 00  |WDCDMSSP........|00000010  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  |................|00000020";
-        
-        try {
-            File testFile = DesktopIOHandler.getInstance().createTmpFileWithContents("test", "tst");
-            String filePath = testFile.getAbsolutePath();
-            
-            DesktopIOHandler.getInstance().addFileAttributeOSX(filePath,
-                    PGTUtil.OSX_FINDER_METADATA_NAME,
-                    PGTUtil.OSX_FINDER_INFO_VALUE_DIC_FILES,
-                    true);
-            
-            String result = DesktopIOHandler.getInstance().getFileAttributeOSX(filePath, PGTUtil.OSX_FINDER_METADATA_NAME);
-            assertTrue(result.endsWith(expectedEnd));
-        } catch (Exception e) {
-            fail(e);
-        }
-    }
-    
-    @Test
-    public void testWriteOSXMetadataAttributeString() {
-        Assumptions.assumeTrue(PGTUtil.IS_OSX);
-        
-        System.out.println("IOHandlerTest.testWriteOSXMetadataAttributeString");
-        
-        String attribName = "zimzam";
-        String value = "mbam";
-        
-        try {
-            File testFile = DesktopIOHandler.getInstance().createTmpFileWithContents("test", "tst");
-            String filePath = testFile.getAbsolutePath();
-            
-            DesktopIOHandler.getInstance().addFileAttributeOSX(filePath,
-                    attribName,
-                    value,
-                    false);
-            
-            String result = DesktopIOHandler.getInstance().getFileAttributeOSX(filePath, attribName);
-            assertTrue(result.endsWith(value));
-        } catch (Exception e) {
-            fail(e);
-        }
-    }
-    
-    @Test
     public void testArchiveFile() {
         System.out.println("IOHandlerTest.testArchiveFile");
         

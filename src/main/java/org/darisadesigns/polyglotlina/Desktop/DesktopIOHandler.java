@@ -1366,25 +1366,6 @@ public final class DesktopIOHandler implements IOHandler {
         }
     }
 
-    // TODO: If I ever need this, refine it. It currently gives very little back.
-    // Consider returning object which specifies whether hex or string data. or something.
-    // No need exept for testing at this point.
-    @Override
-    public String getFileAttributeOSX(String filePath, String attribute) throws Exception {
-        if (!PGTUtil.IS_OSX) {
-            throw new Exception("This method may only be called within OSX.");
-        }
-
-        String[] cmd = {"xattr", "-l", attribute, filePath};
-        String[] result = runAtConsole(cmd, false);
-
-        if (!result[1].isBlank()) {
-            throw new Exception(result[1]);
-        }
-
-        return result[0];
-    }
-
     /**
      * Runs a command at the console, returning informational and error output.
      *

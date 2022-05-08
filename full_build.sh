@@ -13,6 +13,7 @@ CONST_WIN_VIRTUAL="WinDev2001Eval"
 CONST_LINUX="lin"
 CONST_LINUX_VIRTUAL="PolyGlotUbuntu_Nov_2021"
 CONST_OSX="osx"
+CONST_GOOGLE_DRIVE="/Volumes/GoogleDrive/My Drive/Permanent_Share/PolyGlotBetas"
 
 # ensure java home properly defined
 source ~/.bash_profile
@@ -128,16 +129,17 @@ if [ "$#" -eq 0 ] || [ "$1" == "$CONST_OSX" ] || [ "$1" == "$CONST_RELEASE" ]; t
     # Python3 must be brew installed if not present (not included on macs by default)
     if [ "$BUILD_STEP" == "" ] ; then
         python3 build_image.py \
-            -copyDestination "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas" \
+            -copyDestination "$CONST_GOOGLE_DRIVE" \
             -mac-sign-identity "Apple Development: Draque Thompson (A3YEXQ2CB4)" \
-            -java-home-o "/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home" #\ #DISABLED FOR NOW
-            #-mac-distrib-cert "Apple Distribution: Draque Thompson (HS2SXD98BV)"
+            -java-home-o "/Library/Java/JavaVirtualMachines/jdk-17-intel.0.2.jdk/Contents/Home" #\
+            #-mac-distrib-cert "Apple Distribution: Draque Thompson (HS2SXD98BV)" #DISABLED FOR NOW
+
     else
         python3 build_image.py \
-            "$BUILD_STEP" -copyDestination "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas" \
+            "$BUILD_STEP" -copyDestination "$CONST_GOOGLE_DRIVE" \
             -mac-sign-identity "Apple Development: Draque Thompson (A3YEXQ2CB4)" \
-            -java-home-o "/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home" #\ #DISABLED FOR NOW
-            #-mac-distrib-cert "Apple Distribution: Draque Thompson (HS2SXD98BV)"
+            -java-home-o "/Library/Java/JavaVirtualMachines/jdk-17-intel.0.2.jdk/Contents/Home" #\ 
+            #-mac-distrib-cert "Apple Distribution: Draque Thompson (HS2SXD98BV)" #DISABLED FOR NOW
     fi
     echo "OSX build process complete."
     
@@ -172,17 +174,17 @@ else
 fi 
 
 # Announce any build failures...
-if [ -f "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas/Windows_BUILD_FAILED" ] &&  [ $WIN_BUILD_TIME != 0 ]; then
+if [ -f "$CONST_GOOGLE_DRIVE/Windows_BUILD_FAILED" ] &&  [ $WIN_BUILD_TIME != 0 ]; then
     echo -e "\x1B[41mWindows build failed.\x1B[0m"
 elif [ $WIN_BUILD_TIME != 0 ]; then
     echo -e "\x1B[32mWindows build success.\x1B[0m"
 fi
-if [ -f "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas/Linux_BUILD_FAILED" ] && [ $LIN_BUILD_TIME != 0 ]; then
+if [ -f "$CONST_GOOGLE_DRIVE/Linux_BUILD_FAILED" ] && [ $LIN_BUILD_TIME != 0 ]; then
     echo -e "\x1B[41mLinux build failed.\x1B[0m"
 elif [ $LIN_BUILD_TIME != 0 ]; then
     echo -e "\x1B[32mLinux build success.\x1B[0m"
 fi
-if [ -f "/Users/draque/Google Drive/Permanent_Share/PolyGlotBetas/Darwin_BUILD_FAILED" ] && [ $OSX_BUILD_TIME != 0 ]; then
+if [ -f "$CONST_GOOGLE_DRIVE/Darwin_BUILD_FAILED" ] && [ $OSX_BUILD_TIME != 0 ]; then
     echo -e "\x1B[41mOSX build failed.\x1B[0m"
 elif [ $OSX_BUILD_TIME != 0 ]; then
     echo -e "\x1B[32mOSX build success.\x1B[0m"
