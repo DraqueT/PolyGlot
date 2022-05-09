@@ -32,6 +32,8 @@ osxString = 'Darwin'
 winString = 'Windows'
 
 separatorCharacter = '/'
+macIntelBuild = False
+skipTests = False
 
 
 ###############################
@@ -42,6 +44,7 @@ LIN_INS_NAME = 'PolyGlot-Ins-Lin.deb'
 ###############################
 # OSX BUILD CONSTANTS
 OSX_INS_NAME = 'PolyGlot-Ins-Osx.dmg'
+OSX_INTEL_INS_NAME = 'PolyGlot-Ins-Osx-intel.dmg'
 SIGN_IDENTITY = '' # set in main for timing reasons
 DISTRIB_IDENTITY = '' # set in main for timing reasons
 
@@ -82,11 +85,22 @@ def main(args):
     global failFile
     global copyDestination
     global separatorCharacter
+    global macIntelBuild
+    global skipTests
+
+    if 'help' in args or '-help' in args or '--help' in args:
+        printHelp()
+        return
     
     skip_steps = []
     
     if osString == winString:
         separatorCharacter = '\\'
+
+    if '-skipTests' in args:
+        skipTests = True
+        command_index = args.index('-skipTests')
+        del args[command_index]
 
     # gather list of steps marked to be skipped
     while '-skip' in args:
@@ -151,35 +165,41 @@ def main(args):
         del args[command_index + 1]
         del args[command_index]
 
-    if not JAVA_HOME is not None:
+    if JAVA_HOME is None:
         print('JAVA_HOME must be set. If necessary, use -java-home-o command to override')
         return
 
-    fullBuild = (len(args) == 1) # length of 1 means no arguments (full build)
-    POLYGLOT_VERSION = getVersion()
-    POLYGLOT_BUILD = getBuildNum();
-    print('Building Version: ' + POLYGLOT_VERSION)
-    updateVersionResource(POLYGLOT_VERSION)
-    JAR_W_DEP = 'PolyGlotLinA-' + POLYGLOT_VERSION + '-jar-with-dependencies.jar'
-    JAR_WO_DEP = 'PolyGlotLinA-' + POLYGLOT_VERSION + '.jar'
-    JAVAFX_VER = getJfxVersion()
-    
-    if 'help' in args or '-help' in args or '--help' in args:
-        printHelp()
+    try:
+        POLYGLOT_VERSION = getVersion()
+        POLYGLOT_BUILD = getBuildNum();
+        print('Building Version: ' + POLYGLOT_VERSION)
+        updateVersionResource(POLYGLOT_VERSION)
+        JAR_W_DEP = 'PolyGlotLinA-' + POLYGLOT_VERSION + '-jar-with-dependencies.jar'
+        JAR_WO_DEP = 'PolyGlotLinA-' + POLYGLOT_VERSION + '.jar'
+        JAVAFX_VER = getJfxVersion()
 
-    if osString == winString:
-        os.system('echo off')
-    
-    if (fullBuild and 'docs' not in skip_steps) or 'docs' in args:
-        injectDocs()
-    if (fullBuild and 'build' not in skip_steps) or 'build' in args:
-        build()
-    if (fullBuild and 'clean' not in skip_steps) or 'clean' in args or 'image' in args:
-        clean()
-    if (fullBuild and 'image' not in skip_steps) or 'image' in args:
-        image()
-    if (fullBuild and 'dist' not in skip_steps) or 'dist' in args:
-        dist()
+        if osString == winString:
+            os.system('echo off')
+        elif osString == osxString and '-intelBuild' in args:
+            macIntelBuild = True
+            command_index = args.index('-intelBuild')
+            del args[command_index]
+
+        fullBuild = (len(args) == 1) # length of 1 means no arguments (full build)
+        
+        if (fullBuild and 'docs' not in skip_steps) or 'docs' in args:
+            injectDocs()
+        if (fullBuild and 'build' not in skip_steps) or 'build' in args:
+            build()
+        if (fullBuild and 'clean' not in skip_steps) or 'clean' in args or 'image' in args:
+            clean()
+        if (fullBuild and 'image' not in skip_steps) or 'image' in args:
+            image()
+        if (fullBuild and 'dist' not in skip_steps) or 'dist' in args:
+            dist()
+    finally:
+        if osString == osxString:
+            resetMacRepo()
         
     print('Done!')
 
@@ -202,9 +222,12 @@ def clean():
         cleanWin()
     
 def image():
+    global macIntelBuild
+
     if osString == linString:
         imageLinux()
     elif osString == osxString:
+        setupMacRepo() # must be handled here due to earlier build pulling libraries
         imageOsx()
     elif osString == winString:
         imageWin()
@@ -223,8 +246,14 @@ def dist():
 ######################################
 
 def buildLinux():
+    global skipTests
     print('cleaning/testing/compiling...')
-    os.system('/usr/lib/jvm/apache-maven-3.8.4/bin/mvn clean package')
+    command = '/usr/lib/jvm/apache-maven-3.8.4/bin/mvn clean package'
+
+    if (skipTests):
+        command += ' -DskipTests'
+
+    os.system(command)
 
 def cleanLinux():
     print('cleaning build paths...')
@@ -281,12 +310,18 @@ def distLinux():
 
 
 ######################################
-#       OSX FUNCTIONALITY
+#       Mac OS FUNCTIONALITY
 ######################################
 
 def buildOsx():
+    global skipTests
     print('cleaning/testing/compiling...')
-    os.system('mvn clean package')
+    command = 'mvn clean package'
+
+    if skipTests:
+        command += ' -DskipTests'
+
+    os.system(command)
     
 def cleanOsx():
     print('cleaning build paths...')
@@ -398,14 +433,68 @@ def distOsx():
     if(path.exists('PolyGlot.app')):
         shutil.rmtree('PolyGlot.app')
 
+# This prevents the build from getting confused from multiple versions of libraries existing (intel and Arch64)
+def setupMacRepo():
+    global macIntelBuild
+    print('setting up mac repo for ' + ('intel ' if macIntelBuild else 'arch64 ') + 'build...')
+    ignoreJavaFxFile('base')
+    ignoreJavaFxFile('controls')
+    ignoreJavaFxFile('graphics')
+    ignoreJavaFxFile('media')
+    ignoreJavaFxFile('swing')
+
+def ignoreJavaFxFile(fileModule):
+    global JAVAFX_VER
+    global macIntelBuild
+    JAVAFX_LOCATION = getJfxLocation();
+
+    jfxJar = JAVAFX_LOCATION + '/javafx-' + fileModule + '/' + JAVAFX_VER+ '/javafx-' + fileModule + '-' + JAVAFX_VER + '-mac.jar' if not macIntelBuild \
+        else JAVAFX_LOCATION + '/javafx-' + fileModule + '/' + JAVAFX_VER+ '/javafx-' + fileModule + '-' + JAVAFX_VER + '-mac-aarch64.jar'
+
+    if path.exists(jfxJar):
+        print('Temporarily ignoring: ' + jfxJar)
+        os.rename(jfxJar, jfxJar + '.ignore')
+    else:
+        raise Exception("JavaFx File Missing: " + jfxJar)
+
+# Resets files from setupMacRepo step
+def resetMacRepo():
+    print('resetting mac repo files...')
+    unignoreJavaFxFile('base')
+    unignoreJavaFxFile('controls')
+    unignoreJavaFxFile('graphics')
+    unignoreJavaFxFile('media')
+    unignoreJavaFxFile('swing')
+
+def unignoreJavaFxFile(fileModule):
+    global JAVAFX_VER
+    JAVAFX_LOCATION = getJfxLocation();
+
+    jfxIntelJar = JAVAFX_LOCATION + '/javafx-' + fileModule + '/' + JAVAFX_VER + '/javafx-' + fileModule + '-' + JAVAFX_VER + '-mac.jar'
+    jfxArch = JAVAFX_LOCATION + '/javafx-' + fileModule + '/' + JAVAFX_VER + '/javafx-' + fileModule + '-' + JAVAFX_VER + '-mac-aarch64.jar'
+
+    if path.exists(jfxIntelJar + '.ignore'):
+        print('Unignoring: ' + jfxIntelJar)
+        os.rename(jfxIntelJar + '.ignore', jfxIntelJar)
+
+    if path.exists(jfxArch + '.ignore'):
+        print('Unignoring: ' + jfxArch)
+        os.rename(jfxArch + '.ignore', jfxArch)
+
 
 ######################################
 #       WINDOWS FUNCTIONALITY
 ######################################
 
 def buildWin():
+    global skipTests
     print('cleaning/testing/compiling...')
-    os.system('mvn clean package')
+    command = 'mvn clean package'
+
+    if skipTests:
+        command += ' -DskipTests'
+
+    os.system(command)
     
 def cleanWin():
     print('cleaning build paths...')
@@ -579,12 +668,15 @@ def injectDocs():
 # Copies installer file to final destination and removes error indicator file
 def copyInstaller(source):
     global copyDestination
+    global macIntelBuild
 
     if path.exists(source):
         if osString == winString:
             insFile = WIN_INS_NAME
         elif osString == linString:
             insFile = LIN_INS_NAME
+        elif osString == osxString and macIntelBuild:
+            insFile = OSX_INTEL_INS_NAME
         elif osString == osxString:
             insFile = OSX_INS_NAME
 
@@ -628,7 +720,11 @@ To use this utility, simply execute this script with no arguments to run the ent
     
     -skip <step> : skips the given step (can be used multiple times)
     
-    -release: marks build as release build. Otherwise will be build as beta
+    -release : marks build as release build. Otherwise will be build as beta
+
+    -skipTests : skips test step in Maven
+
+    -intelBuild : MacOS only, indicates to use intel libraries rather than Arch64 when building
 
 Example: python build_image.py image pack -java-home-o /usr/lib/jvm/jdk-14
 

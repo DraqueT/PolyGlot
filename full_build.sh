@@ -131,14 +131,28 @@ if [ "$#" -eq 0 ] || [ "$1" == "$CONST_OSX" ] || [ "$1" == "$CONST_RELEASE" ]; t
         python3 build_image.py \
             -copyDestination "$CONST_GOOGLE_DRIVE" \
             -mac-sign-identity "Apple Development: Draque Thompson (A3YEXQ2CB4)" \
+            -intelBuild \
             -java-home-o "/Library/Java/JavaVirtualMachines/jdk-17-intel.0.2.jdk/Contents/Home" #\
+            #-mac-distrib-cert "Apple Distribution: Draque Thompson (HS2SXD98BV)" #DISABLED FOR NOW
+
+        python3 build_image.py \
+            -copyDestination "$CONST_GOOGLE_DRIVE" \
+            -mac-sign-identity "Apple Development: Draque Thompson (A3YEXQ2CB4)" \
+            -java-home-o "/Library/Java/JavaVirtualMachines/jdk-17.0.2.jdk/Contents/Home" #\
             #-mac-distrib-cert "Apple Distribution: Draque Thompson (HS2SXD98BV)" #DISABLED FOR NOW
 
     else
         python3 build_image.py \
             "$BUILD_STEP" -copyDestination "$CONST_GOOGLE_DRIVE" \
             -mac-sign-identity "Apple Development: Draque Thompson (A3YEXQ2CB4)" \
+            -intelBuild \
             -java-home-o "/Library/Java/JavaVirtualMachines/jdk-17-intel.0.2.jdk/Contents/Home" #\ 
+            #-mac-distrib-cert "Apple Distribution: Draque Thompson (HS2SXD98BV)" #DISABLED FOR NOW
+
+        python3 build_image.py \
+            "$BUILD_STEP" -copyDestination "$CONST_GOOGLE_DRIVE" \
+            -mac-sign-identity "Apple Development: Draque Thompson (A3YEXQ2CB4)" \
+            -java-home-o "/Library/Java/JavaVirtualMachines/jdk-17.0.2.jdk/Contents/Home" #\ 
             #-mac-distrib-cert "Apple Distribution: Draque Thompson (HS2SXD98BV)" #DISABLED FOR NOW
     fi
     echo "OSX build process complete."
