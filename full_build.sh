@@ -30,56 +30,7 @@ if [ "$1" == "$CONST_RELEASE" ]; then
 fi
 
 # Windows Build/upload
-if [ "$#" -eq 0 ] || [ "$1" == "$CONST_WIN" ] || [ "$1" == "$CONST_RELEASE" ]; then
-    WIN_START_TIME=$(date +%s)
-    echo "Starting Windows build process..."
-###### For whatever reason, jpackage will simply not function correctly unless the PC is booted up in advance
-#    VBoxManage startvm "$CONST_WIN_VIRTUAL" --type gui
-#    echo "Waiting 25 seconds for target machine to start up..."
-#    sleep 5
-#    echo "Waiting 20 seconds for target machine to start up..."
-#    sleep 5
-#    echo "Waiting 15 seconds for target machine to start up..."
-#    sleep 5
-#    echo "Waiting 10 seconds for target machine to start up..."
-#    sleep 5
-#    echo "Waiting 05 seconds for target machine to start up..."
-#    sleep 5
-
-    if [ $(vboxmanage showvminfo "$CONST_WIN_VIRTUAL" | grep -c "running .since") == 0 ] ; then
-        echo -e "\x1B[41mWindows must be running to be built due to limitations in jpackage for Windows.\x1B[0m"
-        sleep 5
-    else
-        if [ "$BUILD_STEP" == "" ] ; then
-            VBoxManage guestcontrol "$CONST_WIN_VIRTUAL" \
-                run --exe "C:\Users\polyglot\Documents\NetBeansProjects\auto_polyglot_build.bat" \
-                --username polyglot \
-                --passwordfile /Users/draque/NetBeansProjects/polyglotvmpass
-        else
-            VBoxManage guestcontrol "$CONST_WIN_VIRTUAL" \
-                run --exe "cmd.exe" \
-                    --username polyglot \
-                    --passwordfile /Users/draque/NetBeansProjects/polyglotvmpass \
-                    -- cmd.exe/arg0  /c C:\\Users\\polyglot\\Documents\\NetBeansProjects\\auto_polyglot_build.bat "$CONST_RELEASE"
-        fi
-
-        VBoxManage guestcontrol "$CONST_WIN_VIRTUAL" \
-            run --exe "C:\Users\polyglot\Documents\NetBeansProjects\auto_polyglot_build_shutdown.bat" \
-            --username polyglot \
-            --passwordfile /Users/draque/NetBeansProjects/polyglotvmpass
-
-        echo "Waiting for Windows machine to power down..."
-        until $(VBoxManage showvminfo --machinereadable "$CONST_WIN_VIRTUAL" | grep -q ^VMState=.poweroff.)
-        do
-            sleep 2
-        done
-
-        echo "Windows build process complete."
-
-        WIN_END_TIME=$(date +%s)
-        WIN_BUILD_TIME=$(echo "$WIN_END_TIME - $WIN_START_TIME" | bc)
-    fi
-fi
+# Disabled currently
 
 # Linux Build/upload
 if [ "$#" -eq 0 ] || [ "$1" == "$CONST_LINUX" ] || [ "$1" == "$CONST_RELEASE" ]; then
