@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#   PolyGlot build script Copyright 2019-2020 Draque Thompson
+#   PolyGlot build script Copyright 2019-2022 Draque Thompson
 #
 #   This script builds PolyGlot into a distributable package on Linux,
 #   OSX, and Windows. Windows does not come with Python installed by default.
@@ -12,7 +12,6 @@
 
 import datetime
 from datetime import date
-import distutils.spawn
 import os
 from os import path
 import platform
@@ -248,7 +247,7 @@ def dist():
 def buildLinux():
     global skipTests
     print('cleaning/testing/compiling...')
-    command = '/usr/lib/jvm/apache-maven-3.8.4/bin/mvn clean package'
+    command = 'mvn clean package'
 
     if (skipTests):
         command += ' -DskipTests'
@@ -404,7 +403,7 @@ def distOsx():
 
     POLYGLOT_DMG = 'PolyGlot-' + POLYGLOT_VERSION + '.dmg'
 
-    if distutils.spawn.find_executable('dmgbuild'):
+    try:
         print('Creating distribution package...')
         command = ('dmgbuild ' +
             '-s packaging_files/mac/dmg_settings.py PolyGlot ' + POLYGLOT_DMG)
@@ -425,7 +424,7 @@ def distOsx():
         if copyDestination != "":
             copyInstaller('PolyGlot-' + POLYGLOT_VERSION + '.dmg')
 
-    else:
+    except:
         print('\'dmgbuild\' does not exist in PATH, distribution packaging will be skipped')
         print('Run \'pip install dmgbuild\' to install it')
 

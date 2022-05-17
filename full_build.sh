@@ -34,36 +34,18 @@ fi
 
 # Linux Build/upload
 if [ "$#" -eq 0 ] || [ "$1" == "$CONST_LINUX" ] || [ "$1" == "$CONST_RELEASE" ]; then
-    LIN_START_TIME=$(date +%s)
-    echo "Starting Ubuntu build process..."
-    VBoxManage startvm "$CONST_LINUX_VIRTUAL" --type headless
-    echo "Waiting 25 seconds for target machine to start up..."
-    sleep 5
-    echo "Waiting 20 seconds for target machine to start up..."
-    sleep 5
-    echo "Waiting 15 seconds for target machine to start up..."
-    sleep 5
-    echo "Waiting 10 seconds for target machine to start up..."
-    sleep 5
-    echo "Waiting 05 seconds for target machine to start up..."
-    sleep 5
+    LIN_BUILD_TIME=$(0)
+
     if [ "$BUILD_STEP" == "" ] ; then
-        VBoxManage guestcontrol "$CONST_LINUX_VIRTUAL" \
-            run --exe "/home/polyglot/NetBeansProjects/auto_polyglot_build.sh" \
-            --username polyglot \
-            --passwordfile /Users/draque/NetBeansProjects/polyglotvmpass
+        python3 build_image.py \
+            -copyDestination "/mnt/hgfs/PolyGlotBetas" \
+            -java-home-o "/lib/OpenJdk/jdk-17.0.2"
     else
-        VBoxManage guestcontrol "$CONST_LINUX_VIRTUAL" \
-            run --exe "/home/polyglot/NetBeansProjects/auto_polyglot_build.sh" \
-            --username polyglot \
-            --passwordfile /Users/draque/NetBeansProjects/polyglotvmpass \
-            -- auto_polyglot_build.sh/arg0 "$BUILD_STEP"
+        python3 build_image.py \
+            -copyDestination "/mnt/hgfs/PolyGlotBetas" \
+            -java-home-o "/lib/OpenJdk/jdk-17.0.2" \
+            $BUILD_STEP
     fi
-    echo "Waiting for Ubuntu machine to power down..."
-    until $(VBoxManage showvminfo --machinereadable "$CONST_LINUX_VIRTUAL" | grep -q ^VMState=.poweroff.)
-    do
-        sleep 2
-    done
     echo "Linux build process complete."
     
     LIN_END_TIME=$(date +%s)

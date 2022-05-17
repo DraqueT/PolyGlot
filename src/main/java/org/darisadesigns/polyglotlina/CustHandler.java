@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -26,15 +26,15 @@ import org.xml.sax.helpers.DefaultHandler;
  *
  * @author draque
  */
-public class CustHandler extends DefaultHandler{
-        protected String errorLog = "";
-        protected String warningLog = "";
-        
-        public String getErrorLog() {
-            return errorLog;
-        }
-        
-        public String getWarningLog() {
-            return warningLog;
-        }
+public class CustHandler extends DefaultHandler {
+    protected String errorLog = "";
+    protected String warningLog = "";
+
+    public String getErrorLog() {
+        return errorLog;
+    }
+
+    public String getWarningLog() {
+        return warningLog;
+    }
 }
