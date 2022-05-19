@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -413,13 +413,16 @@ public class DictCore {
      * loads revision XML from revision byte array (does not support media revisions)
      * @param revision 
      * @param fileName 
+     * @return  
      * @throws java.io.IOException 
      */
-    public void revertToState(byte[] revision, String fileName) throws IOException{
+    public DictCore revertToState(byte[] revision, String fileName) throws IOException{
         DictCore revDict = new DictCore(this.propertiesManager, this.osHandler, this.pgtUtil, this.grammarManager);
         revDict.readFile(fileName, revision);
         
         pushUpdateWithCore(revDict);
+        
+        return revDict;
     }
     
     /**

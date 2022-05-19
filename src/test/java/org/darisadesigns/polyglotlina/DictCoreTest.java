@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -26,8 +26,10 @@ import java.nio.file.Path;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopGrammarChapNode;
+import org.darisadesigns.polyglotlina.ManagersCollections.ReversionManager;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
+import org.darisadesigns.polyglotlina.Nodes.ReversionNode;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -98,7 +100,6 @@ public class DictCoreTest {
     
     @Test
     public void testSaveLanguageIntegrityDeep() {
-        // this tests the deep integrity of saved languages
         System.out.println("DictCoreTest.testSaveLanguageIntegrityDeep");
         
         try {
@@ -114,6 +115,40 @@ public class DictCoreTest {
         } catch (IOException | IllegalStateException | ParserConfigurationException | TransformerException e) {
             // e.printStackTrace();
             //System.out.println(e.getMessage());
+            fail(e);
+        }
+    }
+    
+    @Test
+    public void testRevertLanguage() {
+        System.out.println("DictCoreTest.testRevertLanguage");
+        
+        try {
+            core.readFile(PGTUtil.TESTRESOURCES + "testRevert.pgd");
+            ReversionManager revMan = core.getReversionManager();
+            
+            ReversionNode[] reversions = revMan.getReversionList();
+            core = core.revertToState(reversions[0].getValue(), core.getCurFileName());
+            assertEquals(3, core.getWordCollection().getWordCount());
+            core = core.revertToState(reversions[1].getValue(), core.getCurFileName());
+            assertEquals(2, core.getWordCollection().getWordCount());
+            ConWord word = core.getWordCollection().getNodesLocalOrder()[0];
+            assertEquals("1", word.getValue());
+            assertTrue(word.getDefinition().contains("2"));
+            core = core.revertToState(reversions[2].getValue(), core.getCurFileName());
+            assertEquals(1, core.getWordCollection().getWordCount());
+            word = core.getWordCollection().getNodesLocalOrder()[0];
+            assertEquals("1", word.getValue());
+            assertTrue(word.getDefinition().contains("1"));
+            core = core.revertToState(reversions[3].getValue(), core.getCurFileName());
+            assertEquals(0, core.getWordCollection().getWordCount());
+            core = core.revertToState(reversions[4].getValue(), core.getCurFileName());
+            assertEquals(3, core.getWordCollection().getWordCount());
+            
+
+        } catch (IOException | IllegalStateException e) {
+//            e.printStackTrace();
+//            System.out.println(e.getMessage());
             fail(e);
         }
     }

@@ -129,7 +129,9 @@ public class DesktopPropertiesManager extends PropertiesManager {
      */
     public void setFontConRaw(Font fontCon) {
         // null cached font if being set to new font
-        if (conFont != null && !conFont.getFamily().equals(fontCon.getFamily())) {
+        if (conFont != null 
+                && fontCon!= null 
+                && !conFont.getFamily().equals(fontCon.getFamily())) {
             cachedConFont = null;
         }
 
