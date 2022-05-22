@@ -55,6 +55,8 @@ public final class ScrIPARefChart extends PFrame {
         ipaToChars = core.getPronunciationMgr().getCharactersPerIpaSound();
         this.setSize(849, 595);
         setupToolTips();
+        
+        jTabbedPane1.requestFocus();
     }
     
     /**
@@ -66,8 +68,7 @@ public final class ScrIPARefChart extends PFrame {
         ((PLabel)lblVowels).setToolTipAction((e) -> {
             String ret = "";
             
-            if (e instanceof MouseEvent) {
-                MouseEvent event = (MouseEvent)e;
+            if (e instanceof MouseEvent event) {
                 String ipa = handler.getVowelChar(event.getX(), event.getY());
                 
                 if (ipaToChars.containsKey(ipa)) {
@@ -85,8 +86,7 @@ public final class ScrIPARefChart extends PFrame {
         ((PLabel)lblNonPulmonicConsonants).setToolTipAction((e) -> {
             String ret = "";
             
-            if (e instanceof MouseEvent) {
-                MouseEvent event = (MouseEvent)e;
+            if (e instanceof MouseEvent event) {
                 String ipa = handler.getNonPulConsChar(event.getX(), event.getY());
                 
                 if (ipaToChars.containsKey(ipa)) {
@@ -104,8 +104,7 @@ public final class ScrIPARefChart extends PFrame {
         ((PLabel)lblOtherSymbols).setToolTipAction((e) -> {
             String ret = "";
             
-            if (e instanceof MouseEvent) {
-                MouseEvent event = (MouseEvent)e;
+            if (e instanceof MouseEvent event) {
                 String ipa = handler.getOtherChar(event.getX(), event.getY());
                 
                 if (ipaToChars.containsKey(ipa)) {
@@ -123,8 +122,7 @@ public final class ScrIPARefChart extends PFrame {
         ((PLabel)lblPulmonicConsonants).setToolTipAction((e) -> {
             String ret = "";
             
-            if (e instanceof MouseEvent) {
-                MouseEvent event = (MouseEvent)e;
+            if (e instanceof MouseEvent event) {
                 String ipa = handler.getPulConsChar(event.getX(), event.getY());
                 
                 if (ipaToChars.containsKey(ipa)) {
@@ -162,7 +160,7 @@ public final class ScrIPARefChart extends PFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("IPA Pronunciation/Character Guide");
         setBackground(new java.awt.Color(255, 255, 255));
-        setResizable(false);
+        setMinimumSize(new java.awt.Dimension(828, 589));
 
         jTabbedPane1.setBackground(new java.awt.Color(255, 255, 255));
         jTabbedPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
