@@ -471,6 +471,11 @@ public class DictCore {
         Document doc = docBuilder.newDocument();
         Element rootElement = doc.createElement(PGTUtil.DICTIONARY_XID);
         doc.appendChild(rootElement);
+        
+        // store system info for troubleshooting
+        Element sysInfo = doc.createElement(PGTUtil.SYS_INFO_XID);
+        sysInfo.appendChild(doc.createTextNode(osHandler.getIOHandler().getSystemInformation()));
+        rootElement.appendChild(sysInfo);
 
         // collect XML representation of all dictionary elements
         writeXMLHeader(doc, rootElement, newSaveTime);

@@ -1151,8 +1151,7 @@ public final class DesktopIOHandler implements IOHandler {
 //                System.out.println("Writing error to: " + errorLog.getAbsolutePath());
                 writer.write(output);
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             // Fail silently. This fails almost exclusively due to being run in write protected folder, caught elsewhere
             // do not log to written file for obvious reasons (causes further write failure)
             // WHY DO PEOPLE INSTALL THIS TO WRITE PROTECTED FOLDERS AND SYSTEM32. WHY.
