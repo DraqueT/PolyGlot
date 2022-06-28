@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -54,10 +54,12 @@ public class DesktopGrammarChapNode extends DefaultMutableTreeNode implements Gr
         parentManager = _parentManager;
     }
 
+    @Override
     public void setName(String _name) {
         name = _name;
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -134,6 +136,7 @@ public class DesktopGrammarChapNode extends DefaultMutableTreeNode implements Gr
      *
      * @return section buffer
      */
+    @Override
     public GrammarSectionNode getBuffer() {
         return buffer;
     }
@@ -141,6 +144,7 @@ public class DesktopGrammarChapNode extends DefaultMutableTreeNode implements Gr
     /**
      * inserts current section buffer to sections and clears it
      */
+    @Override
     public void insert() {
         this.add(buffer);
         clear();
@@ -149,6 +153,7 @@ public class DesktopGrammarChapNode extends DefaultMutableTreeNode implements Gr
     /**
      * clears current buffer
      */
+    @Override
     public void clear() {
         buffer = new DesktopGrammarSectionNode(parentManager);
     }
@@ -158,6 +163,7 @@ public class DesktopGrammarChapNode extends DefaultMutableTreeNode implements Gr
         return name;
     }
     
+    @Override
     public void writeXML(Document doc, Element rootElement) {
         Element chapNode = doc.createElement(PGTUtil.GRAMMAR_CHAPTER_NODE_XID);
             rootElement.appendChild(chapNode);
@@ -187,7 +193,7 @@ public class DesktopGrammarChapNode extends DefaultMutableTreeNode implements Gr
             
             ret = (children == null && compChap.children == null) 
                     || ( children != null && children.equals(compChap.children));
-            ret = ret && name.equals(compChap.name);
+            ret = ret && name.trim().equals(compChap.name.trim());
         }
         
         return ret;

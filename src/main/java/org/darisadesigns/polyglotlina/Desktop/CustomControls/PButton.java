@@ -31,7 +31,6 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import javax.swing.Icon;
 import javax.swing.JButton;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -51,8 +50,8 @@ public class PButton extends JButton implements MouseListener {
         setupListeners();
     }
     
-    public PButton(boolean nightMode, double fontSize) { // nightmode included for future progress
-        super.setFont(PGTUtil.MENU_FONT.deriveFont((float)fontSize));        
+    public PButton(boolean nightModee) { // nightmode included for future progress
+        super.setFont(PGTUtil.MENU_FONT.deriveFont(PGTUtil.DEFAULT_FONT_SIZE.floatValue()));        
         setupListeners();
     }
     
@@ -173,7 +172,7 @@ public class PButton extends JButton implements MouseListener {
         super.setText(text);
         
         if (text.equals("↑") || text.equals("↓")) {
-            setFont(PGTUtil.CHARIS_UNICODE.deriveFont((float)PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize()));
+            setFont(PGTUtil.CHARIS_UNICODE.deriveFont(PGTUtil.DEFAULT_FONT_SIZE.floatValue()));
         }
         
         // force recalc of text size
@@ -182,7 +181,7 @@ public class PButton extends JButton implements MouseListener {
     
     @Override
     public void setFont(Font font) {
-        super.setFont(font);
+        super.setFont(font.deriveFont(PGTUtil.DEFAULT_FONT_SIZE.floatValue()));
         // force recalc of text size
         fontMetrics = null;
     }

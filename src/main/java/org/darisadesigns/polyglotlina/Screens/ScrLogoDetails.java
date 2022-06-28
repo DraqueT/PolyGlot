@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -85,7 +85,7 @@ import javax.swing.table.TableColumn;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 
 /**
  *
@@ -160,6 +160,16 @@ public class ScrLogoDetails extends PFrame {
         super.getRootPane().getContentPane().setBackground(Color.white);
     }
     
+    private void setLegal() {
+        if (txtName.getText().isBlank() && lstLogos.getModel().getSize() > 0) {
+            txtName.setBackground(PGTUtil.COLOR_REQUIRED_LEX_COLOR);
+            btnAddLogo.setEnabled(false);
+        } else {
+            txtName.setBackground(PGTUtil.COLOR_TEXT_BG);
+            btnAddLogo.setEnabled(true);
+        }
+    }
+    
     private void setupFilterMenu() {
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
@@ -198,7 +208,7 @@ public class ScrLogoDetails extends PFrame {
     
     private TitledPane createSearchPanel() {
         GridPane grid = new GridPane();
-        javafx.scene.text.Font font = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        javafx.scene.text.Font font = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), PGTUtil.DEFAULT_FONT_SIZE);
         javafx.scene.text.Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFXConFont();
         
         gridTitlePane = new TitledPane();
@@ -344,16 +354,19 @@ public class ScrLogoDetails extends PFrame {
             @Override
             public void changedUpdate(DocumentEvent e) {
                 updateName();
+                setLegal();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 updateName();
+                setLegal();
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
                 updateName();
+                setLegal();
             }
         });
         txtNotes.getDocument().addDocumentListener(new DocumentListener() {
@@ -1068,31 +1081,31 @@ public class ScrLogoDetails extends PFrame {
 
         jLayeredPane1 = new javax.swing.JLayeredPane();
         jPanel1 = new javax.swing.JPanel();
-        jLabel6 = new PLabel("", menuFontSize);
+        jLabel6 = new PLabel("");
         jScrollPane1 = new javax.swing.JScrollPane();
         lstLogos = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         jPanel2 = new javax.swing.JPanel();
         lblLogo = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         lstRelWords = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
-        jLabel8 = new PLabel("", menuFontSize);
+        jLabel8 = new PLabel("");
         jScrollPane4 = new javax.swing.JScrollPane();
         lstRadicals = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
-        jLabel10 = new PLabel("", menuFontSize);
+        jLabel10 = new PLabel("");
         btnAddReading = new PAddRemoveButton("+");
         btnDelReading = new PAddRemoveButton("-");
         btnAddRad = new PAddRemoveButton("+");
         btnDelRad = new PAddRemoveButton("-");
-        chkIsRad = new PCheckBox(nightMode, menuFontSize);
+        chkIsRad = new PCheckBox(nightMode);
         txtName = new PTextField(core, false, "Name");
-        jLabel12 = new PLabel("", menuFontSize);
+        jLabel12 = new PLabel("");
         txtStrokes = new javax.swing.JTextField();
-        btnLoadImage = new PButton(nightMode, menuFontSize);
+        btnLoadImage = new PButton(nightMode);
         jScrollPane6 = new javax.swing.JScrollPane();
         tblReadings = new PTable(core);
         jScrollPane3 = new javax.swing.JScrollPane();
         txtNotes = new PTextPane(core, true, "-- Notes --");
-        btnClipboard = new PButton(nightMode, menuFontSize);
+        btnClipboard = new PButton(nightMode);
         jTextField5 = new javax.swing.JTextField();
         btnAddLogo = new PAddRemoveButton("+");
         btnDelLogo = new PAddRemoveButton("-");
@@ -1439,6 +1452,7 @@ public class ScrLogoDetails extends PFrame {
      */
     private void btnAddLogoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLogoActionPerformed
         addLogo();
+        setLegal();
     }//GEN-LAST:event_btnAddLogoActionPerformed
 
     private void lstLogosValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstLogosValueChanged
@@ -1481,6 +1495,7 @@ public class ScrLogoDetails extends PFrame {
 
     private void btnDelLogoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelLogoActionPerformed
         deleteLogo();
+        setLegal();
     }//GEN-LAST:event_btnDelLogoActionPerformed
 
     private void btnDelReadingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelReadingActionPerformed

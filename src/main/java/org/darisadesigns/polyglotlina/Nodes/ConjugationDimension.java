@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -65,7 +65,7 @@ public class ConjugationDimension extends DictNode {
         if (this == comp) {
             ret = true;
         } else if (comp != null && getClass() == comp.getClass()) {
-            ret = this.value.equals(((DictNode) comp).value);
+            ret = this.value.trim().equals(((DictNode) comp).value.trim());
         }
         
         return ret;

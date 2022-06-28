@@ -45,6 +45,7 @@ public class ScrDeclensionsGridsTest {
     
     public ScrDeclensionsGridsTest() {
         core = DummyCore.newCore();
+        PGTUtil.enterUITestingMode();
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "conj_autopop_check_test.pgd");

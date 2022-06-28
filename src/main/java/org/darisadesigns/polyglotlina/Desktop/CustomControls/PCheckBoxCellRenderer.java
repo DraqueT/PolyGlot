@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Draque Thopmson, draquemail@gmail.com
+ * Copyright (c) 2019-2022, Draque Thopmson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -38,9 +38,9 @@ public class PCheckBoxCellRenderer<E extends PCheckableItem> implements ListCell
     private final JLabel label;
     private final PCheckBox check;
 
-    public PCheckBoxCellRenderer(boolean nightMode, double fontSize) {
+    public PCheckBoxCellRenderer(boolean nightMode) {
         label = new JLabel(" ");
-        check = new PCheckBox(nightMode, fontSize);
+        check = new PCheckBox(nightMode);
     }
 
     @Override

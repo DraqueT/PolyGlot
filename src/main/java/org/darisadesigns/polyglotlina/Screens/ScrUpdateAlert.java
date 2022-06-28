@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -24,7 +24,6 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.WebInterface;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -275,7 +274,7 @@ public class ScrUpdateAlert extends PDialog {
 
             buttonMap.put(nameNode.getTextContent(), linkNode.getTextContent());
 
-            PButton newButton = new PButton(nightMode, menuFontSize);
+            PButton newButton = new PButton(nightMode);
             newButton.addActionListener((ActionEvent e) -> {
                 JButton thisButton = (JButton) e.getSource();
                 String link = buttonMap.get(thisButton.getText());
@@ -339,7 +338,7 @@ public class ScrUpdateAlert extends PDialog {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
-        txtVersion = new PLabel("", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        txtVersion = new PLabel("");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);

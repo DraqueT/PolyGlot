@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2021, Draque Thompson
+ * Copyright (c) 2015-2022, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -179,15 +179,7 @@ public final class ScrTypes extends PFrame {
             return;
         }
 
-        if (((PTextField) txtName).isDefaultText() || txtName.getText().isEmpty()) {
-            txtErrorBox.setText("Types must have name populated.");
-            txtName.setBackground(PGTUtil.COLOR_REQUIRED_LEX_COLOR);
-            lstTypes.setEnabled(false);
-        } else {
-            txtErrorBox.setText("");
-            lstTypes.setEnabled(true);
-            ((PTextField)txtName).setupLook();
-        }
+        updateLegal();
 
         if (updatingName || curNode == null) {
             return;
@@ -199,6 +191,20 @@ public final class ScrTypes extends PFrame {
         populateTypes();
         lstTypes.setSelectedValue(curNode, true);
         updatingName = false;
+    }
+    
+    private void updateLegal() {
+        if (txtName.getText().isEmpty() && lstTypes.getModel().getSize() > 0) {
+            txtErrorBox.setText("Types must have name populated.");
+            txtName.setBackground(PGTUtil.COLOR_REQUIRED_LEX_COLOR);
+            lstTypes.setEnabled(false);
+            btnAddType.setEnabled(false);
+        } else {
+            txtErrorBox.setText("");
+            lstTypes.setEnabled(true);
+            btnAddType.setEnabled(true);
+            ((PTextField)txtName).setupLook();
+        }
     }
 
     /**
@@ -336,6 +342,8 @@ public final class ScrTypes extends PFrame {
         
         setListeningActive(true);
         ignoreUpdate = false;
+        
+        updateLegal();
     }
 
     /**
@@ -422,19 +430,19 @@ public final class ScrTypes extends PFrame {
         txtName = new PTextField(core, true, "Part of Speech Name");
         txtTypePattern = new PTextField(core,
             core.getPropertiesManager().isOverrideRegexFont(),
-            "Type Pattern");
-        btnSetup = new PButton(nightMode, menuFontSize);
-        btnAutogen = new PButton(nightMode, menuFontSize);
+            "Enforced Pattern");
+        btnSetup = new PButton(nightMode);
+        btnAutogen = new PButton(nightMode);
         txtErrorBox = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
-        chkDefMand = new PCheckBox(nightMode, menuFontSize);
-        chkProcMand = new PCheckBox(nightMode, menuFontSize);
+        chkDefMand = new PCheckBox(nightMode);
+        chkProcMand = new PCheckBox(nightMode);
         txtGloss = new PTextField(core, true, "Part of Speech Gloss");
         jScrollPane3 = new javax.swing.JScrollPane();
         txtNotes = new PTextPane(core, true, "-- Notes --");
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstTypes = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
+        lstTypes = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
         btnAddType = new PAddRemoveButton("+");
         btnDelType = new PAddRemoveButton("-");
 
@@ -451,7 +459,7 @@ public final class ScrTypes extends PFrame {
 
         txtName.setToolTipText("Part of speech name");
 
-        txtTypePattern.setToolTipText("Regex pattern which words of this type must conform to");
+        txtTypePattern.setToolTipText("Regex pattern which words of this part of speech must conform to");
 
         btnSetup.setText("Conjugations/Declensions Setup");
         btnSetup.setToolTipText("Create declension and conjugation dimensins here.");
@@ -478,10 +486,10 @@ public final class ScrTypes extends PFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         chkDefMand.setText("Definition Mandatory");
-        chkDefMand.setToolTipText("Select to enforce definition text for this par of speech.");
+        chkDefMand.setToolTipText("Select to enforce definition text for this part of speech.");
 
         chkProcMand.setText("Pronunciation Mandatory");
-        chkProcMand.setToolTipText("Select to enforce pronunciation text for this par of speech.");
+        chkProcMand.setToolTipText("Select to enforce pronunciation text for this part of speech.");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);

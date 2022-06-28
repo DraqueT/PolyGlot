@@ -21,7 +21,6 @@ package org.darisadesigns.polyglotlina.Screens;
 
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Desktop.FormattedTextHelper;
-import org.darisadesigns.polyglotlina.ExternalCode.GlyphVectorPainter;
 import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
 import java.awt.Color;
 import java.awt.Component;
@@ -331,7 +330,7 @@ public final class ScrGrammarGuide extends PFrame {
         if (cmbFonts.getSelectedIndex() == 0) {
             StyleConstants.setFontFamily(aset, natFont.getFamily());
         } else {
-            aset.addAttribute(GlyphVectorPainter.KEY_KERNING, core.getPropertiesManager().getKerningSpace() * 10);
+            // TODO: Will this even set the font at all if it's not installed locally? This is terrible.
             StyleConstants.setFontFamily(aset, conFont.getFamily());
         }
 
@@ -871,7 +870,7 @@ public final class ScrGrammarGuide extends PFrame {
         cmbFonts = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
         txtFontSize = new javax.swing.JTextField();
         cmbFontColor = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
-        btnApply = new PButton(nightMode, menuFontSize);
+        btnApply = new PButton(nightMode);
         panSection = new javax.swing.JScrollPane();
         txtSection = new PGrammarPane(core);
         jPanel4 = new javax.swing.JPanel();
@@ -884,12 +883,12 @@ public final class ScrGrammarGuide extends PFrame {
         btnDeleteRecordedAudio = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        treChapList = new PTree(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize, nightMode);
+        treChapList = new PTree(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), nightMode);
         txtSearch = new PTextField(core, true, "Search");
-        jLabel1 = new PLabel("", menuFontSize);
+        jLabel1 = new PLabel("");
         btnAddSection = new PAddRemoveButton("+");
         btnDelete = new PAddRemoveButton("-");
-        btnAddChapter = new PButton(nightMode, menuFontSize);
+        btnAddChapter = new PButton(nightMode);
         btnMoveNodeDown = new PButton();
         btnMoveNodeUp = new PButton();
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -50,7 +50,7 @@ public class FamilyManager {
      */
     public FamNode getRoot() {
         if (famRoot == null) {
-            famRoot = new FamNode(null, "Families", this);
+            famRoot = new FamNode(null, "", this);
         }
         
         return famRoot;
@@ -167,8 +167,7 @@ public class FamilyManager {
             ret = true;
         } else if (comp instanceof FamilyManager) {
             FamilyManager compMan = (FamilyManager)comp;
-            ret = (famRoot == null && compMan.famRoot == null) 
-                    || famRoot.equals(compMan.famRoot); 
+            ret = getRoot().equals(compMan.getRoot()); 
         }
         
         return ret;

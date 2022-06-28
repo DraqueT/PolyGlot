@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Draque Thompson
+ * Copyright (c) 2019-2022, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -48,19 +48,16 @@ public class PCheckedComboBox<E extends PCheckableItem> extends JComboBox<E> imp
     private boolean keepOpen;
     private transient ActionListener listener;
     private final boolean nightMode;
-    private final double fontSize;
     private boolean mouseOver = false;
 
-    public PCheckedComboBox(boolean _nightMode, double _fontSize) {
+    public PCheckedComboBox(boolean _nightMode) {
         super();
         nightMode = _nightMode;
-        fontSize = _fontSize;
     }
 
-    public PCheckedComboBox(ComboBoxModel<E> model, boolean _nightMode, double _fontSize) {
+    public PCheckedComboBox(ComboBoxModel<E> model, boolean _nightMode) {
         super(model);
         nightMode = _nightMode;
-        fontSize = _fontSize;
     }
 
     @Override
@@ -79,7 +76,7 @@ public class PCheckedComboBox<E extends PCheckableItem> extends JComboBox<E> imp
                 keepOpen = true;
             }
         };
-        setRenderer(new PCheckBoxCellRenderer<>(nightMode, fontSize));
+        setRenderer(new PCheckBoxCellRenderer<>(nightMode));
         addActionListener(listener);
         getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "checkbox-select");
         getActionMap().put("checkbox-select", new AbstractAction() {

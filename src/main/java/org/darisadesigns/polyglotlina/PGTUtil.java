@@ -111,7 +111,6 @@ public class PGTUtil {
     public static final String LANG_PROP_AUTH_COPYRIGHT_XID = "langPropAuthorCopyright";
     public static final String LANG_PROP_LOCAL_NAME_XID = "langPropLocalLangName";
     public static final String LANG_PROP_USE_LOCAL_LEX_XID = "langPropUseLocalLexicon";
-    public static final String LANG_PROP_KERN_VAL_XID = "langPropKerningValue";
     public static final String LANG_PROP_OVERRIDE_REGEX_FONT_XID = "langPropOverrideRegexFont";
     public static final String LANG_PROP_USE_SIMPLIFIED_CONJ = "langPropUseSimplifiedConjugations";
     public static final String LANG_PROP_EXPANDED_LEX_LIST_DISP = "expandedLexListDisplay";
@@ -268,6 +267,8 @@ public class PGTUtil {
     public static final String OPTIONS_DIVIDER_POSITION = "OptionsDividerPosition";
     public static final String OPTIONS_MAXIMIZED = "OptionsMaximized";
     public static final String OPTIONS_MSBETWEENSAVES = "MsBetweenSaves";
+    public static final String OPTIONS_UI_SCALE = "UiScale";
+    
 
     // Java 8 bridge constants
     public static final String JAVA_JAVA_COMMAND = "java";
@@ -462,6 +463,7 @@ public class PGTUtil {
         VERSION_HIERARCHY.put("3.3.5", 47);
         VERSION_HIERARCHY.put("3.5", 48);
         VERSION_HIERARCHY.put("3.5.1", 49);
+        VERSION_HIERARCHY.put("3.6", 50);
         
         BUILD_DATE_TIME = getBuildDate();
     }
@@ -544,7 +546,7 @@ public class PGTUtil {
     public static File getDefaultDirectory() {
         String defaultDirectoryPath = System.getProperty("user.home") + File.separator + POLYGLOT_WORKINGDIRECTORY;
         
-        // for my own sanity, this keeps test stuff from overwriting options and stuff
+        // for my own sanity, this keeps test stuff from overwriting options and whatnot
         if (PGTUtil.isInJUnitTest()) {
             defaultDirectoryPath += "_TEST";
         }
@@ -588,7 +590,7 @@ public class PGTUtil {
     
     public static void validateVersion() throws Exception {
         if (!VERSION_HIERARCHY.containsKey(PGT_VERSION)) {
-            throw new Exception("ERROR: CURRENT VERSION NOT ACCOUNTED FOR IN VERSION HISTORY.");
+            throw new Exception("ERROR: CURRENT VERSION NOT ACCOUNTED FOR IN VERSION HISTORY: " + PGT_VERSION);
         }
     }
     

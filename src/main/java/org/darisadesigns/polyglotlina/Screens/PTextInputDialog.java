@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -144,8 +144,8 @@ public final class PTextInputDialog extends PDialog {
 
         txtDialog = new javax.swing.JLabel();
         pnlTextFields = new javax.swing.JPanel();
-        jButton1 = new PButton(nightMode, menuFontSize);
-        jButton2 = new PButton(nightMode, menuFontSize);
+        jButton1 = new PButton(nightMode);
+        jButton2 = new PButton(nightMode);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(416, 2));

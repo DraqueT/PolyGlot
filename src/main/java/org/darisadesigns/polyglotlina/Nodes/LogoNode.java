@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -324,7 +324,7 @@ public class LogoNode extends DictNode {
             LogoNode c = (LogoNode) comp;
 
             ret = value.equals(c.value);
-            ret = ret && notes.equals(c.notes);
+            ret = ret && WebInterface.getTextFromHtml(notes).equals(WebInterface.getTextFromHtml(c.notes));
             ret = ret && Arrays.equals(logoBytes, c.logoBytes);
             ret = ret && isRadical == c.isRadical;
             ret = ret && radicals.equals(c.radicals);

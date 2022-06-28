@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2018-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -18,8 +18,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 package org.darisadesigns.polyglotlina.Screens;
-
-// TODO: Most of these tests
 
 import TestResources.DummyCore;
 import java.awt.GraphicsEnvironment;
@@ -48,6 +46,8 @@ public class ScrMainMenuTest {
         } else {
             mainMenu = null;
         }
+        
+        PGTUtil.enterUITestingMode();
     }
     
     @Test
@@ -82,6 +82,7 @@ public class ScrMainMenuTest {
                 | SecurityException | InvocationTargetException | ParserConfigurationException 
                 | TransformerException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
+            // e.printStackTrace();
             fail(e);
         } finally {
             File testFile = new File(testFileName);

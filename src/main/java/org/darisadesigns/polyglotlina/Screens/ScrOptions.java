@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
+import javax.swing.event.ChangeEvent;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
@@ -27,11 +28,9 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextFieldFilter;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
-import javax.swing.InputVerifier;
-import javax.swing.JComponent;
-import javax.swing.JTextField;
 import javax.swing.text.PlainDocument;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
+import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
  *
@@ -49,13 +48,24 @@ public final class ScrOptions extends PDialog {
         
         initComponents();
         setOptions();
-        final ScrOptions optionsParent = this;
+        setupListeners();
         
-        // TODO: Either finish night mode or remove references to it.
-        chkNightMode.setVisible(false);
+        if (PGTUtil.IS_OSX) {
+            lblUiScaling.setEnabled(false);
+            sldUiScaling.setEnabled(false);
+            sldUiScaling.setToolTipText("UI scaling unavailable on macOS");
+        } else {
+            lblUiScaling.setText("UI Scaling: " + sldUiScaling.getValue());
+        }
         
         ((PlainDocument)txtRevisionNumbers.getDocument()).setDocumentFilter(new PTextFieldFilter());
         ((PlainDocument)txtAutoSave.getDocument()).setDocumentFilter(new PTextFieldFilter());
+    }
+    
+    private void setupListeners() {
+        sldUiScaling.addChangeListener((ChangeEvent e) -> {
+            lblUiScaling.setText("UI Scaling: " + sldUiScaling.getValue());
+        });
     }
 
     @Override
@@ -63,23 +73,19 @@ public final class ScrOptions extends PDialog {
         if (testWarnClose()) {
             DesktopOptionsManager options = PolyGlot.getPolyGlot().getOptionsManager();
             
-            double fontSize = Double.parseDouble(txtTextFontSize.getText());
-            double fontSizeOriginal = options.getMenuFontSize();
-            boolean nightModeOriginal = options.isNightMode();
+            int scalingOriginal = options.getUiScale();
             int maxReversion = Integer.parseInt(txtRevisionNumbers.getText());
             maxReversion = maxReversion > -1 ? maxReversion : 1;
             int autoSaveInteral = (int) 
                     (Float.parseFloat(txtAutoSave.getText()) * 60000); // multiply to get val in MS
             
             options.setAnimateWindows(chkResize.isSelected());
-            options.setNightMode(chkNightMode.isSelected());
-            options.setMenuFontSize(fontSize);
             options.setMaxReversionCount(maxReversion);
             options.setMsBetweenSaves(autoSaveInteral);
+            options.setUiScale(sldUiScaling.getValue());
             
-            // only refresh if font size changed or night mode setting switched
-            if (fontSizeOriginal != fontSize|| nightModeOriginal != chkNightMode.isSelected()) {
-                PolyGlot.getPolyGlot().refreshUiDefaults();
+            if (scalingOriginal != sldUiScaling.getValue() && !isDisposed()) {
+                new DesktopInfoBox().info("Please Restart PolyGlot", "Please Restart PolyGlot for UI scaling change to be applied.");
             }
             
             super.dispose();
@@ -89,18 +95,10 @@ public final class ScrOptions extends PDialog {
     public boolean testWarnClose() {
         boolean ret = true;
         
-        if (Double.parseDouble(txtTextFontSize.getText()) > 30.0) {
-            ret = false;
-            new DesktopInfoBox(this).warning("Inlaid text size", "Text cannot be larger thant 30.0 points.");
-        }
-        
         return ret;
     }
 
     private void setOptions() {
-        ((PlainDocument) txtTextFontSize.getDocument())
-                .setDocumentFilter(new PTextFieldFilter());
-
         updateAllValues(core);
     }
     
@@ -121,15 +119,14 @@ public final class ScrOptions extends PDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        chkResize = new PCheckBox(nightMode, menuFontSize);
-        jLabel1 = new PLabel("", menuFontSize);
-        txtTextFontSize = new javax.swing.JTextField();
-        chkNightMode = new PCheckBox(nightMode, menuFontSize);
-        jLabel2 = new PLabel("", menuFontSize);
+        chkResize = new PCheckBox(nightMode);
+        jLabel2 = new PLabel("");
         txtRevisionNumbers = new javax.swing.JTextField();
         btnResetOptions = new PButton();
-        jLabel3 = new PLabel("", menuFontSize);
+        jLabel3 = new PLabel("");
         txtAutoSave = new javax.swing.JTextField();
+        sldUiScaling = new javax.swing.JSlider();
+        lblUiScaling = new PLabel("");
         btnOk = new PButton();
 
         setTitle("PolyGlot Options");
@@ -143,12 +140,6 @@ public final class ScrOptions extends PDialog {
 
         chkResize.setText("Auto Resize Window");
         chkResize.setToolTipText("Resize window to last size of given module automatically");
-
-        jLabel1.setText("Menu Font Size");
-
-        txtTextFontSize.setToolTipText(" Size of menu text (not optimized for alternate values)");
-
-        chkNightMode.setText("Night Mode");
 
         jLabel2.setText("Revision States Saved");
         jLabel2.setToolTipText("The max number of prior versions to save in your PGD files. 0 is unlimited (can lead to large files ).");
@@ -167,6 +158,15 @@ public final class ScrOptions extends PDialog {
 
         txtAutoSave.setToolTipText("Frequency in minutes between saving to temp recovery file");
 
+        sldUiScaling.setMajorTickSpacing(1);
+        sldUiScaling.setMaximum(4);
+        sldUiScaling.setMinimum(1);
+        sldUiScaling.setToolTipText("Allows for scaling of UI. Left is smaller, right is bigger (requires restart)");
+        sldUiScaling.setValue(2);
+
+        lblUiScaling.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblUiScaling.setText("UI Scaling");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -178,22 +178,20 @@ public final class ScrOptions extends PDialog {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(chkResize, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(chkNightMode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtTextFontSize, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(sldUiScaling, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel3)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(txtAutoSave, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(lblUiScaling, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtRevisionNumbers, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtAutoSave, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 148, Short.MAX_VALUE)))
+                                .addComponent(txtRevisionNumbers, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 98, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -201,21 +199,19 @@ public final class ScrOptions extends PDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(chkResize)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chkNightMode)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtTextFontSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(5, 5, 5)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtRevisionNumbers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(txtAutoSave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(sldUiScaling, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblUiScaling, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addComponent(btnResetOptions))
         );
 
@@ -259,23 +255,21 @@ public final class ScrOptions extends PDialog {
         DesktopOptionsManager mgr = PolyGlot.getPolyGlot().getOptionsManager();
         
         chkResize.setSelected(mgr.isAnimateWindows());
-        chkNightMode.setSelected(mgr.isNightMode());
-        txtTextFontSize.setText(Double.toString(mgr.getMenuFontSize()));
         txtRevisionNumbers.setText(Integer.toString(mgr.getMaxReversionCount()));
         txtAutoSave.setText(Float.toString(mgr.getMsBetweenSaves()/60000.0f));
+        sldUiScaling.setValue(mgr.getUiScale());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnOk;
     private javax.swing.JButton btnResetOptions;
-    private javax.swing.JCheckBox chkNightMode;
     private javax.swing.JCheckBox chkResize;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblUiScaling;
+    private javax.swing.JSlider sldUiScaling;
     private javax.swing.JTextField txtAutoSave;
     private javax.swing.JTextField txtRevisionNumbers;
-    private javax.swing.JTextField txtTextFontSize;
     // End of variables declaration//GEN-END:variables
 }

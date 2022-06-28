@@ -19,10 +19,7 @@
  */
 package org.darisadesigns.polyglotlina;
 
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import TestResources.DummyCore;
-import java.awt.Dimension;
-import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -36,7 +33,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
-import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
@@ -185,66 +181,6 @@ public class IOHandlerTest {
     }
     
     @Test
-    public void testIniFile() {
-        System.out.println("IOHandlerTest.testIniFile");
-        
-        try {
-            String testScreenName = "Silly Sergal Merp Screen";
-
-            boolean animatedExpected = true;
-            int reversionCountExpected = 13;
-            double menuFontExpected = 16;
-            boolean nightModeExpected = true;
-            Point expectedScreenPosition = new Point(13, 42);
-            Dimension expectedScreenDimension = new Dimension(69, 420);
-            int toDoBarPositionExpected = 666;
-            int autoSavMs = 12345678;
-
-            // create test core to set values in...
-            DictCore core = DummyCore.newCore();
-            DesktopOptionsManager opt = PolyGlot.getPolyGlot().getOptionsManager();
-
-            opt.setAnimateWindows(animatedExpected);
-            opt.setMaxReversionCount(reversionCountExpected);
-            opt.setMenuFontSize(menuFontExpected);
-            opt.setNightMode(nightModeExpected);
-            opt.setScreenPosition(testScreenName, expectedScreenPosition);
-            opt.setScreenSize(testScreenName, expectedScreenDimension);
-            opt.setToDoBarPosition(toDoBarPositionExpected);
-            opt.setMaximized(true);
-            opt.setDividerPosition(testScreenName, toDoBarPositionExpected);
-            opt.setMsBetweenSaves(autoSavMs);
-
-            // save values to disk...
-            DesktopIOHandler.getInstance().writeOptionsIni(core.getWorkingDirectory().getAbsolutePath(), opt);
-
-            // create new core to load saved values into...
-            core = DummyCore.newCore();
-            opt = PolyGlot.getPolyGlot().getOptionsManager();
-            
-            // relaod saved values...
-            DesktopIOHandler.getInstance().loadOptionsIni(opt, core.getWorkingDirectory().getAbsolutePath());
-            
-            assertEquals(animatedExpected, opt.isAnimateWindows());
-            assertEquals(reversionCountExpected, opt.getMaxReversionCount());
-            assertEquals(menuFontExpected, opt.getMenuFontSize());
-            assertEquals(nightModeExpected, opt.isNightMode());
-            assertEquals(expectedScreenPosition, opt.getScreenPosition(testScreenName));
-            assertEquals(expectedScreenDimension, opt.getScreenSize(testScreenName));
-            assertEquals(toDoBarPositionExpected, opt.getToDoBarPosition());
-            assertEquals(toDoBarPositionExpected, opt.getDividerPosition(testScreenName));
-            assertTrue(opt.isMaximized());
-            assertEquals(autoSavMs, opt.getMsBetweenSaves());
-        } catch (Exception e) {
-            DesktopIOHandler.getInstance().writeErrorLog(e);
-            fail(e);
-        } finally {
-            // clean up
-            new File(PGTUtil.TESTRESOURCES + PGTUtil.POLYGLOT_INI).delete();
-        }
-    }
-    
-    @Test
     public void testMakeTempSaveFile(){
         System.out.println("IOHandlerTest.testMakeTempSaveFile");
         
@@ -370,55 +306,6 @@ public class IOHandlerTest {
             if (testFile != null && testFile.exists()) {
                 testFile.delete();
             }
-        }
-    }
-    
-    @Test
-    public void testWriteOSXMetadataAttributeHex() {
-        Assumptions.assumeTrue(PGTUtil.IS_OSX);
-        
-        System.out.println("IOHandlerTest.testWriteOSXMetadataAttributeHex");
-        
-        String expectedEnd = "com.apple.FinderInfo:00000000  57 44 43 44 4D 53 53 50 00 00 00 00 00 00 00 00  |WDCDMSSP........|00000010  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  |................|00000020";
-        
-        try {
-            File testFile = DesktopIOHandler.getInstance().createTmpFileWithContents("test", "tst");
-            String filePath = testFile.getAbsolutePath();
-            
-            DesktopIOHandler.getInstance().addFileAttributeOSX(filePath,
-                    PGTUtil.OSX_FINDER_METADATA_NAME,
-                    PGTUtil.OSX_FINDER_INFO_VALUE_DIC_FILES,
-                    true);
-            
-            String result = DesktopIOHandler.getInstance().getFileAttributeOSX(filePath, PGTUtil.OSX_FINDER_METADATA_NAME);
-            assertTrue(result.endsWith(expectedEnd));
-        } catch (Exception e) {
-            fail(e);
-        }
-    }
-    
-    @Test
-    public void testWriteOSXMetadataAttributeString() {
-        Assumptions.assumeTrue(PGTUtil.IS_OSX);
-        
-        System.out.println("IOHandlerTest.testWriteOSXMetadataAttributeString");
-        
-        String attribName = "zimzam";
-        String value = "mbam";
-        
-        try {
-            File testFile = DesktopIOHandler.getInstance().createTmpFileWithContents("test", "tst");
-            String filePath = testFile.getAbsolutePath();
-            
-            DesktopIOHandler.getInstance().addFileAttributeOSX(filePath,
-                    attribName,
-                    value,
-                    false);
-            
-            String result = DesktopIOHandler.getInstance().getFileAttributeOSX(filePath, attribName);
-            assertTrue(result.endsWith(value));
-        } catch (Exception e) {
-            fail(e);
         }
     }
     

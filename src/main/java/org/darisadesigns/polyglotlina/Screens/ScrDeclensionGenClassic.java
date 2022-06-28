@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -988,29 +988,29 @@ public final class ScrDeclensionGenClassic extends PDialog {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new PLabel("", menuFontSize);
+        jLabel1 = new PLabel("");
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstCombinedDec = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
+        lstCombinedDec = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new PLabel("", menuFontSize);
+        jLabel2 = new PLabel("");
         jScrollPane2 = new javax.swing.JScrollPane();
-        lstRules = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
+        lstRules = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
         btnAddRule = new PAddRemoveButton("+");
         btnDeleteRule = new PAddRemoveButton("-");
-        chkDisableWordform = new PCheckBox(nightMode, menuFontSize);
-        btnMoveRuleUp = new PButton(nightMode, menuFontSize); btnMoveRuleUp.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu()) ;
-        btnMoveRuleDown = new PButton(nightMode, menuFontSize); btnMoveRuleDown.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
+        chkDisableWordform = new PCheckBox(nightMode);
+        btnMoveRuleUp = new PButton(nightMode); btnMoveRuleUp.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu()) ;
+        btnMoveRuleDown = new PButton(nightMode); btnMoveRuleDown.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         jPanel3 = new javax.swing.JPanel();
         txtRuleName = new PTextField(core, true, "Name");
         txtRuleRegex = new PTextField(core,
             core.getPropertiesManager().isOverrideRegexFont(),
             "Filter Regex");
-        jLabel3 = new PLabel("", menuFontSize);
+        jLabel3 = new PLabel("");
         sclTransforms = new javax.swing.JScrollPane();
         tblTransforms = new PTable(core);
         btnAddTransform = new PAddRemoveButton("+");
-        btnMoveTransformUp = new PButton(nightMode, menuFontSize); btnMoveTransformUp.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
-        btnMoveTransformDown = new PButton(nightMode, menuFontSize); btnMoveTransformDown.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
+        btnMoveTransformUp = new PButton(nightMode); btnMoveTransformUp.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
+        btnMoveTransformDown = new PButton(nightMode); btnMoveTransformDown.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         btnDeleteTransform = new PAddRemoveButton("-");
         scrApplyClasses = new javax.swing.JScrollPane();
         pnlApplyClasses = new PClassCheckboxPanel(core, core.getTypes().getNodeById(typeId), true);

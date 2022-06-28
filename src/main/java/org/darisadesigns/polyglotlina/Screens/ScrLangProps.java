@@ -59,9 +59,7 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellRenderer;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTable;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextFieldFilter;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
-import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -89,8 +87,7 @@ public class ScrLangProps extends PFrame {
         populateProperties();
         setAlphaLegal();
         
-        float fontSize = (float)((DesktopOptionsManager)PolyGlot.getPolyGlot().getOptionsManager()).getMenuFontSize();
-        Font charis = PGTUtil.CHARIS_UNICODE.deriveFont(fontSize);
+        Font charis = PGTUtil.CHARIS_UNICODE;
         btnAlphaUp.setFont(charis);
         btnAlphaDown.setFont(charis);
         chkTypesMandatory.setEnabled(!core.getTypes().getAllValues().isEmpty());
@@ -275,33 +272,6 @@ public class ScrLangProps extends PFrame {
             }
         });
         
-        txtKerning.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                save();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                save();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                save();
-            }
-
-            private void save() {
-                try {
-                    core.getPropertiesManager().setKerningSpace(Double.parseDouble(txtKerning.getText()));
-                }
-                catch (NumberFormatException e) {
-                    // do nothing. This fails on non-numeric values, which is handled elsewhere
-                    // IOHandler.writeErrorLog(e);
-                }
-            }
-        });
-        
         ((PTable)tblAlphabet).setDefaultCellListender(new CellEditorListener() {
             @Override
             public void editingStopped(ChangeEvent e) {
@@ -423,7 +393,6 @@ public class ScrLangProps extends PFrame {
         propMan.setOverrideRegexFont(chkOverrideRegexFont.isSelected());
         propMan.setExpandedLexListDisplay(chkExpandedLexList.isSelected());
         propMan.setUseLocalWordLex(chkUseLocalWordLex.isSelected());
-        propMan.setKerningSpace(Double.parseDouble(txtKerning.getText()));
 
         TableCellEditor cellEdit = tblAlphabet.getCellEditor();
         if (cellEdit != null) {
@@ -449,7 +418,6 @@ public class ScrLangProps extends PFrame {
         chkOverrideRegexFont.setSelected(propMan.isOverrideRegexFont());
         chkExpandedLexList.setSelected(propMan.isExpandedLexListDisplay());
         chkUseLocalWordLex.setSelected(propMan.isUseLocalWordLex());
-        txtKerning.setValue(propMan.getKerningSpace());
         txtConSize.setText(Double.toString(propMan.getFontSize()));
         txtLocalSize.setText(Double.toString(propMan.getLocalFontSize()));
         
@@ -628,20 +596,17 @@ public class ScrLangProps extends PFrame {
         btnChangeFont = new PButtonDropdown(getConFontPopupMenu());
         txtFont = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
-        chkTypesMandatory = new PCheckBox(nightMode, menuFontSize);
-        chkLocalMandatory = new PCheckBox(nightMode, menuFontSize);
-        chkWordUniqueness = new PCheckBox(nightMode, menuFontSize);
-        chkLocalUniqueness = new PCheckBox(nightMode, menuFontSize);
-        chkIgnoreCase = new PCheckBox(nightMode, menuFontSize);
-        chkDisableProcRegex = new PCheckBox(nightMode, menuFontSize);
-        chkEnforceRTL = new PCheckBox(nightMode, menuFontSize);
-        jLabel2 = new PLabel("", menuFontSize);
-        chkOverrideRegexFont = new PCheckBox(nightMode, menuFontSize);
-        chkUseLocalWordLex = new PCheckBox(nightMode, menuFontSize);
-        chkExpandedLexList = new PCheckBox(nightMode, menuFontSize);
-        jPanel4 = new javax.swing.JPanel();
-        jLabel1 = new PLabel("", menuFontSize);
-        txtKerning = new javax.swing.JFormattedTextField(decimalFormat);
+        chkTypesMandatory = new PCheckBox(nightMode);
+        chkLocalMandatory = new PCheckBox(nightMode);
+        chkWordUniqueness = new PCheckBox(nightMode);
+        chkLocalUniqueness = new PCheckBox(nightMode);
+        chkIgnoreCase = new PCheckBox(nightMode);
+        chkDisableProcRegex = new PCheckBox(nightMode);
+        chkEnforceRTL = new PCheckBox(nightMode);
+        jLabel2 = new PLabel("");
+        chkOverrideRegexFont = new PCheckBox(nightMode);
+        chkUseLocalWordLex = new PCheckBox(nightMode);
+        chkExpandedLexList = new PCheckBox(nightMode);
         btnFontLocal = new PButtonDropdown(getLocalFontPopupMenu());
         txtLocalFont = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -656,9 +621,9 @@ public class ScrLangProps extends PFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblAlphabet = new PTable(core);
-        jLabel4 = new javax.swing.JLabel();
-        btnAlphaUp = new PButton(nightMode, menuFontSize);
-        btnAlphaDown = new PButton(nightMode, menuFontSize);
+        jLabel4 = new PLabel("");
+        btnAlphaUp = new PButton(nightMode);
+        btnAlphaDown = new PButton(nightMode);
         btnDeleteAlpha = new PAddRemoveButton("-");
         btnAddAlpha = new PAddRemoveButton("+");
 
@@ -782,34 +747,7 @@ public class ScrLangProps extends PFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(chkUseLocalWordLex)
                     .addComponent(chkExpandedLexList))
-                .addContainerGap(65, Short.MAX_VALUE))
-        );
-
-        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Kerning");
-
-        txtKerning.setToolTipText("Values between -0.1 and 0.3 work best. 0 is default(blank) WARNING: Values over 0 will cause PolyGlot to ignore ligatures.");
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtKerning, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtKerning, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(107, Short.MAX_VALUE))
         );
 
         btnFontLocal.setText("Local Font");
@@ -840,7 +778,6 @@ public class ScrLangProps extends PFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane2)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -874,8 +811,6 @@ public class ScrLangProps extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -893,7 +828,7 @@ public class ScrLangProps extends PFrame {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(txtLangName, javax.swing.GroupLayout.DEFAULT_SIZE, 667, Short.MAX_VALUE)
+            .addComponent(txtLangName, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
             .addComponent(txtLocalLanguage, javax.swing.GroupLayout.Alignment.TRAILING)
             .addComponent(jScrollPane4)
         );
@@ -905,7 +840,7 @@ public class ScrLangProps extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtLocalLanguage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1096,13 +1031,11 @@ public class ScrLangProps extends PFrame {
     private javax.swing.JCheckBox chkTypesMandatory;
     private javax.swing.JCheckBox chkUseLocalWordLex;
     private javax.swing.JCheckBox chkWordUniqueness;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -1112,7 +1045,6 @@ public class ScrLangProps extends PFrame {
     private javax.swing.JTextPane txtAuthorCopyright;
     private javax.swing.JTextField txtConSize;
     private javax.swing.JTextField txtFont;
-    private javax.swing.JFormattedTextField txtKerning;
     private javax.swing.JTextField txtLangName;
     private javax.swing.JTextField txtLocalFont;
     private javax.swing.JTextField txtLocalLanguage;

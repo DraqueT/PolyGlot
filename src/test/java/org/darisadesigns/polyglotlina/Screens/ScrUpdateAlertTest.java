@@ -24,7 +24,7 @@ import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
-import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
+import org.darisadesigns.polyglotlina.PGTUtil;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
@@ -40,6 +40,7 @@ public class ScrUpdateAlertTest {
     public ScrUpdateAlertTest() {
         Assumptions.assumeFalse(GraphicsEnvironment.isHeadless());
         Assumptions.assumeTrue(netConnected());
+        PGTUtil.enterUITestingMode();
 
         try {
             updateAlert = new ScrUpdateAlert(false, DummyCore.newCore());

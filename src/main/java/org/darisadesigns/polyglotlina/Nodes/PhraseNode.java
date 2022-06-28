@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2021-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -143,12 +143,12 @@ public class PhraseNode extends DictNode {
         
         PhraseNode compNode = (PhraseNode)comp;
         
-        boolean ret = getGloss().equals(compNode.getGloss());
-        ret = ret && getConPhrase().equals(compNode.getConPhrase());
-        ret = ret && getLocalPhrase().equals(compNode.getLocalPhrase());
-        ret = ret && (getPronunciation().equals(compNode.getPronunciation())
+        boolean ret = getGloss().trim().equals(compNode.getGloss().trim());
+        ret = ret && getConPhrase().trim().equals(compNode.getConPhrase().trim());
+        ret = ret && getLocalPhrase().trim().equals(compNode.getLocalPhrase().trim());
+        ret = ret && (getPronunciation().trim().equals(compNode.getPronunciation().trim())
                 || (isProcOverride() && compNode.isProcOverride()));
-        ret = ret && getNotes().equals(compNode.getNotes());
+        ret = ret && getNotes().trim().equals(compNode.getNotes().trim());
         ret = ret && isProcOverride() == compNode.isProcOverride();
         
         return ret;

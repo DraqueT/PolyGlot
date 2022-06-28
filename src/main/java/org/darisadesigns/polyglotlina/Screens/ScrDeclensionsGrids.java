@@ -41,6 +41,8 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDeclensionPanelInt
 import java.awt.Window;
 import javax.swing.JOptionPane;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 
 /**
@@ -315,12 +317,12 @@ public final class ScrDeclensionsGrids extends PDialog {
         cmbDimX = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         cmbDimY = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
         pnlTabDeclensions = new javax.swing.JTabbedPane();
-        chkAutogenOverride = new javax.swing.JCheckBox();
-        btnOk = new PButton(nightMode, menuFontSize);
-        btnCancel = new PButton(nightMode, menuFontSize);
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        btnDeprecated = new PButton(nightMode, menuFontSize);
+        chkAutogenOverride = new PCheckBox();
+        btnOk = new PButton(nightMode);
+        btnCancel = new PButton(nightMode);
+        jLabel1 = new PLabel("");
+        jLabel2 = new PLabel("");
+        btnDeprecated = new PButton(nightMode);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Conjugations/Declensions");

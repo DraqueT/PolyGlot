@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2021-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -22,7 +22,6 @@ package org.darisadesigns.polyglotlina.Desktop;
 import org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager;
 import java.awt.Font;
 import java.awt.FontFormatException;
-import java.awt.font.TextAttribute;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +43,7 @@ public class DesktopPropertiesManager extends PropertiesManager {
      * @return
      */
     public Font getFontMenu() {
-        return PGTUtil.CHARIS_UNICODE.deriveFont(Font.PLAIN, (float)PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        return PGTUtil.CHARIS_UNICODE.deriveFont(PGTUtil.DEFAULT_FONT_SIZE.floatValue());
     }
     
     public Font getFontLocal() {
@@ -95,7 +94,7 @@ public class DesktopPropertiesManager extends PropertiesManager {
             java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(conFont);
             ret = javafx.scene.text.Font.font(conFont.getFamily(), conFontSize);
         } else { // last default to menu standard
-            ret = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+            ret = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), PGTUtil.DEFAULT_FONT_SIZE);
         }
 
         return ret;
@@ -115,7 +114,7 @@ public class DesktopPropertiesManager extends PropertiesManager {
             java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(localFont);
             ret = javafx.scene.text.Font.font(localFont.getFamily(), localFontSize);
         } else { // last default to menu standard
-            ret = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+            ret = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), PGTUtil.DEFAULT_FONT_SIZE);
         }
 
         return ret;
@@ -130,7 +129,9 @@ public class DesktopPropertiesManager extends PropertiesManager {
      */
     public void setFontConRaw(Font fontCon) {
         // null cached font if being set to new font
-        if (conFont != null && !conFont.getFamily().equals(fontCon.getFamily())) {
+        if (conFont != null 
+                && fontCon!= null 
+                && !conFont.getFamily().equals(fontCon.getFamily())) {
             cachedConFont = null;
         }
 
@@ -225,13 +226,9 @@ public class DesktopPropertiesManager extends PropertiesManager {
         if (conFontSize == 0) {
             conFontSize = 12;
         }
-
-        if (retFont != null && kerningSpace != 0.0) {
-            retFont = PGTUtil.addFontAttribute(TextAttribute.TRACKING, kerningSpace, conFont);
-        }
         
         return retFont == null ? 
-                PGTUtil.CHARIS_UNICODE.deriveFont((float)PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize()) : 
+                PGTUtil.CHARIS_UNICODE.deriveFont(conFontStyle, (float)conFontSize) : 
                 retFont.deriveFont(conFontStyle, (float)conFontSize);
     }
     
@@ -338,12 +335,11 @@ public class DesktopPropertiesManager extends PropertiesManager {
             ret = true;
         } else if (comp instanceof DesktopPropertiesManager) {
             DesktopPropertiesManager prop = (DesktopPropertiesManager) comp;
-            ret = ((conFont == null) && (prop.conFont == null)) || conFont.equals(prop.conFont);
+            ret = getFontCon().equals(prop.getFontCon());
             ret = ret && conFontStyle.equals(prop.conFontStyle);
             ret = ret && conFontSize == prop.conFontSize;
             ret = ret && localFontSize == prop.localFontSize;
             ret = ret && localFont.equals(prop.localFont);
-            ret = ret && kerningSpace.equals(prop.kerningSpace);
             ret = ret && super.equals(comp);
         }
         

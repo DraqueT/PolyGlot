@@ -162,7 +162,7 @@
             <Property name="text" type="java.lang.String" value="Font Size"/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;Font Size&quot;, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize())"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PLabel(&quot;Font Size&quot;)"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="txtFontSize">

@@ -316,11 +316,6 @@ public interface IOHandler {
      * @throws Exception if you try to run it on a nonOSX platform
      */
     public void addFileAttributeOSX(String filePath, String attribute, String value, boolean isHexVal) throws Exception;
-    
-    // TODO: If I ever need this, refine it. It currently gives very little back.
-    // Consider returning object which specifies whether hex or string data. or something.
-    // No need exept for testing at this point.
-    public String getFileAttributeOSX(String filePath, String attribute) throws Exception;
 
     /**
      * Runs a command at the console, returning informational and error output.

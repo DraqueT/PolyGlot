@@ -65,7 +65,6 @@ public abstract class PropertiesManager {
     protected byte[] cachedLocalFont = null;
     private final Map<String, String> charRep = new HashMap<>();
     protected DictCore core;
-    protected Double kerningSpace = 0.0;
     private boolean useSimplifiedConjugations = false;
 
     public PropertiesManager() {
@@ -519,11 +518,6 @@ public abstract class PropertiesManager {
         wordValue.appendChild(doc.createTextNode(localLangName));
         propContainer.appendChild(wordValue);
         
-        // store kerning value (default 0)
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_KERN_VAL_XID);
-        wordValue.appendChild(doc.createTextNode(kerningSpace.toString()));
-        propContainer.appendChild(wordValue);
-        
         // store option to use simplified conjugation autogeneration
         wordValue = doc.createElement(PGTUtil.LANG_PROP_USE_SIMPLIFIED_CONJ);
         wordValue.appendChild(doc.createTextNode(useSimplifiedConjugations ? PGTUtil.TRUE : PGTUtil.FALSE));
@@ -586,7 +580,7 @@ public abstract class PropertiesManager {
      * @return the localLangName
      */
     public String getLocalLangName() {
-        return localLangName;
+        return localLangName.trim().isEmpty() ? "Local" : localLangName;
     }
 
     /**
@@ -608,20 +602,6 @@ public abstract class PropertiesManager {
      */
     public void setCopyrightAuthorInfo(String _copyrightAuthorInfo) {
         this.copyrightAuthorInfo = _copyrightAuthorInfo;
-    }
-
-    /**
-     * @return the kerningSpace
-     */
-    public Double getKerningSpace() {
-        return kerningSpace;
-    }
-
-    /**
-     * @param _kerningSpace the kerningSpace to set
-     */
-    public void setKerningSpace(Double _kerningSpace) {
-        this.kerningSpace = _kerningSpace;
     }
     
     /**
@@ -804,9 +784,9 @@ public abstract class PropertiesManager {
             ret = ret && conFontSize == prop.conFontSize;
             ret = ret && localFontSize == prop.localFontSize;
             ret = ret && alphaOrder.equals(prop.alphaOrder);
-            ret = ret && langName.equals(prop.langName);
-            ret = ret && localLangName.equals(prop.localLangName);
-            ret = ret && copyrightAuthorInfo.equals(prop.copyrightAuthorInfo);
+            ret = ret && langName.trim().equals(prop.langName.trim());
+            ret = ret && localLangName.trim().equals(prop.localLangName.trim());
+            ret = ret && WebInterface.getTextFromHtml(copyrightAuthorInfo).equals(WebInterface.getTextFromHtml(prop.copyrightAuthorInfo));
             ret = ret && typesMandatory == prop.typesMandatory;
             ret = ret && localMandatory == prop.localMandatory;
             ret = ret && wordUniqueness == prop.wordUniqueness;
@@ -817,13 +797,12 @@ public abstract class PropertiesManager {
             ret = ret && enforceRTL == prop.enforceRTL;
             ret = ret && useLocalWordLex == prop.useLocalWordLex;
             ret = ret && charRep.equals(prop.charRep);
-            ret = ret && kerningSpace.equals(prop.kerningSpace);
             ret = ret && useSimplifiedConjugations == prop.useSimplifiedConjugations;
             ret = ret && expandedLexListDisplay == prop.expandedLexListDisplay;
-            ret = ret && zompistCategories.equals(prop.zompistCategories);
-            ret = ret && zompistIllegalClusters.equals(prop.zompistIllegalClusters);
-            ret = ret && zompistRewriteRules.equals(prop.zompistRewriteRules);
-            ret = ret && zompistSyllableTypes.equals(prop.zompistSyllableTypes);
+            ret = ret && zompistCategories.trim().equals(prop.zompistCategories.trim());
+            ret = ret && zompistIllegalClusters.trim().equals(prop.zompistIllegalClusters.trim());
+            ret = ret && zompistRewriteRules.trim().equals(prop.zompistRewriteRules.trim());
+            ret = ret && zompistSyllableTypes.trim().equals(prop.zompistSyllableTypes.trim());
             ret = ret && zompistDropoffRate == prop.zompistDropoffRate;
             ret = ret && zompistMonosylableFrequency == prop.zompistMonosylableFrequency;
         }

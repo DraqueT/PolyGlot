@@ -40,7 +40,7 @@ public final class PRadioButton extends JRadioButton {
     
     public PRadioButton() {
         core = PolyGlot.getPolyGlot().getCore();
-        this.setFont(PGTUtil.MENU_FONT.deriveFont((float)PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize()));
+        this.setFont(PGTUtil.MENU_FONT);
     }
     
     /**
@@ -88,7 +88,7 @@ public final class PRadioButton extends JRadioButton {
         if (_type == QuestionType.ConEquiv) {
             this.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         } else {
-            this.setFont(PGTUtil.CHARIS_UNICODE.deriveFont((float)PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize()));
+            this.setFont(PGTUtil.CHARIS_UNICODE);
         }
         
         this.type = _type;

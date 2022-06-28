@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -28,7 +28,6 @@ import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.EvolutionPair;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -103,7 +102,7 @@ public class ScrEvolveReport extends PDialog {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tblReport = new PTable(core);
-        jLabel1 = new PLabel("Original and evolved lexical forms:", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        jLabel1 = new PLabel("Original and evolved lexical forms:");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Evolution Report");

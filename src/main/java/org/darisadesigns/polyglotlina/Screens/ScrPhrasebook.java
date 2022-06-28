@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2021-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -33,9 +33,7 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
-import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.ManagersCollections.PhraseManager;
 import org.darisadesigns.polyglotlina.Nodes.PhraseNode;
@@ -60,6 +58,27 @@ public class ScrPhrasebook extends PFrame {
         setupComponents();
         populatePhrases();
         populatePhraseAttributes();
+        setupListeners();
+        setLegal();
+    }
+    
+    private void setupListeners() {
+        txtGloss.getDocument().addDocumentListener(new DocumentListener(){
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                setLegal();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                setLegal();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                setLegal();
+            }
+        });
     }
     
     private void setupComponents() {
@@ -122,8 +141,7 @@ public class ScrPhrasebook extends PFrame {
             }
         });
         
-        float fontSize = (float)((DesktopOptionsManager)PolyGlot.getPolyGlot().getOptionsManager()).getMenuFontSize();
-        Font charis = PGTUtil.CHARIS_UNICODE.deriveFont(fontSize);
+        Font charis = PGTUtil.CHARIS_UNICODE;
         btnUp.setFont(charis);
         btnDown.setFont(charis);
     }
@@ -194,6 +212,16 @@ public class ScrPhrasebook extends PFrame {
         txtNotes.setEnabled(enable);
         chkOverrideProc.setEnabled(enable);
     }
+    
+    private void setLegal() {
+        if (txtGloss.getText().isBlank() && lstPhrases.getModel().getSize() > 0) {
+            txtGloss.setBackground(PGTUtil.COLOR_REQUIRED_LEX_COLOR);
+            btnAdd.setEnabled(false);
+        } else {
+            txtGloss.setBackground(PGTUtil.COLOR_TEXT_BG);
+            btnAdd.setEnabled(true);
+        }
+    }
 
     @Override
     public boolean canClose() {
@@ -249,12 +277,12 @@ public class ScrPhrasebook extends PFrame {
         txtPronunciation = new PTextPane(core, true, "-- Pronunciation Guide --");
         jScrollPane5 = new javax.swing.JScrollPane();
         txtNotes = new PTextPane(core, true, "-- Phrase Notes --");
-        chkOverrideProc = new PCheckBox(nightMode, menuFontSize);
+        chkOverrideProc = new PCheckBox(nightMode);
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         lstPhrases = new javax.swing.JList<>();
-        btnUp = new PButton(false, (((DesktopOptionsManager)PolyGlot.getPolyGlot().getOptionsManager()).getMenuFontSize()));
-        btnDown = new PButton(false, (((DesktopOptionsManager)PolyGlot.getPolyGlot().getOptionsManager()).getMenuFontSize()));
+        btnUp = new PButton(false);
+        btnDown = new PButton(false);
         btnAdd = new PAddRemoveButton("+");
         btnDelete = new PAddRemoveButton("-");
 
@@ -262,12 +290,18 @@ public class ScrPhrasebook extends PFrame {
 
         jSplitPane1.setDividerLocation(170);
 
+        txtGloss.setToolTipText("The gloss that a phrase can be found under");
+
+        txtLocalPhrase.setToolTipText("The phrase in your local natlang");
         jScrollPane1.setViewportView(txtLocalPhrase);
 
+        txtConPhrase.setToolTipText("The phrase in your conlan");
         jScrollPane3.setViewportView(txtConPhrase);
 
+        txtPronunciation.setToolTipText("The phrase's pronunciation");
         jScrollPane4.setViewportView(txtPronunciation);
 
+        txtNotes.setToolTipText("Phrase notes");
         jScrollPane5.setViewportView(txtNotes);
 
         chkOverrideProc.setText("Override Pronunciation");
@@ -434,6 +468,8 @@ public class ScrPhrasebook extends PFrame {
         } catch(Exception e) {
             new DesktopInfoBox().error("Phrase Creation Error", "Unable to create phrase due to: " + e.getMessage());
         }
+        
+        setLegal();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
@@ -450,6 +486,8 @@ public class ScrPhrasebook extends PFrame {
                 new DesktopInfoBox().error("Phrase Deletion Error", "Unable to delete phrase due to: " + e.getMessage());
             }
         }
+        
+        setLegal();
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void chkOverrideProcItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkOverrideProcItemStateChanged

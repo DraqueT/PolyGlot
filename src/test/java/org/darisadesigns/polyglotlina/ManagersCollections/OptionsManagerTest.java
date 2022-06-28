@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -44,7 +44,6 @@ public class OptionsManagerTest {
         
         mgr.setAnimateWindows(true);
         mgr.setMaxReversionCount(999);
-        mgr.setMenuFontSize(20);
         mgr.setNightMode(true);
         mgr.setScreenPosition("ZIMZAM", new Point(999,999));
         mgr.setScreenSize("ZIMZAM", new Dimension(999,999));
@@ -55,7 +54,6 @@ public class OptionsManagerTest {
         
         assertFalse(mgr.isAnimateWindows());
         assertEquals(PGTUtil.DEFAULT_MAX_ROLLBACK_NUM, mgr.getMaxReversionCount());
-        assertEquals(PGTUtil.DEFAULT_FONT_SIZE, mgr.getMenuFontSize());
         assertFalse(mgr.isNightMode());
         assertTrue(mgr.getScreenPositions().isEmpty());
         assertTrue(mgr.getScreenSizes().isEmpty());

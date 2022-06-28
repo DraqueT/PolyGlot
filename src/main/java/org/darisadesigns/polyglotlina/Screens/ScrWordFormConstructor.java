@@ -38,7 +38,6 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 
@@ -177,11 +176,11 @@ public class ScrWordFormConstructor extends PFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblBaseWord = new PLabel("", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        lblBaseWord = new PLabel("");
         txtWordForm = new PTextField(core, false, "");
         scrlDimensions = new javax.swing.JScrollPane();
         pnlDimensions = new javax.swing.JPanel();
-        jLabel1 = new PLabel("Base Word", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        jLabel1 = new PLabel("Base Word");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Word Form Composition Helper");

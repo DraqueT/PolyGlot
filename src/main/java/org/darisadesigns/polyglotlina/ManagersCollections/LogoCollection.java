@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -388,9 +388,9 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
         } else if (comp instanceof LogoCollection) {
             LogoCollection compLog = (LogoCollection) comp;
             
-            ret = logoToWord.equals(compLog.logoToWord)
-                    && wordToLogo.equals(compLog.wordToLogo)
-                    && super.equals(comp);
+            ret = logoToWord.equals(compLog.logoToWord) || (logoToWord.isEmpty() && compLog.logoToWord.isEmpty());
+            ret = ret && wordToLogo.equals(compLog.wordToLogo) || (wordToLogo.isEmpty() && compLog.wordToLogo.isEmpty());
+            ret = ret && super.equals(comp);
         }
             
         return ret;

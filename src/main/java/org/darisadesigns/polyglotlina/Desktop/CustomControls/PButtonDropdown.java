@@ -32,7 +32,6 @@ import java.awt.font.FontRenderContext;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 import javax.swing.JPopupMenu;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  * A version of PButton which supports dropdown functionality
@@ -46,7 +45,7 @@ public class PButtonDropdown extends PButton {
     int curMouseRelativeX;
     
     public PButtonDropdown(JPopupMenu _popupMenu) {
-        super(false, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        super(false);
         
         setupMousePositionListener();
         popupMenu = _popupMenu;

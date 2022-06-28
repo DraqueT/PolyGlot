@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -227,7 +227,7 @@ public final class ScrFontImportDialog extends PDialog {
         jPanel1 = new javax.swing.JPanel();
         txtFontLocation = new PTextField(core, true, "Font File");
         btnSelectFont = new PButton();
-        jLabel1 = new PLabel("Font Size", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        jLabel1 = new PLabel("Font Size");
         txtFontSize = new PTextField(core, true, "");
         txtDemoText = new PTextField(core, false, "");
         rdoConlang = new javax.swing.JRadioButton();

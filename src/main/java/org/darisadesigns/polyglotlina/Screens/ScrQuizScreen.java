@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -64,7 +64,7 @@ public final class ScrQuizScreen extends PFrame {
     public ScrQuizScreen(Quiz _quiz, DictCore _core) {
         super(_core);
         
-        lblQNode = new PLabel("", PLabel.CENTER, menuFontSize);
+        lblQNode = new PLabel("", PLabel.CENTER);
         initComponents();
         quiz = _quiz;
 
@@ -143,24 +143,17 @@ public final class ScrQuizScreen extends PFrame {
         try {
             lblQuestion.setText(question.getQuestionValue());
             switch (question.getType()) {
-                case Local:
-                case PoS:
-                case Proc:
-                case Def:
-                case Classes: {
+                case Local, PoS, Proc, Def, Classes -> {
                     ConWord sourceWord = (ConWord) question.getSource();
                     lblQNode.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
                     lblQNode.setText(sourceWord.getValue());
-                    break;
                 }
-                case ConEquiv: {
+                case ConEquiv -> {
                     ConWord sourceWord = (ConWord) question.getSource();
                     lblQNode.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
                     lblQNode.setText(sourceWord.getLocalWord());
-                    break;
                 }
-                default:
-                    throw new Exception("Unhandled question type: " + question.getType());
+                default -> throw new Exception("Unhandled question type: " + question.getType());
             }
 
             // force firing of font resize code for question label
@@ -312,13 +305,13 @@ public final class ScrQuizScreen extends PFrame {
         grpAnswerSelection = new javax.swing.ButtonGroup();
         pnlChoices = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        lblQuestion = new PLabel("", PLabel.CENTER, menuFontSize);
+        lblQuestion = new PLabel("", PLabel.CENTER);
         jPanel3 = new javax.swing.JPanel();
-        btnForward = new PButton(nightMode, menuFontSize);
-        btnBackward = new PButton(nightMode, menuFontSize);
-        lblAnsStat = new javax.swing.JLabel();
-        lblQNum = new PLabel("", menuFontSize);
-        jLabel1 = new PLabel("", menuFontSize);
+        btnForward = new PButton(nightMode);
+        btnBackward = new PButton(nightMode);
+        lblAnsStat = new PLabel("");
+        lblQNum = new PLabel("");
+        jLabel1 = new PLabel("");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("PolyGlot Quiz");

@@ -268,9 +268,9 @@ public final class ScrDeclensionGenSetup extends PDialog {
         jPanel1 = new javax.swing.JPanel();
         rdoClassic = new PRadioButton();
         rdoSimplified = new PRadioButton();
-        btnTestWord = new PButton(nightMode, menuFontSize);
+        btnTestWord = new PButton(nightMode);
         jPanel2 = new javax.swing.JPanel();
-        btnOK = new PButton(nightMode, menuFontSize);
+        btnOK = new PButton(nightMode);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 

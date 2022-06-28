@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -230,16 +230,19 @@ public class ConWord extends DictNode {
             ConWord c = (ConWord) comp;
 
             ret = value.equals(c.value);
-            ret = ret && localWord.equals(c.localWord);
+            ret = ret && localWord.trim().equals(c.localWord.trim());
             ret = ret && typeId == c.typeId;
             ret = ret && WebInterface.archiveHTML(definition, core).equals(WebInterface.archiveHTML(c.definition, core));
-            ret = ret && pronunciation.equals(c.pronunciation);
-            ret = ret && etymNotes.equals(c.etymNotes);
+            ret = ret && WebInterface.getTextFromHtml(etymNotes).equals(WebInterface.getTextFromHtml(c.etymNotes));
             ret = ret && procOverride == c.procOverride;
             ret = ret && autoConjugationOverride == c.autoConjugationOverride;
             ret = ret && rulesOverride == c.rulesOverride;
             ret = ret && classValues.equals(c.classValues);
             ret = ret && classTextValues.equals(c.classTextValues);
+            
+            if (procOverride) {
+                ret = ret && pronunciation.trim().equals(c.pronunciation.trim());
+            }
         }
 
         return ret;

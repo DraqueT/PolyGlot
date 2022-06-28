@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson - draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson - draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -49,7 +49,6 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
     protected DictCore core;
     protected boolean firstVisible = true;
     protected boolean ignoreInitialResize = false;
-    protected final double menuFontSize;
     protected final boolean nightMode;
        
     public PDialog(DictCore _core) {
@@ -68,7 +67,6 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
         super(owner);
         core = _core;
         firstVisible = _firstVisible;
-        menuFontSize = PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();
         nightMode = PolyGlot.getPolyGlot().getOptionsManager().isNightMode();
         this.setupOS();
     }

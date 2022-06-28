@@ -19,8 +19,11 @@
 package org.darisadesigns.polyglotlina;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.swing.JOptionPane;
 
@@ -38,8 +41,7 @@ public class ZompistVocabGenerator {
     private final int dropoff;
     private final String[] rewriteValues;
     private final boolean slowSyllables;
-    private final String[] categories;
-    private int categoryCount; // mutable under certain circumstances
+    private final Map<String, List<String>> categories;
     private final String categoryIndex;
     private final String[] userSyllables;
     private final int sylableDropoffRate;
@@ -78,16 +80,15 @@ public class ZompistVocabGenerator {
         syllableBreaks = _syllableBreaks;
         monosyllableRarity = _monosyllableRarity;
         dropoff = _dropoff;
-        categories = rawCategories.replace(" ", "").split("\n");
-        categoryCount = categories.length;
+        categories = parseCatrgories(rawCategories);
         categoryIndex = getCategoryIndex();
-        userSyllables = rawSyllables.replace(" ", "").split("\n");
-        rewriteValues = rawRewriteValues.replace(" ", "").split("\n");
+        userSyllables = rawSyllables.replaceAll(" ", "").split("\n");
+        rewriteValues = rawRewriteValues.replaceAll(" ", "").split("\n");
         sylableDropoffRate = getSyllableDropoffRate(slowSyllables, userSyllables.length);
         illegalClusters = getIllegalClusters(rawIllegalClusters.replace(" ", ""));
         osHandler = _osHandler;
 
-        if (categoryCount <= 0 || userSyllables.length <= 0) {
+        if (categories.isEmpty() || userSyllables.length == 0) {
             throw new Exception("You must have both categories and syllables to generate text.");
         }
     }
@@ -154,6 +155,90 @@ public class ZompistVocabGenerator {
         return text;
     }
     
+    /**
+     * Checks formatting of category rules
+     * @param catCheck
+     * @return 
+     */
+    public static boolean checkCatFormattingCorrect(String catCheck) {
+        for (String line : catCheck.split("\n")) {
+            if (line.trim().isEmpty()) {
+                continue;
+            }
+            
+            if (!line.trim().matches("^[A-Z]=[^=]+$")) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Returns true if the illegal clusters input is legit
+     * @param illegals
+     * @return 
+     */
+    public static boolean checkIllegalsFormattingCorrect(String illegals) {
+        return !illegals.contains(",");
+    }
+    
+    /**
+     * Checks formatting of rewrite rules
+     * @param rewrites
+     * @return 
+     */
+    public static boolean checkRewriteRules(String rewrites) {
+        for (String line : rewrites.split("\n")) {
+            if (line.trim().isEmpty()) {
+                continue;
+            }
+            
+            if (!line.trim().matches("^[^\\|]+\\|[^\\|]*$") || line.contains(",")) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Technically, nothing is illegal here, but warn if users enter constants
+     * @param catCheck
+     * @param sylCheck
+     * @return 
+     */
+    public static String checkSyllableRules(String catCheck, String sylCheck) {
+        if (!checkCatFormattingCorrect(catCheck)) {
+            return "Cannot check syllables while categories misformatted.";
+        }
+        
+        String reducedRules = sylCheck.trim();
+        
+        for (String catLine : catCheck.split("\n")) {
+            if (catLine.trim().isEmpty()) {
+                continue;
+            }
+            String curCat = catLine.substring(0, catLine.indexOf("="));
+            reducedRules = reducedRules.replaceAll(curCat, "").trim();
+        }
+        
+        if (reducedRules.isEmpty()) {
+            return "";
+        }
+        
+        List<String> constants = new ArrayList<>();
+        
+        while (!reducedRules.isEmpty()) {
+            String targetChar = reducedRules.substring(0, 1);
+            constants.add(targetChar);
+            reducedRules = reducedRules.replace(targetChar, "").trim();
+        }
+        
+        return "WARNING: The following constant values are found in your syllable types: "
+                + String.join(", ", constants);
+    }
+    
     private String[] getIllegalClusters(String rawIllegalClusters) {
         List<String> illegalClustersSet = new ArrayList<>();
         
@@ -185,24 +270,42 @@ public class ZompistVocabGenerator {
         
         return dropoffRate;
     }
+    
+    private Map<String, List<String>> parseCatrgories(String rawCategories) throws Exception {
+        Map<String, List<String>> categoriesMap = new LinkedHashMap<>();
+        
+        for (String line : rawCategories.split("\n")) {
+            line = line.trim();
+            
+            if (line.isEmpty()) {
+                continue;
+            }
+            
+            String[] split = line.split("=");
+            
+            if (split.length != 2) {
+                throw new Exception("Improperly formatted categories");
+            }
+
+            categoriesMap.put(split[0], parseCategoryDefinition(split[1]));
+        }
+        
+        return categoriesMap;
+    }
+    
+    private List<String> parseCategoryDefinition(String rawDefinition) {
+        List<String> definition = new ArrayList<>();
+        String splitter = (rawDefinition.contains(",") ? "," : "(?!^)");
+        definition.addAll(Arrays.asList(rawDefinition.split(splitter)));
+        
+        return definition;
+    }
 
     private String getCategoryIndex() throws Exception {
         String index = "";
 
-        for (int w = 0; w < categoryCount; w++) {
-            // A final empty cat can be ignored
-            String category = categories[w];
-
-            if (category.length() == 0 && w == categoryCount - 1) {
-                categoryCount--;
-            } else if (category.length() < 3 || !category.contains("=")) {
-                throw new Exception("Categories must be of the form V=aeiou\n"
-                    + "That is, a single letter, an equal sign, then a list of possible expansions.");
-            } else if (category.split("=")[0].length() > 1) {
-                throw new Exception("Categories must be of a single charater length.");
-            } else {
-                index += category.charAt(0);
-            }
+        for (String key : categories.keySet()) {
+            index += key;
         }
         
         return index;
@@ -277,16 +380,16 @@ public class ZompistVocabGenerator {
                 curVal += theCat;
             } else {
                 // Choose from this category
-                String expansion = categories[ix].substring(2);
+                List<String> expansion = categories.get(theCat);
                 int r2;
 
                 if (dropoff == 0) {
-                    r2 = (int) (Math.random() * expansion.length());
+                    r2 = (int) (Math.random() * expansion.size());
                 } else {
-                    r2 = powerLaw(expansion.length(), dropoff);
+                    r2 = powerLaw(expansion.size(), dropoff);
                 }
 
-                curVal += expansion.substring(r2, r2 + 1);
+                curVal += expansion.get(r2);
             }
         }
         
@@ -368,10 +471,10 @@ public class ZompistVocabGenerator {
             }
         } else {
             // It's a category; iterate over its members
-            String members = categories[ix].substring(2);
+            List<String> members = categories.get(theCat);
 
-            for (int i = 0; i < members.length(); i++) {
-                String m = members.substring(i, i + 1);
+            for (int i = 0; i < members.size(); i++) {
+                String m = members.get(i);
                 if (lastOne) {
                     addToResults(applyRewriteRule(initial + m));
                 } else {
@@ -408,7 +511,7 @@ public class ZompistVocabGenerator {
     
     private boolean containsIllegalCluster(String test) {
         for (String illegalCluster : illegalClusters) {
-            if (test.matches(illegalCluster)) {
+            if (test.matches(illegalCluster) || test.contains(illegalCluster)) {
                 return true;
             }
         }

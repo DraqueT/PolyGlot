@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2018-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -50,13 +50,11 @@ public final class PToDoTree extends JTree {
     private AbstractCollection<TreePath> checkedPaths = new HashSet<>();
     private TreePath clickedPath;
     private final boolean nightMode;
-    private final double fontSize;
     private final CheckBoxCellRenderer checkCellRenderer;
 
-    public PToDoTree(boolean _nightMode, double _fontSize) {
+    public PToDoTree(boolean _nightMode) {
         super();
         nightMode = _nightMode;
-        fontSize = _fontSize;
         
         // Disabling toggling by double-click
         this.setToggleClickCount(0);
@@ -280,7 +278,7 @@ public final class PToDoTree extends JTree {
             super();      
 
             this.setLayout(new BorderLayout());
-            checkBox = new PCheckBox(nightMode, fontSize);
+            checkBox = new PCheckBox(nightMode);
             checkBox.setFont(getFont());
             add(checkBox, BorderLayout.CENTER);
             setOpaque(false);

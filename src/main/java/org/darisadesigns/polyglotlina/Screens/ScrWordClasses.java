@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -50,6 +50,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.TableColumn;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 
 /**
  *
@@ -69,6 +70,8 @@ public final class ScrWordClasses extends PFrame {
         setupComponents();
         super.setPreferredSize(new Dimension(584, 377));
         setupForm();
+        setupListeners();
+        setLegal();
     }
     
     private void setupForm() {
@@ -130,6 +133,16 @@ public final class ScrWordClasses extends PFrame {
     public void saveAllValues() {
         // not needed - saved in real time
     }
+    
+    private void setLegal() {
+        if (txtName.getText().isBlank() && lstProperties.getModel().getSize() > 0) {
+            txtName.setBackground(PGTUtil.COLOR_REQUIRED_LEX_COLOR);
+            btnAddProp.setEnabled(false);
+        } else {
+            txtName.setBackground(PGTUtil.COLOR_TEXT_BG);
+            btnAddProp.setEnabled(true);
+        }
+    }
 
     /**
      * Sets up type checkboxes.
@@ -145,7 +158,7 @@ public final class ScrWordClasses extends PFrame {
         gbc.weighty = 1;
         
         if (types.length > 0) {
-            final PCheckBox checkAll = new PCheckBox(nightMode, menuFontSize);
+            final PCheckBox checkAll = new PCheckBox(nightMode);
             checkAll.setText("All");
 
             checkAll.addItemListener(new ItemListener() {
@@ -180,7 +193,7 @@ public final class ScrWordClasses extends PFrame {
 
         for (TypeNode curNode : types) {
             final int typeId = curNode.getId();
-            final PCheckBox checkType = new PCheckBox(nightMode, menuFontSize);
+            final PCheckBox checkType = new PCheckBox(nightMode);
             
             checkType.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
             checkType.setText(curNode.getValue());
@@ -233,6 +246,25 @@ public final class ScrWordClasses extends PFrame {
             // "ALL should always be enabled
             all.setEnabled(true);
         }
+    }
+    
+    private void setupListeners() {
+        txtName.getDocument().addDocumentListener(new DocumentListener(){
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                setLegal();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                setLegal();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                setLegal();
+            }
+        });
     }
 
     private void populateWordProperties() {
@@ -410,7 +442,7 @@ public final class ScrWordClasses extends PFrame {
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstProperties = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
+        lstProperties = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
         btnAddProp = new PAddRemoveButton("+");
         btnDelProp = new PAddRemoveButton("-");
         jPanel1 = new javax.swing.JPanel();
@@ -420,8 +452,8 @@ public final class ScrWordClasses extends PFrame {
         pnlTypes = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblValues = new javax.swing.JTable();
-        chkFreeText = new PCheckBox(nightMode, menuFontSize);
-        chkAssociative = new PCheckBox(false, PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        chkFreeText = new PCheckBox(nightMode);
+        chkAssociative = new PCheckBox(false);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Word Classes");
@@ -601,10 +633,12 @@ public final class ScrWordClasses extends PFrame {
     private void btnAddPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddPropActionPerformed
         addWordProperty();
         txtName.requestFocus();
+        setLegal();
     }//GEN-LAST:event_btnAddPropActionPerformed
 
     private void btnDelPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelPropActionPerformed
         deleteWordProperty();
+        setLegal();
     }//GEN-LAST:event_btnDelPropActionPerformed
 
     private void lstPropertiesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstPropertiesValueChanged

@@ -1738,22 +1738,22 @@ public final class ScrLexicon extends PFrame {
         txtLocalWord = new PTextField(core, true, core.localLabel() + " Word");
         cmbType = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), "Part of Speech");
         txtProc = new PTextField(core, true, "Pronunciation");
-        chkProcOverride = new PCheckBox(nightMode, menuFontSize);
-        chkRuleOverride = new PCheckBox(nightMode, menuFontSize);
+        chkProcOverride = new PCheckBox(nightMode);
+        chkRuleOverride = new PCheckBox(nightMode);
         btnDeclensions = new PButtonDropdown(getConjPopupMenu());
-        btnLogographs = new PButton(nightMode, menuFontSize);
+        btnLogographs = new PButton(nightMode);
         jScrollPane1 = new javax.swing.JScrollPane();
         txtErrorBox = new javax.swing.JTextPane();
         pnlClasses = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         txtDefinition = new PTextPane(core, true, "-- Definition --");
-        btnEtymology = new PButton(nightMode, menuFontSize);
+        btnEtymology = new PButton(nightMode);
         jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         lstLexicon = new PListLexicon(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         btnAddWord = new PAddRemoveButton("+");
         btnDelWord = new PAddRemoveButton("-");
-        jButton1 = new PButton(nightMode, menuFontSize);
+        jButton1 = new PButton(nightMode);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Lexicon");

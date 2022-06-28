@@ -47,7 +47,7 @@ public class TESTO extends javax.swing.JFrame {
             var oSHandler = new DesktopOSHandler(iOHandler, infoBox, new DesktopHelpHandler(), new PFontHandler());
             core = new DictCore(new DesktopPropertiesManager(), oSHandler, new PGTUtil(), new DesktopGrammarManager());
             PGTUtil.enterUITestingMode();
-            PolyGlot.setTestPolyGlot(new PolyGlot("", core, oSHandler));
+            PolyGlot.setTestPolyGlot(new PolyGlot(core, oSHandler));
             initComponents();
         } catch (Exception e) {
             e.printStackTrace();

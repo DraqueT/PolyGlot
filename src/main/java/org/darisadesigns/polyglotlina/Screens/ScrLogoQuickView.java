@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2019, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -40,8 +40,6 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -53,7 +51,6 @@ import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
-import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
  *
@@ -308,7 +305,7 @@ public final class ScrLogoQuickView extends PFrame {
         lstLogos = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         btnAdd = new PAddRemoveButton("+");
         btnDel = new PAddRemoveButton("-");
-        btnOK = new PButton(nightMode, menuFontSize);
+        btnOK = new PButton(nightMode);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 

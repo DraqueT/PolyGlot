@@ -92,6 +92,9 @@
           </Layout>
           <SubComponents>
             <Component class="javax.swing.JTextField" name="txtGloss">
+              <Properties>
+                <Property name="toolTipText" type="java.lang.String" value="The gloss that a phrase can be found under"/>
+              </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(core, true, &quot;Gloss&quot;)"/>
               </AuxValues>
@@ -104,6 +107,9 @@
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
                 <Component class="javax.swing.JTextPane" name="txtLocalPhrase">
+                  <Properties>
+                    <Property name="toolTipText" type="java.lang.String" value="The phrase in your local natlang"/>
+                  </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextPane(core, true, &quot;-- Local Phrase --&quot;)"/>
                   </AuxValues>
@@ -118,6 +124,9 @@
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
                 <Component class="javax.swing.JTextPane" name="txtConPhrase">
+                  <Properties>
+                    <Property name="toolTipText" type="java.lang.String" value="The phrase in your conlan"/>
+                  </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextPane(core, false, &quot;-- Con Phrase --&quot;)"/>
                   </AuxValues>
@@ -132,6 +141,9 @@
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
                 <Component class="javax.swing.JTextPane" name="txtPronunciation">
+                  <Properties>
+                    <Property name="toolTipText" type="java.lang.String" value="The phrase&apos;s pronunciation"/>
+                  </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextPane(core, true, &quot;-- Pronunciation Guide --&quot;)"/>
                   </AuxValues>
@@ -146,6 +158,9 @@
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
                 <Component class="javax.swing.JTextPane" name="txtNotes">
+                  <Properties>
+                    <Property name="toolTipText" type="java.lang.String" value="Phrase notes"/>
+                  </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextPane(core, true, &quot;-- Phrase Notes --&quot;)"/>
                   </AuxValues>
@@ -160,7 +175,7 @@
                 <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="chkOverrideProcItemStateChanged"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode, menuFontSize)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PCheckBox(nightMode)"/>
               </AuxValues>
             </Component>
           </SubComponents>
@@ -246,7 +261,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUpActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(false, (((DesktopOptionsManager)PolyGlot.getPolyGlot().getOptionsManager()).getMenuFontSize()))"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(false)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="btnDown">
@@ -258,7 +273,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDownActionPerformed"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(false, (((DesktopOptionsManager)PolyGlot.getPolyGlot().getOptionsManager()).getMenuFontSize()))"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(false)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="btnAdd">

@@ -47,7 +47,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,7 +55,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -339,123 +337,6 @@ public final class DesktopIOHandler implements IOHandler {
         }
     }
 
-    /**
-     * Loads all option data from ini file, if none, ignore.One will be created
-     * on exit.
-     *
-     * @param opMan
-     * @param workingDirectory
-     * @throws IOException on failure to open existing file
-     */
-    public void loadOptionsIni(DesktopOptionsManager opMan, String workingDirectory) throws Exception {
-        File f = new File(workingDirectory + File.separator + PGTUtil.POLYGLOT_INI);
-        if (!f.exists() || f.isDirectory()) {
-            return;
-        }
-
-        try ( BufferedReader br = new BufferedReader(new FileReader(
-                workingDirectory + File.separator + PGTUtil.POLYGLOT_INI, StandardCharsets.UTF_8))) {
-            String loadProblems = "";
-
-            for (String line; (line = br.readLine()) != null;) {
-                String[] bothVal = line.split("=");
-
-                // if no value set, move on
-                if (bothVal.length == 1) {
-                    continue;
-                }
-
-                // if multiple values, something has gone wrong
-                if (bothVal.length != 2) {
-                    throw new Exception("PolyGlot.ini corrupt or unreadable.");
-                }
-
-                switch (bothVal[0]) {
-                    case PGTUtil.OPTIONS_LAST_FILES -> {
-                        for (String last : bothVal[1].split(",")) {
-                            opMan.pushRecentFile(last);
-                        }
-                    }
-                    case PGTUtil.OPTIONS_SCREENS_OPEN -> {
-                        for (String screen : bothVal[1].split(",")) {
-                            opMan.addScreenUp(screen);
-                        }
-                    }
-                    case PGTUtil.OPTIONS_SCREEN_POS -> {
-                        for (String curPosSet : bothVal[1].split(",")) {
-                            if (curPosSet.isEmpty()) {
-                                continue;
-                            }
-
-                            String[] splitSet = curPosSet.split(":");
-
-                            if (splitSet.length != 3) {
-                                loadProblems += "Malformed Screen Position: " + curPosSet + "\n";
-                                continue;
-                            }
-                            Point p = new Point(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
-                            opMan.setScreenPosition(splitSet[0], p);
-                        }
-                    }
-                    case PGTUtil.OPTIONS_SCREENS_SIZE -> {
-                        for (String curSizeSet : bothVal[1].split(",")) {
-                            if (curSizeSet.isEmpty()) {
-                                continue;
-                            }
-
-                            String[] splitSet = curSizeSet.split(":");
-
-                            if (splitSet.length != 3) {
-                                loadProblems += "Malformed Screen Size: " + curSizeSet + "\n";
-                                continue;
-                            }
-                            Dimension d = new Dimension(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
-                            opMan.setScreenSize(splitSet[0], d);
-                        }
-                    }
-                    case PGTUtil.OPTIONS_DIVIDER_POSITION -> {
-                        for (String curPosition : bothVal[1].split(",")) {
-                            if (curPosition.isEmpty()) {
-                                continue;
-                            }
-
-                            String[] splitSet = curPosition.split(":");
-
-                            if (splitSet.length != 2) {
-                                loadProblems += "Malformed divider position: " + curPosition + "\n";
-                                continue;
-                            }
-                            Integer position = Integer.parseInt(splitSet[1]);
-                            opMan.setDividerPosition(splitSet[0], position);
-                        }
-                    }
-                    case PGTUtil.OPTIONS_MSBETWEENSAVES ->
-                        opMan.setMsBetweenSaves(Integer.parseInt(bothVal[1]));
-                    case PGTUtil.OPTIONS_AUTO_RESIZE ->
-                        opMan.setAnimateWindows(bothVal[1].equals(PGTUtil.TRUE));
-                    case PGTUtil.OPTIONS_MAXIMIZED ->
-                        opMan.setMaximized(bothVal[1].equals(PGTUtil.TRUE));
-                    case PGTUtil.OPTIONS_MENU_FONT_SIZE ->
-                        opMan.setMenuFontSize(Double.parseDouble(bothVal[1]));
-                    case PGTUtil.OPTIONS_NIGHT_MODE ->
-                        opMan.setNightMode(bothVal[1].equals(PGTUtil.TRUE));
-                    case PGTUtil.OPTIONS_REVERSIONS_COUNT ->
-                        opMan.setMaxReversionCount(Integer.parseInt(bothVal[1]));
-                    case PGTUtil.OPTIONS_TODO_DIV_LOCATION ->
-                        opMan.setToDoBarPosition(Integer.parseInt(bothVal[1]));
-                    case "\n" -> {
-                    }
-                    default ->
-                        loadProblems += "Unrecognized value: " + bothVal[0] + " in PolyGlot.ini." + "\n";
-                }
-            }
-
-            if (!loadProblems.isEmpty()) {
-                throw new Exception("Problems loading ini file: \n" + loadProblems);
-            }
-        }
-    }
-
     @Override
     /**
      * Given handler class, parses XML document within file (archive or not)
@@ -533,11 +414,11 @@ public final class DesktopIOHandler implements IOHandler {
     )
             throws IOException, TransformerException {
         File finalFile = new File(_fileName);
-        String writeLog = "";
+        String writeLog;
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
 
-        try ( StringWriter writer = new StringWriter()) {
+        try (StringWriter writer = new StringWriter()) {
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
 
             StringBuilder sb = new StringBuilder();
@@ -545,36 +426,12 @@ public final class DesktopIOHandler implements IOHandler {
             byte[] xmlData = sb.toString().getBytes(StandardCharsets.UTF_8);
 
             final File tmpSaveLocation = makeTempSaveFile(workingDirectory);
+            
+            writeLog = writeRawFileOutput(tmpSaveLocation, xmlData, core);
 
-            try ( FileOutputStream fileOutputStream = new FileOutputStream(tmpSaveLocation)) {
-                try ( ZipOutputStream out = new ZipOutputStream(fileOutputStream, StandardCharsets.UTF_8)) {
-                    ZipEntry e = new ZipEntry(PGTUtil.LANG_FILE_NAME);
-                    out.putNextEntry(e);
-
-                    out.write(xmlData, 0, xmlData.length);
-
-                    out.closeEntry();
-
-                    writeLog += PFontHandler.writeFont(out,
-                            ((DesktopPropertiesManager) core.getPropertiesManager()).getFontCon(),
-                            core.getPropertiesManager().getCachedFont(),
-                            core,
-                            true);
-
-                    writeLog += PFontHandler.writeFont(out,
-                            ((DesktopPropertiesManager) core.getPropertiesManager()).getFontLocal(),
-                            core.getPropertiesManager().getCachedLocalFont(),
-                            core,
-                            false);
-
-                    writeLog += writeLogoNodesToArchive(out, core);
-                    writeLog += writeImagesToArchive(out, core);
-                    writeLog += writeWavToArchive(out, core);
-                    writeLog += writePriorStatesToArchive(out, core);
-
-                    out.finish();
-                }
-            }
+            // copy tmp file to final location folder
+            var tmpSaveFinalLocation = new File(finalFile.getParent() + File.separator + tmpSaveLocation.getName());
+            copyFile(tmpSaveLocation.toPath(), tmpSaveFinalLocation.toPath(), true);
 
             // attempt to open file in dummy core. On success, copy file to end
             // destination, on fail, delete file and inform user by bubbling error
@@ -585,17 +442,21 @@ public final class DesktopIOHandler implements IOHandler {
                 var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), new DummyInfoBox(), helpHandler, fontHandler);
                 DictCore test = new DictCore(new DesktopPropertiesManager(), osHandler, new PGTUtil(), new DesktopGrammarManager());
                 PolyGlot.getTestShell(test);
-                test.readFile(tmpSaveLocation.getAbsolutePath());
+                test.readFile(tmpSaveFinalLocation.getAbsolutePath());
+                
+                if (!core.equals(test)) {
+                    throw new Exception("Written file does not match file in memory.");
+                }
             } catch (Exception ex) {
                 throw new IOException(ex);
             }
-
-            try {
-                copyFile(tmpSaveLocation.toPath(), finalFile.toPath(), true);
-                tmpSaveLocation.delete(); // wipe temp file if successful
-            } catch (IOException e) {
-                throw new IOException("Unable to save file: " + e.getMessage(), e);
+            
+            if (finalFile.exists()) {
+                finalFile.delete();
             }
+            
+            tmpSaveFinalLocation.renameTo(finalFile);
+            tmpSaveLocation.delete(); // wipe temp file if successful
 
             if (writeToReversionMgr) {
                 core.getReversionManager().addVersion(xmlData, saveTime);
@@ -605,6 +466,45 @@ public final class DesktopIOHandler implements IOHandler {
         if (!writeLog.isEmpty()) {
             new DesktopInfoBox().warning("File Save Issues", "Problems encountered when saving file " + _fileName + writeLog);
         }
+    }
+    
+    /**
+     * Creates raw output file (processed for safety/security upstream)
+     */
+    private String writeRawFileOutput(File tmpSaveLocation, byte[] xmlData, DictCore core) throws FileNotFoundException, IOException {
+        String writeLog;
+        
+        try (FileOutputStream fileOutputStream = new FileOutputStream(tmpSaveLocation)) {
+            try ( ZipOutputStream out = new ZipOutputStream(fileOutputStream, StandardCharsets.UTF_8)) {
+                ZipEntry e = new ZipEntry(PGTUtil.LANG_FILE_NAME);
+                out.putNextEntry(e);
+
+                out.write(xmlData, 0, xmlData.length);
+
+                out.closeEntry();
+
+                writeLog = PFontHandler.writeFont(out,
+                        ((DesktopPropertiesManager) core.getPropertiesManager()).getFontCon(),
+                        core.getPropertiesManager().getCachedFont(),
+                        core,
+                        true);
+
+                writeLog += PFontHandler.writeFont(out,
+                        ((DesktopPropertiesManager) core.getPropertiesManager()).getFontLocal(),
+                        core.getPropertiesManager().getCachedLocalFont(),
+                        core,
+                        false);
+
+                writeLog += writeLogoNodesToArchive(out, core);
+                writeLog += writeImagesToArchive(out, core);
+                writeLog += writeWavToArchive(out, core);
+                writeLog += writePriorStatesToArchive(out, core);
+
+                out.finish();
+            }
+        }
+        
+        return writeLog;
     }
 
     /**
@@ -669,11 +569,7 @@ public final class DesktopIOHandler implements IOHandler {
                 + "_" + source.getName()
                 + ".archive");
 
-        try ( FileChannel sourceChannel = new FileInputStream(source).getChannel();  FileChannel destChannel = new FileOutputStream(dest).getChannel()) {
-            destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
-        }
-
-        source.delete();
+        source.renameTo(dest);
 
         return dest;
     }
@@ -862,9 +758,7 @@ public final class DesktopIOHandler implements IOHandler {
                     img = ImageIO.read(imageStream);
                     ImageNode imageNode = new ImageNode(PolyGlot.getPolyGlot().getCore());
                     imageNode.setId(imageId);
-                    imageNode.setImageBytes(
-                            DesktopIOHandler.getInstance().loadImageBytesFromImage(img)
-                    );
+                    imageNode.setImageBytes(loadImageBytesFromImage(img));
                     imageCollection.getBuffer().setEqual(imageNode);
                     imageCollection.insert(imageId);
                 }
@@ -885,22 +779,17 @@ public final class DesktopIOHandler implements IOHandler {
             String fileName) throws Exception {
         try ( ZipFile zipFile = new ZipFile(fileName)) {
             for (LogoNode curNode : logoCollection.getAllLogos()) {
-                if (curNode.getLogoBytes() != null
-                        && curNode.getLogoBytes().length != 0) {
-                    continue;
-                }
                 ZipEntry imgEntry = zipFile.getEntry(PGTUtil.LOGOGRAPH_SAVE_PATH
                         + curNode.getId() + ".png");
                 
                 if (imgEntry == null) {
-                    throw new IOException("PGD file corrupt. Unable to read required file from archive: " + PGTUtil.LOGOGRAPH_SAVE_PATH);
+                    continue;
                 }
 
-                byte[] img;
-                try ( InputStream imageStream = zipFile.getInputStream(imgEntry)) {
-                    img = this.loadImageBytesFromStream(imageStream);
+                try (InputStream imageStream = zipFile.getInputStream(imgEntry)) {
+                    var img = ImageIO.read(imageStream);
+                    curNode.setLogoBytes(loadImageBytesFromImage(img));
                 }
-                curNode.setLogoBytes(img);
             }
         }
     }
@@ -1116,9 +1005,6 @@ public final class DesktopIOHandler implements IOHandler {
                     + (opMan.isAnimateWindows() ? PGTUtil.TRUE : PGTUtil.FALSE);
             f0.write(nextLine + newLine);
 
-            nextLine = PGTUtil.OPTIONS_MENU_FONT_SIZE + "=" + opMan.getMenuFontSize();
-            f0.write(nextLine + newLine);
-
             nextLine = PGTUtil.OPTIONS_NIGHT_MODE + "="
                     + (opMan.isNightMode() ? PGTUtil.TRUE : PGTUtil.FALSE);
             f0.write(nextLine + newLine);
@@ -1139,6 +1025,9 @@ public final class DesktopIOHandler implements IOHandler {
             f0.write(nextLine + newLine);
             
             nextLine = PGTUtil.OPTIONS_MSBETWEENSAVES + "=" + opMan.getMsBetweenSaves();
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_UI_SCALE + "=" + opMan.getUiScale();
             f0.write(nextLine + newLine);
         }
     }
@@ -1477,25 +1366,6 @@ public final class DesktopIOHandler implements IOHandler {
         }
     }
 
-    // TODO: If I ever need this, refine it. It currently gives very little back.
-    // Consider returning object which specifies whether hex or string data. or something.
-    // No need exept for testing at this point.
-    @Override
-    public String getFileAttributeOSX(String filePath, String attribute) throws Exception {
-        if (!PGTUtil.IS_OSX) {
-            throw new Exception("This method may only be called within OSX.");
-        }
-
-        String[] cmd = {"xattr", "-l", attribute, filePath};
-        String[] result = runAtConsole(cmd, false);
-
-        if (!result[1].isBlank()) {
-            throw new Exception(result[1]);
-        }
-
-        return result[0];
-    }
-
     /**
      * Runs a command at the console, returning informational and error output.
      *
@@ -1596,15 +1466,6 @@ public final class DesktopIOHandler implements IOHandler {
 
         loadBlank.paintIcon(null, g, 0, 0);
         g.dispose();
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(image, "jpg", baos);
-        baos.flush();
-        return baos.toByteArray();
-    }
-
-    public byte[] loadImageBytesFromStream(InputStream stream) throws IOException {
-        BufferedImage image = ImageIO.read(stream);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(image, "jpg", baos);

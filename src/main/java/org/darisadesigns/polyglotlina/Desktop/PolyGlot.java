@@ -32,6 +32,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import javax.swing.InputMap;
 import javax.swing.JFileChooser;
@@ -49,6 +50,7 @@ import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammar
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.VisualStyleManager;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.OSHandler;
 import org.darisadesigns.polyglotlina.OSHandler.CoreUpdatedListener;
 import org.darisadesigns.polyglotlina.OSHandler.FileReadListener;
 import org.darisadesigns.polyglotlina.Screens.ScrAbout;
@@ -73,13 +75,19 @@ public final class PolyGlot {
     private FileReadListener fileReadListener;
     private final File autoSaveFile;
 
-    public PolyGlot(String overridePath, DictCore _core, DesktopOSHandler _osHandler) throws Exception {
+    public PolyGlot(DictCore _core, DesktopOSHandler _osHandler) throws Exception {
+        this(_core, _osHandler, new DesktopOptionsManager(_core));
+    }
+    
+    public PolyGlot(
+            DictCore _core, 
+            DesktopOSHandler _osHandler, 
+            DesktopOptionsManager _optionsManager
+    ) throws Exception {
         core = _core;
         osHandler = _osHandler;
-        osHandler.setWorkingDirectory(overridePath); // TODO: In the future, figure out how this might be better set. In options?
-        optionsManager = new DesktopOptionsManager(core);
+        optionsManager = _optionsManager;
         autoSaveFile = this.getNewAutoSaveFile();
-        ((DesktopIOHandler)osHandler.getIOHandler()).loadOptionsIni(optionsManager, getWorkingDirectory().getAbsolutePath());
         refreshUiDefaults();
     }
 
@@ -88,7 +96,25 @@ public final class PolyGlot {
      * in chunks if spaces in path
      */
     public static void main(final String[] args) {
-        DesktopInfoBox cInfoBox = new DesktopInfoBox();
+        // must be done before absolutely anything else
+        setupScaling();
+        
+        var opMan = new DesktopOptionsManager();
+        var ioHandler = DesktopIOHandler.getInstance();
+        var cInfoBox = new DesktopInfoBox();
+        var helpHandler = new DesktopHelpHandler();
+        var fontHandler = new PFontHandler();
+        var osHandler = new DesktopOSHandler(ioHandler, cInfoBox, helpHandler, fontHandler);
+        
+        try {
+            opMan.loadOptionsIni(org.darisadesigns.polyglotlina.PGTUtil.getDefaultDirectory().getAbsolutePath());
+        } catch (Exception e) {
+            ioHandler.writeErrorLog(e, "Startup config file failure.");
+            cInfoBox.warning("Config Load Failure", "Unable to load options file or file corrupted:\n" 
+                    + e.getLocalizedMessage());
+            DesktopIOHandler.getInstance().deleteIni(polyGlot.getWorkingDirectory().getAbsolutePath());
+        }
+        
         try {
             // must be set before accessing System to test OS (values will simply be ignored for other OSes
             if (PGTUtil.IS_OSX) {
@@ -116,10 +142,6 @@ public final class PolyGlot {
             // catch all top level application killing throwables (and bubble up directly to ensure reasonable behavior)
             try {
                 // separated due to serious nature of Throwable vs Exception
-                DesktopHelpHandler helpHandler = new DesktopHelpHandler();
-                PFontHandler fontHandler = new PFontHandler();
-                var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), cInfoBox, helpHandler, fontHandler);
-
                 DictCore core = new DictCore(
                         new DesktopPropertiesManager(), 
                         osHandler, 
@@ -127,7 +149,7 @@ public final class PolyGlot {
                         new DesktopGrammarManager()
                 );
                 
-                PolyGlot.polyGlot = new PolyGlot("", core, osHandler);
+                PolyGlot.polyGlot = new PolyGlot(core, osHandler, opMan);
                 
                 s = new ScrMainMenu(core);
                 polyGlot.setRootWindow(s);
@@ -144,71 +166,9 @@ public final class PolyGlot {
                 osHandler.setCoreUpdatedListener(polyGlot.coreUpdatedListener);
                 osHandler.setFileReadListener(polyGlot.fileReadListener);
 
-                try {
-                    DesktopIOHandler.getInstance()
-                            .loadOptionsIni(PolyGlot.polyGlot.optionsManager, 
-                                    polyGlot.getWorkingDirectory().getAbsolutePath());
-                }
-                catch (Exception ex) {
-                    DesktopIOHandler.getInstance().writeErrorLog(ex);
-                    polyGlot.getOSHandler().getInfoBox().error("Options Load Error", "Unable to load options file or file corrupted:\n"
-                            + ex.getLocalizedMessage());
-                    DesktopIOHandler.getInstance().deleteIni(polyGlot.getWorkingDirectory().getAbsolutePath());
-                }
-
                 // runs additional integration if on OSX system
                 if (PGTUtil.IS_OSX) {
-                    Desktop desk = Desktop.getDesktop();
-                    final ScrMainMenu staticScr = s;
-
-                    desk.setOpenFileHandler(e -> {
-                        List<File> files = e.getFiles();
-
-                        if (files.size() <= 0) {
-                            return;
-                        } else if (files.size() > 1) {
-                            polyGlot.getOSHandler().getInfoBox().info("File Limit", 
-                                    "PolyGlot can only open a single file at once.\nOpening first selected file:"
-                                    + files.get(0).getName());
-                        }
-
-                        try {
-                            // saveOrCancelTest to prevent accidental failure to save open languages
-                            if (polyGlot.getRootWindow().saveOrCancelTest()) {
-                                String filePath = files.get(0).getCanonicalPath();
-                                polyGlot.getRootWindow().openFileFromPath(filePath);
-                            }
-                        }
-                        catch (IOException | IllegalStateException ex) {
-                            polyGlot.getOSHandler().getInfoBox().error("File Read Error", 
-                                    "Unable to open file due to error:\n"
-                                    + ex.getLocalizedMessage());
-                        }
-                    });
-
-                    desk.setQuitHandler((QuitEvent e, QuitResponse response) -> {
-                        staticScr.dispose();
-                    });
-
-                    desk.setPreferencesHandler((PreferencesEvent e) -> {
-                        staticScr.showOptions();
-                    });
-
-                    desk.setAboutHandler((AboutEvent e) -> {
-                        DictCore _core = new DictCore(
-                                new DesktopPropertiesManager(), 
-                                osHandler, 
-                                new PGTUtil(), 
-                                new DesktopGrammarManager()
-                        );
-                        
-                        polyGlot.setCore(_core);
-                        ScrAbout.run(_core);
-                    });
-
-                    desk.setPrintFileHandler((PrintFilesEvent e) -> {
-                        staticScr.printToPdf();
-                    });
+                    setupMacOs(osHandler, s);
                 }
 
                 // if a recovery file exists, query user for action
@@ -250,15 +210,99 @@ public final class PolyGlot {
                     s.dispose();
                 }
                 
-                System.exit(0);
+                if (!PGTUtil.isInJUnitTest() && !PGTUtil.isUITestingMode()) {
+                    System.exit(0);
+                }
             }
             catch (Throwable t) {
                 // t.printStackTrace();
                 cInfoBox.error("PolyGlot Error", "A serious error has occurred: " + t.getLocalizedMessage());
                 DesktopIOHandler.getInstance().writeErrorLog(t);
-                System.exit(0);
+                
+                if (!PGTUtil.isInJUnitTest() && !PGTUtil.isUITestingMode()) {
+                    System.exit(0);
+                }
             }
         });
+    }
+    
+    /**
+     * Sets up Mac OS integration
+     */
+    private static void setupMacOs(OSHandler osHandler, final ScrMainMenu staticScr) {
+        Desktop desk = Desktop.getDesktop();
+
+        desk.setOpenFileHandler(e -> {
+            List<File> files = e.getFiles();
+
+            if (files.size() <= 0) {
+                return;
+            } else if (files.size() > 1) {
+                polyGlot.getOSHandler().getInfoBox().info("File Limit", 
+                        "PolyGlot can only open a single file at once.\nOpening first selected file:"
+                        + files.get(0).getName());
+            }
+
+            try {
+                // saveOrCancelTest to prevent accidental failure to save open languages
+                if (polyGlot.getRootWindow().saveOrCancelTest()) {
+                    String filePath = files.get(0).getCanonicalPath();
+                    polyGlot.getRootWindow().openFileFromPath(filePath);
+                }
+            }
+            catch (IOException | IllegalStateException ex) {
+                polyGlot.getOSHandler().getInfoBox().error("File Read Error", 
+                        "Unable to open file due to error:\n"
+                        + ex.getLocalizedMessage());
+            }
+        });
+
+        desk.setQuitHandler((QuitEvent e, QuitResponse response) -> {
+            staticScr.dispose();
+        });
+
+        desk.setPreferencesHandler((PreferencesEvent e) -> {
+            staticScr.showOptions();
+        });
+
+        desk.setAboutHandler((AboutEvent e) -> {
+            DictCore _core = new DictCore(
+                    new DesktopPropertiesManager(), 
+                    osHandler, 
+                    new PGTUtil(), 
+                    new DesktopGrammarManager()
+            );
+
+            polyGlot.setCore(_core);
+            ScrAbout.run(_core);
+        });
+
+        desk.setPrintFileHandler((PrintFilesEvent e) -> {
+            staticScr.printToPdf();
+        });
+    }
+    
+    private static void setupScaling() {
+        Path p = Path.of(org.darisadesigns.polyglotlina.Desktop.PGTUtil.getDefaultDirectory()
+                + File.separator + org.darisadesigns.polyglotlina.Desktop.PGTUtil.POLYGLOT_INI);
+        if (!p.toFile().exists() || p.toFile().isDirectory()) {
+            return;
+        }
+        
+        try {
+            String ini = Files.readString(p);
+            int loc = ini.indexOf("UiScale=");
+
+            if (loc == -1) {
+                return;
+            }
+
+            String value = ini.substring(loc + 8, loc + 9);
+
+            System.setProperty("sun.java2d.uiScale", value);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
     
     /**
@@ -357,7 +401,7 @@ public final class PolyGlot {
         }
         
         // allow JUnit to handle this state itself
-        if (!PGTUtil.isInJUnitTest()) {
+        if (!PGTUtil.isInJUnitTest() && !PGTUtil.isUITestingMode()) {
             System.exit(0);
         }
     }
@@ -509,7 +553,10 @@ public final class PolyGlot {
                 new DesktopHelpHandler(),
                 new PFontHandler()
         );
-        return new PolyGlot(Files.createTempDirectory("POLYGLOT").toFile().getAbsolutePath(), _core, osHandler);
+        
+        osHandler.setWorkingDirectory(Files.createTempDirectory("POLYGLOT").toFile().getAbsolutePath());
+        
+        return new PolyGlot(_core, osHandler);
     }
 
     public DictCore getCore() {

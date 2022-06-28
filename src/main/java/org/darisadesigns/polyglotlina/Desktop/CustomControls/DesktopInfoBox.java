@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -158,21 +158,37 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
     
     @Override
     public void info(String title, String message) {
+        if (PGTUtil.isUITestingMode()) {
+            return;
+        }
+        
         this.doInfo(title, message);
     }
 
     @Override
     public void error(String title, String message) {
+        if (PGTUtil.isUITestingMode()) {
+            return;
+        }
+        
         this.doError(title, message);
     }
 
     @Override
     public void warning(String title, String message) {
+        if (PGTUtil.isUITestingMode()) {
+            return;
+        }
+        
         this.doWarning(title, message);
     }
 
     @Override
     public Integer yesNoCancel(String title, String message) {
+        if (PGTUtil.isUITestingMode()) {
+            return -1;
+        }
+        
         return this.doYesNoCancel(title, message);
     }
 
@@ -183,6 +199,10 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
      * @return true if chooser accepts, false otherwise
      */
     public boolean deletionConfirmation() {
+        if (PGTUtil.isUITestingMode()) {
+            return false;
+        }
+        
         return this.actionConfirmation("Delete Confirmation", "Delete Entry? Cannot be undone.");
     }
     
@@ -195,6 +215,10 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
      * @return true if chooser accepts, false otherwise
      */
     public boolean actionConfirmation(String title, String message) {
+        if (PGTUtil.isUITestingMode()) {
+            return false;
+        }
+        
         PButton[] buttons = {getYesButton(), getNoButton()};
         
         int option = POptionPane.internalShowOptionDialog(parent,
@@ -217,6 +241,10 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
      * @return string value if input, null if cancel hit
      */
     public String stringInputDialog(String title, String message) {
+        if (PGTUtil.isUITestingMode()) {
+            return "";
+        }
+        
         return JOptionPane.showInputDialog(parent, message, title, JOptionPane.INFORMATION_MESSAGE);
     }
     
@@ -230,6 +258,10 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
      */
     public Double doubleInputDialog(String title, String message, String warningMessage) {
         Double ret = null;
+        
+        if (PGTUtil.isUITestingMode()) {
+            return ret;
+        }
         
         String inputString = JOptionPane.showInputDialog(parent, message, title, JOptionPane.INFORMATION_MESSAGE);
         
@@ -247,6 +279,10 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
     }
 
     private Integer doYesNoCancel(String title, String message) {
+        if (PGTUtil.isUITestingMode()) {
+            return -1;
+        }
+        
         int ret;
         PButton[] option = {getYesButton(), getNoButton(), getCancelButton()};
 
@@ -263,7 +299,7 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
     }
 
     private void doError(String title, String message) {
-        if (!PGTUtil.isForceSuppressDialogs()) {
+        if (!PGTUtil.isForceSuppressDialogs() && ! PGTUtil.isUITestingMode()) {
             Object[] option = {getOKButton()};        
             POptionPane.internalShowOptionDialog(parent, message, title, DEFAULT_OPTION,
                              JOptionPane.ERROR_MESSAGE, null, option, null);
@@ -271,7 +307,7 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
     }
 
     private void doWarning(String title, String message) {
-        if (!PGTUtil.isForceSuppressDialogs()) {
+        if (!PGTUtil.isForceSuppressDialogs() && ! PGTUtil.isUITestingMode()) {
             Object[] option = {getOKButton()};
             POptionPane.internalShowOptionDialog(parent, message, title, DEFAULT_OPTION,
                              JOptionPane.WARNING_MESSAGE, null, option, null);
@@ -279,6 +315,10 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
     }
 
     private void doInfo(String title, String message) {
+        if (PGTUtil.isUITestingMode()) {
+            return;
+        }
+        
         Object[] option = {getOKButton()};        
         POptionPane.internalShowOptionDialog(parent, message, title, DEFAULT_OPTION,
                          JOptionPane.INFORMATION_MESSAGE, null, option, null);

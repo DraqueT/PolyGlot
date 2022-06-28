@@ -50,6 +50,7 @@ public class OpenScreensTest {
         // TODO: figure out why windows tests are flakey (ancient machine running Windows virtual?)
         Assumptions.assumeTrue(!PGTUtil.IS_WINDOWS);
         
+        PGTUtil.enterUITestingMode();
         core = DummyCore.newCore();
         errors = DesktopIOHandler.getInstance().getErrorLogFile();
         

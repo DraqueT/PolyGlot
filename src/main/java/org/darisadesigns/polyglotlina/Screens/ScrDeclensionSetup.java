@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -56,6 +56,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
@@ -523,23 +524,23 @@ public final class ScrDeclensionSetup extends PDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new PLabel("", menuFontSize);
+        jLabel1 = new PLabel("");
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstDeclensionList = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), menuFontSize);
+        lstDeclensionList = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
         jPanel2 = new javax.swing.JPanel();
         txtDeclensionName = new PTextField(core, true, "Name");
-        jLabel3 = new PLabel("", menuFontSize);
+        jLabel3 = new PLabel("");
         btnAddDimension = new PAddRemoveButton("+");
         btnDelDimension = new PAddRemoveButton("-");
         sclDimensions = new javax.swing.JScrollPane();
         tblDimensions = new PTable(core);
         jScrollPane3 = new javax.swing.JScrollPane();
         txtDeclensionNotes = new PTextPane(core, true, "-- Notes --");
-        chkNonDimensional = new javax.swing.JCheckBox();
+        chkNonDimensional = new PCheckBox();
         btnDeleteDeclension = new PAddRemoveButton("-");
         btnAddDeclension = new PAddRemoveButton("+");
-        btnOK = new PButton(nightMode, menuFontSize);
-        btnClearDep = new PButton(nightMode, menuFontSize);
+        btnOK = new PButton(nightMode);
+        btnClearDep = new PButton(nightMode);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 

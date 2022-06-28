@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -74,7 +74,7 @@ public class TypeNode extends DictNode {
                 TypeNode comp = (TypeNode)o;
                 ret = comp.getId().equals(this.id);
                 ret = ret && comp.getGloss().equals(this.gloss);
-                ret = ret && comp.getNotes().equals(this.notes);
+                ret = ret && WebInterface.getTextFromHtml(comp.getNotes()).equals(WebInterface.getTextFromHtml(this.notes));
                 ret = ret && comp.getPattern().equals(this.regexPattern);
                 ret = ret && comp.getValue().equals(this.value);
             }

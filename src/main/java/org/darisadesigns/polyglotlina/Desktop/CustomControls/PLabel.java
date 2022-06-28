@@ -34,7 +34,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.JToolTip;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  * Extends Labels with some useful functionality. If resize set to true, ensures
@@ -45,19 +44,19 @@ import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 public final class PLabel extends JLabel {
     
     public PLabel() {
-        this("", PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize());
+        this("");
     }
     
-    public PLabel(String text, double fontSize) {
+    public PLabel(String text) {
         super(text);
-        setFont(PGTUtil.MENU_FONT.deriveFont((float)fontSize));
+        setFont(PGTUtil.MENU_FONT);
         init();
         toolTipAction = e -> "";
     }
     
-    public PLabel(String text, int alignment, double fontSize) {
+    public PLabel(String text, int alignment) {
         super(text, alignment);
-        setFont(PGTUtil.MENU_FONT.deriveFont((float)fontSize));
+        setFont(PGTUtil.MENU_FONT);
         init();
     }
 

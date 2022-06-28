@@ -81,7 +81,7 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
                 : ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
         double fontSize = useConFont ? 
                 preSize :
-                PolyGlot.getPolyGlot().getOptionsManager().getMenuFontSize();
+                PGTUtil.DEFAULT_FONT_SIZE;
 
         myFont = PGTUtil.addFontAttribute(TextAttribute.SIZE, (float)fontSize, defFont);
         component.setFont(myFont);
