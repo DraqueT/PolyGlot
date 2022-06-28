@@ -82,13 +82,13 @@ public final class CustHandlerFactory {
         Node versionNode = doc.getDocumentElement().getElementsByTagName(PGTUtil.PGVERSION_XID).item(0);
         String versionNumber = versionNode == null ? "0" : versionNode.getTextContent();
         int fileVersionHierarchy = PGTUtil.getVersionHierarchy(versionNumber);
-        
+
         if (fileVersionHierarchy == -1) {
             throw new Exception("Please upgrade PolyGlot. The PGD file you are loading was "
-                        + "written with a newer version with additional features: Ver " + versionNumber + ".");
+                    + "written with a newer version with additional features: Ver " + versionNumber + ".");
         } else if (fileVersionHierarchy < PGTUtil.getVersionHierarchy("0.7.5")) {
             throw new Exception("Version " + versionNumber + " no longer supported. Load/save with older version of "
-                        + "PolyGlot (0.7.5 through 1.2) to upconvert.");
+                    + "PolyGlot (0.7.5 through 1.2) to upconvert.");
         }
 
         return get075orHigherHandler(core, fileVersionHierarchy);
@@ -105,21 +105,14 @@ public final class CustHandlerFactory {
             int ruleIdBuffer = 0;
             String ruleValBuffer = "";
             boolean bwordClassTextVal = false;
-            boolean bgenderId = false;
-            boolean bgenderNotes = false;
-            boolean bgenderName = false;
-            boolean bgender = false;
-            boolean bwordPlur = false;
             boolean betyIntRelationNode = false;
             boolean betyChildExternals = false;
             boolean bphraseBook = false;
             boolean bphraseNode = false;
-            
+
             int wId;
             int wCId;
-            int wGId;
             String combinedDecId = "";
-            String tmpString; // placeholder for building serialized values that are guaranteed processed in a single pass
 
             final ConjugationManager conjugationMgr = core.getConjugationManager();
             final PronunciationMgr procMan = core.getPronunciationMgr();
@@ -158,7 +151,7 @@ public final class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.ETY_CHILD_EXTERNALS_XID)) {
                     betyChildExternals= true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_XID)) {
-                     core.getToDoManager().pushBuffer();
+                    core.getToDoManager().pushBuffer();
                 } else if (qName.equalsIgnoreCase(PGTUtil.PHRASEBOOK_XID)) {
                     // no subsequent logic required.
                     //bphraseBook = true;
@@ -245,7 +238,7 @@ public final class CustHandlerFactory {
                         core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nWord image load error: " + e.getLocalizedMessage();
                     }
-                    
+
                     curWord.setDefinition(curWord.getDefinition().replaceAll("<br>\\s*[<br>\\s*]+<br>\\s*", ""));
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_ETY_NOTES_XID)) {
                     ConWord buffer = core.getWordCollection().getBufferWord();
@@ -559,11 +552,11 @@ public final class CustHandlerFactory {
                     betyIntRelationNode= false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ETY_INT_CHILD_XID)) {
                     core.getEtymologyManager().setBufferChild(Integer.parseInt(value));
-                     core.getEtymologyManager().insert();
+                    core.getEtymologyManager().insert();
                 } else if (qName.equalsIgnoreCase(PGTUtil.ETY_CHILD_EXTERNALS_XID)) {
                     betyChildExternals= false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ETY_EXTERNAL_WORD_NODE_XID)) {
-                     core.getEtymologyManager().insertBufferExtParent();
+                    core.getEtymologyManager().insertBufferExtParent();
                 } else if (qName.equalsIgnoreCase(PGTUtil.ETY_EXTERNAL_WORD_VALUE_XID)) {
                     EtyExternalParent ext = core.getEtymologyManager().getBufferExtParent();
                     ext.setValue(ext.getValue() + value);
@@ -574,7 +567,7 @@ public final class CustHandlerFactory {
                     EtyExternalParent ext = core.getEtymologyManager().getBufferExtParent();
                     ext.setDefinition(ext.getDefinition() + value);
                 } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_XID)) {
-                     core.getToDoManager().popBuffer();
+                    core.getToDoManager().popBuffer();
                 } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_LABEL_XID)) {
                     ToDoNode node = core.getToDoManager().getBuffer();
                     node.setValue(node.toString() + value);
@@ -637,13 +630,7 @@ public final class CustHandlerFactory {
 
                 stringBuilder.append(ch, start, length);
 
-                if (bwordPlur) {
-                    // plurality now handled as declension
-                    conjugationMgr.setBufferDecTemp(false);
-                    conjugationMgr.setBufferDecText(new String(ch, start, length));
-                    conjugationMgr.setBufferDecNotes("Plural");
-                    bwordPlur = false;
-                } else if (bwordClassTextVal) {
+                if (bwordClassTextVal) {
                     if (ruleIdBuffer == 0) {
                         String[] classValIds = new String(ch, start, length).split(",");
                         ruleIdBuffer = Integer.parseInt(classValIds[0]);
@@ -653,15 +640,6 @@ public final class CustHandlerFactory {
                     } else {
                         ruleValBuffer += new String(ch, start, length);
                     }
-                } else if (bgender) {
-                    tmpString += new String(ch, start, length);
-                } else if (bgenderId) {
-                    wGId = Integer.parseInt(new String(ch, start, length));
-                    bgenderId = false;
-                } else if (bgenderName) {
-                    // Deprecated
-                } else if (bgenderNotes) {
-                    // Deprecated
                 } else if (betyIntRelationNode) {
                     core.getEtymologyManager().setBufferParent(Integer.parseInt(
                             new String(ch, start, length)));
@@ -677,7 +655,7 @@ public final class CustHandlerFactory {
                     bphraseNode = false; // set false here so not to consume action from subnodes
                 }
             }
-            
+
             @Override
             public void endDocument() {
                 // Version 2.3 implemented class filters for conj rules. Default to all on.
