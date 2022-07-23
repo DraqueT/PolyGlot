@@ -104,7 +104,6 @@ public final class CustHandlerFactory {
             String charRepValBuffer = "";
             int ruleIdBuffer = 0;
             String ruleValBuffer = "";
-            boolean blastSave = false;
             boolean blocalWord = false;
             boolean bconWord = false;
             boolean btypeId = false;
@@ -249,9 +248,7 @@ public final class CustHandlerFactory {
             public void startElement(String uri, String localName, String qName, Attributes attributes) {
                 stringBuilder = new StringBuilder();
 
-                if (qName.equalsIgnoreCase(PGTUtil.DICTIONARY_SAVE_DATE)) {
-                    blastSave = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_XID)) {
+                if (qName.equalsIgnoreCase(PGTUtil.WORD_XID)) {
                     core.getWordCollection().clear();
                 } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_XID)) {
                     proBuffer = new PronunciationNode();
@@ -521,11 +518,11 @@ public final class CustHandlerFactory {
             }
 
             @Override
-            public void endElement(String uri, String localName,
-                    String qName) throws SAXException {
+            public void endElement(String uri, String localName, String qName) throws SAXException {
+                String value = stringBuilder.toString();
 
                 if (qName.equalsIgnoreCase(PGTUtil.DICTIONARY_SAVE_DATE)) {
-                    blastSave = false;
+                    core.setLastSaveTime(Instant.parse(value));
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_XID)) {
                     try {
                         core.getWordCollection().insert(wId);
@@ -573,7 +570,7 @@ public final class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_RULEOVERRIDE_XID)) {
                     bwordRuleOverride = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_CLASS_AND_VALUE_XID)) {
-                    String[] classValIds = stringBuilder.toString().split(",");
+                    String[] classValIds = value.split(",");
                     int classId = Integer.parseInt(classValIds[0]);
                     int valId = Integer.parseInt(classValIds[1]);
                     core.getWordCollection().getBufferWord().setClassValue(classId, valId);
@@ -908,12 +905,10 @@ public final class CustHandlerFactory {
             }
 
             @Override
-            public void characters(char[] ch, int start, int length)
-                    throws SAXException {
+            public void characters(char[] ch, int start, int length) throws SAXException {
+                stringBuilder.append(ch, start, length);
 
-                if (blastSave) {
-                    core.setLastSaveTime(Instant.parse(new String(ch, start, length)));
-                } else if (blocalWord) {
+                if (blocalWord) {
                     ConWord bufferWord = core.getWordCollection().getBufferWord();
                     bufferWord.setLocalWord(bufferWord.getLocalWord()
                             + new String(ch, start, length));
@@ -945,7 +940,7 @@ public final class CustHandlerFactory {
                             .setRulesOverride(new String(ch, start, length).equals(PGTUtil.TRUE));
                     bwordRuleOverride = false;
                 } else if (bclassVal) {
-                    stringBuilder.append(new String(ch, start, length));
+                    // stringBuilder.append(new String(ch, start, length));
                 } else if (bwordClassTextVal) {
                     if (ruleIdBuffer == 0) {
                         String[] classValIds = new String(ch, start, length).split(",");
