@@ -110,11 +110,7 @@ public final class CustHandlerFactory {
             boolean bId = false;
             boolean bdef = false;
             boolean bfontlocal = false;
-            boolean bwordClassName = false;
             boolean bwordClassTextVal = false;
-            boolean bwordClassId = false;
-            boolean bwordClassNotes = false;
-            boolean bwordClassGloss = false;
             boolean bwordEtymNotes = false;
             boolean bpronuncation = false;
             boolean bclassVal = false;
@@ -135,9 +131,6 @@ public final class CustHandlerFactory {
             boolean bromActive = false;
             boolean bromPhon = false;
             boolean bwordPlur = false;
-            boolean bwordClassDefMan = false;
-            boolean bwordClassProcMan = false;
-            boolean bwordClassPattern = false;
             boolean bwordProcOverride = false;
             boolean bdimNode = false;
             boolean bdimId = false;
@@ -219,6 +212,8 @@ public final class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.CLASS_VALUES_NODE_XID)) {
                     // WordClass doesn't have utility method clear() to reset buffer
                     core.getWordClassCollection().getBuffer().buffer = new WordClassValue();
+                } else if (qName.equalsIgnoreCase(PGTUtil.POS_XID)) {
+                    core.getTypes().clear();
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_XID)) {
                     core.getWordCollection().clear();
                 } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_XID)) {
@@ -245,14 +240,6 @@ public final class CustHandlerFactory {
                     bwordClassTextVal = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.FONT_LOCAL_XID)) {
                     bfontlocal = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.POS_ID_XID)) {
-                    bwordClassId = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.POS_NAME_XID)) {
-                    bwordClassName = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.POS_NOTES_XID)) {
-                    bwordClassNotes = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.POS_GLOSS_XID)) {
-                    bwordClassGloss = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_PROC_XID)) {
                     bpronuncation = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_AUTODECLOVERRIDE_XID)) {
@@ -284,12 +271,6 @@ public final class CustHandlerFactory {
                     bromPhon = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_PROCOVERRIDE_XID)) {
                     bwordProcOverride = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.POS_PROC_MAN_XID)) {
-                    bwordClassProcMan = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.POS_DEF_MAN_XID)) {
-                    bwordClassDefMan = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.POS_PATTERN_XID)) {
-                    bwordClassPattern = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DIMENSION_NODE_XID)) {
                     bdimNode = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DIMENSION_ID_XID)) {
@@ -533,18 +514,41 @@ public final class CustHandlerFactory {
                 } 
                 //endregion
                 //endregion
-                else if (qName.equalsIgnoreCase(PGTUtil.WORD_XID)) {
-                    try {
-                        core.getWordCollection().insert(wId);
-                    } catch (Exception e) {
-                        throw new SAXException("Word insertion error: " + e.getLocalizedMessage(), e);
-                    }
-                } else if (qName.equalsIgnoreCase(PGTUtil.POS_XID)) {
+                //region TypeCollection.TypeNode
+                else if (qName.equalsIgnoreCase(PGTUtil.POS_XID)) {
                     // insertion for word types is much simpler
                     try {
                         core.getTypes().insert(wCId);
                     } catch (Exception e) {
                         throw new SAXException("Type insertion error: " + e.getLocalizedMessage(), e);
+                    }
+                } else if (qName.equalsIgnoreCase(PGTUtil.POS_ID_XID)) {
+                    wCId = Integer.parseInt(value);
+                } else if (qName.equalsIgnoreCase(PGTUtil.POS_NAME_XID)) {
+                    core.getTypes().getBufferType().setValue(value);
+                } else if (qName.equalsIgnoreCase(PGTUtil.POS_NOTES_XID)) {
+                    TypeNode node = core.getTypes().getBufferType();
+                    try {
+                        node.setNotes(WebInterface.unarchiveHTML(value, core));
+                    } catch (Exception e) {
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
+                        warningLog += "\nProblem loading part of speech note image: " + e.getLocalizedMessage();
+                    }
+                } else if (qName.equalsIgnoreCase(PGTUtil.POS_DEF_MAN_XID)) {
+                    core.getTypes().getBufferType().setDefMandatory(value.equals(PGTUtil.TRUE));
+                } else if (qName.equalsIgnoreCase(PGTUtil.POS_PROC_MAN_XID)) {
+                    core.getTypes().getBufferType().setProcMandatory(value.equals(PGTUtil.TRUE));
+                } else if (qName.equalsIgnoreCase(PGTUtil.POS_PATTERN_XID)) {
+                    core.getTypes().getBufferType().setPattern(value, core);
+                } else if (qName.equalsIgnoreCase(PGTUtil.POS_GLOSS_XID)) {
+                    core.getTypes().getBufferType().setGloss(value);
+                } 
+                //endregion
+                else if (qName.equalsIgnoreCase(PGTUtil.WORD_XID)) {
+                    try {
+                        core.getWordCollection().insert(wId);
+                    } catch (Exception e) {
+                        throw new SAXException("Word insertion error: " + e.getLocalizedMessage(), e);
                     }
                 } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_XID)) {
                     procMan.addPronunciation(proBuffer);
@@ -606,25 +610,6 @@ public final class CustHandlerFactory {
                     bwordEtymNotes = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.FONT_LOCAL_XID)) {
                     bfontlocal = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.POS_NAME_XID)) {
-                    bwordClassName = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.POS_NOTES_XID)) {
-                    TypeNode node = core.getTypes().getBufferType();
-                    try {
-                        node.setNotes(WebInterface.unarchiveHTML(node.getNotes(), core));
-                    } catch (Exception e) {
-                        core.getOSHandler().getIOHandler().writeErrorLog(e);
-                        warningLog += "\nProblem loading part of speech note image: " + e.getLocalizedMessage();
-                    }
-                    bwordClassNotes = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.POS_PROC_MAN_XID)) {
-                    bwordClassProcMan = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.POS_DEF_MAN_XID)) {
-                    bwordClassDefMan = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.POS_PATTERN_XID)) {
-                    bwordClassPattern = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.POS_GLOSS_XID)) {
-                    bwordClassGloss = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_PROC_XID)) {
                     bpronuncation = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_AUTODECLOVERRIDE_XID)) {
@@ -883,25 +868,6 @@ public final class CustHandlerFactory {
                     core.getWordCollection().getBufferWord()
                             .setOverrideAutoConjugate(new String(ch, start, length).equals(PGTUtil.TRUE));
                     bwordoverAutoDec = false;
-                } else if (bwordClassNotes) {
-                    TypeNode bufferType = core.getTypes().getBufferType();
-                    bufferType.setNotes(bufferType.getNotes()
-                            + new String(ch, start, length));
-                } else if (bwordClassName) {
-                    TypeNode bufferType = core.getTypes().getBufferType();
-                    bufferType.setValue(bufferType.getValue()
-                            + new String(ch, start, length));
-                } else if (bwordClassPattern) {
-                    TypeNode bufferType = core.getTypes().getBufferType();
-                    bufferType.setPattern(bufferType.getPattern()
-                            + new String(ch, start, length), core);
-                } else if (bwordClassGloss) {
-                    TypeNode bufferType = core.getTypes().getBufferType();
-                    bufferType.setGloss(bufferType.getGloss()
-                            + new String(ch, start, length));
-                } else if (bwordClassId) {
-                    wCId = Integer.parseInt(new String(ch, start, length));
-                    bwordClassId = false;
                 } else if (bpronuncation) {
                     ConWord bufferWord = core.getWordCollection().getBufferWord();
                     try {
@@ -956,12 +922,6 @@ public final class CustHandlerFactory {
                 } else if (bromPhon) {
                     romBuffer.setPronunciation(romBuffer.getPronunciation()
                             + new String(ch, start, length));
-                } else if (bwordClassProcMan) {
-                    core.getTypes().getBufferType().setProcMandatory(new String(ch, start, length).equals(PGTUtil.TRUE));
-                    bwordClassProcMan = false;
-                } else if (bwordClassDefMan) {
-                    core.getTypes().getBufferType().setDefMandatory(new String(ch, start, length).equals(PGTUtil.TRUE));
-                    bwordClassDefMan = false;
                 } else if (bdimId) {
                     conjugationMgr.getBuffer().getBuffer().setId(Integer.parseInt(new String(ch, start, length)));
                     bdimId = false;
