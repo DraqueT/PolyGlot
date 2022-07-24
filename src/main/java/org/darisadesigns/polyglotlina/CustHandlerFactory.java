@@ -116,8 +116,6 @@ public final class CustHandlerFactory {
             boolean bfamName = false;
             boolean bfamNotes = false;
             boolean bfamWord = false;
-            boolean btoDoNodeDone = false;
-            boolean btoDoNodeLabel = false;
             boolean bphraseBook = false;
             boolean bphraseNode = false;
             boolean bphraseid = false;
@@ -186,6 +184,8 @@ public final class CustHandlerFactory {
                     core.getGrammarManager().clear();
                 } else if (qName.equalsIgnoreCase(PGTUtil.GRAMMAR_SECTION_NODE_XID)) {
                     core.getGrammarManager().getBuffer().clear();
+                } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_XID)) {
+                    core.getToDoManager().pushBuffer();
                 } else if (qName.equalsIgnoreCase(PGTUtil.FONT_LOCAL_XID)) {
                     bfontlocal = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_COMB_DIM_XID)) {
@@ -198,12 +198,6 @@ public final class CustHandlerFactory {
                     bfamNotes = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.FAM_WORD_XID)) {
                     bfamWord = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_XID)) {
-                     core.getToDoManager().pushBuffer();
-                } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_LABEL_XID)) {
-                     btoDoNodeLabel = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_DONE_XID)) {
-                     btoDoNodeDone = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.PHRASEBOOK_XID)) {
                     // no subsequent logic required.
                     //bphraseBook = true;
@@ -665,6 +659,15 @@ public final class CustHandlerFactory {
                 } 
                 //endregion
                 //endregion
+                //region ToDoManager.ToDoNode
+                else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_XID)) {
+                    core.getToDoManager().popBuffer();
+                } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_DONE_XID)) {
+                    core.getToDoManager().getBuffer().setDone(value.equals(PGTUtil.TRUE));
+                } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_LABEL_XID)) {
+                    core.getToDoManager().getBuffer().setValue(value);
+                } 
+                //endregion
                 else if (qName.equalsIgnoreCase(PGTUtil.FONT_LOCAL_XID)) {
                     bfontlocal = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_COMB_DIM_XID)) {
@@ -688,12 +691,6 @@ public final class CustHandlerFactory {
                     core.getPropertiesManager().addCharacterReplacement(charRepCharBuffer, charRepValBuffer);
                     charRepCharBuffer = "";
                     charRepValBuffer = "";
-                } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_XID)) {
-                     core.getToDoManager().popBuffer();
-                } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_LABEL_XID)) {
-                     btoDoNodeLabel = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_DONE_XID)) {
-                     btoDoNodeDone = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.PHRASEBOOK_XID)) {
                     bphraseBook = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_NODE_XID)) {
@@ -770,11 +767,6 @@ public final class CustHandlerFactory {
                         warningLog += "\nFamily load error: " + e.getLocalizedMessage();
                     }
                     bfamWord = false;
-                } else if (btoDoNodeLabel) {
-                    ToDoNode node = core.getToDoManager().getBuffer();
-                    node.setValue(node.toString() + new String(ch, start, length));
-                } else if (btoDoNodeDone) {
-                    core.getToDoManager().getBuffer().setDone(new String(ch, start, length).equals(PGTUtil.TRUE));
                 } else if (bphraseBook) {
                     // nothing to do: blank book populated in DictCore already
                     bphraseBook = false; // set false here so not to consume action from subnodes
