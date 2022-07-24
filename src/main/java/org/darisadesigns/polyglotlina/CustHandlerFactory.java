@@ -97,13 +97,15 @@ public final class CustHandlerFactory {
     private static CustHandler get075orHigherHandler(final DictCore core, final int versionHierarchy) {
         return new CustHandler() {
 
-            private StringBuilder stringBuilder;
+            private StringBuilder stringBuilder = new StringBuilder();
             PronunciationNode proBuffer;
             PronunciationNode romBuffer;
             String charRepCharBuffer = "";
             String charRepValBuffer = "";
             int ruleIdBuffer = 0;
             String ruleValBuffer = "";
+            boolean betyIntRelationNode = false;
+            boolean betyChildExternals = false;
             boolean bfontlocal = false;
             boolean bgenderId = false;
             boolean bgenderNotes = false;
@@ -155,13 +157,6 @@ public final class CustHandlerFactory {
             boolean bgrammarSecText = false;
             boolean bromRecurse = false;
             boolean bprocRecurse = false;
-            boolean betyIntRelationNode = false;
-            boolean betyIntChild = false;
-            boolean betyChildExternals = false;
-            boolean betyExternalWordNode = false;
-            boolean betyExternalWordValue = false;
-            boolean betyExternalWordOrigin = false;
-            boolean betyExternalWordDefinition = false;
             boolean btoDoNodeDone = false;
             boolean btoDoNodeLabel = false;
             boolean bphraseBook = false;
@@ -192,7 +187,7 @@ public final class CustHandlerFactory {
 
             @Override
             public void startElement(String uri, String localName, String qName, Attributes attributes) {
-                stringBuilder = new StringBuilder();
+                stringBuilder.setLength(0);
 
                 if (qName.equalsIgnoreCase(PGTUtil.CLASS_XID)) {
                     // Make sure we have a clean buffer node
@@ -204,6 +199,12 @@ public final class CustHandlerFactory {
                     core.getTypes().clear();
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_XID)) {
                     core.getWordCollection().clear();
+                } else if (qName.equalsIgnoreCase(PGTUtil.ETY_INT_RELATION_NODE_XID)) {
+                    // This tag has mixed content, which still requires to be processed like this
+                    betyIntRelationNode= true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.ETY_CHILD_EXTERNALS_XID)) {
+                    // This tag has mixed content, which still requires to be processed like this
+                    betyChildExternals= true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_XID)) {
                     proBuffer = new PronunciationNode();
                 } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_NODE_XID)) {
@@ -306,20 +307,6 @@ public final class CustHandlerFactory {
                     bprocRecurse = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_RECURSE_XID)) {
                     bromRecurse = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.ETY_INT_RELATION_NODE_XID)) {
-                     betyIntRelationNode= true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.ETY_INT_CHILD_XID)) {
-                     betyIntChild= true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.ETY_CHILD_EXTERNALS_XID)) {
-                     betyChildExternals= true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.ETY_EXTERNAL_WORD_NODE_XID)) {
-                     betyExternalWordNode = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.ETY_EXTERNAL_WORD_VALUE_XID)) {
-                     betyExternalWordValue = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.ETY_EXTERNAL_WORD_ORIGIN_XID)) {
-                     betyExternalWordOrigin = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.ETY_EXTERNAL_WORD_DEFINITION_XID)) {
-                     betyExternalWordDefinition = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_XID)) {
                      core.getToDoManager().pushBuffer();
                 } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_LABEL_XID)) {
@@ -573,6 +560,25 @@ public final class CustHandlerFactory {
                     core.getWordCollection().getBufferWord().setEtymNotes(value);
                 } 
                 //endregion
+                //region EtymologyManager
+                else if (qName.equalsIgnoreCase(PGTUtil.ETY_INT_RELATION_NODE_XID)) {
+                    betyIntRelationNode= false;
+                    core.getEtymologyManager().setBufferParent(Integer.parseInt(value));
+                } else if (qName.equalsIgnoreCase(PGTUtil.ETY_INT_CHILD_XID)) {
+                    core.getEtymologyManager().setBufferChild(Integer.parseInt(value));
+                    core.getEtymologyManager().insert();
+                } else if (qName.equalsIgnoreCase(PGTUtil.ETY_CHILD_EXTERNALS_XID)) {
+                    betyChildExternals= false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.ETY_EXTERNAL_WORD_NODE_XID)) {
+                    core.getEtymologyManager().insertBufferExtParent();
+                } else if (qName.equalsIgnoreCase(PGTUtil.ETY_EXTERNAL_WORD_VALUE_XID)) {
+                    core.getEtymologyManager().getBufferExtParent().setValue(value);
+                } else if (qName.equalsIgnoreCase(PGTUtil.ETY_EXTERNAL_WORD_ORIGIN_XID)) {
+                    core.getEtymologyManager().getBufferExtParent().setExternalLanguage(value);
+                } else if (qName.equalsIgnoreCase(PGTUtil.ETY_EXTERNAL_WORD_DEFINITION_XID)) {
+                    core.getEtymologyManager().getBufferExtParent().setDefinition(value);
+                } 
+                //endregion
                 else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_XID)) {
                     procMan.addPronunciation(proBuffer);
                 } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_NODE_XID)) {
@@ -740,22 +746,6 @@ public final class CustHandlerFactory {
                     bprocRecurse = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_RECURSE_XID)) {
                     bromRecurse = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.ETY_INT_RELATION_NODE_XID)) {
-                     betyIntRelationNode= false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.ETY_INT_CHILD_XID)) {
-                     betyIntChild= false;
-                     core.getEtymologyManager().insert();
-                } else if (qName.equalsIgnoreCase(PGTUtil.ETY_CHILD_EXTERNALS_XID)) {
-                     betyChildExternals= false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.ETY_EXTERNAL_WORD_NODE_XID)) {
-                     betyExternalWordNode = false;
-                     core.getEtymologyManager().insertBufferExtParent();
-                } else if (qName.equalsIgnoreCase(PGTUtil.ETY_EXTERNAL_WORD_VALUE_XID)) {
-                     betyExternalWordValue = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.ETY_EXTERNAL_WORD_ORIGIN_XID)) {
-                     betyExternalWordOrigin = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.ETY_EXTERNAL_WORD_DEFINITION_XID)) {
-                     betyExternalWordDefinition = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_XID)) {
                      core.getToDoManager().popBuffer();
                 } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_LABEL_XID)) {
@@ -802,7 +792,15 @@ public final class CustHandlerFactory {
             public void characters(char[] ch, int start, int length) throws SAXException {
                 stringBuilder.append(ch, start, length);
 
-                if (bwordPlur) {
+                if (betyIntRelationNode) {
+                    core.getEtymologyManager().setBufferParent(Integer.parseInt(
+                            new String(ch, start, length)));
+                    betyIntRelationNode = false;
+                } else if (betyChildExternals) {
+                    core.getEtymologyManager().setBufferChild(Integer.parseInt(
+                            new String(ch, start, length)));
+                    betyChildExternals = false;
+                } else if (bwordPlur) {
                     // plurality now handled as declension
                     conjugationMgr.setBufferDecTemp(false);
                     conjugationMgr.setBufferDecText(new String(ch, start, length));
@@ -960,27 +958,6 @@ public final class CustHandlerFactory {
                 } else if (bromRecurse) {
                     core.getRomManager().setRecurse(
                             new String(ch, start, length).equals(PGTUtil.TRUE));
-                } else if (betyIntRelationNode) {
-                    core.getEtymologyManager().setBufferParent(Integer.parseInt(
-                            new String(ch, start, length)));
-                    betyIntRelationNode = false;
-                } else if (betyIntChild) {
-                    core.getEtymologyManager().setBufferChild(Integer.parseInt(
-                            new String(ch, start, length)));
-                    betyIntChild = false;
-                } else if (betyChildExternals) {
-                    core.getEtymologyManager().setBufferChild(Integer.parseInt(
-                            new String(ch, start, length)));
-                    betyChildExternals = false;
-                } else if (betyExternalWordValue) {
-                    EtyExternalParent ext = core.getEtymologyManager().getBufferExtParent();
-                    ext.setValue(ext.getValue() + new String(ch, start, length));
-                } else if (betyExternalWordOrigin) {
-                    EtyExternalParent ext = core.getEtymologyManager().getBufferExtParent();
-                    ext.setExternalLanguage(ext.getExternalLanguage() + new String(ch, start, length));
-                } else if (betyExternalWordDefinition) {
-                    EtyExternalParent ext = core.getEtymologyManager().getBufferExtParent();
-                    ext.setDefinition(ext.getDefinition() + new String(ch, start, length));
                 } else if (btoDoNodeLabel) {
                     ToDoNode node = core.getToDoManager().getBuffer();
                     node.setValue(node.toString() + new String(ch, start, length));
