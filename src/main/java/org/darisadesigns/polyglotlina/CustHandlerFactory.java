@@ -116,15 +116,6 @@ public final class CustHandlerFactory {
             boolean bfamName = false;
             boolean bfamNotes = false;
             boolean bfamWord = false;
-            boolean blogoStrokes = false;
-            boolean blogoNotes = false;
-            boolean blogoRadical = false;
-            boolean blogoRadicalList = false;
-            boolean blogoReading = false;
-            boolean blogoValue = false;
-            boolean blogoId = false;
-            boolean blogoNode = false;
-            boolean blogoWordRelation = false;
             boolean bgrammarChapNode = false;
             boolean bgrammarChapName = false;
             boolean bgrammarSecNode = false;
@@ -192,6 +183,11 @@ public final class CustHandlerFactory {
                     proBuffer = new PronunciationNode();
                 } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_NODE_XID)) {
                     romBuffer = new PronunciationNode();
+                } else if (qName.equalsIgnoreCase(PGTUtil.LOGOGRAPH_NODE_XID)) {
+                    core.getLogoCollection().clear();
+                } else if (qName.equalsIgnoreCase(PGTUtil.LOGO_READING_LIST_XID)) {
+                    // This clears the reading buffer
+                    core.getLogoCollection().getBufferNode().setReadingBuffer("");
                 } else if (qName.equalsIgnoreCase(PGTUtil.FONT_LOCAL_XID)) {
                     bfontlocal = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_COMB_DIM_XID)) {
@@ -204,25 +200,6 @@ public final class CustHandlerFactory {
                     bfamNotes = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.FAM_WORD_XID)) {
                     bfamWord = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.LOGO_STROKES_XID)) {
-                    blogoStrokes = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.LOGO_NOTES_XID)) {
-                    blogoNotes = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.LOGO_IS_RADICAL_XID)) {
-                    blogoRadical = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.LOGO_RADICAL_LIST_XID)) {
-                    blogoRadicalList = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.LOGO_READING_LIST_XID)) {
-                    blogoReading = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.LOGOGRAPH_VALUE_XID)) {
-                    blogoValue = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.LOGOGRAPH_ID_XID)) {
-                    blogoId = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.LOGOGRAPH_NODE_XID)) {
-                    blogoNode = true;
-                    core.getLogoCollection().clear();
-                } else if (qName.equalsIgnoreCase(PGTUtil.LOGO_WORD_RELATION_XID)) {
-                    blogoWordRelation = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.GRAMMAR_CHAPTER_NODE_XID)) {
                     bgrammarChapNode = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.GRAMMAR_CHAPTER_NAME_XID)) {
@@ -626,6 +603,58 @@ public final class CustHandlerFactory {
                 } 
                 //endregion
                 //endregion
+                //region LogoCollection
+                //region LogoNode
+                else if (qName.equalsIgnoreCase(PGTUtil.LOGOGRAPH_NODE_XID)) {
+                    try {
+                        core.getLogoCollection().insert();
+                    } catch (Exception e) {
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
+                        warningLog += "\nLogograph load error: " + e.getLocalizedMessage();
+                    }
+                    core.getLogoCollection().clear();
+                } else if (qName.equalsIgnoreCase(PGTUtil.LOGOGRAPH_ID_XID)) {
+                    try {
+                        core.getLogoCollection().getBufferNode().setId(Integer.parseInt(value));
+                    } catch (NumberFormatException e) {
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
+                        warningLog += "\nLogograph load error: " + e.getLocalizedMessage();
+                    }
+                } else if (qName.equalsIgnoreCase(PGTUtil.LOGOGRAPH_VALUE_XID)) {
+                    core.getLogoCollection().getBufferNode().setValue(value);
+                } else if (qName.equalsIgnoreCase(PGTUtil.LOGO_IS_RADICAL_XID)) {
+                    core.getLogoCollection().getBufferNode().setRadical(value.equals(PGTUtil.TRUE));
+                } else if (qName.equalsIgnoreCase(PGTUtil.LOGO_NOTES_XID)) {
+                    LogoNode node = core.getLogoCollection().getBufferNode();
+                    try {
+                        node.setNotes(WebInterface.unarchiveHTML(value, core));
+                    } catch (Exception e) {
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
+                        warningLog += "\nProblem loading logograph note image: " + e.getLocalizedMessage();
+                    }
+                } else if (qName.equalsIgnoreCase(PGTUtil.LOGO_RADICAL_LIST_XID)) {
+                    core.getLogoCollection().getBufferNode().setTmpRadEntries(value);
+                } else if (qName.equalsIgnoreCase(PGTUtil.LOGO_STROKES_XID)) {
+                    try {
+                        core.getLogoCollection().getBufferNode().setStrokes(Integer.parseInt(value));
+                    } catch (NumberFormatException e) {
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
+                        warningLog += "\nLogograph load error: " + e.getLocalizedMessage();
+                    }
+                } else if (qName.equalsIgnoreCase(PGTUtil.LOGO_READING_LIST_XID)) {
+                    core.getLogoCollection().getBufferNode().setReadingBuffer(value);
+                    core.getLogoCollection().getBufferNode().insertReadingBuffer();
+                } 
+                //endregion
+                else if (qName.equalsIgnoreCase(PGTUtil.LOGO_WORD_RELATION_XID)) {
+                    try {
+                        core.getLogoCollection().loadLogoRelations(value);
+                    } catch (Exception e) {
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
+                        warningLog += "\nLogograph relation load error: " + e.getLocalizedMessage();
+                    }
+                } 
+                //endregion
                 else if (qName.equalsIgnoreCase(PGTUtil.FONT_LOCAL_XID)) {
                     bfontlocal = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_COMB_DIM_XID)) {
@@ -645,39 +674,6 @@ public final class CustHandlerFactory {
                     bfamNotes = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.FAM_WORD_XID)) {
                     bfamWord = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.LOGO_STROKES_XID)) {
-                    blogoStrokes = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.LOGO_NOTES_XID)) {
-                    LogoNode node = core.getLogoCollection().getBufferNode();
-                    try {
-                        node.setNotes(WebInterface.unarchiveHTML(node.getNotes(), core));
-                    } catch (Exception e) {
-                        core.getOSHandler().getIOHandler().writeErrorLog(e);
-                        warningLog += "\nProblem loading logograph note image: " + e.getLocalizedMessage();
-                    }
-                    blogoNotes = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.LOGO_IS_RADICAL_XID)) {
-                    blogoRadical = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.LOGO_RADICAL_LIST_XID)) {
-                    blogoRadicalList = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.LOGO_READING_LIST_XID)) {
-                    core.getLogoCollection().getBufferNode().insertReadingBuffer();
-                    blogoReading = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.LOGOGRAPH_VALUE_XID)) {
-                    blogoValue = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.LOGOGRAPH_ID_XID)) {
-                    blogoId = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.LOGOGRAPH_NODE_XID)) {
-                    blogoNode = false;
-                    try {
-                        core.getLogoCollection().insert();
-                    } catch (Exception e) {
-                        core.getOSHandler().getIOHandler().writeErrorLog(e);
-                        warningLog += "\nLogograph load error: " + e.getLocalizedMessage();
-                    }
-                    core.getLogoCollection().clear();
-                } else if (qName.equalsIgnoreCase(PGTUtil.LOGO_WORD_RELATION_XID)) {
-                    blogoWordRelation = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.GRAMMAR_CHAPTER_NODE_XID)) {
                     GrammarManager gMan = core.getGrammarManager();
                     gMan.insert();
@@ -782,41 +778,6 @@ public final class CustHandlerFactory {
                         warningLog += "\nFamily load error: " + e.getLocalizedMessage();
                     }
                     bfamWord = false;
-                } else if (blogoStrokes) {
-                    try {
-                        core.getLogoCollection().getBufferNode().setStrokes(Integer.parseInt(new String(ch, start, length)));
-                    } catch (NumberFormatException e) {
-                        core.getOSHandler().getIOHandler().writeErrorLog(e);
-                        warningLog += "\nLogograph load error: " + e.getLocalizedMessage();
-                    }
-                } else if (blogoNotes) {
-                    LogoNode curNode = core.getLogoCollection().getBufferNode();
-                    curNode.setNotes(curNode.getNotes() + new String(ch, start, length));
-                } else if (blogoRadical) {
-                    core.getLogoCollection().getBufferNode().setRadical(
-                            new String(ch, start, length).equals(PGTUtil.TRUE));
-                } else if (blogoRadicalList) {
-                    core.getLogoCollection().getBufferNode().setTmpRadEntries(new String(ch, start, length));
-                } else if (blogoReading) {
-                    LogoNode curNode = core.getLogoCollection().getBufferNode();
-                    curNode.setReadingBuffer(curNode.getReadingBuffer() + new String(ch, start, length));
-                } else if (blogoValue) {
-                    LogoNode curNode = core.getLogoCollection().getBufferNode();
-                    curNode.setValue(curNode.getValue() + new String(ch, start, length));
-                } else if (blogoId) {
-                    try {
-                        core.getLogoCollection().getBufferNode().setId(Integer.parseInt(new String(ch, start, length)));
-                    } catch (NumberFormatException e) {
-                        core.getOSHandler().getIOHandler().writeErrorLog(e);
-                        warningLog += "\nLogograph load error: " + e.getLocalizedMessage();
-                    }
-                } else if (blogoWordRelation) {
-                    try {
-                        core.getLogoCollection().loadLogoRelations(new String(ch, start, length));
-                    } catch (Exception e) {
-                        core.getOSHandler().getIOHandler().writeErrorLog(e);
-                        warningLog += "\nLogograph relation load error: " + e.getLocalizedMessage();
-                    }
                 } else if (bgrammarChapName) {
                     GrammarChapNode buffer = core.getGrammarManager().getBuffer();
                     buffer.setName(buffer.getName() + new String(ch, start, length));
