@@ -112,9 +112,6 @@ public final class CustHandlerFactory {
             boolean bgenderName = false;
             boolean bgender = false;
             boolean bDecCombId = false;
-            boolean bromBase = false;
-            boolean bromActive = false;
-            boolean bromPhon = false;
             boolean bwordPlur = false;
             boolean bfamName = false;
             boolean bfamNotes = false;
@@ -134,7 +131,6 @@ public final class CustHandlerFactory {
             boolean bgrammarSecName = false;
             boolean bgrammarSecRecId = false;
             boolean bgrammarSecText = false;
-            boolean bromRecurse = false;
             boolean btoDoNodeDone = false;
             boolean btoDoNodeLabel = false;
             boolean bphraseBook = false;
@@ -198,12 +194,6 @@ public final class CustHandlerFactory {
                     romBuffer = new PronunciationNode();
                 } else if (qName.equalsIgnoreCase(PGTUtil.FONT_LOCAL_XID)) {
                     bfontlocal = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_BASE_XID)) {
-                    bromBase = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_ENABLED_XID)) {
-                    bromActive = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_PHON_XID)) {
-                    bromPhon = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_COMB_DIM_XID)) {
                     bDecCombId = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.FAM_NAME_XID)) {
@@ -245,8 +235,6 @@ public final class CustHandlerFactory {
                     bgrammarSecRecId = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.GRAMMAR_SECTION_TEXT_XID)) {
                     bgrammarSecText = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_RECURSE_XID)) {
-                    bromRecurse = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_XID)) {
                      core.getToDoManager().pushBuffer();
                 } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_LABEL_XID)) {
@@ -622,18 +610,26 @@ public final class CustHandlerFactory {
                 } 
                 //endregion
                 //endregion
+                //region RomanizationManager
+                else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_ENABLED_XID)) {
+                    romanizationMgr.setEnabled(value.equals(PGTUtil.TRUE));
+                } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_RECURSE_XID)) {
+                    core.getRomManager().setRecurse(value.equals(PGTUtil.TRUE));
+                } 
+                //region RomanizationManager.PronunciationNode
                 else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_NODE_XID)) {
                     romanizationMgr.addPronunciation(romBuffer);
-                } else if (qName.equalsIgnoreCase(PGTUtil.FONT_LOCAL_XID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_BASE_XID)) {
+                    romBuffer.setValue(value);
+                } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_PHON_XID)) {
+                    romBuffer.setPronunciation(value);
+                } 
+                //endregion
+                //endregion
+                else if (qName.equalsIgnoreCase(PGTUtil.FONT_LOCAL_XID)) {
                     bfontlocal = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_COMB_DIM_XID)) {
                     bDecCombId = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_BASE_XID)) {
-                    bromBase = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_ENABLED_XID)) {
-                    bromActive = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_PHON_XID)) {
-                    bromPhon = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.FAM_NAME_XID)) {
                     bfamName = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.FAM_NODE_XID)) {
@@ -704,8 +700,6 @@ public final class CustHandlerFactory {
                     core.getPropertiesManager().addCharacterReplacement(charRepCharBuffer, charRepValBuffer);
                     charRepCharBuffer = "";
                     charRepValBuffer = "";
-                } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_RECURSE_XID)) {
-                    bromRecurse = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_XID)) {
                      core.getToDoManager().popBuffer();
                 } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_LABEL_XID)) {
@@ -772,14 +766,6 @@ public final class CustHandlerFactory {
                     // Deprecated
                 } else if (bDecCombId) {
                     conjugationMgr.getBuffer().setCombinedDimId(new String(ch, start, length));
-                } else if (bromBase) {
-                    romBuffer.setValue(romBuffer.getValue()
-                            + new String(ch, start, length));
-                } else if (bromActive) {
-                    romanizationMgr.setEnabled(new String(ch, start, length).equals(PGTUtil.TRUE));
-                } else if (bromPhon) {
-                    romBuffer.setPronunciation(romBuffer.getPronunciation()
-                            + new String(ch, start, length));
                 } else if (bfamName) {
                     FamNode famBuffer = famMan.getBuffer();
                     famBuffer.setValue(famBuffer.getValue()
@@ -843,9 +829,6 @@ public final class CustHandlerFactory {
                 } else if (bgrammarSecText) {
                     GrammarSectionNode buffer = core.getGrammarManager().getBuffer().getBuffer();
                     buffer.setSectionText(buffer.getSectionText() + new String(ch, start, length));
-                } else if (bromRecurse) {
-                    core.getRomManager().setRecurse(
-                            new String(ch, start, length).equals(PGTUtil.TRUE));
                 } else if (btoDoNodeLabel) {
                     ToDoNode node = core.getToDoManager().getBuffer();
                     node.setValue(node.toString() + new String(ch, start, length));
