@@ -111,12 +111,6 @@ public final class CustHandlerFactory {
             boolean bgenderNotes = false;
             boolean bgenderName = false;
             boolean bgender = false;
-            boolean bDecId = false;
-            boolean bDecText = false;
-            boolean bDecNotes = false;
-            boolean bDecIsTemp = false;
-            boolean bDecIsDimless = false;
-            boolean bDecRelId = false;
             boolean bDecCombId = false;
             boolean bpronBase = false;
             boolean bpronPhon = false;
@@ -124,22 +118,9 @@ public final class CustHandlerFactory {
             boolean bromActive = false;
             boolean bromPhon = false;
             boolean bwordPlur = false;
-            boolean bdimNode = false;
-            boolean bdimId = false;
-            boolean bdimName = false;
             boolean bfamName = false;
             boolean bfamNotes = false;
             boolean bfamWord = false;
-            boolean bdecGenRuleComb = false;
-            boolean bdecGenRuleName = false;
-            boolean bdecGenRuleRegex = false;
-            boolean bdecGenRuleType = false;
-            boolean bdecGenRuleIndex = false;
-            boolean bdecGenTransRegex = false;
-            boolean bdecGenTransRep = false;
-            boolean bdecGenTransClassVal = false;
-            boolean bcombinedFormId = false;
-            boolean bcombinedFormSurpress = false;
             boolean blogoStrokes = false;
             boolean blogoNotes = false;
             boolean blogoRadical = false;
@@ -205,27 +186,23 @@ public final class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.ETY_CHILD_EXTERNALS_XID)) {
                     // This tag has mixed content, which still requires to be processed like this
                     betyChildExternals= true;
+                } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_XID)) {
+                    // from old versions, declensions are loaded as dimensions of a master declension
+                    conjugationMgr.getBuffer().clearBuffer();
+                } else if (qName.equalsIgnoreCase(PGTUtil.DIMENSION_NODE_XID)) {
+                    conjugationMgr.getBuffer().clearBuffer();
+                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_XID)) {
+                    // ConjugationManager doesn't have a way to clear ruleBuffer
+                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_TRANS_XID)) {
+                    // ConjugationGenRule doesn't have a way to clear transBuffer
+                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_COMBINED_FORM_XID)) {
+                    combinedDecId = "";
                 } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_XID)) {
                     proBuffer = new PronunciationNode();
                 } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_NODE_XID)) {
                     romBuffer = new PronunciationNode();
                 } else if (qName.equalsIgnoreCase(PGTUtil.FONT_LOCAL_XID)) {
                     bfontlocal = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_XID)) {
-                    // from old versions, declensions are loaded as dimensions of a master declension
-                    conjugationMgr.getBuffer().clearBuffer();
-                } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_ID_XID)) {
-                    bDecId = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_TEXT_XID)) {
-                    bDecText = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_NOTES_XID)) {
-                    bDecNotes = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_IS_TEMPLATE_XID)) {
-                    bDecIsTemp = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_IS_DIMENSIONLESS_XID)) {
-                    bDecIsDimless = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_RELATED_ID_XID)) {
-                    bDecRelId = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_BASE_XID)) {
                     bpronBase = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_PHON_XID)) {
@@ -236,12 +213,6 @@ public final class CustHandlerFactory {
                     bromActive = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_PHON_XID)) {
                     bromPhon = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DIMENSION_NODE_XID)) {
-                    bdimNode = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DIMENSION_ID_XID)) {
-                    bdimId = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DIMENSION_NAME_XID)) {
-                    bdimName = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_COMB_DIM_XID)) {
                     bDecCombId = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.FAM_NAME_XID)) {
@@ -252,26 +223,6 @@ public final class CustHandlerFactory {
                     bfamNotes = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.FAM_WORD_XID)) {
                     bfamWord = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_COMB_XID)) {
-                    bdecGenRuleComb = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_NAME_XID)) {
-                    bdecGenRuleName = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_REGEX_XID)) {
-                    bdecGenRuleRegex = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_TYPE_XID)) {
-                    bdecGenRuleType = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_TRANS_REGEX_XID)) {
-                    bdecGenTransRegex = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_TRANS_REPLACE_XID)) {
-                    bdecGenTransRep = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_APPLY_TO_CLASS_VALUE_XID)) {
-                    bdecGenTransClassVal = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_INDEX_XID)) {
-                    bdecGenRuleIndex = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_COMBINED_ID_XID)) {
-                    bcombinedFormId = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_COMBINED_SURPRESS_XID)) {
-                    bcombinedFormSurpress = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LOGO_STROKES_XID)) {
                     blogoStrokes = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LOGO_NOTES_XID)) {
@@ -579,11 +530,8 @@ public final class CustHandlerFactory {
                     core.getEtymologyManager().getBufferExtParent().setDefinition(value);
                 } 
                 //endregion
-                else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_XID)) {
-                    procMan.addPronunciation(proBuffer);
-                } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_NODE_XID)) {
-                    romanizationMgr.addPronunciation(romBuffer);
-                } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_XID)) {
+                //region ConjugationManager.ConjugationNode
+                else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_XID)) {
                     ConjugationNode curBuffer = conjugationMgr.getBuffer();
 
                     // old bug set IDs to crazy values... this should clean it up.
@@ -602,26 +550,82 @@ public final class CustHandlerFactory {
                     }
 
                     conjugationMgr.clearBuffer();
-                } else if (qName.equalsIgnoreCase(PGTUtil.FONT_LOCAL_XID)) {
-                    bfontlocal = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_ID_XID)) {
-                    bDecId = false;
+                    conjugationMgr.setBufferId(Integer.parseInt(value));
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_TEXT_XID)) {
-                    bDecText = false;
+                    conjugationMgr.setBufferDecText(value);
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_NOTES_XID)) {
                     try {
-                        conjugationMgr.setBufferDecNotes(WebInterface.unarchiveHTML(conjugationMgr.getBufferDecNotes(), core));
+                        conjugationMgr.setBufferDecNotes(WebInterface.unarchiveHTML(value, core));
                     } catch (Exception e) {
                         core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nProblem loading declension notes image: " + e.getLocalizedMessage();
                     }
-                    bDecNotes = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_IS_TEMPLATE_XID)) {
-                    bDecIsTemp = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_IS_DIMENSIONLESS_XID)) {
-                    bDecIsDimless = false;
+                    conjugationMgr.setBufferDecTemp(value.equals("1"));
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_RELATED_ID_XID)) {
-                    bDecRelId = false;
+                    conjugationMgr.setBufferRelId(Integer.parseInt(value));
+                } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_IS_DIMENSIONLESS_XID)) {
+                    conjugationMgr.getBuffer().setDimensionless(value.equals(PGTUtil.TRUE));
+                } 
+                //region ConjugationManager.ConjugationNode.ConjugationDimension
+                else if (qName.equalsIgnoreCase(PGTUtil.DIMENSION_NODE_XID)) {
+                    try {
+                        conjugationMgr.getBuffer().insertBuffer();
+                        conjugationMgr.getBuffer().clearBuffer();
+                    } catch (Exception e) {
+                        throw new SAXException(e);
+                    }
+                } else if (qName.equalsIgnoreCase(PGTUtil.DIMENSION_ID_XID)) {
+                    conjugationMgr.getBuffer().getBuffer().setId(Integer.parseInt(value));
+                } else if (qName.equalsIgnoreCase(PGTUtil.DIMENSION_NAME_XID)) {
+                    conjugationMgr.getBuffer().getBuffer().setValue(value);
+                } 
+                //endregion
+                //endregion
+                //region ConjugationManager.ConjugationGenRule
+                else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_XID)) {
+                    core.getConjugationManager().insRuleBuffer();
+                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_COMB_XID)) {
+                    core.getConjugationManager().getRuleBuffer().setCombinationId(value);
+                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_NAME_XID)) {
+                    core.getConjugationManager().getRuleBuffer().setName(value);
+                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_REGEX_XID)) {
+                    core.getConjugationManager().getRuleBuffer().setRegex(value);
+                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_TYPE_XID)) {
+                    core.getConjugationManager().getRuleBuffer().setTypeId(Integer.parseInt(value));
+                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_INDEX_XID)) {
+                    core.getConjugationManager().getRuleBuffer().setIndex(Integer.parseInt(value));
+                } 
+                //region ConjugationGenRule.ConjugationGenTransform
+                else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_TRANS_XID)) {
+                    core.getConjugationManager().getRuleBuffer().insertTransBuffer();
+                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_TRANS_REGEX_XID)) {
+                    core.getConjugationManager().getRuleBuffer().getTransBuffer().regex = value;
+                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_TRANS_REPLACE_XID)) {
+                    core.getConjugationManager().getRuleBuffer().getTransBuffer().replaceText = value;
+                } 
+                //endregion
+                else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_APPLY_TO_CLASS_VALUE_XID)) {
+                    String[] classValueIds = value.split(",");
+                    core.getConjugationManager().getRuleBuffer().addClassToFilterList(
+                            Integer.parseInt(classValueIds[0]),
+                            Integer.parseInt(classValueIds[1]));
+                } 
+                //endregion
+                //region ConjugationManager Combined forms settings
+                else if (qName.equalsIgnoreCase(PGTUtil.DEC_COMBINED_ID_XID)) {
+                    combinedDecId = value;
+                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_COMBINED_SURPRESS_XID)) {
+                    core.getConjugationManager().setCombinedConjugationSuppressedRaw(combinedDecId, value.equals(PGTUtil.TRUE));
+                } 
+                //endregion
+                else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_XID)) {
+                    procMan.addPronunciation(proBuffer);
+                } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_NODE_XID)) {
+                    romanizationMgr.addPronunciation(romBuffer);
+                } else if (qName.equalsIgnoreCase(PGTUtil.FONT_LOCAL_XID)) {
+                    bfontlocal = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_COMB_DIM_XID)) {
                     bDecCombId = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_BASE_XID)) {
@@ -634,18 +638,6 @@ public final class CustHandlerFactory {
                     bromActive = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_PHON_XID)) {
                     bromPhon = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DIMENSION_NODE_XID)) {
-                    try {
-                        conjugationMgr.getBuffer().insertBuffer();
-                        conjugationMgr.getBuffer().clearBuffer();
-                    } catch (Exception e) {
-                        throw new SAXException(e);
-                    }
-                    bdimNode = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DIMENSION_ID_XID)) {
-                    bdimId = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DIMENSION_NAME_XID)) {
-                    bdimName = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.FAM_NAME_XID)) {
                     bfamName = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.FAM_NODE_XID)) {
@@ -661,32 +653,6 @@ public final class CustHandlerFactory {
                     bfamNotes = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.FAM_WORD_XID)) {
                     bfamWord = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_XID)) {
-                    core.getConjugationManager().insRuleBuffer();
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_COMB_XID)) {
-                    bdecGenRuleComb = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_NAME_XID)) {
-                    bdecGenRuleName = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_REGEX_XID)) {
-                    bdecGenRuleRegex = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_APPLY_TO_CLASS_VALUE_XID)) {
-                    bdecGenTransClassVal = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_TYPE_XID)) {
-                    bdecGenRuleType = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_TRANS_XID)) {
-                    core.getConjugationManager().getRuleBuffer().insertTransBuffer();
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_TRANS_REGEX_XID)) {
-                    bdecGenTransRegex = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_TRANS_REPLACE_XID)) {
-                    bdecGenTransRep = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_GEN_RULE_INDEX_XID)) {
-                    bdecGenRuleIndex = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_COMBINED_ID_XID)) {
-                    bcombinedFormId = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_COMBINED_SURPRESS_XID)) {
-                    bcombinedFormSurpress = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DEC_COMBINED_FORM_XID)) {
-                    combinedDecId = "";
                 } else if (qName.equalsIgnoreCase(PGTUtil.LOGO_STROKES_XID)) {
                     blogoStrokes = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LOGO_NOTES_XID)) {
@@ -815,26 +781,8 @@ public final class CustHandlerFactory {
                     // Deprecated
                 } else if (bgenderNotes) {
                     // Deprecated
-                } else if (bDecId) {
-                    conjugationMgr.setBufferId(Integer.parseInt(new String(ch, start, length)));
-                    bDecId = false;
-                } else if (bDecText) {
-                    conjugationMgr.setBufferDecText(conjugationMgr.getBufferDecText()
-                            + new String(ch, start, length));
-                } else if (bDecNotes) {
-                    conjugationMgr.setBufferDecNotes(conjugationMgr.getBufferDecNotes()
-                            + new String(ch, start, length));
-                } else if (bDecIsTemp) {
-                    conjugationMgr.setBufferDecTemp(new String(ch, start, length).equals("1"));
-                    bDecIsTemp = false;
-                } else if (bDecIsDimless) {
-                    conjugationMgr.getBuffer().setDimensionless(new String(ch, start, length).equals(PGTUtil.TRUE));
                 } else if (bDecCombId) {
                     conjugationMgr.getBuffer().setCombinedDimId(new String(ch, start, length));
-                    bDecIsTemp = false;
-                } else if (bDecRelId) {
-                    conjugationMgr.setBufferRelId(Integer.parseInt(new String(ch, start, length)));
-                    bDecRelId = false;
                 } else if (bpronBase) {
                     proBuffer.setValue(proBuffer.getValue()
                             + new String(ch, start, length));
@@ -848,13 +796,6 @@ public final class CustHandlerFactory {
                     romanizationMgr.setEnabled(new String(ch, start, length).equals(PGTUtil.TRUE));
                 } else if (bromPhon) {
                     romBuffer.setPronunciation(romBuffer.getPronunciation()
-                            + new String(ch, start, length));
-                } else if (bdimId) {
-                    conjugationMgr.getBuffer().getBuffer().setId(Integer.parseInt(new String(ch, start, length)));
-                    bdimId = false;
-                } else if (bdimName) {
-                    ConjugationDimension dimBuffer = conjugationMgr.getBuffer().getBuffer();
-                    dimBuffer.setValue(dimBuffer.getValue()
                             + new String(ch, start, length));
                 } else if (bfamName) {
                     FamNode famBuffer = famMan.getBuffer();
@@ -872,39 +813,6 @@ public final class CustHandlerFactory {
                         warningLog += "\nFamily load error: " + e.getLocalizedMessage();
                     }
                     bfamWord = false;
-                } else if (bdecGenTransClassVal) {
-                    String[] classValueIds = new String(ch, start, length).split(",");
-                    core.getConjugationManager().getRuleBuffer().addClassToFilterList(
-                            Integer.parseInt(classValueIds[0]),
-                            Integer.parseInt(classValueIds[1]));
-                } else if (bdecGenRuleComb) {
-                    core.getConjugationManager().getRuleBuffer().setCombinationId(new String(ch, start, length));
-                    bdecGenRuleComb = false;
-                } else if (bdecGenRuleName) {
-                    ConjugationGenRule ruleBuffer = core.getConjugationManager().getRuleBuffer();
-                    ruleBuffer.setName(ruleBuffer.getName()
-                            + new String(ch, start, length));
-                } else if (bdecGenRuleRegex) {
-                    ConjugationGenRule ruleBuffer = core.getConjugationManager().getRuleBuffer();
-                    ruleBuffer.setRegex(ruleBuffer.getRegex()
-                            + new String(ch, start, length));
-                } else if (bdecGenRuleType) {
-                    core.getConjugationManager().getRuleBuffer().setTypeId(Integer.parseInt(new String(ch, start, length)));
-                    bdecGenRuleType = false;
-                } else if (bdecGenTransRegex) {
-                    ConjugationGenTransform transBuffer = core.getConjugationManager().getRuleBuffer().getTransBuffer();
-                    transBuffer.regex += new String(ch, start, length);
-                } else if (bdecGenTransRep) {
-                    ConjugationGenTransform transBuffer = core.getConjugationManager().getRuleBuffer().getTransBuffer();
-                    transBuffer.replaceText += new String(ch, start, length);
-                } else if (bdecGenRuleIndex) {
-                    core.getConjugationManager().getRuleBuffer().setIndex(Integer.parseInt(new String(ch, start, length)));
-                    bdecGenRuleIndex = false;
-                } else if (bcombinedFormId) {
-                    combinedDecId += new String(ch, start, length);
-                } else if (bcombinedFormSurpress) {
-                    core.getConjugationManager().setCombinedConjugationSuppressedRaw(combinedDecId,
-                            new String(ch, start, length).equals(PGTUtil.TRUE));
                 } else if (blogoStrokes) {
                     try {
                         core.getLogoCollection().getBufferNode().setStrokes(Integer.parseInt(new String(ch, start, length)));
