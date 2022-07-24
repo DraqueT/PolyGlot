@@ -112,8 +112,6 @@ public final class CustHandlerFactory {
             boolean bgenderName = false;
             boolean bgender = false;
             boolean bDecCombId = false;
-            boolean bpronBase = false;
-            boolean bpronPhon = false;
             boolean bromBase = false;
             boolean bromActive = false;
             boolean bromPhon = false;
@@ -137,7 +135,6 @@ public final class CustHandlerFactory {
             boolean bgrammarSecRecId = false;
             boolean bgrammarSecText = false;
             boolean bromRecurse = false;
-            boolean bprocRecurse = false;
             boolean btoDoNodeDone = false;
             boolean btoDoNodeLabel = false;
             boolean bphraseBook = false;
@@ -150,8 +147,6 @@ public final class CustHandlerFactory {
             boolean bphrasePronunciationOverride = false;
             boolean bphraseNotes = false;
             boolean bphraseOrder = false;
-            boolean bsyllableNode = false;
-            boolean bsyllableComposition = false;
             
             int wId;
             int wCId;
@@ -203,10 +198,6 @@ public final class CustHandlerFactory {
                     romBuffer = new PronunciationNode();
                 } else if (qName.equalsIgnoreCase(PGTUtil.FONT_LOCAL_XID)) {
                     bfontlocal = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_BASE_XID)) {
-                    bpronBase = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_PHON_XID)) {
-                    bpronPhon = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_BASE_XID)) {
                     bromBase = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_ENABLED_XID)) {
@@ -254,8 +245,6 @@ public final class CustHandlerFactory {
                     bgrammarSecRecId = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.GRAMMAR_SECTION_TEXT_XID)) {
                     bgrammarSecText = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_RECURSIVE_XID)) {
-                    bprocRecurse = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_RECURSE_XID)) {
                     bromRecurse = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_XID)) {
@@ -286,11 +275,6 @@ public final class CustHandlerFactory {
                     bphrasegloss = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_ORDER_XID)) {
                     bphraseOrder = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_SYLLABLE)) {
-                    bsyllableNode = true;
-                    tmpString = "";
-                } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_COMPOSITION_SYLLABLE)) {
-                    bsyllableComposition = true;
                 }
             }
 
@@ -620,18 +604,30 @@ public final class CustHandlerFactory {
                     core.getConjugationManager().setCombinedConjugationSuppressedRaw(combinedDecId, value.equals(PGTUtil.TRUE));
                 } 
                 //endregion
+                //region PronunciationMgr
+                else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_SYLLABLE)) {
+                    procMan.addSyllable(value);
+                } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_COMPOSITION_SYLLABLE)) {
+                    procMan.setSyllableCompositionEnabled(value.equals(PGTUtil.TRUE));
+                } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_RECURSIVE_XID)) {
+                    core.getPronunciationMgr().setRecurse(value.equals(PGTUtil.TRUE));
+                } 
+                //region PronunciationMgr.PronunciationNode
                 else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_XID)) {
                     procMan.addPronunciation(proBuffer);
-                } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_NODE_XID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_BASE_XID)) {
+                    proBuffer.setValue(value);
+                } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_PHON_XID)) {
+                    proBuffer.setPronunciation(value);
+                } 
+                //endregion
+                //endregion
+                else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_NODE_XID)) {
                     romanizationMgr.addPronunciation(romBuffer);
                 } else if (qName.equalsIgnoreCase(PGTUtil.FONT_LOCAL_XID)) {
                     bfontlocal = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_COMB_DIM_XID)) {
                     bDecCombId = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_BASE_XID)) {
-                    bpronBase = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_PHON_XID)) {
-                    bpronPhon = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_BASE_XID)) {
                     bromBase = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_ENABLED_XID)) {
@@ -708,8 +704,6 @@ public final class CustHandlerFactory {
                     core.getPropertiesManager().addCharacterReplacement(charRepCharBuffer, charRepValBuffer);
                     charRepCharBuffer = "";
                     charRepValBuffer = "";
-                } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_RECURSIVE_XID)) {
-                    bprocRecurse = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_RECURSE_XID)) {
                     bromRecurse = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_XID)) {
@@ -746,11 +740,6 @@ public final class CustHandlerFactory {
                     bphrasegloss = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_ORDER_XID)) {
                     bphraseOrder = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_SYLLABLE)) {
-                    bsyllableNode = false;
-                    procMan.addSyllable(tmpString);
-                } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_COMPOSITION_SYLLABLE)) {
-                    bsyllableComposition = false;
                 }
             }
 
@@ -783,12 +772,6 @@ public final class CustHandlerFactory {
                     // Deprecated
                 } else if (bDecCombId) {
                     conjugationMgr.getBuffer().setCombinedDimId(new String(ch, start, length));
-                } else if (bpronBase) {
-                    proBuffer.setValue(proBuffer.getValue()
-                            + new String(ch, start, length));
-                } else if (bpronPhon) {
-                    proBuffer.setPronunciation(proBuffer.getPronunciation()
-                            + new String(ch, start, length));
                 } else if (bromBase) {
                     romBuffer.setValue(romBuffer.getValue()
                             + new String(ch, start, length));
@@ -860,9 +843,6 @@ public final class CustHandlerFactory {
                 } else if (bgrammarSecText) {
                     GrammarSectionNode buffer = core.getGrammarManager().getBuffer().getBuffer();
                     buffer.setSectionText(buffer.getSectionText() + new String(ch, start, length));
-                } else if (bprocRecurse) {
-                    core.getPronunciationMgr().setRecurse(
-                            new String(ch, start, length).equals(PGTUtil.TRUE));
                 } else if (bromRecurse) {
                     core.getRomManager().setRecurse(
                             new String(ch, start, length).equals(PGTUtil.TRUE));
@@ -909,10 +889,6 @@ public final class CustHandlerFactory {
                 } else if (bphraseOrder) {
                     int orderId = Integer.parseInt(new String(ch, start, length));
                     phraseMan.getBuffer().setOrderId(orderId);
-                } else if (bsyllableNode) {
-                    tmpString += new String(ch, start, length);
-                } else if (bsyllableComposition) {
-                    procMan.setSyllableCompositionEnabled(new String(ch, start, length).equals(PGTUtil.TRUE));
                 }
             }
             
