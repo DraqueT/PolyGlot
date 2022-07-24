@@ -113,9 +113,6 @@ public final class CustHandlerFactory {
             boolean bgender = false;
             boolean bDecCombId = false;
             boolean bwordPlur = false;
-            boolean bfamName = false;
-            boolean bfamNotes = false;
-            boolean bfamWord = false;
             
             int wId;
             int wCId;
@@ -178,18 +175,12 @@ public final class CustHandlerFactory {
                     core.getToDoManager().pushBuffer();
                 } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_NODE_XID)) {
                     phraseMan.clear();
+                } else if (qName.equalsIgnoreCase(PGTUtil.FAM_NODE_XID)) {
+                    famMan.buildNewBuffer();
                 } else if (qName.equalsIgnoreCase(PGTUtil.FONT_LOCAL_XID)) {
                     bfontlocal = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_COMB_DIM_XID)) {
                     bDecCombId = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.FAM_NAME_XID)) {
-                    bfamName = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.FAM_NODE_XID)) {
-                    famMan.buildNewBuffer();
-                } else if (qName.equalsIgnoreCase(PGTUtil.FAM_NOTES_XID)) {
-                    bfamNotes = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.FAM_WORD_XID)) {
-                    bfamWord = true;
                 }
             }
 
@@ -666,25 +657,33 @@ public final class CustHandlerFactory {
                     phraseMan.getBuffer().setOrderId(Integer.parseInt(value));
                 } 
                 //endregion
-                else if (qName.equalsIgnoreCase(PGTUtil.FONT_LOCAL_XID)) {
-                    bfontlocal = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_COMB_DIM_XID)) {
-                    bDecCombId = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.FAM_NAME_XID)) {
-                    bfamName = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.FAM_NODE_XID)) {
+                //region FamilyManager.FamNode
+                else if (qName.equalsIgnoreCase(PGTUtil.FAM_NODE_XID)) {
                     famMan.bufferDone();
+                } else if (qName.equalsIgnoreCase(PGTUtil.FAM_NAME_XID)) {
+                    famMan.getBuffer().setValue(value);
                 } else if (qName.equalsIgnoreCase(PGTUtil.FAM_NOTES_XID)) {
-                    FamNode node = core.getFamManager().getBuffer();
+                    FamNode node = famMan.getBuffer();
                     try {
-                        node.setNotes(WebInterface.unarchiveHTML(node.getNotes(), core));
+                        node.setNotes(WebInterface.unarchiveHTML(value, core));
                     } catch (Exception e) {
                         core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nProblem loading family note image: " + e.getLocalizedMessage();
                     }
-                    bfamNotes = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.FAM_WORD_XID)) {
-                    bfamWord = false;
+                    try {
+                        famMan.getBuffer().addWord(core.getWordCollection().getNodeById(
+                                Integer.parseInt(value)));
+                    } catch (NumberFormatException e) {
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
+                        warningLog += "\nFamily load error: " + e.getLocalizedMessage();
+                    }
+                } 
+                //endregion
+                else if (qName.equalsIgnoreCase(PGTUtil.FONT_LOCAL_XID)) {
+                    bfontlocal = false;
+                } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_COMB_DIM_XID)) {
+                    bDecCombId = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROPCHAR_REP_NODE_XID)) {
                     core.getPropertiesManager().addCharacterReplacement(charRepCharBuffer, charRepValBuffer);
                     charRepCharBuffer = "";
@@ -721,22 +720,6 @@ public final class CustHandlerFactory {
                     // Deprecated
                 } else if (bDecCombId) {
                     conjugationMgr.getBuffer().setCombinedDimId(new String(ch, start, length));
-                } else if (bfamName) {
-                    FamNode famBuffer = famMan.getBuffer();
-                    famBuffer.setValue(famBuffer.getValue()
-                            + new String(ch, start, length));
-                } else if (bfamNotes) {
-                    FamNode node = famMan.getBuffer();
-                    node.setNotes(node.getNotes() + new String(ch, start, length));
-                } else if (bfamWord) {
-                    try {
-                        famMan.getBuffer().addWord(core.getWordCollection().getNodeById(
-                                Integer.parseInt(new String(ch, start, length))));
-                    } catch (NumberFormatException e) {
-                        core.getOSHandler().getIOHandler().writeErrorLog(e);
-                        warningLog += "\nFamily load error: " + e.getLocalizedMessage();
-                    }
-                    bfamWord = false;
                 }
             }
             
