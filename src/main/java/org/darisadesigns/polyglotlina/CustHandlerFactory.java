@@ -104,16 +104,7 @@ public final class CustHandlerFactory {
             String charRepValBuffer = "";
             int ruleIdBuffer = 0;
             String ruleValBuffer = "";
-            boolean blocalWord = false;
-            boolean bconWord = false;
-            boolean btypeId = false;
-            boolean bId = false;
-            boolean bdef = false;
             boolean bfontlocal = false;
-            boolean bwordClassTextVal = false;
-            boolean bwordEtymNotes = false;
-            boolean bpronuncation = false;
-            boolean bclassVal = false;
             boolean bgenderId = false;
             boolean bgenderNotes = false;
             boolean bgenderName = false;
@@ -131,14 +122,12 @@ public final class CustHandlerFactory {
             boolean bromActive = false;
             boolean bromPhon = false;
             boolean bwordPlur = false;
-            boolean bwordProcOverride = false;
             boolean bdimNode = false;
             boolean bdimId = false;
             boolean bdimName = false;
             boolean bfamName = false;
             boolean bfamNotes = false;
             boolean bfamWord = false;
-            boolean bwordoverAutoDec = false;
             boolean bdecGenRuleComb = false;
             boolean bdecGenRuleName = false;
             boolean bdecGenRuleRegex = false;
@@ -149,7 +138,6 @@ public final class CustHandlerFactory {
             boolean bdecGenTransClassVal = false;
             boolean bcombinedFormId = false;
             boolean bcombinedFormSurpress = false;
-            boolean bwordRuleOverride = false;
             boolean blogoStrokes = false;
             boolean blogoNotes = false;
             boolean blogoRadical = false;
@@ -220,30 +208,8 @@ public final class CustHandlerFactory {
                     proBuffer = new PronunciationNode();
                 } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_NODE_XID)) {
                     romBuffer = new PronunciationNode();
-                } else if (qName.equalsIgnoreCase(PGTUtil.LOCALWORD_XID)) {
-                    blocalWord = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.CONWORD_XID)) {
-                    bconWord = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_POS_ID_XID)) {
-                    btypeId = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_ID_XID)) {
-                    bId = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_DEF_XID)) {
-                    bdef = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_ETY_NOTES_XID)) {
-                    bwordEtymNotes = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_RULEOVERRIDE_XID)) {
-                    bwordRuleOverride = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_CLASS_AND_VALUE_XID)) {
-                    bclassVal = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_CLASS_TEXT_VAL_XID)){
-                    bwordClassTextVal = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.FONT_LOCAL_XID)) {
                     bfontlocal = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_PROC_XID)) {
-                    bpronuncation = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_AUTODECLOVERRIDE_XID)) {
-                    bwordoverAutoDec = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_XID)) {
                     // from old versions, declensions are loaded as dimensions of a master declension
                     conjugationMgr.getBuffer().clearBuffer();
@@ -269,8 +235,6 @@ public final class CustHandlerFactory {
                     bromActive = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_PHON_XID)) {
                     bromPhon = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_PROCOVERRIDE_XID)) {
-                    bwordProcOverride = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DIMENSION_NODE_XID)) {
                     bdimNode = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DIMENSION_ID_XID)) {
@@ -544,13 +508,72 @@ public final class CustHandlerFactory {
                     core.getTypes().getBufferType().setGloss(value);
                 } 
                 //endregion
+                //region ConWordCollection
                 else if (qName.equalsIgnoreCase(PGTUtil.WORD_XID)) {
                     try {
                         core.getWordCollection().insert(wId);
                     } catch (Exception e) {
                         throw new SAXException("Word insertion error: " + e.getLocalizedMessage(), e);
                     }
-                } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_XID)) {
+                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_ID_XID)) {
+                    wId = Integer.parseInt(value);
+                } else if (qName.equalsIgnoreCase(PGTUtil.LOCALWORD_XID)) {
+                    core.getWordCollection().getBufferWord().setLocalWord(value);
+                } else if (qName.equalsIgnoreCase(PGTUtil.CONWORD_XID)) {
+                    core.getWordCollection().getBufferWord().setValue(value);
+                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_POS_ID_XID)) {
+                    ConWord bufferWord = core.getWordCollection().getBufferWord();
+                    bufferWord.setWordTypeId(Integer.parseInt(value));
+                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_PROC_XID)) {
+                    ConWord bufferWord = core.getWordCollection().getBufferWord();
+                    try {
+                        bufferWord.setPronunciation(value);
+                    } catch (Exception e) {
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
+                        // Don't bother raising an exception. This is regenerated
+                        // each time the word is accessed if the error pops
+                        // users will be informed at that more obvious point.
+                    }
+                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_DEF_XID)) {
+                    // finalize loading of def (if it contains archived HTML elements
+                    ConWord curWord = core.getWordCollection().getBufferWord();
+                    try {
+                        curWord.setDefinition(WebInterface.unarchiveHTML(value, core));
+                    } catch (Exception e) {
+                        core.getOSHandler().getIOHandler().writeErrorLog(e);
+                        warningLog += "\nWord image load error: " + e.getLocalizedMessage();
+                    }
+                    
+                    curWord.setDefinition(curWord.getDefinition().replaceAll("<br>\\s*[<br>\\s*]+<br>\\s*", ""));
+                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_PROCOVERRIDE_XID)) {
+                    core.getWordCollection().getBufferWord().setProcOverride(value.equals(PGTUtil.TRUE));
+                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_AUTODECLOVERRIDE_XID)) {
+                    core.getWordCollection().getBufferWord().setOverrideAutoConjugate(value.equals(PGTUtil.TRUE));
+                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_RULEOVERRIDE_XID)) {
+                    core.getWordCollection().getBufferWord().setRulesOverride(value.equals(PGTUtil.TRUE));
+                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_CLASS_AND_VALUE_XID)) {
+                    String[] classValIds = value.split(",");
+                    int classId = Integer.parseInt(classValIds[0]);
+                    int valId = Integer.parseInt(classValIds[1]);
+                    core.getWordCollection().getBufferWord().setClassValue(classId, valId);
+                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_CLASS_TEXT_VAL_XID)){
+                    if (ruleIdBuffer == 0) {
+                        String[] classValIds = value.split(",");
+                        ruleIdBuffer = Integer.parseInt(classValIds[0]);
+                        for (int i = 1; i < classValIds.length; i++) {
+                            ruleValBuffer += classValIds[i];
+                        }
+                    } else {
+                        ruleValBuffer += value;
+                    }
+                    core.getWordCollection().getBufferWord().setClassTextValue(ruleIdBuffer, ruleValBuffer);
+                    ruleIdBuffer = 0;
+                    ruleValBuffer = "";
+                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_ETY_NOTES_XID)) {
+                    core.getWordCollection().getBufferWord().setEtymNotes(value);
+                } 
+                //endregion
+                else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_XID)) {
                     procMan.addPronunciation(proBuffer);
                 } else if (qName.equalsIgnoreCase(PGTUtil.ROM_GUIDE_NODE_XID)) {
                     romanizationMgr.addPronunciation(romBuffer);
@@ -573,47 +596,8 @@ public final class CustHandlerFactory {
                     }
 
                     conjugationMgr.clearBuffer();
-                } else if (qName.equalsIgnoreCase(PGTUtil.LOCALWORD_XID)) {
-                    blocalWord = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.CONWORD_XID)) {
-                    bconWord = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_POS_ID_XID)) {
-                    btypeId = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_ID_XID)) {
-                    bId = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_RULEOVERRIDE_XID)) {
-                    bwordRuleOverride = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_CLASS_AND_VALUE_XID)) {
-                    String[] classValIds = value.split(",");
-                    int classId = Integer.parseInt(classValIds[0]);
-                    int valId = Integer.parseInt(classValIds[1]);
-                    core.getWordCollection().getBufferWord().setClassValue(classId, valId);
-                    bclassVal = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_CLASS_TEXT_VAL_XID)){
-                    core.getWordCollection().getBufferWord().setClassTextValue(ruleIdBuffer, ruleValBuffer);
-                    ruleIdBuffer = 0;
-                    ruleValBuffer = "";
-                    bwordClassTextVal = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_DEF_XID)) {
-                    // finalize loading of def (if it contains archived HTML elements
-                    ConWord curWord = core.getWordCollection().getBufferWord();
-                    try {
-                        curWord.setDefinition(WebInterface.unarchiveHTML(curWord.getDefinition(), core));
-                    } catch (Exception e) {
-                        core.getOSHandler().getIOHandler().writeErrorLog(e);
-                        warningLog += "\nWord image load error: " + e.getLocalizedMessage();
-                    }
-                    
-                    curWord.setDefinition(curWord.getDefinition().replaceAll("<br>\\s*[<br>\\s*]+<br>\\s*", ""));
-                    bdef = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_ETY_NOTES_XID)) {
-                    bwordEtymNotes = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.FONT_LOCAL_XID)) {
                     bfontlocal = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_PROC_XID)) {
-                    bpronuncation = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.WORD_AUTODECLOVERRIDE_XID)) {
-                    bwordoverAutoDec = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_ID_XID)) {
                     bDecId = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_TEXT_XID)) {
@@ -818,67 +802,12 @@ public final class CustHandlerFactory {
             public void characters(char[] ch, int start, int length) throws SAXException {
                 stringBuilder.append(ch, start, length);
 
-                if (blocalWord) {
-                    ConWord bufferWord = core.getWordCollection().getBufferWord();
-                    bufferWord.setLocalWord(bufferWord.getLocalWord()
-                            + new String(ch, start, length));
-                } else if (bconWord) {
-                    ConWord bufferWord = core.getWordCollection().getBufferWord();
-                    bufferWord.setValue(bufferWord.getValue()
-                            + new String(ch, start, length));
-                } else if (btypeId) {
-                    ConWord bufferWord = core.getWordCollection().getBufferWord();
-                    bufferWord.setWordTypeId(Integer.parseInt(new String(ch, start, length)));
-                } else if (bId) {
-                    wId = Integer.parseInt(new String(ch, start, length));
-                } else if (bdef) {
-                    ConWord bufferWord = core.getWordCollection().getBufferWord();
-                    bufferWord.setDefinition(bufferWord.getDefinition()
-                            + new String(ch, start, length));
-                } else if (bwordPlur) {
+                if (bwordPlur) {
                     // plurality now handled as declension
                     conjugationMgr.setBufferDecTemp(false);
                     conjugationMgr.setBufferDecText(new String(ch, start, length));
                     conjugationMgr.setBufferDecNotes("Plural");
                     bwordPlur = false;
-                } else if (bwordProcOverride) {
-                    core.getWordCollection().getBufferWord()
-                            .setProcOverride(new String(ch, start, length).equals(PGTUtil.TRUE));
-                    bwordProcOverride = false;
-                } else if (bwordRuleOverride) {
-                    core.getWordCollection().getBufferWord()
-                            .setRulesOverride(new String(ch, start, length).equals(PGTUtil.TRUE));
-                    bwordRuleOverride = false;
-                } else if (bclassVal) {
-                    // stringBuilder.append(new String(ch, start, length));
-                } else if (bwordClassTextVal) {
-                    if (ruleIdBuffer == 0) {
-                        String[] classValIds = new String(ch, start, length).split(",");
-                        ruleIdBuffer = Integer.parseInt(classValIds[0]);
-                        for (int i = 1; i < classValIds.length; i++) {
-                            ruleValBuffer += classValIds[i];
-                        }
-                    } else {
-                        ruleValBuffer += new String(ch, start, length);
-                    }
-                } else if (bwordEtymNotes) {
-                    ConWord buffer = core.getWordCollection().getBufferWord();
-                    buffer.setEtymNotes(buffer.getEtymNotes() + new String(ch, start, length));
-                }else if (bwordoverAutoDec) {
-                    core.getWordCollection().getBufferWord()
-                            .setOverrideAutoConjugate(new String(ch, start, length).equals(PGTUtil.TRUE));
-                    bwordoverAutoDec = false;
-                } else if (bpronuncation) {
-                    ConWord bufferWord = core.getWordCollection().getBufferWord();
-                    try {
-                        bufferWord.setPronunciation(bufferWord.getPronunciation()
-                                + new String(ch, start, length));
-                    } catch (Exception e) {
-                        core.getOSHandler().getIOHandler().writeErrorLog(e);
-                        // Don't bother raising an exception. This is regenerated
-                        // each time the word is accessed if the error pops
-                        // users will be informed at that more obvious point.
-                    }
                 } else if (bgender) {
                     tmpString += new String(ch, start, length);
                 } else if (bgenderId) {
