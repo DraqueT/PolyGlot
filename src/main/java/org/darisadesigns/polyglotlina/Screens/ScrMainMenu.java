@@ -923,7 +923,10 @@ public final class ScrMainMenu extends PFrame {
     private void populateToDo() {
         toDoTree.setRootVisible(false);
         toDoTree.setModel(new PToDoTreeModel(ToDoTreeNode.createToDoTreeNode(core.getToDoManager().getRoot())));
-        ((DefaultTreeModel) toDoTree.getModel()).nodeStructureChanged((ToDoTreeNode) toDoTree.getModel().getRoot());
+        
+        if ((ToDoTreeNode) toDoTree.getModel().getRoot() instanceof ToDoTreeNode) {
+            ((DefaultTreeModel) toDoTree.getModel()).nodeStructureChanged((ToDoTreeNode) toDoTree.getModel().getRoot());
+        }
 
         SwingUtilities.invokeLater(() -> {
             PolyGlot.getPolyGlot().getOSHandler().getPFontHandler().updateLocalFont();
