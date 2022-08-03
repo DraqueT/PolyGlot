@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -318,8 +318,15 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
      */
     public boolean isDefaultText() {
         String body = super.getText();
-        body = body.substring(0, body.indexOf("</body>"));
-        body = body.substring(body.indexOf("<body>") + 6);
+        
+        if (body.contains("</body>")) {
+            body = body.substring(0, body.indexOf("</body>"));
+        }
+        
+        if (body.contains("<body>")) {
+            body = body.substring(body.indexOf("<body>") + 6);
+        }
+        
         return body.trim().equals(defText);
     }
     
