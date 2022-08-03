@@ -171,12 +171,6 @@ public final class ScrDeclensionsGrids extends PDialog {
         if (shouldRenderDimensional()) {
             if (dimX == dimY) {
                 new DesktopInfoBox(this).warning("Dimension Selection", "Please select differing Row and Column values.");
-                if (cmbDimY.getSelectedIndex() == 0) {
-                    cmbDimX.setSelectedIndex(1);
-                } else {
-                    cmbDimX.setSelectedIndex(0);
-                }
-                buildWindowBody();
                 return;
             } else {
                 // get all partial dim ID patterns (sans X & Y dims)/feed to grid panel class
