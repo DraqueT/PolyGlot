@@ -34,7 +34,6 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterAll;
 
@@ -365,8 +364,6 @@ public class IOHandlerTest {
             
             assertEquals(origin, target);
         } catch (Exception e) {
-//            e.printStackTrace();
-//            System.out.println(e.getMessage());
             fail(e);
         } finally {
             if (tmpLangFile.exists()) {

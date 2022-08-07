@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -33,7 +33,6 @@ import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.QuizEngine.Quiz;
 import org.darisadesigns.polyglotlina.QuizEngine.QuizQuestion;
-import org.junit.jupiter.api.Assumptions;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
 
@@ -47,9 +46,6 @@ public class OpenScreensTest {
     private final boolean headless = GraphicsEnvironment.isHeadless(); // testing this in a headless environment makes no sense
     
     public OpenScreensTest() {
-        // TODO: figure out why windows tests are flakey (ancient machine running Windows virtual?)
-        Assumptions.assumeTrue(!PGTUtil.IS_WINDOWS);
-        
         PGTUtil.enterUITestingMode();
         core = DummyCore.newCore();
         errors = DesktopIOHandler.getInstance().getErrorLogFile();
