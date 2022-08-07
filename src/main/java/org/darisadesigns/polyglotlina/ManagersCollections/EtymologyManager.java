@@ -501,8 +501,16 @@ public class EtymologyManager {
      */
     private void clearParentChildList(Map clean) {
         for(Object key : clean.keySet()) {
-            if (((List)clean.get(key)).isEmpty()) {
-                clean.remove(key);
+            Object value = clean.get(key);
+            
+            if (value instanceof List) {
+                if (((List)value).isEmpty()) {
+                    clean.remove(key);
+                }
+            } else if (value instanceof Map) {
+                if (((Map)value).isEmpty()) {
+                    clean.remove(key);
+                }
             }
         }
     }
