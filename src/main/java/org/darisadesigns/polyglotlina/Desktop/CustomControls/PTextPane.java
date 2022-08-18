@@ -46,6 +46,7 @@ import javax.swing.JTextPane;
 import javax.swing.SwingWorker;
 import org.darisadesigns.polyglotlina.CustomControls.CoreUpdateSubscriptionInterface;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -63,7 +64,18 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
         overrideFont = _overrideFont;
         setCore(_core);
         defText = _defText;
-        this.setContentType("text/html");
+        
+        try {
+            this.setContentType("text/html");
+        } catch (RuntimeException e) {
+            new DesktopInfoBox(PolyGlot.getPolyGlot().getRootWindow()).error(
+                    "Fatal Font Error", 
+                    "PolyGlot has detected a fatal error with your font.\nTry downloading a font tool with diagnostic tools\n(FontForge suggested) and analyze.\n\nERROR: " 
+                            + e.getMessage());
+            
+            return;
+        }
+        
         setupRightClickMenu();
 
         setupListeners();
