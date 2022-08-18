@@ -500,7 +500,7 @@ public class EtymologyManager {
      * @param clean 
      */
     private void clearParentChildList(Map clean) {
-        for(Object key : clean.keySet()) {
+        for(Object key : clean.keySet().toArray()) {
             Object value = clean.get(key);
             
             if (value instanceof List) {
