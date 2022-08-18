@@ -459,14 +459,12 @@ public final class ScrMainMenu extends PFrame {
                 cacheLexicon.updateAllValues(core);
                 changeScreen(cacheLexicon, cacheLexicon.getWindow(), null);
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             core = PolyGlot.getPolyGlot().getNewCore(); // don't allow partial loads
             core.getOSHandler().getInfoBox().error("File Read Error", "Could not read file: " + fileName
                     + "\n\n " + e.getMessage());
-        }
-        catch (IllegalStateException e) {
+        } catch (IllegalStateException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             core.getOSHandler().getInfoBox().warning("File Read Problems", "Problems reading file:\n"
                     + e.getLocalizedMessage());

@@ -21,6 +21,8 @@ package org.darisadesigns.polyglotlina.Desktop;
 
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Taskbar;
 import java.awt.Toolkit;
 import java.awt.desktop.AboutEvent;
@@ -531,10 +533,15 @@ public final class PolyGlot {
     public void refreshUiDefaults() {
         uiDefaults = VisualStyleManager.generateUIOverrides(optionsManager.isNightMode());
         if (rootWindow != null) {
+            Point location = rootWindow.getLocation();
+            Dimension size = rootWindow.getSize();
+            
             rootWindow.dispose(false);
             rootWindow = new ScrMainMenu(core);
             rootWindow.setVisible(true);
             rootWindow.selectFirstAvailableButton();
+            rootWindow.setLocation(location);
+            rootWindow.setSize(size);
         }
     }
 
