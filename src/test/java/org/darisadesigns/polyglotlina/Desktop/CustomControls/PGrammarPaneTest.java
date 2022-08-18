@@ -20,6 +20,7 @@
 package org.darisadesigns.polyglotlina.Desktop.CustomControls;
 
 import TestResources.DummyCore;
+import TestResources.PTest;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -37,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author draque
  */
-public class PGrammarPaneTest {
+public class PGrammarPaneTest extends PTest {
     
     private final DictCore core;
     private final boolean headless = GraphicsEnvironment.isHeadless();

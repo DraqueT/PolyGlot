@@ -35,6 +35,7 @@ fi
 # Linux Build/upload
 if [ "$#" -eq 0 ] || [ "$1" == "$CONST_LINUX" ] || [ "$1" == "$CONST_RELEASE" ]; then
     LIN_BUILD_TIME=$(0)
+    LIN_START_TIME=$(date +%s)
 
     if [ "$BUILD_STEP" == "" ] ; then
         python3 build_image.py \

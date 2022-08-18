@@ -20,6 +20,7 @@
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
 import TestResources.DummyCore;
+import TestResources.PTest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,7 +37,7 @@ import org.junit.jupiter.api.Test;
  *
  * @author draque
  */
-public class ConWordCollectionTest {
+public class ConWordCollectionTest extends PTest {
     
     private final DictCore badLexEntriesCore;
     

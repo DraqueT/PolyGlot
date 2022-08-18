@@ -103,7 +103,6 @@ public class NonModularBridgeTest {
             assertTrue(new File(OUTPUT).exists());
         } catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
-            // e.printStackTrace();
             fail(e);
         }
     }

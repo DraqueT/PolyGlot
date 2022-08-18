@@ -603,7 +603,8 @@ public class PGTUtil {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         StackTraceElement[] list = stackTrace;
         for (StackTraceElement element : list) {
-            if (element.getClassName().startsWith("org.junit.")) {
+            String name = element.getClassName();
+            if (name.startsWith("org.junit.") || name.contains("Test")) {
                 return true;
             }           
         }
