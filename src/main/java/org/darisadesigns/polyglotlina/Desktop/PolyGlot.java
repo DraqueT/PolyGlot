@@ -424,7 +424,7 @@ public final class PolyGlot {
      * within lib folder) Sets version to display as beta
      */
     private static void conditionalBetaSetup() {
-        if (PGTUtil.IS_BETA && !PGTUtil.isInJUnitTest()) { // This requires user interaction and is not covered by the test
+        if (PGTUtil.IS_BETA && !PGTUtil.isInJUnitTest() && !PGTUtil.IS_DEV_MODE) { // This requires user interaction and is not covered by the test
             new DesktopInfoBox().warning("BETA BUILD", "This is a pre-release, beta build of PolyGlot. Please use with care.\n\nBuild Date: " + PGTUtil.BUILD_DATE_TIME);
         }
     }

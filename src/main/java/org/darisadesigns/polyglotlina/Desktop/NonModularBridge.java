@@ -277,9 +277,15 @@ public final class NonModularBridge {
         
         if (PGTUtil.isInJUnitTest() || PGTUtil.isUITestingMode()) {
             return (PGTUtil.IS_LINUX ? System.getenv("JAVA_HOME") + "/bin/" : "") + path;
+        } else if (PGTUtil.IS_DEV_MODE) {
+            path = PGTUtil.IS_OSX ?
+                    System.getenv(macOSEnvVar).substring(1) :
+                    ProcessHandle.current()
+                        .info()
+                        .command()
+                        .orElseThrow();
         } else if (PGTUtil.IS_OSX) {
             if (System.getenv().containsKey(macOSEnvVar)) {
-                // ":Applications/PolyGlot.app/Contents/app" -> Applications/PolyGlot.app/Contents/runtime/Contents/Home/bin/java"
                 path = System.getenv(macOSEnvVar).substring(1).replaceAll("/app", "/runtime/Contents/Home/bin") + "/" + path;
             }
         } else if(PGTUtil.IS_LINUX) {
