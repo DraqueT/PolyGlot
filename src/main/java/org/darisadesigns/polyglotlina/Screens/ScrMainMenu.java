@@ -86,6 +86,7 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.Desktop.DesktopHelpHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopOSHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammarManager;
 import org.darisadesigns.polyglotlina.HelpHandler;
 import org.darisadesigns.polyglotlina.Desktop.NonModularBridge;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
@@ -453,7 +454,24 @@ public final class ScrMainMenu extends PFrame {
 
         try {
             core.readFile(fileName);
+            
+            // Tests are performed so quickly that this locks up file access
+            if (!PGTUtil.isInJUnitTest() || PGTUtil.isUITestingMode()) {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            var loadState = new DictCore(new DesktopPropertiesManager(), core.getOSHandler(), new PGTUtil(), new DesktopGrammarManager());
+                            loadState.readFile(fileName, null, false);
+                            core.setLoadState(loadState);
+                        } catch (IOException | IllegalStateException e) {
+                            core.getOSHandler().getIOHandler().writeErrorLog(e, "On load of comparison file. Why failure here and not immediately above?");
+                        }
+                    }
 
+                }.start();
+            }
+            
             if (curWindow == null) {
                 saveAllValues();
                 cacheLexicon.updateAllValues(core);
@@ -482,7 +500,7 @@ public final class ScrMainMenu extends PFrame {
     public boolean saveOrCancelTest() {
         boolean ret = true;
 
-        if (core != null && !core.isLanguageEmpty()) {
+        if (core != null && core.hasChanged()) {
             int saveFirst = core.getOSHandler().getInfoBox().yesNoCancel("Save First?",
                     "Save current language before performing action?");
 

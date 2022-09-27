@@ -80,6 +80,7 @@ public class DictCore {
     private Instant lastSaveTime = Instant.MIN;
     private String curFileName = "";
     private List<CoreUpdateSubscriptionInterface> subscribers;
+    private DictCore loadState = null;
     
     /**
      * Language core initialization
@@ -319,6 +320,19 @@ public class DictCore {
      * @throws IllegalStateException for recoverable errors
      */
     public void readFile(String _fileName, byte[] overrideXML) throws IOException, IllegalStateException {
+        readFile(_fileName, overrideXML, true);
+    }
+    
+    /**
+     * Reads from given file
+     *
+     * @param _fileName filename to read from
+     * @param overrideXML override to where the XML should be loaded from
+     * @param useFileReadListener whether to use file read listener
+     * @throws java.io.IOException for unrecoverable errors
+     * @throws IllegalStateException for recoverable errors
+     */
+    public void readFile(String _fileName, byte[] overrideXML, boolean useFileReadListener) throws IOException, IllegalStateException {
         curLoading = true;
         curFileName = _fileName;
         String errorLog = "";
@@ -403,10 +417,24 @@ public class DictCore {
             throw new IllegalStateException(warningLog);
         }
 
-        FileReadListener listener = this.getOSHandler().getFileReadListener();
-        if (null != listener) {
-            listener.fileRead(this);
+        if (useFileReadListener) {
+            FileReadListener listener = this.getOSHandler().getFileReadListener();
+            if (null != listener) {
+                listener.fileRead(this);
+            }
         }
+    }
+    
+    public void setLoadState(DictCore _loadState) {
+        loadState = _loadState;
+    }
+    
+    /**
+     * Returns true if language has changed state since last load
+     * @return 
+     */
+    public boolean hasChanged() {
+        return loadState != null && !this.equals(loadState);
     }
     
     /**
