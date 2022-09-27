@@ -556,30 +556,24 @@ public final class ScrMainMenu extends PFrame {
      * @return returns success/failure
      */
     private boolean doWrite(final String _fileName) {
-        boolean cleanSave = false;
         String curFileName = core.getCurFileName();
 
         pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
         try {
             core.writeFile(_fileName, true);
-            cleanSave = true;
-        }
-        catch (IOException | ParserConfigurationException
+        } catch (IOException | ParserConfigurationException
                 | TransformerException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             core.getOSHandler().getInfoBox().error("Save Error", "Unable to save to file: "
                     + curFileName + "\n\n" + e.getMessage());
+            
+            return false;
+        } finally {
+            pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
         }
 
-        pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
-
-        if (cleanSave) {
-            core.getOSHandler().getInfoBox().info("Success", "Language saved to: "
-                    + curFileName + ".");
-        }
-
-        return cleanSave;
+        return true;
     }
 
     /**
@@ -940,7 +934,7 @@ public final class ScrMainMenu extends PFrame {
         toDoTree.setRootVisible(false);
         toDoTree.setModel(new PToDoTreeModel(ToDoTreeNode.createToDoTreeNode(core.getToDoManager().getRoot())));
         
-        if ((ToDoTreeNode) toDoTree.getModel().getRoot() instanceof ToDoTreeNode) {
+        if (toDoTree.getModel().getRoot() instanceof ToDoTreeNode) {
             ((DefaultTreeModel) toDoTree.getModel()).nodeStructureChanged((ToDoTreeNode) toDoTree.getModel().getRoot());
         }
 

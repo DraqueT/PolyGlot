@@ -178,7 +178,11 @@ public final class PolyGlot {
 
                 // open file if one is provided via arguments (but only if no recovery file- that takes precedence)
                 if (args.length > 0 && recoveredFile == false) {
-                    String filePath = args[0].trim();
+                    String filePath = "";
+                    
+                    for (var arg : args) {
+                        filePath += arg.trim();
+                    }
 
                     if (new File(filePath).exists()) {
                         s.setFile(filePath);
