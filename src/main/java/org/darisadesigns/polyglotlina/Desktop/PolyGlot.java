@@ -302,8 +302,20 @@ public final class PolyGlot {
             if (loc == -1) {
                 return;
             }
-
-            String value = ini.substring(loc + 8, loc + 9);
+            
+            ini = ini.substring(loc + 8);
+            
+            String value = "";
+            
+            for (int i = 0; i < ini.length(); i++) {
+                String curChar = ini.substring(i, i+1);
+                
+                if (ini.substring(i, i+1).equals("\n") || ini.substring(i, i+1).equals("\r")) {
+                    break;
+                }
+                
+                value += curChar;
+            }
 
             System.setProperty("sun.java2d.uiScale", value);
         } catch (IOException e) {

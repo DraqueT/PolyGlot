@@ -55,7 +55,7 @@ public final class ScrOptions extends PDialog {
             sldUiScaling.setEnabled(false);
             sldUiScaling.setToolTipText("UI scaling unavailable on macOS");
         } else {
-            lblUiScaling.setText("UI Scaling: " + sldUiScaling.getValue());
+            lblUiScaling.setText("UI Scaling: " + (sldUiScaling.getValue() / 10.0));
         }
         
         ((PlainDocument)txtRevisionNumbers.getDocument()).setDocumentFilter(new PTextFieldFilter());
@@ -64,7 +64,7 @@ public final class ScrOptions extends PDialog {
     
     private void setupListeners() {
         sldUiScaling.addChangeListener((ChangeEvent e) -> {
-            lblUiScaling.setText("UI Scaling: " + sldUiScaling.getValue());
+            lblUiScaling.setText("UI Scaling: " + (sldUiScaling.getValue() / 10.0));
         });
     }
 
@@ -73,7 +73,7 @@ public final class ScrOptions extends PDialog {
         if (testWarnClose()) {
             DesktopOptionsManager options = PolyGlot.getPolyGlot().getOptionsManager();
             
-            int scalingOriginal = options.getUiScale();
+            double scalingOriginal = options.getUiScale();
             int maxReversion = Integer.parseInt(txtRevisionNumbers.getText());
             maxReversion = maxReversion > -1 ? maxReversion : 1;
             int autoSaveInteral = (int) 
@@ -82,9 +82,9 @@ public final class ScrOptions extends PDialog {
             options.setAnimateWindows(chkResize.isSelected());
             options.setMaxReversionCount(maxReversion);
             options.setMsBetweenSaves(autoSaveInteral);
-            options.setUiScale(sldUiScaling.getValue());
+            options.setUiScale(sldUiScaling.getValue() / 10.0);
             
-            if (scalingOriginal != sldUiScaling.getValue() && !isDisposed()) {
+            if (scalingOriginal != (sldUiScaling.getValue() / 10.0) && !isDisposed()) {
                 new DesktopInfoBox().info("Please Restart PolyGlot", "Please Restart PolyGlot for UI scaling change to be applied.");
             }
             
@@ -158,10 +158,10 @@ public final class ScrOptions extends PDialog {
         txtAutoSave.setToolTipText("Frequency in minutes between saving to temp recovery file");
 
         sldUiScaling.setMajorTickSpacing(1);
-        sldUiScaling.setMaximum(4);
+        sldUiScaling.setMaximum(40);
         sldUiScaling.setMinimum(1);
         sldUiScaling.setToolTipText("Allows for scaling of UI. Left is smaller, right is bigger (requires restart)");
-        sldUiScaling.setValue(2);
+        sldUiScaling.setValue(20);
 
         lblUiScaling.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblUiScaling.setText("UI Scaling");
@@ -256,7 +256,7 @@ public final class ScrOptions extends PDialog {
         chkResize.setSelected(mgr.isAnimateWindows());
         txtRevisionNumbers.setText(Integer.toString(mgr.getMaxReversionCount()));
         txtAutoSave.setText(Float.toString(mgr.getMsBetweenSaves()/60000.0f));
-        sldUiScaling.setValue(mgr.getUiScale());
+        sldUiScaling.setValue((int)(mgr.getUiScale() * 10));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

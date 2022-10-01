@@ -51,7 +51,7 @@ public class DesktopOptionsManager {
     private DictCore core;
     private final javafx.scene.text.Font menuFontFX;
     private int msBetweenSaves;
-    private int uiScale = 2;
+    private double uiScale = 2.0;
 
     public DesktopOptionsManager() {
         msBetweenSaves = PGTUtil.DEFAULT_MS_BETWEEN_AUTO_SAVES;
@@ -294,11 +294,14 @@ public class DesktopOptionsManager {
         this.msBetweenSaves = msBetweenSaves;
     }
 
-    public int getUiScale() {
+    public double getUiScale() {
         return uiScale;
     }
 
-    public void setUiScale(int uiScale) {
+    public void setUiScale(double uiScale) {
+        if (uiScale < 0.5) {
+            uiScale = 0.5;
+        }
         this.uiScale = uiScale;
     }
     
@@ -404,7 +407,7 @@ public class DesktopOptionsManager {
                     case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_TODO_DIV_LOCATION ->
                         setToDoBarPosition(Integer.parseInt(bothVal[1]));
                     case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_UI_SCALE ->
-                        setUiScale(Integer.parseInt(bothVal[1]));
+                        setUiScale(Double.parseDouble(bothVal[1]));
                     default -> {}
                 }
             }

@@ -170,10 +170,10 @@
         <Component class="javax.swing.JSlider" name="sldUiScaling">
           <Properties>
             <Property name="majorTickSpacing" type="int" value="1"/>
-            <Property name="maximum" type="int" value="4"/>
+            <Property name="maximum" type="int" value="40"/>
             <Property name="minimum" type="int" value="1"/>
             <Property name="toolTipText" type="java.lang.String" value="Allows for scaling of UI. Left is smaller, right is bigger (requires restart)"/>
-            <Property name="value" type="int" value="2"/>
+            <Property name="value" type="int" value="20"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblUiScaling">
