@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -19,8 +19,8 @@
  */
 package org.darisadesigns.polyglotlina.Desktop.CustomControls;
 
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PGrammarPane;
 import TestResources.DummyCore;
+import TestResources.PTest;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -31,7 +31,6 @@ import org.darisadesigns.polyglotlina.Desktop.FormattedTextHelper;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ImageNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author draque
  */
-public class PGrammarPaneTest {
+public class PGrammarPaneTest extends PTest {
     
     private final DictCore core;
     private final boolean headless = GraphicsEnvironment.isHeadless();
@@ -56,9 +55,6 @@ public class PGrammarPaneTest {
         if (headless) {
             return;
         }
-        
-        // TODO: figure out why windows tests are flakey (ancient machine running Windows virtual?)
-        Assumptions.assumeTrue(!PGTUtil.IS_WINDOWS);
         
         System.out.println("PGrammarPaneTest.testPasteRegular");
         

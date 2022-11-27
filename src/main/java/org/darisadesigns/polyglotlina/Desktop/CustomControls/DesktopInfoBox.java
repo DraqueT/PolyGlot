@@ -34,7 +34,7 @@ import static javax.swing.JOptionPane.DEFAULT_OPTION;
 import javax.swing.UIManager;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.InfoBox;
-import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 
 public class DesktopInfoBox extends JFrame implements InfoBox {
 
@@ -158,7 +158,7 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
     
     @Override
     public void info(String title, String message) {
-        if (PGTUtil.isUITestingMode()) {
+        if (PGTUtil.isUITestingMode() || PGTUtil.isInJUnitTest()) {
             return;
         }
         
@@ -167,7 +167,7 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
 
     @Override
     public void error(String title, String message) {
-        if (PGTUtil.isUITestingMode()) {
+        if (PGTUtil.isUITestingMode() || PGTUtil.isInJUnitTest()) {
             return;
         }
         
@@ -176,7 +176,7 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
 
     @Override
     public void warning(String title, String message) {
-        if (PGTUtil.isUITestingMode()) {
+        if (PGTUtil.isUITestingMode() || PGTUtil.isInJUnitTest()) {
             return;
         }
         

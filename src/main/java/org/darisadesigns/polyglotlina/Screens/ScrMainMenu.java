@@ -86,6 +86,7 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.Desktop.DesktopHelpHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopOSHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammarManager;
 import org.darisadesigns.polyglotlina.HelpHandler;
 import org.darisadesigns.polyglotlina.Desktop.NonModularBridge;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
@@ -453,20 +454,35 @@ public final class ScrMainMenu extends PFrame {
 
         try {
             core.readFile(fileName);
+            
+            // Tests are performed so quickly that this locks up file access
+            if (!PGTUtil.isInJUnitTest() || PGTUtil.isUITestingMode()) {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            var loadState = new DictCore(new DesktopPropertiesManager(), core.getOSHandler(), new PGTUtil(), new DesktopGrammarManager());
+                            loadState.readFile(fileName, null, false);
+                            core.setLoadState(loadState);
+                        } catch (IOException | IllegalStateException e) {
+                            core.getOSHandler().getIOHandler().writeErrorLog(e, "On load of comparison file. Why failure here and not immediately above?");
+                        }
+                    }
 
+                }.start();
+            }
+            
             if (curWindow == null) {
                 saveAllValues();
                 cacheLexicon.updateAllValues(core);
                 changeScreen(cacheLexicon, cacheLexicon.getWindow(), null);
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             core = PolyGlot.getPolyGlot().getNewCore(); // don't allow partial loads
             core.getOSHandler().getInfoBox().error("File Read Error", "Could not read file: " + fileName
                     + "\n\n " + e.getMessage());
-        }
-        catch (IllegalStateException e) {
+        } catch (IllegalStateException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             core.getOSHandler().getInfoBox().warning("File Read Problems", "Problems reading file:\n"
                     + e.getLocalizedMessage());
@@ -484,7 +500,7 @@ public final class ScrMainMenu extends PFrame {
     public boolean saveOrCancelTest() {
         boolean ret = true;
 
-        if (core != null && !core.isLanguageEmpty()) {
+        if (core != null && core.hasChanged()) {
             int saveFirst = core.getOSHandler().getInfoBox().yesNoCancel("Save First?",
                     "Save current language before performing action?");
 
@@ -540,30 +556,24 @@ public final class ScrMainMenu extends PFrame {
      * @return returns success/failure
      */
     private boolean doWrite(final String _fileName) {
-        boolean cleanSave = false;
         String curFileName = core.getCurFileName();
 
         pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
         try {
             core.writeFile(_fileName, true);
-            cleanSave = true;
-        }
-        catch (IOException | ParserConfigurationException
+        } catch (IOException | ParserConfigurationException
                 | TransformerException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             core.getOSHandler().getInfoBox().error("Save Error", "Unable to save to file: "
                     + curFileName + "\n\n" + e.getMessage());
+            
+            return false;
+        } finally {
+            pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
         }
 
-        pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
-
-        if (cleanSave) {
-            core.getOSHandler().getInfoBox().info("Success", "Language saved to: "
-                    + curFileName + ".");
-        }
-
-        return cleanSave;
+        return true;
     }
 
     /**
@@ -923,7 +933,10 @@ public final class ScrMainMenu extends PFrame {
     private void populateToDo() {
         toDoTree.setRootVisible(false);
         toDoTree.setModel(new PToDoTreeModel(ToDoTreeNode.createToDoTreeNode(core.getToDoManager().getRoot())));
-        ((DefaultTreeModel) toDoTree.getModel()).nodeStructureChanged((ToDoTreeNode) toDoTree.getModel().getRoot());
+        
+        if (toDoTree.getModel().getRoot() instanceof ToDoTreeNode) {
+            ((DefaultTreeModel) toDoTree.getModel()).nodeStructureChanged((ToDoTreeNode) toDoTree.getModel().getRoot());
+        }
 
         SwingUtilities.invokeLater(() -> {
             PolyGlot.getPolyGlot().getOSHandler().getPFontHandler().updateLocalFont();
@@ -1531,6 +1544,7 @@ public final class ScrMainMenu extends PFrame {
         btnQuiz = new PButton(nightMode);
         btnPhrasebook = new PButton(nightMode);
         btnZompistWordGenerator = new PButton(nightMode);
+        jScrollPane2 = new javax.swing.JScrollPane();
         pnlMain = new javax.swing.JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -1614,11 +1628,11 @@ public final class ScrMainMenu extends PFrame {
         pnlToDo.setLayout(pnlToDoLayout);
         pnlToDoLayout.setHorizontalGroup(
             pnlToDoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1, Short.MAX_VALUE)
+            .addGap(0, 110, Short.MAX_VALUE)
         );
         pnlToDoLayout.setVerticalGroup(
             pnlToDoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 430, Short.MAX_VALUE)
+            .addGap(0, 462, Short.MAX_VALUE)
         );
 
         pnlToDoSplit.setRightComponent(pnlToDo);
@@ -1749,7 +1763,7 @@ public final class ScrMainMenu extends PFrame {
                 .addComponent(btnProp, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnQuiz)
-                .addContainerGap(88, Short.MAX_VALUE))
+                .addContainerGap(127, Short.MAX_VALUE))
         );
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
@@ -1825,7 +1839,7 @@ public final class ScrMainMenu extends PFrame {
         pnlMain.setLayout(pnlMainLayout);
         pnlMainLayout.setHorizontalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 616, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(pnlStartButtons, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1849,6 +1863,8 @@ public final class ScrMainMenu extends PFrame {
                 .addComponent(pnlStartButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        jScrollPane2.setViewportView(pnlMain);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -1856,12 +1872,12 @@ public final class ScrMainMenu extends PFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(pnlSideButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlSideButtons, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         pnlToDoSplit.setLeftComponent(jPanel3);
@@ -2135,7 +2151,7 @@ public final class ScrMainMenu extends PFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlToDoSplit)
+            .addComponent(pnlToDoSplit, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
         );
 
         pack();
@@ -2454,6 +2470,7 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;

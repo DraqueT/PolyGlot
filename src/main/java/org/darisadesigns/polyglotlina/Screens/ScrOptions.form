@@ -10,7 +10,6 @@
       <Dimension value="[319, 278]"/>
     </Property>
     <Property name="modal" type="boolean" value="true"/>
-    <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="2"/>
@@ -67,29 +66,28 @@
                   <Component id="btnResetOptions" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
               </Group>
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="chkResize" max="32767" attributes="0"/>
-                      <Group type="102" attributes="0">
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="sldUiScaling" alignment="1" max="32767" attributes="0"/>
+                      <Component id="chkResize" alignment="0" max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="sldUiScaling" alignment="0" max="32767" attributes="0"/>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="txtAutoSave" min="-2" pref="52" max="-2" attributes="0"/>
-                                  </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+                                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="txtAutoSave" min="-2" pref="52" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="lblUiScaling" alignment="0" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="txtRevisionNumbers" min="-2" pref="52" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace min="0" pref="98" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="38" max="32767" attributes="0"/>
                       </Group>
+                      <Component id="lblUiScaling" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -114,7 +112,7 @@
                   <Component id="sldUiScaling" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="lblUiScaling" max="32767" attributes="0"/>
-                  <EmptySpace pref="20" max="32767" attributes="0"/>
+                  <EmptySpace pref="12" max="32767" attributes="0"/>
                   <Component id="btnResetOptions" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -172,10 +170,10 @@
         <Component class="javax.swing.JSlider" name="sldUiScaling">
           <Properties>
             <Property name="majorTickSpacing" type="int" value="1"/>
-            <Property name="maximum" type="int" value="4"/>
+            <Property name="maximum" type="int" value="40"/>
             <Property name="minimum" type="int" value="1"/>
             <Property name="toolTipText" type="java.lang.String" value="Allows for scaling of UI. Left is smaller, right is bigger (requires restart)"/>
-            <Property name="value" type="int" value="2"/>
+            <Property name="value" type="int" value="20"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblUiScaling">

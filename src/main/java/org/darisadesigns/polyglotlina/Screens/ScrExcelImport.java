@@ -261,7 +261,7 @@ public class ScrExcelImport extends PDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Import From External Format");
-        setResizable(false);
+        setMinimumSize(new java.awt.Dimension(457, 559));
 
         txtFileName.setToolTipText("path and name of file to import");
 
@@ -360,7 +360,7 @@ public class ScrExcelImport extends PDialog {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(txtClass, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                                .addComponent(txtClass, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(txtPronunciation, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(txtDefinition, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(txtType, javax.swing.GroupLayout.Alignment.LEADING)

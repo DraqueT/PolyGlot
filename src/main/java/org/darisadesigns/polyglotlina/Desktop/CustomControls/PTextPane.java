@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -46,6 +46,7 @@ import javax.swing.JTextPane;
 import javax.swing.SwingWorker;
 import org.darisadesigns.polyglotlina.CustomControls.CoreUpdateSubscriptionInterface;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -63,7 +64,18 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
         overrideFont = _overrideFont;
         setCore(_core);
         defText = _defText;
-        this.setContentType("text/html");
+        
+        try {
+            this.setContentType("text/html");
+        } catch (RuntimeException e) {
+            new DesktopInfoBox(PolyGlot.getPolyGlot().getRootWindow()).error(
+                    "Fatal Font Error", 
+                    "PolyGlot has detected a fatal error with your font.\nTry downloading a font tool with diagnostic tools\n(FontForge suggested) and analyze.\n\nERROR: " 
+                            + e.getMessage());
+            
+            return;
+        }
+        
         setupRightClickMenu();
 
         setupListeners();
@@ -318,8 +330,15 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
      */
     public boolean isDefaultText() {
         String body = super.getText();
-        body = body.substring(0, body.indexOf("</body>"));
-        body = body.substring(body.indexOf("<body>") + 6);
+        
+        if (body.contains("</body>")) {
+            body = body.substring(0, body.indexOf("</body>"));
+        }
+        
+        if (body.contains("<body>")) {
+            body = body.substring(body.indexOf("<body>") + 6);
+        }
+        
         return body.trim().equals(defText);
     }
     

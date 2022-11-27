@@ -485,6 +485,36 @@ public class EtymologyManager {
         }
     }
     
+    /**
+     * removes empty lists from parent and child lists
+     */
+    private void cleanParentChildLists() {
+        clearParentChildList(parentToChild);
+        clearParentChildList(childToParent);
+        clearParentChildList(extParentToChild);
+        clearParentChildList(childToExtParent);
+    }
+    
+    /**
+     * removes empty entries from passed map
+     * @param clean 
+     */
+    private void clearParentChildList(Map clean) {
+        for(Object key : clean.keySet().toArray()) {
+            Object value = clean.get(key);
+            
+            if (value instanceof List) {
+                if (((List)value).isEmpty()) {
+                    clean.remove(key);
+                }
+            } else if (value instanceof Map) {
+                if (((Map)value).isEmpty()) {
+                    clean.remove(key);
+                }
+            }
+        }
+    }
+    
     public static class IllegalLoopException extends Exception {
         public IllegalLoopException(String message) {
             super(message);
@@ -494,6 +524,8 @@ public class EtymologyManager {
     @Override
     public boolean equals(Object comp) {
         boolean ret = false;
+        
+        this.cleanParentChildLists();
         
         if (this == comp) {
             ret = true;

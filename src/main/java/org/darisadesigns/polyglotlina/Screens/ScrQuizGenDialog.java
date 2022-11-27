@@ -107,8 +107,8 @@ public final class ScrQuizGenDialog extends PFrame {
         filter.setValue(txtFilterConWord.getText());
         filter.setLocalWord(txtFilterLocalWord.getText());
         filter.setPronunciation(txtFilterProc.getText());
-        if (cmbFilterType.getSelectedItem() instanceof TypeNode) {
-            filter.setWordTypeId(((TypeNode)cmbFilterType.getSelectedItem()).getId());
+        if (cmbFilterType.getSelectedItem() instanceof TypeNode wordType) {
+            filter.setWordTypeId(wordType.getId());
         }
         
         if(!chkConlangQuiz.isSelected() && 
@@ -175,7 +175,6 @@ public final class ScrQuizGenDialog extends PFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Quiz Generator");
-        setResizable(false);
 
         btnQuiz.setText("Take Quiz");
         btnQuiz.addActionListener(new java.awt.event.ActionListener() {

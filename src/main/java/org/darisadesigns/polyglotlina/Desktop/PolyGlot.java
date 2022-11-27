@@ -21,6 +21,8 @@ package org.darisadesigns.polyglotlina.Desktop;
 
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Taskbar;
 import java.awt.Toolkit;
 import java.awt.desktop.AboutEvent;
@@ -176,7 +178,11 @@ public final class PolyGlot {
 
                 // open file if one is provided via arguments (but only if no recovery file- that takes precedence)
                 if (args.length > 0 && recoveredFile == false) {
-                    String filePath = args[0].trim();
+                    String filePath = "";
+                    
+                    for (var arg : args) {
+                        filePath += arg.trim();
+                    }
 
                     if (new File(filePath).exists()) {
                         s.setFile(filePath);
@@ -296,8 +302,20 @@ public final class PolyGlot {
             if (loc == -1) {
                 return;
             }
-
-            String value = ini.substring(loc + 8, loc + 9);
+            
+            ini = ini.substring(loc + 8);
+            
+            String value = "";
+            
+            for (int i = 0; i < ini.length(); i++) {
+                String curChar = ini.substring(i, i+1);
+                
+                if (ini.substring(i, i+1).equals("\n") || ini.substring(i, i+1).equals("\r")) {
+                    break;
+                }
+                
+                value += curChar;
+            }
 
             System.setProperty("sun.java2d.uiScale", value);
         } catch (IOException e) {
@@ -422,7 +440,7 @@ public final class PolyGlot {
      * within lib folder) Sets version to display as beta
      */
     private static void conditionalBetaSetup() {
-        if (PGTUtil.IS_BETA && !PGTUtil.isInJUnitTest()) { // This requires user interaction and is not covered by the test
+        if (PGTUtil.IS_BETA && !PGTUtil.isInJUnitTest() && !PGTUtil.IS_DEV_MODE) { // This requires user interaction and is not covered by the test
             new DesktopInfoBox().warning("BETA BUILD", "This is a pre-release, beta build of PolyGlot. Please use with care.\n\nBuild Date: " + PGTUtil.BUILD_DATE_TIME);
         }
     }
@@ -531,10 +549,15 @@ public final class PolyGlot {
     public void refreshUiDefaults() {
         uiDefaults = VisualStyleManager.generateUIOverrides(optionsManager.isNightMode());
         if (rootWindow != null) {
+            Point location = rootWindow.getLocation();
+            Dimension size = rootWindow.getSize();
+            
             rootWindow.dispose(false);
             rootWindow = new ScrMainMenu(core);
             rootWindow.setVisible(true);
             rootWindow.selectFirstAvailableButton();
+            rootWindow.setLocation(location);
+            rootWindow.setSize(size);
         }
     }
 

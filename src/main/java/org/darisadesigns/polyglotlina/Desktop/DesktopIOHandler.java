@@ -93,8 +93,10 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopGrammarChapN
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammarManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.XMLRecoveryTool;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 /**
  * This class handles file IO for PolyGlot
@@ -240,16 +242,31 @@ public final class DesktopIOHandler implements IOHandler {
                 
                 try ( InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
                     ret = CustHandlerFactory.getCustHandler(ioStream, _core);
-                }
-                catch (Exception e) {
+                } catch (SAXParseException e) {
+                    new DesktopInfoBox(null).warning("Data corruption detected", "Data corruption has been detected in your save. Attempting to recover.");
+                    
+                    try ( InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
+                        var xml = "";
+                        for (var myByte : ioStream.readAllBytes()) {
+                            xml += (char)myByte;
+                        }
+
+                        var xmlRecoveryTool = new XMLRecoveryTool(xml);
+                        xml = xmlRecoveryTool.recoverXml();
+
+                        ret = CustHandlerFactory.getCustHandler(new ByteArrayInputStream(xml.getBytes()), _core);
+                        new DesktopInfoBox(null).info("Success", "Recovery successful!");
+                    } catch (Exception ex) {
+                        throw new IOException(e.getLocalizedMessage(), ex);
+                    }
+                } catch (Exception e) {
                     throw new IOException(e.getLocalizedMessage(), e);
                 }
             }
         } else {
             try ( InputStream ioStream = new FileInputStream(_fileName)) {
                 ret = CustHandlerFactory.getCustHandler(ioStream, _core);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 throw new IOException(e.getLocalizedMessage(), e);
             }
         }
@@ -358,6 +375,20 @@ public final class DesktopIOHandler implements IOHandler {
             
             try ( InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
                 parseHandlerInternal(ioStream, _handler);
+            } catch (SAXParseException e) {
+                try ( InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
+                    var xml = "";
+                    for (var myByte : ioStream.readAllBytes()) {
+                        xml += (char)myByte;
+                    }
+
+                    var xmlRecoveryTool = new XMLRecoveryTool(xml);
+                    xml = xmlRecoveryTool.recoverXml();
+
+                    parseHandlerInternal(new ByteArrayInputStream(xml.getBytes()), _handler);
+                } catch (Exception ex) {
+                    throw new IOException(e.getLocalizedMessage(), ex);
+                }
             }
         }
     }
@@ -1151,8 +1182,7 @@ public final class DesktopIOHandler implements IOHandler {
 //                System.out.println("Writing error to: " + errorLog.getAbsolutePath());
                 writer.write(output);
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             // Fail silently. This fails almost exclusively due to being run in write protected folder, caught elsewhere
             // do not log to written file for obvious reasons (causes further write failure)
             // WHY DO PEOPLE INSTALL THIS TO WRITE PROTECTED FOLDERS AND SYSTEM32. WHY.

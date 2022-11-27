@@ -41,6 +41,7 @@ public class PGTUtil {
     public static final String BUILD_DATE_TIME;
     public static final String DICTIONARY_XID = "dictionary";
     public static final String PGVERSION_XID = "PolyGlotVer";
+    public static final String SYS_INFO_XID = "NativeSystemInfo";
     public static final String DICTIONARY_SAVE_DATE = "DictSaveDate";
     public static final String MAIN_MENU_IMAGE = "/assets/org/DarisaDesigns/ImageAssets/PolyGlotBG.png";
     public static final String POLYGLOT_FILE_SUFFIX = "pgd";
@@ -602,7 +603,8 @@ public class PGTUtil {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         StackTraceElement[] list = stackTrace;
         for (StackTraceElement element : list) {
-            if (element.getClassName().startsWith("org.junit.")) {
+            String name = element.getClassName();
+            if (name.startsWith("org.junit.") || name.contains("Test")) {
                 return true;
             }           
         }

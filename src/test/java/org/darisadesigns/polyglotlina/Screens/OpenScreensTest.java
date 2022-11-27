@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -19,7 +19,9 @@
 package org.darisadesigns.polyglotlina.Screens;
 
 import TestResources.DummyCore;
+import java.awt.Frame;
 import java.awt.GraphicsEnvironment;
+import java.awt.Window;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -33,7 +35,6 @@ import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.QuizEngine.Quiz;
 import org.darisadesigns.polyglotlina.QuizEngine.QuizQuestion;
-import org.junit.jupiter.api.Assumptions;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
 
@@ -47,9 +48,6 @@ public class OpenScreensTest {
     private final boolean headless = GraphicsEnvironment.isHeadless(); // testing this in a headless environment makes no sense
     
     public OpenScreensTest() {
-        // TODO: figure out why windows tests are flakey (ancient machine running Windows virtual?)
-        Assumptions.assumeTrue(!PGTUtil.IS_WINDOWS);
-        
         PGTUtil.enterUITestingMode();
         core = DummyCore.newCore();
         errors = DesktopIOHandler.getInstance().getErrorLogFile();
@@ -74,7 +72,8 @@ public class OpenScreensTest {
             return;
         }
         
-        PTextInputDialog s = new PTextInputDialog(new ScrAbout(core), core, "", "");
+        Window parent = new Window(new Frame());
+        PTextInputDialog s = new PTextInputDialog(parent, core, "", "");
         s.dispose();
         
         testExceptions(new Object() {}.getClass().getEnclosingMethod().getName());

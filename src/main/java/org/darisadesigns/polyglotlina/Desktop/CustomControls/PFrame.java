@@ -27,9 +27,13 @@ import org.darisadesigns.polyglotlina.Screens.ScrMainMenu;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.DisplayMode;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -271,19 +275,19 @@ public abstract class PFrame extends JFrame implements FocusListener {
     // positions on screen once form has already been build/sized
     @Override
     public void setVisible(boolean visible) {
-        // only run setup stuff the initial visibility setting
+        // setup only runs first time frame becomes visible.
         if (firstVisible) {
             if (core != null) {
                 Point lastPos = PolyGlot.getPolyGlot().getOptionsManager().getScreenPosition(getClass().getName());
                 if (lastPos != null) {
-                    setLocation(lastPos);
+                    PFrame.setWindowLocationLegally(this, lastPos.x, lastPos.y);
                 } else if (!ignoreCenter) {
                     this.setLocationRelativeTo(null);
                 }
 
                 Dimension lastDim = PolyGlot.getPolyGlot().getOptionsManager().getScreenSize(getClass().getName());
                 if (lastDim != null) {
-                    setSize(lastDim);
+                    this.setSize(lastDim);
                 }
 
                 if (core == null && !(this instanceof ScrMainMenu)) {
@@ -372,6 +376,35 @@ public abstract class PFrame extends JFrame implements FocusListener {
      */
     public void hardDispose()  {
         super.dispose();
+    }
+    
+    /**
+     * Sets the screen location of a window, but checks across all monitors to make certain the position is legal.
+     * If illegal, it sets the position to the center of Monitor 1.
+     * 
+     * @param w Window whose position must be set
+     * @param xPos x position of window
+     * @param yPos y position of window
+     */
+    public static void setWindowLocationLegally(Window w, int xPos, int yPos) {
+        boolean legal = false;
+
+        for (GraphicsDevice gDevice : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
+            DisplayMode dMode = gDevice.getDisplayMode();
+            Rectangle bounds = gDevice.getDefaultConfiguration().getBounds();
+            
+            if ((xPos >= bounds.x && yPos >= bounds.y)
+                    && xPos <= dMode.getWidth() && yPos <= dMode.getHeight()) {
+                legal = true;
+                break;
+            }
+        }
+        
+        if (legal) {
+            w.setLocation(xPos, yPos);
+        } else {
+            w.setLocationRelativeTo(null);
+        }
     }
             
 

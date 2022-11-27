@@ -37,6 +37,13 @@ public class PHTMLEditorKit extends HTMLEditorKit {
     public void write(Writer out, Document doc, int pos, int len)
         throws IOException, BadLocationException {
 
+        // If bad data is passed in, simply log, but do not render
+        int docLength = doc.getLength();
+        if ((pos < 0) || (pos > docLength) || (len < 0) ||
+            ((pos + len) > docLength) || ((pos + len) < 0)) {
+            return;
+        }
+        
         if (doc instanceof HTMLDocument) {
             PHTMLWriter w = new PHTMLWriter(out, (HTMLDocument)doc, pos, len); 
             w.write();

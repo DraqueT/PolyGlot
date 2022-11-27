@@ -108,8 +108,9 @@ public final class PTextInputDialog extends PDialog {
     @Override
     public void setVisible(boolean visible) {
         this.ignoreInitialResize = true;
-        this.setSize(new Dimension(initialSize()));
-        this.setResizable(false);
+        var size = new Dimension(initialSize());
+        this.setSize(size);
+        this.setMinimumSize(size);
         this.toFront();
         super.setVisible(visible);
         

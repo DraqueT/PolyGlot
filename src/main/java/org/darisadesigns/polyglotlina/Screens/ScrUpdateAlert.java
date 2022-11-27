@@ -64,7 +64,10 @@ public class ScrUpdateAlert extends PDialog {
         initComponents();
         
         if (!WebInterface.isInternetConnected()) {
-            throw new Exception("No Internet connection detected.");
+            if (verbose) {
+                core.getOSHandler().getInfoBox().warning("Connection Error", "No Internet connection detected. Unable to check for updates");
+            }
+            return;
         }
         
         jTextPane1.setContentType("text/html");
@@ -342,7 +345,6 @@ public class ScrUpdateAlert extends PDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);
-        setResizable(false);
 
         jScrollPane2.setViewportBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 

@@ -55,7 +55,7 @@ public final class ScrOptions extends PDialog {
             sldUiScaling.setEnabled(false);
             sldUiScaling.setToolTipText("UI scaling unavailable on macOS");
         } else {
-            lblUiScaling.setText("UI Scaling: " + sldUiScaling.getValue());
+            lblUiScaling.setText("UI Scaling: " + (sldUiScaling.getValue() / 10.0));
         }
         
         ((PlainDocument)txtRevisionNumbers.getDocument()).setDocumentFilter(new PTextFieldFilter());
@@ -64,7 +64,7 @@ public final class ScrOptions extends PDialog {
     
     private void setupListeners() {
         sldUiScaling.addChangeListener((ChangeEvent e) -> {
-            lblUiScaling.setText("UI Scaling: " + sldUiScaling.getValue());
+            lblUiScaling.setText("UI Scaling: " + (sldUiScaling.getValue() / 10.0));
         });
     }
 
@@ -73,7 +73,7 @@ public final class ScrOptions extends PDialog {
         if (testWarnClose()) {
             DesktopOptionsManager options = PolyGlot.getPolyGlot().getOptionsManager();
             
-            int scalingOriginal = options.getUiScale();
+            double scalingOriginal = options.getUiScale();
             int maxReversion = Integer.parseInt(txtRevisionNumbers.getText());
             maxReversion = maxReversion > -1 ? maxReversion : 1;
             int autoSaveInteral = (int) 
@@ -82,9 +82,9 @@ public final class ScrOptions extends PDialog {
             options.setAnimateWindows(chkResize.isSelected());
             options.setMaxReversionCount(maxReversion);
             options.setMsBetweenSaves(autoSaveInteral);
-            options.setUiScale(sldUiScaling.getValue());
+            options.setUiScale(sldUiScaling.getValue() / 10.0);
             
-            if (scalingOriginal != sldUiScaling.getValue() && !isDisposed()) {
+            if (scalingOriginal != (sldUiScaling.getValue() / 10.0) && !isDisposed()) {
                 new DesktopInfoBox().info("Please Restart PolyGlot", "Please Restart PolyGlot for UI scaling change to be applied.");
             }
             
@@ -133,7 +133,6 @@ public final class ScrOptions extends PDialog {
         setBackground(new java.awt.Color(255, 255, 255));
         setMinimumSize(new java.awt.Dimension(319, 278));
         setModal(true);
-        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -159,10 +158,10 @@ public final class ScrOptions extends PDialog {
         txtAutoSave.setToolTipText("Frequency in minutes between saving to temp recovery file");
 
         sldUiScaling.setMajorTickSpacing(1);
-        sldUiScaling.setMaximum(4);
+        sldUiScaling.setMaximum(40);
         sldUiScaling.setMinimum(1);
         sldUiScaling.setToolTipText("Allows for scaling of UI. Left is smaller, right is bigger (requires restart)");
-        sldUiScaling.setValue(2);
+        sldUiScaling.setValue(20);
 
         lblUiScaling.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblUiScaling.setText("UI Scaling");
@@ -174,24 +173,24 @@ public final class ScrOptions extends PDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(btnResetOptions)
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(chkResize, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(sldUiScaling, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(chkResize, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(sldUiScaling, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(txtAutoSave, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(lblUiScaling, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtAutoSave, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtRevisionNumbers, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 98, Short.MAX_VALUE)))
+                        .addGap(0, 38, Short.MAX_VALUE))
+                    .addComponent(lblUiScaling, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -211,7 +210,7 @@ public final class ScrOptions extends PDialog {
                 .addComponent(sldUiScaling, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblUiScaling, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addComponent(btnResetOptions))
         );
 
@@ -257,7 +256,7 @@ public final class ScrOptions extends PDialog {
         chkResize.setSelected(mgr.isAnimateWindows());
         txtRevisionNumbers.setText(Integer.toString(mgr.getMaxReversionCount()));
         txtAutoSave.setText(Float.toString(mgr.getMsBetweenSaves()/60000.0f));
-        sldUiScaling.setValue(mgr.getUiScale());
+        sldUiScaling.setValue((int)(mgr.getUiScale() * 10));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

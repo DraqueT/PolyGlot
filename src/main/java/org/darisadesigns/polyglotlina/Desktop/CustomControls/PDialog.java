@@ -185,7 +185,7 @@ public abstract class PDialog extends JDialog implements FocusListener, WindowFo
 
             Point lastPos = PolyGlot.getPolyGlot().getOptionsManager().getScreenPosition(getClass().getName());
             if (lastPos != null) {
-                setLocation(lastPos);
+                PFrame.setWindowLocationLegally(this, lastPos.x, lastPos.y);
             }
 
             Dimension lastDim = PolyGlot.getPolyGlot().getOptionsManager().getScreenSize(getClass().getName());
