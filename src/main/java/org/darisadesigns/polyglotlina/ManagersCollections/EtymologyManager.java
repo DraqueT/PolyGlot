@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.HashSet;
+import java.util.Set;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -42,11 +44,10 @@ import org.w3c.dom.Element;
  */
 public class EtymologyManager {
     private final DictCore core;
-    private final Map<Integer, List<Integer>> parentToChild = new HashMap<>();
-    private final Map<Integer, List<Integer>> childToParent = new HashMap<>();
-    private final Map<String, List<Integer>> extParentToChild = new HashMap<>();
+    private final Map<Integer, Set<Integer>> parentToChild = new HashMap<>();
+    private final Map<Integer, Set<Integer>> childToParent = new HashMap<>();
+    private final Map<String, Set<Integer>> extParentToChild = new HashMap<>();
     private final Map<Integer, Map<String, EtyExternalParent>> childToExtParent = new HashMap<>();
-    private final Map<String, EtyExternalParent> allExtParents = new HashMap<>();
     private Integer bufferParent = 0;
     private Integer bufferChild = 0;
     private EtyExternalParent bufferExtParent = new EtyExternalParent();
@@ -125,25 +126,25 @@ public class EtymologyManager {
         }
 
         if (parentToChild.containsKey(parent)) {
-            List<Integer> myList = parentToChild.get(parent);
+            Set<Integer> myList = parentToChild.get(parent);
 
             if (!myList.contains(child)) {
                 myList.add(child);
             }
         } else {
-            List<Integer> newList = new ArrayList<>();
+            Set<Integer> newList = new HashSet<>();
             newList.add(child);
             parentToChild.put(parent, newList);
         }
 
         if (childToParent.containsKey(child)) {
-            List<Integer> myList = childToParent.get(child);
+            Set<Integer> myList = childToParent.get(child);
 
             if (!myList.contains(parent)) {
                 myList.add(parent);
             }
         } else {
-            List<Integer> newList = new ArrayList<>();
+            Set<Integer> newList = new HashSet<>();
             newList.add(parent);
             childToParent.put(child, newList);
         }
@@ -173,12 +174,12 @@ public class EtymologyManager {
      * @return list of integer IDs of child words (empty array if none)
      */
     public Integer[] getChildren(Integer wordId) {
-        List<Integer> ret;
+        Set<Integer> ret;
         
         if (parentToChild.containsKey(wordId)) {
             ret = parentToChild.get(wordId);
         } else {
-            ret = new ArrayList<>();
+            ret = new HashSet<>();
         }
         
         return ret.toArray(new Integer[0]);
@@ -215,15 +216,14 @@ public class EtymologyManager {
         // return immediately if child does not exist
         if (core.getWordCollection().exists(child)) {
             if (extParentToChild.containsKey(parent.getUniqueId())) {
-                List<Integer> myList = extParentToChild.get(parent.getUniqueId());
+                Set<Integer> myList = extParentToChild.get(parent.getUniqueId());
                 if (!myList.contains(child)) {
                     myList.add(child);
                 }
             } else {
-                List<Integer> myList = new ArrayList<>();
+                Set<Integer> myList = new HashSet<>();
                 myList.add(child);
                 extParentToChild.put(parent.getUniqueId(), myList);
-                allExtParents.put(parent.getUniqueId(), parent);
             }
 
             if (childToExtParent.containsKey(child)) {
@@ -243,12 +243,8 @@ public class EtymologyManager {
         // only run if child exists
         if (core.getWordCollection().exists(child)) {
             if (extParentToChild.containsKey(parent.getUniqueId())) {
-                List<Integer> myList = extParentToChild.get(parent.getUniqueId());
+                Set<Integer> myList = extParentToChild.get(parent.getUniqueId());
                 myList.remove(child);
-                
-                if (myList.isEmpty()) {
-                    allExtParents.remove(getExtListParentValue(parent));
-                }
             }
             
             if (childToExtParent.containsKey(child)) {
@@ -259,21 +255,23 @@ public class EtymologyManager {
     }
     
     /**
-     * Creates external parent display value (used as ID for list of all external
-     * parents for use in filtering
-     * @param parent
-     * @return 
-     */
-    private String getExtListParentValue(EtyExternalParent parent) {
-        return parent.getValue() + " (" + parent.getExternalLanguage() + ")";
-    }
-    
-    /**
      * Gets list of every external parent referenced in entire language
      * @return alphabetical list by word + (language)
      */
     private List<EtyExternalParent> getExtParentList() {
-        List<EtyExternalParent> ret = new ArrayList<>(allExtParents.values());        
+        Map<String, EtyExternalParent> retValsMap = new HashMap<>();
+        
+        // iterate on each set of parent values (key = wordId)
+        for (Entry<Integer, Map<String, EtyExternalParent>> parentMap : childToExtParent.entrySet()) {
+            // iterate on each parent (key = parentId, which is a string)
+            for (Entry<String, EtyExternalParent> parent : parentMap.getValue().entrySet()) {
+                if (!retValsMap.containsKey(parent.getKey())) {
+                    retValsMap.put(parent.getKey(), parent.getValue());
+                }
+            }
+        }
+        
+        List<EtyExternalParent> ret = new ArrayList(retValsMap.values());
         Collections.sort(ret);
         return ret;
     }
@@ -285,16 +283,71 @@ public class EtymologyManager {
      */
     public void delRelation(Integer parentId, Integer childId) {
         if (parentToChild.containsKey(parentId)) {
-            List<Integer> myList = parentToChild.get(parentId);
+            Set<Integer> myList = parentToChild.get(parentId);
             myList.remove(childId);
         }
         
         if (childToParent.containsKey(childId)) {
-            List<Integer> myList = childToParent.get(childId);
+            Set<Integer> myList = childToParent.get(childId);
             myList.remove(parentId);
         }
     }
     
+    /**
+     * Deletes all broken etymological roots
+     */
+    public void cleanBrokenEtymologyRoots() {
+        cleanEtymologyMap(parentToChild);
+        cleanEtymologyMap(childToParent);
+        cleanExternalEtymologyMap();
+        
+    }
+    
+    private void cleanEtymologyMap(Map<Integer, Set<Integer>> cleanMap) {
+        ConWordCollection wordCollection = core.getWordCollection();
+        
+        for (Entry<Integer, Set<Integer>> curEntry : cleanMap.entrySet()) {
+            if (!wordCollection.exists(curEntry.getKey())) {
+                cleanMap.remove(curEntry.getKey());
+            } else {
+                Set<Integer> childIds = curEntry.getValue();
+                int childIdLength = childIds.size();
+                
+                // remove all dead children
+                for (Integer id : childIds.toArray(new Integer[0])) {
+                    if (!wordCollection.exists(id)) {
+                        childIds.remove(id);
+                    }
+                }
+                
+                // remove entry entirely if empty
+                if (childIds.isEmpty()) {
+                    cleanMap.remove(curEntry.getKey());
+                }
+            }
+        }
+    }
+    
+    private void cleanExternalEtymologyMap() {
+        ConWordCollection wordCollection = core.getWordCollection();
+        for (Integer extChildId : childToExtParent.keySet()) {
+            if (!wordCollection.exists(extChildId)) {
+                // first delete all parnt referenes to this child
+                for (String extParentId : childToExtParent.get(extChildId).keySet()) {
+                    Set<Integer> cleanParentToChild = extParentToChild.get(extParentId);
+                    
+                    cleanParentToChild.remove(extChildId);
+                    
+                    if (cleanParentToChild.isEmpty()) {
+                        extParentToChild.remove(extParentId);
+                    }
+                }
+                
+                childToExtParent.remove(extChildId);
+            }
+        }
+    }
+
     /**
      * Writes all word information to XML document
      *
@@ -306,7 +359,7 @@ public class EtymologyManager {
         Element collection = doc.createElement(PGTUtil.ETY_COLLECTION_XID);
         
         // we only need to record the relationship one way, the bidirection will be regenerated
-        for (Entry<Integer, List<Integer>> curEntry : parentToChild.entrySet()) {
+        for (Entry<Integer, Set<Integer>> curEntry : parentToChild.entrySet()) {
             // skip nonexistent words
             if (!wordCollection.exists(curEntry.getKey())) {
                 continue;
@@ -348,6 +401,7 @@ public class EtymologyManager {
                 extParentNode.appendChild(curElement);
                 
                 childContainer.appendChild(extParentNode);
+                
             });
             return childContainer;
         }).forEachOrdered((childContainer) -> {
@@ -444,7 +498,7 @@ public class EtymologyManager {
         boolean ret = false;
         
         if (childToParent.containsKey(childId)) {
-            List<Integer> myList = childToParent.get(childId);
+            Set<Integer> myList = childToParent.get(childId);
             ret = myList.contains(parId);
             
             if (!ret) {
@@ -536,7 +590,6 @@ public class EtymologyManager {
             ret = ret && childToParent.equals(compEt.childToParent);
             ret = ret && extParentToChild.equals(compEt.extParentToChild);
             ret = ret && childToExtParent.equals(compEt.childToExtParent);
-            ret = ret && allExtParents.equals(compEt.allExtParents);
         }
         
         return ret;

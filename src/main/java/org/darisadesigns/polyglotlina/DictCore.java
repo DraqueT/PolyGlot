@@ -494,6 +494,9 @@ public class DictCore {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
         Instant newSaveTime = Instant.now();
+        
+        // clean up etymological entries which might be orphaned
+        etymologyManager.cleanBrokenEtymologyRoots();
 
         // root elements
         Document doc = docBuilder.newDocument();
