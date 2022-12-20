@@ -558,7 +558,8 @@ public class ConjugationManager {
         if (generationRules.containsKey(typeId)) {
             for (ConjugationGenRule rule : generationRules.get(typeId)) {
                 ConjugationPair parent = mappedConjugations.get(rule.getCombinationId());
-                rule.setName(parent.label + ": " + rule.getName());
+                var label = parent == null ? "" : parent.label;
+                rule.setName(label + ": " + rule.getName());
             }
         }
 
