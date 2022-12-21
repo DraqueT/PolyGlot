@@ -323,7 +323,7 @@ public class LogoNode extends DictNode {
         } else if (comp instanceof LogoNode) {
             LogoNode c = (LogoNode) comp;
 
-            ret = value.equals(c.value);
+            ret = value.replaceAll("\\s", "").equals(c.value.replaceAll("\\s", ""));
             ret = ret && WebInterface.getTextFromHtml(notes).equals(WebInterface.getTextFromHtml(c.notes));
             ret = ret && Arrays.equals(logoBytes, c.logoBytes);
             ret = ret && isRadical == c.isRadical;

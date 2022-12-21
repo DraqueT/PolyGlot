@@ -190,7 +190,7 @@ public class ToDoNode {
             ToDoNode compNode = (ToDoNode)comp;
             
             ret = isDone == compNode.isDone;
-            ret = ret && value.trim().equals(compNode.value.trim());
+            ret = ret && value.replaceAll("\\s", "").equals(compNode.value.replaceAll("\\s", ""));
             ret = ret && children.equals(compNode.children);
         }
         

@@ -230,7 +230,7 @@ public class ConWord extends DictNode {
             ConWord c = (ConWord) comp;
 
             ret = value.equals(c.value);
-            ret = ret && localWord.trim().equals(c.localWord.trim());
+            ret = ret && localWord.replaceAll("\\s", "").equals(c.localWord.replaceAll("\\s", ""));
             ret = ret && typeId == c.typeId;
             ret = ret && WebInterface.archiveHTML(definition, core).equals(WebInterface.archiveHTML(c.definition, core));
             ret = ret && WebInterface.getTextFromHtml(etymNotes).equals(WebInterface.getTextFromHtml(c.etymNotes));
@@ -241,7 +241,7 @@ public class ConWord extends DictNode {
             ret = ret && classTextValues.equals(c.classTextValues);
             
             if (procOverride) {
-                ret = ret && pronunciation.trim().equals(c.pronunciation.trim());
+                ret = ret && pronunciation.replaceAll("\\s", "").equals(c.pronunciation.replaceAll("\\s", ""));
             }
         }
 

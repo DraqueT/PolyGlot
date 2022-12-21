@@ -61,7 +61,7 @@ public class WordClassValue extends DictNode {
             ret = true;
         } else if (comp != null && getClass() == comp.getClass()) {
             WordClassValue c = (WordClassValue)comp;
-            ret = value.trim().equals(c.value.trim());
+            ret = value.replaceAll("\\s", "").equals(c.value.replaceAll("\\s", ""));
         }
         
         return ret;

@@ -65,7 +65,7 @@ public class ConjugationDimension extends DictNode {
         if (this == comp) {
             ret = true;
         } else if (comp != null && getClass() == comp.getClass()) {
-            ret = this.value.trim().equals(((DictNode) comp).value.trim());
+            ret = this.value.replaceAll("\\s", "").equals(((DictNode) comp).value.replaceAll("\\s", ""));
         }
         
         return ret;

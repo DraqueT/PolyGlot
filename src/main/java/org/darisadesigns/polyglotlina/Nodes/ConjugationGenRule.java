@@ -444,7 +444,7 @@ public class ConjugationGenRule implements Comparable<ConjugationGenRule> {
             ret = ret && (combinationId == null && compRule.combinationId == null) 
                     || combinationId.equals(compRule.combinationId);
             ret = ret && regex.equals(compRule.regex);
-            ret = ret && name.trim().equals(compRule.name.trim());
+            ret = ret && name.replaceAll("\\s", "").equals(compRule.name.replaceAll("\\s", ""));
             ret = ret && transformations.equals(compRule.transformations);
             ret = ret && applyToClasses.equals(compRule.applyToClasses);
         }

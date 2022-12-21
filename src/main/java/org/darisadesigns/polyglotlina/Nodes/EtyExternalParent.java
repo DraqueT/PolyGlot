@@ -74,9 +74,9 @@ public class EtyExternalParent extends ConWord {
             ret = true;
         } else if (comp != null && getClass() == comp.getClass()) {
             EtyExternalParent c = (EtyExternalParent)comp;
-            ret = value.trim().equals(c.value.trim());
-            ret = ret && externalLanguage.trim().equals(c.externalLanguage.trim());
-            ret = ret && definition.trim().equals(c.definition.trim());
+            ret = value.replaceAll("\\s", "").equals(c.value.replaceAll("\\s", ""));
+            ret = ret && externalLanguage.replaceAll("\\s", "").equals(c.externalLanguage.replaceAll("\\s", ""));
+            ret = ret && definition.replaceAll("\\s", "").equals(c.definition.replaceAll("\\s", ""));
         }
         
         return ret;

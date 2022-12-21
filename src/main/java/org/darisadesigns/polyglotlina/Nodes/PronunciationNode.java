@@ -89,8 +89,8 @@ public class PronunciationNode extends DictNode {
             ret = true;
         } else if (comp != null && getClass() == comp.getClass()) {
             PronunciationNode c = (PronunciationNode)comp;
-            ret = value.trim().equals(c.value.trim());
-            ret = ret && pronunciation.trim().equals(c.pronunciation.trim());
+            ret = value.replaceAll("\\s", "").equals(c.value.replaceAll("\\s", ""));
+            ret = ret && pronunciation.replaceAll("\\s", "").equals(c.pronunciation.replaceAll("\\s", ""));
         }
         
         return ret;

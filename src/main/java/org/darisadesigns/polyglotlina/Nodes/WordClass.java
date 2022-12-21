@@ -277,7 +277,7 @@ public class WordClass extends DictNode {
         } else if (comp != null && getClass() == comp.getClass()) {
             WordClass c = (WordClass) comp;
             
-            ret = value.trim().equals(c.value.trim());
+            ret = value.replaceAll("\\s", "").equals(c.value.replaceAll("\\s", ""));
             ret = ret && values.equals(c.values);
             ret = ret && applyTypes.equals(c.applyTypes);
             ret = ret && freeText == c.freeText;

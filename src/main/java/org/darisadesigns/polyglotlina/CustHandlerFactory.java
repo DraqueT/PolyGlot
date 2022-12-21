@@ -111,7 +111,6 @@ public final class CustHandlerFactory {
             boolean bId = false;
             boolean bdef = false;
             boolean bfontcon = false;
-            boolean bfontlocal = false;
             boolean bwordClassName = false;
             boolean bwordClassTextVal = false;
             boolean bwordClassId = false;
@@ -120,9 +119,6 @@ public final class CustHandlerFactory {
             boolean bwordEtymNotes = false;
             boolean bpronuncation = false;
             boolean bclassVal = false;
-            boolean bgenderId = false;
-            boolean bgenderNotes = false;
-            boolean bgenderName = false;
             boolean bgender = false;
             boolean blangName = false;
             boolean blangRegexFontOvr = false;
@@ -156,7 +152,6 @@ public final class CustHandlerFactory {
             boolean bwordClassProcMan = false;
             boolean bwordClassPattern = false;
             boolean bwordProcOverride = false;
-            boolean bdimNode = false;
             boolean bdimId = false;
             boolean bdimName = false;
             boolean bfamName = false;
@@ -183,11 +178,8 @@ public final class CustHandlerFactory {
             boolean blogoReading = false;
             boolean blogoValue = false;
             boolean blogoId = false;
-            boolean blogoNode = false;
             boolean blogoWordRelation = false;
-            boolean bgrammarChapNode = false;
             boolean bgrammarChapName = false;
-            boolean bgrammarSecNode = false;
             boolean bgrammarSecName = false;
             boolean bgrammarSecRecId = false;
             boolean bgrammarSecText = false;
@@ -196,7 +188,6 @@ public final class CustHandlerFactory {
             boolean bclassApplyTypes = false;
             boolean bclassFreeText = false;
             boolean bclassAssociative = false;
-            boolean bclassValueNode = false;
             boolean bclassValueId = false;
             boolean bclassValueName = false;
             boolean bcharRepChar = false;
@@ -206,7 +197,6 @@ public final class CustHandlerFactory {
             boolean betyIntRelationNode = false;
             boolean betyIntChild = false;
             boolean betyChildExternals = false;
-            boolean betyExternalWordNode = false;
             boolean betyExternalWordValue = false;
             boolean betyExternalWordOrigin = false;
             boolean betyExternalWordDefinition = false;
@@ -234,7 +224,6 @@ public final class CustHandlerFactory {
             
             int wId;
             int wCId;
-            int wGId;
             String combinedDecId = "";
             String tmpString; // placeholder for building serialized values that are guaranteed processed in a single pass
 
@@ -277,8 +266,6 @@ public final class CustHandlerFactory {
                     bwordClassTextVal = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.FONT_CON_XID)) {
                     bfontcon = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.FONT_LOCAL_XID)) {
-                    bfontlocal = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.POS_ID_XID)) {
                     bwordClassId = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.POS_NAME_XID)) {
@@ -358,8 +345,6 @@ public final class CustHandlerFactory {
                     blangPropLocalMandatory = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROP_TYPE_MAND_XID)) {
                     blangPropTypeMandatory = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DIMENSION_NODE_XID)) {
-                    bdimNode = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DIMENSION_ID_XID)) {
                     bdimId = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DIMENSION_NAME_XID)) {
@@ -413,16 +398,11 @@ public final class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.LOGOGRAPH_ID_XID)) {
                     blogoId = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LOGOGRAPH_NODE_XID)) {
-                    blogoNode = true;
                     core.getLogoCollection().clear();
                 } else if (qName.equalsIgnoreCase(PGTUtil.LOGO_WORD_RELATION_XID)) {
                     blogoWordRelation = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.GRAMMAR_CHAPTER_NODE_XID)) {
-                    bgrammarChapNode = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.GRAMMAR_CHAPTER_NAME_XID)) {
                     bgrammarChapName = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.GRAMMAR_SECTION_NODE_XID)) {
-                    bgrammarSecNode = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.GRAMMAR_SECTION_NAME_XID)) {
                     bgrammarSecName = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.GRAMMAR_SECTION_RECORDING_XID)) {
@@ -444,8 +424,6 @@ public final class CustHandlerFactory {
                     bclassFreeText = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.CLASS_IS_ASSOCIATIVE_XID)) {
                     bclassAssociative = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.CLASS_VALUES_NODE_XID)) {
-                    bclassValueNode = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.CLASS_VALUE_ID_XID)) {
                     bclassValueId = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.CLASS_VALUE_NAME_XID)) {
@@ -464,8 +442,6 @@ public final class CustHandlerFactory {
                      betyIntChild= true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ETY_CHILD_EXTERNALS_XID)) {
                      betyChildExternals= true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.ETY_EXTERNAL_WORD_NODE_XID)) {
-                     betyExternalWordNode = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ETY_EXTERNAL_WORD_VALUE_XID)) {
                      betyExternalWordValue = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ETY_EXTERNAL_WORD_ORIGIN_XID)) {
@@ -478,12 +454,6 @@ public final class CustHandlerFactory {
                      btoDoNodeLabel = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.TODO_NODE_DONE_XID)) {
                      btoDoNodeDone = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.PHRASEBOOK_XID)) {
-                    // no subsequent logic required.
-                    //bphraseBook = true;
-                } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_NODE_XID)) {
-                    // no subsequent logicrequired.
-                    //bphraseNode = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_ID_XID)) {
                     bphraseid = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.PHRASE_CONPHRASE_XID)) {
@@ -599,8 +569,6 @@ public final class CustHandlerFactory {
                     bwordEtymNotes = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.FONT_CON_XID)) {
                     bfontcon = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.FONT_LOCAL_XID)) {
-                    bfontlocal = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.POS_NAME_XID)) {
                     bwordClassName = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.POS_NOTES_XID)) {
@@ -688,7 +656,6 @@ public final class CustHandlerFactory {
                     } catch (Exception e) {
                         throw new SAXException(e);
                     }
-                    bdimNode = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DIMENSION_ID_XID)) {
                     bdimId = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DIMENSION_NAME_XID)) {
@@ -761,7 +728,6 @@ public final class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.LOGOGRAPH_ID_XID)) {
                     blogoId = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LOGOGRAPH_NODE_XID)) {
-                    blogoNode = false;
                     try {
                         core.getLogoCollection().insert();
                     } catch (Exception e) {
@@ -775,14 +741,12 @@ public final class CustHandlerFactory {
                     GrammarManager gMan = core.getGrammarManager();
                     gMan.insert();
                     gMan.clear();
-                    bgrammarChapNode = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.GRAMMAR_CHAPTER_NAME_XID)) {
                     bgrammarChapName = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.GRAMMAR_SECTION_NODE_XID)) {
                     GrammarChapNode gChap = core.getGrammarManager().getBuffer();
                     gChap.insert();
                     gChap.clear();
-                    bgrammarSecNode = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.GRAMMAR_SECTION_NAME_XID)) {
                     bgrammarSecName = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.GRAMMAR_SECTION_RECORDING_XID)) {
@@ -816,7 +780,6 @@ public final class CustHandlerFactory {
                         core.getOSHandler().getIOHandler().writeErrorLog(e);
                         warningLog += "\nWord class load error: " + e.getLocalizedMessage();
                     }
-                    bclassValueNode = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.CLASS_VALUE_ID_XID)) {
                     bclassValueId = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.CLASS_VALUE_NAME_XID)) {
@@ -845,7 +808,6 @@ public final class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.ETY_CHILD_EXTERNALS_XID)) {
                      betyChildExternals= false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.ETY_EXTERNAL_WORD_NODE_XID)) {
-                     betyExternalWordNode = false;
                      core.getEtymologyManager().insertBufferExtParent();
                 } else if (qName.equalsIgnoreCase(PGTUtil.ETY_EXTERNAL_WORD_VALUE_XID)) {
                      betyExternalWordValue = false;
@@ -1003,13 +965,6 @@ public final class CustHandlerFactory {
                     }
                 } else if (bgender) {
                     tmpString += new String(ch, start, length);
-                } else if (bgenderId) {
-                    wGId = Integer.parseInt(new String(ch, start, length));
-                    bgenderId = false;
-                } else if (bgenderName) {
-                    // Deprecated
-                } else if (bgenderNotes) {
-                    // Deprecated
                 } else if (blangName) {
                     propMan.setLangName(propMan.getLangName()
                             + new String(ch, start, length));
