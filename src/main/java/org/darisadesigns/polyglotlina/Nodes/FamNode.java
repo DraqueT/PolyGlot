@@ -22,8 +22,10 @@ package org.darisadesigns.polyglotlina.Nodes;
 import org.darisadesigns.polyglotlina.ManagersCollections.FamilyManager;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import org.darisadesigns.polyglotlina.WebInterface;
 
 /**
@@ -31,8 +33,8 @@ import org.darisadesigns.polyglotlina.WebInterface;
  * @author draque
  */
 public class FamNode extends DictNode {
-    private final List<FamNode> subNodes = new ArrayList<>();
-    private final List<ConWord> words = new ArrayList<>();
+    private final Set<FamNode> subNodes = new HashSet<>();
+    private final Set<ConWord> words = new HashSet<>();
     private final FamNode parentNode;
     private String notes = "";
     private final FamilyManager manager;
@@ -182,9 +184,10 @@ public class FamNode extends DictNode {
      * @return alphabetically sorted iterator of all subnodes
      */
     public FamNode[] getNodes() {
-        Collections.sort(subNodes);
+        var ret = new ArrayList<FamNode>(subNodes);
+        Collections.sort(ret);
         
-        return subNodes.toArray(new FamNode[0]);
+        return ret.toArray(new FamNode[0]);
     }
     
     public void addNode(FamNode _node) {
@@ -233,6 +236,7 @@ public class FamNode extends DictNode {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        // node is mutable, so we cannot use hashing
+        return 1;
     }
 }
