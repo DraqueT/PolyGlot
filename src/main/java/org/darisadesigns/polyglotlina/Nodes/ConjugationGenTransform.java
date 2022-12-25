@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -72,7 +72,7 @@ public final class ConjugationGenTransform {
         } else if (comp instanceof ConjugationGenTransform) {
             ConjugationGenTransform compDec = (ConjugationGenTransform)comp;
             ret = regex.equals(compDec.regex);
-            ret = ret && replaceText.trim().equals(compDec.replaceText.trim());
+            ret = ret && replaceText.replaceAll("\\s", "").equals(compDec.replaceText.replaceAll("\\s", ""));
         }
         
         return ret;

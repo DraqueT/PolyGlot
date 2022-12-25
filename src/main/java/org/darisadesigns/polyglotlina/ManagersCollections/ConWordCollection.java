@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -621,21 +621,19 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
                 // etymological root
                 Object parent = _filter.getFilterEtyParent();
                 if (parent != null) {
-                    if (parent instanceof ConWord) {
-                        ConWord parWord = (ConWord)parent;
-                        if (parWord.getId() != -1 && !core.getEtymologyManager()
-                                .childHasParent(curWord.getId(), parWord.getId())) {
-                            continue;
-                        }
-                    }
-                    
                     if (parent instanceof EtyExternalParent) {
                         EtyExternalParent parExt = (EtyExternalParent)parent;
                         if (parExt.getId() != -1 && !core.getEtymologyManager()
                                 .childHasExtParent(curWord.getId(), parExt.getUniqueId())) {
                             continue;
                         }
-                    } 
+                    } else if (parent instanceof ConWord) {
+                        ConWord parWord = (ConWord)parent;
+                        if (parWord.getId() != -1 && !core.getEtymologyManager()
+                                .childHasParent(curWord.getId(), parWord.getId())) {
+                            continue;
+                        }
+                    }
                 }
 
                 retValues.setBufferWord(curWord);

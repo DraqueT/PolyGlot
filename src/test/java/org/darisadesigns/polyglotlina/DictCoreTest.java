@@ -114,7 +114,7 @@ public class DictCoreTest {
             assertEquals(origin, target, "DictCoreTest.testIsLanguageEmptyNoPOS:F");
         } catch (IOException | IllegalStateException | ParserConfigurationException | TransformerException e) {
             // e.printStackTrace();
-            //System.out.println(e.getMessage());
+            // System.out.println(e.getMessage());
             fail(e);
         }
     }

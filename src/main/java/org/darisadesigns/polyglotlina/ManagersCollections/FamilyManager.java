@@ -26,8 +26,8 @@ import org.darisadesigns.polyglotlina.Nodes.FamNode;
 import org.darisadesigns.polyglotlina.WebInterface;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -61,7 +61,7 @@ public class FamilyManager {
      * @param fam family entry to clean
      * @param wordList raw words from entry
      */
-    public void removeDeadWords(FamNode fam, List<ConWord> wordList) {
+    public void removeDeadWords(FamNode fam, Set<ConWord> wordList) {
         Iterator<ConWord> wordIt = new ArrayList<>(wordList).iterator();
         
         while (wordIt.hasNext()) {

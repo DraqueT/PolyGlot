@@ -116,7 +116,6 @@ public final class CustHandlerFactory {
             
             int wId;
             int wCId;
-            int wGId;
             String combinedDecId = "";
             String tmpString; // placeholder for building serialized values that are guaranteed processed in a single pass
 

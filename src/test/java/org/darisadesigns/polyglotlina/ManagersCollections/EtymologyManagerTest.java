@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020-2022, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -20,6 +20,7 @@
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
 import TestResources.DummyCore;
+import java.io.File;
 import java.io.IOException;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
@@ -121,6 +122,102 @@ public class EtymologyManagerTest {
             }
         } catch (Exception e) {
             fail(e);
+        }
+    }
+    
+    @Test
+    public void testEtymology_delete_parent_of_single_child() {
+        System.out.println("testEtymology_delete_parent_of_single_child");
+        String testFileLocation = PGTUtil.TESTRESOURCES + "testoid.pgd";
+        
+        try {
+            DictCore core = DummyCore.newCore();
+            core.readFile(PGTUtil.TESTRESOURCES + "etymology_parents_deletion.pgd");
+            core.getWordCollection().deleteNodeById(2);
+        } catch (Exception e) {
+            fail(e.getLocalizedMessage());
+        } finally {
+            File testFile = new File(testFileLocation);
+            if (testFile.exists()) {
+                testFile.delete();
+            }
+        }
+    }
+    
+    @Test
+    public void testEtymology_delete_single_child_of_parent() {
+        System.out.println("testEtymology_delete_single_child_of_parent");
+        String testFileLocation = PGTUtil.TESTRESOURCES + "testoid.pgd";
+        
+        try {
+            DictCore core = DummyCore.newCore();
+            core.readFile(PGTUtil.TESTRESOURCES + "etymology_parents_deletion.pgd");
+            core.getWordCollection().deleteNodeById(3);
+        } catch (Exception e) {
+            fail(e.getLocalizedMessage());
+        } finally {
+            File testFile = new File(testFileLocation);
+            if (testFile.exists()) {
+                testFile.delete();
+            }
+        }
+    }
+    
+    @Test
+    public void testEtymology_delete_both_children_of_external_parent() {
+        System.out.println("testEtymology_delete_both_children_of_external_parent");
+        String testFileLocation = PGTUtil.TESTRESOURCES + "testoid.pgd";
+        
+        try {
+            DictCore core = DummyCore.newCore();
+            core.readFile(PGTUtil.TESTRESOURCES + "etymology_parents_deletion.pgd");
+            core.getWordCollection().deleteNodeById(3);
+            core.getWordCollection().deleteNodeById(4);
+        } catch (Exception e) {
+            fail(e.getLocalizedMessage());
+        } finally {
+            File testFile = new File(testFileLocation);
+            if (testFile.exists()) {
+                testFile.delete();
+            }
+        }
+    }
+    
+    @Test
+    public void testEtymology_delete_single_child_of_parent_with_other_children() {
+        System.out.println("testEtymology_delete_single_child_of_parent_with_other_children");
+        String testFileLocation = PGTUtil.TESTRESOURCES + "testoid.pgd";
+        
+        try {
+            DictCore core = DummyCore.newCore();
+            core.readFile(PGTUtil.TESTRESOURCES + "etymology_parents_deletion.pgd");
+            core.getWordCollection().deleteNodeById(6);
+        } catch (Exception e) {
+            fail(e.getLocalizedMessage());
+        } finally {
+            File testFile = new File(testFileLocation);
+            if (testFile.exists()) {
+                testFile.delete();
+            }
+        }
+    }
+    
+    @Test
+    public void testEtymology_delete_parent_of_multiple_children() {
+        System.out.println("testEtymology_delete_parent_of_multiple_children");
+        String testFileLocation = PGTUtil.TESTRESOURCES + "testoid.pgd";
+        
+        try {
+            DictCore core = DummyCore.newCore();
+            core.readFile(PGTUtil.TESTRESOURCES + "etymology_parents_deletion.pgd");
+            core.getWordCollection().deleteNodeById(5);
+        } catch (Exception e) {
+            fail(e.getLocalizedMessage());
+        } finally {
+            File testFile = new File(testFileLocation);
+            if (testFile.exists()) {
+                testFile.delete();
+            }
         }
     }
 }

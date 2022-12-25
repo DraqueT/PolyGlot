@@ -46,7 +46,7 @@ public class PronunciationMgr {
     private final DictCore core;
     protected boolean recurse = false;
     private List<PronunciationNode> pronunciations = new ArrayList<>();
-    private Set<String> syllables = new HashSet<>();
+    private final Set<String> syllables = new HashSet<>();
     private boolean syllableCompositionEnabled = false;
     
     public PronunciationMgr(DictCore _core) {

@@ -143,12 +143,12 @@ public class PhraseNode extends DictNode {
         
         PhraseNode compNode = (PhraseNode)comp;
         
-        boolean ret = getGloss().trim().equals(compNode.getGloss().trim());
-        ret = ret && getConPhrase().trim().equals(compNode.getConPhrase().trim());
-        ret = ret && getLocalPhrase().trim().equals(compNode.getLocalPhrase().trim());
-        ret = ret && (getPronunciation().trim().equals(compNode.getPronunciation().trim())
+        boolean ret = getGloss().replaceAll("\\s", "").equals(compNode.getGloss().replaceAll("\\s", ""));
+        ret = ret && getConPhrase().replaceAll("\\s", "").equals(compNode.getConPhrase().replaceAll("\\s", ""));
+        ret = ret && getLocalPhrase().replaceAll("\\s", "").equals(compNode.getLocalPhrase().replaceAll("\\s", ""));
+        ret = ret && (getPronunciation().replaceAll("\\s", "").equals(compNode.getPronunciation().replaceAll("\\s", ""))
                 || (isProcOverride() && compNode.isProcOverride()));
-        ret = ret && getNotes().trim().equals(compNode.getNotes().trim());
+        ret = ret && getNotes().replaceAll("\\s", "").equals(compNode.getNotes().replaceAll("\\s", ""));
         ret = ret && isProcOverride() == compNode.isProcOverride();
         
         return ret;

@@ -319,7 +319,7 @@ public final class PolyGlot {
 
             System.setProperty("sun.java2d.uiScale", value);
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            polyGlot.getOSHandler().getIOHandler().writeErrorLog(e);
         }
     }
     
