@@ -106,11 +106,6 @@ public final class CustHandlerFactory {
             String ruleValBuffer = "";
             boolean betyIntRelationNode = false;
             boolean betyChildExternals = false;
-            boolean bfontlocal = false;
-            boolean bgenderId = false;
-            boolean bgenderNotes = false;
-            boolean bgenderName = false;
-            boolean bgender = false;
             boolean bDecCombId = false;
             boolean bwordPlur = false;
             
@@ -176,8 +171,6 @@ public final class CustHandlerFactory {
                     phraseMan.clear();
                 } else if (qName.equalsIgnoreCase(PGTUtil.FAM_NODE_XID)) {
                     famMan.buildNewBuffer();
-                } else if (qName.equalsIgnoreCase(PGTUtil.FONT_LOCAL_XID)) {
-                    bfontlocal = true;
                 } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_COMB_DIM_XID)) {
                     bDecCombId = true;
                 }
@@ -679,9 +672,7 @@ public final class CustHandlerFactory {
                     }
                 } 
                 //endregion
-                else if (qName.equalsIgnoreCase(PGTUtil.FONT_LOCAL_XID)) {
-                    bfontlocal = false;
-                } else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_COMB_DIM_XID)) {
+                else if (qName.equalsIgnoreCase(PGTUtil.DECLENSION_COMB_DIM_XID)) {
                     bDecCombId = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.LANG_PROPCHAR_REP_NODE_XID)) {
                     core.getPropertiesManager().addCharacterReplacement(charRepCharBuffer, charRepValBuffer);
@@ -708,15 +699,6 @@ public final class CustHandlerFactory {
                     conjugationMgr.setBufferDecText(new String(ch, start, length));
                     conjugationMgr.setBufferDecNotes("Plural");
                     bwordPlur = false;
-                } else if (bgender) {
-                    tmpString += new String(ch, start, length);
-                } else if (bgenderId) {
-                    wGId = Integer.parseInt(new String(ch, start, length));
-                    bgenderId = false;
-                } else if (bgenderName) {
-                    // Deprecated
-                } else if (bgenderNotes) {
-                    // Deprecated
                 } else if (bDecCombId) {
                     conjugationMgr.getBuffer().setCombinedDimId(new String(ch, start, length));
                 }
