@@ -82,41 +82,76 @@ public class XMLRecoveryToolTest {
                 </dictionary>
                 """
             ),
-             Arguments.of(
-                 "Missing definition open tag",
-                 """
-                 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-                 <dictionary>
-                     <PolyGlotVer>3.6</PolyGlotVer>
-                     <lexicon>
-                         <word>
-                             <wordId>2</wordId>
-                             <pronunciation/>
-                             definition</definition>
-                             <wordProcOverride>F</wordProcOverride>
-                             <autoDeclOverride>F</autoDeclOverride>
-                             <wordRuleOverride>F</wordRuleOverride>
-                         </word>
-                     </lexicon>
-                 </dictionary>
-                 """,
-                 """
-                 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-                 <dictionary>
-                     <PolyGlotVer>3.6</PolyGlotVer>
-                     <lexicon>
-                         <word>
-                             <wordId>2</wordId>
-                             <pronunciation/>
-                             definition
-                             <wordProcOverride>F</wordProcOverride>
-                             <autoDeclOverride>F</autoDeclOverride>
-                             <wordRuleOverride>F</wordRuleOverride>
-                         </word>
-                     </lexicon>
-                 </dictionary>
-                 """
-             )
+            Arguments.of(
+                "Missing definition open tag",
+                """
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+                <dictionary>
+                    <PolyGlotVer>3.6</PolyGlotVer>
+                    <lexicon>
+                        <word>
+                            <wordId>2</wordId>
+                            <pronunciation/>
+                            definition</definition>
+                            <wordProcOverride>F</wordProcOverride>
+                            <autoDeclOverride>F</autoDeclOverride>
+                            <wordRuleOverride>F</wordRuleOverride>
+                        </word>
+                    </lexicon>
+                </dictionary>
+                """,
+                """
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+                <dictionary>
+                    <PolyGlotVer>3.6</PolyGlotVer>
+                    <lexicon>
+                        <word>
+                            <wordId>2</wordId>
+                            <pronunciation/><definition>
+                            definition</definition>
+                            <wordProcOverride>F</wordProcOverride>
+                            <autoDeclOverride>F</autoDeclOverride>
+                            <wordRuleOverride>F</wordRuleOverride>
+                        </word>
+                    </lexicon>
+                </dictionary>
+                """
+            ),
+            Arguments.of(
+                "Missing definition open tag without content",
+                """
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+                <dictionary>
+                    <PolyGlotVer>3.6</PolyGlotVer>
+                    <lexicon>
+                        <word>
+                            <wordId>2</wordId>
+                            <pronunciation/>
+                            </definition>
+                            <wordProcOverride>F</wordProcOverride>
+                            <autoDeclOverride>F</autoDeclOverride>
+                            <wordRuleOverride>F</wordRuleOverride>
+                        </word>
+                    </lexicon>
+                </dictionary>
+                """,
+                """
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+                <dictionary>
+                    <PolyGlotVer>3.6</PolyGlotVer>
+                    <lexicon>
+                        <word>
+                            <wordId>2</wordId>
+                            <pronunciation/>
+                            <definition/>
+                            <wordProcOverride>F</wordProcOverride>
+                            <autoDeclOverride>F</autoDeclOverride>
+                            <wordRuleOverride>F</wordRuleOverride>
+                        </word>
+                    </lexicon>
+                </dictionary>
+                """
+            )
         );
     }
 }
