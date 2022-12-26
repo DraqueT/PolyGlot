@@ -87,8 +87,11 @@ public class XMLRecoveryTool {
                         if (tagStack.contains(startTag)) { // if tag stack contains related opening tag, close all tags back up to opener
                             while (tagStack.contains(startTag)) {
                                 String closer = tagStack.get(tagStack.size() - 1);
+                                // If tag being closed is the current one insert at the end
+                                // Otherwise insert after content of the opening tag
+                                int idx = closer.equals(startTag) ? outputList.size() : outputList.lastIndexOf(closer) + 2;
                                 closer = new StringBuffer(closer).insert(1, "/").toString();
-                                outputList.add(closer);
+                                outputList.add(idx, closer);
                                 tagStack.remove(tagStack.size() - 1);
                             }
                         } 

@@ -176,11 +176,6 @@ public class DictCoreTest {
             core.readFile(PGTUtil.TESTRESOURCES + "missing_no_element.pgd");
             DictCore corruptCore = DummyCore.newCore();
             corruptCore.readFile(PGTUtil.TESTRESOURCES + "missing_closing_elements.pgd");
-            
-            // corrupted core will read corrupted conword *slightly* incorrectly. Corret here.
-            ConWord correctMe = corruptCore.getWordCollection().getNodeById(2);
-            String definition = correctMe.getDefinition();
-            correctMe.setDefinition(definition.substring(0, definition.length() - 3));
 
             assertEquals(core, corruptCore);
         } catch (IOException | IllegalStateException e) {
