@@ -170,7 +170,7 @@ public class DictCoreTest {
     
     @Test
     public void testRecoverMissingClosingXmlTags() {
-        System.out.println("DictCoreTest.testRecoverMissingOpeningXmlTags");
+        System.out.println("DictCoreTest.testRecoverMissingClosingXmlTags");
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "missing_no_element.pgd");
