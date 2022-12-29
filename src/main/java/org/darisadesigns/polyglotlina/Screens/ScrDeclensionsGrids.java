@@ -29,7 +29,6 @@ import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationNode;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationPair;
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -39,6 +38,7 @@ import java.util.Map.Entry;
 import javax.swing.DefaultComboBoxModel;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDeclensionPanelInterface;
 import java.awt.Window;
+import java.awt.event.ItemEvent;
 import javax.swing.JOptionPane;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
@@ -121,11 +121,15 @@ public final class ScrDeclensionsGrids extends PDialog {
     }
 
     private void setupListeners() {
-        cmbDimX.addActionListener((ActionEvent ae) -> {
-            buildWindowBody();
+        cmbDimX.addItemListener((ItemEvent event) -> {
+            if (event.getStateChange() == ItemEvent.SELECTED) {
+                buildWindowBody();
+            }
         });
-        cmbDimY.addActionListener((ActionEvent ae) -> {
-            buildWindowBody();
+        cmbDimY.addItemListener((ItemEvent event) -> {
+            if (event.getStateChange() == ItemEvent.SELECTED) {
+                buildWindowBody();
+            }
         });
     }
 
@@ -232,7 +236,7 @@ public final class ScrDeclensionsGrids extends PDialog {
         int xNode = decMan.getDimensionTemplateIndex(word.getWordTypeId(), (ConjugationNode) cmbDimX.getSelectedItem());
         int yNode = decMan.getDimensionTemplateIndex(word.getWordTypeId(), (ConjugationNode) cmbDimY.getSelectedItem());
 
-        for (String dimId : combDecIds) {
+        for (var dimId : combDecIds) {
             if (dimId == null) {
                 continue;
             }
