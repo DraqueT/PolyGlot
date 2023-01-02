@@ -39,6 +39,7 @@ import org.darisadesigns.polyglotlina.OSHandler.CoreUpdatedListener;
 import org.darisadesigns.polyglotlina.OSHandler.FileReadListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,10 +48,16 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
 import org.darisadesigns.polyglotlina.CustomControls.CoreUpdateSubscriptionInterface;
 import org.darisadesigns.polyglotlina.ManagersCollections.PhraseManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 /**
@@ -366,13 +373,23 @@ public class DictCore {
             CustHandler handler;
             // if override XML value, load from that, otherwise pull from file
             if (overrideXML == null) {
+                // try(InputStream stream = this.osHandler.getIOHandler().getXMLStreamFromPGDFile(_fileName)) {
+                //     this.loadFromXMLStream(stream);
+                // } catch (PolyglotException e) {
+                //     // TODO: handle exception   
+                // }
                 handler = this.osHandler.getIOHandler().getHandlerFromFile(_fileName, this);
                 this.osHandler.getIOHandler().parseHandler(_fileName, handler);
             } else {
+                // try(InputStream stream = new ByteArrayInputStream(overrideXML)) {
+                //     this.loadFromXMLStream(stream);
+                // } catch (PolyglotException e) {
+                //     // TODO: handle exception   
+                // }
                 handler = this.osHandler.getIOHandler().getHandlerFromByteArray(overrideXML, this);
                 this.osHandler.getIOHandler().parseHandlerByteArray(overrideXML, handler);
             }
-            
+
             errorLog += handler.getErrorLog();
             warningLog += handler.getWarningLog();
         } catch (ParserConfigurationException | SAXException | IOException e) {
@@ -539,6 +556,13 @@ public class DictCore {
         lastSaveTime = newSaveTime;
     }
     
+    /**
+     * Writes metadata to the root element of the document. 
+     * 
+     * @param doc Instance of document to create Elements.
+     * @param rootElement Root element of the XML file.
+     * @param saveTime Time to include as save date.
+     */
     private static void writeXMLHeader(Document doc, Element rootElement, Instant saveTime) {
         Element headerElement = doc.createElement(PGTUtil.PGVERSION_XID);
         headerElement.appendChild(doc.createTextNode(PGTUtil.PGT_VERSION));
@@ -547,6 +571,55 @@ public class DictCore {
         headerElement = doc.createElement(PGTUtil.DICTIONARY_SAVE_DATE);
         headerElement.appendChild(doc.createTextNode(saveTime.toString()));
         rootElement.appendChild(headerElement);
+    }
+
+    /**
+     * Loads input stream of XML PGD file to this instance of the core
+     * 
+     * @param inputStream
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws IOException
+     * @throws PolyglotException if there's an error with the format of the file.
+     */
+    public void loadFromXMLStream(InputStream inputStream) throws ParserConfigurationException, SAXException, IOException, PolyglotException {
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        XPath xPath = XPathFactory.newInstance().newXPath();
+        String xPathExpression;
+
+        Document doc = dBuilder.parse(inputStream);
+        doc.getDocumentElement().normalize();
+
+        this.validateXMLVersion(doc);
+
+        try {
+            xPathExpression = "/dictionary/languageProperties";
+            propertiesManager.loadXML((Node)xPath.evaluate(xPathExpression, doc, XPathConstants.NODE));
+        } catch (XPathExpressionException e) {
+            throw new Error("Invalid XPath expression");
+        }
+    }
+
+    /**
+     * Validates the version of a document based on the history of PolyGlot versions.
+     * 
+     * @param doc Valid polyglot document.
+     * @throws PolyglotException
+     */
+    private void validateXMLVersion(Document doc) throws PolyglotException {
+        // test for version number in pgd file, set to 0 if none found (pre 0.6)
+        Node versionNode = doc.getDocumentElement().getElementsByTagName(PGTUtil.PGVERSION_XID).item(0);
+        String versionNumber = versionNode == null ? "0" : versionNode.getTextContent();
+        int fileVersionHierarchy = PGTUtil.getVersionHierarchy(versionNumber);
+        
+        if (fileVersionHierarchy == PGTUtil.INVALID_VERSION) {
+            throw new PolyglotException("Please upgrade PolyGlot. The PGD file you are loading was "
+                        + "written with a newer version with additional features: Ver " + versionNumber + ".");
+        } else if (fileVersionHierarchy < PGTUtil.getVersionHierarchy("0.7.5")) {
+            throw new PolyglotException("Version " + versionNumber + " no longer supported. Load/save with older version of "
+                        + "PolyGlot (0.7.5 through 1.2) to upconvert.");
+        }
     }
 
     /**
