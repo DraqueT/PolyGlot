@@ -180,12 +180,20 @@ public abstract class PropertiesManager {
         return new ArrayList<>(charRep.entrySet());
     }
 
+    public Map<String, String> getCharacterReplacements() {
+        return charRep;
+    }
+
     public void AddEmptyRep() {
         charRep.put("", "");
     }
     
     public void setLocalFontSize(double size) {
         localFontSize = size;
+    }
+
+    public double getLocalFontSize() {
+        return localFontSize;
     }
 
     /**
