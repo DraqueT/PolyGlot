@@ -99,6 +99,15 @@ public interface IOHandler {
     public CustHandler getHandlerFromByteArray(byte[] byteArray, DictCore _core) throws IOException;
 
     /**
+     * Retrieves a stream to the XML file inside a PGD file.
+     * 
+     * @param filePath Path to a PGD file.
+     * @return Input stream for the XML file.
+     * @throws IOException on invalid/corrupt file.
+     */
+    public InputStream getXMLStreamFromPGDFile(String filePath) throws IOException;
+
+    /**
      * returns name of file sans path
      *
      * @param fullPath full path to file

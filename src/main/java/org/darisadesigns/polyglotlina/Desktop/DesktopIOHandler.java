@@ -293,6 +293,23 @@ public final class DesktopIOHandler implements IOHandler {
         }
     }
 
+    @Override
+    public InputStream getXMLStreamFromPGDFile(String _fileName) throws IOException {
+        if (!isFileZipArchive(_fileName)) {
+            throw new IOException("Invalid PGD file");
+        }
+
+        try ( ZipFile zipFile = new ZipFile(_fileName)) {
+            ZipEntry xmlEntry = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
+
+            if (xmlEntry == null) {
+                throw new IOException("PGD file corrupt. Unable to read required file from archive: " + PGTUtil.LANG_FILE_NAME);
+            }
+
+            return zipFile.getInputStream(xmlEntry);
+        }
+    }
+
     /**
      * Opens an image via GUI and returns as buffered image Returns null if user
      * cancels.
