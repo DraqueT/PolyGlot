@@ -30,14 +30,56 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.WebInterface;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXParseException;
 
 /**
  * Contains and manages properties of given language
  * @author draque
  */
 public abstract class PropertiesManager {
+
+    //#region XML tag names
+    private static final String LANG_PROPERTIES_XID = "languageProperties";
+    private static final String FONT_CON_XID = "fontCon";
+    private static final String FONT_LOCAL_XID = "fontLocal";
+    private static final String LANG_PROP_LANG_NAME_XID = "langName";
+    private static final String LANG_PROP_FONT_SIZE_XID = "fontSize";
+    private static final String LANG_PROP_FONT_STYLE_XID = "fontStyle";
+    private static final String LANG_PROP_LOCAL_FONT_SIZE_XID = "localFontSize";
+    private static final String LANG_PROP_ALPHA_ORDER_XID = "alphaOrder";
+    private static final String LANG_PROP_TYPE_MAND_XID = "langPropTypeMandatory";
+    private static final String LANG_PROP_LOCAL_MAND_XID = "langPropLocalMandatory";
+    private static final String LANG_PROP_WORD_UNIQUE_XID = "langPropWordUniqueness";
+    private static final String LANG_PROP_LOCAL_UNIQUE_XID = "langPropLocalUniqueness";
+    private static final String LANG_PROP_IGNORE_CASE_XID = "langPropIgnoreCase";
+    private static final String LANG_PROP_DISABLE_PROC_REGEX = "langPropDisableProcRegex";
+    private static final String LANG_PROP_ENFORCE_RTL_XID = "langPropEnforceRTL";
+    private static final String LANG_PROP_AUTH_COPYRIGHT_XID = "langPropAuthorCopyright";
+    private static final String LANG_PROP_LOCAL_NAME_XID = "langPropLocalLangName";
+    private static final String LANG_PROP_USE_LOCAL_LEX_XID = "langPropUseLocalLexicon";
+    private static final String LANG_PROP_OVERRIDE_REGEX_FONT_XID = "langPropOverrideRegexFont";
+    private static final String LANG_PROP_USE_SIMPLIFIED_CONJ = "langPropUseSimplifiedConjugations";
+    private static final String LANG_PROP_EXPANDED_LEX_LIST_DISP = "expandedLexListDisplay";
+    private static final String LANG_PROP_ZOMPIST_CATEGORIES = "zompistCategories";
+    private static final String LANG_PROP_ZOMPIST_ILLEGAL_CLUSTERS = "zompistIllegalClusters";
+    private static final String LANG_PROP_ZOMPIST_REWRITE_RULES = "zompistRewriteRules";
+    private static final String LANG_PROP_ZOMPIST_SYLLABLES = "zompistSyllables";
+    private static final String LANG_PROP_ZOMPIST_DROPOFF_RATE = "zompistDropoffRate";
+    private static final String LANG_PROP_ZOMPIST_MONOSYLLABLE_FREQUENCY = "zompistMonosyllableFrequency";
+
+    //#region character replacement pair values
+    private static final String LANG_PROP_CHAR_REP_CONTAINER_XID = "langPropCharRep";
+    private static final String LANG_PROPCHAR_REP_NODE_XID = "langPropCharRepNode";
+    private static final String LANG_PROP_CHAR_REP_CHAR_XID = "langPropCharRepCharacter";
+    private static final String LANG_PROP_CHAR_REP_VAL_XID = "langPropCharRepValue";
+    //#endregion
+    //#endregion
+
     protected Integer conFontStyle;
     protected double conFontSize = 12;
     protected double localFontSize = 12;
@@ -426,154 +468,294 @@ public abstract class PropertiesManager {
      * @param rootElement root element of document
      */
     public void writeXML(Document doc, Element rootElement) {
-        Element propContainer = doc.createElement(PGTUtil.LANG_PROPERTIES_XID);
+        Element propContainer = doc.createElement(LANG_PROPERTIES_XID);
         Element wordValue;
         
         rootElement.appendChild(propContainer);
 
         // store font for Conlang words ONLY if no cached font
         if (cachedConFont == null) {
-            wordValue = doc.createElement(PGTUtil.FONT_CON_XID);
+            wordValue = doc.createElement(FONT_CON_XID);
             wordValue.appendChild(doc.createTextNode(getFontConFamily()));
             propContainer.appendChild(wordValue);
         }
 
         // store font style
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_FONT_STYLE_XID);
+        wordValue = doc.createElement(LANG_PROP_FONT_STYLE_XID);
         wordValue.appendChild(doc.createTextNode(conFontStyle.toString()));
         propContainer.appendChild(wordValue);
 
         // store font size
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_FONT_SIZE_XID);
+        wordValue = doc.createElement(LANG_PROP_FONT_SIZE_XID);
         wordValue.appendChild(doc.createTextNode(Double.toString(conFontSize)));
         propContainer.appendChild(wordValue);
         
         // store font size for local language font
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_LOCAL_FONT_SIZE_XID);
+        wordValue = doc.createElement(LANG_PROP_LOCAL_FONT_SIZE_XID);
         wordValue.appendChild(doc.createTextNode(Double.toString(localFontSize)));
         propContainer.appendChild(wordValue);
 
         // store name for conlang
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_LANG_NAME_XID);
+        wordValue = doc.createElement(LANG_PROP_LANG_NAME_XID);
         wordValue.appendChild(doc.createTextNode(langName));
         propContainer.appendChild(wordValue);
 
         // store alpha order for conlang
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_ALPHA_ORDER_XID);
+        wordValue = doc.createElement(LANG_PROP_ALPHA_ORDER_XID);
         wordValue.appendChild(doc.createTextNode(String.join(",", getOrderedAlphaList())));
         propContainer.appendChild(wordValue);
 
         // store option for mandatory Types
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_TYPE_MAND_XID);
+        wordValue = doc.createElement(LANG_PROP_TYPE_MAND_XID);
         wordValue.appendChild(doc.createTextNode(typesMandatory ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
 
         // store option for mandatory Local word
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_LOCAL_MAND_XID);
+        wordValue = doc.createElement(LANG_PROP_LOCAL_MAND_XID);
         wordValue.appendChild(doc.createTextNode(localMandatory ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
 
         // store option for unique local word
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_LOCAL_UNIQUE_XID);
+        wordValue = doc.createElement(LANG_PROP_LOCAL_UNIQUE_XID);
         wordValue.appendChild(doc.createTextNode(localUniqueness ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
 
         // store option for unique conwords
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_WORD_UNIQUE_XID);
+        wordValue = doc.createElement(LANG_PROP_WORD_UNIQUE_XID);
         wordValue.appendChild(doc.createTextNode(wordUniqueness ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
 
         // store option for ignoring case
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_IGNORE_CASE_XID);
+        wordValue = doc.createElement(LANG_PROP_IGNORE_CASE_XID);
         wordValue.appendChild(doc.createTextNode(ignoreCase ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
 
         // store option for disabling regex or pronunciations
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_DISABLE_PROC_REGEX);
+        wordValue = doc.createElement(LANG_PROP_DISABLE_PROC_REGEX);
         wordValue.appendChild(doc.createTextNode(disableProcRegex ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
 
         // store option for enforcing RTL in conlang
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_ENFORCE_RTL_XID);
+        wordValue = doc.createElement(LANG_PROP_ENFORCE_RTL_XID);
         wordValue.appendChild(doc.createTextNode(enforceRTL ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
         
         // store option for overriding the regex display font
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_OVERRIDE_REGEX_FONT_XID);
+        wordValue = doc.createElement(LANG_PROP_OVERRIDE_REGEX_FONT_XID);
         wordValue.appendChild(doc.createTextNode(overrideRegexFont ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
 
         // store option for displaying local words in lexicon
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_USE_LOCAL_LEX_XID);
+        wordValue = doc.createElement(LANG_PROP_USE_LOCAL_LEX_XID);
         wordValue.appendChild(doc.createTextNode(useLocalWordLex ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
 
         // store option for Author and copyright info
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_AUTH_COPYRIGHT_XID);
+        wordValue = doc.createElement(LANG_PROP_AUTH_COPYRIGHT_XID);
         wordValue.appendChild(doc.createTextNode(copyrightAuthorInfo));
         propContainer.appendChild(wordValue);
 
         // store option local language name
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_LOCAL_NAME_XID);
+        wordValue = doc.createElement(LANG_PROP_LOCAL_NAME_XID);
         wordValue.appendChild(doc.createTextNode(localLangName));
         propContainer.appendChild(wordValue);
         
         // store option to use simplified conjugation autogeneration
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_USE_SIMPLIFIED_CONJ);
+        wordValue = doc.createElement(LANG_PROP_USE_SIMPLIFIED_CONJ);
         wordValue.appendChild(doc.createTextNode(useSimplifiedConjugations ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
         
         // store option whether to display both conword and local word in lexicon list
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_EXPANDED_LEX_LIST_DISP);
+        wordValue = doc.createElement(LANG_PROP_EXPANDED_LEX_LIST_DISP);
         wordValue.appendChild(doc.createTextNode(expandedLexListDisplay ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
         
         // store Zompist categories setup
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_ZOMPIST_CATEGORIES);
+        wordValue = doc.createElement(LANG_PROP_ZOMPIST_CATEGORIES);
         wordValue.appendChild(doc.createTextNode(zompistCategories));
         propContainer.appendChild(wordValue);
         
         // store Zompist illegal clusters setup
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_ZOMPIST_ILLEGAL_CLUSTERS);
+        wordValue = doc.createElement(LANG_PROP_ZOMPIST_ILLEGAL_CLUSTERS);
         wordValue.appendChild(doc.createTextNode(zompistIllegalClusters));
         propContainer.appendChild(wordValue);
         
         // store Zompist rewrite rules setup
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_ZOMPIST_REWRITE_RULES);
+        wordValue = doc.createElement(LANG_PROP_ZOMPIST_REWRITE_RULES);
         wordValue.appendChild(doc.createTextNode(zompistRewriteRules));
         propContainer.appendChild(wordValue);
         
         // store Zompist syllables setup
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_ZOMPIST_SYLLABLES);
+        wordValue = doc.createElement(LANG_PROP_ZOMPIST_SYLLABLES);
         wordValue.appendChild(doc.createTextNode(zompistSyllableTypes));
         propContainer.appendChild(wordValue);
         
         // store Zompist syllables setup
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_ZOMPIST_DROPOFF_RATE);
+        wordValue = doc.createElement(LANG_PROP_ZOMPIST_DROPOFF_RATE);
         wordValue.appendChild(doc.createTextNode(Integer.toString(zompistDropoffRate)));
         propContainer.appendChild(wordValue);
         
         // store Zompist syllables setup
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_ZOMPIST_MONOSYLLABLE_FREQUENCY);
+        wordValue = doc.createElement(LANG_PROP_ZOMPIST_MONOSYLLABLE_FREQUENCY);
         wordValue.appendChild(doc.createTextNode(Integer.toString(zompistMonosylableFrequency)));
         propContainer.appendChild(wordValue);
         
         // store all replacement pairs
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_CHAR_REP_CONTAINER_XID);
+        wordValue = doc.createElement(LANG_PROP_CHAR_REP_CONTAINER_XID);
         for (Entry<String, String> pair : getAllCharReplacements()) {
-            Element node = doc.createElement(PGTUtil.LANG_PROPCHAR_REP_NODE_XID);
+            Element node = doc.createElement(LANG_PROPCHAR_REP_NODE_XID);
             
-            Element val = doc.createElement(PGTUtil.LANG_PROP_CHAR_REP_CHAR_XID);
+            Element val = doc.createElement(LANG_PROP_CHAR_REP_CHAR_XID);
             val.appendChild(doc.createTextNode(pair.getKey()));
             node.appendChild(val);
             
-            val = doc.createElement(PGTUtil.LANG_PROP_CHAR_REP_VAL_XID);
+            val = doc.createElement(LANG_PROP_CHAR_REP_VAL_XID);
             val.appendChild(doc.createTextNode(pair.getValue()));
             node.appendChild(val);
             
             wordValue.appendChild(node);
         }
         propContainer.appendChild(wordValue);
+    }
+
+    /**
+     * Loads all dictionary properties from an XML node of language properties.
+     * This method is the reverse of {@link #writeXML}
+     * 
+     * @param node Node of language properties.
+     * @throws SAXParseException if the node is malformed.
+     */
+    public void loadXML(Node node) throws SAXParseException {
+        if (!node.getNodeName().equals(LANG_PROPERTIES_XID)) {
+            throw new SAXParseException("Invalid language properties node", null);
+        }
+        NodeList children = node.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            try {
+                Node child = children.item(i);
+                String textContent = child.getTextContent();
+                switch (child.getNodeName()) {
+                    case FONT_CON_XID:
+                        try {
+                            setFontCon(textContent);
+                        } catch (Exception e) {
+                            // TODO: properly handle this exception
+                            this.core.getOSHandler().getIOHandler().writeErrorLog(e);
+                        }
+                        break;
+                    case LANG_PROP_FONT_STYLE_XID:
+                        setFontStyle(Integer.parseInt(textContent));
+                        break;
+                    case LANG_PROP_FONT_SIZE_XID:
+                        setFontSize(Double.parseDouble(textContent));
+                        break;
+                    case LANG_PROP_LOCAL_FONT_SIZE_XID:
+                        setLocalFontSize(Double.parseDouble(textContent));
+                        break;
+                    case LANG_PROP_LANG_NAME_XID:
+                        setLangName(textContent);
+                        break;
+                    case LANG_PROP_ALPHA_ORDER_XID:
+                        try {
+                            setAlphaOrder(textContent);
+                        } catch (Exception e) {
+                            throw new SAXParseException("Load error: " + e.getLocalizedMessage(), null, e);
+                        }
+                        break;
+                    case LANG_PROP_TYPE_MAND_XID:
+                        setTypesMandatory(textContent.equals(PGTUtil.TRUE));
+                        break;
+                    case LANG_PROP_LOCAL_MAND_XID:
+                        setLocalMandatory(textContent.equals(PGTUtil.TRUE));
+                        break;
+                    case LANG_PROP_LOCAL_UNIQUE_XID:
+                        setLocalUniqueness(textContent.equals(PGTUtil.TRUE));
+                        break;
+                    case LANG_PROP_WORD_UNIQUE_XID:
+                        setWordUniqueness(textContent.equals(PGTUtil.TRUE));
+                        break;
+                    case LANG_PROP_IGNORE_CASE_XID:
+                        setIgnoreCase(textContent.equals(PGTUtil.TRUE));
+                        break;
+                    case LANG_PROP_DISABLE_PROC_REGEX:
+                        setDisableProcRegex(textContent.equals(PGTUtil.TRUE));
+                        break;
+                    case LANG_PROP_ENFORCE_RTL_XID:
+                        setEnforceRTL(textContent.equals(PGTUtil.TRUE));
+                        break;
+                    case LANG_PROP_OVERRIDE_REGEX_FONT_XID:
+                        setOverrideRegexFont(textContent.equals(PGTUtil.TRUE));
+                        break;
+                    case LANG_PROP_USE_LOCAL_LEX_XID:
+                        setUseLocalWordLex(textContent.equals(PGTUtil.TRUE));
+                        break;
+                    case LANG_PROP_AUTH_COPYRIGHT_XID:
+                        setCopyrightAuthorInfo(textContent);
+                        break;
+                    case LANG_PROP_LOCAL_NAME_XID:
+                        setLocalLangName(textContent);
+                        break;
+                    case LANG_PROP_USE_SIMPLIFIED_CONJ:
+                        setUseSimplifiedConjugations(textContent.equals(PGTUtil.TRUE));
+                        break;
+                    case LANG_PROP_EXPANDED_LEX_LIST_DISP:
+                        setExpandedLexListDisplay(textContent.equals(PGTUtil.TRUE));
+                        break;
+                    case LANG_PROP_ZOMPIST_CATEGORIES:
+                        setZompistCategories(textContent);
+                        break;
+                    case LANG_PROP_ZOMPIST_ILLEGAL_CLUSTERS:
+                        setZompistIllegalClusters(textContent);
+                        break;
+                    case LANG_PROP_ZOMPIST_REWRITE_RULES:
+                        setZompistRewriteRules(textContent);
+                        break;
+                    case LANG_PROP_ZOMPIST_SYLLABLES:
+                        setZompistSyllableTypes(textContent);
+                        break;
+                    case LANG_PROP_ZOMPIST_DROPOFF_RATE:
+                        setZompistDropoffRate(Integer.parseInt(textContent));
+                        break;
+                    case LANG_PROP_ZOMPIST_MONOSYLLABLE_FREQUENCY:
+                        setZompistMonosylableFrequency(Integer.parseInt(textContent));
+                        break;
+                    case LANG_PROP_CHAR_REP_CONTAINER_XID:
+                        NodeList replacementNodes = child.getChildNodes();
+                        clearCharacterReplacement();
+                        for (int idx = 0; idx < replacementNodes.getLength(); idx++) {
+                            Node replacement = replacementNodes.item(idx);
+                            /* Ignore extra nodes */
+                            if (!replacement.getNodeName().equals(LANG_PROPCHAR_REP_NODE_XID)) continue;
+
+                            NodeList replacementValues = replacement.getChildNodes();
+                            String key = "";
+                            String value = "";
+                            for (int j = 0; j < replacementValues.getLength(); j++) {
+                                textContent = replacementValues.item(j).getTextContent();
+                                switch(replacementValues.item(j).getNodeName()) {
+                                    case LANG_PROP_CHAR_REP_CHAR_XID:
+                                        key = textContent;
+                                        break;
+                                    case LANG_PROP_CHAR_REP_VAL_XID:
+                                        value = textContent;
+                                        break;
+                                    default:
+                                        /* Ignore extra nodes */
+                                        break;
+                                }
+                            }
+                            addCharacterReplacement(key, value);
+                        }
+                        break;
+                    default:
+                        /* Ignore extra nodes */
+                        break;
+                }
+            } catch (DOMException e) {
+                // TODO: properly handle this exception
+                this.core.getOSHandler().getIOHandler().writeErrorLog(e);
+            }
+        }
     }
 
     /**
