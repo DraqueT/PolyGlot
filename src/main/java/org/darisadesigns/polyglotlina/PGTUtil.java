@@ -38,6 +38,7 @@ public class PGTUtil {
 
     // CONSTANTS
     protected static  final Map<String, Integer> VERSION_HIERARCHY;
+    public static final int INVALID_VERSION = 9999;
     public static final String BUILD_DATE_TIME;
     public static final String DICTIONARY_XID = "dictionary";
     public static final String PGVERSION_XID = "PolyGlotVer";
@@ -580,7 +581,7 @@ public class PGTUtil {
      * @return lower numbers are lower 
      */
     public static int getVersionHierarchy(String version) {
-        int ret = 9999; // version not found is presumed to be higher than any given version in records
+        int ret = INVALID_VERSION; // version not found is presumed to be higher than any given version in records
         
         if (VERSION_HIERARCHY.containsKey(version)) {
             ret = VERSION_HIERARCHY.get(version);
