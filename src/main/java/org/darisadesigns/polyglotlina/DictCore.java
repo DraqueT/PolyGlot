@@ -352,7 +352,7 @@ public class DictCore {
         try {
             this.osHandler.getIOHandler().loadImageAssets(imageCollection, _fileName);
         } catch (Exception e) {
-            throw new IOException("Image loading error: " + e.getLocalizedMessage(), e);
+            warningLog += "Image loading error: " + e.getLocalizedMessage() + "\n";
         }
         
         try {
@@ -376,6 +376,7 @@ public class DictCore {
             errorLog += handler.getErrorLog();
             warningLog += handler.getWarningLog();
         } catch (ParserConfigurationException | SAXException | IOException e) {
+            // failure to load the XML is the only thing that should lead to an overally file load exception.
             throw new IOException(e.getMessage(), e);
         }
 

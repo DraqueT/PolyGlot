@@ -456,7 +456,7 @@ public final class ScrMainMenu extends PFrame {
             core.readFile(fileName);
             
             // Tests are performed so quickly that this locks up file access
-            if (!PGTUtil.isInJUnitTest() || PGTUtil.isUITestingMode()) {
+            if (!PGTUtil.isInJUnitTest() && !PGTUtil.isUITestingMode()) {
                 new Thread() {
                     @Override
                     public void run() {
@@ -465,6 +465,7 @@ public final class ScrMainMenu extends PFrame {
                             loadState.readFile(fileName, null, false);
                             core.setLoadState(loadState);
                         } catch (IOException | IllegalStateException e) {
+                            // user informed below
                             core.getOSHandler().getIOHandler().writeErrorLog(e, "On load of comparison file. Why failure here and not immediately above?");
                         }
                     }
@@ -484,7 +485,7 @@ public final class ScrMainMenu extends PFrame {
                     + "\n\n " + e.getMessage());
         } catch (IllegalStateException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getOSHandler().getInfoBox().warning("File Read Problems", "Problems reading file:\n"
+            core.getOSHandler().getInfoBox().warning("File Read Warning", "Problems reading file:\n"
                     + e.getLocalizedMessage());
         }
 
@@ -2184,9 +2185,13 @@ public final class ScrMainMenu extends PFrame {
     }//GEN-LAST:event_mnuSaveAsActionPerformed
 
     private void mnuOpenLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuOpenLocalActionPerformed
-        pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        open();
-        pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
+        try {
+            pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            open();
+        } finally {
+            pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
+        }
+        
         updateAllValues(core);
     }//GEN-LAST:event_mnuOpenLocalActionPerformed
 
