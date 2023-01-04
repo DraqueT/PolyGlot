@@ -60,14 +60,20 @@ public class XMLRecoveryTool {
         }
     }
     
+    /**
+     * Fixes errors of simple tags.  
+     * i.e. tags that only contain a value and not other tags inside it
+     */
     private void fixMissingTags() {
         var tagStack = new ArrayList<String>();
         outputList = new ArrayList<>();
         boolean failures = false;
+        var prevNonBlankToken = "";
         
         
         // first element is header
         outputList.add(tokenList.get(0));
+        prevNonBlankToken = tokenList.get(1);
         
         for (int i = 1; i < tokenList.size(); i++) {
             String tag = tokenList.get(i);
@@ -81,14 +87,30 @@ public class XMLRecoveryTool {
                     if (!tagStack.isEmpty() && startTag.equals(tagStack.get(tagStack.size() - 1))) {
                         // tag is closed correctly. Remove from stack
                         tagStack.remove(tagStack.size() - 1);
+                    } else if (!tagStack.isEmpty() && !tagStack.contains(startTag)) {
+                        // Opening tag is missing
+                        failures = true;
+                        if (prevNonBlankToken.startsWith("<") && prevNonBlankToken.endsWith(">")) {
+                            // Previous token is a tag, no content for this tag (insert "<tag/>")
+                            outputList.add(new StringBuffer(startTag).insert(startTag.length() - 1, "/").toString());
+                        } else {
+                            // Insert opening tag before content
+                            outputList.add(outputList.size() - 1, startTag);
+                            // Also include closing tag
+                            outputList.add(new StringBuffer(startTag).insert(1, "/").toString());
+                        }
+                        continue;
                     } else { // Either an opening or closing tag is missing. Mark with failures
                         failures = true;
 
                         if (tagStack.contains(startTag)) { // if tag stack contains related opening tag, close all tags back up to opener
                             while (tagStack.contains(startTag)) {
                                 String closer = tagStack.get(tagStack.size() - 1);
+                                // If tag being closed is the current one insert at the end
+                                // Otherwise insert after content of the opening tag
+                                int idx = closer.equals(startTag) ? outputList.size() : outputList.lastIndexOf(closer) + 2;
                                 closer = new StringBuffer(closer).insert(1, "/").toString();
-                                outputList.add(closer);
+                                outputList.add(idx, closer);
                                 tagStack.remove(tagStack.size() - 1);
                             }
                         } 
@@ -97,6 +119,9 @@ public class XMLRecoveryTool {
                         continue;
                     }
                 }
+            }
+            if(!tag.isBlank()) {
+                prevNonBlankToken = tag;
             }
             
             outputList.add(tag);
