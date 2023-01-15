@@ -36,6 +36,7 @@ import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
 import org.darisadesigns.polyglotlina.ManagersCollections.RomanizationManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.TranslationManager;
 import org.darisadesigns.polyglotlina.Nodes.EtyExternalParent;
 import org.darisadesigns.polyglotlina.Nodes.ToDoNode;
 import org.darisadesigns.polyglotlina.Nodes.WordClassValue;
@@ -97,7 +98,7 @@ public final class CustHandlerFactory {
     private static CustHandler get075orHigherHandler(final DictCore core, final int versionHierarchy) {
         return new CustHandler() {
 
-            private StringBuilder stringBuilder;
+            private StringBuilder stringBuilder = new StringBuilder();
             PronunciationNode proBuffer;
             PronunciationNode romBuffer;
             String charRepCharBuffer = "";
@@ -236,7 +237,7 @@ public final class CustHandlerFactory {
 
             @Override
             public void startElement(String uri, String localName, String qName, Attributes attributes) {
-                stringBuilder = new StringBuilder();
+                stringBuilder.setLength(0);
 
                 if (qName.equalsIgnoreCase(PGTUtil.DICTIONARY_SAVE_DATE)) {
                     blastSave = true;
@@ -493,6 +494,7 @@ public final class CustHandlerFactory {
             @Override
             public void endElement(String uri, String localName,
                     String qName) throws SAXException {
+                String builderValue = stringBuilder.toString();
 
                 if (qName.equalsIgnoreCase(PGTUtil.DICTIONARY_SAVE_DATE)) {
                     blastSave = false;
@@ -543,7 +545,7 @@ public final class CustHandlerFactory {
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_RULEOVERRIDE_XID)) {
                     bwordRuleOverride = false;
                 } else if (qName.equalsIgnoreCase(PGTUtil.WORD_CLASS_AND_VALUE_XID)) {
-                    String[] classValIds = stringBuilder.toString().split(",");
+                    String[] classValIds = builderValue.split(",");
                     int classId = Integer.parseInt(classValIds[0]);
                     int valId = Integer.parseInt(classValIds[1]);
                     core.getWordCollection().getBufferWord().setClassValue(classId, valId);
@@ -866,13 +868,16 @@ public final class CustHandlerFactory {
                     procMan.addSyllable(tmpString);
                 } else if (qName.equalsIgnoreCase(PGTUtil.PRO_GUIDE_COMPOSITION_SYLLABLE)) {
                     bsyllableComposition = false;
+                } else if (qName.equalsIgnoreCase(TranslationManager.TMP_FILENAME_XID)) {
+                    core.getTranslationManager().setTmpFileName(builderValue);
                 }
             }
 
             @Override
             public void characters(char[] ch, int start, int length)
                     throws SAXException {
-
+                stringBuilder.append(ch, start, length);
+                
                 if (blastSave) {
                     core.setLastSaveTime(Instant.parse(new String(ch, start, length)));
                 } else if (blocalWord) {
@@ -907,7 +912,7 @@ public final class CustHandlerFactory {
                             .setRulesOverride(new String(ch, start, length).equals(PGTUtil.TRUE));
                     bwordRuleOverride = false;
                 } else if (bclassVal) {
-                    stringBuilder.append(new String(ch, start, length));
+                    // stringBuilder.append(new String(ch, start, length));
                 } else if (bwordClassTextVal) {
                     if (ruleIdBuffer == 0) {
                         String[] classValIds = new String(ch, start, length).split(",");

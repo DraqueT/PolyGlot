@@ -34,6 +34,7 @@ import org.darisadesigns.polyglotlina.ManagersCollections.ImageCollection;
 import org.darisadesigns.polyglotlina.ManagersCollections.ReversionManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.RomanizationManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.ToDoManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.TranslationManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.WordClassCollection;
 import org.darisadesigns.polyglotlina.OSHandler.CoreUpdatedListener;
 import org.darisadesigns.polyglotlina.OSHandler.FileReadListener;
@@ -75,6 +76,7 @@ public class DictCore {
     private ReversionManager reversionManager;
     private PhraseManager phraseManager;
     private ToDoManager toDoManager;
+    private TranslationManager translationManager;
     private final OSHandler osHandler;
     private boolean curLoading = false;
     private Instant lastSaveTime = Instant.MIN;
@@ -115,6 +117,7 @@ public class DictCore {
             reversionManager = new ReversionManager(this);
             toDoManager = new ToDoManager();
             phraseManager = new PhraseManager(this);
+            translationManager = new TranslationManager(this);
 
             PAlphaMap<String, Integer> alphaOrder = propertiesManager.getAlphaOrder();
             subscribers = new ArrayList<>();
@@ -523,6 +526,7 @@ public class DictCore {
         grammarManager.writeXML(doc, rootElement);
         toDoManager.writeXML(doc, rootElement);
         phraseManager.writeXML(doc, rootElement);
+        translationManager.writeXML(doc, rootElement);
 
         // write family entries
         rootElement.appendChild(famManager.writeToSaveXML(doc));
@@ -608,6 +612,10 @@ public class DictCore {
     
     public PhraseManager getPhraseManager() {
         return phraseManager;
+    }
+
+    public TranslationManager getTranslationManager() {
+        return this.translationManager;
     }
     
     /**
