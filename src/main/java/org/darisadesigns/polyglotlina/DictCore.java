@@ -411,6 +411,13 @@ public class DictCore {
             warningLog += e.getLocalizedMessage() + "\n";
         }
 
+        try {
+            this.osHandler.getIOHandler().loadTranslationDB(translationManager, _fileName);
+        } catch (IOException e) {
+            this.osHandler.getIOHandler().writeErrorLog(e);
+            warningLog += e.getLocalizedMessage() + "\n";
+        }
+
         curLoading = false;
 
         if (!errorLog.trim().isEmpty()) {
