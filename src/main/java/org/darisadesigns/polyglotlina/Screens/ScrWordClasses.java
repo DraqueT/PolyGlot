@@ -460,8 +460,10 @@ public final class ScrWordClasses extends PFrame {
         setBackground(new java.awt.Color(255, 255, 255));
 
         jSplitPane1.setDividerLocation(150);
+        jSplitPane1.setPreferredSize(new java.awt.Dimension(200, 200));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setPreferredSize(new java.awt.Dimension(85, 200));
 
         lstProperties.setToolTipText("Properties (such as gender) of words in your language");
         lstProperties.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
@@ -512,6 +514,7 @@ public final class ScrWordClasses extends PFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jPanel1.setToolTipText("");
+        jPanel1.setPreferredSize(new java.awt.Dimension(333, 200));
 
         txtName.setToolTipText("Name of property");
 
@@ -620,11 +623,11 @@ public final class ScrWordClasses extends PFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
         );
 
         pack();
