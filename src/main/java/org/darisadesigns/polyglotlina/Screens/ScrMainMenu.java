@@ -119,6 +119,7 @@ public final class ScrMainMenu extends PFrame {
     private final List<Window> childWindows = new ArrayList<>();
     private Thread longRunningSetup;
     private boolean menuReady = false;
+    private boolean isLoading = false;
 
     /**
      * Creates new form ScrMainMenu
@@ -199,6 +200,23 @@ public final class ScrMainMenu extends PFrame {
         longRunningSetup.start();
     }
 
+    /**
+     * Helper method to lock the main screen for loading operations.
+     * (Prevents the user from changing screens).
+     * 
+     * @param b 
+     */
+    public void setLoading(boolean b) {
+        this.isLoading = b;
+        setCursor(b ? Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR) : Cursor.getDefaultCursor());
+        for (var container : this.pnlSideButtons.getComponents()) {
+            container.setEnabled(!b);
+        }
+        for (var container : this.jMenuBar1.getComponents()) {
+            container.setEnabled(!b);
+        }
+    }
+    
     public Thread getSetupThread() {
         return longRunningSetup;
     }
@@ -1545,6 +1563,7 @@ public final class ScrMainMenu extends PFrame {
         btnQuiz = new PButton(nightMode);
         btnPhrasebook = new PButton(nightMode);
         btnZompistWordGenerator = new PButton(nightMode);
+        btnTranslate = new PButton(nightMode);
         jScrollPane2 = new javax.swing.JScrollPane();
         pnlMain = new javax.swing.JPanel() {
             @Override
@@ -1722,6 +1741,15 @@ public final class ScrMainMenu extends PFrame {
             }
         });
 
+        btnTranslate.setText("Translate");
+        btnTranslate.setToolTipText("Translate from and to your conlang");
+        btnTranslate.setPreferredSize(new java.awt.Dimension(141, 29));
+        btnTranslate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTranslateActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlSideButtonsLayout = new javax.swing.GroupLayout(pnlSideButtons);
         pnlSideButtons.setLayout(pnlSideButtonsLayout);
         pnlSideButtonsLayout.setHorizontalGroup(
@@ -1738,7 +1766,8 @@ public final class ScrMainMenu extends PFrame {
                     .addComponent(btnPhonology, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnPhrasebook, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnProp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnQuiz, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnQuiz, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnTranslate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnlSideButtonsLayout.setVerticalGroup(
@@ -1764,7 +1793,9 @@ public final class ScrMainMenu extends PFrame {
                 .addComponent(btnProp, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnQuiz)
-                .addContainerGap(127, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnTranslate, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(99, Short.MAX_VALUE))
         );
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
@@ -1873,7 +1904,7 @@ public final class ScrMainMenu extends PFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(pnlSideButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2438,6 +2469,14 @@ public final class ScrMainMenu extends PFrame {
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnPhrasebookActionPerformed
 
+    private void btnTranslateActionPerformed(java.awt.event.ActionEvent evt) {
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        saveAllValues();
+        ScrTranslate s = new ScrTranslate(core);
+        changeScreen(s, s.getWindow(), (PButton) evt.getSource());
+        setCursor(Cursor.getDefaultCursor());
+    }
+    
     private void mnuUnpackLanguageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuUnpackLanguageActionPerformed
         unpackLanguage();
     }//GEN-LAST:event_mnuUnpackLanguageActionPerformed
@@ -2464,6 +2503,7 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JButton btnPos;
     private javax.swing.JButton btnProp;
     private javax.swing.JButton btnQuiz;
+    private javax.swing.JButton btnTranslate;
     private javax.swing.JButton btnZompistWordGenerator;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
