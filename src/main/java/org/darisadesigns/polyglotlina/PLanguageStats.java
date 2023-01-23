@@ -203,7 +203,7 @@ public final class PLanguageStats {
     private static boolean testCanRun(DictCore core) {
         if (!core.getPropertiesManager().isAlphabetComplete()) {
             core.getOSHandler().infoBox.warning("Unable to Calculate Statistics", 
-                    "Please complete aphabetic order before runing statistical analysis.");
+                    "Please complete alphabetic order before runing statistical analysis.");
             return false;
         }
         
