@@ -323,97 +323,102 @@ public class DesktopOptionsManager {
             String loadProblems = "";
 
             for (String line; (line = br.readLine()) != null;) {
-                String[] bothVal = line.split("=");
+                try {
+                    String[] bothVal = line.split("=");
 
-                // if no value set, move on
-                if (bothVal.length == 1) {
-                    continue;
-                }
-
-                // if multiple values, something has gone wrong
-                if (bothVal.length != 2) {
-                    throw new Exception("PolyGlot.ini corrupt or unreadable.");
-                }
-
-                switch (bothVal[0]) {
-                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_LAST_FILES -> {
-                        for (String last : bothVal[1].split(",")) {
-                            pushRecentFile(last);
-                        }
+                    // if no value set, move on
+                    if (bothVal.length == 1) {
+                        continue;
                     }
-                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_SCREENS_OPEN -> {
-                        for (String screen : bothVal[1].split(",")) {
-                            addScreenUp(screen);
-                        }
+
+                    // if multiple values, something has gone wrong
+                    if (bothVal.length != 2) {
+                        throw new Exception("Unreadable value in PolyGlot.ini" + (bothVal.length > 0 ? ": " + bothVal[0] : "."));
                     }
-                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_SCREEN_POS -> {
-                        for (String curPosSet : bothVal[1].split(",")) {
-                            if (curPosSet.isEmpty()) {
-                                continue;
-                            }
 
-                            String[] splitSet = curPosSet.split(":");
-
-                            if (splitSet.length != 3) {
-                                loadProblems += "Malformed Screen Position: " + curPosSet + "\n";
-                                continue;
+                    switch (bothVal[0]) {
+                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_LAST_FILES -> {
+                            for (String last : bothVal[1].split(",")) {
+                                pushRecentFile(last);
                             }
-                            Point p = new Point(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
-                            setScreenPosition(splitSet[0], p);
                         }
-                    }
-                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_SCREENS_SIZE -> {
-                        for (String curSizeSet : bothVal[1].split(",")) {
-                            if (curSizeSet.isEmpty()) {
-                                continue;
+                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_SCREENS_OPEN -> {
+                            for (String screen : bothVal[1].split(",")) {
+                                addScreenUp(screen);
                             }
-
-                            String[] splitSet = curSizeSet.split(":");
-
-                            if (splitSet.length != 3) {
-                                loadProblems += "Malformed Screen Size: " + curSizeSet + "\n";
-                                continue;
-                            }
-                            Dimension d = new Dimension(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
-                            setScreenSize(splitSet[0], d);
                         }
-                    }
-                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_DIVIDER_POSITION -> {
-                        for (String curPosition : bothVal[1].split(",")) {
-                            if (curPosition.isEmpty()) {
-                                continue;
-                            }
+                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_SCREEN_POS -> {
+                            for (String curPosSet : bothVal[1].split(",")) {
+                                if (curPosSet.isEmpty()) {
+                                    continue;
+                                }
 
-                            String[] splitSet = curPosition.split(":");
+                                String[] splitSet = curPosSet.split(":");
 
-                            if (splitSet.length != 2) {
-                                loadProblems += "Malformed divider position: " + curPosition + "\n";
-                                continue;
+                                if (splitSet.length != 3) {
+                                    loadProblems += "Malformed Screen Position: " + curPosSet + "\n";
+                                    continue;
+                                }
+                                Point p = new Point(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
+                                setScreenPosition(splitSet[0], p);
                             }
-                            Integer position = Integer.parseInt(splitSet[1]);
-                            setDividerPosition(splitSet[0], position);
                         }
+                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_SCREENS_SIZE -> {
+                            for (String curSizeSet : bothVal[1].split(",")) {
+                                if (curSizeSet.isEmpty()) {
+                                    continue;
+                                }
+
+                                String[] splitSet = curSizeSet.split(":");
+
+                                if (splitSet.length != 3) {
+                                    loadProblems += "Malformed Screen Size: " + curSizeSet + "\n";
+                                    continue;
+                                }
+                                Dimension d = new Dimension(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
+                                setScreenSize(splitSet[0], d);
+                            }
+                        }
+                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_DIVIDER_POSITION -> {
+                            for (String curPosition : bothVal[1].split(",")) {
+                                if (curPosition.isEmpty()) {
+                                    continue;
+                                }
+
+                                String[] splitSet = curPosition.split(":");
+
+                                if (splitSet.length != 2) {
+                                    loadProblems += "Malformed divider position: " + curPosition + "\n";
+                                    continue;
+                                }
+                                Integer position = Integer.parseInt(splitSet[1]);
+                                setDividerPosition(splitSet[0], position);
+                            }
+                        }
+                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_MSBETWEENSAVES ->
+                            setMsBetweenSaves(Integer.parseInt(bothVal[1]));
+                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_AUTO_RESIZE ->
+                            setAnimateWindows(bothVal[1].equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.TRUE));
+                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_MAXIMIZED ->
+                            setMaximized(bothVal[1].equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.TRUE));
+                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_NIGHT_MODE ->
+                            setNightMode(bothVal[1].equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.TRUE));
+                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_REVERSIONS_COUNT ->
+                            setMaxReversionCount(Integer.parseInt(bothVal[1]));
+                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_TODO_DIV_LOCATION ->
+                            setToDoBarPosition(Integer.parseInt(bothVal[1]));
+                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_UI_SCALE ->
+                            setUiScale(Double.parseDouble(bothVal[1]));
+                        default -> {}
                     }
-                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_MSBETWEENSAVES ->
-                        setMsBetweenSaves(Integer.parseInt(bothVal[1]));
-                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_AUTO_RESIZE ->
-                        setAnimateWindows(bothVal[1].equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.TRUE));
-                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_MAXIMIZED ->
-                        setMaximized(bothVal[1].equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.TRUE));
-                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_NIGHT_MODE ->
-                        setNightMode(bothVal[1].equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.TRUE));
-                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_REVERSIONS_COUNT ->
-                        setMaxReversionCount(Integer.parseInt(bothVal[1]));
-                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_TODO_DIV_LOCATION ->
-                        setToDoBarPosition(Integer.parseInt(bothVal[1]));
-                    case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_UI_SCALE ->
-                        setUiScale(Double.parseDouble(bothVal[1]));
-                    default -> {}
+                } catch (Exception e) {
+                    loadProblems += e.getLocalizedMessage() + "\n";
                 }
             }
 
             if (!loadProblems.isEmpty()) {
-                throw new Exception("Problems loading configuration file: \n" + loadProblems);
+                throw new DesktopOptionsManagerException("Problems encountered when loading configuration file.\n" 
+                        + "Corrupted values discarded: \n" + loadProblems);
             }
         }
     }

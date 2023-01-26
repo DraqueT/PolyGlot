@@ -26,6 +26,7 @@ import java.io.File;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.ManagersCollections.OptionsManagerTest;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
@@ -68,7 +69,6 @@ public class DesktopOptionsManagerTest {
 
             boolean animatedExpected = true;
             int reversionCountExpected = 13;
-            double menuFontExpected = 16;
             boolean nightModeExpected = true;
             Point expectedScreenPosition = new Point(13, 42);
             Dimension expectedScreenDimension = new Dimension(69, 420);
@@ -114,6 +114,48 @@ public class DesktopOptionsManagerTest {
         } finally {
             // clean up
             new File(PGTUtil.TESTRESOURCES + PGTUtil.POLYGLOT_INI).delete();
+        }
+    }
+    
+    @Test
+    public void testloadCorruptedOptionsIni() {
+        System.out.println("DesktopOptionsManager.testloadCorruptedOptionsIni");
+        
+        try {
+            String testScreenName = "Silly Sergal Merp Screen";
+
+            boolean animatedExpected = true;
+            boolean expectedException = false;
+            int reversionCountExpected = 13;
+            boolean nightModeExpected = true;
+            Point expectedScreenPosition = new Point(13, 42);
+            Dimension expectedScreenDimension = new Dimension(69, 420);
+            int toDoBarPositionExpected = 666;
+            int autoSavMs = 12345678;
+
+            // create new core to load corrupted values into...
+            DictCore core = DummyCore.newCore();
+            DesktopOptionsManager opt = PolyGlot.getPolyGlot().getOptionsManager();
+            
+            try {
+                opt.loadOptionsIni(core.getWorkingDirectory().getAbsolutePath() + File.separator + "iniCorrupted");
+            } catch (DesktopOptionsManagerException e) {
+                expectedException = true;
+            }
+
+            assertTrue(expectedException);
+            assertEquals(animatedExpected, opt.isAnimateWindows());
+            assertEquals(reversionCountExpected, opt.getMaxReversionCount());
+            assertEquals(nightModeExpected, opt.isNightMode());
+            assertEquals(expectedScreenPosition, opt.getScreenPosition(testScreenName));
+            assertEquals(expectedScreenDimension, opt.getScreenSize(testScreenName));
+            assertEquals(toDoBarPositionExpected, opt.getToDoBarPosition());
+            assertEquals(toDoBarPositionExpected, opt.getDividerPosition(testScreenName));
+            assertTrue(opt.isMaximized());
+            assertEquals(autoSavMs, opt.getMsBetweenSaves());
+        } catch (Exception e) {
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            fail(e);
         }
     }
 }
