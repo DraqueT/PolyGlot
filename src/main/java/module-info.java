@@ -4,8 +4,10 @@ module org.darisadesigns.polyglotlina.polyglot {
     requires javafx.controls;
     requires javafx.media;
     requires javafx.swing;
+    requires javafx.web;
     requires java.desktop;
     requires java.logging;
+    requires java.sql;
     requires java.xml;
     requires jdk.charsets;
     requires jsr305; //AUT - fixed with module injector - only needed for jsoup

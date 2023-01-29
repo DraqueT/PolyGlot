@@ -23,6 +23,8 @@ import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.LogoCollection;
 import org.darisadesigns.polyglotlina.ManagersCollections.ImageCollection;
 import org.darisadesigns.polyglotlina.ManagersCollections.ReversionManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.TranslationManager;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -204,8 +206,16 @@ public interface IOHandler {
      * @param fileName full path of polyglot archive
      * @throws IOException on read error
      */
-    public void loadReversionStates(ReversionManager reversionManager,
-            String fileName) throws IOException;
+    public void loadReversionStates(ReversionManager reversionManager, String fileName) throws IOException;
+
+    /**
+     * Loads SQLite DB file from a PolyGlot file.  
+     * 
+     * @param translationManager Translation manager to retrieve settings of DB file.
+     * @param filePath full path of polyglot archive
+     * @throws IOException on read error
+     */
+    public void loadTranslationDB(TranslationManager translationManager, String filePath) throws IOException;
 
     /**
      * Exports font in PGD to external file

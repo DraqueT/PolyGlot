@@ -28,6 +28,7 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.ManagersCollections.ImageCollection;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.ReversionManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.TranslationManager;
 import org.darisadesigns.polyglotlina.Nodes.ImageNode;
 import org.darisadesigns.polyglotlina.Nodes.ReversionNode;
 import java.awt.Desktop;
@@ -530,6 +531,7 @@ public final class DesktopIOHandler implements IOHandler {
                 writeLog += writeImagesToArchive(out, core);
                 writeLog += writeWavToArchive(out, core);
                 writeLog += writePriorStatesToArchive(out, core);
+                writeLog += writeTranslationDBToArchive(out, core);
 
                 out.finish();
             }
@@ -733,6 +735,24 @@ public final class DesktopIOHandler implements IOHandler {
         return writeLog;
     }
 
+    private String writeTranslationDBToArchive(ZipOutputStream out, DictCore core) {
+        String writeLog = "";
+        String tmpFileName = core.getTranslationManager().getTmpFileName();
+        File dir = core.getOSHandler().getWorkingDirectory();
+        String dbPath = "";
+		try {
+            dbPath = dir.getCanonicalPath() + File.separator + tmpFileName;
+            out.putNextEntry(new ZipEntry(TranslationManager.ZIP_FILE_NAME));
+            try (InputStream dbInput = new FileInputStream(dbPath)) {
+                dbInput.transferTo(out);
+            }
+            out.closeEntry();
+        } catch (IOException e) {
+            writeLog = "Unable to save translations DB.\n";
+        }
+        return writeLog;
+    }
+
     /**
      * Tests whether a file at a particular location exists. Wrapped to avoid IO
      * code outside this file
@@ -851,6 +871,24 @@ public final class DesktopIOHandler implements IOHandler {
             // remember to load latest state in addition to all prior ones
             reversion = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
             reversionManager.addVersionToEnd(streamToByetArray(zipFile.getInputStream(reversion)));
+        }
+    }
+
+    @Override
+    public void loadTranslationDB(TranslationManager translationManager, String filePath) throws IOException {
+        ZipFile zipFile = new ZipFile(filePath);
+        try (zipFile) {
+            ZipEntry translationDB = zipFile.getEntry(TranslationManager.ZIP_FILE_NAME);
+
+            if (null == translationDB) return;
+
+            File dir = translationManager.getCore().getOSHandler().getWorkingDirectory();
+            String dbPath = dir.getCanonicalPath() + File.separator + translationManager.getTmpFileName();
+            OutputStream tmpFileStream = new FileOutputStream(dbPath);
+            try (tmpFileStream) {
+                zipFile.getInputStream(translationDB).transferTo(tmpFileStream);
+                translationManager.setIsInitialized(true);
+            }
         }
     }
 

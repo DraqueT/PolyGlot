@@ -335,7 +335,7 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="pnlToDoSplit" alignment="0" pref="464" max="32767" attributes="0"/>
+          <Component id="pnlToDoSplit" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -430,6 +430,7 @@
                               <Component id="btnPhrasebook" alignment="0" max="32767" attributes="0"/>
                               <Component id="btnProp" max="32767" attributes="0"/>
                               <Component id="btnQuiz" alignment="0" max="32767" attributes="0"/>
+                              <Component id="btnTranslate" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -458,7 +459,9 @@
                           <Component id="btnProp" min="-2" pref="28" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="btnQuiz" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="127" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="btnTranslate" min="-2" pref="28" max="-2" attributes="0"/>
+                          <EmptySpace pref="99" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -582,6 +585,21 @@
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnZompistWordGeneratorActionPerformed"/>
+                  </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode)"/>
+                  </AuxValues>
+                </Component>
+                <Component class="javax.swing.JButton" name="btnTranslate">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Translate"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Translate from and to your conlang"/>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[141, 29]"/>
+                    </Property>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTranslateActionPerformed"/>
                   </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PButton(nightMode)"/>
