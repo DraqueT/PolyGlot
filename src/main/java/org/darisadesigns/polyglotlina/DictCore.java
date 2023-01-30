@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -492,54 +492,63 @@ public class DictCore {
      */
     public void writeFile(String _fileName, boolean writeToReversionMgr)
             throws ParserConfigurationException, TransformerException, IOException {
-        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-        Instant newSaveTime = Instant.now();
+        PGTUtil.waitForWritePermission();
         
-        // clean up etymological entries which might be orphaned
-        etymologyManager.cleanBrokenEtymologyRoots();
+        try {
+            PGTUtil.claimWriteLock();
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+            Instant newSaveTime = Instant.now();
 
-        // root elements
-        Document doc = docBuilder.newDocument();
-        Element rootElement = doc.createElement(PGTUtil.DICTIONARY_XID);
-        doc.appendChild(rootElement);
-        
-        // store system info for troubleshooting
-        Element sysInfo = doc.createElement(PGTUtil.SYS_INFO_XID);
-        sysInfo.appendChild(doc.createTextNode(osHandler.getIOHandler().getSystemInformation()));
-        rootElement.appendChild(sysInfo);
+            // clean up etymological entries which might be orphaned
+            etymologyManager.cleanBrokenEtymologyRoots();
 
-        // collect XML representation of all dictionary elements
-        writeXMLHeader(doc, rootElement, newSaveTime);
-        propertiesManager.writeXML(doc, rootElement);
-        wordClassCollection.writeXML(doc, rootElement);
-        typeCollection.writeXML(doc, rootElement);
-        wordCollection.writeXML(doc, rootElement);
-        etymologyManager.writeXML(doc, rootElement);
-        conjugationMgr.writeXML(doc, rootElement);
-        pronuncMgr.writeXML(doc, rootElement);
-        romMgr.writeXML(doc, rootElement);
-        logoCollection.writeXML(doc, rootElement);
-        grammarManager.writeXML(doc, rootElement);
-        toDoManager.writeXML(doc, rootElement);
-        phraseManager.writeXML(doc, rootElement);
+            // root elements
+            Document doc = docBuilder.newDocument();
+            Element rootElement = doc.createElement(PGTUtil.DICTIONARY_XID);
+            doc.appendChild(rootElement);
 
-        // write family entries
-        rootElement.appendChild(famManager.writeToSaveXML(doc));
+            // store system info for troubleshooting
+            Element sysInfo = doc.createElement(PGTUtil.SYS_INFO_XID);
+            sysInfo.appendChild(doc.createTextNode(osHandler.getIOHandler().getSystemInformation()));
+            rootElement.appendChild(sysInfo);
 
-        // have IOHandler write constructed document to file
-        this.osHandler.getIOHandler().writeFile(
-                _fileName, 
-                doc, 
-                this, 
-                this.getWorkingDirectory(), 
-                newSaveTime, 
-                writeToReversionMgr
-        );
-        
-        lastSaveTime = newSaveTime;
+            // collect XML representation of all dictionary elements
+            writeXMLHeader(doc, rootElement, newSaveTime);
+            propertiesManager.writeXML(doc, rootElement);
+            wordClassCollection.writeXML(doc, rootElement);
+            typeCollection.writeXML(doc, rootElement);
+            wordCollection.writeXML(doc, rootElement);
+            etymologyManager.writeXML(doc, rootElement);
+            conjugationMgr.writeXML(doc, rootElement);
+            pronuncMgr.writeXML(doc, rootElement);
+            romMgr.writeXML(doc, rootElement);
+            logoCollection.writeXML(doc, rootElement);
+            grammarManager.writeXML(doc, rootElement);
+            toDoManager.writeXML(doc, rootElement);
+            phraseManager.writeXML(doc, rootElement);
+
+            // write family entries
+            rootElement.appendChild(famManager.writeToSaveXML(doc));
+
+            // have IOHandler write constructed document to file
+            this.osHandler.getIOHandler().writeFile(
+                    _fileName, 
+                    doc, 
+                    this, 
+                    this.getWorkingDirectory(), 
+                    newSaveTime, 
+                    writeToReversionMgr
+            );
+
+            lastSaveTime = newSaveTime;
+        } finally {
+            if (PGTUtil.isWriteLock()) {
+                PGTUtil.releaseWriteLock();
+            }
+        }
     }
-    
+
     private static void writeXMLHeader(Document doc, Element rootElement, Instant saveTime) {
         Element headerElement = doc.createElement(PGTUtil.PGVERSION_XID);
         headerElement.appendChild(doc.createTextNode(PGTUtil.PGT_VERSION));

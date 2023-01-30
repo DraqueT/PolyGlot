@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -245,20 +245,9 @@ public final class DesktopIOHandler implements IOHandler {
                 } catch (SAXParseException e) {
                     new DesktopInfoBox(null).warning("Data corruption detected", "Data corruption has been detected in your save. Attempting to recover.");
                     
-                    try ( InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
-                        var xml = "";
-                        for (var myByte : ioStream.readAllBytes()) {
-                            xml += (char)myByte;
-                        }
-
-                        var xmlRecoveryTool = new XMLRecoveryTool(xml);
-                        xml = xmlRecoveryTool.recoverXml();
-
-                        ret = CustHandlerFactory.getCustHandler(new ByteArrayInputStream(xml.getBytes()), _core);
-                        new DesktopInfoBox(null).info("Success", "Recovery successful!");
-                    } catch (Exception ex) {
-                        throw new IOException(e.getLocalizedMessage(), ex);
-                    }
+                    ret = recoverXml(_fileName, _core);
+                    
+                    new DesktopInfoBox(null).info("Success", "Recovery successful!");
                 } catch (Exception e) {
                     throw new IOException(e.getLocalizedMessage(), e);
                 }
@@ -272,6 +261,29 @@ public final class DesktopIOHandler implements IOHandler {
         }
 
         return ret;
+    }
+    
+    private static CustHandler recoverXml(String _fileName, DictCore _core) throws IOException {
+        try ( ZipFile zipFile = new ZipFile(_fileName)) {
+            ZipEntry xmlEntry = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
+            
+            try ( InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
+                var xml = "";
+                byte[] rawXmlBytes = new byte[ioStream.available()];
+                ioStream.read(rawXmlBytes);
+                
+                for (var myByte : rawXmlBytes) {
+                    xml += (char)myByte;
+                }
+
+                var xmlRecoveryTool = new XMLRecoveryTool(xml);
+                xml = xmlRecoveryTool.recoverXml();
+
+                return CustHandlerFactory.getCustHandler(new ByteArrayInputStream(xml.getBytes()), _core);
+            } catch (Exception e) {
+                throw new IOException(e.getLocalizedMessage(), e);
+            }
+        }
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -62,6 +62,8 @@ public class PGTUtil {
     public static final String AUTO_SAVE_FILE_NAME = ".pgtAutoSave.bak";
     public static final String TROUBLE_TICKET_URL = "https://github.com/DraqueT/PolyGlot/issues/new";
     public static final String ERROR_LOG_SPEARATOR = "\n-=-=-=-=-=-=-\n";
+    public static final int READ_PERMISSION_RETRY_ATTEMPTS = 6;
+    public static final int READ_PERMISSION_DELAY_MS;
 
     // properties on words
     public static final String LEXICON_XID = "lexicon";
@@ -412,6 +414,12 @@ public class PGTUtil {
             PGT_VERSION = version;
         }
         
+        if (isInJUnitTest()) {
+            READ_PERMISSION_DELAY_MS = 240;
+        } else {
+            READ_PERMISSION_DELAY_MS = 1200;
+        }
+        
         // populate version hierarchy
         VERSION_HIERARCHY = new HashMap<>();
         VERSION_HIERARCHY.put("0", 0);
@@ -503,11 +511,86 @@ public class PGTUtil {
     private static File errorDirectory = null;
     private static boolean forceSuppressDialogs = false;
     private static boolean uiTestingMode = false;
+    private static StackTraceElement writeLock = null;
+    private static long writeLockThreadId;
+    
     
     // OS CONSTANTS
     public static String OSX_FINDER_INFO_VALUE_DIC_FILES = "574443444D535350000000000000000000000000000000000000000000000000";
     public static String OSX_FINDER_METADATA_NAME = "com.apple.FinderInfo";
 
+    /**
+     * Returns true if writelock mode enabled
+     * (typically when a write is already going on)
+     * @return 
+     */
+    public static boolean isWriteLock() {
+        return writeLock != null;
+    }
+    
+    /**
+     * Claims a write lock for the current stack context
+     * (The current methd of the calling class)
+     * @throws IOException If writelock already claimed
+     */
+    public static void claimWriteLock() throws IOException {
+        if (writeLock != null) {
+            throw new IOException("Write lock requested while locked.");
+        }
+        Thread thread = Thread.currentThread();
+        StackTraceElement[] stackTrace = thread.getStackTrace();
+        writeLockThreadId = thread.getId();
+        writeLock = stackTrace[2]; // 0=getStackTrace, 1=self, 2=prior method
+        
+    }
+    
+    /**
+     * Releases writelock for current context
+     * (The current methd of the calling class)
+     * @throws IOException if no write lock or write lock owned by another context
+     */
+    public static void releaseWriteLock() throws IOException {
+        Thread thread = Thread.currentThread();
+        StackTraceElement[] stackTrace = thread.getStackTrace();
+        StackTraceElement currentCall = stackTrace[2]; // 0=getStackTrace, 1=self, 2=prior method
+        
+        if (writeLock == null) {
+            throw new IOException("Write lock released without being claimed.");
+        }
+        
+        if (!currentCall.getClass().equals(writeLock.getClass()) 
+                || !currentCall.getMethodName().equals(writeLock.getMethodName())
+                || thread.getId() != writeLockThreadId) {
+            throw new IOException("Writelock must be claimed and released from within the same method. "
+                    + "Called from: " + writeLock.getClassName() + "." + writeLock.getMethodName() + " Thread: " + writeLockThreadId
+                    + " Released from: " + currentCall.getClassName() + "." + currentCall.getMethodName() + " Thread: " + thread.getId());
+        }
+        
+        writeLock = null;
+    }
+    
+    /**
+     * Waits for permission to write (gives up eventually)
+     * @throws IOException On repeated attempt timeouts
+     */
+    public static void waitForWritePermission() throws IOException {
+        try {
+            for (int i = 0; i < PGTUtil.READ_PERMISSION_RETRY_ATTEMPTS; i++) {
+                if (PGTUtil.isWriteLock()) {
+                    Thread.sleep(PGTUtil.READ_PERMISSION_DELAY_MS);
+                } else {
+                    return;
+                }
+            }
+            
+            throw new IOException("Unable to obtain write permission after retrying for " 
+                    +  (PGTUtil.READ_PERMISSION_RETRY_ATTEMPTS * PGTUtil.READ_PERMISSION_DELAY_MS) / 1000.0
+                    + " seconds");
+        } catch (InterruptedException e) {
+            throw new IOException(e);
+        }
+    }
+    
     /**
      * Strips string of RTL and LTR markers
      *

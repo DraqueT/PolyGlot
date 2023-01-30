@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2022-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -50,7 +50,7 @@ public class XMLRecoveryTool {
     private void populateTokenList() {
         tokenList.clear();
         
-        var regex = "<[^<]*>|[^<]*"; // fetch encapsulated tags and data
+        String regex = "<[^<]*>|[^<]*"; // fetch encapsulated tags and data
         
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(source);
@@ -65,10 +65,10 @@ public class XMLRecoveryTool {
      * i.e. tags that only contain a value and not other tags inside it
      */
     private void fixMissingTags() {
-        var tagStack = new ArrayList<String>();
+        List<String> tagStack = new ArrayList<>();
         outputList = new ArrayList<>();
         boolean failures = false;
-        var prevNonBlankToken = "";
+        String prevNonBlankToken;
         
         
         // first element is header
@@ -140,34 +140,5 @@ public class XMLRecoveryTool {
             populateTokenList();
             fixMissingTags();
         }
-    }
-    
-
-    
-    /***
-     * removes string node from XML at given index
-     * @param index
-     */
-    private void removeNodeAt(int index) {
-        var targetLength = tokenList.get(index).length();
-        var targetLocation = this.getLengthToNode(index);
-        
-        source = source.substring(0, targetLocation) 
-                + source.substring(targetLocation + targetLength);
-    }
-    
-    /***
-     * Gets string length to node at given index
-     * @param index
-     * @return 
-     */
-    private int getLengthToNode(int index) {
-        var length = 0;
-        
-        for (var i = 0; i < index; i++) {
-            length += tokenList.get(i).length();
-        }
-        
-        return length;
     }
 }
