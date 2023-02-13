@@ -624,7 +624,10 @@ public final class ScrGrammarGuide extends PFrame {
             sldSoundPosition.setValue(0);
             sldSoundPosition.setEnabled(false);
             txtTimer.setText(defTime);
-            soundRecorder.setSound(null);
+            
+            if (soundRecorder != null) {
+                soundRecorder.setSound(null);
+            }
         }
 
         isUpdating = false;
