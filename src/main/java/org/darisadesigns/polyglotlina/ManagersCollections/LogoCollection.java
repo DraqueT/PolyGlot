@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -299,6 +299,11 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
         return ret;
     }
     
+    @Override
+    public Integer insert(Integer _id, LogoNode _buffer) throws Exception {
+        return super.insert(_id, _buffer);
+    }
+    
     /**
      * Loads logograph and word relations with one another from comma delimited
      * string of node IDs
@@ -311,7 +316,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
         String loadLog = "";
         
         try {
-            relNode = (LogoNode)getNodeById(Integer.parseInt(ids[0]));
+            relNode = (LogoNode)getNodeById(Integer.valueOf(ids[0]));
         } catch (NumberFormatException e) {
             throw new Exception("Unable to load logograph relations.", e);
         }
@@ -322,7 +327,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
         
         for (int i = 1; i < ids.length; i++) {
             try {
-                ConWord word = core.getWordCollection().getNodeById(Integer.parseInt(ids[i]));
+                ConWord word = core.getWordCollection().getNodeById(Integer.valueOf(ids[i]));
                 addWordLogoRelation(word, relNode);
             } catch (NumberFormatException e) {
                 core.getOSHandler().getIOHandler().writeErrorLog(e);

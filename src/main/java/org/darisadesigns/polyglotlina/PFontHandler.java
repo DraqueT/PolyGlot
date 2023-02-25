@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 - 2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019 - 2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence

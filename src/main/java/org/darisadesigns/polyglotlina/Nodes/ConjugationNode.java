@@ -189,13 +189,8 @@ public class ConjugationNode extends DictNode {
      * @return 
      */
     public String getCombinedDimId() {
-        String ret = combinedDimId;
-        if (dimensionless) {
-            // normal dimensional ids are comma delimited with guaranteed commas before and after. This should be unique.
-            ret = id.toString();
-        }
-        
-        return ret;
+        // normal dimensional ids are comma delimited with guaranteed commas before and after. This should be unique.
+        return dimensionless ? id.toString() : combinedDimId;
     }
     
     public void writeXMLTemplate(Document doc, Element rootElement, Integer relatedId) {

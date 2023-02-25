@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2018-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -75,6 +75,15 @@ public class ToDoManager {
     
     public void popBuffer() {
         bufferNode = bufferNode.getParent();
+    }
+    
+    /**
+     * On load, ToDo nodes must be moved up by one level
+     */
+    public void fixTodoNodeLoad() {
+        if (root.hasChildren()) {
+            root = root.getChildren()[0];
+        }
     }
     
     @Override

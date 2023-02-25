@@ -70,7 +70,8 @@ public class PGTUtil {
     public static final String WORD_XID = "word";
     public static final String LOCALWORD_XID = "localWord";
     public static final String CONWORD_XID = "conWord";
-    public static final String WORD_POS_ID_XID = "wordTypeId";
+    public static final String WORD_POS_ID_XID = "wordPosId";
+    public static final String WORD_POS_ID_XID_LEGACY = "wordTypeId";
     public static final String WORD_ID_XID = "wordId";
     public static final String WORD_PROCOVERRIDE_XID = "wordProcOverride";
     public static final String WORD_DEF_XID = "definition";
@@ -86,14 +87,24 @@ public class PGTUtil {
 
     // properties for types/parts of speech
     public static final String POS_COLLECTION_XID = "partsOfSpeech";
-    public static final String POS_XID = "class";
-    public static final String POS_NAME_XID = "className";
-    public static final String POS_ID_XID = "classId";
-    public static final String POS_NOTES_XID = "classNotes";
-    public static final String POS_PROC_MAN_XID = "pronunciationMandatoryClass";
-    public static final String POS_DEF_MAN_XID = "definitionMandatoryClass";
-    public static final String POS_PATTERN_XID = "classPattern";
-    public static final String POS_GLOSS_XID = "classGloss";
+    public static final String POS_XID = "partOfSpeechNode";
+    public static final String POS_ID_XID = "partOfSpeechId";
+    public static final String POS_NAME_XID = "partOfSpeechName";
+    public static final String POS_NOTES_XID = "partOfSpeechNotes";
+    public static final String POS_DEF_MAN_XID = "definitionMandatoryPartOfSpeech";
+    public static final String POS_PROC_MAN_XID = "pronunciationMandatoryPartOfSpeech";
+    public static final String POS_PATTERN_XID = "partOfSpeechPattern";
+    public static final String POS_GLOSS_XID = "partOfSpeechGloss";
+    
+    // Legacy property values for parts of speech
+    public static final String POS_XID_LEGACY = "class";
+    public static final String POS_NAME_XID_LEGACY = "className";
+    public static final String POS_ID_XID_LEGACY = "classId";
+    public static final String POS_NOTES_XID_LEGACY = "classNotes";
+    public static final String POS_PROC_MAN_XID_LEGACY = "pronunciationMandatoryClass";
+    public static final String POS_DEF_MAN_XID_LEGACY = "definitionMandatoryClass";
+    public static final String POS_PATTERN_XID_LEGACY = "classPattern";
+    public static final String POS_GLOSS_XID_LEGACY = "classGloss";
 
     // language properties
     public static final String LANG_PROPERTIES_XID = "languageProperties";
@@ -123,6 +134,7 @@ public class PGTUtil {
     public static final String LANG_PROP_ZOMPIST_SYLLABLES = "zompistSyllables";
     public static final String LANG_PROP_ZOMPIST_DROPOFF_RATE = "zompistDropoffRate";
     public static final String LANG_PROP_ZOMPIST_MONOSYLLABLE_FREQUENCY = "zompistMonosyllableFrequency";
+    public static final String LANG_PROP_KERNING_DEPRECATED = "langPropKerningValue";
 
     // character replacement pair values
     public static final String LANG_PROP_CHAR_REP_CONTAINER_XID = "langPropCharRep";
@@ -140,14 +152,17 @@ public class PGTUtil {
     public static final String DECLENSION_IS_TEMPLATE_XID = "declensionTemplate";
     public static final String DECLENSION_RELATED_ID_XID = "declensionRelatedId";
     public static final String DECLENSION_IS_DIMENSIONLESS_XID = "declensionDimensionless";
+    public static final String DECLENSION_MANDATORY_DEPRECATED = "declensionMandatory";
 
     // dimensional declension properties
     public static final String DIMENSION_NODE_XID = "dimensionNode";
     public static final String DIMENSION_ID_XID = "dimensionId";
     public static final String DIMENSION_NAME_XID = "dimensionName";
+    public static final String DIMENSION_MANDATORY_DEPRECATED = "dimensionMand";
 
     // pronunciation properties
-    public static final String ETYMOLOGY_COLLECTION_XID = "etymologyCollection";
+    public static final String PRONUNCIATION_COLLECTION_XID = "pronunciationCollection";
+    public static final String PRONUNCIATION_COLLECTION_XID_LEGACY = "etymologyCollection";
     public static final String PRO_GUIDE_XID = "proGuide";
     public static final String PRO_GUIDE_BASE_XID = "proGuideBase";
     public static final String PRO_GUIDE_PHON_XID = "proGuidePhon";

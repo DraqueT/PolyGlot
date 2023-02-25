@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -422,7 +422,7 @@ public class PronunciationMgr {
      * @param rootElement root element of document
      */
     public void writeXML(Document doc, Element rootElement) {
-        Element collection = doc.createElement(PGTUtil.ETYMOLOGY_COLLECTION_XID);
+        Element collection = doc.createElement(PGTUtil.PRONUNCIATION_COLLECTION_XID);
         
         rootElement.appendChild(collection);
         

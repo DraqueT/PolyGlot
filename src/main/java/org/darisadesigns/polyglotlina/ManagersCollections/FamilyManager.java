@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -158,6 +158,14 @@ public class FamilyManager {
         return curElement;
     }
     
+    /**
+     * On load, family nodes must be moved up by one level
+     */
+    public void fixFamilyNodeLoad() {
+        if (famRoot.getNodes().length > 0) {
+            famRoot = famRoot.getNodes()[0];
+        }
+    }
     
     @Override
     public boolean equals(Object comp) {

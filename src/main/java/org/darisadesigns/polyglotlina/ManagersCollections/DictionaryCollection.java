@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -60,12 +60,12 @@ public abstract class DictionaryCollection<N extends DictNode> {
      */
     public abstract N notFoundNode();
     
-    public int addNode(N _addType) throws Exception {
+    public int addNode(N node) throws Exception {
         int ret;
         
         clear();
         
-        bufferNode.setEqual(_addType);
+        bufferNode.setEqual(node);
 
         ret = this.insert(bufferNode);
 

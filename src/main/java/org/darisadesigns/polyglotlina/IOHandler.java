@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -29,10 +29,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.time.Instant;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 /**
  * This class handles file IO for PolyGlot
@@ -56,6 +54,8 @@ public interface IOHandler {
     public File createTmpFileFromImageBytes(byte[] imageBytes, String fileName) throws IOException;
     
     public File createFileWithContents(String path, String contents) throws IOException;
+    
+    public byte[] getXmlBytesFromArchive(String path) throws IOException;
 
     public byte[] getByteArrayFromFile(File file) throws IOException;
 
@@ -66,7 +66,7 @@ public interface IOHandler {
      * @return raw byte representation of stream
      * @throws IOException
      */
-    public byte[] streamToByetArray(InputStream is) throws IOException;
+    public byte[] streamToByteArray(InputStream is) throws IOException;
 
     /**
      * Used for snagging catchable versions of files
@@ -76,27 +76,6 @@ public interface IOHandler {
      * @throws java.io.FileNotFoundException
      */
     public byte[] getFileByteArray(String filePath) throws IOException;
-
-    /**
-     * Given file name, returns appropriate cust handler
-     *
-     * @param _fileName full path of target file to read
-     * @param _core dictionary core
-     * @return CustHandler class
-     * @throws java.io.IOException on read problem
-     */
-    public CustHandler getHandlerFromFile(String _fileName, DictCore _core) throws IOException;
-
-    /**
-     * Creates a custhandler object from a reversion byte array of a language
-     * state
-     *
-     * @param byteArray byte array containing XML of language state
-     * @param _core dictionary core
-     * @return new custhandler class
-     * @throws IOException on parse error
-     */
-    public CustHandler getHandlerFromByteArray(byte[] byteArray, DictCore _core) throws IOException;
 
     /**
      * returns name of file sans path
@@ -112,21 +91,6 @@ public interface IOHandler {
      * @param workingDirectory
      */
     public void deleteIni(String workingDirectory);
-
-    /**
-     * Given handler class, parses XML document within file (archive or not)
-     *
-     * @param _fileName full path of target file
-     * @param _handler custom handler to consume XML document
-     * @throws IOException on read error
-     * @throws ParserConfigurationException on parser factory config error
-     * @throws SAXException on XML interpretation error
-     */
-    public void parseHandler(String _fileName, CustHandler _handler)
-            throws IOException, ParserConfigurationException, SAXException;
-
-    public void parseHandlerByteArray(byte[] reversion, CustHandler _handler)
-            throws ParserConfigurationException, IOException, SAXException;
 
     /**
      * Tests whether or not a file is a zip archive

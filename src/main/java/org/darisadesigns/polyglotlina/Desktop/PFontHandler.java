@@ -399,7 +399,7 @@ public class PFontHandler extends org.darisadesigns.polyglotlina.PFontHandler {
 
                 if (fontFile != null) {
                     try (FileInputStream fontInputStream = new FileInputStream(fontFile)) {
-                        byte[] fontBytes = core.getOSHandler().getIOHandler().streamToByetArray(fontInputStream);
+                        byte[] fontBytes = core.getOSHandler().getIOHandler().streamToByteArray(fontInputStream);
 
                         if (isConFont) {
                             core.getPropertiesManager().setCachedFont(fontBytes);

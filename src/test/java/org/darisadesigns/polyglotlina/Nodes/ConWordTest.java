@@ -269,7 +269,7 @@ public class ConWordTest {
                 + "<wordId>0</wordId>"
                 + "<localWord>LOCALWORD!</localWord>"
                 + "<conWord>MY_WORD</conWord>"
-                + "<wordTypeId>13</wordTypeId>"
+                + "<wordPosId>13</wordPosId>"
                 + "<pronunciation>PRONUNCIATION</pronunciation>"
                 + "<definition>DEFINITION</definition>"
                 + "<wordProcOverride>T</wordProcOverride>"

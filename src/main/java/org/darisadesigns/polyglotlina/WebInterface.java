@@ -182,7 +182,7 @@ public class WebInterface {
             ret = true;
         }
         catch (IOException e) {
-            // TODO: write to log?
+            // error simply means no connection
         }
 
         return ret;

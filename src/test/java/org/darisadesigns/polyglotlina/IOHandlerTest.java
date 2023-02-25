@@ -171,7 +171,7 @@ public class IOHandlerTest {
         try {
             byte[] expectedResult = "!@)*\ntest\n".getBytes();
             InputStream is = new FileInputStream(PGTUtil.TESTRESOURCES + "inputTest.txt");
-            byte[] result = DesktopIOHandler.getInstance().clearCarrigeReturns(DesktopIOHandler.getInstance().streamToByetArray(is));
+            byte[] result = DesktopIOHandler.getInstance().clearCarrigeReturns(DesktopIOHandler.getInstance().streamToByteArray(is));
             assertTrue(java.util.Arrays.equals(expectedResult, result));
         } catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());

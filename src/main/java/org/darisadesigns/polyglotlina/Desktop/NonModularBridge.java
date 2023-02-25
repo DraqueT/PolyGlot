@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -263,12 +263,15 @@ public final class NonModularBridge {
         
         return ret;
     }
-    
-    // TODO: Test that the location of java is valid on program startup (since this cannot be done in pre-compiled testing)
+
     /**
      * Gets executable location of java - differs per OS
      * When in dev mode, it may be presumed that a valid version
      * of Java is on the system path
+     * 
+     * For typical users, Java path utilizes PolyGlot's own
+     * Java Runtime (to avoid compatibility issues with host
+     * systems)
      * @return 
      */
     public static String getJavaExecutablePath() {

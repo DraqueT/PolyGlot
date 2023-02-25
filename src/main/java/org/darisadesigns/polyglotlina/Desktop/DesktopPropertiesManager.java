@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2021-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -207,7 +207,11 @@ public class DesktopPropertiesManager extends PropertiesManager {
                 newFont = Font.getFont(_fontFamily);
             } 
 
-            setFontConRaw(newFont);
+            // only replace the conFont like this if it does not already match (you risk losing diacritic placement otherwise)
+            if (newFont != null 
+                    && !(conFont != null && newFont.getFamily().equals(conFont.getFamily()))) {
+                setFontConRaw(newFont);
+            }
         } catch (Exception e) {
             throw new Exception ("Unable to find or set font: " + _fontFamily + " due to: \n", e);
         }
@@ -238,7 +242,10 @@ public class DesktopPropertiesManager extends PropertiesManager {
     @Override
     public void setFontStyle(Integer _fontStyle) {
         conFontStyle = _fontStyle;
-        conFont = conFont.deriveFont(conFontStyle, (float)conFontSize);
+        
+        if (conFont != null) {
+            conFont = conFont.deriveFont(conFontStyle, (float)conFontSize);
+        }
     }
     
     /**

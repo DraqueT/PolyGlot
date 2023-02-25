@@ -78,25 +78,17 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.darisadesigns.polyglotlina.CustHandler;
-import org.darisadesigns.polyglotlina.CustHandlerFactory;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopGrammarChapNode;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammarManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IOHandler;
-import org.darisadesigns.polyglotlina.XMLRecoveryTool;
 import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 /**
  * This class handles file IO for PolyGlot
@@ -176,7 +168,7 @@ public final class DesktopIOHandler implements IOHandler {
     @Override
     public byte[] getByteArrayFromFile(File file) throws IOException {
         try ( InputStream inputStream = new FileInputStream(file)) {
-            return streamToByetArray(inputStream);
+            return streamToByteArray(inputStream);
         }
     }
 
@@ -188,7 +180,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @throws IOException
      */
     @Override
-    public byte[] streamToByetArray(InputStream is) throws IOException {
+    public byte[] streamToByteArray(InputStream is) throws IOException {
         try ( ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
             int nRead;
             byte[] data = new byte[16384];
@@ -214,94 +206,24 @@ public final class DesktopIOHandler implements IOHandler {
         final File toByteArrayFile = new File(filePath);
 
         try ( InputStream inputStream = new FileInputStream(toByteArrayFile)) {
-            ret = streamToByetArray(inputStream);
-        }
-
-        return ret;
-    }
-
-    @Override
-    /**
-     * Given file name, returns appropriate cust handler
-     *
-     * @param _fileName full path of target file to read
-     * @param _core dictionary core
-     * @return CustHandler class
-     * @throws java.io.IOException on read problem
-     */
-    public CustHandler getHandlerFromFile(String _fileName, DictCore _core) throws IOException {
-        CustHandler ret = null;
-
-        if (isFileZipArchive(_fileName)) {
-            try ( ZipFile zipFile = new ZipFile(_fileName)) {
-                ZipEntry xmlEntry = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
-                
-                if (xmlEntry == null) {
-                    throw new IOException("PGD file corrupt. Unable to read required file from archive: " + PGTUtil.LANG_FILE_NAME);
-                }
-                
-                try ( InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
-                    ret = CustHandlerFactory.getCustHandler(ioStream, _core);
-                } catch (SAXParseException e) {
-                    new DesktopInfoBox(null).warning("Data corruption detected", "Data corruption has been detected in your save. Attempting to recover.");
-                    
-                    ret = recoverXml(_fileName, _core);
-                    
-                    new DesktopInfoBox(null).info("Success", "Recovery successful!");
-                } catch (Exception e) {
-                    throw new IOException(e.getLocalizedMessage(), e);
-                }
-            }
-        } else {
-            try ( InputStream ioStream = new FileInputStream(_fileName)) {
-                ret = CustHandlerFactory.getCustHandler(ioStream, _core);
-            } catch (Exception e) {
-                throw new IOException(e.getLocalizedMessage(), e);
-            }
+            ret = streamToByteArray(inputStream);
         }
 
         return ret;
     }
     
-    private static CustHandler recoverXml(String _fileName, DictCore _core) throws IOException {
-        try ( ZipFile zipFile = new ZipFile(_fileName)) {
+    @Override
+    public byte[] getXmlBytesFromArchive(String path) throws IOException {
+        try (ZipFile zipFile = new ZipFile(path)) {
             ZipEntry xmlEntry = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
             
-            try ( InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
-                var xml = "";
-                byte[] rawXmlBytes = new byte[ioStream.available()];
-                ioStream.read(rawXmlBytes);
-                
-                for (var myByte : rawXmlBytes) {
-                    xml += (char)myByte;
-                }
-
-                var xmlRecoveryTool = new XMLRecoveryTool(xml);
-                xml = xmlRecoveryTool.recoverXml();
-
-                return CustHandlerFactory.getCustHandler(new ByteArrayInputStream(xml.getBytes()), _core);
-            } catch (Exception e) {
-                throw new IOException(e.getLocalizedMessage(), e);
+            if (xmlEntry == null) {
+                throw new IOException("PGD file corrupt. Unable to read required file from archive: " + PGTUtil.LANG_FILE_NAME);
             }
-        }
-    }
-
-    @Override
-    /**
-     * Creates a custhandler object from a reversion byte array of a language
-     * state
-     *
-     * @param byteArray byte array containing XML of language state
-     * @param _core dictionary core
-     * @return new custhandler class
-     * @throws IOException on parse error
-     */
-    public CustHandler getHandlerFromByteArray(byte[] byteArray, DictCore _core) throws IOException {
-        try {
-            return CustHandlerFactory.getCustHandler(new ByteArrayInputStream(byteArray), _core);
-        }
-        catch (Exception e) {
-            throw new IOException(e.getLocalizedMessage(), e);
+            
+            try (InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
+                return ioStream.readAllBytes();
+            }
         }
     }
 
@@ -365,59 +287,7 @@ public final class DesktopIOHandler implements IOHandler {
                     + "Please move to a folder with full write permissions: " + e.getLocalizedMessage());
         }
     }
-
-    @Override
-    /**
-     * Given handler class, parses XML document within file (archive or not)
-     *
-     * @param _fileName full path of target file
-     * @param _handler custom handler to consume XML document
-     * @throws IOException on read error
-     * @throws ParserConfigurationException on parser factory config error
-     * @throws SAXException on XML interpretation error
-     */
-    public void parseHandler(String _fileName, CustHandler _handler)
-            throws IOException, ParserConfigurationException, SAXException {
-        try ( ZipFile zipFile = new ZipFile(_fileName)) {
-            ZipEntry xmlEntry = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
-            
-            if (xmlEntry == null) {
-                throw new IOException("PGD file corrupt. Unable to read required file from archive: " + PGTUtil.LANG_FILE_NAME);
-            }
-            
-            try ( InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
-                parseHandlerInternal(ioStream, _handler);
-            } catch (SAXParseException e) {
-                try ( InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
-                    var xml = "";
-                    for (var myByte : ioStream.readAllBytes()) {
-                        xml += (char)myByte;
-                    }
-
-                    var xmlRecoveryTool = new XMLRecoveryTool(xml);
-                    xml = xmlRecoveryTool.recoverXml();
-
-                    parseHandlerInternal(new ByteArrayInputStream(xml.getBytes()), _handler);
-                } catch (Exception ex) {
-                    throw new IOException(e.getLocalizedMessage(), ex);
-                }
-            }
-        }
-    }
-
-    @Override
-    public void parseHandlerByteArray(byte[] reversion, CustHandler _handler)
-            throws ParserConfigurationException, IOException, SAXException {
-        parseHandlerInternal(new ByteArrayInputStream(reversion), _handler);
-    }
-
-    private void parseHandlerInternal(InputStream stream, CustHandler _handler)
-            throws ParserConfigurationException, SAXException, IOException {
-        SAXParserFactory factory = SAXParserFactory.newInstance();
-        SAXParser saxParser = factory.newSAXParser();
-        saxParser.parse(stream, _handler);
-    }
-
+    
     /**
      * Tests whether or not a file is a zip archive
      *
@@ -854,7 +724,7 @@ public final class DesktopIOHandler implements IOHandler {
                     + PGTUtil.REVERSION_BASE_FILE_NAME + i);
 
             while (reversion != null && i < reversionManager.getMaxReversionsCount()) {
-                reversionManager.addVersionToEnd(streamToByetArray(zipFile.getInputStream(reversion)));
+                reversionManager.addVersionToEnd(streamToByteArray(zipFile.getInputStream(reversion)));
                 i++;
                 reversion = zipFile.getEntry(PGTUtil.REVERSION_SAVE_PATH
                         + PGTUtil.REVERSION_BASE_FILE_NAME + i);
@@ -862,7 +732,7 @@ public final class DesktopIOHandler implements IOHandler {
 
             // remember to load latest state in addition to all prior ones
             reversion = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
-            reversionManager.addVersionToEnd(streamToByetArray(zipFile.getInputStream(reversion)));
+            reversionManager.addVersionToEnd(streamToByteArray(zipFile.getInputStream(reversion)));
         }
     }
 
@@ -949,7 +819,7 @@ public final class DesktopIOHandler implements IOHandler {
                     byte[] sound = null;
 
                     try ( InputStream soundStream = zipFile.getInputStream(soundEntry)) {
-                        sound = streamToByetArray(soundStream);
+                        sound = streamToByteArray(soundStream);
                     }
                     catch (IOException e) {
                         writeErrorLog(e);

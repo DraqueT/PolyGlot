@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina;
 
+import java.io.ByteArrayInputStream;
 import org.darisadesigns.polyglotlina.PLanguageStats.PLanguageStatsProgress;
 import org.darisadesigns.polyglotlina.CustomControls.PAlphaMap;
 import org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager;
@@ -39,6 +40,7 @@ import org.darisadesigns.polyglotlina.OSHandler.CoreUpdatedListener;
 import org.darisadesigns.polyglotlina.OSHandler.FileReadListener;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,13 +50,16 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.darisadesigns.polyglotlina.CustomControls.CoreUpdateSubscriptionInterface;
+import org.darisadesigns.polyglotlina.DomParser.PDomParser;
 import org.darisadesigns.polyglotlina.ManagersCollections.PhraseManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 /**
- * This is the core of PolyGlot. It manages the top level of all aspects of the program.
+ * This is the core of PolyGlot. It manages the top level of all aspects of the
+ * program.
+ *
  * @author draque
  */
 public class DictCore {
@@ -81,7 +86,7 @@ public class DictCore {
     private String curFileName = "";
     private List<CoreUpdateSubscriptionInterface> subscribers;
     private DictCore loadState = null;
-    
+
     /**
      * Language core initialization
      *
@@ -95,7 +100,7 @@ public class DictCore {
         pgtUtil = _util;
         initializeDictCore(_propertiesManager, _grammarManager);
     }
-    
+
     private void initializeDictCore(PropertiesManager _propertiesManager, GrammarManager _grammarManager) {
         try {
             wordCollection = new ConWordCollection(this);
@@ -121,14 +126,15 @@ public class DictCore {
 
             wordCollection.setAlphaOrder(alphaOrder);
             logoCollection.setAlphaOrder(alphaOrder);
-            
+
             PGTUtil.validateVersion();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             this.osHandler.getIOHandler().writeErrorLog(e);
             this.osHandler.getInfoBox().error("CORE ERROR", "Error creating language core: " + e.getLocalizedMessage());
         }
     }
-    
+
     /**
      * Gets conlang name or CONLANG. Put on core because it's used a lot.
      *
@@ -154,7 +160,8 @@ public class DictCore {
 
     /**
      * Gets collection of all images available within current file
-     * @return 
+     *
+     * @return
      */
     public ImageCollection getImageCollection() {
         return imageCollection;
@@ -171,7 +178,8 @@ public class DictCore {
 
     /**
      * Returns all word classes
-     * @return 
+     *
+     * @return
      */
     public WordClassCollection getWordClassCollection() {
         return wordClassCollection;
@@ -184,10 +192,11 @@ public class DictCore {
     public void pushUpdate() {
         pushUpdateWithCore(this);
     }
-    
+
     /**
      * Pushes signal to all forms to update their values from the core. Cascades
      * through windows and their children.
+     *
      * @param _core new core to push
      */
     public void pushUpdateWithCore(DictCore _core) {
@@ -205,28 +214,30 @@ public class DictCore {
         }
 
         CoreUpdatedListener listener = _core.getOSHandler().getCoreUpdatedListener();
-        if(null != listener) {
+        if (null != listener) {
             listener.coreUpdated(_core);
         }
-        
+
         // ------------------------------
         // NEW STYLE OF UPDATING OBJECTS
         // ------------------------------
         sendUpdate(_core);
     }
-    
+
     /**
      * subscribes to updates from core
-     * @param newSub 
+     *
+     * @param newSub
      */
     public void subscribe(CoreUpdateSubscriptionInterface newSub) {
         if (!subscribers.contains(newSub)) {
             subscribers.add(newSub);
         }
     }
-    
+
     /**
      * Sends out update to all subscribers
+     *
      * @param core
      */
     public void sendUpdate(DictCore core) {
@@ -247,7 +258,8 @@ public class DictCore {
 
     /**
      * Returns collection of all logographs in language file
-     * @return 
+     *
+     * @return
      */
     public LogoCollection getLogoCollection() {
         return logoCollection;
@@ -255,7 +267,8 @@ public class DictCore {
 
     /**
      * Returns grammar guide in language file
-     * @return 
+     *
+     * @return
      */
     public GrammarManager getGrammarManager() {
         return grammarManager;
@@ -282,17 +295,17 @@ public class DictCore {
     /**
      * Builds a report on the conlang. Potentially very computationally
      * expensive.
-     * 
+     *
      * @param progress
      */
     public void buildLanguageReport(PLanguageStatsProgress progress) {
         final DictCore core = this;
-        
+
         new Thread() {
             @Override
             public void run() {
                 String reportContents = PLanguageStats.buildWordReport(core, progress);
-                
+
                 if (!core.getPGTUtil().isBlank(reportContents)) {
                     core.getOSHandler().openLanguageReport(reportContents);
                 }
@@ -310,7 +323,7 @@ public class DictCore {
     public void readFile(String _fileName) throws IOException, IllegalStateException {
         readFile(_fileName, null);
     }
-    
+
     /**
      * Reads from given file
      *
@@ -322,7 +335,7 @@ public class DictCore {
     public void readFile(String _fileName, byte[] overrideXML) throws IOException, IllegalStateException {
         readFile(_fileName, overrideXML, true);
     }
-    
+
     /**
      * Reads from given file
      *
@@ -338,77 +351,89 @@ public class DictCore {
         String errorLog = "";
         String warningLog = "";
 
-        // test file exists
-        if (!this.osHandler.getIOHandler().fileExists(_fileName)) {
-            throw new IOException("File " + _fileName + " does not exist.");
-        }
-        
-        // inform user if file is not an archive
-        if (!this.osHandler.getIOHandler().isFileZipArchive(_fileName)) {
-            throw new IOException("File " + _fileName + " is not a valid PolyGlot archive.");
-        }
+        try {
+            // test file exists
+            if (!this.osHandler.getIOHandler().fileExists(_fileName)) {
+                throw new IOException("File " + _fileName + " does not exist.");
+            }
 
-        // load image assets first to allow referencing as dictionary loads
-        try {
-            this.osHandler.getIOHandler().loadImageAssets(imageCollection, _fileName);
-        } catch (Exception e) {
-            warningLog += "Image loading error: " + e.getLocalizedMessage() + "\n";
-        }
-        
-        try {
-            this.osHandler.fontHandler.setFontFrom(_fileName, this);
-        } catch (Exception e) {
-            this.osHandler.getIOHandler().writeErrorLog(e);
-            warningLog += e.getLocalizedMessage() + "\n";
-        }
-        
-        try {
-            CustHandler handler;
-            // if override XML value, load from that, otherwise pull from file
-            if (overrideXML == null) {
-                handler = this.osHandler.getIOHandler().getHandlerFromFile(_fileName, this);
-                this.osHandler.getIOHandler().parseHandler(_fileName, handler);
-            } else {
-                handler = this.osHandler.getIOHandler().getHandlerFromByteArray(overrideXML, this);
-                this.osHandler.getIOHandler().parseHandlerByteArray(overrideXML, handler);
+            // inform user if file is not an archive
+            if (!this.osHandler.getIOHandler().isFileZipArchive(_fileName)) {
+                throw new IOException("File " + _fileName + " is not a valid PolyGlot archive.");
+            }
+
+            // load image assets first to allow referencing as dictionary loads
+            try {
+                this.osHandler.getIOHandler().loadImageAssets(imageCollection, _fileName);
+            } catch (Exception e) {
+                warningLog += "Image loading error: " + e.getLocalizedMessage() + "\n";
+            }
+
+            try {
+                this.osHandler.fontHandler.setFontFrom(_fileName, this);
+            } catch (Exception e) {
+                this.osHandler.getIOHandler().writeErrorLog(e);
+                warningLog += e.getLocalizedMessage() + "\n";
+            }
+
+            PDomParser parser = new PDomParser(this);
+                    
+            byte[] rawXml = overrideXML == null ?
+                    this.osHandler.getIOHandler().getXmlBytesFromArchive(_fileName) :
+                    overrideXML;
+
+            parser.readXml(new ByteArrayInputStream(rawXml));
+            Exception parseException = parser.getError();
+            
+            if (parseException instanceof SAXException) {
+                // attempt to repair malformed XML on IOException
+                parser = new PDomParser(this);                
+                XMLRecoveryTool recovery = new XMLRecoveryTool(new String(rawXml, StandardCharsets.UTF_8));
+                String recoveredXml = recovery.recoverXml();
+                parser.readXml(new ByteArrayInputStream(recoveredXml.getBytes()));
+                
+                // if not possible to recover, bubble error
+                if (parser.getError() != null) {
+                    throw (IOException)parser.getError();
+                }
+            } else if (parseException instanceof Exception) {
+                throw new IOException(parseException);
             }
             
-            errorLog += handler.getErrorLog();
-            warningLog += handler.getWarningLog();
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            // failure to load the XML is the only thing that should lead to an overally file load exception.
-            throw new IOException(e.getMessage(), e);
-        }
+            for (String issue : parser.getIssues()) {
+                warningLog += issue + "\n";
+            }
+            
+            try {
+                this.osHandler.getIOHandler().loadGrammarSounds(_fileName, grammarManager);
+            } catch (Exception e) {
+                this.osHandler.getIOHandler().writeErrorLog(e);
+                warningLog += e.getLocalizedMessage() + "\n";
+            }
 
-        try {
-            this.osHandler.getIOHandler().loadGrammarSounds(_fileName, grammarManager);
-        } catch (Exception e) {
-            this.osHandler.getIOHandler().writeErrorLog(e);
-            warningLog += e.getLocalizedMessage() + "\n";
-        }
+            try {
+                logoCollection.loadRadicalRelations();
+            } catch (Exception e) {
+                this.osHandler.getIOHandler().writeErrorLog(e);
+                warningLog += e.getLocalizedMessage() + "\n";
+            }
 
-        try {
-            logoCollection.loadRadicalRelations();
-        } catch (Exception e) {
-            this.osHandler.getIOHandler().writeErrorLog(e);
-            warningLog += e.getLocalizedMessage() + "\n";
-        }
+            try {
+                this.osHandler.getIOHandler().loadLogographs(logoCollection, _fileName);
+            } catch (Exception e) {
+                this.osHandler.getIOHandler().writeErrorLog(e);
+                warningLog += e.getLocalizedMessage() + "\n";
+            }
 
-        try {
-            this.osHandler.getIOHandler().loadLogographs(logoCollection, _fileName);
-        } catch (Exception e) {
-            this.osHandler.getIOHandler().writeErrorLog(e);
-            warningLog += e.getLocalizedMessage() + "\n";
+            try {
+                this.osHandler.getIOHandler().loadReversionStates(reversionManager, _fileName);
+            } catch (IOException e) {
+                this.osHandler.getIOHandler().writeErrorLog(e);
+                warningLog += e.getLocalizedMessage() + "\n";
+            }
+        } finally {
+            curLoading = false;
         }
-        
-        try {
-            this.osHandler.getIOHandler().loadReversionStates(reversionManager, _fileName);
-        } catch (IOException e) {
-            this.osHandler.getIOHandler().writeErrorLog(e);
-            warningLog += e.getLocalizedMessage() + "\n";
-        }
-
-        curLoading = false;
 
         if (!errorLog.trim().isEmpty()) {
             throw new IOException(errorLog);
@@ -425,62 +450,65 @@ public class DictCore {
             }
         }
     }
-    
+
     public void setLoadState(DictCore _loadState) {
         loadState = _loadState;
     }
-    
+
     /**
      * Returns true if language has changed state since last load
-     * @return 
+     *
+     * @return
      */
     public boolean hasChanged() {
         return loadState != null && !this.equals(loadState);
     }
-    
+
     /**
-     * loads revision XML from revision byte array (does not support media revisions)
-     * @param revision 
-     * @param fileName 
-     * @return  
-     * @throws java.io.IOException 
+     * loads revision XML from revision byte array (does not support media
+     * revisions)
+     *
+     * @param revision
+     * @param fileName
+     * @return
+     * @throws java.io.IOException
      */
-    public DictCore revertToState(byte[] revision, String fileName) throws IOException{
+    public DictCore revertToState(byte[] revision, String fileName) throws IOException {
         DictCore revDict = new DictCore(this.propertiesManager, this.osHandler, this.pgtUtil, this.grammarManager);
         revDict.readFile(fileName, revision);
-        
+
         pushUpdateWithCore(revDict);
-        
+
         return revDict;
     }
-    
+
     /**
-     * Used for test loading reversion XMLs. Cannot successfully load actual revision into functioning DictCore
-     * @param reversion 
+     * Used for test loading reversion XMLs. Cannot successfully load actual
+     * revision into functioning DictCore
+     *
+     * @param reversion
      * @return
      */
     public String testLoadReversion(byte[] reversion) {
-        String errorLog;
-        
-        try {
-            CustHandler handler = this.osHandler.getIOHandler().getHandlerFromByteArray(reversion, this);
-            this.osHandler.getIOHandler().parseHandlerByteArray(reversion, handler);
-
-            errorLog = handler.getErrorLog();
-            // errorLog += handler.getWarningLog(); // warnings may be disregarded here
-        } catch (IOException | ParserConfigurationException | SAXException e) {
-            this.osHandler.getIOHandler().writeErrorLog(e);
-            errorLog = e.getLocalizedMessage();
-        }
+        PDomParser parser = new PDomParser(this);
+        parser.readXml(new ByteArrayInputStream(reversion));
+        String error = "";
         
         // if no save time present, simply timestamp for current time (only relevant for first time revision log added)
         if (lastSaveTime == Instant.MIN) {
             lastSaveTime = Instant.now();
         }
         
-        return errorLog;
+        Exception parseException = parser.getError();
+        if (parseException != null) {
+            this.osHandler.getIOHandler().writeErrorLog(parseException);
+            error = parseException.getLocalizedMessage();
+        }
+        
+        // we only care about errors here, rather than warnings
+        return error;
     }
-    
+
     /**
      * Writes to given file
      *
@@ -493,7 +521,7 @@ public class DictCore {
     public void writeFile(String _fileName, boolean writeToReversionMgr)
             throws ParserConfigurationException, TransformerException, IOException {
         PGTUtil.waitForWritePermission();
-        
+
         try {
             PGTUtil.claimWriteLock();
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -533,16 +561,17 @@ public class DictCore {
 
             // have IOHandler write constructed document to file
             this.osHandler.getIOHandler().writeFile(
-                    _fileName, 
-                    doc, 
-                    this, 
-                    this.getWorkingDirectory(), 
-                    newSaveTime, 
+                    _fileName,
+                    doc,
+                    this,
+                    this.getWorkingDirectory(),
+                    newSaveTime,
                     writeToReversionMgr
             );
 
             lastSaveTime = newSaveTime;
-        } finally {
+        }
+        finally {
             if (PGTUtil.isWriteLock()) {
                 PGTUtil.releaseWriteLock();
             }
@@ -553,7 +582,7 @@ public class DictCore {
         Element headerElement = doc.createElement(PGTUtil.PGVERSION_XID);
         headerElement.appendChild(doc.createTextNode(PGTUtil.PGT_VERSION));
         rootElement.appendChild(headerElement);
-        
+
         headerElement = doc.createElement(PGTUtil.DICTIONARY_SAVE_DATE);
         headerElement.appendChild(doc.createTextNode(saveTime.toString()));
         rootElement.appendChild(headerElement);
@@ -561,7 +590,8 @@ public class DictCore {
 
     /**
      * Returns declension manager within language file
-     * @return 
+     *
+     * @return
      */
     public ConjugationManager getConjugationManager() {
         return conjugationMgr;
@@ -569,7 +599,8 @@ public class DictCore {
 
     /**
      * Returns all parts of speech
-     * @return 
+     *
+     * @return
      */
     public TypeCollection getTypes() {
         return typeCollection;
@@ -577,7 +608,8 @@ public class DictCore {
 
     /**
      * Returns pronunciations within language file
-     * @return 
+     *
+     * @return
      */
     public PronunciationMgr getPronunciationMgr() {
         return pronuncMgr;
@@ -585,55 +617,61 @@ public class DictCore {
 
     /**
      * Returns romanization manager within language file
-     * @return 
+     *
+     * @return
      */
     public RomanizationManager getRomManager() {
         return romMgr;
     }
-    
+
     /**
      * Returns etymology manager within language file
-     * @return 
+     *
+     * @return
      */
     public EtymologyManager getEtymologyManager() {
         return etymologyManager;
     }
-    
+
     /**
      * Returns XML file reversions within language file
-     * @return 
+     *
+     * @return
      */
     public ReversionManager getReversionManager() {
         return reversionManager;
     }
-    
+
     /**
      * Returns to do manager within language file
-     * @return 
+     *
+     * @return
      */
     public ToDoManager getToDoManager() {
         return toDoManager;
     }
-    
+
     public PhraseManager getPhraseManager() {
         return phraseManager;
     }
-    
+
     /**
      * Returns DictCore OS handler
-     * @return 
+     *
+     * @return
      */
     public OSHandler getOSHandler() {
         return this.osHandler;
     }
-    
+
     public PGTUtil getPGTUtil() {
         return this.pgtUtil;
     }
-    
+
     /**
      * Returns last time language file was saved
-     * @return 
+     *
+     * @return
      */
     public Instant getLastSaveTime() {
         return lastSaveTime;
@@ -641,27 +679,29 @@ public class DictCore {
 
     /**
      * Sets time of last save
-     * @param _lastSaveTime 
+     *
+     * @param _lastSaveTime
      */
     public void setLastSaveTime(Instant _lastSaveTime) {
         lastSaveTime = _lastSaveTime;
     }
-    
+
     public File getWorkingDirectory() {
         return this.osHandler.getWorkingDirectory();
     }
-    
+
     public void setCurFileName(String _curFileName) {
         this.curFileName = _curFileName;
     }
-    
+
     public String getCurFileName() {
         return curFileName;
     }
-    
+
     /**
      * Returns true if the language has no contents (blank language)
-     * @return 
+     *
+     * @return
      */
     public boolean isLanguageEmpty() {
         return wordCollection.isEmpty()
@@ -675,25 +715,24 @@ public class DictCore {
                 && imageCollection.isEmpty()
                 && phraseManager.isEmpty();
     }
-    
+
     /**
-     * Compares equality of languages.
-     * Does not compare save version.
-     * Does not compare filename.
-     * Does not compare last save time.
-     * Does not compare reversion states.
-     * 
+     * Compares equality of languages. Does not compare save version. Does not
+     * compare filename. Does not compare last save time. Does not compare
+     * reversion states.
+     *
      * Depending on size of language, might take some time.
+     *
      * @param comp
-     * @return 
+     * @return
      */
     @Override
     public boolean equals(Object comp) {
         boolean ret = false;
 
         if (comp instanceof DictCore) {
-            DictCore compCore = (DictCore)comp;
-            
+            DictCore compCore = (DictCore) comp;
+
             ret = wordCollection.equals(compCore.wordCollection);
             ret = ret && typeCollection.equals(compCore.typeCollection);
             ret = ret && conjugationMgr.equals(compCore.conjugationMgr);
@@ -709,7 +748,7 @@ public class DictCore {
             ret = ret && toDoManager.equals(compCore.toDoManager);
             ret = ret && phraseManager.equals(compCore.phraseManager);
         }
-        
+
         return ret;
     }
 
