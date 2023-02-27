@@ -527,6 +527,10 @@ public final class DesktopIOHandler implements IOHandler {
             try {
                 out.putNextEntry(new ZipEntry(PGTUtil.LOGOGRAPH_SAVE_PATH));
                 for (LogoNode curNode : logoNodes) {
+                    if (!curNode.isImageSet()) {
+                        continue;
+                    }
+                    
                     try {
                         out.putNextEntry(new ZipEntry(PGTUtil.LOGOGRAPH_SAVE_PATH
                                 + curNode.getId() + ".png"));

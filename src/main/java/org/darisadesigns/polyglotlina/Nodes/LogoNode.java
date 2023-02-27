@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -22,7 +22,6 @@ package org.darisadesigns.polyglotlina.Nodes;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.WebInterface;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -49,16 +48,11 @@ public class LogoNode extends DictNode {
 
     public LogoNode(DictCore _core) {
         core = _core;
-        try {
-            logoBytes = _core.getOSHandler().getIOHandler().loadImageBytes(PGTUtil.EMPTY_LOGO_IMAGE);
-        }
-        catch (IOException ex) {
-            _core.getOSHandler().getIOHandler().writeErrorLog(ex);
-        }
+        logoBytes = new byte[0];
     }
     
     public byte[] getLogoBytes() {
-        return logoBytes;
+        return logoBytes.length > 0 ? logoBytes : core.getLogoCollection().EMPTY_LOGO_NODE_IMAGE;
     }
     
     public void setLogoBytes(byte[] _logoBytes) {
@@ -332,6 +326,10 @@ public class LogoNode extends DictNode {
         }
 
         return ret;
+    }
+    
+    public boolean isImageSet() {
+        return this.logoBytes.length > 0;
     }
 
     @Override

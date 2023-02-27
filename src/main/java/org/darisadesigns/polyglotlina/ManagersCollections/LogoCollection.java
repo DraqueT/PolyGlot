@@ -39,6 +39,8 @@ import org.w3c.dom.Element;
  * @author draque
  */
 public class LogoCollection extends DictionaryCollection<LogoNode> {
+    public final byte[] EMPTY_LOGO_NODE_IMAGE;
+    
     private final Map<Integer, ArrayList<Integer>> logoToWord;
     private final Map<Integer, ArrayList<Integer>> wordToLogo;
     private final DictCore core;
@@ -48,8 +50,17 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
         
         wordToLogo = new HashMap<>();
         logoToWord = new HashMap<>();
-        
         core = _core;
+        
+        byte[] emptyLogoImage = new byte[0];
+        try {
+            emptyLogoImage = core.getOSHandler().getIOHandler().loadImageBytes(PGTUtil.EMPTY_LOGO_IMAGE);
+        } catch (IOException e) {
+            core.getOSHandler().getIOHandler().writeErrorLog(e);
+            core.getOSHandler().getInfoBox().error("Initialization Error", "Unable to load internal asset EMPTY_LOGO_IMAGE.");
+        } finally {
+            EMPTY_LOGO_NODE_IMAGE = emptyLogoImage;
+        }
     }
     
     /**
