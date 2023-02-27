@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -1115,6 +1115,7 @@ public class ScrLogoDetails extends PFrame {
         setBackground(new java.awt.Color(255, 255, 255));
 
         jLayeredPane1.setBackground(new java.awt.Color(255, 255, 255));
+        jLayeredPane1.setPreferredSize(new java.awt.Dimension(1, 1));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -1436,11 +1437,11 @@ public class ScrLogoDetails extends PFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane1)
+            .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane1)
+            .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 503, Short.MAX_VALUE)
         );
 
         pack();
