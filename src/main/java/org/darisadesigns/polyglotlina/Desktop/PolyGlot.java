@@ -627,16 +627,19 @@ public final class PolyGlot {
                     try {
                         core.writeFile(autoSaveFile.getAbsolutePath(), false);
                     } catch (IOException e) {
-                        // Impossible to write to error log
-                        //core.getOSHandler().getIOHandler().writeErrorLog(e, "Autosave Exeption");
-                        core.getOSHandler().getInfoBox().error("Working Path Write Error", "Unable to write to path: " 
-                                + autoSaveFile.getAbsolutePath() + " due to: " + e.getLocalizedMessage());
+                        // Do not attempt to write on failure to write
+//                        core.getOSHandler().getIOHandler().writeErrorLog(e, "Autosave Exeption");
+                        // Error messages disabled due to UI generated mismatches of files
+//                        core.getOSHandler().getInfoBox().error("Working Path Write Error", "Unable to write to path: " 
+//                                + autoSaveFile.getAbsolutePath() + " due to: " + e.getLocalizedMessage());
                     } catch (ParserConfigurationException | TransformerException e) {
                         core.getOSHandler().getIOHandler().writeErrorLog(e, "Autosave Exeption");
-                        core.getOSHandler().getInfoBox().error("Working Path Write Error", "Unable to write to path: " 
-                                + autoSaveFile.getAbsolutePath() + " due to: " + e.getLocalizedMessage());
+                        // Error messages disabled due to UI generated mismatches of files
+//                        core.getOSHandler().getInfoBox().error("Working Path Write Error", "Unable to write to path: " 
+//                                + autoSaveFile.getAbsolutePath() + " due to: " + e.getLocalizedMessage());
+                    } finally {
+                        autoSave();
                     }
-                    autoSave();
                 }
             }
         }, polyGlot.getOptionsManager().getMsBetweenSaves());
