@@ -418,7 +418,7 @@ public final class ScrLexicon extends PFrame {
             final int classId = curProp.getId();
 
             if (curProp.isFreeText()) {
-                final PTextField classText = new PTextField(core, false, curProp.getValue());
+                final PTextField classText = new PTextField(core, true, curProp.getValue());
                 classText.setToolTipText(curProp.getValue() + " value");
 
                 classText.getDocument().addDocumentListener(new DocumentListener() {
