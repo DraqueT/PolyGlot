@@ -19,8 +19,8 @@
  */
 package org.darisadesigns.polyglotlina;
 
-import org.darisadesigns.polyglotlina.Desktop.PFontInfo;
 import TestResources.DummyCore;
+import org.darisadesigns.polyglotlina.Desktop.PFontInfo;
 import java.awt.Color;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;

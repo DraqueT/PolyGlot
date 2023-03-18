@@ -194,11 +194,17 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
 
         String localWord = word.getLocalWord();
         if (core.getPropertiesManager().isLocalUniqueness() 
-                && !localWord.isEmpty()
-                && localCount.containsKey(localWord)
-                && localCount.get(localWord) > 1) {
-            ret.setLocalWord(ret.getLocalWord() + (ret.getLocalWord().isEmpty() ? "" : "\n")
-                    + core.localLabel() + " words set to enforced unique: this local exists elsewhere.");
+                && !localWord.isEmpty()) {
+            
+            String[] locals = localWord.split(",");
+            
+            for (String local : locals) {
+                local = local.trim();
+                if (!local.isBlank() && localCount.containsKey(local) && localCount.get(local) > 1) {
+                    ret.setLocalWord(core.localLabel() 
+                        + " words set to enforce uniqueness, which this violates.");
+                }
+            }
         }
 
         TypeNode wordPos = core.getTypes().getNodeById(word.getWordTypeId());
@@ -313,18 +319,26 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
     
     /**
      * Generates and returns map with strings to count of
-     * string occurrences within local words of the lexicon
+     * string occurrences within local words of the lexicon.
+     * Respects comma delimited lists.
      * @return 
      */
     public Map<String, Integer> getLocalCount() {
         Map<String, Integer> ret = new HashMap<>();
         
         for (ConWord word : this.nodeMap.values()) {
-            String local = word.getLocalWord();
-            if (ret.containsKey(local)) {
-                ret.replace(local, ret.get(local) + 1);
-            } else {
-                ret.put(local,1);
+            String[] locals = word.getLocalWord().split(",");
+            
+            for (String local : locals) {
+                local = local.trim();
+                
+                if (!local.isBlank()) {
+                    if (ret.containsKey(local)) {
+                        ret.replace(local, ret.get(local) + 1);
+                    } else {
+                        ret.put(local,1);
+                    }
+                }
             }
         }
         

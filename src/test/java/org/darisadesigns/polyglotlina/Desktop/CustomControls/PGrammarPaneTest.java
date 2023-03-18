@@ -20,7 +20,7 @@
 package org.darisadesigns.polyglotlina.Desktop.CustomControls;
 
 import TestResources.DummyCore;
-import TestResources.PTest;
+import org.darisadesigns.polyglotlina.PTest;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;

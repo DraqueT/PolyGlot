@@ -20,7 +20,7 @@
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
 import TestResources.DummyCore;
-import TestResources.PTest;
+import org.darisadesigns.polyglotlina.PTest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,6 +62,35 @@ public class ConWordCollectionTest extends PTest {
         ConWord results = core.getWordCollection().testWordLegality(test);
         
         assertEquals(results.getValue(), "Conlang word value cannot be blank.");
+    }
+    
+    @Test
+    public void testDuplicatedLocalWithCommas() {
+        System.out.println("ConWordCollectionTest.testDuplicatedLocalWithCommas");
+        
+        DictCore core = DummyCore.newCore();
+        ConWordCollection collection = core.getWordCollection();
+        ConWord testOne = new ConWord();
+        ConWord testTwo = new ConWord();
+        
+        testOne.setValue("ZOT");
+        testOne.setLocalWord("bloober, doober");
+        
+        testTwo.setValue("SLPAT");
+        testTwo.setLocalWord("zorba, bloober");
+        
+        core.getPropertiesManager().setLocalUniqueness(true);
+        
+        try {
+            collection.addWord(testOne);
+            collection.addWord(testTwo);
+            
+            ConWord result = collection.testWordLegality(testOne);
+            
+            assertNotEquals(result.getLocalWord(), "");
+        } catch (Exception e) {
+            fail(e.getLocalizedMessage());
+        }
     }
     
     @Test

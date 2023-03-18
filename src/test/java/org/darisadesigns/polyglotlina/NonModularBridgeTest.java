@@ -19,8 +19,8 @@
  */
 package org.darisadesigns.polyglotlina;
 
-import org.darisadesigns.polyglotlina.Desktop.NonModularBridge;
 import TestResources.DummyCore;
+import org.darisadesigns.polyglotlina.Desktop.NonModularBridge;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;

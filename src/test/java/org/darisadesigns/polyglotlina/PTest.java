@@ -17,7 +17,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package TestResources;
+package org.darisadesigns.polyglotlina;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
