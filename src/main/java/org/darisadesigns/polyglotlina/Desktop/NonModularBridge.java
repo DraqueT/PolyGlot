@@ -27,6 +27,7 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -281,8 +282,10 @@ public final class NonModularBridge {
         if (PGTUtil.isInJUnitTest() || PGTUtil.isUITestingMode()) {
             return (PGTUtil.IS_LINUX ? System.getenv("JAVA_HOME") + "/bin/" : "") + path;
         } else if (PGTUtil.IS_DEV_MODE) {
-            path = PGTUtil.IS_OSX ?
-                    System.getenv(macOSEnvVar).substring(1) :
+            String pathValues = System.getenv(macOSEnvVar);
+            
+            path = PGTUtil.IS_OSX && pathValues != null ?
+                    pathValues.substring(1) :
                     ProcessHandle.current()
                         .info()
                         .command()
