@@ -75,7 +75,7 @@ public class PronunciationMgr {
      * @return 
      */
     public String[] getSyllables() {
-        return syllables.toArray(new String[0]);
+        return syllables.toArray(String[]::new);
     }
     
     public void setSyllableCompositionEnabled(boolean _syllableCompositionEnabled) {
@@ -98,7 +98,7 @@ public class PronunciationMgr {
      */
     public PronunciationNode[] getPronunciations() {
         // CORRECT FOR FILTERING/CREATION OF COPY OBJECT
-        return pronunciations.toArray(new PronunciationNode[0]);
+        return pronunciations.toArray(PronunciationNode[]::new);
     }
 
     /**
@@ -449,8 +449,12 @@ public class PronunciationMgr {
         });
     }
 
+    /**
+     * Always returns false if pronunciation regex is disabled
+     * @return 
+     */
     public boolean isRecurse() {
-        return recurse;
+        return recurse && !core.getPropertiesManager().isDisableProcRegex();
     }
 
     public void setRecurse(boolean _recurse) {
