@@ -479,8 +479,8 @@ public class ScrPrintToPDF extends PDialog {
             return;
         }
         
-        jPanel1.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        try{
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        try {
             // prevent printing if etymology is selected but there are illegal loops present
             if (core.getEtymologyManager().checkAllForIllegalLoops().length > 0) {
                 String message = 
@@ -525,7 +525,7 @@ public class ScrPrintToPDF extends PDialog {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             core.getOSHandler().getInfoBox().error("Save Error", e.getMessage());
         } finally {
-            jPanel1.setCursor(Cursor.getDefaultCursor());
+            this.setCursor(Cursor.getDefaultCursor());
         }
     }//GEN-LAST:event_btnPrintActionPerformed
 

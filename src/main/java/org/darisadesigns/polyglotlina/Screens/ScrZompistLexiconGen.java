@@ -775,21 +775,24 @@ public class ScrZompistLexiconGen extends PFrame {
     }
     
     private void generateValues() {
-        pnlTop.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         setEnableMenuButtons(false);
         isWordImport = rdoGenWords.isSelected();
         
+        pnlTop.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         SwingUtilities.invokeLater(() ->{
-            if (isWordImport) {
-                genWords();
-                setEnableWordImport(true);
-            } else {
-                genSyllables();
-                setEnableSyllableImport(true);
+            try {
+                if (isWordImport) {
+                    genWords();
+                    setEnableWordImport(true);
+                } else {
+                    genSyllables();
+                    setEnableSyllableImport(true);
+                }
+
+                pnlTop.setCursor(Cursor.getDefaultCursor());
+            } finally {
+                setEnableMenuButtons(true);
             }
-        
-            pnlTop.setCursor(Cursor.getDefaultCursor());
-            setEnableMenuButtons(true);
         });
     }
     

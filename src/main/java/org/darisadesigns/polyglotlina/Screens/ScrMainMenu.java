@@ -1253,10 +1253,14 @@ public final class ScrMainMenu extends PFrame {
 
     public void openProperties() {
         pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        saveAllValues();
-        ScrLangProps s = new ScrLangProps(core);
-        changeScreen(s, s.getWindow(), (PButton) btnProp);
-        pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
+        
+        try {
+            saveAllValues();
+            ScrLangProps s = new ScrLangProps(core);
+            changeScreen(s, s.getWindow(), (PButton) btnProp);
+        } finally {
+            pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
+        }
     }
 
     @Override
@@ -2170,17 +2174,32 @@ public final class ScrMainMenu extends PFrame {
 
     private void mnuNewLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNewLocalActionPerformed
         pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        newFile(true);
-        pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
+        try {
+            newFile(true);
+        } finally {
+            pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
+        }
     }//GEN-LAST:event_mnuNewLocalActionPerformed
 
     private void mnuSaveLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSaveLocalActionPerformed
-        saveFile();
+        pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        
+        try {
+            saveFile();
+        } finally {
+            pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
+        }
     }//GEN-LAST:event_mnuSaveLocalActionPerformed
 
     private void mnuSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSaveAsActionPerformed
         if (saveFileAsDialog()) {
-            saveFile();
+            pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        
+            try {
+                saveFile();
+            } finally {
+                pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
+            }
         }
     }//GEN-LAST:event_mnuSaveAsActionPerformed
 
@@ -2205,15 +2224,21 @@ public final class ScrMainMenu extends PFrame {
 
     private void mnuImportFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportFileActionPerformed
         pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        ScrExcelImport.run(core, this);
-        cacheLexicon.refreshWordList(-1);
-        pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
+        try {
+            ScrExcelImport.run(core, this);
+            cacheLexicon.refreshWordList(-1);
+        } finally {
+            pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
+        }
     }//GEN-LAST:event_mnuImportFileActionPerformed
 
     private void mnuExportToExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportToExcelActionPerformed
         pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        exportToExcel();
-        pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
+        try {
+            exportToExcel();
+        } finally {
+            pnlToDoSplit.setCursor(Cursor.getDefaultCursor());
+        }
     }//GEN-LAST:event_mnuExportToExcelActionPerformed
 
     private void mnuExportFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportFontActionPerformed
@@ -2222,54 +2247,61 @@ public final class ScrMainMenu extends PFrame {
 
     private void mnuLangStatsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLangStatsActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        if (core.getOSHandler().getInfoBox().yesNoCancel("Continue Operation?", "The statistics report can"
-                + " take a long time to complete, depending on the complexity\n"
-                + "of your conlang. Continue?") == JOptionPane.YES_OPTION) {
+        
+        try {
+            if (core.getOSHandler().getInfoBox().yesNoCancel("Continue Operation?", "The statistics report can"
+                    + " take a long time to complete, depending on the complexity\n"
+                    + "of your conlang. Continue?") == JOptionPane.YES_OPTION) {
 
-            if (!WebInterface.isInternetConnected()) {
-                new DesktopInfoBox(this).warning("No Net Connection", "No network connection detected. Google generated graphs will not be rendered.");
-            }
-
-            try {
-                int wordCount = core.getWordCollection().getWordCount();
-                ScrProgressMenu progress = ScrProgressMenu.createScrProgressMenu("Generating Language Stats", wordCount + 5, true, true);
-                progress.setVisible(true);
-
-                if (PolyGlot.getPolyGlot().getRootWindow() != null) {
-                    progress.setLocation(PolyGlot.getPolyGlot().getRootWindow().getLocation());
+                if (!WebInterface.isInternetConnected()) {
+                    new DesktopInfoBox(this).warning("No Net Connection", "No network connection detected. Google generated graphs will not be rendered.");
                 }
 
-                core.buildLanguageReport(progress);
-            }
-            catch (InterruptedException e) {
-                core.getOSHandler().getIOHandler().writeErrorLog(e);
-                core.getOSHandler().getInfoBox().error("Language Stat Error", "Unable to generate language statistics: " + e.getLocalizedMessage());
-            }
+                try {
+                    int wordCount = core.getWordCollection().getWordCount();
+                    ScrProgressMenu progress = ScrProgressMenu.createScrProgressMenu("Generating Language Stats", wordCount + 5, true, true);
+                    progress.setVisible(true);
 
-            // test whether con-font family is installed on computer
-            GraphicsEnvironment g = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            String conFontFamily = ((DesktopPropertiesManager) core.getPropertiesManager()).getFontCon().getFamily();
-            if (!Arrays.asList(g.getAvailableFontFamilyNames()).contains(conFontFamily)) {
-                // prompt user to install font (either Charis or their chosen con-font) if not currently on system
-                new DesktopInfoBox(this).warning("Font Not Installed",
-                        "The font used for your language is not installed on this computer.\n"
-                        + "This may result in the statistics page appearing incorrectly.\n"
-                        + "Please select a path to save font to, install from this location, "
-                        + "and re-run the statistics option.");
-                if (conFontFamily.equals(PGTUtil.UNICODE_FONT_FAMILY_NAME)) {
-                    exportFont(true);
-                } else {
-                    exportFont(false);
+                    if (PolyGlot.getPolyGlot().getRootWindow() != null) {
+                        progress.setLocation(PolyGlot.getPolyGlot().getRootWindow().getLocation());
+                    }
+
+                    core.buildLanguageReport(progress);
+                }
+                catch (InterruptedException e) {
+                    core.getOSHandler().getIOHandler().writeErrorLog(e);
+                    core.getOSHandler().getInfoBox().error("Language Stat Error", "Unable to generate language statistics: " + e.getLocalizedMessage());
+                }
+
+                // test whether con-font family is installed on computer
+                GraphicsEnvironment g = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                String conFontFamily = ((DesktopPropertiesManager) core.getPropertiesManager()).getFontCon().getFamily();
+                if (!Arrays.asList(g.getAvailableFontFamilyNames()).contains(conFontFamily)) {
+                    // prompt user to install font (either Charis or their chosen con-font) if not currently on system
+                    new DesktopInfoBox(this).warning("Font Not Installed",
+                            "The font used for your language is not installed on this computer.\n"
+                            + "This may result in the statistics page appearing incorrectly.\n"
+                            + "Please select a path to save font to, install from this location, "
+                            + "and re-run the statistics option.");
+                    if (conFontFamily.equals(PGTUtil.UNICODE_FONT_FAMILY_NAME)) {
+                        exportFont(true);
+                    } else {
+                        exportFont(false);
+                    }
                 }
             }
+        } finally {
+            setCursor(Cursor.getDefaultCursor());
         }
-        setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuLangStatsActionPerformed
 
     private void mnuIPAChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuIPAChartActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        ipaHit();
-        setCursor(Cursor.getDefaultCursor());
+        try {
+            ipaHit();
+        } finally {
+            setCursor(Cursor.getDefaultCursor());
+        }
     }//GEN-LAST:event_mnuIPAChartActionPerformed
 
     private void mnuAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAboutActionPerformed
@@ -2291,26 +2323,35 @@ public final class ScrMainMenu extends PFrame {
 
     private void btnClassesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClassesActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        saveAllValues();
-        ScrWordClasses s = new ScrWordClasses(core);
-        changeScreen(s, s.getWindow(), (PButton) evt.getSource());
-        setCursor(Cursor.getDefaultCursor());
+        try {
+            saveAllValues();
+            ScrWordClasses s = new ScrWordClasses(core);
+            changeScreen(s, s.getWindow(), (PButton) evt.getSource());
+        } finally {
+            setCursor(Cursor.getDefaultCursor());
+        }
     }//GEN-LAST:event_btnClassesActionPerformed
 
     private void btnGrammarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrammarActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        saveAllValues();
-        ScrGrammarGuide s = new ScrGrammarGuide(core);
-        changeScreen(s, s.getWindow(), (PButton) evt.getSource());
-        setCursor(Cursor.getDefaultCursor());
+        try {
+            saveAllValues();
+            ScrGrammarGuide s = new ScrGrammarGuide(core);
+            changeScreen(s, s.getWindow(), (PButton) evt.getSource());
+        } finally {
+            setCursor(Cursor.getDefaultCursor());
+        }
     }//GEN-LAST:event_btnGrammarActionPerformed
 
     private void btnLogosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogosActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        saveAllValues();
-        ScrLogoDetails s = new ScrLogoDetails(core);
-        changeScreen(s, s.getWindow(), (PButton) evt.getSource());
-        setCursor(Cursor.getDefaultCursor());
+        try {
+            saveAllValues();
+            ScrLogoDetails s = new ScrLogoDetails(core);
+            changeScreen(s, s.getWindow(), (PButton) evt.getSource());
+        } finally {
+            setCursor(Cursor.getDefaultCursor());
+        }
     }//GEN-LAST:event_btnLogosActionPerformed
 
     private void btnPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPropActionPerformed
@@ -2319,40 +2360,43 @@ public final class ScrMainMenu extends PFrame {
 
     private void mnuLexFamiliesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLexFamiliesActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        mnuLexFamilies.setEnabled(false);
-        ScrFamilies s = new ScrFamilies(core, this);
-        s.addWindowListener(new WindowListener() {
-            @Override
-            public void windowOpened(WindowEvent e) {
-            }
+        try {
+            mnuLexFamilies.setEnabled(false);
+            ScrFamilies s = new ScrFamilies(core, this);
+            s.addWindowListener(new WindowListener() {
+                @Override
+                public void windowOpened(WindowEvent e) {
+                }
 
-            @Override
-            public void windowClosing(WindowEvent e) {
-            }
+                @Override
+                public void windowClosing(WindowEvent e) {
+                }
 
-            @Override
-            public void windowClosed(WindowEvent e) {
-                mnuLexFamilies.setEnabled(true);
-            }
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    mnuLexFamilies.setEnabled(true);
+                }
 
-            @Override
-            public void windowIconified(WindowEvent e) {
-            }
+                @Override
+                public void windowIconified(WindowEvent e) {
+                }
 
-            @Override
-            public void windowDeiconified(WindowEvent e) {
-            }
+                @Override
+                public void windowDeiconified(WindowEvent e) {
+                }
 
-            @Override
-            public void windowActivated(WindowEvent e) {
-            }
+                @Override
+                public void windowActivated(WindowEvent e) {
+                }
 
-            @Override
-            public void windowDeactivated(WindowEvent e) {
-            }
-        });
-        s.setVisible(true);
-        setCursor(Cursor.getDefaultCursor());
+                @Override
+                public void windowDeactivated(WindowEvent e) {
+                }
+            });
+            s.setVisible(true);
+        } finally {
+            setCursor(Cursor.getDefaultCursor());
+        }
 
     }//GEN-LAST:event_mnuLexFamiliesActionPerformed
 
@@ -2371,10 +2415,13 @@ public final class ScrMainMenu extends PFrame {
 
     private void btnPhonologyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPhonologyActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        saveAllValues();
-        ScrPhonology s = new ScrPhonology(core);
-        changeScreen(s, s.getWindow(), (PButton) evt.getSource());
-        setCursor(Cursor.getDefaultCursor());
+        try {
+            saveAllValues();
+            ScrPhonology s = new ScrPhonology(core);
+            changeScreen(s, s.getWindow(), (PButton) evt.getSource());
+        } finally {
+            setCursor(Cursor.getDefaultCursor());
+        }
     }//GEN-LAST:event_btnPhonologyActionPerformed
 
     private void mnuOptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuOptionsActionPerformed
@@ -2389,10 +2436,13 @@ public final class ScrMainMenu extends PFrame {
 
     private void btnQuizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuizActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        saveAllValues();
-        ScrQuizGenDialog s = new ScrQuizGenDialog(core);
-        changeScreen(s, s.getWindow(), (PButton) evt.getSource());
-        setCursor(Cursor.getDefaultCursor());
+        try {
+            saveAllValues();
+            ScrQuizGenDialog s = new ScrQuizGenDialog(core);
+            changeScreen(s, s.getWindow(), (PButton) evt.getSource());
+        } finally {
+            setCursor(Cursor.getDefaultCursor());
+        }
     }//GEN-LAST:event_btnQuizActionPerformed
 
     private void mnuReversionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuReversionActionPerformed
@@ -2432,10 +2482,13 @@ public final class ScrMainMenu extends PFrame {
 
     private void btnPhrasebookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPhrasebookActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        saveAllValues();
-        ScrPhrasebook s = new ScrPhrasebook(core);
-        changeScreen(s, s.getWindow(), (PButton) evt.getSource());
-        setCursor(Cursor.getDefaultCursor());
+        try {
+            saveAllValues();
+            ScrPhrasebook s = new ScrPhrasebook(core);
+            changeScreen(s, s.getWindow(), (PButton) evt.getSource());
+        } finally {
+            setCursor(Cursor.getDefaultCursor());
+        }
     }//GEN-LAST:event_btnPhrasebookActionPerformed
 
     private void mnuUnpackLanguageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuUnpackLanguageActionPerformed
