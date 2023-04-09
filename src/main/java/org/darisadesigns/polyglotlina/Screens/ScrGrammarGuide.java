@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -275,9 +275,9 @@ public final class ScrGrammarGuide extends PFrame {
     
     private void updateFontSize() {
         try {
-            Integer.parseInt(txtFontSize.getText());
+            Integer.valueOf(txtFontSize.getText());
         } catch (NumberFormatException e) {
-            // user error
+            // user error, do not log
             // core.getOSHandler().getIOHandler().writeErrorLog(e);
             core.getOSHandler().getInfoBox().warning("Font Size", "Invalid size: " + txtFontSize.getText());
             txtFontSize.setText("12");
@@ -910,8 +910,8 @@ public final class ScrGrammarGuide extends PFrame {
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
+        jToolBar1.setPreferredSize(new java.awt.Dimension(24, 29));
 
         cmbFonts.setToolTipText("Text font");
         cmbFonts.setEnabled(false);
@@ -993,7 +993,6 @@ public final class ScrGrammarGuide extends PFrame {
         sldSoundPosition.setEnabled(false);
         sldSoundPosition.setMinimumSize(new java.awt.Dimension(10, 29));
 
-        jToolBar2.setFloatable(false);
         jToolBar2.setRollover(true);
 
         btnRecordAudio.setText("Record");
