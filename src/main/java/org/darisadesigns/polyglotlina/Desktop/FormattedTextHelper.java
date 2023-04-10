@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -89,7 +89,7 @@ public final class FormattedTextHelper extends org.darisadesigns.polyglotlina.Fo
                 // do nothing
             } else if (nextNode.startsWith("<img src=")) {
                 String idString = nextNode.replace("<img src=\"", "").replace("\">", "");
-                Integer id = Integer.parseInt(idString);
+                Integer id = Integer.valueOf(idString);
                 ImageNode imageNode = (ImageNode)core.getImageCollection().getNodeById(id);
                 ((PGrammarPane)pane).addImage(imageNode);      
             } else {
@@ -97,14 +97,8 @@ public final class FormattedTextHelper extends org.darisadesigns.polyglotlina.Fo
                 
                 MutableAttributeSet aset = new SimpleAttributeSet();
                 if (font.equals(PGTUtil.CONLANG_FONT)) {
-                    if (core.getPropertiesManager().isEnforceRTL()) {
-                        nextNode = PGTUtil.RTL_CHARACTER + nextNode;
-                    }
                     StyleConstants.setFontFamily(aset, conFont.getFamily());
                 } else {
-                    if (core.getPropertiesManager().isEnforceRTL()) {
-                        nextNode = PGTUtil.LTR_MARKER + nextNode;
-                    }
                     if (!font.isEmpty()) {
                         StyleConstants.setFontFamily(aset, font);
                     }
@@ -149,12 +143,6 @@ public final class FormattedTextHelper extends org.darisadesigns.polyglotlina.Fo
             } else if (nextNode.startsWith("</font")) {
                 // do nothing. All font changes are prefixed with<font
             } else {
-                if (font.equals(conFont.awtFont.getFamily()) && core.getPropertiesManager().isEnforceRTL()) {
-                    nextNode = PGTUtil.RTL_CHARACTER + nextNode;
-                } else if (core.getPropertiesManager().isEnforceRTL()) {
-                    nextNode = PGTUtil.LTR_MARKER + nextNode;
-                }
-                
                 if (!nextNode.isEmpty()){
                     conFont.awtFont = font.equals(core.getPropertiesManager().getFontConFamily()) ? 
                             ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon() : new JLabel().getFont();
@@ -291,14 +279,13 @@ public final class FormattedTextHelper extends org.darisadesigns.polyglotlina.Fo
     
     /**
      * Creates and returns string representing complex formatted text, which 
-     * can be saved. Filters out all RTL and LTR characters before returning.
+     * can be saved.
      * @param pane JTextPane containing text to be saved
      * @return encoded values of pane
      * @throws BadLocationException if unable to create string format
      */
     public static String storageFormat(JTextPane pane) throws Exception {
-        String ret = storeFormatRecurse(pane.getDocument().getDefaultRootElement(), pane);
-        return ret.replace(PGTUtil.RTL_CHARACTER, "").replace(PGTUtil.LTR_MARKER, "");
+        return storeFormatRecurse(pane.getDocument().getDefaultRootElement(), pane);
     }
 
     /**

@@ -121,7 +121,6 @@ public class PGTUtil {
     public static final String LANG_PROP_LOCAL_UNIQUE_XID = "langPropLocalUniqueness";
     public static final String LANG_PROP_IGNORE_CASE_XID = "langPropIgnoreCase";
     public static final String LANG_PROP_DISABLE_PROC_REGEX = "langPropDisableProcRegex";
-    public static final String LANG_PROP_ENFORCE_RTL_XID = "langPropEnforceRTL";
     public static final String LANG_PROP_AUTH_COPYRIGHT_XID = "langPropAuthorCopyright";
     public static final String LANG_PROP_LOCAL_NAME_XID = "langPropLocalLangName";
     public static final String LANG_PROP_USE_LOCAL_LEX_XID = "langPropUseLocalLexicon";
@@ -135,6 +134,7 @@ public class PGTUtil {
     public static final String LANG_PROP_ZOMPIST_DROPOFF_RATE = "zompistDropoffRate";
     public static final String LANG_PROP_ZOMPIST_MONOSYLLABLE_FREQUENCY = "zompistMonosyllableFrequency";
     public static final String LANG_PROP_KERNING_DEPRECATED = "langPropKerningValue";
+    public static final String LANG_PROP_ENFORCE_RTL_XID_DEPRECATED = "langPropEnforceRTL";
 
     // character replacement pair values
     public static final String LANG_PROP_CHAR_REP_CONTAINER_XID = "langPropCharRep";
@@ -355,8 +355,6 @@ public class PGTUtil {
     public static final String WAV_SUFFIX = ".wav";
     public static final String IPA_SOUNDS_LOCATION = "/assets/org/DarisaDesigns/SoundAssets/";
     
-    public static final String RTL_CHARACTER = "\u202e";
-    public static final String LTR_MARKER = "\u202c";
     public static final String IMAGE_ID_ATTRIBUTE = "imageIDAttribute";
     public static final String TRUE = "T";
     public static final String FALSE = "F";
@@ -604,16 +602,6 @@ public class PGTUtil {
         } catch (InterruptedException e) {
             throw new IOException(e);
         }
-    }
-    
-    /**
-     * Strips string of RTL and LTR markers
-     *
-     * @param strip string to strip
-     * @return stripped string
-     */
-    public static String stripRTL(String strip) {
-        return strip.replace(RTL_CHARACTER, "").replace(LTR_MARKER, "");
     }
 
     /**

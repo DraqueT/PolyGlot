@@ -73,8 +73,8 @@ public class LangPropertiesParser extends BaseParser {
             case PGTUtil.LANG_PROP_DISABLE_PROC_REGEX -> {
                 core.getPropertiesManager().setDisableProcRegex(node.getTextContent().equals(PGTUtil.TRUE));
             }
-            case PGTUtil.LANG_PROP_ENFORCE_RTL_XID -> {
-                propMan.setEnforceRTL(node.getTextContent().equals(PGTUtil.TRUE));
+            case PGTUtil.LANG_PROP_ENFORCE_RTL_XID_DEPRECATED -> {
+                // deprecated feature: do nothing
             }
             case PGTUtil.LANG_PROP_OVERRIDE_REGEX_FONT_XID -> {
                 propMan.setOverrideRegexFont(node.getTextContent().equals(PGTUtil.TRUE));

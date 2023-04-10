@@ -868,8 +868,7 @@ public class ScrLogoDetails extends PFrame {
         }
 
         lstRadicals.setModel(radModel);
-        
-        // TODO: figure out a way to make this respect RTL languages... maybe just insert char here? and cut at save time? Messy but effective...
+
         // Populate readings
         DefaultTableModel procModel = new DefaultTableModel();
         procModel.addColumn("Readings");

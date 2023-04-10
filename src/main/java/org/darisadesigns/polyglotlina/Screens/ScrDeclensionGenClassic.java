@@ -846,7 +846,7 @@ public final class ScrDeclensionGenClassic extends PDialog {
     /**
      * adds transform set to currently selected rule
      */
-    private void addTransform() { // TODO: somehow integrate RTL letters here?
+    private void addTransform() {
         if (lstRules.getSelectedValue() == null) {
             return;
         }

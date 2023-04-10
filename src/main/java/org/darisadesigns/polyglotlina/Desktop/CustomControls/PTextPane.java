@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -463,23 +463,9 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
 
     @Override
     public String getText() {
-        final String bodyS = "<body>";
-        final String bodyE = "</body>";        
-        String ret = super.getText().replaceAll(PGTUtil.RTL_CHARACTER, "").replaceAll(PGTUtil.LTR_MARKER, "");
-
-        // special logic needed if this is written in the conlang's font and RTL is enforced.
-        if (isDefaultText()) {
-            ret = "";
-        } else if (core.getPropertiesManager().isEnforceRTL() && !overrideFont
-                && ret.contains(bodyS) && ret.contains(bodyE)) {
-            String body = ret.substring(0, ret.indexOf(bodyE));
-            body = body.substring(body.lastIndexOf(bodyS) + bodyS.length());
-            String start = ret.substring(0, ret.indexOf(bodyS) + bodyS.length());
-            String end = ret.substring(ret.indexOf(bodyE));
-            ret = start + PGTUtil.RTL_CHARACTER + body.trim() + end;
-        }
-
-        return FormattedTextHelper.HTMLLineBreakParse(ret);
+        return isDefaultText() ?
+                "" :
+                FormattedTextHelper.HTMLLineBreakParse(super.getText());
     }
 
     /**
@@ -488,7 +474,7 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
      * @return
      */
     private String getSuperText() {
-        return super.getText().replaceAll(PGTUtil.RTL_CHARACTER, "").replaceAll(PGTUtil.LTR_MARKER, "");
+        return super.getText();
     }
 
     @Override

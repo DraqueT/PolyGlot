@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -36,14 +36,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.Serializable;
 import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
 import javax.swing.text.JTextComponent;
@@ -57,7 +55,6 @@ import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 public final class PTextField extends JTextField implements CoreUpdateSubscriptionInterface {
 
     private DictCore core;
-    private boolean skipRepaint = false;
     private boolean curSetText = false;
     private boolean overrideFont = false;
     private SwingWorker worker = null;
@@ -93,7 +90,6 @@ public final class PTextField extends JTextField implements CoreUpdateSubscripti
         for (ChangeListener chlist : pVis.getChangeListeners()) {
             pVis.removeChangeListener(chlist);
         }
-        pVis.addChangeListener(new PScrollRepainter());
 
         setCore(_core);
         defText = _defText;
@@ -169,9 +165,7 @@ public final class PTextField extends JTextField implements CoreUpdateSubscripti
      * @return
      */
     public boolean isDefaultText() {
-        // account for RtL languages
-        String curText = super.getText().replaceAll(PGTUtil.RTL_CHARACTER, "").replaceAll(PGTUtil.LTR_MARKER, "");
-        return curText.equals(defText);
+        return getText().equals(defText);
     }
 
     /**
@@ -186,7 +180,7 @@ public final class PTextField extends JTextField implements CoreUpdateSubscripti
             @Override
             public void focusGained(FocusEvent e) {
                 SwingUtilities.invokeLater(() -> {
-                    if (getSuperText().equals(defText)) {
+                    if (getText().equals(defText)) {
                         setText("");
                         setForeground(Color.black);
                     }
@@ -196,7 +190,7 @@ public final class PTextField extends JTextField implements CoreUpdateSubscripti
             @Override
             public void focusLost(FocusEvent e) {
                 SwingUtilities.invokeLater(() -> {
-                    if (getSuperText().isEmpty()) {
+                    if (getText().isEmpty()) {
                         setText(defText);
                         setForeground(Color.lightGray);
                     }
@@ -275,30 +269,9 @@ public final class PTextField extends JTextField implements CoreUpdateSubscripti
         }
     }
 
-    public class PScrollRepainter implements ChangeListener, Serializable {
-
-        @Override
-        public void stateChanged(ChangeEvent e) {
-            if (!skipRepaint && !curSetText) {
-                repaint();
-            }
-        }
-    }
-
-    /**
-     * Prefixes the RTL character if not prefixed already
-     */
-    private void prefixRTL() {
-        if (super.getText().startsWith(PGTUtil.RTL_CHARACTER)) {
-            return;
-        }
-
-        setText(PGTUtil.RTL_CHARACTER + getText());
-    }
-
     @Override
     public void paint(Graphics g) {
-        if (skipRepaint || core == null) {
+        if (core == null) {
             return;
         }
 
@@ -306,21 +279,6 @@ public final class PTextField extends JTextField implements CoreUpdateSubscripti
             setForeground(Color.lightGray);
         } else {
             setForeground(Color.black);
-        }
-        
-        try {
-            DesktopPropertiesManager propMan = ((DesktopPropertiesManager)core.getPropertiesManager());
-            skipRepaint = true;
-            if (propMan != null
-                    && !curSetText
-                    && propMan.isEnforceRTL()
-                    && !overrideFont) {
-                prefixRTL();
-            }
-            skipRepaint = false;
-        } catch (Exception e) {
-            core.getOSHandler().getInfoBox().error("Repaint error", "Could not repaint component: " + e.getLocalizedMessage());
-            skipRepaint = false;
         }
         
         try {
@@ -403,31 +361,6 @@ public final class PTextField extends JTextField implements CoreUpdateSubscripti
         }
 
         curSetText = false;
-    }
-
-    /**
-     * Gets text from super with minimal processing
-     *
-     * @return super's text
-     */
-    private String getSuperText() {
-        return super.getText().replaceAll(PGTUtil.RTL_CHARACTER, "").replaceAll(PGTUtil.LTR_MARKER, "");
-    }
-
-    @Override
-    /**
-     * Make certain only to return appropriate text and never default text
-     */
-    public String getText() {
-        String ret = super.getText().replaceAll(PGTUtil.RTL_CHARACTER, "").replaceAll(PGTUtil.LTR_MARKER, "");
-
-        if (ret.equals(defText)) {
-            ret = "";
-        } else {
-            ret = (core.getPropertiesManager().isEnforceRTL() && !overrideFont) ? PGTUtil.RTL_CHARACTER + ret : ret;
-        }
-
-        return ret;
     }
 
     /**

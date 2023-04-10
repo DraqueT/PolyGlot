@@ -358,7 +358,7 @@ public final class ScrPhonology extends PFrame {
         tableModel.addColumn("Character");
         tableModel.addColumn("Replacement");
 
-        tblRep.setModel(tableModel); // TODO: find way to make rom display RTL order when appropriate Maybe something on my custom cell editor
+        tblRep.setModel(tableModel);
         
         boolean useConFont = !core.getPropertiesManager().isOverrideRegexFont();
 
@@ -422,7 +422,7 @@ public final class ScrPhonology extends PFrame {
         DefaultTableModel romTableModel = new DefaultTableModel();
         romTableModel.addColumn("Character(s)");
         romTableModel.addColumn("Romanization");
-        tblRom.setModel(romTableModel); // TODO: find way to make rom display RTL order when appropriate Maybe something on my custom cell editor
+        tblRom.setModel(romTableModel);
         
         boolean useConFont = !core.getPropertiesManager().isOverrideRegexFont();
 

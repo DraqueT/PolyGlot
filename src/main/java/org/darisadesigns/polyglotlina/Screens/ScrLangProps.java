@@ -45,7 +45,6 @@ import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
-import javax.swing.JTextField;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
@@ -389,7 +388,6 @@ public class ScrLangProps extends PFrame {
         propMan.setLocalUniqueness(chkLocalUniqueness.isSelected());
         propMan.setTypesMandatory(chkTypesMandatory.isSelected());
         propMan.setWordUniqueness(chkWordUniqueness.isSelected());
-        propMan.setEnforceRTL(chkEnforceRTL.isSelected());
         propMan.setOverrideRegexFont(chkOverrideRegexFont.isSelected());
         propMan.setExpandedLexListDisplay(chkExpandedLexList.isSelected());
         propMan.setUseLocalWordLex(chkUseLocalWordLex.isSelected());
@@ -414,7 +412,6 @@ public class ScrLangProps extends PFrame {
         chkLocalUniqueness.setSelected(propMan.isLocalUniqueness());
         chkTypesMandatory.setSelected(propMan.isTypesMandatory());
         chkWordUniqueness.setSelected(propMan.isWordUniqueness());
-        chkEnforceRTL.setSelected(propMan.isEnforceRTL());
         chkOverrideRegexFont.setSelected(propMan.isOverrideRegexFont());
         chkExpandedLexList.setSelected(propMan.isExpandedLexListDisplay());
         chkUseLocalWordLex.setSelected(propMan.isUseLocalWordLex());
@@ -462,7 +459,6 @@ public class ScrLangProps extends PFrame {
                     + "To address this, please load your font manually via Tools->Import Font\n\nError: " + e.getLocalizedMessage());
         }
 
-        testRTLWarning();
         core.pushUpdate();
     }
 
@@ -473,22 +469,6 @@ public class ScrLangProps extends PFrame {
 
             txtLocalFont.setText(localFont.getFamily());
             core.pushUpdate();
-        }
-    }
-
-    /**
-     * Displays warning to user if RTL is enforced and confont is standard
-     */
-    private void testRTLWarning() {
-        Font conFont = propMan.getFontCon();
-        Font stdFont = (new JTextField()).getFont();
-
-        if (core.getPropertiesManager().isEnforceRTL()
-                && (conFont == null
-                || conFont.getFamily().equals(stdFont.getFamily()))) {
-            core.getOSHandler().getInfoBox().warning("RTL Font Warning", "Enforcing RTL with default font"
-                    + " is not recommended. For best results, please set distinct"
-                    + " conlang font.");
         }
     }
 
@@ -602,7 +582,6 @@ public class ScrLangProps extends PFrame {
         chkLocalUniqueness = new PCheckBox(nightMode);
         chkIgnoreCase = new PCheckBox(nightMode);
         chkDisableProcRegex = new PCheckBox(nightMode);
-        chkEnforceRTL = new PCheckBox(nightMode);
         jLabel2 = new PLabel("");
         chkOverrideRegexFont = new PCheckBox(nightMode);
         chkUseLocalWordLex = new PCheckBox(nightMode);
@@ -677,14 +656,6 @@ public class ScrLangProps extends PFrame {
             }
         });
 
-        chkEnforceRTL.setText("Enforce RTL");
-        chkEnforceRTL.setToolTipText("Check this to force all conlang text to appear in RTL fashion through PolyGlot. This works even if the character set you are using is not typically RTL.");
-        chkEnforceRTL.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkEnforceRTLActionPerformed(evt);
-            }
-        });
-
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Language Toggles");
 
@@ -717,7 +688,6 @@ public class ScrLangProps extends PFrame {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(chkExpandedLexList)
                             .addComponent(chkOverrideRegexFont)
-                            .addComponent(chkEnforceRTL)
                             .addComponent(chkLocalUniqueness)
                             .addComponent(chkIgnoreCase))
                         .addGap(0, 47, Short.MAX_VALUE)))
@@ -738,15 +708,13 @@ public class ScrLangProps extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(chkDisableProcRegex)
-                    .addComponent(chkEnforceRTL))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(chkLocalMandatory)
                     .addComponent(chkOverrideRegexFont))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(chkUseLocalWordLex)
+                    .addComponent(chkLocalMandatory)
                     .addComponent(chkExpandedLexList))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkUseLocalWordLex)
                 .addContainerGap(107, Short.MAX_VALUE))
         );
 
@@ -958,12 +926,6 @@ public class ScrLangProps extends PFrame {
         fontDialog.setVisible(true);
     }//GEN-LAST:event_btnChangeFontActionPerformed
 
-    private void chkEnforceRTLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkEnforceRTLActionPerformed
-        // needs to update value immediately for text elements on this form affected by change
-        core.getPropertiesManager().setEnforceRTL(chkEnforceRTL.isSelected());
-        testRTLWarning();
-    }//GEN-LAST:event_chkEnforceRTLActionPerformed
-
     private void btnFontLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFontLocalActionPerformed
         var fontDialog = new ScrFontImportDialog(core);
         fontDialog.setLocalSelected();
@@ -1022,7 +984,6 @@ public class ScrLangProps extends PFrame {
     private javax.swing.JButton btnDeleteAlpha;
     private javax.swing.JButton btnFontLocal;
     private javax.swing.JCheckBox chkDisableProcRegex;
-    private javax.swing.JCheckBox chkEnforceRTL;
     private javax.swing.JCheckBox chkExpandedLexList;
     private javax.swing.JCheckBox chkIgnoreCase;
     private javax.swing.JCheckBox chkLocalMandatory;

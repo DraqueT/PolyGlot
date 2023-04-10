@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -272,25 +272,6 @@ public class ConWord extends DictNode {
         core = _core;
     }
 
-    /**
-     * Returns string value of conword (reversed if appropriate)
-     *
-     * @return
-     */
-    @Override
-    public String toString() {
-        String ret;
-
-        if (core == null
-                || !core.getPropertiesManager().isEnforceRTL()) {
-            ret = super.toString();
-        } else {
-            ret = PGTUtil.RTL_CHARACTER + super.toString();
-        }
-
-        return ret;
-    }
-
     public boolean isOverrideAutoConjugate() {
         return autoConjugationOverride;
     }
@@ -313,11 +294,6 @@ public class ConWord extends DictNode {
 
     public void setLocalWord(String _localWord) {
         this.localWord = _localWord.trim();
-    }
-
-    @Override
-    public void setValue(String _value) {
-        super.setValue(_value.replace(PGTUtil.RTL_CHARACTER, "").replace(PGTUtil.LTR_MARKER, ""));
     }
 
     /**

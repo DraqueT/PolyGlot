@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -58,7 +58,6 @@ public abstract class PropertiesManager {
     private boolean overrideRegexFont = false;
     private boolean ignoreCase = false;
     private boolean disableProcRegex = false;
-    private boolean enforceRTL = false;
     private boolean useLocalWordLex = false;
     private boolean expandedLexListDisplay = true;
     protected byte[] cachedConFont = null;
@@ -103,11 +102,9 @@ public abstract class PropertiesManager {
     /**
      * Adds character/replacement set
      * @param character character to look for/be replaced in text
-     * @param _replacement the string to replace the character with
+     * @param replacement the string to replace the character with
      */
-    public void addCharacterReplacement(String character, String _replacement) {
-        String replacement = PGTUtil.stripRTL(_replacement);
-        
+    public void addCharacterReplacement(String character, String replacement) {
         if (charRep.containsKey(character)) {
             charRep.replace(character, replacement);
         } else {
@@ -178,14 +175,6 @@ public abstract class PropertiesManager {
 
     public boolean isDisableProcRegex() {
         return disableProcRegex;
-    }
-
-    public void setEnforceRTL(boolean _enforceRTL) {
-        enforceRTL = _enforceRTL;
-    }
-
-    public boolean isEnforceRTL() {
-        return enforceRTL;
     }
 
     /**
@@ -322,7 +311,7 @@ public abstract class PropertiesManager {
             }
         }
         
-        return ret.toArray(new String[0]);
+        return ret.toArray(String[]::new);
     }
 
     /**
@@ -491,11 +480,6 @@ public abstract class PropertiesManager {
         // store option for disabling regex or pronunciations
         wordValue = doc.createElement(PGTUtil.LANG_PROP_DISABLE_PROC_REGEX);
         wordValue.appendChild(doc.createTextNode(disableProcRegex ? PGTUtil.TRUE : PGTUtil.FALSE));
-        propContainer.appendChild(wordValue);
-
-        // store option for enforcing RTL in conlang
-        wordValue = doc.createElement(PGTUtil.LANG_PROP_ENFORCE_RTL_XID);
-        wordValue.appendChild(doc.createTextNode(enforceRTL ? PGTUtil.TRUE : PGTUtil.FALSE));
         propContainer.appendChild(wordValue);
         
         // store option for overriding the regex display font
@@ -794,7 +778,6 @@ public abstract class PropertiesManager {
             ret = ret && overrideRegexFont == prop.overrideRegexFont;
             ret = ret && ignoreCase == prop.ignoreCase;
             ret = ret && disableProcRegex == prop.disableProcRegex;
-            ret = ret && enforceRTL == prop.enforceRTL;
             ret = ret && useLocalWordLex == prop.useLocalWordLex;
             ret = ret && charRep.equals(prop.charRep);
             ret = ret && useSimplifiedConjugations == prop.useSimplifiedConjugations;
