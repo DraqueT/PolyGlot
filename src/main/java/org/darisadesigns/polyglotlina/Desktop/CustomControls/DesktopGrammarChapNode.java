@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -64,6 +64,7 @@ public class DesktopGrammarChapNode extends DefaultMutableTreeNode implements Gr
         return name;
     }
 
+    @Override
     public Enumeration children(String _filter) {
         return internalChildren(_filter);
     }
@@ -183,14 +184,17 @@ public class DesktopGrammarChapNode extends DefaultMutableTreeNode implements Gr
     }
     
     @Override
+    public GrammarSectionNode getChild(int i) {
+        return (DesktopGrammarSectionNode)this.getChildAt(i);
+    }
+    
+    @Override
     public boolean equals(Object comp) {
         boolean ret = false;
         
         if (comp == this) {
             ret = true;
-        } else if (comp instanceof DesktopGrammarChapNode) {
-            DesktopGrammarChapNode compChap = (DesktopGrammarChapNode)comp;
-            
+        } else if (comp instanceof DesktopGrammarChapNode compChap) {
             ret = (children == null && compChap.children == null) 
                     || ( children != null && children.equals(compChap.children));
             ret = ret && name.trim().equals(compChap.name.trim());

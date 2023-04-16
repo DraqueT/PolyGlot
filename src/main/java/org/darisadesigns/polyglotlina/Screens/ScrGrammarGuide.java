@@ -49,7 +49,6 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -323,17 +322,12 @@ public final class ScrGrammarGuide extends PFrame {
      * Sets input font/font of selected text
      */
     private void setFont() {
-        Font natFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
-        Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
         SimpleAttributeSet aset = new SimpleAttributeSet();
+        var font = cmbFonts.getSelectedIndex() == 0 ? // 0th index is always local font
+               ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal() :
+                ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
 
-        // natlang font is always 0, conlang font always 1
-        if (cmbFonts.getSelectedIndex() == 0) {
-            StyleConstants.setFontFamily(aset, natFont.getFamily());
-        } else {
-            // TODO: Will this even set the font at all if it's not installed locally? This is terrible.
-            StyleConstants.setFontFamily(aset, conFont.getFamily());
-        }
+        StyleConstants.setFontFamily(aset, font.getFamily());
 
         StyleConstants.setForeground(aset,
                 FormattedTextHelper.textToColor((String) cmbFontColor.getSelectedItem()));
@@ -345,26 +339,10 @@ public final class ScrGrammarGuide extends PFrame {
         int caretStart = txtSection.getSelectionStart();
         int caretEnd = txtSection.getSelectionEnd();
 
-        // logic for ensuring LTR enforcement if no text is currently selected
-        if (caretStart == caretEnd
-                && core.getPropertiesManager().isEnforceRTL()) {
-            StyledDocument doc = txtSection.getStyledDocument();
-            try {
-                doc.insertString(caretStart, " ", aset);
-                caretEnd++;
-            } catch (BadLocationException e) {
-                core.getOSHandler().getIOHandler().writeErrorLog(e);
-                core.getOSHandler().getInfoBox().warning("Font Error", "Problem setting font: "
-                        + e.getLocalizedMessage());
-            }
-        }
-
-        if (core.getPropertiesManager().isEnforceRTL()) {
-            // this ensures that the correct sections are displayed RTL
-            savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
-            populateProperties();
-        }
-
+        // forces refresh of style
+        this.saveAllValues();
+        this.populateProperties();
+        
         txtSection.requestFocus();
         txtSection.setSelectionStart(caretStart);
         txtSection.setSelectionEnd(caretEnd);

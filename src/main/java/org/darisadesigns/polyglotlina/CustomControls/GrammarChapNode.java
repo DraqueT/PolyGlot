@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.CustomControls;
 
+import java.util.Enumeration;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -37,5 +38,7 @@ public interface GrammarChapNode {
     public String getName();
     public void setName(String _name);
     public int getChildCount();
+    public Enumeration children(String _filter);
     public void writeXML(Document doc, Element rootElement);
+    public GrammarSectionNode getChild(int i);
 }
