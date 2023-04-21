@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -20,9 +20,11 @@
 package org.darisadesigns.polyglotlina.Desktop.CustomControls;
 
 import java.util.Objects;
+import java.util.regex.Pattern;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import javax.swing.tree.DefaultMutableTreeNode;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammarManager;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.DictCore;
@@ -39,6 +41,9 @@ public class DesktopGrammarSectionNode extends DefaultMutableTreeNode implements
     private String name;
     private String sectionText;
     private int recordingId;
+    
+    private static final String LOCAL_PACK = "LLOOCCAALL__PPAACCKK";
+    private static final String CON_PACK = "CCOONN__PPAACCKK";
     
     public DesktopGrammarSectionNode(DesktopGrammarManager _manager) {
         name = "";
@@ -68,11 +73,12 @@ public class DesktopGrammarSectionNode extends DefaultMutableTreeNode implements
     
     @Override
     public void setSectionText(String _sectionText) {
-        sectionText = _sectionText;
+         sectionText = packSectionText(_sectionText);
     }
+
     @Override
     public String getSectionText() {
-        return sectionText;
+        return unpackSectionText(sectionText);
     }
     
     @Override
@@ -96,6 +102,56 @@ public class DesktopGrammarSectionNode extends DefaultMutableTreeNode implements
         return name;
     }
     
+    /**
+     * Puts the text into a storage format and ensures only appropriate fonts
+     * are used.
+     * @param _sectionText
+     * @return 
+     */
+    private String packSectionText(String _sectionText) {
+        var propMan = (DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager();
+        var conFontFam = propMan.getFontCon().getFamily();
+        
+        return packer(_sectionText, conFontFam, CON_PACK, LOCAL_PACK);
+    }
+    
+    /**
+     * Returns text to a normal format
+     * @param _sectionText
+     * @return 
+     */
+    private String unpackSectionText(String _sectionText) {
+        var propMan = (DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager();
+        var conFontFam = propMan.getFontCon().getFamily();
+        var localFontFam = propMan.getFontLocal().getFamily();
+        
+        return packer(_sectionText, CON_PACK, conFontFam, localFontFam);
+    }
+    
+    private String packer(String _sectionText, String matchName, String matchReplace, String defaultReplace) {
+        var regex = "<font\s+face=\"([^\"]+)\"\s*size=\"([^\"]+)\"\s*color=\"([^\"]+)\"\s*>";
+        System.out.println(regex);
+        var pattern = Pattern.compile(regex);
+        var matcher = pattern.matcher(_sectionText);
+        
+        StringBuffer sb = new StringBuffer();
+        
+        while (matcher.find()) {
+            var fontName = matcher.group(1);
+            var fontSize = matcher.group(2);
+            var fontColor = matcher.group(3);
+            
+            if (fontName.equals(matchName)) {
+                matcher.appendReplacement(sb, "<font face=\"" + matchReplace + "\" size=\"" + fontSize + "\" color=\"" + fontColor +  "\">");
+            } else { // default to local font
+                matcher.appendReplacement(sb, "<font face=\"" + defaultReplace + "\" size=\"" + fontSize + "\" color=\"" + fontColor +  "\">");
+            }
+        }
+        
+        matcher.appendTail(sb);
+        return sb.toString();
+    }
+    
     public void writeXML(Document doc, Element rootElement) {
         Element secNode = doc.createElement(PGTUtil.GRAMMAR_SECTION_NODE_XID);
                 
@@ -108,7 +164,7 @@ public class DesktopGrammarSectionNode extends DefaultMutableTreeNode implements
         secNode.appendChild(secElement);
 
         secElement = doc.createElement(PGTUtil.GRAMMAR_SECTION_TEXT_XID);
-        secElement.appendChild(doc.createTextNode(this.sectionText));
+        secElement.appendChild(doc.createTextNode(unpackSectionText(this.sectionText)));
         secNode.appendChild(secElement);
 
         rootElement.appendChild(secNode);

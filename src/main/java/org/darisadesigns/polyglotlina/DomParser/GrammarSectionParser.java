@@ -63,5 +63,4 @@ public class GrammarSectionParser extends BaseParser {
                 throw new PDomException("Unexpected node in " + this.getClass().getName() + " : " + node.getNodeName());
         }
     }
-    
 }

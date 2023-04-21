@@ -43,6 +43,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.event.CaretEvent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.TreeSelectionEvent;
@@ -167,6 +168,27 @@ public final class ScrGrammarGuide extends PFrame {
         if (divider > -1) {
             jSplitPane1.setDividerLocation(divider);
         }
+        
+        setFontFromText();
+    }
+    
+    /**
+     * Detects font based on text (if any set) applies it to the menu
+     */
+    private void setFontFromText() {
+        var grammarPane = (PGrammarPane)txtSection;
+        var fontConFamily = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon().getFamily();
+        var isConFont = grammarPane.getFontFamilyAtCursor().equals(fontConFamily);
+        var localUpdating = isUpdating;
+        var fontColor = FormattedTextHelper.colorToText(grammarPane.getFontColorAtCursor());
+        
+        isUpdating = true;
+        
+        cmbFonts.setSelectedIndex(isConFont ? 1 : 0);
+        txtFontSize.setText(String.valueOf(grammarPane.getFontSizeAtCursor()));
+        cmbFontColor.setSelectedItem(fontColor);
+        
+        isUpdating = localUpdating;
     }
     
     private void initFontDrop() {
@@ -322,6 +344,11 @@ public final class ScrGrammarGuide extends PFrame {
      * Sets input font/font of selected text
      */
     private void setFont() {
+        // do not update font if already updating elsewhere
+        if (isUpdating) {
+            return;
+        }
+
         SimpleAttributeSet aset = new SimpleAttributeSet();
         var font = cmbFonts.getSelectedIndex() == 0 ? // 0th index is always local font
                ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal() :
@@ -338,6 +365,8 @@ public final class ScrGrammarGuide extends PFrame {
 
         int caretStart = txtSection.getSelectionStart();
         int caretEnd = txtSection.getSelectionEnd();
+        int positionV = panSection.getVerticalScrollBar().getValue();
+        int positionH = panSection.getHorizontalScrollBar().getValue();
 
         // forces refresh of style
         this.saveAllValues();
@@ -346,6 +375,8 @@ public final class ScrGrammarGuide extends PFrame {
         txtSection.requestFocus();
         txtSection.setSelectionStart(caretStart);
         txtSection.setSelectionEnd(caretEnd);
+        panSection.getVerticalScrollBar().setValue(positionV);
+        panSection.getHorizontalScrollBar().setValue(positionH);
     }
 
     /**
@@ -441,6 +472,12 @@ public final class ScrGrammarGuide extends PFrame {
             @Override
             public void keyReleased(KeyEvent e) {
                 // do nothing
+            }
+        });
+        
+        txtSection.addCaretListener((CaretEvent e) -> {
+            if (!isUpdating) {
+                setFontFromText();
             }
         });
     }
@@ -737,6 +774,7 @@ public final class ScrGrammarGuide extends PFrame {
 
         txtName.setText("");
         txtName.setForeground(Color.gray);
+        setFont();
     }
 
     private void playPauseAudio() {
@@ -899,38 +937,18 @@ public final class ScrGrammarGuide extends PFrame {
         cmbFonts.setToolTipText("Text font");
         cmbFonts.setEnabled(false);
         cmbFonts.setMaximumSize(new java.awt.Dimension(120, 32767));
-        cmbFonts.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbFontsActionPerformed(evt);
-            }
-        });
         jToolBar1.add(cmbFonts);
 
         txtFontSize.setText("12");
         txtFontSize.setToolTipText("Font Size");
         txtFontSize.setEnabled(false);
         txtFontSize.setMaximumSize(new java.awt.Dimension(40, 20));
-        txtFontSize.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtFontSizeFocusLost(evt);
-            }
-        });
-        txtFontSize.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtFontSizeKeyPressed(evt);
-            }
-        });
         jToolBar1.add(txtFontSize);
 
         cmbFontColor.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "black", "red", "blue", "green", "gray", "yellow" }));
         cmbFontColor.setToolTipText("Font Color");
         cmbFontColor.setEnabled(false);
         cmbFontColor.setMaximumSize(new java.awt.Dimension(96, 20));
-        cmbFontColor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbFontColorActionPerformed(evt);
-            }
-        });
         jToolBar1.add(cmbFontColor);
 
         btnApply.setText(" Apply ");
@@ -1264,25 +1282,6 @@ public final class ScrGrammarGuide extends PFrame {
     private void btnApplyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApplyActionPerformed
         setFont();
     }//GEN-LAST:event_btnApplyActionPerformed
-
-    private void cmbFontsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbFontsActionPerformed
-        setFont();
-    }//GEN-LAST:event_cmbFontsActionPerformed
-
-    private void cmbFontColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbFontColorActionPerformed
-        setFont();
-    }//GEN-LAST:event_cmbFontColorActionPerformed
-
-    private void txtFontSizeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFontSizeFocusLost
-        updateFontSize();
-    }//GEN-LAST:event_txtFontSizeFocusLost
-
-    private void txtFontSizeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFontSizeKeyPressed
-        int event = evt.getKeyCode();
-        if (event == KeyEvent.VK_ENTER) {
-            updateFontSize();
-        }
-    }//GEN-LAST:event_txtFontSizeKeyPressed
 
     private void btnMoveNodeUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveNodeUpActionPerformed
         moveNodeUp();

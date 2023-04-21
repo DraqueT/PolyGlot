@@ -81,7 +81,6 @@ public class WordClassParser extends BaseParser{
             }
             default ->
                 throw new PDomException("Unexpected node in " + this.getClass().getName() + " : " + node.getNodeName());
-                //System.out.println(node.getNodeName());
         }
     }
     

@@ -54,15 +54,6 @@ import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
  * for font selection.
  * This class has <code>JFileChooser</code> like APIs.
  * The following code pops up a font chooser dialog.
- * <pre>
- *   JFontChooser fontChooser = new JFontChooser();
- *   int result = fontChooser.showDialog(parent);
- *   if (result == JFontChooser.OK_OPTION)
- *   {
- *      Font font = fontChooser.getSelectedFont(); 
- *      System.out.println("Selected Font : " + font); 
- *   }
- * </pre>
  **/
 public class JFontChooser extends JComponent
 {

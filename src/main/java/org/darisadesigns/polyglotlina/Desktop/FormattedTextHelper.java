@@ -342,7 +342,6 @@ public final class FormattedTextHelper extends org.darisadesigns.polyglotlina.Fo
     public static String colorToText(Color c) {
         String ret;
 
-        // Java 1.6 can't switch on an enum...
         if (c == Color.black) {
             ret = BLACK;
         } else if (c == Color.red) {

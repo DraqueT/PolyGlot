@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2019 Draque Thompson
+ * Copyright (c) 2016-2023 Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.Desktop.CustomControls;
 
+import java.awt.Color;
 import org.darisadesigns.polyglotlina.Desktop.ClipboardHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
@@ -47,6 +48,7 @@ import javax.swing.text.Caret;
 import javax.swing.text.Document;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 /**
  * Similar to the PTextPane, but compatible with the HTML stylings performed in the grammar window
@@ -124,6 +126,39 @@ public class PGrammarPane extends JTextPane {
                 }
             }
         });
+    }
+    
+    /**
+     * Finds the font size at the start position of the current selection
+     * @return 
+     */
+    public int getFontSizeAtCursor() {
+        int pos = this.getSelectionStart();
+        StyledDocument doc = this.getStyledDocument();
+        AttributeSet attrs = doc.getCharacterElement(pos).getAttributes();
+        return StyleConstants.getFontSize(attrs);
+    }
+    
+    /**
+     * Finds the font family at the start position of the current selection
+     * @return 
+     */
+    public String getFontFamilyAtCursor() {
+        int pos = this.getSelectionStart();
+        StyledDocument doc = this.getStyledDocument();
+        AttributeSet attrs = doc.getCharacterElement(pos).getAttributes();
+        return StyleConstants.getFontFamily(attrs);
+    }
+    
+    /**
+     * Finds the font color at the start position of the current selection
+     * @return 
+     */
+    public Color getFontColorAtCursor() {
+        int pos = this.getSelectionStart();
+        StyledDocument doc = this.getStyledDocument();
+        AttributeSet attrs = doc.getCharacterElement(pos).getAttributes();
+        return StyleConstants.getForeground(attrs);
     }
 
     @Override
