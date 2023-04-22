@@ -111,6 +111,12 @@ public class DesktopGrammarSectionNode extends DefaultMutableTreeNode implements
     private String packSectionText(String _sectionText) {
         var propMan = (DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager();
         var conFontFam = propMan.getFontCon().getFamily();
+        var localFontFam = propMan.getFontLocal().getFamily();
+        
+        // if only using a single font, presume all sections are "local" for clarity
+        if (conFontFam.equals(localFontFam)) {
+            return packer(_sectionText, conFontFam, LOCAL_PACK, LOCAL_PACK);
+        }
         
         return packer(_sectionText, conFontFam, CON_PACK, LOCAL_PACK);
     }
@@ -142,9 +148,9 @@ public class DesktopGrammarSectionNode extends DefaultMutableTreeNode implements
             var fontColor = matcher.group(3);
             
             if (fontName.equals(matchName)) {
-                matcher.appendReplacement(sb, "<font face=\"" + matchReplace + "\" size=\"" + fontSize + "\" color=\"" + fontColor +  "\">");
+                matcher.appendReplacement(sb, "<font face=\"" + matchReplace + "\"size=\"" + fontSize + "\"color=\"" + fontColor +  "\">");
             } else { // default to local font
-                matcher.appendReplacement(sb, "<font face=\"" + defaultReplace + "\" size=\"" + fontSize + "\" color=\"" + fontColor +  "\">");
+                matcher.appendReplacement(sb, "<font face=\"" + defaultReplace + "\"size=\"" + fontSize + "\"color=\"" + fontColor +  "\">");
             }
         }
         

@@ -170,7 +170,8 @@ public class FormattedTextHelperTest {
         
         try {
             FormattedTextHelper.restoreFromString(sectionText, pane, core);
-            assertEquals(sectionText, FormattedTextHelper.storageFormat(pane));
+            String result = FormattedTextHelper.storageFormat(pane);
+            assertEquals(sectionText, result);
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
