@@ -1344,7 +1344,7 @@ public final class ScrLexicon extends PFrame {
                 }
                 txtLocalWord.setText("");
                 txtProc.setText("");
-                ((PTextPane) txtDefinition).setDefault();
+                txtDefinition.setText("");
                 cmbType.setSelectedIndex(0);
                 chkProcOverride.setSelected(false);
                 chkRuleOverride.setSelected(false);
