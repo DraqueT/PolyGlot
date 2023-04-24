@@ -52,6 +52,10 @@ import org.darisadesigns.polyglotlina.Nodes.ConWord;
  * @param <E> Type to display
  */
 public class PComboBox<E> extends JComboBox<E> implements MouseListener {
+    private FontMetrics menuFontMetrics;
+    private FontMetrics displayFontMetrics;
+    private FontMetrics localFontMetrics;
+    private FontMetrics conFontMetrics;
     private boolean mouseOver = false;
     private String defaultText;
     private List<E> baseObjects;
@@ -307,6 +311,7 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         // turn on anti-alias mode
         Graphics2D antiAlias = (Graphics2D) g;
         antiAlias.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        populateFontMetrics(antiAlias);
                 
         if (enabled) {
             antiAlias.setColor(getBackground());
@@ -326,16 +331,17 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         
         Font tmpFont = this.getFont();
         Font defaultMenuFont = tmpFont;
+        FontMetrics fm  = localFontMetrics;
         
         // display default text if appropriate
         if ((text.isBlank() && this.getSelectedIndex() == 0) || text.equals(defaultText)) {
             text = getDefaultText();
             antiAlias.setColor(PGTUtil.COLOR_TEXT_DISABLED);
             defaultMenuFont = PGTUtil.MENU_FONT;
+            fm = menuFontMetrics;
         }
         
         if (!text.isEmpty()) { // 0 length text makes bounding box explode
-            FontMetrics fm = antiAlias.getFontMetrics(defaultMenuFont);
             antiAlias.setFont(defaultMenuFont);
             Rectangle2D rec = fm.getStringBounds(text, antiAlias);
             int stringW = (int) Math.round(rec.getWidth());
@@ -360,39 +366,59 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         var core = PolyGlot.getPolyGlot().getCore();
         if (!filterActive && core.getPropertiesManager().isExpandedLexListDisplay()
                 && getSelectedItem() instanceof ConWord word) {
-            Font localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
-            Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
-            FontMetrics localMetrics = g.getFontMetrics(localFont);
-            FontMetrics conMetrics = g.getFontMetrics(conFont);
             
             var printValue = word.getLocalWord();
-            var drawPosition = (conMetrics.stringWidth(word.getValue()) / 2) 
+            var drawPosition = (conFontMetrics.stringWidth(word.getValue()) / 2) 
                     + (getWidth()/2);
-            g.setFont(localFont);
+            g.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
             
             if (!printValue.isBlank()) {
                 g.setColor(PGTUtil.COLOR_COMBOBOX_LOCAL_TEXT_LINE);
-                g.drawLine(drawPosition + 10, 5, drawPosition + 10, conMetrics.getHeight());
+                g.drawLine(drawPosition + 10, 5, drawPosition + 10, conFontMetrics.getHeight());
                 g.setColor(PGTUtil.COLOR_COMBOBOX_LOCAL_TEXT);
-                g.drawString(printValue, drawPosition + 15, localMetrics.getHeight());
+                g.drawString(printValue, drawPosition + 15, localFontMetrics.getHeight());
             }
         }
         
-        // TODO: Do not paint default text at all if the field is filled: instead move that to prepend tooltips
         // draw default text if appropriate
         if (!defaultText.isBlank() && !isDefaultValue() && text.isBlank()) {
-            var localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
-            var localMetrics = g.getFontMetrics(localFont);
-            var menuMetrics = g.getFontMetrics(PGTUtil.MENU_FONT);
             var drawPosition = (getWidth() / 2) 
-                    - menuMetrics.stringWidth(defaultText)
+                    - menuFontMetrics.stringWidth(defaultText)
                     - 10;
             
             g.setFont(PGTUtil.MENU_FONT);
             g.setColor(PGTUtil.COLOR_DEFAULT_TEXT);
             
-            g.drawString(defaultText, drawPosition - 10, localMetrics.getHeight());
+            g.drawString(defaultText, drawPosition - 10, localFontMetrics.getHeight());
         }
+    }
+    
+    private void populateFontMetrics(Graphics g) {
+        if (menuFontMetrics == null) {
+            menuFontMetrics = g.getFontMetrics(PGTUtil.MENU_FONT);
+        }
+        
+        if (displayFontMetrics == null) {
+            displayFontMetrics = g.getFontMetrics(this.getFont());
+        }
+        
+        if (localFontMetrics == null) {
+            var core = PolyGlot.getPolyGlot().getCore();
+            var localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
+            localFontMetrics = g.getFontMetrics(localFont);
+        }
+        
+        if (conFontMetrics == null) {
+            var core = PolyGlot.getPolyGlot().getCore();
+            var conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
+            conFontMetrics = g.getFontMetrics(conFont);
+        }
+    }
+    
+    @Override
+    public void setFont(Font font) {
+        super.setFont(font);
+        displayFontMetrics = null;
     }
 
     public String getDefaultText() {
