@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2021-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -78,6 +78,13 @@ public class PGTUtil extends org.darisadesigns.polyglotlina.PGTUtil {
     public static final Color COLOR_REQUIRED_LEX_COLOR;
     public static final Color COLOR_ERROR_FIELD;
     public static final Color COLOR_WARNING_FIELD;
+    public static final Color COLOR_COMBOBOX_OUTLINE;
+    public static final Color COLOR_COMBOBOX_DISABLED_OUTLINE;
+    public static final Color COLOR_COMBOBOX_DISABLED;
+    public static final Color COLOR_COMBOBOX_DISABLED_BG;
+    public static final Color COLOR_COMBOBOX_DISABLED_TEXT;
+    public static final Color COLOR_COMBOBOX_LOCAL_TEXT_LINE;
+    public static final Color COLOR_COMBOBOX_LOCAL_TEXT;
     
     // Fonts stored here to cache values single time
     public static final Font MENU_FONT;
@@ -128,6 +135,13 @@ public class PGTUtil extends org.darisadesigns.polyglotlina.PGTUtil {
         COLOR_REQUIRED_LEX_COLOR = new Color(255, 204, 204);
         COLOR_ERROR_FIELD = new Color(255, 204, 204);
         COLOR_WARNING_FIELD = new Color( 255, 195, 0);
+        COLOR_COMBOBOX_DISABLED = Color.decode("#d0d0d0");
+        COLOR_COMBOBOX_DISABLED_BG = Color.decode("#e0e0e4");
+        COLOR_COMBOBOX_DISABLED_TEXT = Color.decode("#909090");
+        COLOR_COMBOBOX_OUTLINE = Color.black;
+        COLOR_COMBOBOX_DISABLED_OUTLINE = Color.lightGray;
+        COLOR_COMBOBOX_LOCAL_TEXT_LINE = Color.blue;
+        COLOR_COMBOBOX_LOCAL_TEXT = Color.darkGray;        
         
         // loads default font on system error (never came up, but for completeness...)
         Font tmpFont;
