@@ -1065,7 +1065,6 @@ public final class DesktopIOHandler implements IOHandler {
             try ( BufferedWriter writer = new BufferedWriter(new FileWriter(errorLog))) {
                 String output = getSystemInformation() + PGTUtil.ERROR_LOG_SPEARATOR
                         + curContents + errorMessage + "\n";
-//                System.out.println("Writing error to: " + errorLog.getAbsolutePath());
                 writer.write(output);
             }
         } catch (IOException e) {

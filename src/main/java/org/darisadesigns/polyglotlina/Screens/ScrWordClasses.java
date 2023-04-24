@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -102,7 +102,7 @@ public final class ScrWordClasses extends PFrame {
             public void sync() {
                 WordClass prop = lstProperties.getSelectedValue();
 
-                if (prop != null && !((PTextField)txtName).isDefaultText()) {
+                if (prop != null) {
                     prop.setValue(txtName.getText());
                     lstProperties.repaint();
                 }
@@ -199,7 +199,6 @@ public final class ScrWordClasses extends PFrame {
             checkType.setText(curNode.getValue());
             checkType.addItemListener(new ItemListener() {
                 final PCheckBox thisBox = checkType;
-                final int thisTypeId = typeId;
 
                 @Override
                 public void itemStateChanged(ItemEvent e) {
@@ -290,7 +289,7 @@ public final class ScrWordClasses extends PFrame {
         }
 
         if (curProp == null) {
-            ((PTextField)txtName).setDefault();
+            txtName.setText("");
             enableValues(false);
             typeChecks.values().forEach((checkBox) -> {
                 checkBox.setSelected(false);

@@ -425,12 +425,16 @@ public final class PolyGlot {
     }
 
     public DictCore getNewCore() {
+        DictCore oldCore = this.core;
+        
         this.core = new DictCore(
                 new DesktopPropertiesManager(),
                 this.getOSHandler(),
                 new PGTUtil(),
                 new DesktopGrammarManager()
         );
+        
+        oldCore.migrateSubscriptions(this.core);
         
         return this.core;
     }

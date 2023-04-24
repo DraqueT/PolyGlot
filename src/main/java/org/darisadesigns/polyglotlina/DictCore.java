@@ -234,6 +234,23 @@ public class DictCore {
             subscribers.add(newSub);
         }
     }
+    
+    public void unSubscribe(CoreUpdateSubscriptionInterface newSub) {
+        if (subscribers.contains(newSub)) {
+            subscribers.remove(newSub);
+        }
+    }
+    
+    /**
+     * Migrates all subscriptions to new core
+     * @param core 
+     */
+    public void migrateSubscriptions(DictCore core) {
+        for (CoreUpdateSubscriptionInterface subscriber : subscribers) {
+            subscriber.setCore(core);
+        }
+        subscribers.clear();
+    }
 
     /**
      * Sends out update to all subscribers

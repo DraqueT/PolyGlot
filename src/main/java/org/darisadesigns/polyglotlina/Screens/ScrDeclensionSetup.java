@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -201,9 +201,6 @@ public final class ScrDeclensionSetup extends PDialog {
         txtDeclensionName.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
-                if (((PTextField) txtDeclensionName).isSettingText()) {
-                    return;
-                }
                 Cursor cursor = txtDeclensionName.getCursor();
                 saveDeclension();
                 updateDeclensionListName();
@@ -213,9 +210,6 @@ public final class ScrDeclensionSetup extends PDialog {
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                if (((PTextField) txtDeclensionName).isSettingText()) {
-                    return;
-                }
                 Cursor cursor = txtDeclensionName.getCursor();
                 saveDeclension();
                 updateDeclensionListName();
@@ -225,9 +219,6 @@ public final class ScrDeclensionSetup extends PDialog {
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-                if (((PTextField) txtDeclensionName).isSettingText()) {
-                    return;
-                }
                 Cursor cursor = txtDeclensionName.getCursor();
                 saveDeclension();
                 updateDeclensionListName();

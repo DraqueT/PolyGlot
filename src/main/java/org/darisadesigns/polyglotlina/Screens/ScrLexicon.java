@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -830,10 +830,10 @@ public final class ScrLexicon extends PFrame {
                 return;
             }
 
-            testWord.setValue(((PTextField) txtConWord).isDefaultText() ? "" : txtConWord.getText());
-            testWord.setLocalWord(((PTextField) txtLocalWord).isDefaultText() ? "" : txtLocalWord.getText());
+            testWord.setValue(txtConWord.getText());
+            testWord.setLocalWord(txtLocalWord.getText());
             testWord.setDefinition(txtDefinition.getText());
-            testWord.setPronunciation(((PTextField) txtProc).isDefaultText() ? "" : txtProc.getText());
+            testWord.setPronunciation(txtProc.getText());
             testWord.setWordTypeId(typeId);
             testWord.setRulesOverride(chkRuleOverride.isSelected());
             testWord.setCore(core);
@@ -1336,14 +1336,14 @@ public final class ScrLexicon extends PFrame {
                 if (!namePopulating) {
                     namePopulating = true;
                     try {
-                        ((PTextField) txtConWord).setDefault();
+                        txtConWord.setText("");
                     } catch (Exception e) {
                         DesktopIOHandler.getInstance().writeErrorLog(e);
                     }
                     namePopulating = false;
                 }
-                ((PTextField) txtLocalWord).setDefault();
-                ((PTextField) txtProc).setDefault();
+                txtLocalWord.setText("");
+                txtProc.setText("");
                 ((PTextPane) txtDefinition).setDefault();
                 cmbType.setSelectedIndex(0);
                 chkProcOverride.setSelected(false);
@@ -1360,11 +1360,9 @@ public final class ScrLexicon extends PFrame {
                     namePopulating = false;
                 }
                 txtDefinition.setText(curWord.getDefinition());
-                txtLocalWord.setText(curWord.getLocalWord().isEmpty()
-                        ? ((PTextField) txtLocalWord).getDefaultValue() : curWord.getLocalWord());
+                txtLocalWord.setText(curWord.getLocalWord());
                 if (enableProcGen) {
-                    txtProc.setText(curWord.getPronunciation().isEmpty()
-                            ? ((PTextField) txtProc).getDefaultValue() : curWord.getPronunciation());
+                    txtProc.setText(curWord.getPronunciation());
                 }
                 TypeNode type = curWord.getWordTypeId() == 0 ? null : core.getTypes().getNodeById(curWord.getWordTypeId());
                 if (type == null) {
@@ -1524,17 +1522,15 @@ public final class ScrLexicon extends PFrame {
      * @param saveWord word to save current values to
      */
     private void saveValuesTo(ConWord saveWord) {
-        if (((PTextField) txtConWord).isDefaultText() || saveWord == null) {
+        if (saveWord == null) {
             return;
         }
 
         saveWord.setValue(txtConWord.getText());
         saveWord.setDefinition(txtDefinition.getText());
-        saveWord.setLocalWord(((PTextField) txtLocalWord).isDefaultText()
-                ? "" : txtLocalWord.getText());
+        saveWord.setLocalWord(txtLocalWord.getText());
         saveWord.setProcOverride(chkProcOverride.isSelected());
-        saveWord.setPronunciation(((PTextField) txtProc).isDefaultText()
-                ? "" : txtProc.getText());
+        saveWord.setPronunciation(txtProc.getText());
         saveWord.setRulesOverride(chkRuleOverride.isSelected());
         Object curType = cmbType.getSelectedItem();
         if (curType != null) {
@@ -1736,7 +1732,7 @@ public final class ScrLexicon extends PFrame {
         jPanel3 = new javax.swing.JPanel();
         txtConWord = new PTextField(core, false, "Conlang Word");
         txtLocalWord = new PTextField(core, true, core.localLabel() + " Word");
-        cmbType = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), "Part of Speech");
+        cmbType = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), "-- Part of Speech --");
         txtProc = new PTextField(core, true, "Pronunciation");
         chkProcOverride = new PCheckBox(nightMode);
         chkRuleOverride = new PCheckBox(nightMode);
@@ -1983,7 +1979,7 @@ public final class ScrLexicon extends PFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(btnAddWord, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnDelWord, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
         );

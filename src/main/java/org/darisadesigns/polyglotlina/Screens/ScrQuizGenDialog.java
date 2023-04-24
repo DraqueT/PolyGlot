@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -71,9 +71,9 @@ public final class ScrQuizGenDialog extends PFrame {
         chkTypeQuiz.setFont(propMan.getFontLocal());
         
         ((PTextField)txtFilterConWord).setDefaultValue(core.conLabel() + " Filter");
-        ((PTextField)txtFilterConWord).setDefault();
+        txtFilterConWord.setText("");
         ((PTextField)txtFilterLocalWord).setDefaultValue(core.localLabel()+ " Filter");
-        ((PTextField)txtFilterLocalWord).setDefault();
+        txtFilterLocalWord.setText("");
         
         populateDropdowns();
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2022, Draque Thompson
+ * Copyright (c) 2015-2023, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -142,31 +142,25 @@ public final class ScrTypes extends PFrame {
         txtName.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
-                updateName();
+                if (!ignoreUpdate) {
+                    updateName();
+                }
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                updateName();
+                if (!ignoreUpdate) {
+                    updateName();
+                }
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-                updateName();
+                if (!ignoreUpdate) {
+                    updateName();
+                }
             }
         });
-    }
-    
-    /**
-     * Sets whether objects with listeners should ignore
-     * @param listenValue 
-     */
-    private void setListeningActive(boolean listenValue) {
-        if (listenValue) {
-            ((PTextField)txtName).startListening();
-        } else {
-            ((PTextField)txtName).stopListening();
-        }
     }
 
     /**
@@ -185,8 +179,7 @@ public final class ScrTypes extends PFrame {
             return;
         }
         updatingName = true;
-        curNode.setValue(((PTextField) txtName).isDefaultText()
-                ? "" : txtName.getText());
+        curNode.setValue(txtName.getText());
 
         populateTypes();
         lstTypes.setSelectedValue(curNode, true);
@@ -248,16 +241,12 @@ public final class ScrTypes extends PFrame {
         } else {
             if (!updatingName) {
                 updatingName = true;
-                txtName.setText(curNode.getValue().isEmpty()
-                        ? ((PTextField) txtName).getDefaultValue() : curNode.getValue());
+                txtName.setText(curNode.getValue());
                 updatingName = false;
             }
-            txtNotes.setText(curNode.getNotes().isEmpty()
-                    ? ((PTextPane) txtNotes).getDefaultValue() : curNode.getNotes());
-            txtTypePattern.setText(curNode.getPattern().isEmpty()
-                    ? ((PTextField) txtTypePattern).getDefaultValue() : curNode.getPattern());
-            txtGloss.setText(curNode.getGloss().isEmpty()
-                    ? ((PTextField) txtGloss).getDefaultValue() : curNode.getGloss());
+            txtNotes.setText(curNode.getNotes());
+            txtTypePattern.setText(curNode.getPattern());
+            txtGloss.setText(curNode.getGloss());
             chkDefMand.setSelected(curNode.isDefMandatory());
             chkProcMand.setSelected(curNode.isProcMandatory());
             setPropertiesEnabled(true);
@@ -271,14 +260,11 @@ public final class ScrTypes extends PFrame {
      */
     private void savePropertiesTo(TypeNode saveNode) {
         if (!updatingName) {
-            saveNode.setValue(((PTextField) txtName).isDefaultText()
-                    ? "" : txtName.getText());
+            saveNode.setValue(txtName.getText());
             saveNode.setNotes(((PTextPane) txtNotes).isDefaultText()
                     ? "" : txtNotes.getText());
-            saveNode.setPattern(((PTextField) txtTypePattern).isDefaultText()
-                    ? "" : txtTypePattern.getText(), core);
-            saveNode.setGloss(((PTextField) txtGloss).isDefaultText()
-                    ? "" : txtGloss.getText());
+            saveNode.setPattern(txtTypePattern.getText(), core);
+            saveNode.setGloss(txtGloss.getText());
             saveNode.setDefMandatory(chkDefMand.isSelected());
             saveNode.setProcMandatory(chkProcMand.isSelected());
         }
@@ -326,7 +312,6 @@ public final class ScrTypes extends PFrame {
         }
 
         ignoreUpdate = true;
-        setListeningActive(false);
         
         try {
             core.getTypes().deleteNodeById(curType.getId());
@@ -340,7 +325,6 @@ public final class ScrTypes extends PFrame {
         populateTypes();
         populateProperties();
         
-        setListeningActive(true);
         ignoreUpdate = false;
         
         updateLegal();
@@ -410,7 +394,7 @@ public final class ScrTypes extends PFrame {
         if (txtName.getText().isEmpty()
                 && curType != null) {
             core.getOSHandler().getInfoBox().warning("Illegal Type",
-                    "Currently selected type is illegal. Please correct or delete.");
+                    "Currently selected part of speech is illegal. Please correct or delete.");
             ret = false;
         }
         

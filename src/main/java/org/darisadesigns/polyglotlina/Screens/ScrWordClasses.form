@@ -113,9 +113,6 @@
             </Container>
             <Component class="javax.swing.JButton" name="btnAddProp">
               <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                </Property>
                 <Property name="toolTipText" type="java.lang.String" value="Add new property"/>
               </Properties>
               <Events>
@@ -127,9 +124,6 @@
             </Component>
             <Component class="javax.swing.JButton" name="btnDelProp">
               <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                </Property>
                 <Property name="toolTipText" type="java.lang.String" value="Delete selected property"/>
               </Properties>
               <Events>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2021-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -195,7 +195,7 @@ public class ScrPhrasebook extends PFrame {
     
     private void savePhraseAttributes(PhraseNode phrase) {
         if (!isCurPopulating && phrase != null) {
-            phrase.setGloss(((PTextField)txtGloss).isDefaultText() ? "" : txtGloss.getText());
+            phrase.setGloss(txtGloss.getText());
             phrase.setConPhrase(((PTextPane)txtConPhrase).isDefaultText() ? "" : ((PTextPane)txtConPhrase).getNakedText());
             phrase.setLocalPhrase(((PTextPane)txtLocalPhrase).isDefaultText() ? "" : ((PTextPane)txtLocalPhrase).getNakedText());
             phrase.setPronunciation(((PTextPane)txtPronunciation).isDefaultText() ? "" : ((PTextPane)txtPronunciation).getNakedText());

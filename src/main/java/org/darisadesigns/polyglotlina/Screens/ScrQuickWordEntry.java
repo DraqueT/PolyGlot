@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -38,6 +38,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
@@ -87,6 +88,7 @@ public final class ScrQuickWordEntry extends PDialog {
         }
 
         populateTypes();
+        testWordLegality(false);
     }
 
     /**
@@ -107,21 +109,22 @@ public final class ScrQuickWordEntry extends PDialog {
                         }
                     }
                     tryRecord();
+                } else {
+                    testWordLegality(false);
                 }
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-                /*DO NOTHING*/
+                testWordLegality(false);
             }
 
             @Override
             public void keyTyped(KeyEvent e) {
-                /*DO NOTHING*/
+                testWordLegality(false);
             }
         };
 
-        txtConWord.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
         txtConWord.addKeyListener(enterListener);
         txtConWord.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -144,6 +147,9 @@ public final class ScrQuickWordEntry extends PDialog {
         txtProc.addKeyListener(enterListener);
         cmbType.addKeyListener(enterListener);
         txtDefinition.addKeyListener(enterListener);
+        cmbType.addActionListener((action) -> {
+            testWordLegality(false);
+        });
     }
 
     /**
@@ -184,11 +190,8 @@ public final class ScrQuickWordEntry extends PDialog {
             cmbType.addItem(curNode);
         }
     }
-
-    /**
-     * records a word if appropriate, flashes required fields otherwise
-     */
-    private void tryRecord() {
+    
+    private ConWord getCurrentWord() {
         ConWord word = new ConWord();
         word.setCore(core);
 
@@ -204,7 +207,7 @@ public final class ScrQuickWordEntry extends PDialog {
         // set class values
         classComboMap.entrySet().forEach((curEntry) -> {
             if (curEntry.getValue() instanceof PComboBox) {
-                PComboBox boxEntry = (PComboBox) curEntry.getValue();
+                var boxEntry = (PComboBox) curEntry.getValue();
                 if (boxEntry.getSelectedItem() instanceof WordClassValue) {
                     WordClassValue curValue = (WordClassValue) boxEntry.getSelectedItem();
                     word.setClassValue(curEntry.getKey(), curValue.getId());
@@ -214,70 +217,91 @@ public final class ScrQuickWordEntry extends PDialog {
                 word.setClassTextValue(curEntry.getKey(), curText.getText());
             }
         });
+        
+        return word;
+    }
 
-        ConWord test = core.getWordCollection().testWordLegality(word);
-        String testResults = "";
+    /**
+     * records a word if appropriate, flashes required fields otherwise
+     */
+    private void tryRecord() {
+        if (testWordLegality(true)) {
+            try {
+                int wordId = core.getWordCollection().addWord(getCurrentWord());
+                blankWord();
+                txtConWord.requestFocus();
 
-        if (!test.getValue().isEmpty()) {
-            ((PTextField) txtConWord).makeFlash(PGTUtil.COLOR_REQUIRED_LEX_COLOR, true);
-            testResults += test.getValue();
-        }
-        if (!test.getLocalWord().isEmpty()) {
-            ((PTextField) txtLocalWord).makeFlash(PGTUtil.COLOR_REQUIRED_LEX_COLOR, true);
-            testResults += ("\n" + test.getLocalWord());
-        }
-        try {
-            if (!test.getPronunciation().isEmpty()) {
-                ((PTextField) txtProc).makeFlash(PGTUtil.COLOR_REQUIRED_LEX_COLOR, true);
-                testResults += ("\n" + test.getPronunciation());
+                parent.refreshWordList(wordId);
+            } catch (Exception e) {
+                DesktopIOHandler.getInstance().writeErrorLog(e);
+                new DesktopInfoBox().error("Word Error", "Unable to insert word: " + e.getMessage());
             }
+        }
+    }
+    
+    /**
+     * Tests legality of word and sets colors of fields accordingly
+     * @return true if legal
+     */
+    private boolean testWordLegality(boolean verbose) {
+        var word = getCurrentWord();
+        var test = core.getWordCollection().testWordLegality(word);
+        var testResults = new ArrayList<String>();
+        var defaultColor = nightMode ? PGTUtil.COLOR_TEXT_BG_NIGHT : PGTUtil.COLOR_TEXT_BG;
+        var highlightColor = PGTUtil.COLOR_REQUIRED_LEX_COLOR;
+
+        txtConWord.setBackground(test.getValue().isBlank() ? defaultColor : highlightColor);
+        testResults.add(test.getValue());
+        
+        txtLocalWord.setBackground(test.getLocalWord().isBlank() ?  defaultColor : highlightColor);
+        testResults.add(test.getLocalWord());
+        
+        try {
+            txtProc.setBackground(test.getPronunciation().isBlank() ?  defaultColor : highlightColor);
+            testResults.add(test.getPronunciation());
         } catch (Exception e) {
             // do nothing. The user will be informed of this elsewhere.
             // IOHandler.writeErrorLog(e);
         }
-        if (!test.getDefinition().isEmpty()) {
-            // errors having to do with type patterns returned in def field.
-            ((PComboBox) cmbType).makeFlash(PGTUtil.COLOR_REQUIRED_LEX_COLOR, true);
-            testResults += ("\n" + test.getDefinition());
-        }
-        if (!test.typeError.isEmpty()) {
-            ((PComboBox) cmbType).makeFlash(PGTUtil.COLOR_REQUIRED_LEX_COLOR, true);
-            testResults += ("\n" + test.typeError);
-        }
+        
+        cmbType.setBackground(test.getDefinition().isBlank() && test.typeError.isBlank() ? defaultColor : highlightColor);
+        testResults.add(test.getDefinition());
+        testResults.add(test.typeError);
+        
         if (core.getPropertiesManager().isWordUniqueness()
                 && core.getWordCollection().testWordValueExists(txtConWord.getText())) {
-            ((PTextField) txtConWord).makeFlash(PGTUtil.COLOR_REQUIRED_LEX_COLOR, true);
-            testResults += ("\nConWords set to enforced unique: this local exists elsewhere.");
+            txtConWord.setBackground(highlightColor);
+            testResults.add("ConWords set to enforced unique: this local exists elsewhere.");
+        } else if (test.getValue().isBlank()) { // don't unset highlight if already set above
+            txtConWord.setBackground(defaultColor);
         }
+        
         if (core.getPropertiesManager().isLocalUniqueness()
                 && core.getWordCollection().testLocalValueExists(txtLocalWord.getText())) {
-            ((PTextField) txtLocalWord).makeFlash(PGTUtil.COLOR_REQUIRED_LEX_COLOR, true);
-            testResults += ("\nLocal words set to enforced unique: this work exists elsewhere.");
+            
+            txtLocalWord.setBackground(highlightColor);
+            testResults.add("Local words set to enforced unique: this work exists elsewhere.");
         }
+        
+        testResults.removeIf(String::isBlank);
 
         if (!testResults.isEmpty()) {
-            new DesktopInfoBox().warning("Illegal Values", "Word contains illegal values:\n\n"
-                    + testResults);
-            return;
+            if (verbose) {
+                new DesktopInfoBox().warning("Illegal Values", "Word contains illegal values:\n\n"
+                        + String.join("\n", testResults).trim());
+            }
+            
+            return false;
         }
-
-        try {
-            int wordId = core.getWordCollection().addWord(word);
-            blankWord();
-            txtConWord.requestFocus();
-
-            parent.refreshWordList(wordId);
-        } catch (Exception e) {
-            DesktopIOHandler.getInstance().writeErrorLog(e);
-            new DesktopInfoBox().error("Word Error", "Unable to insert word: " + e.getMessage());
-        }
+        
+        return true;
     }
 
     /**
      * blanks out current conword fields
      */
     private void blankWord() {
-        ((PTextField)txtConWord).setDefault();
+        txtConWord.setText("");
         txtConWord.requestFocus();
         ((PTextPane)txtDefinition).setDefault();
         txtDefinition.requestFocus();
