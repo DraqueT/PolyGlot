@@ -303,7 +303,7 @@ public final class ScrQuickWordEntry extends PDialog {
     private void blankWord() {
         txtConWord.setText("");
         txtConWord.requestFocus();
-        ((PTextPane)txtDefinition).setDefault();
+        txtDefinition.setText("");
         txtDefinition.requestFocus();
         txtLocalWord.setText("");
         txtLocalWord.requestFocus();

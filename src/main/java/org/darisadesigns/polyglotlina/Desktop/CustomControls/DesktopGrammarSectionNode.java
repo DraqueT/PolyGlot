@@ -136,7 +136,6 @@ public class DesktopGrammarSectionNode extends DefaultMutableTreeNode implements
     
     private String packer(String _sectionText, String matchName, String matchReplace, String defaultReplace) {
         var regex = "<font\s+face=\"([^\"]+)\"\s*size=\"([^\"]+)\"\s*color=\"([^\"]+)\"\s*>";
-        System.out.println(regex);
         var pattern = Pattern.compile(regex);
         var matcher = pattern.matcher(_sectionText);
         

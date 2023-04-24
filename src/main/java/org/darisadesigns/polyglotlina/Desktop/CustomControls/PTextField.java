@@ -203,7 +203,7 @@ public final class PTextField extends JTextField implements CoreUpdateSubscripti
         if (getText().isEmpty() && (!isFocusOwner() || !isEditable())) {
             var fontMetrics = g.getFontMetrics();
             var displayDefText = "-- " + defText + " --";
-            g.setColor(Color.lightGray);
+            g.setColor(PGTUtil.COLOR_DEFAULT_TEXT);
             g.setFont(PGTUtil.MENU_FONT);
             var xPosition = (getWidth()/2) - (fontMetrics.stringWidth(displayDefText)/2);
             g.drawString(displayDefText, xPosition, fontMetrics.getHeight());

@@ -24,16 +24,13 @@ import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Desktop.ClipboardHandler;
 import org.darisadesigns.polyglotlina.FormattedTextHelper;
 import org.darisadesigns.polyglotlina.Nodes.ImageNode;
-import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.WebInterface;
-import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Window;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -43,9 +40,9 @@ import java.io.IOException;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextPane;
-import javax.swing.SwingWorker;
 import org.darisadesigns.polyglotlina.CustomControls.CoreUpdateSubscriptionInterface;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
@@ -53,8 +50,6 @@ import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
  * @author draque
  */
 public final class PTextPane extends JTextPane implements CoreUpdateSubscriptionInterface {
-
-    private SwingWorker worker = null;
     private final String defText;
     private DictCore core;
     private boolean disableMedia = false;
@@ -79,7 +74,6 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
         setupRightClickMenu();
 
         setupListeners();
-        setText(defText);
         
         this.setEditorKit(new PHTMLEditorKit());
     }
@@ -162,44 +156,11 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
     @Override
     public void setText(String t) {
         try {
-            if (t.isEmpty() && !this.hasFocus()) {
-                super.setText(defText);
-            } else {
-                super.setText(t);
-            }
+            super.setText(t);
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             core.getOSHandler().getInfoBox().error("Set text error", "Could not set text component: " + e.getLocalizedMessage());
         }
-
-        if (isDefaultText() && !defText.isBlank()) {
-            setForeground(Color.lightGray);
-        } else {
-            setForeground(Color.BLACK);
-        }
-    }
-
-    /**
-     * makes this component flash. If already flashing, does nothing.
-     *
-     * @param _flashColor color to flash
-     * @param isBack whether display color is background (rather than
-     * foreground)
-     */
-    public void makeFlash(Color _flashColor, boolean isBack) {
-        if (worker == null || worker.isDone()) {
-            worker = PGTUtil.getFlashWorker(this, _flashColor, isBack);
-            worker.execute();
-        }
-    }
-
-    /**
-     * gets default value string of text
-     *
-     * @return default text
-     */
-    public String getDefaultValue() {
-        return defText;
     }
 
     @Override
@@ -211,14 +172,6 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
         }
         
         return ret;
-    }
-    
-    /**
-     * Exposes super's set text to menu items
-     * @param text 
-     */
-    private void superSetText(String text) {
-        super.setText(text);
     }
 
     private void setupRightClickMenu() {
@@ -251,11 +204,7 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
             copy();
         });
         paste.addActionListener((ActionEvent ae) -> {
-            if(isDefaultText()) { //removes default text if appropriate
-                superSetText("");
-            }
             paste();
-            setText(getText()); // ensures text is not left grey
         });
 
         ruleMenu.add(insertImage);
@@ -306,10 +255,6 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
     private void addImage(ImageNode image) throws Exception {
         final String placeHold = "-POLYGLOTIMAGE-";
         
-        if (isDefaultText()) {
-            super.setText("");
-        }
-        
         ClipboardHandler test = new ClipboardHandler();
 
         test.cacheClipboard();
@@ -339,7 +284,7 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
             body = body.substring(body.indexOf("<body>") + 6);
         }
         
-        return body.trim().equals(defText);
+        return body.isBlank();
     }
     
     /**
@@ -367,39 +312,23 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
         
         return ret;
     }
+    
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
-    /**
-     * sets text to default value
-     */
-    public void setDefault() {
-        setText(defText);
+        // display default text if blank and is either not focused, or is not editable
+        if (this.isEmpty() && (!isFocusOwner() || !isEditable())) {
+            var fontMetrics = g.getFontMetrics();
+            var displayDefText = "-- " + defText + " --";
+            g.setColor(PGTUtil.COLOR_DEFAULT_TEXT);
+            g.setFont(PGTUtil.MENU_FONT);
+            var xPosition = (getWidth()/2) - (fontMetrics.stringWidth(displayDefText)/2);
+            g.drawString(displayDefText, xPosition, fontMetrics.getHeight());
+        }
     }
 
     private void setupListeners() {
-        // if blank, this field is being used for something more complex: no listeners
-        if (!defText.isEmpty()) {
-            FocusListener listener = new FocusListener() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    if (isDefaultText()) {
-                        setText("");
-                    }
-                    
-                    setForeground(Color.BLACK);
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    if (isEmpty() && !defText.isEmpty()) {
-                        setText(defText);
-                        setForeground(Color.lightGray);
-                    }
-                }
-            };
-            
-            this.addFocusListener(listener);
-        }
-        
         // add a listener for character replacement if conlang font not overridden
         if (!overrideFont) {
             this.addKeyListener(new KeyListener() {
@@ -453,19 +382,13 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
      */
     public String getNakedText() {
         var ret = WebInterface.getTextFromHtml(getSuperText()).trim();
-  
-        if (ret.equals(defText)) {
-            ret = "";
-        }
         
         return ret;
     }
 
     @Override
     public String getText() {
-        return isDefaultText() ?
-                "" :
-                FormattedTextHelper.HTMLLineBreakParse(super.getText());
+        return FormattedTextHelper.HTMLLineBreakParse(super.getText());
     }
 
     /**
