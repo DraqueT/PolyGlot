@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2022, Draque Thompson
+ * Copyright (c) 2019-2023, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -27,9 +27,11 @@ import java.awt.event.WindowFocusListener;
 import java.awt.event.WindowListener;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PRadioButton;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationPair;
 
@@ -72,10 +74,10 @@ public final class ScrDeclensionGenSetup extends PDialog {
 
             @Override
             public void windowLostFocus(WindowEvent e) {
-                if (curDialog instanceof ScrDeclensionGenClassic) {
-                    ((ScrDeclensionGenClassic)curDialog).saveVolatileValues();
-                } else if (curDialog instanceof ScrDeclensionGenSimple) {
-                    ((ScrDeclensionGenSimple)curDialog).saveRule();
+                if (curDialog instanceof ScrDeclensionGenClassic decGenClassic) {
+                    decGenClassic.saveVolatileValues();
+                } else if (curDialog instanceof ScrDeclensionGenSimple decGenSimple) {
+                    decGenSimple.saveRule();
                 }
             }
         });
@@ -192,12 +194,14 @@ public final class ScrDeclensionGenSetup extends PDialog {
     }
     
     public String getCurSelectedCombId() {
-        String ret;
+        String ret = "";
         
-        if (curDialog instanceof ScrDeclensionGenClassic) {
-            ret = ((ScrDeclensionGenClassic)curDialog).getCurSelectedCombId();
+        if (curDialog instanceof ScrDeclensionGenClassic decGenClassic) {
+            ret = decGenClassic.getCurSelectedCombId();
+        } else if (curDialog instanceof ScrDeclensionGenSimple decGenSimple) {
+            ret = decGenSimple.getCurSelectedCombId();
         } else {
-            ret = ((ScrDeclensionGenSimple)curDialog).getCurSelectedCombId();
+            new DesktopInfoBox(PolyGlot.getPolyGlot().getRootWindow()).warning("Window Missing", "Cannot retrieve ID: No declension window.");
         }
         
         return ret;
@@ -266,8 +270,8 @@ public final class ScrDeclensionGenSetup extends PDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        rdoClassic = new PRadioButton();
-        rdoSimplified = new PRadioButton();
+        rdoClassic = new PRadioButton(core);
+        rdoSimplified = new PRadioButton(core);
         btnTestWord = new PButton(nightMode);
         jPanel2 = new javax.swing.JPanel();
         btnOK = new PButton(nightMode);

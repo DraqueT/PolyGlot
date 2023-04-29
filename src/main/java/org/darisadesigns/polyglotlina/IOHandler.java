@@ -140,15 +140,16 @@ public interface IOHandler {
     public boolean fileExists(String fullPath);
 
     /**
-     * Loads image assets from file. Does not load logographs due to legacy
-     * coding/logic
+     * Loads image assets from file.Does not load logographs due to legacy
+ coding/logic
      *
      * @param imageCollection from dictCore to populate
      * @param fileName of file containing assets
+     * @param core
      * @throws java.io.IOException
      */
     public void loadImageAssets(ImageCollection imageCollection,
-            String fileName) throws Exception;
+            String fileName, DictCore core) throws Exception;
 
     /**
      * loads all images into their logographs from archive and images into the

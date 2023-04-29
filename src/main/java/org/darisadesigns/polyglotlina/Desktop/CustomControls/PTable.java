@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -32,7 +32,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -49,10 +48,6 @@ public final class PTable extends JTable {
     private EditorController editorController = (e,x,y)->{};
     private boolean useConFont = false;
     
-    public PTable() {
-        this(PolyGlot.getPolyGlot().getCore());
-    }
-
     public PTable(DictCore _core) {
         core = _core;
         disabledRend = new PCellRenderer(isUseConFont(), core);
@@ -174,8 +169,8 @@ public final class PTable extends JTable {
     @Override
     public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
         Component ret = super.prepareRenderer(renderer, row, column);
-        if (renderer instanceof PCellRenderer) {
-            rendererController.r((PCellRenderer)renderer, row, column);
+        if (renderer instanceof PCellRenderer pRenderer) {
+            rendererController.r(pRenderer, row, column);
         } else {
             // The only time this will ever happen is if it is done manually via setting renderer to the column/cell
             new DesktopInfoBox().error("Table Rendering Error", "Unable to render table cell.");

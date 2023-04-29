@@ -54,16 +54,16 @@ public final class PTextField extends JTextField implements CoreUpdateSubscripti
     private Integer contentId = -1;
     private Object associatedObject = null;
     
-    public PTextField() {
-        this("");
+    public PTextField(DictCore _core) {
+        this("", _core);
     }
     
-    public PTextField(String _defText) {
-        this(true, _defText);
+    public PTextField(String _defText, DictCore _core) {
+        this(true, _defText, _core);
     }
     
-    public PTextField(boolean _overrideFont, String _defText) {
-        this(PolyGlot.getPolyGlot().getCore(), _overrideFont, _defText);
+    public PTextField(boolean _overrideFont, String _defText, DictCore _core) {
+        this(_core, _overrideFont, _defText);
     }
     
     /**

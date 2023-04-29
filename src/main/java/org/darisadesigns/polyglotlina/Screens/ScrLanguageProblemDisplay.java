@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -36,7 +36,7 @@ import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
  */
 public class ScrLanguageProblemDisplay extends PDialog {
 
-    private final ScrMainMenu main;
+    private final ScrMainMenu main;    
     /**
      * Creates new form ScrLanguageProblemDisplay
      * @param problems
@@ -49,7 +49,7 @@ public class ScrLanguageProblemDisplay extends PDialog {
         
         DefaultListModel<LexiconProblemNode> model = new DefaultListModel<>();
         jList1.setModel(model);
-        jList1.setCellRenderer(new PListCellRenderer());
+        jList1.setCellRenderer(new PListCellRenderer(_core));
         
         problems.forEach((problem) -> {
             model.addElement(problem);
@@ -69,7 +69,7 @@ public class ScrLanguageProblemDisplay extends PDialog {
 
         jSplitPane1 = new javax.swing.JSplitPane();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
+        jList1 = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon(), core);
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jTextField1 = new javax.swing.JTextField();

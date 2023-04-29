@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2018-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -312,8 +312,8 @@ public final class ScrDeclensionsGrids extends PDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        cmbDimX = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
-        cmbDimY = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
+        cmbDimX = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu(), core);
+        cmbDimY = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu(), core);
         pnlTabDeclensions = new javax.swing.JTabbedPane();
         chkAutogenOverride = new PCheckBox();
         btnOk = new PButton(nightMode);

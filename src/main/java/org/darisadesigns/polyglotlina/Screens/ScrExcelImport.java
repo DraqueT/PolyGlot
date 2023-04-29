@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -125,7 +125,7 @@ public class ScrExcelImport extends PDialog {
                     true, 
                     quotOpt,
                     dupOpt);
-            reader.importFile(txtFileName.getText(), Integer.parseInt(txtExcelSheet.getText()));
+            reader.importFile(txtFileName.getText(), Integer.valueOf(txtExcelSheet.getText()));
 
             if (parent != null) {
                 parent.updateAllValues(core);
@@ -246,18 +246,18 @@ public class ScrExcelImport extends PDialog {
         jLabel11 = new PLabel("");
         txtExcelSheet = new javax.swing.JTextField();
         jLabel10 = new PLabel("");
-        cmbPreferences = new PComboBox<Delimiter>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
+        cmbPreferences = new PComboBox<Delimiter>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu(), core);
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
         jLabel12 = new PLabel("");
-        cmbQuoteChar = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
+        cmbQuoteChar = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu(), core);
         btnImport = new PButton(nightMode);
         btnCancel = new PButton(nightMode);
         jPanel2 = new javax.swing.JPanel();
         jLabel13 = new PLabel("Duplicate Handling");
-        rdoImpAll = new PRadioButton();
-        rdoIgnrDups = new PRadioButton();
-        rdoOverwDups = new PRadioButton();
+        rdoImpAll = new PRadioButton(core);
+        rdoIgnrDups = new PRadioButton(core);
+        rdoOverwDups = new PRadioButton(core);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Import From External Format");

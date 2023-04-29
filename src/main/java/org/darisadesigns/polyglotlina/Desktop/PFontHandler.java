@@ -470,13 +470,14 @@ public class PFontHandler extends org.darisadesigns.polyglotlina.PFontHandler {
      * Tests whether given string can have every character represented as a glyph for the given font
      * @param value string to test
      * @param conFont true if using the conlang font, false if using the local language font
+     * @param core
      * @return 
      */
     @Override
-    public boolean canStringBeRendered(String value, boolean conFont) {
+    public boolean canStringBeRendered(String value, boolean conFont, DictCore core) {
         Font font = conFont ?
-                ((DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager()).getFontCon() :
-                ((DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager()).getFontLocal();
+                ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon() :
+                ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
         
         for (int i = 0; i < value.length(); i++) {
             if (!font.canDisplay(value.charAt(i))) {
@@ -571,10 +572,14 @@ public class PFontHandler extends org.darisadesigns.polyglotlina.PFontHandler {
     }
     
     @Override
-    public void updateLocalFont() {
+    public void updateLocalFont(DictCore core) {
+        if (core == null || PolyGlot.getPolyGlot() == null) {
+            return;
+        }
+        
         var scrMain = PolyGlot.getPolyGlot().getRootWindow();
         if (scrMain != null) {
-            var local = ((DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager()).getFontLocal();
+            var local = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
             scrMain.getToDoTree().setFont(local);
         }
     }

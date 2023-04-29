@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2021-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -29,7 +29,6 @@ import java.awt.RenderingHints;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
@@ -49,6 +48,12 @@ public class PListCellRenderer extends DefaultListCellRenderer {
     private int dropPosition;
     private int height;
     private String printValue = "";
+    private final DictCore core;
+    
+    public PListCellRenderer(DictCore _core) {
+        super();
+        core = _core;
+    }
     
     @Override
     public String getToolTipText() {
@@ -81,7 +86,7 @@ public class PListCellRenderer extends DefaultListCellRenderer {
             }
         } else if (curVal instanceof LexiconProblemNode problemNode) {
             if (!problemNode.useConFont) {
-                this.setFont(((DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager()).getFontLocal());
+                this.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
             }
             
             switch (problemNode.severity) {
@@ -125,7 +130,6 @@ public class PListCellRenderer extends DefaultListCellRenderer {
     }
     
     private void setupFontMetrics(Graphics g) {
-        DictCore core = PolyGlot.getPolyGlot().getCore();
         Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
         conMetrics = g.getFontMetrics(conFont);
         localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();

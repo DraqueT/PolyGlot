@@ -452,7 +452,7 @@ public final class ScrLexicon extends PFrame {
                 pnlClasses.add(classText, gbc);
                 classPropMap.put(curProp.getId(), classText); // text box mapped to related class ID.
             } else if (curProp.isAssociative()) {
-                final PComboBox<Object> classBox = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
+                final PComboBox<Object> classBox = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon(), core);
                 DefaultComboBoxModel<Object> comboModel = new DefaultComboBoxModel<>();
                 classBox.setModel(comboModel);
                 classBox.setDefaultText(curProp.getValue());
@@ -484,7 +484,7 @@ public final class ScrLexicon extends PFrame {
                 pnlClasses.add(classBox, gbc);
                 classPropMap.put(curProp.getId(), classBox); // combobox mapped to related class ID.
             } else {
-                final PComboBox<Object> classBox = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
+                final PComboBox<Object> classBox = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), core);
                 DefaultComboBoxModel<Object> comboModel = new DefaultComboBoxModel<>();
                 classBox.setModel(comboModel);
                 classBox.setDefaultText(curProp.getValue());
@@ -1732,7 +1732,7 @@ public final class ScrLexicon extends PFrame {
         jPanel3 = new javax.swing.JPanel();
         txtConWord = new PTextField(core, false, "Conlang Word");
         txtLocalWord = new PTextField(core, true, core.localLabel() + " Word");
-        cmbType = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), "-- Part of Speech --");
+        cmbType = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), "-- Part of Speech --", core);
         txtProc = new PTextField(core, true, "Pronunciation");
         chkProcOverride = new PCheckBox(nightMode);
         chkRuleOverride = new PCheckBox(nightMode);
@@ -1746,7 +1746,7 @@ public final class ScrLexicon extends PFrame {
         btnEtymology = new PButton(nightMode);
         jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        lstLexicon = new PListLexicon(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
+        lstLexicon = new PListLexicon(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon(), core);
         btnAddWord = new PAddRemoveButton("+");
         btnDelWord = new PAddRemoveButton("-");
         jButton1 = new PButton(nightMode);

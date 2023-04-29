@@ -311,7 +311,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox&lt;IPALibrary&gt;(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu())"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox&lt;IPALibrary&gt;(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu(), core)"/>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;IPALibrary&gt;"/>
       </AuxValues>
     </Component>

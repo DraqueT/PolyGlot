@@ -56,7 +56,7 @@ public class DesktopPropertiesManager extends PropertiesManager {
     
     public void setLocalFont(Font _localFont) {
         setLocalFont(_localFont, localFontSize);
-        PolyGlot.getPolyGlot().getOSHandler().getPFontHandler().updateLocalFont();
+        core.getOSHandler().getPFontHandler().updateLocalFont(core);
     }
     
     public void setLocalFont(Font _localFont, double size) {
@@ -67,13 +67,13 @@ public class DesktopPropertiesManager extends PropertiesManager {
         
         localFont = _localFont; 
         localFontSize = size;
-        PolyGlot.getPolyGlot().getOSHandler().getPFontHandler().updateLocalFont();
+        core.getOSHandler().getPFontHandler().updateLocalFont(core);
     }
     
     @Override
     public void setLocalFontSize(double size) {
         localFontSize = size;
-        PolyGlot.getPolyGlot().getOSHandler().getPFontHandler().updateLocalFont();
+        core.getOSHandler().getPFontHandler().updateLocalFont(core);
     }
     
     public double getLocalFontSize() {

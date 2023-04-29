@@ -159,7 +159,7 @@ public final class ScrQuizGenDialog extends PFrame {
         jPanel2 = new javax.swing.JPanel();
         txtFilterConWord = new PTextField(core, false, core.conLabel() + " Filter");
         txtFilterLocalWord = new PTextField(core, true, core.localLabel() + " Filter");
-        cmbFilterType = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
+        cmbFilterType = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu(), core);
         txtFilterProc = new PTextField(core, true, "Pronunciation Filter");
         btnClearFilter = new PButton(nightMode);
         jLabel1 = new PLabel("");

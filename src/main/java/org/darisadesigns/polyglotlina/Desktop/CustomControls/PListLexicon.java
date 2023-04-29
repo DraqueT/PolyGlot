@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -21,7 +21,7 @@ package org.darisadesigns.polyglotlina.Desktop.CustomControls;
 
 
 import java.awt.Font;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
+import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection.ConWordDisplay;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 
@@ -30,9 +30,9 @@ import org.darisadesigns.polyglotlina.Nodes.ConWord;
  * @author draque
  */
 public class PListLexicon extends PList<ConWordDisplay> {
-    public PListLexicon(Font font) {
-        super(font);
-        this.setCellRenderer(new PListLexiconCellRenderer(PolyGlot.getPolyGlot().getCore()));
+    public PListLexicon(Font font, DictCore core) {
+        super(font, core);
+        this.setCellRenderer(new PListLexiconCellRenderer(core));
     }
     
     public Font conFontToolTip() {

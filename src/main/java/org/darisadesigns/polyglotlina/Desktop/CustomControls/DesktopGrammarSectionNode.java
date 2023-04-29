@@ -109,7 +109,7 @@ public class DesktopGrammarSectionNode extends DefaultMutableTreeNode implements
      * @return 
      */
     private String packSectionText(String _sectionText) {
-        var propMan = (DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager();
+        var propMan = (DesktopPropertiesManager)manager.getCore().getPropertiesManager();
         var conFontFam = propMan.getFontCon().getFamily();
         var localFontFam = propMan.getFontLocal().getFamily();
         
@@ -127,7 +127,7 @@ public class DesktopGrammarSectionNode extends DefaultMutableTreeNode implements
      * @return 
      */
     private String unpackSectionText(String _sectionText) {
-        var propMan = (DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager();
+        var propMan = (DesktopPropertiesManager)manager.getCore().getPropertiesManager();
         var conFontFam = propMan.getFontCon().getFamily();
         var localFontFam = propMan.getFontLocal().getFamily();
         
@@ -182,7 +182,7 @@ public class DesktopGrammarSectionNode extends DefaultMutableTreeNode implements
         if (this == comp) {
             ret = true;
         } else if (comp instanceof DesktopGrammarSectionNode compSec) {
-            DictCore core = PolyGlot.getPolyGlot().getCore();
+            DictCore core = manager.getCore();
             ret = WebInterface.archiveHTML(sectionText, core).equals(WebInterface.archiveHTML(compSec.sectionText, core));
             ret = ret && name.trim().equals(compSec.name.trim());
             ret = ret && recordingId == compSec.recordingId;

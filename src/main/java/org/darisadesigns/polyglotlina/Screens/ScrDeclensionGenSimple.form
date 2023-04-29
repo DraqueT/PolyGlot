@@ -65,9 +65,6 @@
         </Component>
         <Container class="javax.swing.JSplitPane" name="jSplitPane1">
           <Properties>
-            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="null"/>
-            </Property>
             <Property name="dividerLocation" type="int" value="160"/>
             <Property name="dividerSize" type="int" value="10"/>
             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -230,7 +227,7 @@
                         <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lstCombinedDecValueChanged"/>
                       </Events>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal())"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), core)"/>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;org.darisadesigns.polyglotlina.Nodes.ConjugationPair&gt;"/>
                       </AuxValues>
                     </Component>

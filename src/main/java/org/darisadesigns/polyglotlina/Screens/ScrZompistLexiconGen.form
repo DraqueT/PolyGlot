@@ -218,7 +218,7 @@
                     <Property name="toolTipText" type="java.lang.String" value="Values generated: values can be edited, deleted, or created"/>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTable()"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTable(core)"/>
                   </AuxValues>
                 </Component>
               </SubComponents>
@@ -230,7 +230,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Count of values generated"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(&quot;Item Count&quot;)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(&quot;Item Count&quot;, core)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel5">
@@ -251,7 +251,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Swadesh lists that may be imported to match generated words with for import"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox&lt;SwadeshObject&gt;(false)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox&lt;SwadeshObject&gt;(false, core)"/>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;SwadeshObject&gt;"/>
               </AuxValues>
             </Component>
@@ -270,7 +270,7 @@
                     <Property name="toolTipText" type="java.lang.String" value="List of words to import into your language"/>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PListLexicon(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon())"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PListLexicon(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon(), core)"/>
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;ConWordDisplay&gt;"/>
                   </AuxValues>
                 </Component>
@@ -438,7 +438,7 @@
                     <Property name="toolTipText" type="java.lang.String" value="Generate words based on your rules above"/>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PRadioButton()"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PRadioButton(core)"/>
                   </AuxValues>
                 </Component>
                 <Component class="javax.swing.JRadioButton" name="rdoGenSyllables">
@@ -450,7 +450,7 @@
                     <Property name="toolTipText" type="java.lang.String" value="Generates every possible combination of syllable (might be very large!)"/>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PRadioButton()"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PRadioButton(core)"/>
                   </AuxValues>
                 </Component>
               </SubComponents>
@@ -548,7 +548,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Target number of words to generate"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(&quot;Target&quot;)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PTextField(&quot;Target&quot;, core)"/>
               </AuxValues>
             </Component>
             <Container class="javax.swing.JPanel" name="jPanel6">

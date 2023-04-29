@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -116,12 +116,12 @@ public final class ScrEvolveLang extends PDialog {
         jLabel1 = new PLabel("");
         txtConWordFilter = new PTextField(core, false, "ConWord Filter");
         txtLocalWordFilter = new PTextField(core, true, core.getPropertiesManager().getLocalLangName() + " Filter");
-        cmbPoS = new PComboBox<TypeNode>( ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), "Part of Speech");
+        cmbPoS = new PComboBox<TypeNode>( ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), "Part of Speech", core);
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new PLabel("");
         sldApplyTo = new javax.swing.JSlider();
         lblApplyTo = new PLabel("");
-        cmbTransformOptions = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
+        cmbTransformOptions = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu(), core);
         rdoLexicon = new javax.swing.JRadioButton();
         rdoConjpatterns = new javax.swing.JRadioButton();
         rdoBoth = new javax.swing.JRadioButton();

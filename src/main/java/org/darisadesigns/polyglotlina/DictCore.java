@@ -40,6 +40,7 @@ import org.darisadesigns.polyglotlina.OSHandler.CoreUpdatedListener;
 import org.darisadesigns.polyglotlina.OSHandler.FileReadListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -48,7 +49,11 @@ import java.util.Objects;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.darisadesigns.polyglotlina.CustomControls.CoreUpdateSubscriptionInterface;
 import org.darisadesigns.polyglotlina.DomParser.PDomParser;
 import org.darisadesigns.polyglotlina.ManagersCollections.PhraseManager;
@@ -234,16 +239,17 @@ public class DictCore {
             subscribers.add(newSub);
         }
     }
-    
+
     public void unSubscribe(CoreUpdateSubscriptionInterface newSub) {
         if (subscribers.contains(newSub)) {
             subscribers.remove(newSub);
         }
     }
-    
+
     /**
      * Migrates all subscriptions to new core
-     * @param core 
+     *
+     * @param core
      */
     public void migrateSubscriptions(DictCore core) {
         for (CoreUpdateSubscriptionInterface subscriber : subscribers) {
@@ -381,74 +387,81 @@ public class DictCore {
 
             // load image assets first to allow referencing as dictionary loads
             try {
-                this.osHandler.getIOHandler().loadImageAssets(imageCollection, _fileName);
-            } catch (Exception e) {
+                this.osHandler.getIOHandler().loadImageAssets(imageCollection, _fileName, this);
+            }
+            catch (Exception e) {
                 warningLog += "Image loading error: " + e.getLocalizedMessage() + "\n";
             }
 
             try {
                 this.osHandler.fontHandler.setFontFrom(_fileName, this);
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 this.osHandler.getIOHandler().writeErrorLog(e);
                 warningLog += e.getLocalizedMessage() + "\n";
             }
 
             PDomParser parser = new PDomParser(this);
-                    
-            byte[] rawXml = overrideXML == null ?
-                    this.osHandler.getIOHandler().getXmlBytesFromArchive(_fileName) :
-                    overrideXML;
+
+            byte[] rawXml = overrideXML == null
+                    ? this.osHandler.getIOHandler().getXmlBytesFromArchive(_fileName)
+                    : overrideXML;
 
             parser.readXml(new ByteArrayInputStream(rawXml));
             Exception parseException = parser.getError();
-            
+
             if (parseException instanceof SAXException) {
                 // attempt to repair malformed XML on IOException
-                parser = new PDomParser(this);                
+                parser = new PDomParser(this);
                 XMLRecoveryTool recovery = new XMLRecoveryTool(new String(rawXml, StandardCharsets.UTF_8));
                 String recoveredXml = recovery.recoverXml();
                 parser.readXml(new ByteArrayInputStream(recoveredXml.getBytes()));
-                
+
                 // if not possible to recover, bubble error
                 if (parser.getError() != null) {
-                    throw (IOException)parser.getError();
+                    throw (IOException) parser.getError();
                 }
             } else if (parseException instanceof Exception) {
                 throw new IOException(parseException);
             }
-            
+
             for (String issue : parser.getIssues()) {
                 warningLog += issue + "\n";
             }
-            
+
             try {
                 this.osHandler.getIOHandler().loadGrammarSounds(_fileName, grammarManager);
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 this.osHandler.getIOHandler().writeErrorLog(e);
                 warningLog += e.getLocalizedMessage() + "\n";
             }
 
             try {
                 logoCollection.loadRadicalRelations();
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 this.osHandler.getIOHandler().writeErrorLog(e);
                 warningLog += e.getLocalizedMessage() + "\n";
             }
 
             try {
                 this.osHandler.getIOHandler().loadLogographs(logoCollection, _fileName);
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 this.osHandler.getIOHandler().writeErrorLog(e);
                 warningLog += e.getLocalizedMessage() + "\n";
             }
 
             try {
                 this.osHandler.getIOHandler().loadReversionStates(reversionManager, _fileName);
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 this.osHandler.getIOHandler().writeErrorLog(e);
                 warningLog += e.getLocalizedMessage() + "\n";
             }
-        } finally {
+        }
+        finally {
             curLoading = false;
         }
 
@@ -510,18 +523,18 @@ public class DictCore {
         PDomParser parser = new PDomParser(this);
         parser.readXml(new ByteArrayInputStream(reversion));
         String error = "";
-        
+
         // if no save time present, simply timestamp for current time (only relevant for first time revision log added)
         if (lastSaveTime == Instant.MIN) {
             lastSaveTime = Instant.now();
         }
-        
+
         Exception parseException = parser.getError();
         if (parseException != null) {
             this.osHandler.getIOHandler().writeErrorLog(parseException);
             error = parseException.getLocalizedMessage();
         }
-        
+
         // we only care about errors here, rather than warnings
         return error;
     }
@@ -541,40 +554,8 @@ public class DictCore {
 
         try {
             PGTUtil.claimWriteLock();
-            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Instant newSaveTime = Instant.now();
-
-            // clean up etymological entries which might be orphaned
-            etymologyManager.cleanBrokenEtymologyRoots();
-
-            // root elements
-            Document doc = docBuilder.newDocument();
-            Element rootElement = doc.createElement(PGTUtil.DICTIONARY_XID);
-            doc.appendChild(rootElement);
-
-            // store system info for troubleshooting
-            Element sysInfo = doc.createElement(PGTUtil.SYS_INFO_XID);
-            sysInfo.appendChild(doc.createTextNode(osHandler.getIOHandler().getSystemInformation()));
-            rootElement.appendChild(sysInfo);
-
-            // collect XML representation of all dictionary elements
-            writeXMLHeader(doc, rootElement, newSaveTime);
-            propertiesManager.writeXML(doc, rootElement);
-            wordClassCollection.writeXML(doc, rootElement);
-            typeCollection.writeXML(doc, rootElement);
-            wordCollection.writeXML(doc, rootElement);
-            etymologyManager.writeXML(doc, rootElement);
-            conjugationMgr.writeXML(doc, rootElement);
-            pronuncMgr.writeXML(doc, rootElement);
-            romMgr.writeXML(doc, rootElement);
-            logoCollection.writeXML(doc, rootElement);
-            grammarManager.writeXML(doc, rootElement);
-            toDoManager.writeXML(doc, rootElement);
-            phraseManager.writeXML(doc, rootElement);
-
-            // write family entries
-            rootElement.appendChild(famManager.writeToSaveXML(doc));
+            Document doc = getXmlDoc();
 
             // have IOHandler write constructed document to file
             this.osHandler.getIOHandler().writeFile(
@@ -593,6 +574,69 @@ public class DictCore {
                 PGTUtil.releaseWriteLock();
             }
         }
+    }
+    
+    /**
+     * Generates and returns the raw XML of a language file
+     * @return 
+     * @throws javax.xml.parsers.ParserConfigurationException 
+     * @throws java.io.IOException 
+     * @throws javax.xml.transform.TransformerException 
+     */
+    public String getRawXml() throws ParserConfigurationException, IOException, TransformerException {
+        Document doc = getXmlDoc();
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        
+        try (StringWriter writer = new StringWriter()) {
+            transformer.transform(new DOMSource(doc), new StreamResult(writer));
+
+            StringBuilder sb = new StringBuilder();
+            sb.append(writer.getBuffer());
+            return sb.toString();
+        }
+    }
+
+    /**
+     * Gets full XML document of language
+     */
+    private Document getXmlDoc() throws ParserConfigurationException {
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+        Instant newSaveTime = Instant.now();
+
+        // clean up etymological entries which might be orphaned
+        etymologyManager.cleanBrokenEtymologyRoots();
+
+        // root elements
+        Document doc = docBuilder.newDocument();
+        Element rootElement = doc.createElement(PGTUtil.DICTIONARY_XID);
+        doc.appendChild(rootElement);
+
+        // store system info for troubleshooting
+        Element sysInfo = doc.createElement(PGTUtil.SYS_INFO_XID);
+        sysInfo.appendChild(doc.createTextNode(osHandler.getIOHandler().getSystemInformation()));
+        rootElement.appendChild(sysInfo);
+
+        // collect XML representation of all dictionary elements
+        writeXMLHeader(doc, rootElement, newSaveTime);
+        propertiesManager.writeXML(doc, rootElement);
+        wordClassCollection.writeXML(doc, rootElement);
+        typeCollection.writeXML(doc, rootElement);
+        wordCollection.writeXML(doc, rootElement);
+        etymologyManager.writeXML(doc, rootElement);
+        conjugationMgr.writeXML(doc, rootElement);
+        pronuncMgr.writeXML(doc, rootElement);
+        romMgr.writeXML(doc, rootElement);
+        logoCollection.writeXML(doc, rootElement);
+        grammarManager.writeXML(doc, rootElement);
+        toDoManager.writeXML(doc, rootElement);
+        phraseManager.writeXML(doc, rootElement);
+
+        // write family entries
+        rootElement.appendChild(famManager.writeToSaveXML(doc));
+        
+        return doc;
     }
 
     private static void writeXMLHeader(Document doc, Element rootElement, Instant saveTime) {
@@ -758,7 +802,7 @@ public class DictCore {
             ret = ret && romMgr.equals(compCore.romMgr);
             ret = ret && famManager.equals(compCore.famManager);
             ret = ret && logoCollection.equals(compCore.logoCollection);
-            ret = ret && grammarManager.equals(compCore.grammarManager);
+            ret = ret && grammarManager.equals(compCore.grammarManager); // here it is
             ret = ret && wordClassCollection.equals(compCore.wordClassCollection);
             ret = ret && imageCollection.equals(compCore.imageCollection);
             ret = ret && etymologyManager.equals(compCore.etymologyManager);

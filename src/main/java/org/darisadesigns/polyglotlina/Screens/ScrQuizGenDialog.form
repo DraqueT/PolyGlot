@@ -219,7 +219,7 @@
                     <Property name="toolTipText" type="java.lang.String" value="Filter by part of speech here"/>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu())"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu(), core)"/>
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Object&gt;"/>
                   </AuxValues>
                 </Component>

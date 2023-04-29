@@ -292,7 +292,7 @@
                     <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lstTypesValueChanged"/>
                   </Events>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal())"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), core)"/>
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;TypeNode&gt;"/>
                   </AuxValues>
                 </Component>

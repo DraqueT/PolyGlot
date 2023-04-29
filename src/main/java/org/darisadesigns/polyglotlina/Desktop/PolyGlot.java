@@ -80,10 +80,10 @@ public final class PolyGlot {
     public PolyGlot(DictCore _core, DesktopOSHandler _osHandler) throws Exception {
         this(_core, _osHandler, new DesktopOptionsManager(_core));
     }
-    
+
     public PolyGlot(
-            DictCore _core, 
-            DesktopOSHandler _osHandler, 
+            DictCore _core,
+            DesktopOSHandler _osHandler,
             DesktopOptionsManager _optionsManager
     ) throws Exception {
         core = _core;
@@ -100,23 +100,24 @@ public final class PolyGlot {
     public static void main(final String[] args) {
         // must be done before absolutely anything else
         setupScaling();
-        
+
         var opMan = new DesktopOptionsManager();
         var ioHandler = DesktopIOHandler.getInstance();
         var cInfoBox = new DesktopInfoBox();
         var helpHandler = new DesktopHelpHandler();
         var fontHandler = new PFontHandler();
         var osHandler = new DesktopOSHandler(ioHandler, cInfoBox, helpHandler, fontHandler);
-        
+
         try {
             opMan.loadOptionsIni(org.darisadesigns.polyglotlina.PGTUtil.getDefaultDirectory().getAbsolutePath());
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             ioHandler.writeErrorLog(e, "Startup config file failure.");
-            cInfoBox.warning("Config Load Failure", "Unable to load options file or file corrupted:\n" 
+            cInfoBox.warning("Config Load Failure", "Unable to load options file or file corrupted:\n"
                     + e.getLocalizedMessage());
             DesktopIOHandler.getInstance().deleteIni(polyGlot.getWorkingDirectory().getAbsolutePath());
         }
-        
+
         try {
             // must be set before accessing System to test OS (values will simply be ignored for other OSes
             if (PGTUtil.IS_OSX) {
@@ -145,20 +146,20 @@ public final class PolyGlot {
             try {
                 // separated due to serious nature of Throwable vs Exception
                 DictCore core = new DictCore(
-                        new DesktopPropertiesManager(), 
-                        osHandler, 
-                        new PGTUtil(), 
+                        new DesktopPropertiesManager(),
+                        osHandler,
+                        new PGTUtil(),
                         new DesktopGrammarManager()
                 );
-                
+
                 PolyGlot.polyGlot = new PolyGlot(core, osHandler, opMan);
-                
+
                 s = new ScrMainMenu(core);
                 polyGlot.setRootWindow(s);
                 s.checkForUpdates(false);
                 s.setVisible(true);
                 cInfoBox.setParentWindow(s);
-                
+
                 polyGlot.coreUpdatedListener = (DictCore _core) -> {
                     polyGlot.getRootWindow().updateAllValues(_core);
                 };
@@ -179,7 +180,7 @@ public final class PolyGlot {
                 // open file if one is provided via arguments (but only if no recovery file- that takes precedence)
                 if (args.length > 0 && recoveredFile == false) {
                     String filePath = "";
-                    
+
                     for (var arg : args) {
                         filePath += arg.trim();
                     }
@@ -187,25 +188,27 @@ public final class PolyGlot {
                     if (new File(filePath).exists()) {
                         s.setFile(filePath);
                     } else {
-                        polyGlot.getOSHandler().getInfoBox().warning("File Path Error", 
+                        polyGlot.getOSHandler().getInfoBox().warning("File Path Error",
                                 "Unable to open: " + filePath
                                 + "\nPlease retry opening this file by clicking File->Open from the menu.");
                     }
                 }
 
                 // if a language has been loaded, open Lexicon
-                if (!polyGlot.getCore().getCurFileName().isBlank()) {
+                if (!polyGlot.core.getCurFileName().isBlank()) {
                     polyGlot.getRootWindow().openLexicon(true);
                 }
-                
+
                 // only begin autosave loop once checks for recovery files are complete
                 polyGlot.autoSave();
-            } catch (ArrayIndexOutOfBoundsException e) {
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e, "Problem with top level PolyGlot arguments.");
                 polyGlot.getOSHandler().getInfoBox().error("Unable to start", "Unable to open PolyGlot main frame: \n"
                         + e.getMessage() + "\n"
                         + "Problem with top level PolyGlot arguments.");
-            } catch (Exception e) { // split up for logical clarity... might want to differentiate
+            }
+            catch (Exception e) { // split up for logical clarity... might want to differentiate
                 // e.printStackTrace();
                 DesktopIOHandler.getInstance().writeErrorLog(e);
                 polyGlot.getOSHandler().getInfoBox().error("Unable to start", "Unable to open PolyGlot main frame: \n"
@@ -215,7 +218,7 @@ public final class PolyGlot {
                 if (s != null) {
                     s.dispose();
                 }
-                
+
                 if (!PGTUtil.isInJUnitTest() && !PGTUtil.isUITestingMode()) {
                     System.exit(0);
                 }
@@ -224,14 +227,14 @@ public final class PolyGlot {
                 // t.printStackTrace();
                 cInfoBox.error("PolyGlot Error", "A serious error has occurred: " + t.getLocalizedMessage());
                 DesktopIOHandler.getInstance().writeErrorLog(t);
-                
+
                 if (!PGTUtil.isInJUnitTest() && !PGTUtil.isUITestingMode()) {
                     System.exit(0);
                 }
             }
         });
     }
-    
+
     /**
      * Sets up Mac OS integration
      */
@@ -244,7 +247,7 @@ public final class PolyGlot {
             if (files.size() <= 0) {
                 return;
             } else if (files.size() > 1) {
-                polyGlot.getOSHandler().getInfoBox().info("File Limit", 
+                polyGlot.getOSHandler().getInfoBox().info("File Limit",
                         "PolyGlot can only open a single file at once.\nOpening first selected file:"
                         + files.get(0).getName());
             }
@@ -257,7 +260,7 @@ public final class PolyGlot {
                 }
             }
             catch (IOException | IllegalStateException ex) {
-                polyGlot.getOSHandler().getInfoBox().error("File Read Error", 
+                polyGlot.getOSHandler().getInfoBox().error("File Read Error",
                         "Unable to open file due to error:\n"
                         + ex.getLocalizedMessage());
             }
@@ -273,9 +276,9 @@ public final class PolyGlot {
 
         desk.setAboutHandler((AboutEvent e) -> {
             DictCore _core = new DictCore(
-                    new DesktopPropertiesManager(), 
-                    osHandler, 
-                    new PGTUtil(), 
+                    new DesktopPropertiesManager(),
+                    osHandler,
+                    new PGTUtil(),
                     new DesktopGrammarManager()
             );
 
@@ -287,14 +290,14 @@ public final class PolyGlot {
             staticScr.printToPdf();
         });
     }
-    
+
     private static void setupScaling() {
         Path p = Path.of(org.darisadesigns.polyglotlina.Desktop.PGTUtil.getDefaultDirectory()
                 + File.separator + org.darisadesigns.polyglotlina.Desktop.PGTUtil.POLYGLOT_INI);
         if (!p.toFile().exists() || p.toFile().isDirectory()) {
             return;
         }
-        
+
         try {
             String ini = Files.readString(p);
             int loc = ini.indexOf("UiScale=");
@@ -302,48 +305,49 @@ public final class PolyGlot {
             if (loc == -1) {
                 return;
             }
-            
+
             ini = ini.substring(loc + 8);
-            
+
             String value = "";
-            
+
             for (int i = 0; i < ini.length(); i++) {
-                String curChar = ini.substring(i, i+1);
-                
-                if (ini.substring(i, i+1).equals("\n") || ini.substring(i, i+1).equals("\r")) {
+                String curChar = ini.substring(i, i + 1);
+
+                if (ini.substring(i, i + 1).equals("\n") || ini.substring(i, i + 1).equals("\r")) {
                     break;
                 }
-                
+
                 value += curChar;
             }
 
             System.setProperty("sun.java2d.uiScale", value);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             polyGlot.getOSHandler().getIOHandler().writeErrorLog(e);
         }
     }
-    
+
     /**
      * Tests to make certain PolyGlot can access its own java runtime on disk
-     * for use with non-modularized components
-     * NOTE: Only runs for linked/deployed executions, not in dev or tests
+     * for use with non-modularized components NOTE: Only runs for
+     * linked/deployed executions, not in dev or tests
      */
     private static void testNonModularBridge() {
         if (PGTUtil.IS_DEV_MODE || PGTUtil.isInJUnitTest() || PGTUtil.isUITestingMode()) {
             return;
         }
-        
+
         String javaPath = NonModularBridge.getJavaExecutablePath();
-        
+
         if (!new File(javaPath).exists()) {
-            new DesktopInfoBox().warning("Runtime Location Error", 
+            new DesktopInfoBox().warning("Runtime Location Error",
                     "Unable to access external java runtime. Certain features such as Print to PDF may not function properly.");
             DesktopIOHandler.getInstance().writeErrorLog(new Exception("Missing external jave runtime: " + javaPath));
         }
     }
 
     /**
-     * Seeks recovery file or autosave file, queries user what to do with it, 
+     * Seeks recovery file or autosave file, queries user what to do with it,
      * and returns true if a recovery was made
      *
      * @param s
@@ -353,11 +357,11 @@ public final class PolyGlot {
      */
     private boolean handleFileRecoveries(ScrMainMenu s, File workingDirectory) throws IOException {
         File recovery = DesktopIOHandler.getInstance().getTempSaveFileIfExists(workingDirectory);
-        
+
         if (recovery == null) {
             recovery = this.autoSaveFile;
         }
-        
+
         if (recovery != null && recovery.exists()) {
             if (polyGlot.getOSHandler().getInfoBox().yesNoCancel("Recovery File Detected",
                     "PolyGlot appears to have shut down incorrectly. Would you like to recover the latest stable autosave?") == JOptionPane.YES_OPTION) {
@@ -406,10 +410,10 @@ public final class PolyGlot {
                 recovery = null;
             }
         }
-        
+
         return recovery != null && recovery.exists();
     }
-    
+
     /**
      * Cleans up and exits program definitively
      */
@@ -417,7 +421,7 @@ public final class PolyGlot {
         if (autoSaveFile.exists()) {
             autoSaveFile.delete();
         }
-        
+
         // allow JUnit to handle this state itself
         if (!PGTUtil.isInJUnitTest() && !PGTUtil.isUITestingMode()) {
             System.exit(0);
@@ -426,16 +430,16 @@ public final class PolyGlot {
 
     public DictCore getNewCore() {
         DictCore oldCore = this.core;
-        
+
         this.core = new DictCore(
                 new DesktopPropertiesManager(),
                 this.getOSHandler(),
                 new PGTUtil(),
                 new DesktopGrammarManager()
         );
-        
+
         oldCore.migrateSubscriptions(this.core);
-        
+
         return this.core;
     }
 
@@ -515,7 +519,7 @@ public final class PolyGlot {
     public File getWorkingDirectory() {
         return core.getOSHandler().getWorkingDirectory();
     }
-    
+
     public static PolyGlot getPolyGlot() {
         return PolyGlot.polyGlot;
     }
@@ -555,7 +559,7 @@ public final class PolyGlot {
         if (rootWindow != null) {
             Point location = rootWindow.getLocation();
             Dimension size = rootWindow.getSize();
-            
+
             rootWindow.dispose(false);
             rootWindow = new ScrMainMenu(core);
             rootWindow.setVisible(true);
@@ -575,41 +579,41 @@ public final class PolyGlot {
      */
     public static PolyGlot getTestShell(DictCore _core) throws IOException, Exception {
         var osHandler = new DesktopOSHandler(
-                DesktopIOHandler.getInstance(), 
-                new DummyInfoBox(), 
+                DesktopIOHandler.getInstance(),
+                new DummyInfoBox(),
                 new DesktopHelpHandler(),
                 new PFontHandler()
         );
-        
+
         osHandler.setWorkingDirectory(Files.createTempDirectory("POLYGLOT").toFile().getAbsolutePath());
-        
+
         return new PolyGlot(_core, osHandler);
     }
 
-    public DictCore getCore() {
-        return core;
-    }
-
+//    public DictCore getCore() {
+//        return core;
+//    }
     public void setCore(DictCore _core) {
         this.core = _core;
     }
-    
+
     public DesktopOSHandler getOSHandler() {
         return this.osHandler;
     }
-    
+
     public void setOSHandler(DesktopOSHandler _osHandler) {
         this.osHandler = _osHandler;
     }
-    
+
     /**
      * Sets root window (the ScrMainMenu object that the user sees)
-     * @param _rootWindow 
+     *
+     * @param _rootWindow
      */
     public void setRootWindow(ScrMainMenu _rootWindow) {
         rootWindow = _rootWindow;
     }
-    
+
     /**
      * Returns root window of PolyGlot
      *
@@ -630,47 +634,52 @@ public final class PolyGlot {
                 if (core != null && !rootWindow.isDisposed() && !PGTUtil.isInJUnitTest()) {
                     try {
                         core.writeFile(autoSaveFile.getAbsolutePath(), false);
-                    } catch (IOException e) {
+                    }
+                    catch (IOException e) {
                         // Do not attempt to write on failure to write
 //                        core.getOSHandler().getIOHandler().writeErrorLog(e, "Autosave Exeption");
                         // Error messages disabled due to UI generated mismatches of files
 //                        core.getOSHandler().getInfoBox().error("Working Path Write Error", "Unable to write to path: " 
 //                                + autoSaveFile.getAbsolutePath() + " due to: " + e.getLocalizedMessage());
-                    } catch (ParserConfigurationException | TransformerException e) {
+                    }
+                    catch (ParserConfigurationException | TransformerException e) {
                         core.getOSHandler().getIOHandler().writeErrorLog(e, "Autosave Exeption");
                         // Error messages disabled due to UI generated mismatches of files
 //                        core.getOSHandler().getInfoBox().error("Working Path Write Error", "Unable to write to path: " 
 //                                + autoSaveFile.getAbsolutePath() + " due to: " + e.getLocalizedMessage());
-                    } finally {
+                    }
+                    finally {
                         autoSave();
                     }
                 }
             }
         }, polyGlot.getOptionsManager().getMsBetweenSaves());
     }
-    
+
     /**
      * Fetches autosave file for PolyGlot
-     * @return 
+     *
+     * @return
      */
     public File getNewAutoSaveFile() {
-        String path = getWorkingDirectory().getAbsolutePath() 
-                + File.separator 
+        String path = getWorkingDirectory().getAbsolutePath()
+                + File.separator
                 + PGTUtil.AUTO_SAVE_FILE_NAME;
-        
+
         return new File(path);
     }
-    
+
     /**
      * Used for testing purposes only
-     * @param _polyGlot 
-     * @throws java.lang.Exception 
+     *
+     * @param _polyGlot
+     * @throws java.lang.Exception
      */
     public static void setTestPolyGlot(PolyGlot _polyGlot) throws Exception {
         if (!PGTUtil.isInJUnitTest() && !PGTUtil.isUITestingMode()) {
             throw new Exception("ONLY TO BE RUN AS SETUP FOR TESTING");
         }
-        
+
         PolyGlot.polyGlot = _polyGlot;
     }
 }

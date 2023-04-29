@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -231,7 +231,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
             }
         }
 
-        if (!core.getOSHandler().getPFontHandler().canStringBeRendered(word.getValue(), true)) {
+        if (!core.getOSHandler().getPFontHandler().canStringBeRendered(word.getValue(), true, core)) {
             ret.setValue(ret.getValue() + "\nWord: \"" + word.getValue() + "\" with local value: \"" + word.getLocalWord() 
                     + "\" cannot be rendered properly using font: " + core.getPropertiesManager().getFontConFamily());
         }

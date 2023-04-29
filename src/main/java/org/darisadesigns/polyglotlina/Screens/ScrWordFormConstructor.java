@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2021-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -87,7 +87,7 @@ public class ScrWordFormConstructor extends PFrame {
             Font local = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
             int maxHeight = 0;
             for (var dimension : core.getConjugationManager().getDimensionalConjugationListTemplate(word.getWordTypeId())) {
-                var dimensionDropdown = new PComboBox<LexDimension>(local, dimension.getValue());
+                var dimensionDropdown = new PComboBox<LexDimension>(local, dimension.getValue(), core);
                 
                 if (maxHeight == 0) {
                     FontMetrics metrics = this.getGraphics().getFontMetrics();

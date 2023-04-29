@@ -117,8 +117,8 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
             try {
                 Image imageObject = ClipboardHandler.getClipboardImage();
                 BufferedImage image = null;
-                if (imageObject instanceof BufferedImage) {
-                    image = (BufferedImage)imageObject;
+                if (imageObject instanceof BufferedImage bImage) {
+                    image = bImage;
                 } else if (imageObject != null) {
                     image = new BufferedImage(imageObject.getWidth(null),
                             imageObject.getHeight(null), BufferedImage.TYPE_INT_ARGB);
@@ -132,7 +132,7 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
                 }
                 
                 if (image != null) {
-                    ImageNode imageNode = DesktopIOHandler.getInstance().getFromBufferedImage(image);
+                    ImageNode imageNode = DesktopIOHandler.getInstance().getFromBufferedImage(image, core);
                     addImage(imageNode);
                 }
             } catch (Exception e) {
@@ -186,7 +186,7 @@ public final class PTextPane extends JTextPane implements CoreUpdateSubscription
         insertImage.addActionListener((ActionEvent ae) -> {
             try {
                 ImageNode image = DesktopIOHandler.getInstance()
-                        .openNewImage((Window)parentPane.getTopLevelAncestor(), core.getWorkingDirectory());
+                        .openNewImage((Window)parentPane.getTopLevelAncestor(), core.getWorkingDirectory(), core);
                 if (image != null) {
                     // null node means user cancelled process
                     addImage(image);

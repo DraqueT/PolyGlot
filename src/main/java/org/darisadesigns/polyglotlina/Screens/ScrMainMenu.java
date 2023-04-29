@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -491,6 +491,7 @@ public final class ScrMainMenu extends PFrame {
 
         genTitle();
         updateAllValues(core);
+        core.pushUpdate();
     }
 
     /**
@@ -940,7 +941,7 @@ public final class ScrMainMenu extends PFrame {
         }
 
         SwingUtilities.invokeLater(() -> {
-            PolyGlot.getPolyGlot().getOSHandler().getPFontHandler().updateLocalFont();
+            PolyGlot.getPolyGlot().getOSHandler().getPFontHandler().updateLocalFont(core);
         });
     }
 
@@ -1597,7 +1598,8 @@ public final class ScrMainMenu extends PFrame {
         mnuPackLanguage = new javax.swing.JMenuItem();
         mnuCheckLanguage = new javax.swing.JMenuItem();
         mnuIpaTranslator = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        mnuEvolve = new javax.swing.JMenuItem();
+        mnuChatGpt = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mnuLexFamilies = new javax.swing.JMenuItem();
         mnuLangStats = new javax.swing.JMenuItem();
@@ -2039,14 +2041,22 @@ public final class ScrMainMenu extends PFrame {
         });
         mnuTools.add(mnuIpaTranslator);
 
-        jMenuItem1.setText("Evolve Language");
-        jMenuItem1.setToolTipText("Modify large segments of vocabulary at once (regex compatible)");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        mnuEvolve.setText("Evolve Language");
+        mnuEvolve.setToolTipText("Modify large segments of vocabulary at once (regex compatible)");
+        mnuEvolve.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                mnuEvolveActionPerformed(evt);
             }
         });
-        mnuTools.add(jMenuItem1);
+        mnuTools.add(mnuEvolve);
+
+        mnuChatGpt.setText("GPT Translate");
+        mnuChatGpt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuChatGptActionPerformed(evt);
+            }
+        });
+        mnuTools.add(mnuChatGpt);
         mnuTools.add(jSeparator1);
 
         mnuLexFamilies.setText("Lexical Families");
@@ -2461,9 +2471,9 @@ public final class ScrMainMenu extends PFrame {
         newFile(true);
     }//GEN-LAST:event_btnNewLangActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void mnuEvolveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuEvolveActionPerformed
         new ScrEvolveLang(core).setVisible(true);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_mnuEvolveActionPerformed
 
     private void lstRecentOpenedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstRecentOpenedMouseClicked
         // only run on double click
@@ -2504,6 +2514,10 @@ public final class ScrMainMenu extends PFrame {
         changeScreen(zompist, zompist.getWindow(), (PButton) evt.getSource());
     }//GEN-LAST:event_btnZompistWordGeneratorActionPerformed
 
+    private void mnuChatGptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuChatGptActionPerformed
+        new ScrChatGptTranslator(core).setVisible(true);
+    }//GEN-LAST:event_mnuChatGptActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClasses;
     private javax.swing.JButton btnGrammar;
@@ -2522,7 +2536,6 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem8;
@@ -2539,8 +2552,10 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JList<RecentFile> lstRecentOpened;
     private javax.swing.JMenuItem mnuAbout;
     private javax.swing.JMenu mnuAdvanced;
+    private javax.swing.JMenuItem mnuChatGpt;
     private javax.swing.JMenuItem mnuCheckLanguage;
     private javax.swing.JMenuItem mnuChkUpdate;
+    private javax.swing.JMenuItem mnuEvolve;
     private javax.swing.JMenu mnuExLex;
     private javax.swing.JMenuItem mnuExit;
     private javax.swing.JMenu mnuExport;

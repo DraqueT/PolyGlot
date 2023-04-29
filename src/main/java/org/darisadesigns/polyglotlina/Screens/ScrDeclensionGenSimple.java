@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -215,13 +215,12 @@ public class ScrDeclensionGenSimple extends PDialog {
         chkDisableForm = new PCheckBox(nightMode);
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstCombinedDec = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
+        lstCombinedDec = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), core);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Conjugation/Declensions");
 
-        jSplitPane1.setBorder(null);
         jSplitPane1.setDividerLocation(160);
         jSplitPane1.setDividerSize(10);
         jSplitPane1.setMinimumSize(new java.awt.Dimension(0, 0));

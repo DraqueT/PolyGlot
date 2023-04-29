@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -154,7 +154,7 @@ public final class ScrIPARefChart extends PFrame {
         jPanel4 = new javax.swing.JPanel();
         lblOtherSymbols = new PLabel("");
         txtIPAChars = new javax.swing.JTextField();
-        cmbIpaLibSelect = new PComboBox<IPALibrary>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
+        cmbIpaLibSelect = new PComboBox<IPALibrary>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu(), core);
         lblHover = new PLabel("Hover over an IPA character to display which characters in your language express it.");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);

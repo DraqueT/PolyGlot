@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -990,11 +990,11 @@ public final class ScrDeclensionGenClassic extends PDialog {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new PLabel("");
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstCombinedDec = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
+        lstCombinedDec = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), core);
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new PLabel("");
         jScrollPane2 = new javax.swing.JScrollPane();
-        lstRules = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
+        lstRules = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), core);
         btnAddRule = new PAddRemoveButton("+");
         btnDeleteRule = new PAddRemoveButton("-");
         chkDisableWordform = new PCheckBox(nightMode);

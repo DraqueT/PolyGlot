@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2022-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -476,7 +476,7 @@ public class ScrZompistLexiconGen extends PFrame {
             }
             
             tblSwadesh.setModel(model);
-            var cellEditor = new PCellEditor(false);
+            var cellEditor = new PCellEditor(false, core);
             cellEditor.getComponent().addFocusListener(new FocusListener(){
                 @Override
                 public void focusGained(FocusEvent e) {
@@ -509,7 +509,7 @@ public class ScrZompistLexiconGen extends PFrame {
             tableValuesUpdated();
             tblGeneratedValues.setModel(model);
             tableValuesUpdated();
-            var cellEditor = new PCellEditor(true);
+            var cellEditor = new PCellEditor(true, core);
             cellEditor.getComponent().addFocusListener(new FocusListener(){
                 @Override
                 public void focusGained(FocusEvent e) {
@@ -545,7 +545,7 @@ public class ScrZompistLexiconGen extends PFrame {
             tableValuesUpdated();
             tblGeneratedValues.setModel(model);
             tableValuesUpdated();
-            var cellEditor = new PCellEditor(true);
+            var cellEditor = new PCellEditor(true, core);
             cellEditor.getComponent().addFocusListener(new FocusListener(){
                 @Override
                 public void focusGained(FocusEvent e) {
@@ -889,12 +889,12 @@ public class ScrZompistLexiconGen extends PFrame {
         btnAddWord = new PAddRemoveButton("+");
         btnDelWord = new PAddRemoveButton("-");
         jScrollPane4 = new javax.swing.JScrollPane();
-        tblGeneratedValues = new PTable();
-        txtItemCount = new PTextField("Item Count");
+        tblGeneratedValues = new PTable(core);
+        txtItemCount = new PTextField("Item Count", core);
         jLabel5 = new PLabel();
-        cmbSwadesh = new PComboBox<SwadeshObject>(false);
+        cmbSwadesh = new PComboBox<SwadeshObject>(false, core);
         jScrollPane7 = new javax.swing.JScrollPane();
-        lstImport = new PListLexicon(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
+        lstImport = new PListLexicon(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon(), core);
         jLabel6 = new PLabel();
         btnCopyToImport = new PButton();
         btnCopyFromImport = new PButton();
@@ -904,8 +904,8 @@ public class ScrZompistLexiconGen extends PFrame {
         tblSwadesh = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        rdoGenWords = new PRadioButton();
-        rdoGenSyllables = new PRadioButton();
+        rdoGenWords = new PRadioButton(core);
+        rdoGenSyllables = new PRadioButton(core);
         chkShowSyllables = new PCheckBox(false);
         chkSlowSyllableDropoff = new PCheckBox(false);
         jPanel5 = new javax.swing.JPanel();
@@ -913,7 +913,7 @@ public class ScrZompistLexiconGen extends PFrame {
         sldDropoff = new javax.swing.JSlider();
         lblMonoSyllables = new PLabel();
         sldMonoSyllables = new javax.swing.JSlider();
-        txtGenerationNum = new PTextField("Target");
+        txtGenerationNum = new PTextField("Target", core);
         jPanel6 = new javax.swing.JPanel();
         btnGenerate = new PButton();
         btnClear = new PButton();

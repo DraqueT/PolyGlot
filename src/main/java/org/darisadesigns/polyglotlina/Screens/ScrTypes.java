@@ -426,7 +426,7 @@ public final class ScrTypes extends PFrame {
         txtNotes = new PTextPane(core, true, "-- Notes --");
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstTypes = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
+        lstTypes = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), core);
         btnAddType = new PAddRemoveButton("+");
         btnDelType = new PAddRemoveButton("-");
 

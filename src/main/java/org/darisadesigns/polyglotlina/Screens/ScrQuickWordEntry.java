@@ -67,7 +67,7 @@ public final class ScrQuickWordEntry extends PDialog {
      */
     public ScrQuickWordEntry(DictCore _core, ScrLexicon _parent) {
         super(_core);
-        
+
         parent = _parent;
 
         initComponents();
@@ -157,14 +157,15 @@ public final class ScrQuickWordEntry extends PDialog {
      */
     private void setProc() {
         String proc = "";
-        
+
         try {
-            proc  = core.getPronunciationMgr()
-                .getPronunciation(txtConWord.getText());
-        } catch (Exception e) {
+            proc = core.getPronunciationMgr()
+                    .getPronunciation(txtConWord.getText());
+        }
+        catch (Exception e) {
             // user error
             // IOHandler.writeErrorLog(e);
-            new DesktopInfoBox().error("Regex Error", "Unable to generate pronunciation: " 
+            new DesktopInfoBox().error("Regex Error", "Unable to generate pronunciation: "
                     + e.getLocalizedMessage());
         }
 
@@ -184,13 +185,13 @@ public final class ScrQuickWordEntry extends PDialog {
         cmbType.removeAllItems();
         final String defLabel = "-- Part of Speech --";
         cmbType.addItem(defLabel);
-        ((PComboBox)cmbType).setDefaultText(defLabel);
+        ((PComboBox) cmbType).setDefaultText(defLabel);
 
         for (TypeNode curNode : core.getTypes().getNodes()) {
             cmbType.addItem(curNode);
         }
     }
-    
+
     private ConWord getCurrentWord() {
         ConWord word = new ConWord();
         word.setCore(core);
@@ -217,7 +218,7 @@ public final class ScrQuickWordEntry extends PDialog {
                 word.setClassTextValue(curEntry.getKey(), curText.getText());
             }
         });
-        
+
         return word;
     }
 
@@ -232,15 +233,17 @@ public final class ScrQuickWordEntry extends PDialog {
                 txtConWord.requestFocus();
 
                 parent.refreshWordList(wordId);
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
                 new DesktopInfoBox().error("Word Error", "Unable to insert word: " + e.getMessage());
             }
         }
     }
-    
+
     /**
      * Tests legality of word and sets colors of fields accordingly
+     *
      * @return true if legal
      */
     private boolean testWordLegality(boolean verbose) {
@@ -252,22 +255,23 @@ public final class ScrQuickWordEntry extends PDialog {
 
         txtConWord.setBackground(test.getValue().isBlank() ? defaultColor : highlightColor);
         testResults.add(test.getValue());
-        
-        txtLocalWord.setBackground(test.getLocalWord().isBlank() ?  defaultColor : highlightColor);
+
+        txtLocalWord.setBackground(test.getLocalWord().isBlank() ? defaultColor : highlightColor);
         testResults.add(test.getLocalWord());
-        
+
         try {
-            txtProc.setBackground(test.getPronunciation().isBlank() ?  defaultColor : highlightColor);
+            txtProc.setBackground(test.getPronunciation().isBlank() ? defaultColor : highlightColor);
             testResults.add(test.getPronunciation());
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             // do nothing. The user will be informed of this elsewhere.
             // IOHandler.writeErrorLog(e);
         }
-        
+
         cmbType.setBackground(test.getDefinition().isBlank() && test.typeError.isBlank() ? defaultColor : highlightColor);
         testResults.add(test.getDefinition());
         testResults.add(test.typeError);
-        
+
         if (core.getPropertiesManager().isWordUniqueness()
                 && core.getWordCollection().testWordValueExists(txtConWord.getText())) {
             txtConWord.setBackground(highlightColor);
@@ -275,14 +279,14 @@ public final class ScrQuickWordEntry extends PDialog {
         } else if (test.getValue().isBlank()) { // don't unset highlight if already set above
             txtConWord.setBackground(defaultColor);
         }
-        
+
         if (core.getPropertiesManager().isLocalUniqueness()
                 && core.getWordCollection().testLocalValueExists(txtLocalWord.getText())) {
-            
+
             txtLocalWord.setBackground(highlightColor);
             testResults.add("Local words set to enforced unique: this work exists elsewhere.");
         }
-        
+
         testResults.removeIf(String::isBlank);
 
         if (!testResults.isEmpty()) {
@@ -290,10 +294,10 @@ public final class ScrQuickWordEntry extends PDialog {
                 new DesktopInfoBox().warning("Illegal Values", "Word contains illegal values:\n\n"
                         + String.join("\n", testResults).trim());
             }
-            
+
             return false;
         }
-        
+
         return true;
     }
 
@@ -342,13 +346,13 @@ public final class ScrQuickWordEntry extends PDialog {
                 textField.addActionListener((ActionEvent e) -> {
                     tryRecord();
                 });
-                
+
                 textField.setToolTipText(curProp.getValue() + " value");
                 textField.setPreferredSize(new Dimension(99999, textField.getPreferredSize().height));
                 pnlClasses.add(textField, gbc);
                 classComboMap.put(curProp.getId(), textField); // dropbox mapped to related class ID.
             } else {
-                final PComboBox<Object> classBox = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
+                final PComboBox<Object> classBox = new PComboBox<>(((DesktopPropertiesManager) core.getPropertiesManager()).getFontMenu(), core);
                 DefaultComboBoxModel<Object> comboModel = new DefaultComboBoxModel<>();
                 classBox.setModel(comboModel);
                 comboModel.addElement("-- " + curProp.getValue() + " --");
@@ -395,13 +399,14 @@ public final class ScrQuickWordEntry extends PDialog {
         }
         if (propList.length == 0) {
             // must include at least one item (even a dummy) to resize for some reason
-            PComboBox blank = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
+            PComboBox blank = new PComboBox(((DesktopPropertiesManager) core.getPropertiesManager()).getFontMenu(), core);
             blank.setEnabled(false);
             pnlClasses.add(blank, gbc);
             pnlClasses.setPreferredSize(new Dimension(9999, 0));
         } else {
             pnlClasses.setMaximumSize(new Dimension(99999, 99999));
-            pnlClasses.setPreferredSize(new Dimension(9999, propList.length * new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu()).getPreferredSize().height));
+            var defaultCombo = new PComboBox(((DesktopPropertiesManager) core.getPropertiesManager()).getFontMenu(), core);
+            pnlClasses.setPreferredSize(new Dimension(9999, propList.length * defaultCombo.getPreferredSize().height));
         }
 
         pnlClasses.repaint();
@@ -425,7 +430,7 @@ public final class ScrQuickWordEntry extends PDialog {
         jPanel2 = new javax.swing.JPanel();
         txtConWord = new PTextField(core, false, core.conLabel() + " word");
         txtLocalWord = new PTextField(core, true, core.localLabel() + " word");
-        cmbType = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
+        cmbType = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu(), core);
         txtProc = new PTextField(core, true, "Pronunciation");
         pnlClasses = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();

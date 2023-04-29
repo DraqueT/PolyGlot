@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -302,7 +302,7 @@ public final class ScrLogoQuickView extends PFrame {
 
         lblLogoPic = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstLogos = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
+        lstLogos = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon(), core);
         btnAdd = new PAddRemoveButton("+");
         btnDel = new PAddRemoveButton("-");
         btnOK = new PButton(nightMode);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -22,6 +22,7 @@ package org.darisadesigns.polyglotlina.Desktop.CustomControls;
 //import org.darisadesigns.polyglotlina.DictCore;
 import java.awt.Font;
 import javax.swing.JList;
+import org.darisadesigns.polyglotlina.DictCore;
 
 /**
  *
@@ -30,16 +31,16 @@ import javax.swing.JList;
  */
 public class PList<N> extends JList<N> {
     
-    public PList(Font _font) {
-        setup(_font);
+    public PList(Font _font, DictCore core) {
+        setup(_font, core);
     }
     
-    public PList(Font _font, double fontSize) {
-        setup(_font.deriveFont((float)fontSize));
+    public PList(Font _font, double fontSize, DictCore core) {
+        setup(_font.deriveFont((float)fontSize), core);
     }
     
-    private void setup(Font font) {
+    private void setup(Font font, DictCore core) {
         setFont(font);
-        this.setCellRenderer(new PListCellRenderer());
+        this.setCellRenderer(new PListCellRenderer(core));
     }
 }

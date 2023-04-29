@@ -441,7 +441,7 @@ public final class ScrWordClasses extends PFrame {
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstProperties = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
+        lstProperties = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), core);
         btnAddProp = new PAddRemoveButton("+");
         btnDelProp = new PAddRemoveButton("-");
         jPanel1 = new javax.swing.JPanel();
@@ -472,7 +472,6 @@ public final class ScrWordClasses extends PFrame {
         });
         jScrollPane1.setViewportView(lstProperties);
 
-        btnAddProp.setBackground(new java.awt.Color(255, 255, 255));
         btnAddProp.setToolTipText("Add new property");
         btnAddProp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -480,7 +479,6 @@ public final class ScrWordClasses extends PFrame {
             }
         });
 
-        btnDelProp.setBackground(new java.awt.Color(255, 255, 255));
         btnDelProp.setToolTipText("Delete selected property");
         btnDelProp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 - 2023, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -45,10 +45,11 @@ public abstract class PFontHandler {
      * @param conFont true if using the conlang font, false if using the local language font
      * @return 
      */
-    public abstract boolean canStringBeRendered(String value, boolean conFont);
+    public abstract boolean canStringBeRendered(String value, boolean conFont, DictCore core);
     
     /**
      * Pushes local font to any relevant objects
+     * @param core
      */
-    public abstract void updateLocalFont();
+    public abstract void updateLocalFont(DictCore core);
 }

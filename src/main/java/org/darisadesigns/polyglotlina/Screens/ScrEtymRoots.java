@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -320,7 +320,7 @@ public final class ScrEtymRoots extends PDialog {
         }
 
         //create new dropdown for potential additional parent to be added
-        final PComboBox<Object> newParentBox = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
+        final PComboBox<Object> newParentBox = new PComboBox<>(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu(), core);
         newParentBox.setToolTipText("Add new parent to word here.");
         newParentBox.setDefaultText("Select Parent");
         newParentBox.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon());
@@ -338,8 +338,8 @@ public final class ScrEtymRoots extends PDialog {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (me.getSelectedItem() instanceof ConWord) {
-                    addRelation(((ConWord) me.getSelectedItem()).getId(), word.getId());
+                if (me.getSelectedItem() instanceof ConWord conWord) {
+                    addRelation(conWord.getId(), word.getId());
                     setupParentsPanels();
                 }
             }

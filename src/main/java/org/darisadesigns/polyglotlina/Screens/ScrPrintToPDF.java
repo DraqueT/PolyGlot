@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -153,7 +153,7 @@ public class ScrPrintToPDF extends PDialog {
             chapters.add(Integer.toString(item.index));
         }
         
-        return String.join(",", chapters.toArray(new String[0]));
+        return String.join(",", chapters.toArray(String[]::new));
     }
     
     /**
@@ -182,7 +182,7 @@ public class ScrPrintToPDF extends PDialog {
         chkPrintConjugations = new PCheckBox(nightMode);
         chkPrintPhrases = new PCheckBox(nightMode);
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstChapOrder = new PList<>(PGTUtil.MENU_FONT);
+        lstChapOrder = new PList<>(PGTUtil.MENU_FONT, core);
         jLabel1 = new PLabel("Chapter Order");
         btnMoveUp = new PButton(nightMode);
         btnMoveDown = new PButton(nightMode);

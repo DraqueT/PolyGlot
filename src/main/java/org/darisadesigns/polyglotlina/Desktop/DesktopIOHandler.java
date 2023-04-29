@@ -349,7 +349,6 @@ public final class DesktopIOHandler implements IOHandler {
             // attempt to open file in dummy core. On success, copy file to end
             // destination, on fail, delete file and inform user by bubbling error
             try {
-                // pass null shell class because this will ultimately be discarded
                 DesktopHelpHandler helpHandler = new DesktopHelpHandler();
                 PFontHandler fontHandler = new PFontHandler();
                 var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), new DummyInfoBox(), helpHandler, fontHandler);
@@ -642,7 +641,7 @@ public final class DesktopIOHandler implements IOHandler {
      */
     @Override
     public void loadImageAssets(ImageCollection imageCollection,
-            String fileName) throws Exception {
+            String fileName, DictCore core) throws Exception {
         try ( ZipFile zipFile = new ZipFile(fileName)) {
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
@@ -673,7 +672,7 @@ public final class DesktopIOHandler implements IOHandler {
                             .replace(PGTUtil.IMAGES_SAVE_PATH, "");
                     int imageId = Integer.parseInt(name);
                     img = ImageIO.read(imageStream);
-                    ImageNode imageNode = new ImageNode(PolyGlot.getPolyGlot().getCore());
+                    ImageNode imageNode = new ImageNode(core);
                     imageNode.setId(imageId);
                     imageNode.setImageBytes(loadImageBytesFromImage(img));
                     imageCollection.getBuffer().setEqual(imageNode);
@@ -1206,7 +1205,6 @@ public final class DesktopIOHandler implements IOHandler {
         
         // if packing PGD file, test readability afterward
         if (packingPgdFile) {
-            // pass null shell class because this will ultimately be discarded
             DesktopHelpHandler helpHandler = new DesktopHelpHandler();
             PFontHandler fontHandler = new PFontHandler();
             var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), new DummyInfoBox(), helpHandler, fontHandler);
@@ -1351,10 +1349,9 @@ public final class DesktopIOHandler implements IOHandler {
      * @return ImageNode inserted into collection with populated image
      * @throws IOException on file read error
      */
-    public ImageNode openNewImage(Window parent, File workingDirectory) throws Exception {
+    public ImageNode openNewImage(Window parent, File workingDirectory, DictCore core) throws Exception {
         ImageNode image = null;
         try {
-            DictCore core = PolyGlot.getPolyGlot().getCore();
             BufferedImage buffImg = openImage(parent, workingDirectory);
 
             if (buffImg != null) {
@@ -1402,11 +1399,11 @@ public final class DesktopIOHandler implements IOHandler {
      * the node with ID to persist on save
      *
      * @param _image Image to get node of.
+     * @param core
      * @return populated Image node
      * @throws java.lang.Exception
      */
-    public ImageNode getFromBufferedImage(BufferedImage _image) throws Exception {
-        DictCore core = PolyGlot.getPolyGlot().getCore();
+    public ImageNode getFromBufferedImage(BufferedImage _image, DictCore core) throws Exception {
         ImageNode ret = new ImageNode(core);
         ret.setImageBytes(loadImageBytesFromImage(_image));
         core.getImageCollection().insert(ret);

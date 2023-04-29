@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2016-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -167,7 +167,7 @@ public final class ScrQuizScreen extends PFrame {
             gbc.weightx = 9999;
 
             for (DictNode choiceNode : question.getChoices()) {
-                final PRadioButton choice = new PRadioButton();
+                final PRadioButton choice = new PRadioButton(core);
                 choice.setValue(choiceNode);
                 choice.setType(question.getType());
                 

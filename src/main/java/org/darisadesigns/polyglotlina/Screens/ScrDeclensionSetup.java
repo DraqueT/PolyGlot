@@ -517,7 +517,7 @@ public final class ScrDeclensionSetup extends PDialog {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new PLabel("");
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstDeclensionList = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
+        lstDeclensionList = new PList(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), core);
         jPanel2 = new javax.swing.JPanel();
         txtDeclensionName = new PTextField(core, true, "Name");
         jLabel3 = new PLabel("");

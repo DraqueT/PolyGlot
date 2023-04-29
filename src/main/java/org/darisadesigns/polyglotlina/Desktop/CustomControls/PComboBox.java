@@ -44,6 +44,7 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
+import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 
 /**
@@ -62,19 +63,21 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
     private boolean filterActive = false;
     private Object lastSetValue = null;
     private final Font font;
+    private final DictCore core;
 
-    public PComboBox(boolean useConFont) {
+    public PComboBox(boolean useConFont, DictCore _core) {
         this(useConFont ?
-                ((DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager()).getFontCon() :
-                ((DesktopPropertiesManager)PolyGlot.getPolyGlot().getCore().getPropertiesManager()).getFontLocal()
+                ((DesktopPropertiesManager)_core.getPropertiesManager()).getFontCon() :
+                ((DesktopPropertiesManager)_core.getPropertiesManager()).getFontLocal(),
+                _core
         );
         
         this.setBackground(PolyGlot.getPolyGlot().getOptionsManager().isNightMode() ?
                 PGTUtil.COLOR_TEXT_BG_NIGHT : PGTUtil.COLOR_TEXT_BG);
     }
     
-    public PComboBox(Font _font) {
-        this(_font, "");
+    public PComboBox(Font _font, DictCore _core) {
+        this(_font, "", _core);
     }
     
     /**
@@ -82,13 +85,15 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
      * responsible for inserting an appropriately blank entry of type E)
      * @param _font
      * @param _defaultText default selection text (no value)
+     * @param _core
      */
-    public PComboBox(Font _font, String _defaultText) {
+    public PComboBox(Font _font, String _defaultText, DictCore _core) {
         font = _font;
+        core = _core;
         setupListeners();
         super.setFont(font);
-        var cellRenderer = new PListCellRenderer();
-        cellRenderer.setAddLocalExtraText(PolyGlot.getPolyGlot().getCore().getPropertiesManager().isExpandedLexListDisplay());
+        var cellRenderer = new PListCellRenderer(core);
+        cellRenderer.setAddLocalExtraText(core.getPropertiesManager().isExpandedLexListDisplay());
         cellRenderer.setFont(font);
         this.setRenderer(cellRenderer);
         ((JTextField)this.getEditor().getEditorComponent()).setHorizontalAlignment(JTextField.CENTER);
@@ -363,7 +368,6 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         antiAlias.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, 5, 5);
         
         // draw local word if appropriate
-        var core = PolyGlot.getPolyGlot().getCore();
         if (!filterActive && core.getPropertiesManager().isExpandedLexListDisplay()
                 && getSelectedItem() instanceof ConWord word) {
             
@@ -403,13 +407,11 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         }
         
         if (localFontMetrics == null) {
-            var core = PolyGlot.getPolyGlot().getCore();
             var localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
             localFontMetrics = g.getFontMetrics(localFont);
         }
         
         if (conFontMetrics == null) {
-            var core = PolyGlot.getPolyGlot().getCore();
             var conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
             conFontMetrics = g.getFontMetrics(conFont);
         }

@@ -294,18 +294,6 @@ public final class ScrGrammarGuide extends PFrame {
             }
         }
     }
-    
-    private void updateFontSize() {
-        try {
-            Integer.valueOf(txtFontSize.getText());
-        } catch (NumberFormatException e) {
-            // user error, do not log
-            // core.getOSHandler().getIOHandler().writeErrorLog(e);
-            core.getOSHandler().getInfoBox().warning("Font Size", "Invalid size: " + txtFontSize.getText());
-            txtFontSize.setText("12");
-        }
-        setFont();
-    }
 
     /**
      * Sets up initial values of components
@@ -843,7 +831,7 @@ public final class ScrGrammarGuide extends PFrame {
         savePropsToNode((DefaultMutableTreeNode) treChapList.getLastSelectedPathComponent());
         DesktopGrammarChapNode rootNode = new DesktopGrammarChapNode("Root Node", gramMan);
 
-        if (((PTextField) txtSearch).isDefaultText() || txtSearch.getText().isEmpty()) {
+        if (txtSearch.getText().isEmpty()) {
             populateSections();
             return;
         }
@@ -891,9 +879,9 @@ public final class ScrGrammarGuide extends PFrame {
         txtName = new PTextField(core, true, "Name");
         jPanel3 = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
-        cmbFonts = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
+        cmbFonts = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), core);
         txtFontSize = new javax.swing.JTextField();
-        cmbFontColor = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu());
+        cmbFontColor = new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu(), core);
         btnApply = new PButton(nightMode);
         panSection = new javax.swing.JScrollPane();
         txtSection = new PGrammarPane(core);

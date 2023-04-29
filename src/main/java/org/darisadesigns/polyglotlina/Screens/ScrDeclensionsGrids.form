@@ -81,7 +81,7 @@
         <Property name="toolTipText" type="java.lang.String" value="Rows in wordform grids will be based on this donjugation/declension dimension"/>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu())"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu(), core)"/>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;org.darisadesigns.polyglotlina.Nodes.ConjugationNode&gt;"/>
       </AuxValues>
     </Component>
@@ -93,7 +93,7 @@
         <Property name="toolTipText" type="java.lang.String" value="Columns in wordform grids will be based on this donjugation/declension dimension"/>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu())"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu(), core)"/>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;org.darisadesigns.polyglotlina.Nodes.ConjugationNode&gt;"/>
       </AuxValues>
     </Component>

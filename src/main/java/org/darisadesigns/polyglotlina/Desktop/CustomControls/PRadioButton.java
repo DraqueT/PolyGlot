@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2022, Draque Thompson
+ * Copyright (c) 2016-2023, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -27,7 +27,6 @@ import javax.swing.JRadioButton;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  * 
@@ -38,8 +37,8 @@ public final class PRadioButton extends JRadioButton {
     private QuestionType type;
     private final DictCore core;
     
-    public PRadioButton() {
-        core = PolyGlot.getPolyGlot().getCore();
+    public PRadioButton(DictCore _core) {
+        core = _core;
         this.setFont(PGTUtil.MENU_FONT);
     }
     

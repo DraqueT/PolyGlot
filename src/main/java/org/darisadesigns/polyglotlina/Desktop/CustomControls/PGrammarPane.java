@@ -51,7 +51,8 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 /**
- * Similar to the PTextPane, but compatible with the HTML stylings performed in the grammar window
+ * Similar to the PTextPane, but compatible with the HTML stylings performed in
+ * the grammar window
  *
  * @author draque.thompson
  */
@@ -77,12 +78,13 @@ public class PGrammarPane extends JTextPane {
         insertImage.addActionListener((ActionEvent ae) -> {
             try {
                 ImageNode image = DesktopIOHandler.getInstance()
-                        .openNewImage((Window) parentPane.getTopLevelAncestor(), core.getWorkingDirectory());
+                        .openNewImage((Window) parentPane.getTopLevelAncestor(), core.getWorkingDirectory(), core);
                 if (image != null) {
                     // null node means user cancelled process
                     addImage(image);
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
                 core.getOSHandler().getInfoBox().error("Image Import Error", "Unable to import image: "
                         + e.getLocalizedMessage());
@@ -127,10 +129,11 @@ public class PGrammarPane extends JTextPane {
             }
         });
     }
-    
+
     /**
      * Finds the font size at the start position of the current selection
-     * @return 
+     *
+     * @return
      */
     public int getFontSizeAtCursor() {
         int pos = this.getSelectionStart();
@@ -138,10 +141,11 @@ public class PGrammarPane extends JTextPane {
         AttributeSet attrs = doc.getCharacterElement(pos).getAttributes();
         return StyleConstants.getFontSize(attrs);
     }
-    
+
     /**
      * Finds the font family at the start position of the current selection
-     * @return 
+     *
+     * @return
      */
     public String getFontFamilyAtCursor() {
         int pos = this.getSelectionStart();
@@ -149,10 +153,11 @@ public class PGrammarPane extends JTextPane {
         AttributeSet attrs = doc.getCharacterElement(pos).getAttributes();
         return StyleConstants.getFontFamily(attrs);
     }
-    
+
     /**
      * Finds the font color at the start position of the current selection
-     * @return 
+     *
+     * @return
      */
     public Color getFontColorAtCursor() {
         int pos = this.getSelectionStart();
@@ -174,9 +179,10 @@ public class PGrammarPane extends JTextPane {
             }
         }
     }
-    
+
     /**
-     * This is the action which replaces the tab key being hit due to rendering concerns with an external library
+     * This is the action which replaces the tab key being hit due to rendering
+     * concerns with an external library
      */
     private void tabKeyHit() {
         try {
@@ -185,9 +191,10 @@ public class PGrammarPane extends JTextPane {
             cb.setClipboardContents("    "); // four spaces replace the tab
             this.paste();
             cb.restoreClipboard();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getOSHandler().getInfoBox().error("Rendering Error", "Tab rendering error: " 
+            core.getOSHandler().getInfoBox().error("Rendering Error", "Tab rendering error: "
                     + e.getLocalizedMessage());
         }
     }
@@ -200,7 +207,8 @@ public class PGrammarPane extends JTextPane {
             inputAttributes.addAttribute(PGTUtil.IMAGE_ID_ATTRIBUTE, image.getId());
             imageReplaceSelection(" ");
             inputAttributes.removeAttributes(inputAttributes);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             core.getOSHandler().getInfoBox().error("Image Insertion Error", "Unable to insert image: "
                     + e.getLocalizedMessage());
@@ -216,11 +224,11 @@ public class PGrammarPane extends JTextPane {
         if (ClipboardHandler.isClipboardImage()) {
             try {
                 Image imageObject = ClipboardHandler.getClipboardImage();
-                
+
                 if (imageObject != null) {
                     BufferedImage image;
-                    if (imageObject instanceof BufferedImage) {
-                        image = (BufferedImage)imageObject;
+                    if (imageObject instanceof BufferedImage bImage) {
+                        image = bImage;
                     } else {
                         image = new BufferedImage(imageObject.getWidth(null),
                                 imageObject.getHeight(null), BufferedImage.TYPE_INT_ARGB);
@@ -230,10 +238,11 @@ public class PGrammarPane extends JTextPane {
                         bGr.drawImage(imageObject, 0, 0, null);
                         bGr.dispose();
                     }
-                    ImageNode imageNode = DesktopIOHandler.getInstance().getFromBufferedImage(image);
+                    ImageNode imageNode = DesktopIOHandler.getInstance().getFromBufferedImage(image, core);
                     addImage(imageNode);
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
                 core.getOSHandler().getInfoBox().error("Paste Error", "Unable to paste: " + e.getLocalizedMessage());
             }
@@ -245,7 +254,8 @@ public class PGrammarPane extends JTextPane {
                 clipText = clipText.replaceAll("\t", "    ");
                 board.setClipboardContents(clipText);
                 super.paste();
-            } catch (UnsupportedFlavorException | IOException e) {
+            }
+            catch (UnsupportedFlavorException | IOException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
                 core.getOSHandler().getInfoBox().error("Paste Error", "Unable to paste text: " + e.getLocalizedMessage());
             }
@@ -263,8 +273,8 @@ public class PGrammarPane extends JTextPane {
                 int p0 = Math.min(caret.getDot(), caret.getMark());
                 int p1 = Math.max(caret.getDot(), caret.getMark());
                 AttributeSet attr = getInputAttributes().copyAttributes();
-                if (doc instanceof AbstractDocument) {
-                    ((AbstractDocument) doc).replace(p0, p1 - p0, content, attr);
+                if (doc instanceof AbstractDocument aDoc) {
+                    aDoc.replace(p0, p1 - p0, content, attr);
                 } else {
                     if (p0 != p1) {
                         doc.remove(p0, p1 - p0);
@@ -276,7 +286,8 @@ public class PGrammarPane extends JTextPane {
                 if (composedTextSaved) {
                     restoreComposedText();
                 }
-            } catch (BadLocationException e) {
+            }
+            catch (BadLocationException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
                 UIManager.getLookAndFeel().provideErrorFeedback(PGrammarPane.this);
             }

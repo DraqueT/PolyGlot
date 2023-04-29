@@ -154,7 +154,7 @@
                         </Property>
                       </Properties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal())"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), core)"/>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Object&gt;"/>
                       </AuxValues>
                     </Component>
@@ -187,7 +187,7 @@
                         </Property>
                       </Properties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu())"/>
+                        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new PComboBox(((DesktopPropertiesManager)core.getPropertiesManager()).getFontMenu(), core)"/>
                       </AuxValues>
                     </Component>
                     <Component class="javax.swing.JButton" name="btnApply">
