@@ -48,5 +48,12 @@ public class RegexToolsTest {
         assertFalse(RegexTools.isRegexLegal("[rr"));
         assertFalse(RegexTools.isRegexLegal("\\"));
         assertFalse(RegexTools.isRegexLegal("?\\@"));
-    }    
+    }
+    
+    @Test
+    public void deleteMe() {
+        for (String word : "hi, , you".split(",")) {
+            System.out.println("Word: " + word.trim());
+        }
+    }
 }

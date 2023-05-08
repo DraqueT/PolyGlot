@@ -47,6 +47,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -86,6 +87,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopGrammarChapNode;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammarManager;
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManagerException;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IOHandler;
 import org.w3c.dom.Document;
@@ -945,6 +947,157 @@ public final class DesktopIOHandler implements IOHandler {
             
             nextLine = PGTUtil.OPTIONS_UI_SCALE + "=" + opMan.getUiScale();
             f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_UI_WEB_SERVICE_PORT + "=" + opMan.getWebServicePort();
+            f0.write(nextLine + newLine);
+
+            nextLine = PGTUtil.OPTIONS_UI_WEB_SERVICE_TARGET_FOLDER + "=" + opMan.getWebServiceTargetFolder();
+            f0.write(nextLine + newLine);
+
+            nextLine = PGTUtil.OPTIONS_UI_WEB_SERVICE_MASTER_TOKEN_CAPACITY + "=" + opMan.getWebServiceMasterTokenCapacity();
+            f0.write(nextLine + newLine);
+
+            nextLine = PGTUtil.OPTIONS_UI_WEB_SERVICE_MASTER_TOKEN_REFILL + "=" + opMan.getWebServiceMasterTokenRefill();
+            f0.write(nextLine + newLine);
+
+            nextLine = PGTUtil.OPTIONS_UI_WEB_SERVICE_INDIVIDUAL_TOKEN_CAPACITY + "=" + opMan.getWebServiceIndividualTokenCapacity();
+            f0.write(nextLine + newLine);
+
+            nextLine = PGTUtil.OPTIONS_UI_WEB_SERVICE_INDIVIDUAL_TOKEN_REFILL + "=" + opMan.getWebServiceIndividualTokenRefil();
+            f0.write(nextLine + newLine);
+        }
+    }
+    
+    /**
+     * Loads all option data from ini file, if none, ignore.One will be created
+     * on exit.
+     *
+     * @param workingDirectory
+     * @param opMan
+     * @throws java.lang.Exception
+     */
+    public void loadOptionsIni(String workingDirectory, DesktopOptionsManager opMan) throws Exception {
+        File f = new File(workingDirectory + File.separator + org.darisadesigns.polyglotlina.Desktop.PGTUtil.POLYGLOT_INI);
+        if (!f.exists() || f.isDirectory()) {
+            return;
+        }
+
+        try ( BufferedReader br = new BufferedReader(new FileReader(
+                workingDirectory + File.separator + org.darisadesigns.polyglotlina.Desktop.PGTUtil.POLYGLOT_INI, StandardCharsets.UTF_8))) {
+            String loadProblems = "";
+
+            for (String line; (line = br.readLine()) != null;) {
+                try {
+                    String[] bothVal = line.split("=");
+
+                    // if no value set, move on
+                    if (bothVal.length == 1) {
+                        continue;
+                    }
+
+                    // if multiple values, something has gone wrong
+                    if (bothVal.length != 2) {
+                        throw new Exception("Unreadable value in PolyGlot.ini" + (bothVal.length > 0 ? ": " + bothVal[0] : "."));
+                    }
+
+                    switch (bothVal[0]) {
+                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_LAST_FILES -> {
+                            for (String last : bothVal[1].split(",")) {
+                                opMan.pushRecentFile(last);
+                            }
+                        }
+                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_SCREENS_OPEN -> {
+                            for (String screen : bothVal[1].split(",")) {
+                                opMan.addScreenUp(screen);
+                            }
+                        }
+                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_SCREEN_POS -> {
+                            for (String curPosSet : bothVal[1].split(",")) {
+                                if (curPosSet.isEmpty()) {
+                                    continue;
+                                }
+
+                                String[] splitSet = curPosSet.split(":");
+
+                                if (splitSet.length != 3) {
+                                    loadProblems += "Malformed Screen Position: " + curPosSet + "\n";
+                                    continue;
+                                }
+                                Point p = new Point(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
+                                opMan.setScreenPosition(splitSet[0], p);
+                            }
+                        }
+                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_SCREENS_SIZE -> {
+                            for (String curSizeSet : bothVal[1].split(",")) {
+                                if (curSizeSet.isEmpty()) {
+                                    continue;
+                                }
+
+                                String[] splitSet = curSizeSet.split(":");
+
+                                if (splitSet.length != 3) {
+                                    loadProblems += "Malformed Screen Size: " + curSizeSet + "\n";
+                                    continue;
+                                }
+                                Dimension d = new Dimension(Integer.parseInt(splitSet[1]), Integer.parseInt(splitSet[2]));
+                                opMan.setScreenSize(splitSet[0], d);
+                            }
+                        }
+                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_DIVIDER_POSITION -> {
+                            for (String curPosition : bothVal[1].split(",")) {
+                                if (curPosition.isEmpty()) {
+                                    continue;
+                                }
+
+                                String[] splitSet = curPosition.split(":");
+
+                                if (splitSet.length != 2) {
+                                    loadProblems += "Malformed divider position: " + curPosition + "\n";
+                                    continue;
+                                }
+                                Integer position = Integer.valueOf(splitSet[1]);
+                                opMan.setDividerPosition(splitSet[0], position);
+                            }
+                        }
+                        case PGTUtil.OPTIONS_MSBETWEENSAVES ->
+                            opMan.setMsBetweenSaves(Integer.parseInt(bothVal[1]));
+                        case PGTUtil.OPTIONS_AUTO_RESIZE ->
+                            opMan.setAnimateWindows(bothVal[1].equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.TRUE));
+                        case PGTUtil.OPTIONS_MAXIMIZED ->
+                            opMan.setMaximized(bothVal[1].equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.TRUE));
+                        case PGTUtil.OPTIONS_NIGHT_MODE ->
+                            opMan.setNightMode(bothVal[1].equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.TRUE));
+                        case PGTUtil.OPTIONS_REVERSIONS_COUNT ->
+                            opMan.setMaxReversionCount(Integer.parseInt(bothVal[1]));
+                        case PGTUtil.OPTIONS_TODO_DIV_LOCATION ->
+                            opMan.setToDoBarPosition(Integer.parseInt(bothVal[1]));
+                        case PGTUtil.OPTIONS_UI_SCALE ->
+                            opMan.setUiScale(Double.parseDouble(bothVal[1]));
+                        case PGTUtil.OPTIONS_UI_WEB_SERVICE_PORT ->
+                            opMan.setWebServicePort(Integer.parseInt(bothVal[1]));
+                        case PGTUtil.OPTIONS_UI_WEB_SERVICE_TARGET_FOLDER ->
+                            opMan.setWebServiceTargetFolder(bothVal[1]);
+                        case PGTUtil.OPTIONS_UI_WEB_SERVICE_MASTER_TOKEN_CAPACITY ->
+                            opMan.setWebServiceMasterTokenCapacity(Integer.parseInt(bothVal[1]));
+                        case PGTUtil.OPTIONS_UI_WEB_SERVICE_MASTER_TOKEN_REFILL ->
+                            opMan.setWebServiceMasterTokenRefill(Integer.parseInt(bothVal[1]));
+                        case PGTUtil.OPTIONS_UI_WEB_SERVICE_INDIVIDUAL_TOKEN_CAPACITY ->
+                            opMan.setWebServiceIndividualTokenCapacity(Integer.parseInt(bothVal[1]));
+                        case PGTUtil.OPTIONS_UI_WEB_SERVICE_INDIVIDUAL_TOKEN_REFILL ->
+                            opMan.setWebServiceIndividualTokenRefil(Integer.parseInt(bothVal[1]));
+                        default -> {
+                            // ignore unknown config settings
+                        }
+                    }
+                } catch (Exception e) {
+                    loadProblems += e.getLocalizedMessage() + "\n";
+                }
+            }
+
+            if (!loadProblems.isEmpty()) {
+                throw new DesktopOptionsManagerException("Problems encountered when loading configuration file.\n" 
+                        + "Corrupted values discarded: \n" + loadProblems);
+            }
         }
     }
 

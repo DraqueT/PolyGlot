@@ -419,9 +419,9 @@ public class DictCore {
 
                 // if not possible to recover, bubble error
                 if (parser.getError() != null) {
-                    throw (IOException) parser.getError();
+                    throw new IOException(parser.getError());
                 }
-            } else if (parseException instanceof Exception) {
+            } else if (parseException != null) {
                 throw new IOException(parseException);
             }
 

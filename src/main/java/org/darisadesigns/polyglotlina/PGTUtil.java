@@ -286,6 +286,12 @@ public class PGTUtil {
     public static final String OPTIONS_MAXIMIZED = "OptionsMaximized";
     public static final String OPTIONS_MSBETWEENSAVES = "MsBetweenSaves";
     public static final String OPTIONS_UI_SCALE = "UiScale";
+    public static final String OPTIONS_UI_WEB_SERVICE_PORT = "WebServicePort";
+    public static final String OPTIONS_UI_WEB_SERVICE_TARGET_FOLDER = "WebServiceTargetFolder";
+    public static final String OPTIONS_UI_WEB_SERVICE_MASTER_TOKEN_CAPACITY = "WebServiceMasterTokenCapacity";
+    public static final String OPTIONS_UI_WEB_SERVICE_MASTER_TOKEN_REFILL = "WebServiceMasterTokenRefill";
+    public static final String OPTIONS_UI_WEB_SERVICE_INDIVIDUAL_TOKEN_CAPACITY = "WebServiceIndividualTokenCapacity";
+    public static final String OPTIONS_UI_WEB_SERVICE_INDIVIDUAL_TOKEN_REFILL = "WebServiceIndividualTokenRefill";
     
 
     // Java 8 bridge constants
@@ -321,6 +327,7 @@ public class PGTUtil {
     public static final String REVERSION_SAVE_PATH = "reversion/";
     public static final String REVERSION_BASE_FILE_NAME = "reversionXMLFile";
     public static final String ERROR_LOG_FILE = "PolyGlot_error.log";
+    public static final String WEB_SERVICE_LOG_FILE = "PolyGlot_webService.log";
     public static final String EMPTY_FILE = "<EMPTY>";
     public static final String TEMP_FILE = "xxTEMPPGTFILExx";
     public static final String CONLANG_FONT = "PolyGlotConlangGrammarFont";

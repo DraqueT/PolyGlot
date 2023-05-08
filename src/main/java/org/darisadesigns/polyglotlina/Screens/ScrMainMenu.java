@@ -115,6 +115,7 @@ public final class ScrMainMenu extends PFrame {
     private PToDoTree toDoTree;
     private PFrame curWindow = null;
     private ScrLexicon cacheLexicon;
+    private ScrWebService webService;
     private Image backGround;
     private final List<Window> childWindows = new ArrayList<>();
     private Thread longRunningSetup;
@@ -413,6 +414,10 @@ public final class ScrMainMenu extends PFrame {
     private void killAllChildren() {
         for (Window child : childWindows) {
             child.dispose();
+        }
+        
+        if (webService != null && !webService.isDisposed()) {
+            webService.dispose();
         }
 
         childWindows.clear();
@@ -1600,6 +1605,7 @@ public final class ScrMainMenu extends PFrame {
         mnuIpaTranslator = new javax.swing.JMenuItem();
         mnuEvolve = new javax.swing.JMenuItem();
         mnuChatGpt = new javax.swing.JMenuItem();
+        mnuWebServer = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mnuLexFamilies = new javax.swing.JMenuItem();
         mnuLangStats = new javax.swing.JMenuItem();
@@ -2057,6 +2063,15 @@ public final class ScrMainMenu extends PFrame {
             }
         });
         mnuTools.add(mnuChatGpt);
+
+        mnuWebServer.setText("Web Service");
+        mnuWebServer.setToolTipText("Run a simple webservice exposing and serving PolyGlot language files");
+        mnuWebServer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuWebServerActionPerformed(evt);
+            }
+        });
+        mnuTools.add(mnuWebServer);
         mnuTools.add(jSeparator1);
 
         mnuLexFamilies.setText("Lexical Families");
@@ -2515,8 +2530,18 @@ public final class ScrMainMenu extends PFrame {
     }//GEN-LAST:event_btnZompistWordGeneratorActionPerformed
 
     private void mnuChatGptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuChatGptActionPerformed
+        // TODO: Make less shitty
         new ScrChatGptTranslator(core).setVisible(true);
     }//GEN-LAST:event_mnuChatGptActionPerformed
+
+    private void mnuWebServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuWebServerActionPerformed
+        if (webService == null || webService.isDisposed()) {
+            webService = new ScrWebService(core);
+            webService.setVisible(true);
+        } else {
+            webService.toFront();
+        }        
+    }//GEN-LAST:event_mnuWebServerActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClasses;
@@ -2582,6 +2607,7 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JMenu mnuSwadesh;
     private javax.swing.JMenu mnuTools;
     private javax.swing.JMenuItem mnuUnpackLanguage;
+    private javax.swing.JMenuItem mnuWebServer;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlSideButtons;
     private javax.swing.JPanel pnlStartButtons;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2022, Draque Thompson
+ * Copyright (c) 2015-2023, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -25,6 +25,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -80,7 +81,7 @@ public class SoundRecorder {
         format = getAudioFormat();
         parentWindow = _parent;
     }
-    
+
     /**
      * Instantiates recorder with custom format
      *
@@ -109,7 +110,7 @@ public class SoundRecorder {
     public void setButtons(
             JButton _record, JButton _playPause, JButton _deleteBut,
             ImageIcon _playUp, ImageIcon _playDown, ImageIcon _recUp,
-            ImageIcon _recDown, ImageIcon _deleteDown, ImageIcon _deleteUp, 
+            ImageIcon _recDown, ImageIcon _deleteDown, ImageIcon _deleteUp,
             ImageIcon _deleteDisabled
     ) {
         playPauseBut = _playPause;
@@ -200,7 +201,7 @@ public class SoundRecorder {
 
         final SoundRecorder parent = this;
         final DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
-        
+
         // 8000 is the typical rate, but I wanted to get increments of 1/100 second
         int bufferSize = 80;
 
@@ -217,7 +218,7 @@ public class SoundRecorder {
         }
 
         soundThread = new Thread(() -> {
-            try (TargetDataLine line = (TargetDataLine) AudioSystem.getLine(info)) {
+            try ( TargetDataLine line = (TargetDataLine) AudioSystem.getLine(info)) {
                 line.open(format);
                 line.start();
                 int bytesRecorded = 0;
@@ -239,7 +240,8 @@ public class SoundRecorder {
                 playPauseBut.setIcon(playDown);
 
                 out.close();
-            } catch (LineUnavailableException | IOException e) {
+            }
+            catch (LineUnavailableException | IOException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
                 new DesktopInfoBox(parentWindow).error("Recording Error", "Unable to initialize recording: " + e.getLocalizedMessage());
             }
@@ -298,14 +300,14 @@ public class SoundRecorder {
                 return;
             }
         }
-        
+
         killPlay = true;
-                try {
-                    Thread.sleep(TIME_TO_DIE);
-                }
-                catch (InterruptedException ex) {
-                    new DesktopInfoBox().error("Playback Error", "Playback Interrupted.");
-                }
+        try {
+            Thread.sleep(TIME_TO_DIE);
+        }
+        catch (InterruptedException ex) {
+            new DesktopInfoBox().error("Playback Error", "Playback Interrupted.");
+        }
         killPlay = false;
 
         playing = true;
@@ -313,22 +315,21 @@ public class SoundRecorder {
         playThread = soundThread.toString();
         soundThread.start();
     }
-    
+
     private void createSoundThread() {
         final DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
-        
+
         killPlay = true;
         try {
             Thread.sleep(TIME_TO_DIE);
-        } catch (InterruptedException ex) {
-          new DesktopInfoBox().error("Playback Error", "Playback error: process interrupted.");
+        }
+        catch (InterruptedException ex) {
+            new DesktopInfoBox().error("Playback Error", "Playback error: process interrupted.");
         }
         killPlay = false;
-        
+
         soundThread = new Thread(() -> {
-            try (InputStream input = new ByteArrayInputStream(sound);
-                    AudioInputStream ais = new AudioInputStream(input, format, sound.length / format.getFrameSize());  
-                    SourceDataLine sourceLine = (SourceDataLine) AudioSystem.getLine(info)) {
+            try ( InputStream input = new ByteArrayInputStream(sound);  AudioInputStream ais = new AudioInputStream(input, format, sound.length / format.getFrameSize());  SourceDataLine sourceLine = (SourceDataLine) AudioSystem.getLine(info)) {
                 sourceLine.open(format);
                 sourceLine.start();
 
@@ -343,7 +344,6 @@ public class SoundRecorder {
                     if (count > 0) {
                         while (!playing) { // if paused, wait until unpaused
                             Thread.sleep(TIME_TO_DIE);
-                            
 
                             if (killPlay) { // immediately ends playing process
                                 killPlay = false;
@@ -379,7 +379,8 @@ public class SoundRecorder {
 
                 playing = false;
                 sourceLine.drain();
-            } catch (LineUnavailableException | IOException | InterruptedException e) {
+            }
+            catch (LineUnavailableException | IOException | InterruptedException e) {
                 //e.printStackTrace();
                 DesktopIOHandler.getInstance().writeErrorLog(e);
                 new DesktopInfoBox(parentWindow).error("Play Error", "Unable to play audio: "
@@ -476,8 +477,7 @@ public class SoundRecorder {
         AudioFormat audioFormat;
         SourceDataLine sourceLine = null;
 
-        try ( InputStream istream = SoundRecorder.class.getResource(filePath).openStream();  
-                AudioInputStream astream = AudioSystem.getAudioInputStream(istream)) {
+        try ( InputStream istream = SoundRecorder.class.getResource(filePath).openStream();  AudioInputStream astream = AudioSystem.getAudioInputStream(istream)) {
             audioFormat = astream.getFormat();
 
             DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
@@ -495,15 +495,45 @@ public class SoundRecorder {
                     sourceLine.write(abData, 0, nBytesRead);
                 }
             }
-        } catch (IOException
+        }
+        catch (IOException
                 | LineUnavailableException
                 | UnsupportedAudioFileException e) {
             new DesktopInfoBox(parentWindow).error("Sound Error", "Unable to play sound: " + filePath + " due to: " + e.getLocalizedMessage());
-        } finally {
+        }
+        finally {
             if (sourceLine != null) {
                 sourceLine.drain();
                 sourceLine.close();
             }
         }
+    }
+
+    /**
+     * Converts from PCM sound to wav format
+     * @param audioData
+     * @return
+     * @throws IOException 
+     */
+    public static byte[] pcmAudioToWav(byte[] audioData) throws IOException {
+        AudioFormat format = new AudioFormat(
+                AudioFormat.Encoding.PCM_SIGNED,
+                8000.0f, // sample rate
+                8, // sample size in bits
+                1, // channels
+                1, // frame size
+                8000.0f, // frame rate
+                false // little-endian
+        );
+
+        ByteArrayInputStream audioDataStream = new ByteArrayInputStream(audioData);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+        // Write the audio input stream to the byte array output stream in WAV format
+        try (AudioInputStream audioInputStream = new AudioInputStream(audioDataStream, format, audioData.length)) {
+            AudioSystem.write(audioInputStream, AudioFileFormat.Type.WAVE, byteArrayOutputStream);
+        }
+        
+        return byteArrayOutputStream.toByteArray();
     }
 }

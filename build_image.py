@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#   PolyGlot build script Copyright 2019-2022 Draque Thompson
+#   PolyGlot build script Copyright 2019-2023 Draque Thxompson
 #
 #   This script builds PolyGlot into a distributable package on Linux,
 #   OSX, and Windows. Windows does not come with Python installed by default.
@@ -59,6 +59,7 @@ WIN_INS_NAME = 'PolyGlot-Ins-Win.exe'
 JAR_W_DEP = '' # set in main for timing reasons
 JAR_WO_DEP = '' # set in main for timing reasons
 JAVAFX_VER = '' # set in main for timing reasons
+JAKARTA_VER = '' # set in main for timing reasons
 POLYGLOT_VERSION = '' # set in main for timing reasons
 POLYGLOT_BUILD = '' # set in main for timing reasons
 JAVA_HOME = '' # set in main for timing reasons
@@ -81,6 +82,7 @@ def main(args):
     global JAR_W_DEP
     global JAR_WO_DEP
     global JAVAFX_VER
+    global JAKARTA_VER
     global failFile
     global copyDestination
     global separatorCharacter
@@ -176,6 +178,7 @@ def main(args):
         JAR_W_DEP = 'PolyGlotLinA-' + POLYGLOT_VERSION + '-jar-with-dependencies.jar'
         JAR_WO_DEP = 'PolyGlotLinA-' + POLYGLOT_VERSION + '.jar'
         JAVAFX_VER = getJfxVersion()
+        JAKARTA_VER = '2.0.1'
 
         if osString == winString:
             os.system('echo off')
@@ -198,6 +201,7 @@ def main(args):
             dist()
     finally:
         if osString == osxString:
+            print('Resetting...')
             resetMacRepo()
         
     print('Done!')
@@ -273,6 +277,7 @@ def imageLinux():
     command = (JAVA_HOME + '/bin/jlink ' +
         '--module-path "module_injected_jars/:' +
         'target/mods:' +
+        getRepositoryLocation() + '/jakarta/json/jakarta.json-api/' + JAKARTA_VER + '/:' +
         JAVAFX_LOCATION + '/javafx-graphics/' + JAVAFX_VER + '/:' +
         JAVAFX_LOCATION + '/javafx-base/' + JAVAFX_VER + '/:' +
         JAVAFX_LOCATION + '/javafx-media/' + JAVAFX_VER + '/:' +
@@ -340,6 +345,7 @@ def imageOsx():
     os.system(JAVA_HOME + '/bin/jlink ' +
         '--module-path "module_injected_jars/:' +
         'target/mods:' +
+        getRepositoryLocation() + '/jakarta/json/jakarta.json-api/' + JAKARTA_VER + '/:' +
         JAVAFX_LOCATION + '/javafx-graphics/' + JAVAFX_VER + '/:' +
         JAVAFX_LOCATION + '/javafx-base/' + JAVAFX_VER + '/:'+
         JAVAFX_LOCATION + '/javafx-media/' + JAVAFX_VER + '/:' +
@@ -447,7 +453,7 @@ def ignoreJavaFxFile(fileModule):
     global macIntelBuild
     JAVAFX_LOCATION = getJfxLocation();
 
-    jfxJar = JAVAFX_LOCATION + '/javafx-' + fileModule + '/' + JAVAFX_VER+ '/javafx-' + fileModule + '-' + JAVAFX_VER + '-mac.jar' if not macIntelBuild \
+    jfxJar = JAVAFX_LOCATION + '/javafx-' + fileModule + '/' + JAVAFX_VER+ '/javafx-' + fileModule + '-' + JAVAFX_VER + '.jar' if not macIntelBuild \
         else JAVAFX_LOCATION + '/javafx-' + fileModule + '/' + JAVAFX_VER+ '/javafx-' + fileModule + '-' + JAVAFX_VER + '-mac-aarch64.jar'
 
     if path.exists(jfxJar):
@@ -514,6 +520,7 @@ def imageWin():
     command = ('jlink ' +
         '--module-path "module_injected_jars;' +
         'target\\mods;' +
+        getRepositoryLocation() + '\\jakarta\\json\\jakarta.json-api\\' + JAKARTA_VER + ';' +
         JAVAFX_LOCATION + '\\javafx-graphics\\' + JAVAFX_VER + ';' +
         JAVAFX_LOCATION + '\\javafx-base\\' + JAVAFX_VER + ';' +
         JAVAFX_LOCATION + '\\javafx-media\\' + JAVAFX_VER + ';' +
@@ -577,6 +584,14 @@ def getJfxLocation():
     elif (osString == osxString or osString == linString):
         ret += '/.m2/repository/org/openjfx'
 
+    return ret
+
+def getRepositoryLocation():
+    ret = os.path.expanduser('~')
+    if (osString == winString):
+        ret += '\\.m2\\repository'
+    elif (osString == osxString or osString == linString):
+        ret += '/.m2/repository'
     return ret
 
 # What it says on the tin

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -57,6 +57,7 @@ import org.darisadesigns.polyglotlina.OSHandler.CoreUpdatedListener;
 import org.darisadesigns.polyglotlina.OSHandler.FileReadListener;
 import org.darisadesigns.polyglotlina.Screens.ScrAbout;
 import org.darisadesigns.polyglotlina.Screens.ScrMainMenu;
+import org.darisadesigns.polyglotlina.Webservice.WebService;
 
 /**
  * Starts up PolyGlot and does testing for OS/platform that would be
@@ -67,6 +68,7 @@ import org.darisadesigns.polyglotlina.Screens.ScrMainMenu;
 public final class PolyGlot {
 
     private static PolyGlot polyGlot;
+    private static WebService webService;
     private Object clipBoard;
     private UIDefaults uiDefaults;
     private DictCore core;
@@ -109,7 +111,8 @@ public final class PolyGlot {
         var osHandler = new DesktopOSHandler(ioHandler, cInfoBox, helpHandler, fontHandler);
 
         try {
-            opMan.loadOptionsIni(org.darisadesigns.polyglotlina.PGTUtil.getDefaultDirectory().getAbsolutePath());
+            var workingDirectory = org.darisadesigns.polyglotlina.PGTUtil.getDefaultDirectory().getAbsolutePath();
+            ioHandler.loadOptionsIni(workingDirectory, opMan);
         }
         catch (Exception e) {
             ioHandler.writeErrorLog(e, "Startup config file failure.");
@@ -590,9 +593,6 @@ public final class PolyGlot {
         return new PolyGlot(_core, osHandler);
     }
 
-//    public DictCore getCore() {
-//        return core;
-//    }
     public void setCore(DictCore _core) {
         this.core = _core;
     }
@@ -622,6 +622,35 @@ public final class PolyGlot {
     public ScrMainMenu getRootWindow() {
         return rootWindow;
     }
+    
+    public static void startWebService() throws Exception {
+        if (webService == null) {
+            webService = new WebService(polyGlot);
+        }
+        
+        if (!webService.isRunning()) {
+            webService.doServe();
+        }
+    }
+    
+    public static void stopWebService() {
+        if (webService != null) {
+            webService.shutDown();
+            webService = null;
+        }
+    }
+    
+    public static boolean isWebServiceRunning() {
+        return webService != null && webService.isRunning();
+    }
+    
+    public static String getWebServiceLog() {
+        if (webService != null) {
+            return webService.getLog();
+        }
+        
+        return "";
+    }
 
     /**
      * Saves periodically to temp file location (to be reopened on
@@ -636,17 +665,10 @@ public final class PolyGlot {
                         core.writeFile(autoSaveFile.getAbsolutePath(), false);
                     }
                     catch (IOException e) {
-                        // Do not attempt to write on failure to write
-//                        core.getOSHandler().getIOHandler().writeErrorLog(e, "Autosave Exeption");
-                        // Error messages disabled due to UI generated mismatches of files
-//                        core.getOSHandler().getInfoBox().error("Working Path Write Error", "Unable to write to path: " 
-//                                + autoSaveFile.getAbsolutePath() + " due to: " + e.getLocalizedMessage());
+                        // Fail silently
                     }
                     catch (ParserConfigurationException | TransformerException e) {
                         core.getOSHandler().getIOHandler().writeErrorLog(e, "Autosave Exeption");
-                        // Error messages disabled due to UI generated mismatches of files
-//                        core.getOSHandler().getInfoBox().error("Working Path Write Error", "Unable to write to path: " 
-//                                + autoSaveFile.getAbsolutePath() + " due to: " + e.getLocalizedMessage());
                     }
                     finally {
                         autoSave();

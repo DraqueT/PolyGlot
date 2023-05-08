@@ -97,7 +97,7 @@ public class DesktopOptionsManagerTest {
             opt = PolyGlot.getPolyGlot().getOptionsManager();
             
             // relaod saved values...
-            opt.loadOptionsIni(core.getWorkingDirectory().getAbsolutePath());
+            DesktopIOHandler.getInstance().loadOptionsIni(core.getWorkingDirectory().getAbsolutePath(), opt);
             
             assertEquals(animatedExpected, opt.isAnimateWindows());
             assertEquals(reversionCountExpected, opt.getMaxReversionCount());
@@ -138,7 +138,7 @@ public class DesktopOptionsManagerTest {
             DesktopOptionsManager opt = PolyGlot.getPolyGlot().getOptionsManager();
             
             try {
-                opt.loadOptionsIni(core.getWorkingDirectory().getAbsolutePath() + File.separator + "iniCorrupted");
+                DesktopIOHandler.getInstance().loadOptionsIni(core.getWorkingDirectory().getAbsolutePath() + File.separator + "iniCorrupted", opt);
             } catch (DesktopOptionsManagerException e) {
                 expectedException = true;
             }
