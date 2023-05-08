@@ -102,7 +102,7 @@ public class DesktopOptionsManager {
         return webServiceTargetFolder;
     }
     
-        public void setWebServicePort(int webServicePort) {
+    public void setWebServicePort(int webServicePort) {
         this.webServicePort = webServicePort;
     }
 
