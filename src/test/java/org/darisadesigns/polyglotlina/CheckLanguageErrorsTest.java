@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 - 2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020 - 2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -21,6 +21,7 @@ package org.darisadesigns.polyglotlina;
 
 import TestResources.DummyCore;
 import java.io.IOException;
+import javax.xml.parsers.ParserConfigurationException;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode.ProblemType;
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,7 +43,7 @@ public class CheckLanguageErrorsTest {
         try {
             badLexEntriesCore.readFile(PGTUtil.TESTRESOURCES + "test_lex_problems.pgd");
             badRegexEntriesCore.readFile(PGTUtil.TESTRESOURCES + "test_regex_problems.pgd");
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
     }
@@ -140,7 +141,7 @@ public class CheckLanguageErrorsTest {
             LexiconProblemNode[] problems = CheckLanguageErrors.checkCore(dictCore, false);
             
             assertEquals(problems.length, 0);
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
     }

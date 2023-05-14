@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -20,16 +20,15 @@
 package org.darisadesigns.polyglotlina;
 
 import TestResources.DummyCore;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopGrammarChapNode;
-import org.darisadesigns.polyglotlina.ManagersCollections.ReversionManager;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
-import org.darisadesigns.polyglotlina.Nodes.ReversionNode;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -120,37 +119,42 @@ public class DictCoreTest {
     }
     
     @Test
-    public void testRevertLanguage() {
-        System.out.println("DictCoreTest.testRevertLanguage");
+    public void testReadCorruptedArchive() {
+        System.out.println("DictCoreTest.testReadCorruptedArchive");
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "testRevert.pgd");
-            ReversionManager revMan = core.getReversionManager();
+            DictCore origin = DummyCore.newCore();
+            DictCore target = DummyCore.newCore();
+            Path targetPath = Files.createTempFile("POLYGLOT", "pgt");
             
-            ReversionNode[] reversions = revMan.getReversionList();
-            core = core.revertToState(reversions[0].getValue(), core.getCurFileName());
-            assertEquals(3, core.getWordCollection().getWordCount());
-            core = core.revertToState(reversions[1].getValue(), core.getCurFileName());
-            assertEquals(2, core.getWordCollection().getWordCount());
-            ConWord word = core.getWordCollection().getNodesLocalOrder()[0];
-            assertEquals("1", word.getValue());
-            assertTrue(word.getDefinition().contains("2"));
-            core = core.revertToState(reversions[2].getValue(), core.getCurFileName());
-            assertEquals(1, core.getWordCollection().getWordCount());
-            word = core.getWordCollection().getNodesLocalOrder()[0];
-            assertEquals("1", word.getValue());
-            assertTrue(word.getDefinition().contains("1"));
-            core = core.revertToState(reversions[3].getValue(), core.getCurFileName());
-            assertEquals(0, core.getWordCollection().getWordCount());
-            core = core.revertToState(reversions[4].getValue(), core.getCurFileName());
-            assertEquals(3, core.getWordCollection().getWordCount());
+            origin.readFile(PGTUtil.TESTRESOURCES + "test_equality.pgd");
+            origin.writeFile(targetPath.toString(), false);
+            target.readFile(targetPath.toString());
             
-
-        } catch (IOException | IllegalStateException e) {
-//            e.printStackTrace();
-//            System.out.println(e.getMessage());
+            assertEquals(origin, target, "DictCoreTest.testIsLanguageEmptyNoPOS:F");
+        } catch (IOException | IllegalStateException | ParserConfigurationException | TransformerException e) {
+            // e.printStackTrace();
+            // System.out.println(e.getMessage());
             fail(e);
         }
+    }
+    
+    @Test
+    public void testRevertLanguage() {
+        System.out.println("DictCoreTest.testRevertLanguage");
+        Exception exception = null;
+        var expectedMessage = "Encountered corrupted XML file";
+        var expectedLexiconLength = 79;
+        
+        try {
+            core.readFile(PGTUtil.TESTRESOURCES + "corrupted" + File.separator + "truncated_archive.pgd");
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
+            exception = e;
+        }
+        
+        assertTrue(exception instanceof IllegalStateException);
+        assertTrue(exception.getLocalizedMessage().startsWith(expectedMessage));
+        assertEquals(expectedLexiconLength, core.getWordCollection().getWordCount());
     }
     
     @Test
@@ -163,7 +167,7 @@ public class DictCoreTest {
             corruptCore.readFile(PGTUtil.TESTRESOURCES + "missing_opening_element.pgd");
 
             assertEquals(core, corruptCore);
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
     }
@@ -178,7 +182,7 @@ public class DictCoreTest {
             corruptCore.readFile(PGTUtil.TESTRESOURCES + "missing_closing_elements.pgd");
 
             assertEquals(core, corruptCore);
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
     }

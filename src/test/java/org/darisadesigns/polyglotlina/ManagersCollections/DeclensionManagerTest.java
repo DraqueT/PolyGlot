@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2018-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -25,6 +25,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.xml.parsers.ParserConfigurationException;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
@@ -55,7 +56,7 @@ public class DeclensionManagerTest {
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
         ConjugationManager decMan = core.getConjugationManager();
@@ -71,7 +72,7 @@ public class DeclensionManagerTest {
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
         
@@ -89,7 +90,7 @@ public class DeclensionManagerTest {
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
         
@@ -107,7 +108,7 @@ public class DeclensionManagerTest {
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
         
@@ -132,7 +133,7 @@ public class DeclensionManagerTest {
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
         
@@ -158,7 +159,7 @@ public class DeclensionManagerTest {
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
         
@@ -183,7 +184,7 @@ public class DeclensionManagerTest {
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
         
@@ -223,7 +224,7 @@ public class DeclensionManagerTest {
 
             ConjugationManager decManSub = subCore.getConjugationManager();
             assertEquals(expectedInitialSize, decManSub.getConjugationRulesForType(2).length);
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
@@ -244,7 +245,7 @@ public class DeclensionManagerTest {
             rulesToDelete.add(toDelete);
             decManSub.deleteRulesFromConjugationTemplates(2, 1, 2, rulesToDelete);
             assertEquals(expectedFinalSize, decManSub.getConjugationRulesForType(2).length);
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
@@ -265,7 +266,7 @@ public class DeclensionManagerTest {
             rulesToDelete.add(toDelete);
             decManSub.deleteRulesFromConjugationTemplates(2, 0, 3, rulesToDelete);
             assertEquals(expectedFinalSize, decManSub.getConjugationRulesForType(2).length);
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
@@ -289,7 +290,7 @@ public class DeclensionManagerTest {
             rulesToDelete.add(toDelete);
             decManSub.bulkDeleteRuleFromConjugationTemplates(2, rulesToDelete);
             assertEquals(expectedFinalSize, decManSub.getConjugationRulesForType(2).length);
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
@@ -310,7 +311,7 @@ public class DeclensionManagerTest {
             rulesToDelete.add(decManSub.getConjugationRulesForType(2)[1]);
             decManSub.bulkDeleteRuleFromConjugationTemplates(2, rulesToDelete);
             assertEquals(expectedFinalSize, decManSub.getConjugationRulesForType(2).length);
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
@@ -332,7 +333,7 @@ public class DeclensionManagerTest {
             decManSub.deleteConjugationGenRules(typeId, combinedDeclensionId);
             List<ConjugationGenRule> result = Arrays.asList(decManSub.getConjugationRulesForType(typeId));
             assertEquals(result.size(), expectedResultSize);
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
@@ -356,7 +357,7 @@ public class DeclensionManagerTest {
 
             String resultMessage = threw.getLocalizedMessage();
             assertEquals(expectedMessage, resultMessage);
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
@@ -370,7 +371,7 @@ public class DeclensionManagerTest {
         
         try {
             debugCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
         
@@ -421,7 +422,7 @@ public class DeclensionManagerTest {
         
         try {
             debugCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
         
@@ -478,7 +479,7 @@ public class DeclensionManagerTest {
         
         try {
             debugCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
         
@@ -535,7 +536,7 @@ public class DeclensionManagerTest {
         
         try {
             debugCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
         
@@ -588,7 +589,7 @@ public class DeclensionManagerTest {
         
         try {
             debugCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
         
@@ -646,7 +647,7 @@ public class DeclensionManagerTest {
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
         
@@ -669,7 +670,7 @@ public class DeclensionManagerTest {
         
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
         
@@ -752,7 +753,7 @@ public class DeclensionManagerTest {
                 assertEquals(expectedNameOrder[i], allRules[i].getName());
                 assertEquals(expectedIndexOrder[i], allRules[i].getIndex());
             }
-        } catch (IOException e) {
+        } catch (IOException | ParserConfigurationException e) {
             fail(e);
         }
     }
@@ -778,7 +779,7 @@ public class DeclensionManagerTest {
                 assertEquals(expectedNameOrder[i], allRules[i].getName());
                 assertEquals(expectedIndexOrder[i], allRules[i].getIndex());
             }
-        } catch (IOException e) {
+        } catch (IOException | ParserConfigurationException e) {
             fail(e);
         }
     }
@@ -806,7 +807,7 @@ public class DeclensionManagerTest {
                 assertEquals(expectedIndexOrder[i], resultRules[i].getIndex());
             }
             
-        } catch (IOException e) {
+        } catch (IOException | ParserConfigurationException e) {
             fail(e);
         }
     }
@@ -834,7 +835,7 @@ public class DeclensionManagerTest {
                 assertEquals(expectedIndexOrder[i], resultRules[i].getIndex());
             }
             
-        } catch (IOException e) {
+        } catch (IOException | ParserConfigurationException e) {
             fail(e);
         }
     }
@@ -862,7 +863,7 @@ public class DeclensionManagerTest {
                 assertEquals(expectedIndexOrder[i], resultRules[i].getIndex());
             }
             
-        } catch (IOException e) {
+        } catch (IOException | ParserConfigurationException e) {
             fail(e);
         }
     }
@@ -890,7 +891,7 @@ public class DeclensionManagerTest {
                 assertEquals(expectedIndexOrder[i], resultRules[i].getIndex());
             }
             
-        } catch (IOException e) {
+        } catch (IOException | ParserConfigurationException e) {
             fail(e);
         }
     }
@@ -918,7 +919,7 @@ public class DeclensionManagerTest {
                 assertEquals(expectedIndexOrder[i], resultRules[i].getIndex());
             }
             
-        } catch (IOException e) {
+        } catch (IOException | ParserConfigurationException e) {
             fail(e);
         }
     }
@@ -946,7 +947,7 @@ public class DeclensionManagerTest {
                 assertEquals(expectedIndexOrder[i], resultRules[i].getIndex());
             }
             
-        } catch (IOException e) {
+        } catch (IOException | ParserConfigurationException e) {
             fail(e);
         }
     }

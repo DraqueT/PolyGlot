@@ -22,6 +22,7 @@ package org.darisadesigns.polyglotlina.ManagersCollections;
 import TestResources.DummyCore;
 import java.io.File;
 import java.io.IOException;
+import javax.xml.parsers.ParserConfigurationException;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.PGTUtil;
@@ -50,7 +51,7 @@ public class EtymologyManagerTest {
             ConWord[] result = core.getEtymologyManager().checkAllForIllegalLoops();
             
             assertEquals(0, result.length);
-        } catch (IOException e) {
+        } catch (IOException | ParserConfigurationException e) {
             fail(e);
         }
         

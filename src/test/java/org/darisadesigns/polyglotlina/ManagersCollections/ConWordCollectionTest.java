@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2022, Draque Thompson
+ * Copyright (c) 2019-2023, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -20,15 +20,16 @@
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
 import TestResources.DummyCore;
-import org.darisadesigns.polyglotlina.PTest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.xml.parsers.ParserConfigurationException;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.PTest;
 import org.darisadesigns.polyglotlina.RegexTools.ReplaceOptions;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
@@ -46,7 +47,7 @@ public class ConWordCollectionTest extends PTest {
         
         try {
             badLexEntriesCore.readFile(PGTUtil.TESTRESOURCES + "test_lex_problems.pgd");
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
