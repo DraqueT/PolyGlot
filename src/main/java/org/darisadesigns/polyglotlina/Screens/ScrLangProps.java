@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2015-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -19,16 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
-import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButtonDropdown;
-import org.darisadesigns.polyglotlina.ExternalCode.JFontChooser;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -52,13 +42,23 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.text.PlainDocument;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButtonDropdown;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellEditor;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellRenderer;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTable;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextFieldFilter;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
+import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.ExternalCode.JFontChooser;
 
 /**
  *
@@ -89,7 +89,13 @@ public class ScrLangProps extends PFrame {
         Font charis = PGTUtil.CHARIS_UNICODE;
         btnAlphaUp.setFont(charis);
         btnAlphaDown.setFont(charis);
-        chkTypesMandatory.setEnabled(!core.getTypes().getAllValues().isEmpty());
+        var posEmpty = core.getTypes().getAllValues().isEmpty();
+        
+        if (posEmpty) {
+            chkPosMandatory.setEnabled(false);
+            chkPosMandatory.setToolTipText(chkPosMandatory.getToolTipText() 
+                    + "\nTo enable this option, create some parts of speech");
+        }
         
         super.getRootPane().getContentPane().setBackground(Color.white);
         this.setupListeners();
@@ -386,7 +392,7 @@ public class ScrLangProps extends PFrame {
         propMan.setLocalLangName(txtLocalLanguage.getText());
         propMan.setLocalMandatory(chkLocalMandatory.isSelected());
         propMan.setLocalUniqueness(chkLocalUniqueness.isSelected());
-        propMan.setTypesMandatory(chkTypesMandatory.isSelected());
+        propMan.setTypesMandatory(chkPosMandatory.isSelected());
         propMan.setWordUniqueness(chkWordUniqueness.isSelected());
         propMan.setOverrideRegexFont(chkOverrideRegexFont.isSelected());
         propMan.setExpandedLexListDisplay(chkExpandedLexList.isSelected());
@@ -410,7 +416,7 @@ public class ScrLangProps extends PFrame {
         chkIgnoreCase.setSelected(propMan.isIgnoreCase());
         chkLocalMandatory.setSelected(propMan.isLocalMandatory());
         chkLocalUniqueness.setSelected(propMan.isLocalUniqueness());
-        chkTypesMandatory.setSelected(propMan.isTypesMandatory());
+        chkPosMandatory.setSelected(propMan.isTypesMandatory());
         chkWordUniqueness.setSelected(propMan.isWordUniqueness());
         chkOverrideRegexFont.setSelected(propMan.isOverrideRegexFont());
         chkExpandedLexList.setSelected(propMan.isExpandedLexListDisplay());
@@ -576,7 +582,7 @@ public class ScrLangProps extends PFrame {
         btnChangeFont = new PButtonDropdown(getConFontPopupMenu());
         txtFont = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
-        chkTypesMandatory = new PCheckBox(nightMode);
+        chkPosMandatory = new PCheckBox(nightMode);
         chkLocalMandatory = new PCheckBox(nightMode);
         chkWordUniqueness = new PCheckBox(nightMode);
         chkLocalUniqueness = new PCheckBox(nightMode);
@@ -628,8 +634,8 @@ public class ScrLangProps extends PFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel3.setMaximumSize(new java.awt.Dimension(470, 32767));
 
-        chkTypesMandatory.setText("Part of Speech Mandatory");
-        chkTypesMandatory.setToolTipText("Select to enforce selection of a part of speech on each created word.");
+        chkPosMandatory.setText("Part of Speech Mandatory");
+        chkPosMandatory.setToolTipText("Select to enforce selection of a part of speech on each created word.");
 
         chkLocalMandatory.setText("Local Mandatory");
         chkLocalMandatory.setToolTipText("Select to enforce mandatory values for local word equivalents.");
@@ -679,7 +685,7 @@ public class ScrLangProps extends PFrame {
                         .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(chkTypesMandatory)
+                            .addComponent(chkPosMandatory)
                             .addComponent(chkWordUniqueness)
                             .addComponent(chkDisableProcRegex)
                             .addComponent(chkLocalMandatory)
@@ -699,7 +705,7 @@ public class ScrLangProps extends PFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(chkTypesMandatory)
+                    .addComponent(chkPosMandatory)
                     .addComponent(chkLocalUniqueness))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -989,7 +995,7 @@ public class ScrLangProps extends PFrame {
     private javax.swing.JCheckBox chkLocalMandatory;
     private javax.swing.JCheckBox chkLocalUniqueness;
     private javax.swing.JCheckBox chkOverrideRegexFont;
-    private javax.swing.JCheckBox chkTypesMandatory;
+    private javax.swing.JCheckBox chkPosMandatory;
     private javax.swing.JCheckBox chkUseLocalWordLex;
     private javax.swing.JCheckBox chkWordUniqueness;
     private javax.swing.JLabel jLabel2;
