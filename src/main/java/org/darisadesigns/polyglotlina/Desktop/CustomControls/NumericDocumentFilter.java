@@ -24,7 +24,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
 /**
- * Simple document filtet to allow for either integer or decimal values
+ * Simple document filter to allow for either integer or decimal values
  * @author draquethompson
  */
 public class NumericDocumentFilter extends DocumentFilter {
