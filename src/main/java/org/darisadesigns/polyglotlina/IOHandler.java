@@ -20,7 +20,6 @@
 package org.darisadesigns.polyglotlina;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
@@ -255,7 +254,9 @@ public interface IOHandler {
 
     public File getErrorLogFile();
 
-    public String getErrorLog() throws FileNotFoundException;
+    public String getErrorLog() throws IOException;
+    
+    public void clearErrorLog() throws IOException;
 
     /**
      * Gets system information in human readable format

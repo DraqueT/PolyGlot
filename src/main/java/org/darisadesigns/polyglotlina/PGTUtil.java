@@ -376,7 +376,7 @@ public class PGTUtil {
     public static final int MAX_PROC_RECURSE = 100;
     public static final int DEFAULT_MAX_ROLLBACK_NUM = 10;
     public static final int MAX_FILE_PATH_LENGTH = 1000;
-    public static final int MAX_LOG_CHARACTERS = 25000;
+    public static final int MAX_LOG_CHARACTERS = 1024 * 1024; // One MB max size of log
     public static final int PLABEL_MIN_FONT_SIZE = 3;
     public static final int PLABEL_MAX_FONT_SIZE = 240;
 

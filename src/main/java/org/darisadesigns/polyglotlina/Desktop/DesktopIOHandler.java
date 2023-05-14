@@ -1249,6 +1249,24 @@ public final class DesktopIOHandler implements IOHandler {
     public void writeErrorLog(Throwable exception) {
         writeErrorLog(exception, "");
     }
+    
+    @Override
+    public void clearErrorLog() throws IOException {
+        var logFile = getErrorLogFile();
+        var success = true;
+        
+        if (logFile.exists()) {
+            success = logFile.delete();
+        }
+        
+        if (success) {
+            success = logFile.createNewFile();
+        } 
+        
+        if (!success) {
+            throw new IOException("Unable to clear prior log file nd create new one.");
+        }
+    }
 
     /**
      * Writes to the PolyGlot error log file
@@ -1269,8 +1287,7 @@ public final class DesktopIOHandler implements IOHandler {
             errorMessage = comment + ":\n" + errorMessage;
         }
 
-        File errorLog = new File(PGTUtil.getErrorDirectory().getAbsolutePath()
-                + File.separator + PGTUtil.ERROR_LOG_FILE);
+        File errorLog = getErrorLogFile();
 
         try {
             if (errorLog.exists()) {
@@ -1313,16 +1330,9 @@ public final class DesktopIOHandler implements IOHandler {
     }
 
     @Override
-    public String getErrorLog() throws FileNotFoundException {
-        String ret = "";
-        File errorLog = getErrorLogFile();
-
-        if (errorLog.exists()) {
-            try ( Scanner logScanner = new Scanner(errorLog).useDelimiter("\\Z")) {
-                ret = logScanner.hasNext() ? logScanner.next() : "";
-            }
-        }
-        return ret;
+    public String getErrorLog() throws IOException {
+        var errorLog = getErrorLogFile();
+        return Files.readString(errorLog.toPath());
     }
 
     /**
