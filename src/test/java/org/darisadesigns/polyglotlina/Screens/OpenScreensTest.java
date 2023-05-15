@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.parsers.ParserConfigurationException;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
@@ -58,7 +59,7 @@ public class OpenScreensTest {
             if (errors.exists()) {
                 errors.delete();
             }
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }

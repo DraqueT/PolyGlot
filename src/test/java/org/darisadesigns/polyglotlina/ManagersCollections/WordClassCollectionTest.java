@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -22,13 +22,14 @@ package org.darisadesigns.polyglotlina.ManagersCollections;
 import TestResources.DummyCore;
 import java.io.IOException;
 import java.util.List;
+import javax.xml.parsers.ParserConfigurationException;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.PEntry;
 import org.darisadesigns.polyglotlina.Nodes.WordClass;
 import org.darisadesigns.polyglotlina.PGTUtil;
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -58,7 +59,7 @@ public class WordClassCollectionTest {
             List<List<PEntry<Integer, Integer>>> random2 = core.getWordClassCollection().getRandomPropertyCombinations(5, excludeWord);
 
             assertNotEquals(random1, random2);
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
     }

@@ -164,7 +164,7 @@
                           </Group>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="chkTypesMandatory" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="chkPosMandatory" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="chkWordUniqueness" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="chkDisableProcRegex" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="chkLocalMandatory" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -190,7 +190,7 @@
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="chkTypesMandatory" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkPosMandatory" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="chkLocalUniqueness" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -216,7 +216,7 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JCheckBox" name="chkTypesMandatory">
+            <Component class="javax.swing.JCheckBox" name="chkPosMandatory">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Part of Speech Mandatory"/>
                 <Property name="toolTipText" type="java.lang.String" value="Select to enforce selection of a part of speech on each created word."/>

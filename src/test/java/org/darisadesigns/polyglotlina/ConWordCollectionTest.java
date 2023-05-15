@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021, Draque Thompson draquemail@gmail.com
+ * Copyright (c) 2019-2023, Draque Thompson draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -22,11 +22,12 @@ package org.darisadesigns.polyglotlina;
 import TestResources.DummyCore;
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import javax.xml.parsers.ParserConfigurationException;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -107,7 +108,7 @@ public class ConWordCollectionTest {
             assertEquals("Verb", words[4].getValue());
             assertEquals("copy", words[5].getValue());
             assertEquals("copy", words[6].getValue());
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
     }

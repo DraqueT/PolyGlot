@@ -26,8 +26,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -49,6 +49,11 @@ public class PDomParserTest {
     }
 
     private void recurseRead(File curFile) {
+        // do not run on currupted files: they fundamentally lack integrityx    
+        if (curFile.getName().equals("corrupted")) {
+            return;
+        }
+        
         if (curFile.isDirectory()) {
             for (File child : curFile.listFiles()) {
                 recurseRead(child);

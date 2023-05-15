@@ -95,18 +95,24 @@ public class IOHandlerTest {
     public void testWriteErrorLogsMaxLength() {
         System.out.println("IOHandlerTest.testWriteErrorLogsMaxLength");
         
-        for (int i = 0; i < 20; i++) {
-            DesktopIOHandler.getInstance().writeErrorLog(new Exception("This is a test: " + i));
-        }
+        var ioHandler = DesktopIOHandler.getInstance();
+        var systemInfoLength = DesktopIOHandler.getInstance().getSystemInformation().length();
+        var expectedLength = PGTUtil.MAX_LOG_CHARACTERS 
+                + systemInfoLength 
+                + PGTUtil.ERROR_LOG_SPEARATOR.length()
+                + 1; // off by one due to concatenation effect when adding system info (newline)
+        var testError = "\nThis is a test: blahblahblahblahblahblahblahblahblahblahblahblahblahblah : ";
         
         try {
+            ioHandler.clearErrorLog();
+        
+            for (int i = 0; i < 150; i++) {
+                ioHandler.writeErrorLog(new Exception(testError));
+            }
+            
             int logLength = DesktopIOHandler.getInstance().getErrorLog().length();
-            int systemInfoLength = DesktopIOHandler.getInstance().getSystemInformation().length();
-
-            // off by one due to concatenation effect when adding system info (newline)
-            assertEquals(logLength, PGTUtil.MAX_LOG_CHARACTERS 
-                    + systemInfoLength + PGTUtil.ERROR_LOG_SPEARATOR.length());
-        } catch (FileNotFoundException e) {
+            assertEquals(expectedLength, logLength);
+        } catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
@@ -128,7 +134,7 @@ public class IOHandlerTest {
 
             assertTrue(log.contains(testErrorString));
             assertTrue(log.contains(bubblingException));
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
@@ -339,7 +345,7 @@ public class IOHandlerTest {
             String errorLog = ioHandler.getErrorLog();
             assertEquals(errorLog.indexOf(PGTUtil.ERROR_LOG_SPEARATOR),
                     errorLog.lastIndexOf(PGTUtil.ERROR_LOG_SPEARATOR));
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             fail(e);
         }
     }

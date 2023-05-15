@@ -19,17 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.Desktop;
 
-import org.darisadesigns.polyglotlina.Nodes.LogoNode;
-import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
-import org.darisadesigns.polyglotlina.ManagersCollections.LogoCollection;
-import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
-import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
-import org.darisadesigns.polyglotlina.ManagersCollections.ImageCollection;
-import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
-import org.darisadesigns.polyglotlina.ManagersCollections.ReversionManager;
-import org.darisadesigns.polyglotlina.Nodes.ImageNode;
-import org.darisadesigns.polyglotlina.Nodes.ReversionNode;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -79,17 +68,30 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
+import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopGrammarChapNode;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammarManager;
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManagerException;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IOHandler;
+import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.ImageCollection;
+import org.darisadesigns.polyglotlina.ManagersCollections.LogoCollection;
+import org.darisadesigns.polyglotlina.ManagersCollections.ReversionManager;
+import org.darisadesigns.polyglotlina.Nodes.ImageNode;
+import org.darisadesigns.polyglotlina.Nodes.LogoNode;
+import org.darisadesigns.polyglotlina.Nodes.ReversionNode;
+import org.darisadesigns.polyglotlina.XMLRecoveryTool;
 import org.w3c.dom.Document;
 
 /**
@@ -227,6 +229,58 @@ public final class DesktopIOHandler implements IOHandler {
                 return ioStream.readAllBytes();
             }
         }
+    }
+    
+    /**
+     * This reads all possible bytes from an archive from a target file within it.No exceptions will be thrown, but all recoverable bytes will be returned.
+     * There is no guarantee of a complete file here.
+     * @param path
+     * @param targetFile
+     * @return 
+     * @throws javax.xml.parsers.ParserConfigurationException 
+     */
+    @Override
+    public byte[] recoverXmlBytesFromArchive(String path, String targetFile) throws ParserConfigurationException {
+        byte[] fileBytes = new byte[0];
+        
+        try (var zipFile = new org.apache.commons.compress.archivers.zip.ZipFile(new File(path))) {
+            var entry = zipFile.getEntry(targetFile);
+            
+                var buffer = new ByteArrayOutputStream();
+                var fileComplete = true;
+                var fileName = "";
+                String fileContents;
+                
+                try ( InputStream inputStream = zipFile.getInputStream(entry)) {
+                    fileName = entry.getName();
+                    int nRead;
+                    byte[] data = new byte[1024];
+                    while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
+                        buffer.write(data, 0, nRead);
+                    }
+                } catch (IOException e) {
+                    fileComplete = false;
+                } 
+                
+                try {
+                    buffer.flush();
+                    fileBytes = buffer.toByteArray();
+                } catch (IOException e) {
+                    // Eat exception. This is a last ditch recovery. It works or it returns an empty array.
+                    return fileBytes;
+                }
+                
+                // try to recover from incomplete XML documents
+                if (!fileComplete && fileName.equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.LANG_FILE_NAME)) {
+                    fileContents = new String(fileBytes, StandardCharsets.UTF_8);
+                    var fixedContents = new XMLRecoveryTool(fileContents).recoverXml();
+                    fileBytes = fixedContents.getBytes();
+                }
+        } catch (IOException e) {
+            // Eat exception. This is a last ditch recovery. It works or it returns an empty array.
+        }
+        
+        return fileBytes;
     }
 
     /**
@@ -644,6 +698,8 @@ public final class DesktopIOHandler implements IOHandler {
     @Override
     public void loadImageAssets(ImageCollection imageCollection,
             String fileName, DictCore core) throws Exception {
+        boolean readException = false;
+        
         try ( ZipFile zipFile = new ZipFile(fileName)) {
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
@@ -679,7 +735,13 @@ public final class DesktopIOHandler implements IOHandler {
                     imageNode.setImageBytes(loadImageBytesFromImage(img));
                     imageCollection.getBuffer().setEqual(imageNode);
                     imageCollection.insert(imageId);
+                } catch (Exception e) {
+                    readException = true;
                 }
+            }
+            
+            if (readException) {
+                throw new Exception("Problem loading one or more images from archive. (All possilbe images recovered)");
             }
         }
     }
@@ -690,11 +752,12 @@ public final class DesktopIOHandler implements IOHandler {
      *
      * @param logoCollection logocollection from dictionary core
      * @param fileName name/path of archive
-     * @throws java.lang.Exception
+     * @throws java.io.IOException
      */
     @Override
     public void loadLogographs(LogoCollection logoCollection,
-            String fileName) throws Exception {
+            String fileName) throws IOException {
+        var errors = false;
         try ( ZipFile zipFile = new ZipFile(fileName)) {
             for (LogoNode curNode : logoCollection.getAllLogos()) {
                 ZipEntry imgEntry = zipFile.getEntry(PGTUtil.LOGOGRAPH_SAVE_PATH
@@ -707,8 +770,14 @@ public final class DesktopIOHandler implements IOHandler {
                 try (InputStream imageStream = zipFile.getInputStream(imgEntry)) {
                     var img = ImageIO.read(imageStream);
                     curNode.setLogoBytes(loadImageBytesFromImage(img));
+                } catch (IOException e) {
+                    errors = true;
                 }
             }
+        }
+        
+        if (errors) {
+            throw new IOException("Unable to load one or more logograph images.");
         }
     }
 
@@ -722,6 +791,8 @@ public final class DesktopIOHandler implements IOHandler {
     @Override
     public void loadReversionStates(ReversionManager reversionManager,
             String fileName) throws IOException {
+        var errors = false;
+        
         try ( ZipFile zipFile = new ZipFile(fileName)) {
             int i = 0;
 
@@ -729,15 +800,23 @@ public final class DesktopIOHandler implements IOHandler {
                     + PGTUtil.REVERSION_BASE_FILE_NAME + i);
 
             while (reversion != null && i < reversionManager.getMaxReversionsCount()) {
-                reversionManager.addVersionToEnd(streamToByteArray(zipFile.getInputStream(reversion)));
-                i++;
-                reversion = zipFile.getEntry(PGTUtil.REVERSION_SAVE_PATH
-                        + PGTUtil.REVERSION_BASE_FILE_NAME + i);
+                try {
+                    reversionManager.addVersionToEnd(streamToByteArray(zipFile.getInputStream(reversion)));
+                    i++;
+                    reversion = zipFile.getEntry(PGTUtil.REVERSION_SAVE_PATH
+                            + PGTUtil.REVERSION_BASE_FILE_NAME + i);
+                } catch (IOException e) {
+                    errors = true;
+                }
             }
 
             // remember to load latest state in addition to all prior ones
             reversion = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
             reversionManager.addVersionToEnd(streamToByteArray(zipFile.getInputStream(reversion)));
+        }
+        
+        if (errors) {
+            throw new IOException("Unable to load one or more reversion states.");
         }
     }
 
@@ -1170,6 +1249,24 @@ public final class DesktopIOHandler implements IOHandler {
     public void writeErrorLog(Throwable exception) {
         writeErrorLog(exception, "");
     }
+    
+    @Override
+    public void clearErrorLog() throws IOException {
+        var logFile = getErrorLogFile();
+        var success = true;
+        
+        if (logFile.exists()) {
+            success = logFile.delete();
+        }
+        
+        if (success) {
+            success = logFile.createNewFile();
+        } 
+        
+        if (!success) {
+            throw new IOException("Unable to clear prior log file nd create new one.");
+        }
+    }
 
     /**
      * Writes to the PolyGlot error log file
@@ -1190,8 +1287,7 @@ public final class DesktopIOHandler implements IOHandler {
             errorMessage = comment + ":\n" + errorMessage;
         }
 
-        File errorLog = new File(PGTUtil.getErrorDirectory().getAbsolutePath()
-                + File.separator + PGTUtil.ERROR_LOG_FILE);
+        File errorLog = getErrorLogFile();
 
         try {
             if (errorLog.exists()) {
@@ -1234,16 +1330,9 @@ public final class DesktopIOHandler implements IOHandler {
     }
 
     @Override
-    public String getErrorLog() throws FileNotFoundException {
-        String ret = "";
-        File errorLog = getErrorLogFile();
-
-        if (errorLog.exists()) {
-            try ( Scanner logScanner = new Scanner(errorLog).useDelimiter("\\Z")) {
-                ret = logScanner.hasNext() ? logScanner.next() : "";
-            }
-        }
-        return ret;
+    public String getErrorLog() throws IOException {
+        var errorLog = getErrorLogFile();
+        return Files.readString(errorLog.toPath());
     }
 
     /**
@@ -1499,6 +1588,7 @@ public final class DesktopIOHandler implements IOHandler {
      *
      * @param parent parent form
      * @param workingDirectory
+     * @param core
      * @return ImageNode inserted into collection with populated image
      * @throws IOException on file read error
      */

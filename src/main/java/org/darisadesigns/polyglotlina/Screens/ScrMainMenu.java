@@ -19,17 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PToDoTree;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PToDoTreeModel;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.ToDoTreeNode;
-import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
-import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.Nodes.ConWord;
-import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Desktop;
@@ -82,15 +71,26 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.darisadesigns.polyglotlina.CheckLanguageErrors;
 import org.darisadesigns.polyglotlina.Desktop.ClipboardHandler;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PToDoTree;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PToDoTreeModel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.ToDoTreeNode;
 import org.darisadesigns.polyglotlina.Desktop.DesktopHelpHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopOSHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammarManager;
-import org.darisadesigns.polyglotlina.HelpHandler;
-import org.darisadesigns.polyglotlina.Desktop.NonModularBridge;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
+import org.darisadesigns.polyglotlina.Desktop.NonModularBridge;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
+import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.HelpHandler;
+import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.ToolsHelpers.ExportSpellingDictionary;
 import org.darisadesigns.polyglotlina.WebInterface;
 
@@ -469,7 +469,7 @@ public final class ScrMainMenu extends PFrame {
                             var loadState = new DictCore(new DesktopPropertiesManager(), core.getOSHandler(), new PGTUtil(), new DesktopGrammarManager());
                             loadState.readFile(fileName, null, false);
                             core.setLoadState(loadState);
-                        } catch (IOException | IllegalStateException e) {
+                        } catch (ParserConfigurationException | IOException | IllegalStateException e) {
                             // user informed below
                             core.getOSHandler().getIOHandler().writeErrorLog(e, "On load of comparison file. Why failure here and not immediately above?");
                         }
@@ -492,6 +492,10 @@ public final class ScrMainMenu extends PFrame {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             core.getOSHandler().getInfoBox().warning("File Read Warning", "Problems reading file:\n"
                     + e.getLocalizedMessage());
+        } catch (ParserConfigurationException e) {
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+            core.getOSHandler().getInfoBox().error("File Read Error", "Faile to initialize file parser: " + fileName
+                    + "\n\n " + e.getMessage());
         }
 
         genTitle();

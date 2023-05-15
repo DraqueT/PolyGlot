@@ -19,17 +19,17 @@
  */
 package org.darisadesigns.polyglotlina;
 
-import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
-import org.darisadesigns.polyglotlina.ManagersCollections.LogoCollection;
-import org.darisadesigns.polyglotlina.ManagersCollections.ImageCollection;
-import org.darisadesigns.polyglotlina.ManagersCollections.ReversionManager;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.time.Instant;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.ImageCollection;
+import org.darisadesigns.polyglotlina.ManagersCollections.LogoCollection;
+import org.darisadesigns.polyglotlina.ManagersCollections.ReversionManager;
 import org.w3c.dom.Document;
 
 /**
@@ -56,6 +56,8 @@ public interface IOHandler {
     public File createFileWithContents(String path, String contents) throws IOException;
     
     public byte[] getXmlBytesFromArchive(String path) throws IOException;
+    
+    public byte[] recoverXmlBytesFromArchive(String path, String targetFile) throws ParserConfigurationException;
 
     public byte[] getByteArrayFromFile(File file) throws IOException;
 
@@ -157,10 +159,10 @@ public interface IOHandler {
      *
      * @param logoCollection logocollection from dictionary core
      * @param fileName name/path of archive
-     * @throws java.lang.Exception
+     * @throws java.io.IOException
      */
     public void loadLogographs(LogoCollection logoCollection,
-            String fileName) throws Exception;
+            String fileName) throws IOException;
 
     /**
      * Loads all reversion XML files from polyglot archive
@@ -252,7 +254,9 @@ public interface IOHandler {
 
     public File getErrorLogFile();
 
-    public String getErrorLog() throws FileNotFoundException;
+    public String getErrorLog() throws IOException;
+    
+    public void clearErrorLog() throws IOException;
 
     /**
      * Gets system information in human readable format

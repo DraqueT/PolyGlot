@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -21,6 +21,7 @@ package org.darisadesigns.polyglotlina.ToolsHelpers;
 
 import TestResources.DummyCore;
 import java.io.IOException;
+import javax.xml.parsers.ParserConfigurationException;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.PGTUtil;
@@ -44,7 +45,7 @@ public class ExportSpellingDictionaryTest {
         try {
             core.readFile(PGTUtil.TESTRESOURCES + TEST_FILE);
         }
-        catch (IOException | IllegalStateException e) {
+        catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
     }

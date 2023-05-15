@@ -20,24 +20,6 @@
 package org.darisadesigns.polyglotlina;
 
 import java.io.ByteArrayInputStream;
-import org.darisadesigns.polyglotlina.PLanguageStats.PLanguageStatsProgress;
-import org.darisadesigns.polyglotlina.CustomControls.PAlphaMap;
-import org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager;
-import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
-import org.darisadesigns.polyglotlina.ManagersCollections.PronunciationMgr;
-import org.darisadesigns.polyglotlina.ManagersCollections.LogoCollection;
-import org.darisadesigns.polyglotlina.ManagersCollections.FamilyManager;
-import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
-import org.darisadesigns.polyglotlina.ManagersCollections.TypeCollection;
-import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
-import org.darisadesigns.polyglotlina.ManagersCollections.EtymologyManager;
-import org.darisadesigns.polyglotlina.ManagersCollections.ImageCollection;
-import org.darisadesigns.polyglotlina.ManagersCollections.ReversionManager;
-import org.darisadesigns.polyglotlina.ManagersCollections.RomanizationManager;
-import org.darisadesigns.polyglotlina.ManagersCollections.ToDoManager;
-import org.darisadesigns.polyglotlina.ManagersCollections.WordClassCollection;
-import org.darisadesigns.polyglotlina.OSHandler.CoreUpdatedListener;
-import org.darisadesigns.polyglotlina.OSHandler.FileReadListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -55,8 +37,26 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.darisadesigns.polyglotlina.CustomControls.CoreUpdateSubscriptionInterface;
+import org.darisadesigns.polyglotlina.CustomControls.PAlphaMap;
 import org.darisadesigns.polyglotlina.DomParser.PDomParser;
+import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
+import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.EtymologyManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.FamilyManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.ImageCollection;
+import org.darisadesigns.polyglotlina.ManagersCollections.LogoCollection;
 import org.darisadesigns.polyglotlina.ManagersCollections.PhraseManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.PronunciationMgr;
+import org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.ReversionManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.RomanizationManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.ToDoManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.TypeCollection;
+import org.darisadesigns.polyglotlina.ManagersCollections.WordClassCollection;
+import org.darisadesigns.polyglotlina.OSHandler.CoreUpdatedListener;
+import org.darisadesigns.polyglotlina.OSHandler.FileReadListener;
+import org.darisadesigns.polyglotlina.PLanguageStats.PLanguageStatsProgress;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -342,8 +342,9 @@ public class DictCore {
      * @param _fileName filename to read from
      * @throws java.io.IOException for unrecoverable errors
      * @throws IllegalStateException for recoverable errors
+     * @throws javax.xml.parsers.ParserConfigurationException
      */
-    public void readFile(String _fileName) throws IOException, IllegalStateException {
+    public void readFile(String _fileName) throws IOException, IllegalStateException, ParserConfigurationException {
         readFile(_fileName, null);
     }
 
@@ -354,8 +355,10 @@ public class DictCore {
      * @param overrideXML override to where the XML should be loaded from
      * @throws java.io.IOException for unrecoverable errors
      * @throws IllegalStateException for recoverable errors
+     * @throws javax.xml.parsers.ParserConfigurationException
      */
-    public void readFile(String _fileName, byte[] overrideXML) throws IOException, IllegalStateException {
+    public void readFile(String _fileName, byte[] overrideXML) 
+            throws IOException, IllegalStateException, ParserConfigurationException {
         readFile(_fileName, overrideXML, true);
     }
 
@@ -367,8 +370,10 @@ public class DictCore {
      * @param useFileReadListener whether to use file read listener
      * @throws java.io.IOException for unrecoverable errors
      * @throws IllegalStateException for recoverable errors
+     * @throws javax.xml.parsers.ParserConfigurationException
      */
-    public void readFile(String _fileName, byte[] overrideXML, boolean useFileReadListener) throws IOException, IllegalStateException {
+    public void readFile(String _fileName, byte[] overrideXML, boolean useFileReadListener) 
+            throws IOException, IllegalStateException, ParserConfigurationException {
         curLoading = true;
         curFileName = _fileName;
         String errorLog = "";
@@ -388,24 +393,32 @@ public class DictCore {
             // load image assets first to allow referencing as dictionary loads
             try {
                 this.osHandler.getIOHandler().loadImageAssets(imageCollection, _fileName, this);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 warningLog += "Image loading error: " + e.getLocalizedMessage() + "\n";
             }
 
             try {
                 this.osHandler.fontHandler.setFontFrom(_fileName, this);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 this.osHandler.getIOHandler().writeErrorLog(e);
                 warningLog += e.getLocalizedMessage() + "\n";
             }
 
             PDomParser parser = new PDomParser(this);
 
-            byte[] rawXml = overrideXML == null
-                    ? this.osHandler.getIOHandler().getXmlBytesFromArchive(_fileName)
-                    : overrideXML;
+            byte[] rawXml;
+            
+            try {
+                rawXml = overrideXML == null
+                        ? this.osHandler.getIOHandler().getXmlBytesFromArchive(_fileName)
+                        : overrideXML;
+            } catch (IOException e) {
+                // attempt recovery read of XML
+                // This accounts for corrupted zip archives and repairs partial/
+                // corrupted XML documents (even with internal corruption)
+                rawXml = this.osHandler.getIOHandler().recoverXmlBytesFromArchive(_fileName, PGTUtil.LANG_FILE_NAME);
+                warningLog = "Encountered corrupted XML file. All readable text recovered.\n" + warningLog;
+            }
 
             parser.readXml(new ByteArrayInputStream(rawXml));
             Exception parseException = parser.getError();
@@ -422,7 +435,8 @@ public class DictCore {
                     throw new IOException(parser.getError());
                 }
             } else if (parseException != null) {
-                throw new IOException(parseException);
+                errorLog += "Unrecoverable error encountered while reading file: " 
+                        + parseException.getLocalizedMessage() + "\n" + errorLog;
             }
 
             for (String issue : parser.getIssues()) {
@@ -431,32 +445,28 @@ public class DictCore {
 
             try {
                 this.osHandler.getIOHandler().loadGrammarSounds(_fileName, grammarManager);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 this.osHandler.getIOHandler().writeErrorLog(e);
                 warningLog += e.getLocalizedMessage() + "\n";
             }
 
             try {
                 logoCollection.loadRadicalRelations();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 this.osHandler.getIOHandler().writeErrorLog(e);
                 warningLog += e.getLocalizedMessage() + "\n";
             }
 
             try {
                 this.osHandler.getIOHandler().loadLogographs(logoCollection, _fileName);
-            }
-            catch (Exception e) {
+            } catch (IOException e) {
                 this.osHandler.getIOHandler().writeErrorLog(e);
                 warningLog += e.getLocalizedMessage() + "\n";
             }
 
             try {
                 this.osHandler.getIOHandler().loadReversionStates(reversionManager, _fileName);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 this.osHandler.getIOHandler().writeErrorLog(e);
                 warningLog += e.getLocalizedMessage() + "\n";
             }
@@ -465,19 +475,19 @@ public class DictCore {
             curLoading = false;
         }
 
+        if (useFileReadListener) {
+            FileReadListener listener = this.getOSHandler().getFileReadListener();
+            if (listener != null) {
+                listener.fileRead(this);
+            }
+        }
+        
         if (!errorLog.trim().isEmpty()) {
             throw new IOException(errorLog);
         }
 
         if (!warningLog.trim().isEmpty()) {
             throw new IllegalStateException(warningLog);
-        }
-
-        if (useFileReadListener) {
-            FileReadListener listener = this.getOSHandler().getFileReadListener();
-            if (null != listener) {
-                listener.fileRead(this);
-            }
         }
     }
 
@@ -502,8 +512,9 @@ public class DictCore {
      * @param fileName
      * @return
      * @throws java.io.IOException
+     * @throws javax.xml.parsers.ParserConfigurationException
      */
-    public DictCore revertToState(byte[] revision, String fileName) throws IOException {
+    public DictCore revertToState(byte[] revision, String fileName) throws IOException  , ParserConfigurationException {
         DictCore revDict = new DictCore(this.propertiesManager, this.osHandler, this.pgtUtil, this.grammarManager);
         revDict.readFile(fileName, revision);
 

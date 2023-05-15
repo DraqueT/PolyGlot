@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2018-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -20,14 +20,15 @@
 package org.darisadesigns.polyglotlina.Screens;
 
 import java.io.IOException;
+import javax.swing.DefaultListModel;
+import javax.xml.parsers.ParserConfigurationException;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ReversionNode;
-import javax.swing.DefaultListModel;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
  *
@@ -118,6 +119,10 @@ public final class ScrReversion extends PDialog {
             } catch (IOException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
                 new DesktopInfoBox(this).error("Unable to Revert", "Unable to revert to prior version: " 
+                        + e.getLocalizedMessage());
+            } catch (ParserConfigurationException e) {
+                DesktopIOHandler.getInstance().writeErrorLog(e);
+                new DesktopInfoBox(this).error("Unable to Revert: Parser Initilization Error", "Unable to revert to prior version: " 
                         + e.getLocalizedMessage());
             }
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2018-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -20,7 +20,6 @@
 package org.darisadesigns.polyglotlina;
 
 import TestResources.DummyCore;
-import org.darisadesigns.polyglotlina.Desktop.PFontInfo;
 import java.awt.Color;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
@@ -29,12 +28,14 @@ import java.util.List;
 import java.util.Map.Entry;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
+import javax.xml.parsers.ParserConfigurationException;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopGrammarChapNode;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopGrammarSectionNode;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PGrammarPane;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.FormattedTextHelper;
+import org.darisadesigns.polyglotlina.Desktop.PFontInfo;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
@@ -60,7 +61,7 @@ public class FormattedTextHelperTest {
         core = DummyCore.newCore();
         try {
             core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, "FORMATTEDTEXTHELPERTEST");
         }
     }

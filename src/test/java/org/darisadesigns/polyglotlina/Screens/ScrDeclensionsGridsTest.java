@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -23,13 +23,14 @@ import TestResources.DummyCore;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import javax.xml.parsers.ParserConfigurationException;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.PGTUtil;
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -56,7 +57,7 @@ public class ScrDeclensionsGridsTest {
             OneDimNopop = words.getNodeById(4);
             TwoDimPop = words.getNodeById(5);
             TwoDimNopop = words.getNodeById(6);
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }

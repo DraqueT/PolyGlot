@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -20,14 +20,12 @@
 
 package org.darisadesigns.polyglotlina;
 
-import java.util.Map;
 import java.util.stream.Stream;
-import org.darisadesigns.polyglotlina.XMLRecoveryTool;
-import org.junit.jupiter.api.Test;
+import javax.xml.parsers.ParserConfigurationException;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -39,10 +37,15 @@ public class XMLRecoveryToolTest {
     @MethodSource("corruptedXMLProvider")
     public void testRecoverXml(String caseName, String corrupted, String expected) {
         System.out.printf("XMLRecoveryToolTest.testRecoverXml (%s)", caseName).println();
-        XMLRecoveryTool tool = new XMLRecoveryTool(corrupted);
-        String recover = tool.recoverXml();
-        
-        assertEquals(expected, recover);
+
+        try {
+            XMLRecoveryTool tool = new XMLRecoveryTool(corrupted);
+            String recover = tool.recoverXml();
+
+            assertEquals(expected.trim(), recover.trim());
+        } catch (ParserConfigurationException e) {
+            fail(e);
+        }
     }
     
     static Stream<Arguments> corruptedXMLProvider() {

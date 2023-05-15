@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2020-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -22,10 +22,11 @@ package org.darisadesigns.polyglotlina;
 import TestResources.DummyCore;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
+import javax.xml.parsers.ParserConfigurationException;
 import org.darisadesigns.polyglotlina.Screens.ScrProgressMenu;
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -57,7 +58,7 @@ public class PLanguageStatsTest {
             progress.setVisible(true);
             String result = PLanguageStats.buildWordReport(core, progress).trim();
             assertFalse(result.isBlank());
-        } catch (IOException | IllegalStateException | InterruptedException e) {
+        } catch (IOException | IllegalStateException | InterruptedException | ParserConfigurationException e) {
             fail(e);
         }
     }

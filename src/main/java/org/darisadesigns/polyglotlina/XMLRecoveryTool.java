@@ -19,10 +19,16 @@
  */
 package org.darisadesigns.polyglotlina;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -30,21 +36,35 @@ import java.util.regex.Pattern;
  */
 public class XMLRecoveryTool {
     
+    private final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    private final DocumentBuilder builder;
     private String source;
     private List<String> outputList;
     private final List<String> tokenList;
     
     
-    public XMLRecoveryTool(String _source) {
+    public XMLRecoveryTool(String _source) throws ParserConfigurationException {
         source = _source;
         tokenList = new ArrayList<>();
+        builder = factory.newDocumentBuilder();
     }
     
     public String  recoverXml() {
+        this.cleanTruncatedXml();
         this.populateTokenList();
         this.fixMissingTags();
 
         return source;
+    }
+    
+    /**
+     * If XML ws truncated, discards unreadable portions
+     */
+    private void cleanTruncatedXml() {
+        source = source.trim();
+        
+        // removes partial tags at end of XML
+        source = source.replaceAll("<[^<]*\\Z", "");
     }
     
     private void populateTokenList() {
@@ -56,8 +76,47 @@ public class XMLRecoveryTool {
         Matcher m = p.matcher(source);
 
         while (m.find()) {
-            tokenList.add(m.group());
+            var found = m.group();
+            
+            // test all open/close tags and reject if invalid
+            if (found.startsWith("<") && !testOpenCloseTagValidity(found)) {
+                continue;
+            }
+            
+            tokenList.add(found);
         }
+    }
+    
+    /**
+     * Tests the validity of opening and closing tags
+     * It does this by testing an empty open/close combo with a DOM parser
+     * @param tag
+     * @return 
+     */
+    private boolean testOpenCloseTagValidity(String tag) {
+        String test;
+        
+        if (tag.startsWith("<?") && tag.endsWith("?>")) { 
+            // processing tags can be ignored as they're weird
+            return true;
+        } else if (tag.startsWith("<") && tag.endsWith("/>")) {
+            // empty tags...
+            test = tag;
+        } else if (tag.startsWith("</")) {
+            // pair end tags with start tags...
+            test = tag.replace("</", "<") + tag;
+        } else {
+            // pair start tags with end tags...
+            test = tag + tag.replaceAll("<", "</");
+        }
+        
+        try {
+            builder.parse(new ByteArrayInputStream(test.getBytes()));
+        } catch (IOException | SAXException e) {
+            return false;
+        }
+        
+        return true;
     }
     
     /**
