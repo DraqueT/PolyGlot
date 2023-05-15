@@ -1264,7 +1264,7 @@ public final class DesktopIOHandler implements IOHandler {
         } 
         
         if (!success) {
-            throw new IOException("Unable to clear prior log file nd create new one.");
+            throw new IOException("Unable to clear prior log file and create new one.");
         }
     }
 
