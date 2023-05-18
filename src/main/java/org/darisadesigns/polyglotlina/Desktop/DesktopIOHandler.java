@@ -232,7 +232,7 @@ public final class DesktopIOHandler implements IOHandler {
     }
     
     /**
-     * This reads all possible bytes from an archive from a target file within it.No exceptions will be thrown, but all recoverable bytes will be returned.
+     * This reads all possible bytes from an archive from a target file within it. No exceptions will be thrown, but all recoverable bytes will be returned.
      * There is no guarantee of a complete file here.
      * @param path
      * @param targetFile
@@ -1264,7 +1264,7 @@ public final class DesktopIOHandler implements IOHandler {
         } 
         
         if (!success) {
-            throw new IOException("Unable to clear prior log file nd create new one.");
+            throw new IOException("Unable to clear prior log file and create new one.");
         }
     }
 
