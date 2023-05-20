@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2019-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -19,19 +19,19 @@
  */
 package TestResources;
 
-import org.darisadesigns.polyglotlina.Desktop.DummyInfoBox;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import org.darisadesigns.polyglotlina.Desktop.DesktopHelpHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopOSHandler;
-import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPFontHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.DummyInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammarManager;
-import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.InfoBox;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
+import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.InfoBox;
 import org.darisadesigns.polyglotlina.OSHandler;
 
 /**
@@ -47,7 +47,7 @@ public class DummyCore extends DictCore {
         try {
             InfoBox infoBox = new DummyInfoBox();
             DesktopHelpHandler helpHandler = new DesktopHelpHandler();
-            PFontHandler fontHandler = new PFontHandler();
+            DesktopPFontHandler fontHandler = new DesktopPFontHandler();
             DesktopOSHandler osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), infoBox, helpHandler, fontHandler);
             osHandler.setWorkingDirectory(PGTUtil.TESTRESOURCES);
             Constructor constructor = PolyGlot.class.getDeclaredConstructor(new Class[]{DictCore.class, DesktopOSHandler.class});

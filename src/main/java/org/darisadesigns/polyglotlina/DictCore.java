@@ -23,7 +23,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +58,6 @@ import org.darisadesigns.polyglotlina.OSHandler.FileReadListener;
 import org.darisadesigns.polyglotlina.PLanguageStats.PLanguageStatsProgress;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 
 /**
  * This is the core of PolyGlot. It manages the top level of all aspects of the
@@ -241,9 +239,7 @@ public class DictCore {
     }
 
     public void unSubscribe(CoreUpdateSubscriptionInterface newSub) {
-        if (subscribers.contains(newSub)) {
-            subscribers.remove(newSub);
-        }
+        subscribers.remove(newSub);
     }
 
     /**
@@ -324,16 +320,13 @@ public class DictCore {
     public void buildLanguageReport(PLanguageStatsProgress progress) {
         final DictCore core = this;
 
-        new Thread() {
-            @Override
-            public void run() {
-                String reportContents = PLanguageStats.buildWordReport(core, progress);
+        new Thread(() -> {
+            String reportContents = PLanguageStats.buildWordReport(core, progress);
 
-                if (!core.getPGTUtil().isBlank(reportContents)) {
-                    core.getOSHandler().openLanguageReport(reportContents);
-                }
+            if (!core.getPGTUtil().isBlank(reportContents)) {
+                core.getOSHandler().openLanguageReport(reportContents);
             }
-        }.start();
+        }).start();
     }
 
     /**
@@ -380,98 +373,10 @@ public class DictCore {
         String warningLog = "";
 
         try {
-            // test file exists
-            if (!this.osHandler.getIOHandler().fileExists(_fileName)) {
-                throw new IOException("File " + _fileName + " does not exist.");
-            }
-
-            // inform user if file is not an archive
-            if (!this.osHandler.getIOHandler().isFileZipArchive(_fileName)) {
-                throw new IOException("File " + _fileName + " is not a valid PolyGlot archive.");
-            }
-
-            // load image assets first to allow referencing as dictionary loads
-            try {
-                this.osHandler.getIOHandler().loadImageAssets(imageCollection, _fileName, this);
-            } catch (Exception e) {
-                warningLog += "Image loading error: " + e.getLocalizedMessage() + "\n";
-            }
-
-            try {
-                this.osHandler.fontHandler.setFontFrom(_fileName, this);
-            } catch (Exception e) {
-                this.osHandler.getIOHandler().writeErrorLog(e);
-                warningLog += e.getLocalizedMessage() + "\n";
-            }
-
-            PDomParser parser = new PDomParser(this);
-
-            byte[] rawXml;
-            
-            try {
-                rawXml = overrideXML == null
-                        ? this.osHandler.getIOHandler().getXmlBytesFromArchive(_fileName)
-                        : overrideXML;
-            } catch (IOException e) {
-                // attempt recovery read of XML
-                // This accounts for corrupted zip archives and repairs partial/
-                // corrupted XML documents (even with internal corruption)
-                rawXml = this.osHandler.getIOHandler().recoverXmlBytesFromArchive(_fileName, PGTUtil.LANG_FILE_NAME);
-                warningLog = "Encountered corrupted XML file. All readable text recovered.\n" + warningLog;
-            }
-
-            parser.readXml(new ByteArrayInputStream(rawXml));
-            Exception parseException = parser.getError();
-
-            if (parseException instanceof SAXException) {
-                // attempt to repair malformed XML on IOException
-                parser = new PDomParser(this);
-                XMLRecoveryTool recovery = new XMLRecoveryTool(new String(rawXml, StandardCharsets.UTF_8));
-                String recoveredXml = recovery.recoverXml();
-                parser.readXml(new ByteArrayInputStream(recoveredXml.getBytes()));
-
-                // if not possible to recover, bubble error
-                if (parser.getError() != null) {
-                    throw new IOException(parser.getError());
-                }
-            } else if (parseException != null) {
-                errorLog += "Unrecoverable error encountered while reading file: " 
-                        + parseException.getLocalizedMessage() + "\n" + errorLog;
-            }
-
-            for (String issue : parser.getIssues()) {
-                warningLog += issue + "\n";
-            }
-
-            try {
-                this.osHandler.getIOHandler().loadGrammarSounds(_fileName, grammarManager);
-            } catch (Exception e) {
-                this.osHandler.getIOHandler().writeErrorLog(e);
-                warningLog += e.getLocalizedMessage() + "\n";
-            }
-
-            try {
-                logoCollection.loadRadicalRelations();
-            } catch (Exception e) {
-                this.osHandler.getIOHandler().writeErrorLog(e);
-                warningLog += e.getLocalizedMessage() + "\n";
-            }
-
-            try {
-                this.osHandler.getIOHandler().loadLogographs(logoCollection, _fileName);
-            } catch (IOException e) {
-                this.osHandler.getIOHandler().writeErrorLog(e);
-                warningLog += e.getLocalizedMessage() + "\n";
-            }
-
-            try {
-                this.osHandler.getIOHandler().loadReversionStates(reversionManager, _fileName);
-            } catch (IOException e) {
-                this.osHandler.getIOHandler().writeErrorLog(e);
-                warningLog += e.getLocalizedMessage() + "\n";
-            }
-        }
-        finally {
+            var warningsAndErrors = this.osHandler.getIOHandler().readFile(this, _fileName, overrideXML);
+            warningLog = warningsAndErrors[0];
+            errorLog = warningsAndErrors[1];
+        } finally {
             curLoading = false;
         }
 
@@ -521,33 +426,6 @@ public class DictCore {
         pushUpdateWithCore(revDict);
 
         return revDict;
-    }
-
-    /**
-     * Used for test loading reversion XMLs. Cannot successfully load actual
-     * revision into functioning DictCore
-     *
-     * @param reversion
-     * @return
-     */
-    public String testLoadReversion(byte[] reversion) {
-        PDomParser parser = new PDomParser(this);
-        parser.readXml(new ByteArrayInputStream(reversion));
-        String error = "";
-
-        // if no save time present, simply timestamp for current time (only relevant for first time revision log added)
-        if (lastSaveTime == Instant.MIN) {
-            lastSaveTime = Instant.now();
-        }
-
-        Exception parseException = parser.getError();
-        if (parseException != null) {
-            this.osHandler.getIOHandler().writeErrorLog(parseException);
-            error = parseException.getLocalizedMessage();
-        }
-
-        // we only care about errors here, rather than warnings
-        return error;
     }
 
     /**
@@ -602,9 +480,7 @@ public class DictCore {
         try (StringWriter writer = new StringWriter()) {
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
 
-            StringBuilder sb = new StringBuilder();
-            sb.append(writer.getBuffer());
-            return sb.toString();
+            return String.valueOf(writer.getBuffer());
         }
     }
 
@@ -738,15 +614,6 @@ public class DictCore {
 
     public PGTUtil getPGTUtil() {
         return this.pgtUtil;
-    }
-
-    /**
-     * Returns last time language file was saved
-     *
-     * @return
-     */
-    public Instant getLastSaveTime() {
-        return lastSaveTime;
     }
 
     /**

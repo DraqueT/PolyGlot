@@ -19,30 +19,18 @@
  */
 package org.darisadesigns.polyglotlina;
 
-import java.io.IOException;
-
 /**
  * Split out from IOHandler due to large portion devoted to handling fonts
  *
  * @author Draque Thompson
  */
 public abstract class PFontHandler {
-
-    /**
-     * Sets the conlang and local lang fonts, if one exists and caches its file
-     * for quicksaving
-     *
-     * @param _path The path of the PGD file
-     * @param core the dictionary core
-     * @throws java.io.IOException
-     * @throws java.awt.FontFormatException
-     */
-    public abstract void setFontFrom(String _path, DictCore core) throws IOException, Exception;
     
     /**
      * Tests whether given string can have every character represented as a glyph for the given font
      * @param value string to test
      * @param conFont true if using the conlang font, false if using the local language font
+     * @param core
      * @return 
      */
     public abstract boolean canStringBeRendered(String value, boolean conFont, DictCore core);

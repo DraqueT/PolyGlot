@@ -42,10 +42,10 @@ import javax.xml.transform.TransformerException;
 import org.darisadesigns.polyglotlina.Desktop.DesktopHelpHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopOSHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPFontHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.DummyInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammarManager;
-import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.Desktop.SoundRecorder;
@@ -134,41 +134,6 @@ public class WebService {
                 rateLimitExceeded(exchange);
             }
         });
-        
-        // TODO: put the below in each response as is appropriate
-        // exchange.sendResponseHeaders(200, response.length());
-        
-        
-//        server = Undertow.builder()
-//                .addHttpListener(port, "localhost")
-//                .setHandler((HttpServerExchange exchange) -> {
-//                    String clientIp = exchange.getSourceAddress().getAddress().getHostAddress();
-//
-//                    // Create a rate limiter for the client IP if it doesn't exist
-//                    rateLimiterPerAddress.putIfAbsent(clientIp, new TokenBucketRateLimiter(
-//                            polyGlot.getOptionsManager().getWebServiceIndividualTokenCapacity(),
-//                            polyGlot.getOptionsManager().getWebServiceIndividualTokenRefil())
-//                    );
-//                    TokenBucketRateLimiter addressRateLimiter = rateLimiterPerAddress.get(clientIp);
-//
-//                    if (addressRateLimiter.tryConsume() && masterRateLimiter.tryConsume()) {
-//                        try {
-//                            handleRequest(exchange);
-//                        }
-//                        catch (PWebServerException e) {
-//                            reject(exchange, e.getMessage());
-//                        }
-//                        catch (IOException e) {
-//                            error(exchange, e.getLocalizedMessage());
-//                        }
-//                        catch (Exception e) {
-//                            error(exchange, "Unhandled Server Exception");
-//                        }
-//                    } else {
-//                        // too many requests
-//                        rateLimitExceeded(exchange);
-//                    }
-//                }).build();
 
         server.start();
         running = true;
@@ -181,7 +146,7 @@ public class WebService {
         if (query != null) {
             String[] pairs = query.split("&");
             for (String pair : pairs) {
-                int idx = pair.indexOf("=");
+                int idx = pair.indexOf('=');
                 String key = idx > 0 ? pair.substring(0, idx) : pair;
                 String value = idx > 0 && pair.length() > idx + 1 ? pair.substring(idx + 1) : null;
                 queryParams.put(key, value);
@@ -293,7 +258,7 @@ public class WebService {
      * @param fileName
      * @return
      * @throws
-     * org.darisadesigns.polyglotlina.Webservice.WebServer.PWebServerException
+     * PWebServerException
      */
     private File getLanguageFile(String fileName) throws PWebServerException {
         var file = new File(polyGlot.getOptionsManager().getWebServiceTargetFolder() + File.separator + fileName);
@@ -348,7 +313,7 @@ public class WebService {
 
     private void getMetadata(HttpExchange exchange) throws PWebServerException, IOException {
         var params = parseQueryParams(exchange.getRequestURI());
-        var fileName = params.containsKey("file") ? params.get("file") : "";
+        var fileName = params.getOrDefault("file", "");
 
         if (params.size() != 1 || !pgdFiles.containsKey(fileName)) {
             throw new PWebServerException("Bad Request");
@@ -389,7 +354,7 @@ public class WebService {
 
     private void getFont(HttpExchange exchange, boolean conFont) throws PWebServerException, IOException {
         var params = parseQueryParams(exchange.getRequestURI());
-        var fileName = params.containsKey("file") ? params.get("file") : "";
+        var fileName = params.getOrDefault("file", "");
 
         if (params.size() != 1 || !pgdFiles.containsKey(fileName)) {
             throw new PWebServerException("Bad Request");
@@ -402,7 +367,7 @@ public class WebService {
         
         var propMan = ((DesktopPropertiesManager)core.getPropertiesManager());
         
-        var font = conFont ? propMan.getCachedFont() : propMan.getCachedFont();
+        var font = conFont ? propMan.getCachedFont() : propMan.getCachedLocalFont();
         
         if (font == null) {
             font = charisUnicodeBytes;
@@ -417,7 +382,7 @@ public class WebService {
     
     private void getFullFile(HttpExchange exchange) throws PWebServerException, IOException {
         var params = parseQueryParams(exchange.getRequestURI());
-        var fileName = params.containsKey("file") ? params.get("file") : "";
+        var fileName = params.getOrDefault("file", "");
 
         if (params.size() != 1 || !pgdFiles.containsKey(fileName)) {
             throw new PWebServerException("Bad Request");
@@ -443,7 +408,7 @@ public class WebService {
 
     private void getRawXml(HttpExchange exchange) throws PWebServerException {
         var params = parseQueryParams(exchange.getRequestURI());
-        var fileName = params.containsKey("file") ? params.get("file") : "";
+        var fileName = params.getOrDefault("file", "");
 
         if (params.size() != 1 || !pgdFiles.containsKey(fileName)) {
             throw new PWebServerException("Bad Request");
@@ -505,8 +470,8 @@ public class WebService {
 
     private void getImage(HttpExchange exchange) throws PWebServerException, IOException {
         var params = parseQueryParams(exchange.getRequestURI());
-        var fileName = params.containsKey("file") ? params.get("file") : "";
-        var imageIdStr = params.containsKey("mediaId") ? params.get("mediaId") : "-1";
+        var fileName = params.getOrDefault("file", "");
+        var imageIdStr = params.getOrDefault("mediaId", "-1");
         int imageId;
         
         try {
@@ -537,8 +502,8 @@ public class WebService {
     
     private void getSound(HttpExchange exchange) throws PWebServerException, IOException {
         var params = parseQueryParams(exchange.getRequestURI());
-        var fileName = params.containsKey("file") ? params.get("file") : "";
-        var mediaIdStr = params.containsKey("mediaId") ? params.get("mediaId") : "-1";
+        var fileName = params.getOrDefault("file", "");
+        var mediaIdStr = params.getOrDefault("mediaId", "-1");
         int mediaId;
         
         try {
@@ -634,7 +599,7 @@ public class WebService {
             for (File file : servedDirectory.listFiles()) {
                 if (file.getName().endsWith(".pgd")) {
                     var helpHandler = new DesktopHelpHandler();
-                    var fontHandler = new PFontHandler();
+                    var fontHandler = new DesktopPFontHandler();
                     var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), new DummyInfoBox(), helpHandler, fontHandler);
                     var core = new DictCore(new DesktopPropertiesManager(), osHandler, new PGTUtil(), new DesktopGrammarManager());
                     PolyGlot.getTestShell(core);
@@ -670,19 +635,20 @@ public class WebService {
     }
     
     private byte[] getCharisUnicodeBytes() throws IOException {
-        var is = this.getClass().getResourceAsStream(PGTUtil.UNICODE_FONT_LOCATION);
-        var byteArrayOutputStream = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        int bytesRead;
+        try (var is = this.getClass().getResourceAsStream(PGTUtil.UNICODE_FONT_LOCATION)){
+            var byteArrayOutputStream = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int bytesRead;
 
-        while ((bytesRead = is.read(buffer)) != -1) {
-            byteArrayOutputStream.write(buffer, 0, bytesRead);
+            while ((bytesRead = is.read(buffer)) != -1) {
+                byteArrayOutputStream.write(buffer, 0, bytesRead);
+            }
+
+            return byteArrayOutputStream.toByteArray();
         }
-
-        return byteArrayOutputStream.toByteArray();
     }
 
-    public class PWebServerException extends Exception {
+    public static class PWebServerException extends Exception {
         public PWebServerException(String message) {
             super(message);
         }

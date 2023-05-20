@@ -24,10 +24,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.time.Instant;
+import java.util.zip.ZipFile;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
-import org.darisadesigns.polyglotlina.ManagersCollections.ImageCollection;
 import org.darisadesigns.polyglotlina.ManagersCollections.LogoCollection;
 import org.darisadesigns.polyglotlina.ManagersCollections.ReversionManager;
 import org.w3c.dom.Document;
@@ -49,17 +49,15 @@ public interface IOHandler {
      * @return Temporary file with specified contents
      * @throws IOException on write error
      */
-    public File createTmpFileWithContents(String contents, String extension) throws IOException;
-    
-    public File createTmpFileFromImageBytes(byte[] imageBytes, String fileName) throws IOException;
-    
-    public File createFileWithContents(String path, String contents) throws IOException;
-    
-    public byte[] getXmlBytesFromArchive(String path) throws IOException;
-    
-    public byte[] recoverXmlBytesFromArchive(String path, String targetFile) throws ParserConfigurationException;
+    File createTmpFileWithContents(String contents, String extension) throws IOException;
 
-    public byte[] getByteArrayFromFile(File file) throws IOException;
+    File createTmpFileFromImageBytes(byte[] imageBytes, String fileName) throws IOException;
+
+    File createFileWithContents(String path, String contents) throws IOException;
+
+    byte[] recoverFileBytesFromArchive(ZipFile zipFile, String targetFile) throws ParserConfigurationException;
+
+    byte[] getByteArrayFromFile(File file) throws IOException;
 
     /**
      * Takes input stream and converts it to a raw byte array
@@ -68,7 +66,7 @@ public interface IOHandler {
      * @return raw byte representation of stream
      * @throws IOException
      */
-    public byte[] streamToByteArray(InputStream is) throws IOException;
+    byte[] streamToByteArray(InputStream is) throws IOException;
 
     /**
      * Used for snagging catchable versions of files
@@ -77,7 +75,7 @@ public interface IOHandler {
      * @return byte array of file at given path
      * @throws java.io.FileNotFoundException
      */
-    public byte[] getFileByteArray(String filePath) throws IOException;
+    byte[] getFileByteArray(String filePath) throws IOException;
 
     /**
      * returns name of file sans path
@@ -85,14 +83,14 @@ public interface IOHandler {
      * @param fullPath full path to file
      * @return string of filename
      */
-    public String getFilenameFromPath(String fullPath);
+    String getFilenameFromPath(String fullPath);
 
     /**
      * Deletes options file
      *
      * @param workingDirectory
      */
-    public void deleteIni(String workingDirectory);
+    void deleteIni(String workingDirectory);
 
     /**
      * Tests whether or not a file is a zip archive
@@ -101,14 +99,14 @@ public interface IOHandler {
      * @return true is passed file is a zip archive
      * @throws java.io.FileNotFoundException
      */
-    public boolean isFileZipArchive(String _fileName) throws IOException;
+    boolean isFileZipArchive(String _fileName) throws IOException;
 
-    public void writeFile(
-            String _fileName, 
-            Document doc, 
-            DictCore core, 
-            File workingDirectory, 
-            Instant saveTime, 
+    void writeFile(
+            String _fileName,
+            Document doc,
+            DictCore core,
+            File workingDirectory,
+            Instant saveTime,
             boolean writeToReversionMgr
     )
             throws IOException, TransformerException;
@@ -119,18 +117,19 @@ public interface IOHandler {
      * @param workingDirectory
      * @return
      */
-    public File getTempSaveFileIfExists(File workingDirectory);
-    
+    File getTempSaveFileIfExists(File workingDirectory);
+
     /**
      * Moves file to archive folder with name prefixed with current epoch time
+     *
      * @param source
-     * @param workingDirectory 
-     * @return  
+     * @param workingDirectory
+     * @return
      * @throws IOException
      */
-    public File archiveFile(File source, File workingDirectory) throws IOException;
+    File archiveFile(File source, File workingDirectory) throws IOException;
 
-    public void copyFile(Path fromLocation, Path toLocation, boolean replaceExisting) throws IOException;
+    void copyFile(Path fromLocation, Path toLocation, boolean replaceExisting) throws IOException;
 
     /**
      * Tests whether a file at a particular location exists. Wrapped to avoid IO
@@ -139,40 +138,29 @@ public interface IOHandler {
      * @param fullPath path of file to test
      * @return true if file exists, false otherwise
      */
-    public boolean fileExists(String fullPath);
+    boolean fileExists(String fullPath);
 
-    /**
-     * Loads image assets from file.Does not load logographs due to legacy
- coding/logic
-     *
-     * @param imageCollection from dictCore to populate
-     * @param fileName of file containing assets
-     * @param core
-     * @throws java.io.IOException
-     */
-    public void loadImageAssets(ImageCollection imageCollection,
-            String fileName, DictCore core) throws Exception;
+    void loadImageAssetWithId(InputStream imageStream, int imageId, DictCore core) throws IOException, Exception;
 
     /**
      * loads all images into their logographs from archive and images into the
      * generalized image collection
      *
      * @param logoCollection logocollection from dictionary core
-     * @param fileName name/path of archive
+     * @param zipFile
      * @throws java.io.IOException
      */
-    public void loadLogographs(LogoCollection logoCollection,
-            String fileName) throws IOException;
+    void loadLogographs(LogoCollection logoCollection,
+            ZipFile zipFile) throws IOException;
 
     /**
      * Loads all reversion XML files from polyglot archive
      *
      * @param reversionManager reversion manager to load to
-     * @param fileName full path of polyglot archive
+     * @param zipFile
      * @throws IOException on read error
      */
-    public void loadReversionStates(ReversionManager reversionManager,
-            String fileName) throws IOException;
+    void loadReversionStates(ReversionManager reversionManager, ZipFile zipFile) throws IOException;
 
     /**
      * Exports font in PGD to external file
@@ -181,8 +169,8 @@ public interface IOHandler {
      * @param dictionaryPath path of PGT dictionary
      * @throws IOException
      */
-    public void exportConFont(String exportPath, String dictionaryPath) throws IOException;
-    
+    void exportConFont(String exportPath, String dictionaryPath) throws IOException;
+
     /**
      * Exports font in PGD to external file
      *
@@ -190,7 +178,7 @@ public interface IOHandler {
      * @param dictionaryPath path of PGT dictionary
      * @throws IOException
      */
-    public void exportLocalFont(String exportPath, String dictionaryPath) throws IOException;
+    void exportLocalFont(String exportPath, String dictionaryPath) throws IOException;
 
     /**
      * Exports Charis unicode font to specified location
@@ -198,17 +186,17 @@ public interface IOHandler {
      * @param exportPath full export path
      * @throws IOException on failure
      */
-    public void exportCharisFont(String exportPath) throws IOException;
+    void exportCharisFont(String exportPath) throws IOException;
 
     /**
      * Loads any related grammar recordings into the passed grammar manager via
      * id
      *
-     * @param fileName name of file to load sound recordings from
+     * @param zipFile archive being loaded from
      * @param grammarManager grammar manager to populate with sounds
      * @throws Exception on sound load errors
      */
-    void loadGrammarSounds(String fileName, GrammarManager grammarManager) throws Exception;
+    void loadGrammarSounds(ZipFile zipFile, GrammarManager grammarManager) throws Exception;
 
     /**
      * Opens an arbitrary file via the local OS's default. If unable to open for
@@ -217,7 +205,7 @@ public interface IOHandler {
      * @param path
      * @return
      */
-    public boolean openFileNativeOS(String path);
+    boolean openFileNativeOS(String path);
 
     /**
      * Returns deepest directory from given path (truncating non-directory files
@@ -227,7 +215,7 @@ public interface IOHandler {
      * @return File representing directory, null if unable to capture directory
      * path for any reason
      */
-    public File getDirectoryFromPath(String path);
+    File getDirectoryFromPath(String path);
 
     /**
      * Wraps File so that I can avoid importing it elsewhere in code
@@ -235,14 +223,14 @@ public interface IOHandler {
      * @param path path to file
      * @return file
      */
-    public File getFileFromPath(String path);
+    File getFileFromPath(String path);
 
     /**
      * Writes to the PolyGlot error log file
      *
      * @param exception
      */
-    public void writeErrorLog(Throwable exception);
+    void writeErrorLog(Throwable exception);
 
     /**
      * Writes to the PolyGlot error log file
@@ -250,22 +238,22 @@ public interface IOHandler {
      * @param exception
      * @param comment
      */
-    public void writeErrorLog(Throwable exception, String comment);
+    void writeErrorLog(Throwable exception, String comment);
 
-    public File getErrorLogFile();
+    File getErrorLogFile();
 
-    public String getErrorLog() throws IOException;
-    
-    public void clearErrorLog() throws IOException;
+    String getErrorLog() throws IOException;
+
+    void clearErrorLog() throws IOException;
 
     /**
      * Gets system information in human readable format
      *
      * @return system information
      */
-    public String getSystemInformation();
+    String getSystemInformation();
 
-    public File unzipResourceToTempLocation(String resourceLocation) throws IOException;
+    File unzipResourceToTempLocation(String resourceLocation) throws IOException;
 
     /**
      * Unzips an internal resource to a targeted path.Does not check header.
@@ -274,17 +262,18 @@ public interface IOHandler {
      * @param target destination to unzip to
      * @throws java.io.IOException
      */
-    public void unzipResourceToDir(String internalPath, Path target) throws IOException;
-    
+    void unzipResourceToDir(String internalPath, Path target) throws IOException;
+
     /**
      * Adds a metadata attribute to an OSX file
+     *
      * @param filePath
      * @param attribute
      * @param value
      * @param isHexVal
      * @throws Exception if you try to run it on a nonOSX platform
      */
-    public void addFileAttributeOSX(String filePath, String attribute, String value, boolean isHexVal) throws Exception;
+    void addFileAttributeOSX(String filePath, String attribute, String value, boolean isHexVal) throws Exception;
 
     /**
      * Runs a command at the console, returning informational and error output.
@@ -294,7 +283,7 @@ public interface IOHandler {
      * to a single space (some OSes will simply ignore arguments that are empty)
      * @return String array with two entries. [0] = Output, [1] = Error Output
      */
-    public String[] runAtConsole(String[] arguments, boolean addSpaces);
+    String[] runAtConsole(String[] arguments, boolean addSpaces);
 
     /**
      * Does what it says on the tin.Clear those carriage returns away.
@@ -302,7 +291,20 @@ public interface IOHandler {
      * @param filthyWithWindows
      * @return
      */
-    public byte[] clearCarrigeReturns(byte[] filthyWithWindows);
-    
-    public byte[] loadImageBytes(String path) throws IOException;
+    byte[] clearCarrigeReturns(byte[] filthyWithWindows);
+
+    byte[] loadImageBytes(String path) throws IOException;
+
+    /**
+     * Reads from given file
+     *
+     * @param core
+     * @param _fileName filename to read from
+     * @param overrideXML override to where the XML should be loaded from
+     * @return String array of two entries [0] = warnings, [1] = errors
+     * @throws java.io.IOException for unrecoverable errors
+     * @throws IllegalStateException for recoverable errors
+     * @throws javax.xml.parsers.ParserConfigurationException
+     */
+    String[] readFile(DictCore core, String _fileName, byte[] overrideXML) throws IOException, IllegalStateException, ParserConfigurationException;
 }

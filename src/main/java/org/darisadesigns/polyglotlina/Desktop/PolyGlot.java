@@ -87,7 +87,7 @@ public final class PolyGlot {
             DictCore _core,
             DesktopOSHandler _osHandler,
             DesktopOptionsManager _optionsManager
-    ) throws Exception {
+    ) {
         core = _core;
         osHandler = _osHandler;
         optionsManager = _optionsManager;
@@ -107,7 +107,7 @@ public final class PolyGlot {
         var ioHandler = DesktopIOHandler.getInstance();
         var cInfoBox = new DesktopInfoBox();
         var helpHandler = new DesktopHelpHandler();
-        var fontHandler = new PFontHandler();
+        var fontHandler = new DesktopPFontHandler();
         var osHandler = new DesktopOSHandler(ioHandler, cInfoBox, helpHandler, fontHandler);
 
         try {
@@ -181,7 +181,7 @@ public final class PolyGlot {
                 boolean recoveredFile = polyGlot.handleFileRecoveries(s, core.getWorkingDirectory());
 
                 // open file if one is provided via arguments (but only if no recovery file- that takes precedence)
-                if (args.length > 0 && recoveredFile == false) {
+                if (args.length > 0 && !recoveredFile) {
                     String filePath = "";
 
                     for (var arg : args) {
@@ -204,14 +204,12 @@ public final class PolyGlot {
 
                 // only begin autosave loop once checks for recovery files are complete
                 polyGlot.autoSave();
-            }
-            catch (ArrayIndexOutOfBoundsException e) {
+            } catch (ArrayIndexOutOfBoundsException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e, "Problem with top level PolyGlot arguments.");
                 polyGlot.getOSHandler().getInfoBox().error("Unable to start", "Unable to open PolyGlot main frame: \n"
                         + e.getMessage() + "\n"
                         + "Problem with top level PolyGlot arguments.");
-            }
-            catch (Exception e) { // split up for logical clarity... might want to differentiate
+            } catch (IOException e) { // split up for logical clarity... might want to differentiate
                 // e.printStackTrace();
                 DesktopIOHandler.getInstance().writeErrorLog(e);
                 polyGlot.getOSHandler().getInfoBox().error("Unable to start", "Unable to open PolyGlot main frame: \n"
@@ -225,8 +223,7 @@ public final class PolyGlot {
                 if (!PGTUtil.isInJUnitTest() && !PGTUtil.isUITestingMode()) {
                     System.exit(0);
                 }
-            }
-            catch (Throwable t) {
+            } catch (Throwable t) {
                 // t.printStackTrace();
                 cInfoBox.error("PolyGlot Error", "A serious error has occurred: " + t.getLocalizedMessage());
                 DesktopIOHandler.getInstance().writeErrorLog(t);
@@ -247,7 +244,7 @@ public final class PolyGlot {
         desk.setOpenFileHandler(e -> {
             List<File> files = e.getFiles();
 
-            if (files.size() <= 0) {
+            if (files.isEmpty()) {
                 return;
             } else if (files.size() > 1) {
                 polyGlot.getOSHandler().getInfoBox().info("File Limit",
@@ -316,7 +313,7 @@ public final class PolyGlot {
             for (int i = 0; i < ini.length(); i++) {
                 String curChar = ini.substring(i, i + 1);
 
-                if (ini.substring(i, i + 1).equals("\n") || ini.substring(i, i + 1).equals("\r")) {
+                if (ini.charAt(i) == '\n' || ini.charAt(i) == '\r') {
                     break;
                 }
 
@@ -585,7 +582,7 @@ public final class PolyGlot {
                 DesktopIOHandler.getInstance(),
                 new DummyInfoBox(),
                 new DesktopHelpHandler(),
-                new PFontHandler()
+                new DesktopPFontHandler()
         );
 
         osHandler.setWorkingDirectory(Files.createTempDirectory("POLYGLOT").toFile().getAbsolutePath());
@@ -599,10 +596,6 @@ public final class PolyGlot {
 
     public DesktopOSHandler getOSHandler() {
         return this.osHandler;
-    }
-
-    public void setOSHandler(DesktopOSHandler _osHandler) {
-        this.osHandler = _osHandler;
     }
 
     /**

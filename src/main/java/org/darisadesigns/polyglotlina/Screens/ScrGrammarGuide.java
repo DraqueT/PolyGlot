@@ -21,7 +21,7 @@ package org.darisadesigns.polyglotlina.Screens;
 
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Desktop.FormattedTextHelper;
-import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPFontHandler;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -309,7 +309,7 @@ public final class ScrGrammarGuide extends PFrame {
         txtSection.addStyle("default", null); // default style makes word wrap active
 
         try {
-            txtTimer.setFont(PFontHandler.getLcdFont().deriveFont(Font.PLAIN, 18f));
+            txtTimer.setFont(DesktopPFontHandler.getLcdFont().deriveFont(Font.PLAIN, 18f));
         } catch (FontFormatException | IOException e) {
             core.getOSHandler().getIOHandler().writeErrorLog(e);
             core.getOSHandler().getInfoBox().error("Font Error", "Unable to load LCD font due to: " + e.getMessage());

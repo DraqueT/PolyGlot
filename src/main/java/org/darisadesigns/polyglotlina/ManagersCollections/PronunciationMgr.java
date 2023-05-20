@@ -56,11 +56,7 @@ public class PronunciationMgr {
     public void addSyllable(String syllable) {
         syllables.add(syllable);
     }
-    
-    public boolean isSyllable(String testSyllable) {
-        return syllables.contains(testSyllable);
-    }
-    
+
     public void clearSyllables() {
         syllables.clear();
     }
@@ -94,7 +90,7 @@ public class PronunciationMgr {
     /**
      * gets iterator with all pronunciation pairs
      *
-     * @return list of PronunciationNodes
+     * @return PronunciationNode[] of PronunciationNodes
      */
     public PronunciationNode[] getPronunciations() {
         // CORRECT FOR FILTERING/CREATION OF COPY OBJECT
@@ -214,8 +210,7 @@ public class PronunciationMgr {
             if (syllables.contains(base.substring(0, i))) {
                 // syllables ending the word do not need demarkation
                 if (i == base.length()) {
-                    int[] ending = {-1};
-                    return ending;
+                    return new int[]{-1};
                 }
                 
                 int[] subSearch = getSyllableBreaksRecurse(base.substring(i), cur + i);

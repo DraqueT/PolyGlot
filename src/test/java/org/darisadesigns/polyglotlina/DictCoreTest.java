@@ -152,7 +152,7 @@ public class DictCoreTest {
             exception = e;
         }
         
-        assertTrue(exception instanceof IllegalStateException);
+        assertTrue(exception instanceof IOException);
         assertTrue(exception.getLocalizedMessage().startsWith(expectedMessage));
         assertEquals(expectedLexiconLength, core.getWordCollection().getWordCount());
     }

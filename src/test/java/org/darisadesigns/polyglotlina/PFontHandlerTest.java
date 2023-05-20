@@ -24,7 +24,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPFontHandler;
 
 /**
  *
@@ -53,7 +53,7 @@ public class PFontHandlerTest {
         String expectedFileName = "Kukun_LinearA_V05.ttf";
         
         try {
-            File file = PFontHandler.getFontFromLocations(FONT_FAM, PGTUtil.TESTRESOURCES + File.separator + "FontsAll");
+            File file = DesktopPFontHandler.getFontFromLocations(FONT_FAM, PGTUtil.TESTRESOURCES + File.separator + "FontsAll");
             assertEquals(expectedFileName, file.getName());
         } catch (IOException e) {
             fail(e);
@@ -67,7 +67,7 @@ public class PFontHandlerTest {
         
         File file;
         try {
-            file = PFontHandler.getFontFromLocations(FONT_FAM, 
+            file = DesktopPFontHandler.getFontFromLocations(FONT_FAM, 
                     PGTUtil.TESTRESOURCES + File.separator + "FontsPartial",
                     PGTUtil.TESTRESOURCES + File.separator + "FontsAll"
             );
@@ -83,7 +83,7 @@ public class PFontHandlerTest {
         System.out.println("PFontHandlerTest.testGetFontFromLocationsEmptyLocation");
         
         try {
-            File file = PFontHandler.getFontFromLocations(FONT_FAM, 
+            File file = DesktopPFontHandler.getFontFromLocations(FONT_FAM, 
                     PGTUtil.TESTRESOURCES + File.separator + "EmptyFolder");
 
             assertNull(file);
@@ -97,7 +97,7 @@ public class PFontHandlerTest {
         System.out.println("PFontHandlerTest.testGetFontFromLocationsBadLocation");
         
         try {
-            File file = PFontHandler.getFontFromLocations(FONT_FAM, 
+            File file = DesktopPFontHandler.getFontFromLocations(FONT_FAM, 
                     PGTUtil.TESTRESOURCES + File.separator + "BIBBITYBOBBITYBOO");
 
             assertNull(file);

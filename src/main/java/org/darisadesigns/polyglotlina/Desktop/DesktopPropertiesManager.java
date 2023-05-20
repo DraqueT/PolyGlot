@@ -19,7 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.Desktop;
 
-import org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.ByteArrayInputStream;
@@ -27,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
+import org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager;
 
 public class DesktopPropertiesManager extends PropertiesManager {
     private Font conFont = null;
@@ -94,7 +94,7 @@ public class DesktopPropertiesManager extends PropertiesManager {
             java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(conFont);
             ret = javafx.scene.text.Font.font(conFont.getFamily(), conFontSize);
         } else { // last default to menu standard
-            ret = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), PGTUtil.DEFAULT_FONT_SIZE);
+            ret = javafx.scene.text.Font.loadFont(new DesktopPFontHandler().getCharisInputStream(), PGTUtil.DEFAULT_FONT_SIZE);
         }
 
         return ret;
@@ -114,7 +114,7 @@ public class DesktopPropertiesManager extends PropertiesManager {
             java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(localFont);
             ret = javafx.scene.text.Font.font(localFont.getFamily(), localFontSize);
         } else { // last default to menu standard
-            ret = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), PGTUtil.DEFAULT_FONT_SIZE);
+            ret = javafx.scene.text.Font.loadFont(new DesktopPFontHandler().getCharisInputStream(), PGTUtil.DEFAULT_FONT_SIZE);
         }
 
         return ret;
@@ -139,13 +139,13 @@ public class DesktopPropertiesManager extends PropertiesManager {
     }
     
     public void setFontFromFile(String fontPath) throws IOException, FontFormatException {
-        setFontCon(PFontHandler.getFontFromFile(fontPath)
+        setFontCon(DesktopPFontHandler.getFontFromFile(fontPath)
                 .deriveFont(conFontStyle, (float)conFontSize), conFontStyle, (float)conFontSize);
         cachedConFont = core.getOSHandler().getIOHandler().getFileByteArray(fontPath);
     }
     
     public void setLocalFontFromFile(String fontPath) throws IOException, FontFormatException {
-        var font = PFontHandler.getFontFromFile(fontPath)
+        var font = DesktopPFontHandler.getFontFromFile(fontPath)
                 .deriveFont((float)localFontSize);
         setLocalFont(font);
         cachedLocalFont = core.getOSHandler().getIOHandler().getFileByteArray(fontPath);
@@ -157,7 +157,7 @@ public class DesktopPropertiesManager extends PropertiesManager {
      * @throws java.lang.Exception on read error
      */
     public boolean syncCachedFontCon() throws Exception {
-        File fontFile = PFontHandler.getFontFile(conFont.getFamily());
+        File fontFile = DesktopPFontHandler.getFontFile(conFont.getFamily());
         
         if (fontFile == null) {
             return false;
@@ -171,7 +171,7 @@ public class DesktopPropertiesManager extends PropertiesManager {
             cachedConFont = core.getOSHandler().getIOHandler().getByteArrayFromFile(fontFile);
             
             // load font from binary location (superior due to ligature support from binaries)
-            conFont = PFontHandler.getFontFromFile(fontFile.getCanonicalPath());
+            conFont = DesktopPFontHandler.getFontFromFile(fontFile.getCanonicalPath());
         }
         
         return cachedConFont != null;
@@ -179,7 +179,7 @@ public class DesktopPropertiesManager extends PropertiesManager {
     
     /**
      * Sets font. Cached font byte array will be cleared.
-     * 
+     * <p>
      * Will first try to re-load the font from OS font repository folder (due to ligature error in Java)
      *
      * @param _fontCon The font being set
@@ -201,7 +201,7 @@ public class DesktopPropertiesManager extends PropertiesManager {
     @Override
     public void setFontCon(String _fontFamily) throws Exception {
         try {
-            Font newFont = PFontHandler.loadFontFromOSFileFolder(_fontFamily);
+            Font newFont = DesktopPFontHandler.loadFontFromOSFileFolder(_fontFamily);
 
             if (newFont == null) {
                 newFont = Font.getFont(_fontFamily);
@@ -310,21 +310,21 @@ public class DesktopPropertiesManager extends PropertiesManager {
             File updatedLocalFont = null;
             
             if (conFont != null) {
-                updatedConFont = PFontHandler.getFontFile(conFont.getFamily());
+                updatedConFont = DesktopPFontHandler.getFontFile(conFont.getFamily());
             }
             
             if (localFont != null) {
-                updatedLocalFont = PFontHandler.getFontFile(localFont.getFamily());
+                updatedLocalFont = DesktopPFontHandler.getFontFile(localFont.getFamily());
             }
         
             if (updatedConFont != null) {
-                conFont = PFontHandler.getFontFromFile(updatedConFont.getAbsolutePath());
+                conFont = DesktopPFontHandler.getFontFromFile(updatedConFont.getAbsolutePath());
                 conFont = conFont.deriveFont(conFontStyle, (float)conFontSize);
                 cachedConFont = core.getOSHandler().getIOHandler().getByteArrayFromFile(updatedConFont);
             }
             
             if (updatedLocalFont != null) {
-                localFont = PFontHandler.getFontFromFile(updatedLocalFont.getAbsolutePath());
+                localFont = DesktopPFontHandler.getFontFromFile(updatedLocalFont.getAbsolutePath());
                 localFont = localFont.deriveFont((float)localFontSize);
                 cachedLocalFont = core.getOSHandler().getIOHandler().getByteArrayFromFile(updatedLocalFont);
             }
@@ -340,14 +340,13 @@ public class DesktopPropertiesManager extends PropertiesManager {
         
         if (this == comp) {
             ret = true;
-        } else if (comp instanceof DesktopPropertiesManager) {
-            DesktopPropertiesManager prop = (DesktopPropertiesManager) comp;
+        } else if (comp instanceof DesktopPropertiesManager prop) {
             ret = getFontCon().equals(prop.getFontCon());
             ret = ret && conFontStyle.equals(prop.conFontStyle);
             ret = ret && conFontSize == prop.conFontSize;
             ret = ret && localFontSize == prop.localFontSize;
             ret = ret && localFont.equals(prop.localFont);
-            ret = ret && super.equals(comp);
+            ret = ret && super.equals(prop);
         }
         
         return ret;

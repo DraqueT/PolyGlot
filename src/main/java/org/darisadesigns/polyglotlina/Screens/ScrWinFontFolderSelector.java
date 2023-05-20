@@ -25,7 +25,7 @@ import java.io.File;
 import javax.swing.DefaultListModel;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
-import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPFontHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 
 /**
@@ -43,7 +43,7 @@ public class ScrWinFontFolderSelector extends PDialog {
     }
     
     private void populateFonts() {
-        var fontFiles = PFontHandler.searchForFonts(new File(System.getenv("windir") + "/WinSxS"));
+        var fontFiles = DesktopPFontHandler.searchForFonts(new File(System.getenv("windir") + "/WinSxS"));
 
         var model = new DefaultListModel();
         for (File file : fontFiles) {

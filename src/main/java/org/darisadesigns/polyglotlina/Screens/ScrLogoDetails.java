@@ -84,7 +84,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
-import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPFontHandler;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 
 /**
@@ -208,7 +208,7 @@ public class ScrLogoDetails extends PFrame {
     
     private TitledPane createSearchPanel() {
         GridPane grid = new GridPane();
-        javafx.scene.text.Font font = javafx.scene.text.Font.loadFont(new PFontHandler().getCharisInputStream(), PGTUtil.DEFAULT_FONT_SIZE);
+        javafx.scene.text.Font font = javafx.scene.text.Font.loadFont(new DesktopPFontHandler().getCharisInputStream(), PGTUtil.DEFAULT_FONT_SIZE);
         javafx.scene.text.Font conFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFXConFont();
         
         gridTitlePane = new TitledPane();

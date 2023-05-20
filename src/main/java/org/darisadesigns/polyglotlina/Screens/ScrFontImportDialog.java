@@ -39,7 +39,7 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextFieldFilter;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
-import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPFontHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
@@ -173,7 +173,7 @@ public final class ScrFontImportDialog extends PDialog {
     private void updateDisplayFont() {
         if (!txtFontLocation.getText().isBlank()) {
             try {
-                Font newFont = PFontHandler.getFontFromFile(txtFontLocation.getText());
+                Font newFont = DesktopPFontHandler.getFontFromFile(txtFontLocation.getText());
                 txtDemoText.setFont(newFont.deriveFont(Float.parseFloat(txtFontSize.getText())));
             } catch (FontFormatException | IOException e) {
                 new DesktopInfoBox(this).error("Font Load Error", "Unable to load font: " + e.getLocalizedMessage());

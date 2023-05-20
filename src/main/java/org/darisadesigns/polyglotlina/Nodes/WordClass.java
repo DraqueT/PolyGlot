@@ -109,7 +109,7 @@ public class WordClass extends DictNode {
     
     /**
      * Gets copy of list of apply types
-     * @return list of int values (ids)
+     * @return Integer[] of int values (ids)
      */
     public Integer[] getApplyTypes() {
         return applyTypes.toArray(new Integer[0]);
@@ -285,10 +285,5 @@ public class WordClass extends DictNode {
         }
         
         return ret;
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
     }
 }

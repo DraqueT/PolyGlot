@@ -31,8 +31,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Map;
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.SwingWorker;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 
 public class PGTUtil extends org.darisadesigns.polyglotlina.PGTUtil {
@@ -146,7 +144,7 @@ public class PGTUtil extends org.darisadesigns.polyglotlina.PGTUtil {
         // loads default font on system error (never came up, but for completeness...)
         Font tmpFont;
         try {
-            tmpFont = PFontHandler.getMenuFont();
+            tmpFont = DesktopPFontHandler.getMenuFont();
         } catch (IOException e) {
             new DesktopInfoBox().error("PolyGlot Load Error", "Unable to load default button font.");
             DesktopIOHandler.getInstance().writeErrorLog(e, "Initilization error (PGTUtil)");
@@ -155,7 +153,7 @@ public class PGTUtil extends org.darisadesigns.polyglotlina.PGTUtil {
         MENU_FONT = tmpFont;
         
         try {
-            tmpFont = PFontHandler.getCharisUnicodeFontInitial();
+            tmpFont = DesktopPFontHandler.getCharisUnicodeFontInitial();
         } catch (IOException e) {
             new DesktopInfoBox().error("PolyGlot Load Error", "Unable to load Charis Unicode.");
             DesktopIOHandler.getInstance().writeErrorLog(e, "Initilization error (PGTUtil)");
@@ -228,8 +226,8 @@ public class PGTUtil extends org.darisadesigns.polyglotlina.PGTUtil {
     public static BufferedImage toBufferedImage(Image img) {
         BufferedImage ret = null;
         
-        if (img instanceof BufferedImage) {
-            ret = (BufferedImage) img;
+        if (img instanceof BufferedImage bufImg) {
+            ret = bufImg;
         } else if (img != null) {
             // Create a buffered image with transparency
             ret = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
@@ -241,56 +239,6 @@ public class PGTUtil extends org.darisadesigns.polyglotlina.PGTUtil {
         }
 
         return ret;
-    }
-    
-    /**
-     * gets a worker that can make a given component flash
-     *
-     * @param flashMe component to make flash
-     * @param flashColor color to use for flashing
-     * @param isBack whether display color is background (rather than foreground)
-     * @return SwingWorker that will make given component flash if run
-     */
-    public static SwingWorker getFlashWorker(final JComponent flashMe, final Color flashColor, final boolean isBack) {
-        // this will pop out in its own little thread...
-        return new SwingWorker() {
-            @Override
-            protected Object doInBackground() {
-                Color originColor;
-                if (isBack) {
-                    originColor = flashMe.getBackground();
-                } else {
-                    originColor = flashMe.getForeground();
-                }
-
-                Color requiredColor = flashColor.equals(originColor)
-                        ? Color.white : flashColor;
-
-                try {
-                    for (int i = 0; i < PGTUtil.NUM_MENU_FLASHES; i++) {
-                        if (isBack) {
-                            flashMe.setBackground(requiredColor);
-                        } else {
-                            flashMe.setEnabled(false);
-                        }
-                        // suppression for this is broken. Super annoying.
-                        Thread.sleep(PGTUtil.MENU_FLASH_SLEEP);
-                        if (isBack) {
-                            flashMe.setBackground(originColor);
-                        } else {
-                            flashMe.setEnabled(true);
-                        }
-                        Thread.sleep(PGTUtil.MENU_FLASH_SLEEP);
-                    }
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    // catch of thread interrupt not logworthy
-                    // IOHandler.writeErrorLog(e);
-                }
-
-                return null;
-            }
-        };
     }
     
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2021-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -24,9 +24,9 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.Desktop.DesktopHelpHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopOSHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPFontHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammarManager;
-import org.darisadesigns.polyglotlina.Desktop.PFontHandler;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.DictCore;
@@ -44,7 +44,7 @@ public class TESTO extends javax.swing.JFrame {
         try {
             var infoBox = new DesktopInfoBox();
             var iOHandler = DesktopIOHandler.getInstance();
-            var oSHandler = new DesktopOSHandler(iOHandler, infoBox, new DesktopHelpHandler(), new PFontHandler());
+            var oSHandler = new DesktopOSHandler(iOHandler, infoBox, new DesktopHelpHandler(), new DesktopPFontHandler());
             core = new DictCore(new DesktopPropertiesManager(), oSHandler, new PGTUtil(), new DesktopGrammarManager());
             PGTUtil.enterUITestingMode();
             PolyGlot.setTestPolyGlot(new PolyGlot(core, oSHandler));

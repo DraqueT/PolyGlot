@@ -21,6 +21,7 @@ package org.darisadesigns.polyglotlina.Desktop;
 
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
@@ -34,7 +35,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -83,9 +83,9 @@ import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammar
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManagerException;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.DomParser.PDomParser;
 import org.darisadesigns.polyglotlina.IOHandler;
 import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
-import org.darisadesigns.polyglotlina.ManagersCollections.ImageCollection;
 import org.darisadesigns.polyglotlina.ManagersCollections.LogoCollection;
 import org.darisadesigns.polyglotlina.ManagersCollections.ReversionManager;
 import org.darisadesigns.polyglotlina.Nodes.ImageNode;
@@ -93,6 +93,7 @@ import org.darisadesigns.polyglotlina.Nodes.LogoNode;
 import org.darisadesigns.polyglotlina.Nodes.ReversionNode;
 import org.darisadesigns.polyglotlina.XMLRecoveryTool;
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 /**
  * This class handles file IO for PolyGlot
@@ -129,7 +130,7 @@ public final class DesktopIOHandler implements IOHandler {
         File ret = File.createTempFile("POLYGLOT", extension);
 
         try ( Writer out = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(ret), "UTF8"))) {
+                new FileOutputStream(ret), StandardCharsets.UTF_8))) {
             out.append(contents);
             out.flush();
         }
@@ -161,7 +162,7 @@ public final class DesktopIOHandler implements IOHandler {
         }
 
         try ( Writer out = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(ret), "UTF8"))) {
+                new FileOutputStream(ret), StandardCharsets.UTF_8))) {
             out.write(contents);
             out.flush();
         }
@@ -215,71 +216,54 @@ public final class DesktopIOHandler implements IOHandler {
 
         return ret;
     }
-    
-    @Override
-    public byte[] getXmlBytesFromArchive(String path) throws IOException {
-        try (ZipFile zipFile = new ZipFile(path)) {
-            ZipEntry xmlEntry = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
-            
-            if (xmlEntry == null) {
-                throw new IOException("PGD file corrupt. Unable to read required file from archive: " + PGTUtil.LANG_FILE_NAME);
-            }
-            
-            try (InputStream ioStream = zipFile.getInputStream(xmlEntry)) {
-                return ioStream.readAllBytes();
-            }
-        }
-    }
-    
+
     /**
-     * This reads all possible bytes from an archive from a target file within it.No exceptions will be thrown, but all recoverable bytes will be returned.
-     * There is no guarantee of a complete file here.
-     * @param path
+     * This reads all possible bytes from an archive from a target file within
+     * it.No exceptions will be thrown, but all recoverable bytes will be
+     * returned.There is no guarantee of a complete file here.
+     *
+     * @param zipFile
      * @param targetFile
-     * @return 
-     * @throws javax.xml.parsers.ParserConfigurationException 
+     * @return
+     * @throws javax.xml.parsers.ParserConfigurationException
      */
     @Override
-    public byte[] recoverXmlBytesFromArchive(String path, String targetFile) throws ParserConfigurationException {
+    public byte[] recoverFileBytesFromArchive(ZipFile zipFile, String targetFile) throws ParserConfigurationException {
         byte[] fileBytes = new byte[0];
-        
-        try (var zipFile = new org.apache.commons.compress.archivers.zip.ZipFile(new File(path))) {
-            var entry = zipFile.getEntry(targetFile);
-            
-                var buffer = new ByteArrayOutputStream();
-                var fileComplete = true;
-                var fileName = "";
-                String fileContents;
-                
-                try ( InputStream inputStream = zipFile.getInputStream(entry)) {
-                    fileName = entry.getName();
-                    int nRead;
-                    byte[] data = new byte[1024];
-                    while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
-                        buffer.write(data, 0, nRead);
-                    }
-                } catch (IOException e) {
-                    fileComplete = false;
-                } 
-                
-                try {
-                    buffer.flush();
-                    fileBytes = buffer.toByteArray();
-                } catch (IOException e) {
-                    // Eat exception. This is a last ditch recovery. It works or it returns an empty array.
-                    return fileBytes;
-                }
-                
-                // try to recover from incomplete XML documents
-                if (!fileComplete && fileName.equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.LANG_FILE_NAME)) {
-                    fileContents = new String(fileBytes, StandardCharsets.UTF_8);
-                    var fixedContents = new XMLRecoveryTool(fileContents).recoverXml();
-                    fileBytes = fixedContents.getBytes();
-                }
+
+        var entry = zipFile.getEntry(targetFile);
+
+        var buffer = new ByteArrayOutputStream();
+        var fileComplete = true;
+        var fileName = "";
+        String fileContents;
+
+        try ( InputStream inputStream = zipFile.getInputStream(entry)) {
+            fileName = entry.getName();
+            int nRead;
+            byte[] data = new byte[1024];
+            while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, nRead);
+            }
+        } catch (IOException e) {
+            fileComplete = false;
+        }
+
+        try {
+            buffer.flush();
+            fileBytes = buffer.toByteArray();
         } catch (IOException e) {
             // Eat exception. This is a last ditch recovery. It works or it returns an empty array.
+            return fileBytes;
         }
-        
+
+        // try to recover from incomplete XML documents
+        if (!fileComplete && fileName.equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.LANG_FILE_NAME)) {
+            fileContents = new String(fileBytes, StandardCharsets.UTF_8);
+            var fixedContents = new XMLRecoveryTool(fileContents).recoverXml();
+            fileBytes = fixedContents.getBytes();
+        }
+
         return fileBytes;
     }
 
@@ -335,15 +319,14 @@ public final class DesktopIOHandler implements IOHandler {
 
         try {
             f.delete();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // can't write to folder, so don't bother trying to write log file...
             // IOHandler.writeErrorLog(e);
             new DesktopInfoBox().error("Permissions Error", "PolyGlot lacks permissions to write to its native folder.\n"
                     + "Please move to a folder with full write permissions: " + e.getLocalizedMessage());
         }
     }
-    
+
     /**
      * Tests whether or not a file is a zip archive
      *
@@ -387,15 +370,13 @@ public final class DesktopIOHandler implements IOHandler {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
 
-        try (StringWriter writer = new StringWriter()) {
+        try ( StringWriter writer = new StringWriter()) {
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
 
-            StringBuilder sb = new StringBuilder();
-            sb.append(writer.getBuffer());
-            byte[] xmlData = sb.toString().getBytes(StandardCharsets.UTF_8);
+            byte[] xmlData = String.valueOf(writer.getBuffer()).getBytes(StandardCharsets.UTF_8);
 
             final File tmpSaveLocation = makeTempSaveFile(workingDirectory);
-            
+
             writeLog = writeRawFileOutput(tmpSaveLocation, xmlData, core);
 
             // copy tmp file to final location folder
@@ -406,23 +387,24 @@ public final class DesktopIOHandler implements IOHandler {
             // destination, on fail, delete file and inform user by bubbling error
             try {
                 DesktopHelpHandler helpHandler = new DesktopHelpHandler();
-                PFontHandler fontHandler = new PFontHandler();
+                DesktopPFontHandler fontHandler = new DesktopPFontHandler();
                 var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), new DummyInfoBox(), helpHandler, fontHandler);
                 DictCore test = new DictCore(new DesktopPropertiesManager(), osHandler, new PGTUtil(), new DesktopGrammarManager());
                 PolyGlot.getTestShell(test);
                 test.readFile(tmpSaveFinalLocation.getAbsolutePath());
-                
+
                 if (!core.equals(test)) {
                     throw new Exception("Written file does not match file in memory.");
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 throw new IOException(ex);
             }
-            
+
             if (finalFile.exists()) {
                 finalFile.delete();
             }
-            
+
             tmpSaveFinalLocation.renameTo(finalFile);
             tmpSaveLocation.delete(); // wipe temp file if successful
 
@@ -435,14 +417,14 @@ public final class DesktopIOHandler implements IOHandler {
             new DesktopInfoBox().warning("File Save Issues", "Problems encountered when saving file " + _fileName + writeLog);
         }
     }
-    
+
     /**
      * Creates raw output file (processed for safety/security upstream)
      */
-    private String writeRawFileOutput(File tmpSaveLocation, byte[] xmlData, DictCore core) throws FileNotFoundException, IOException {
+    private String writeRawFileOutput(File tmpSaveLocation, byte[] xmlData, DictCore core) throws IOException {
         String writeLog;
-        
-        try (FileOutputStream fileOutputStream = new FileOutputStream(tmpSaveLocation)) {
+
+        try ( FileOutputStream fileOutputStream = new FileOutputStream(tmpSaveLocation)) {
             try ( ZipOutputStream out = new ZipOutputStream(fileOutputStream, StandardCharsets.UTF_8)) {
                 ZipEntry e = new ZipEntry(PGTUtil.LANG_FILE_NAME);
                 out.putNextEntry(e);
@@ -451,13 +433,13 @@ public final class DesktopIOHandler implements IOHandler {
 
                 out.closeEntry();
 
-                writeLog = PFontHandler.writeFont(out,
+                writeLog = DesktopPFontHandler.writeFont(out,
                         ((DesktopPropertiesManager) core.getPropertiesManager()).getFontCon(),
                         core.getPropertiesManager().getCachedFont(),
                         core,
                         true);
 
-                writeLog += PFontHandler.writeFont(out,
+                writeLog += DesktopPFontHandler.writeFont(out,
                         ((DesktopPropertiesManager) core.getPropertiesManager()).getFontLocal(),
                         core.getPropertiesManager().getCachedLocalFont(),
                         core,
@@ -471,7 +453,7 @@ public final class DesktopIOHandler implements IOHandler {
                 out.finish();
             }
         }
-        
+
         return writeLog;
     }
 
@@ -546,10 +528,10 @@ public final class DesktopIOHandler implements IOHandler {
     public void copyFile(Path fromLocation, Path toLocation, boolean replaceExisting) throws IOException {
         StandardCopyOption option = replaceExisting ? StandardCopyOption.REPLACE_EXISTING : StandardCopyOption.ATOMIC_MOVE;
         Files.copy(fromLocation, toLocation, option);
-        
-        if (!new File(toLocation.toString()).exists()) {
-            throw new IOException("File " + toLocation.toString() + " could not be written to its target destination.\n"
-                + "Please try another location or change destination permissions.");
+
+        if (!toLocation.toFile().exists()) {
+            throw new IOException("File " + toLocation + " could not be written to its target destination.\n"
+                    + "Please try another location or change destination permissions.");
         }
     }
 
@@ -585,7 +567,7 @@ public final class DesktopIOHandler implements IOHandler {
                     if (!curNode.isImageSet()) {
                         continue;
                     }
-                    
+
                     try {
                         out.putNextEntry(new ZipEntry(PGTUtil.LOGOGRAPH_SAVE_PATH
                                 + curNode.getId() + ".png"));
@@ -612,7 +594,7 @@ public final class DesktopIOHandler implements IOHandler {
 
     private String writeWavToArchive(ZipOutputStream out, DictCore core) {
         String writeLog = "";
-        Map<Integer, byte[]> grammarSoundMap = ((DesktopGrammarManager) core.getGrammarManager()).getSoundMap();
+        Map<Integer, byte[]> grammarSoundMap = core.getGrammarManager().getSoundMap();
         Iterator<Entry<Integer, byte[]>> gramSoundIt = grammarSoundMap.entrySet().iterator();
         if (gramSoundIt.hasNext()) {
             try {
@@ -687,63 +669,16 @@ public final class DesktopIOHandler implements IOHandler {
         return f.exists();
     }
 
-    /**
-     * Loads image assets from file. Does not load logographs due to legacy
-     * coding/logic
-     *
-     * @param imageCollection from dictCore to populate
-     * @param fileName of file containing assets
-     * @throws java.io.IOException
-     */
     @Override
-    public void loadImageAssets(ImageCollection imageCollection,
-            String fileName, DictCore core) throws Exception {
-        boolean readException = false;
-        
-        try ( ZipFile zipFile = new ZipFile(fileName)) {
-            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+    public void loadImageAssetWithId(InputStream imageStream, int imageId, DictCore core) throws Exception {
+        var img = ImageIO.read(imageStream);
+        var imageCollection = core.getImageCollection();
 
-            while (entries.hasMoreElements()) { // find images directory (zip paths are linear, only simulating tree structure)
-                ZipEntry entry = entries.nextElement();
-                if (!entry.getName().equals(PGTUtil.IMAGES_SAVE_PATH)) {
-                    continue;
-                }
-                break;
-            }
-
-            while (entries.hasMoreElements()) {
-                ZipEntry entry = entries.nextElement();
-                
-                // Linear nature of zip files makes this necessary
-                if (!entry.getName().startsWith(PGTUtil.IMAGES_SAVE_PATH)) {
-                    continue;
-                }
-
-                if (entry.isDirectory()) { // kills process after last image found
-                    break;
-                }
-
-                BufferedImage img;
-                try ( InputStream imageStream = zipFile.getInputStream(entry)) {
-                    String name = entry.getName();
-                    name = name.replace(".png", "")
-                            .replace(PGTUtil.IMAGES_SAVE_PATH, "");
-                    int imageId = Integer.parseInt(name);
-                    img = ImageIO.read(imageStream);
-                    ImageNode imageNode = new ImageNode(core);
-                    imageNode.setId(imageId);
-                    imageNode.setImageBytes(loadImageBytesFromImage(img));
-                    imageCollection.getBuffer().setEqual(imageNode);
-                    imageCollection.insert(imageId);
-                } catch (Exception e) {
-                    readException = true;
-                }
-            }
-            
-            if (readException) {
-                throw new Exception("Problem loading one or more images from archive. (All possilbe images recovered)");
-            }
-        }
+        ImageNode imageNode = new ImageNode(core);
+        imageNode.setId(imageId);
+        imageNode.setImageBytes(loadImageBytesFromImage(img));
+        imageCollection.getBuffer().setEqual(imageNode);
+        imageCollection.insert(imageId);
     }
 
     /**
@@ -751,31 +686,29 @@ public final class DesktopIOHandler implements IOHandler {
      * generalized image collection
      *
      * @param logoCollection logocollection from dictionary core
-     * @param fileName name/path of archive
+     * @param zipFile
      * @throws java.io.IOException
      */
     @Override
-    public void loadLogographs(LogoCollection logoCollection,
-            String fileName) throws IOException {
+    public void loadLogographs(LogoCollection logoCollection, ZipFile zipFile) throws IOException {
         var errors = false;
-        try ( ZipFile zipFile = new ZipFile(fileName)) {
-            for (LogoNode curNode : logoCollection.getAllLogos()) {
-                ZipEntry imgEntry = zipFile.getEntry(PGTUtil.LOGOGRAPH_SAVE_PATH
-                        + curNode.getId() + ".png");
-                
-                if (imgEntry == null) {
-                    continue;
-                }
+        for (LogoNode curNode : logoCollection.getAllLogos()) {
+            ZipEntry imgEntry = zipFile.getEntry(PGTUtil.LOGOGRAPH_SAVE_PATH
+                    + curNode.getId() + ".png");
 
-                try (InputStream imageStream = zipFile.getInputStream(imgEntry)) {
-                    var img = ImageIO.read(imageStream);
-                    curNode.setLogoBytes(loadImageBytesFromImage(img));
-                } catch (IOException e) {
-                    errors = true;
-                }
+            if (imgEntry == null) {
+                continue;
+            }
+
+            try ( InputStream imageStream = zipFile.getInputStream(imgEntry)) {
+                var img = ImageIO.read(imageStream);
+                curNode.setLogoBytes(loadImageBytesFromImage(img));
+            }
+            catch (IOException e) {
+                errors = true;
             }
         }
-        
+
         if (errors) {
             throw new IOException("Unable to load one or more logograph images.");
         }
@@ -785,36 +718,40 @@ public final class DesktopIOHandler implements IOHandler {
      * Loads all reversion XML files from polyglot archive
      *
      * @param reversionManager reversion manager to load to
-     * @param fileName full path of polyglot archive
+     * @param zipFile
      * @throws IOException on read error
      */
     @Override
-    public void loadReversionStates(ReversionManager reversionManager,
-            String fileName) throws IOException {
+    public void loadReversionStates(ReversionManager reversionManager, ZipFile zipFile) throws IOException {
         var errors = false;
-        
-        try ( ZipFile zipFile = new ZipFile(fileName)) {
-            int i = 0;
 
-            ZipEntry reversion = zipFile.getEntry(PGTUtil.REVERSION_SAVE_PATH
-                    + PGTUtil.REVERSION_BASE_FILE_NAME + i);
+        int i = 0;
 
-            while (reversion != null && i < reversionManager.getMaxReversionsCount()) {
-                try {
-                    reversionManager.addVersionToEnd(streamToByteArray(zipFile.getInputStream(reversion)));
-                    i++;
-                    reversion = zipFile.getEntry(PGTUtil.REVERSION_SAVE_PATH
-                            + PGTUtil.REVERSION_BASE_FILE_NAME + i);
-                } catch (IOException e) {
-                    errors = true;
-                }
+        ZipEntry reversion = zipFile.getEntry(
+                PGTUtil.REVERSION_SAVE_PATH + PGTUtil.REVERSION_BASE_FILE_NAME + i
+        );
+
+        while (reversion != null && i < reversionManager.getMaxReversionsCount()) {
+            try {
+                reversionManager.addVersionToEnd(streamToByteArray(zipFile.getInputStream(reversion)));
+                i++;
+                reversion = zipFile.getEntry(
+                        PGTUtil.REVERSION_SAVE_PATH + PGTUtil.REVERSION_BASE_FILE_NAME + i
+                );
             }
+            catch (IOException e) {
+                errors = true;
+            }
+        }
 
-            // remember to load latest state in addition to all prior ones
+        // remember to load latest state in addition to all prior ones
+        try {
             reversion = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
             reversionManager.addVersionToEnd(streamToByteArray(zipFile.getInputStream(reversion)));
+        } catch (IOException e) {
+            // If the XML file is unreadable, it is handled in its own section. Ignore here and recover elsewhere.
         }
-        
+
         if (errors) {
             throw new IOException("Unable to load one or more reversion states.");
         }
@@ -869,7 +806,7 @@ public final class DesktopIOHandler implements IOHandler {
             byte[] buffer = new byte[fontStream.available()];
             fontStream.read(buffer);
 
-            try ( OutputStream oStream = new FileOutputStream(new File(exportPath))) {
+            try ( OutputStream oStream = new FileOutputStream(exportPath)) {
                 oStream.write(buffer);
             }
         }
@@ -879,46 +816,35 @@ public final class DesktopIOHandler implements IOHandler {
      * Loads any related grammar recordings into the passed grammar manager via
      * id
      *
-     * @param fileName name of file to load sound recordings from
+     * @param zipFile archive being loaded from
      * @param grammarManager grammar manager to populate with sounds
      * @throws Exception on sound load errors
      */
     @Override
-    public void loadGrammarSounds(String fileName, GrammarManager grammarManager) throws Exception {
+    public void loadGrammarSounds(ZipFile zipFile, GrammarManager grammarManager) throws Exception {
         String loadLog = "";
 
-        try ( ZipFile zipFile = new ZipFile(fileName)) {
-            for (GrammarChapNode curChap : grammarManager.getChapters()) {
-                for (int i = 0; i < curChap.getChildCount(); i++) {
-                    GrammarSectionNode curNode = (GrammarSectionNode) ((DesktopGrammarChapNode) curChap).getChildAt(i);
+        for (GrammarChapNode curChap : grammarManager.getChapters()) {
+            for (int i = 0; i < curChap.getChildCount(); i++) {
+                var curNode = (GrammarSectionNode) ((DesktopGrammarChapNode) curChap).getChildAt(i);
 
-                    if (curNode.getRecordingId() == -1) {
-                        continue;
-                    }
+                if (curNode.getRecordingId() == -1) {
+                    continue;
+                }
 
-                    String soundPath = PGTUtil.GRAMMAR_SOUNDS_SAVE_PATH
-                            + curNode.getRecordingId() + ".raw";
-                    ZipEntry soundEntry = zipFile.getEntry(soundPath);
+                ZipEntry soundEntry = zipFile.getEntry(
+                        PGTUtil.GRAMMAR_SOUNDS_SAVE_PATH + curNode.getRecordingId() + ".raw"
+                );
 
-                    byte[] sound = null;
-
-                    try ( InputStream soundStream = zipFile.getInputStream(soundEntry)) {
-                        sound = streamToByteArray(soundStream);
-                    }
-                    catch (IOException e) {
-                        writeErrorLog(e);
-                        loadLog += "\nUnable to load sound: " + e.getLocalizedMessage();
-                    }
-                    catch (Exception e) {
-                        writeErrorLog(e);
-                        loadLog += "\nUnable to load sound: " + e.getLocalizedMessage();
-                    }
-
-                    if (sound == null) {
-                        continue;
-                    }
-
-                    grammarManager.addChangeRecording(curNode.getRecordingId(), sound);
+                try ( InputStream soundStream = zipFile.getInputStream(soundEntry)) {
+                    grammarManager.addChangeRecording(
+                            curNode.getRecordingId(),
+                            streamToByteArray(soundStream)
+                    );
+                }
+                catch (Exception e) {
+                    writeErrorLog(e);
+                    loadLog += "\nUnable to load sound: " + e.getLocalizedMessage();
                 }
             }
         }
@@ -1020,13 +946,13 @@ public final class DesktopIOHandler implements IOHandler {
                 nextLine += ("," + location.getKey() + ":" + location.getValue());
             }
             f0.write(nextLine + newLine);
-            
+
             nextLine = PGTUtil.OPTIONS_MSBETWEENSAVES + "=" + opMan.getMsBetweenSaves();
             f0.write(nextLine + newLine);
-            
+
             nextLine = PGTUtil.OPTIONS_UI_SCALE + "=" + opMan.getUiScale();
             f0.write(nextLine + newLine);
-            
+
             nextLine = PGTUtil.OPTIONS_UI_WEB_SERVICE_PORT + "=" + opMan.getWebServicePort();
             f0.write(nextLine + newLine);
 
@@ -1046,7 +972,7 @@ public final class DesktopIOHandler implements IOHandler {
             f0.write(nextLine + newLine);
         }
     }
-    
+
     /**
      * Loads all option data from ini file, if none, ignore.One will be created
      * on exit.
@@ -1134,7 +1060,7 @@ public final class DesktopIOHandler implements IOHandler {
                                     loadProblems += "Malformed divider position: " + curPosition + "\n";
                                     continue;
                                 }
-                                Integer position = Integer.valueOf(splitSet[1]);
+                                int position = Integer.parseInt(splitSet[1]);
                                 opMan.setDividerPosition(splitSet[0], position);
                             }
                         }
@@ -1168,13 +1094,14 @@ public final class DesktopIOHandler implements IOHandler {
                             // ignore unknown config settings
                         }
                     }
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     loadProblems += e.getLocalizedMessage() + "\n";
                 }
             }
 
             if (!loadProblems.isEmpty()) {
-                throw new DesktopOptionsManagerException("Problems encountered when loading configuration file.\n" 
+                throw new DesktopOptionsManagerException("Problems encountered when loading configuration file.\n"
                         + "Corrupted values discarded: \n" + loadProblems);
             }
         }
@@ -1249,20 +1176,20 @@ public final class DesktopIOHandler implements IOHandler {
     public void writeErrorLog(Throwable exception) {
         writeErrorLog(exception, "");
     }
-    
+
     @Override
     public void clearErrorLog() throws IOException {
         var logFile = getErrorLogFile();
         var success = true;
-        
+
         if (logFile.exists()) {
             success = logFile.delete();
         }
-        
+
         if (success) {
             success = logFile.createNewFile();
-        } 
-        
+        }
+
         if (!success) {
             throw new IOException("Unable to clear prior log file nd create new one.");
         }
@@ -1293,14 +1220,14 @@ public final class DesktopIOHandler implements IOHandler {
             if (errorLog.exists()) {
                 try ( Scanner logScanner = new Scanner(errorLog).useDelimiter("\\Z")) {
                     curContents = logScanner.hasNext() ? logScanner.next() : "";
-                    
+
                     // wipe old system info if it still exists
                     if (curContents.contains(PGTUtil.ERROR_LOG_SPEARATOR)) {
                         curContents = curContents.substring(
-                                curContents.indexOf(PGTUtil.ERROR_LOG_SPEARATOR) 
-                                        + PGTUtil.ERROR_LOG_SPEARATOR.length());
+                                curContents.indexOf(PGTUtil.ERROR_LOG_SPEARATOR)
+                                + PGTUtil.ERROR_LOG_SPEARATOR.length());
                     }
-                    
+
                     int length = curContents.length();
                     int newLength = length + errorMessage.length();
 
@@ -1315,7 +1242,8 @@ public final class DesktopIOHandler implements IOHandler {
                         + curContents + errorMessage + "\n";
                 writer.write(output);
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             // Fail silently. This fails almost exclusively due to being run in write protected folder, caught elsewhere
             // do not log to written file for obvious reasons (causes further write failure)
             // WHY DO PEOPLE INSTALL THIS TO WRITE PROTECTED FOLDERS AND SYSTEM32. WHY.
@@ -1384,13 +1312,17 @@ public final class DesktopIOHandler implements IOHandler {
     @Override
     public void unzipResourceToDir(String internalPath, Path target) throws IOException {
         InputStream fin = IOHandler.class.getResourceAsStream(internalPath);
+        if (fin == null) {
+            throw new IOException("Unagle to read file at: " + internalPath);
+        }
+
         try ( ZipInputStream zin = new ZipInputStream(fin)) {
             unZipStreamToLocation(zin, target);
         }
     }
 
     public void unzipFileToDir(String archivePath, Path target) throws IOException {
-        var fin = new FileInputStream(new File(archivePath));
+        var fin = new FileInputStream(archivePath);
         try ( var zin = new ZipInputStream(fin)) {
             File targetDir = new File(target.toString());
             if (!targetDir.exists()) {
@@ -1427,43 +1359,43 @@ public final class DesktopIOHandler implements IOHandler {
             }
         }
     }
-    
+
     /**
-     * Archives directory (used for packing pgt files manually)
-     * When packing a pgt file from directory, set preserveBaseDir to false
-     * 
+     * Archives directory (used for packing pgt files manually) When packing a
+     * pgt file from directory, set preserveBaseDir to false
+     *
      * @param directoryPath
-     * @param targetPath 
+     * @param targetPath
      * @param packingPgdFile Whether This is being used to pack a PGD file
-     * @throws java.io.IOException 
+     * @throws java.io.IOException
      */
     public static void packDirectoryToZip(String directoryPath, String targetPath, boolean packingPgdFile) throws Exception {
-        String sourceFile = directoryPath;
-        try (FileOutputStream fos = new FileOutputStream(targetPath); 
-                ZipOutputStream zipOut = new ZipOutputStream(fos)) {
-            File fileToZip = new File(sourceFile);
+        try ( FileOutputStream fos = new FileOutputStream(targetPath);  ZipOutputStream zipOut = new ZipOutputStream(fos)) {
+            var fileToZip = new File(directoryPath);
             zipFile(fileToZip, fileToZip.getName(), zipOut, !packingPgdFile);
         }
-        
+
         // if packing PGD file, test readability afterward
         if (packingPgdFile) {
-            DesktopHelpHandler helpHandler = new DesktopHelpHandler();
-            PFontHandler fontHandler = new PFontHandler();
+            var helpHandler = new DesktopHelpHandler();
+            var fontHandler = new DesktopPFontHandler();
             var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), new DummyInfoBox(), helpHandler, fontHandler);
-            DictCore test = new DictCore(new DesktopPropertiesManager(), osHandler, new PGTUtil(), new DesktopGrammarManager());
+            var test = new DictCore(new DesktopPropertiesManager(), osHandler, new PGTUtil(), new DesktopGrammarManager());
+
             PolyGlot.getTestShell(test);
             test.readFile(targetPath);
         }
     }
-    
+
     /**
      * Recursing method to zip files/directors while preserving structure
-     * 
+     *
      * @param fileToZip
      * @param fileName
      * @param zipOut
-     * @param preserveBaseDir Whether to preserve th base directory or to add its CONTENTS to the root
-     * @throws IOException 
+     * @param preserveBaseDir Whether to preserve th base directory or to add
+     * its CONTENTS to the root
+     * @throws IOException
      */
     private static void zipFile(File fileToZip, String fileName, ZipOutputStream zipOut, boolean preserveBaseDir) throws IOException {
         if (!fileToZip.isHidden()) { // ignore files added by OS, they are garbo to PolyGlot
@@ -1472,19 +1404,21 @@ public final class DesktopIOHandler implements IOHandler {
                     if (!fileName.endsWith("/")) {
                         fileName += "/";
                     }
-                    
+
                     zipOut.putNextEntry(new ZipEntry(fileName));
                     zipOut.closeEntry();
                 } else {
                     fileName = "";
                 }
-                
+
                 File[] children = fileToZip.listFiles();
-                for (var childFile : children) {
-                    zipFile(childFile, fileName + childFile.getName(), zipOut, true);
+                if (children != null) {
+                    for (var childFile : children) {
+                        zipFile(childFile, fileName + childFile.getName(), zipOut, true);
+                    }
                 }
-            } else { 
-                try (FileInputStream fis = new FileInputStream(fileToZip)) { // handles normal files
+            } else {
+                try ( FileInputStream fis = new FileInputStream(fileToZip)) { // handles normal files
                     ZipEntry zipEntry = new ZipEntry(fileName);
                     zipOut.putNextEntry(zipEntry);
                     byte[] bytes = new byte[1024];
@@ -1554,7 +1488,8 @@ public final class DesktopIOHandler implements IOHandler {
                     error += line;
                 }
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             error = e.getLocalizedMessage();
         }
 
@@ -1607,6 +1542,165 @@ public final class DesktopIOHandler implements IOHandler {
             throw new IOException("Problem loading image: " + e.getLocalizedMessage(), e);
         }
         return image;
+    }
+
+    @Override
+    public String[] readFile(DictCore core, String filePath, byte[] overrideXML) throws IOException, IllegalStateException, ParserConfigurationException {
+        var file = new File(filePath);
+        String[] warningsAndErrors = {"", ""};
+        String[] xmlWarningsAndErrors;
+
+        // test file exists
+        if (!file.exists()) {
+            throw new IOException("File " + filePath + " does not exist.");
+        }
+
+        // inform user if file is not an archive
+        if (!isFileZipArchive(filePath)) {
+            throw new IOException("File " + filePath + " is not a valid PolyGlot archive.");
+        }
+
+        try ( ZipFile zipFile = new ZipFile(filePath)) {
+            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
+            while (entries.hasMoreElements()) {
+                var entry = entries.nextElement();
+                warningsAndErrors[0] += readArchiveElement(zipFile, entry, core);
+            }
+
+            xmlWarningsAndErrors = readArchivedXml(overrideXML, zipFile, core);
+            
+            try {
+                loadGrammarSounds(zipFile, core.getGrammarManager());
+            } catch (Exception e) {
+                writeErrorLog(e);
+                warningsAndErrors[1] += e.getLocalizedMessage() + "\n";
+            }
+
+            try {
+                core.getLogoCollection().loadRadicalRelations();
+            } catch (Exception e) {
+                writeErrorLog(e);
+                warningsAndErrors[0] += e.getLocalizedMessage() + "\n";
+            }
+
+            try {
+                loadLogographs(core.getLogoCollection(), zipFile);
+            } catch (IOException e) {
+                writeErrorLog(e);
+                warningsAndErrors[0] += e.getLocalizedMessage() + "\n";
+            }
+
+            try {
+                loadReversionStates(core.getReversionManager(), zipFile);
+            } catch (IOException e) {
+                writeErrorLog(e);
+                warningsAndErrors[0] += e.getLocalizedMessage() + "\n";
+            }
+        }
+        
+        if (xmlWarningsAndErrors != null) {
+            warningsAndErrors[0] = xmlWarningsAndErrors[0] + warningsAndErrors[0];
+            warningsAndErrors[1] = xmlWarningsAndErrors[1] + warningsAndErrors[1];
+        }
+
+        return warningsAndErrors;
+    }
+    
+    /**
+     * Loads XML from archive, attempts recovery if damage detected
+     * @param overrideXML
+     * @param zipFile
+     * @param core
+     * @return two element string array containing [0] = warnings, [1] = errors
+     * @throws ParserConfigurationException
+     * @throws IOException 
+     */
+    private String[] readArchivedXml(byte[] overrideXML, ZipFile zipFile, DictCore core) throws ParserConfigurationException, IOException {
+        var rawXml = overrideXML;
+        String[] warningAndErrors = {"", ""};
+        
+        if (rawXml == null) {
+                var entry = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
+
+                try ( InputStream ioStream = zipFile.getInputStream(entry)) {
+                    rawXml = ioStream.readAllBytes();
+                } catch (IOException e) {
+                    // attempt recovery read of XML
+                    rawXml = recoverFileBytesFromArchive(zipFile, PGTUtil.LANG_FILE_NAME);
+                    warningAndErrors[1] = "Encountered corrupted XML file. Recovery-read attempted.\n";
+                }
+            }            
+
+            var parser = new PDomParser(core);
+
+            parser.readXml(new ByteArrayInputStream(rawXml));
+            Exception parseException = parser.getError();
+
+            if (parseException instanceof SAXException) {
+                // attempt to repair malformed XML on IOException
+                parser = new PDomParser(core);
+                var recovery = new XMLRecoveryTool(new String(rawXml, StandardCharsets.UTF_8));
+                var recoveredXml = recovery.recoverXml();
+                parser.readXml(new ByteArrayInputStream(recoveredXml.getBytes()));
+
+                // if not possible to recover, bubble error
+                if (parser.getError() != null) {
+                    throw new IOException(parser.getError());
+                }
+            } else if (parseException != null) {
+                warningAndErrors[1] += "Unrecoverable error encountered while reading file: "
+                        + parseException.getLocalizedMessage() + "\n";
+            }
+
+            for (String issue : parser.getIssues()) {
+                warningAndErrors[0] += issue + "\n";
+            }
+        return warningAndErrors;
+    }
+    
+    /**
+     * Processes/loads PolyGlot archive element (ultimately reads non-logograph images and fonts)
+     * @param zipFile
+     * @param entry
+     * @param core
+     * @return
+     * @throws IOException 
+     */
+    private String readArchiveElement(ZipFile zipFile, ZipEntry entry, DictCore core) throws IOException {
+        var entryName = entry.getName();
+        
+        if (entryName.equals(PGTUtil.LANG_FILE_NAME)
+                || entryName.equals(PGTUtil.GRAMMAR_SOUNDS_SAVE_PATH)
+                || entryName.equals(PGTUtil.REVERSION_SAVE_PATH)
+                || entryName.equals(PGTUtil.IMAGES_SAVE_PATH)) {
+            // Some elements loaded elsewhere (or ignored as directories)
+            return "";
+        } else if (entryName.startsWith(PGTUtil.IMAGES_SAVE_PATH)) {
+            try ( InputStream imageStream = zipFile.getInputStream(entry)) {
+                String idString = entryName
+                        .replace(".png", "")
+                        .replace(PGTUtil.IMAGES_SAVE_PATH, "");
+                int imageId = Integer.parseInt(idString);
+                loadImageAssetWithId(imageStream, imageId, core);
+            } catch (Exception e) {
+                 return "\nProblem loading image: " + entryName;
+            }
+        } else if (entryName.equals(PGTUtil.CON_FONT_FILE_NAME)) {
+            try {
+                DesktopPFontHandler.setFontFromIstream(zipFile.getInputStream(entry), true, core);
+            } catch (FontFormatException ex) {
+                return "\nUnable to load conlang font.";
+            }
+        } else if (entryName.equals(PGTUtil.LOCAL_FONT_FILE_NAME)) {
+            try {
+                DesktopPFontHandler.setFontFromIstream(zipFile.getInputStream(entry), false, core);
+            } catch (FontFormatException ex) {
+                return "\nUnable to load local lang font.";
+            }
+        }
+        
+        return "";
     }
 
     @Override
