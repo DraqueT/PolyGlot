@@ -219,7 +219,7 @@ public final class DesktopIOHandler implements IOHandler {
 
     /**
      * This reads all possible bytes from an archive from a target file within
-     * it.No exceptions will be thrown, but all recoverable bytes will be
+     * it. No exceptions will be thrown, but all recoverable bytes will be
      * returned.There is no guarantee of a complete file here.
      *
      * @param zipFile
@@ -1191,7 +1191,7 @@ public final class DesktopIOHandler implements IOHandler {
         }
 
         if (!success) {
-            throw new IOException("Unable to clear prior log file nd create new one.");
+            throw new IOException("Unable to clear prior log file and create new one.");
         }
     }
 
@@ -1569,7 +1569,7 @@ public final class DesktopIOHandler implements IOHandler {
             }
 
             xmlWarningsAndErrors = readArchivedXml(overrideXML, zipFile, core);
-            
+
             try {
                 loadGrammarSounds(zipFile, core.getGrammarManager());
             } catch (Exception e) {
@@ -1598,7 +1598,7 @@ public final class DesktopIOHandler implements IOHandler {
                 warningsAndErrors[0] += e.getLocalizedMessage() + "\n";
             }
         }
-        
+
         if (xmlWarningsAndErrors != null) {
             warningsAndErrors[0] = xmlWarningsAndErrors[0] + warningsAndErrors[0];
             warningsAndErrors[1] = xmlWarningsAndErrors[1] + warningsAndErrors[1];
@@ -1606,7 +1606,7 @@ public final class DesktopIOHandler implements IOHandler {
 
         return warningsAndErrors;
     }
-    
+
     /**
      * Loads XML from archive, attempts recovery if damage detected
      * @param overrideXML
@@ -1614,12 +1614,12 @@ public final class DesktopIOHandler implements IOHandler {
      * @param core
      * @return two element string array containing [0] = warnings, [1] = errors
      * @throws ParserConfigurationException
-     * @throws IOException 
+     * @throws IOException
      */
     private String[] readArchivedXml(byte[] overrideXML, ZipFile zipFile, DictCore core) throws ParserConfigurationException, IOException {
         var rawXml = overrideXML;
         String[] warningAndErrors = {"", ""};
-        
+
         if (rawXml == null) {
                 var entry = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
 
@@ -1630,7 +1630,7 @@ public final class DesktopIOHandler implements IOHandler {
                     rawXml = recoverFileBytesFromArchive(zipFile, PGTUtil.LANG_FILE_NAME);
                     warningAndErrors[1] = "Encountered corrupted XML file. Recovery-read attempted.\n";
                 }
-            }            
+            }
 
             var parser = new PDomParser(core);
 
@@ -1658,18 +1658,18 @@ public final class DesktopIOHandler implements IOHandler {
             }
         return warningAndErrors;
     }
-    
+
     /**
      * Processes/loads PolyGlot archive element (ultimately reads non-logograph images and fonts)
      * @param zipFile
      * @param entry
      * @param core
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     private String readArchiveElement(ZipFile zipFile, ZipEntry entry, DictCore core) throws IOException {
         var entryName = entry.getName();
-        
+
         if (entryName.equals(PGTUtil.LANG_FILE_NAME)
                 || entryName.equals(PGTUtil.GRAMMAR_SOUNDS_SAVE_PATH)
                 || entryName.equals(PGTUtil.REVERSION_SAVE_PATH)
@@ -1699,7 +1699,7 @@ public final class DesktopIOHandler implements IOHandler {
                 return "\nUnable to load local lang font.";
             }
         }
-        
+
         return "";
     }
 

@@ -49,7 +49,7 @@ public class PDomParserTest {
     }
 
     private void recurseRead(File curFile) {
-        // do not run on currupted files: they fundamentally lack integrityx    
+        // do not run on currupted files: they fundamentally lack integrity
         if (curFile.getName().equals("corrupted")) {
             return;
         }
