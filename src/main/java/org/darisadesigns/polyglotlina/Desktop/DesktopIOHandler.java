@@ -220,7 +220,7 @@ public final class DesktopIOHandler implements IOHandler {
     /**
      * This reads all possible bytes from an archive from a target file within
      * it. No exceptions will be thrown, but all recoverable bytes will be
-     * returned.There is no guarantee of a complete file here.
+     * returned. There is no guarantee of a complete file here.
      *
      * @param zipFile
      * @param targetFile
@@ -744,7 +744,7 @@ public final class DesktopIOHandler implements IOHandler {
             }
         }
 
-        // remember to load latest state in addition to all prior ones
+        // remember to load the latest state in addition to all prior ones
         try {
             reversion = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
             reversionManager.addVersionToEnd(streamToByteArray(zipFile.getInputStream(reversion)));
@@ -1303,7 +1303,7 @@ public final class DesktopIOHandler implements IOHandler {
     }
 
     /**
-     * Unzips an internal resource to a targeted path.Does not check header.
+     * Unzips an internal resource to a targeted path. Does not check header.
      *
      * @param internalPath Path to internal zipped resource
      * @param target destination to unzip to
@@ -1313,7 +1313,7 @@ public final class DesktopIOHandler implements IOHandler {
     public void unzipResourceToDir(String internalPath, Path target) throws IOException {
         InputStream fin = IOHandler.class.getResourceAsStream(internalPath);
         if (fin == null) {
-            throw new IOException("Unagle to read file at: " + internalPath);
+            throw new IOException("Unable to read file at: " + internalPath);
         }
 
         try ( ZipInputStream zin = new ZipInputStream(fin)) {
@@ -1393,7 +1393,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @param fileToZip
      * @param fileName
      * @param zipOut
-     * @param preserveBaseDir Whether to preserve th base directory or to add
+     * @param preserveBaseDir Whether to preserve the base directory or to add
      * its CONTENTS to the root
      * @throws IOException
      */
@@ -1550,7 +1550,7 @@ public final class DesktopIOHandler implements IOHandler {
         String[] warningsAndErrors = {"", ""};
         String[] xmlWarningsAndErrors;
 
-        // test file exists
+        // test whether file exists
         if (!file.exists()) {
             throw new IOException("File " + filePath + " does not exist.");
         }
