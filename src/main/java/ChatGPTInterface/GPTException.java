@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2015-2023, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
- * Licensed under: MIT Licence
+ * Licensed under: MIT License
  * See LICENSE.TXT included with this code to read the full license agreement.
 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
@@ -17,22 +17,28 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package org.darisadesigns.polyglotlina.CustomControls;
+package ChatGPTInterface;
+
+import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 
 /**
- * This is a chapter section of the PolyGlot grammar guide.
- * @author draque
+ *
+ * @author draquethompson
  */
-public interface GrammarSectionNode {
-    public void setRecordingId(int _recordingId);
-    public Integer getRecordingId();
-    public String getSectionText();
-    public void setSectionText(String _text);
-    public void setName(String _name);
-    public String getName();
-    public void setRecording(byte[] _recording);
-    public byte[] getRecording() throws Exception ;
-    public void clearRecording();
-    public boolean isGptSelected();
-    public void setGptSelected(boolean gptSelected);
-}
+public class GPTException extends Exception {
+
+        public GPTException() {
+            super();
+            PolyGlot.getPolyGlot().getOSHandler().getIOHandler().writeErrorLog(this);
+        }
+
+        public GPTException(String message) {
+            super(message);
+            PolyGlot.getPolyGlot().getOSHandler().getIOHandler().writeErrorLog(this, message);
+        }
+
+        public GPTException(Exception e) {
+            super(e);
+            PolyGlot.getPolyGlot().getOSHandler().getIOHandler().writeErrorLog(this);
+        }
+    }

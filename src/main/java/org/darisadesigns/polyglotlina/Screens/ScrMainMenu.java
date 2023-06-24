@@ -46,6 +46,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -54,6 +55,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
@@ -945,8 +948,8 @@ public final class ScrMainMenu extends PFrame {
         toDoTree.setRootVisible(false);
         toDoTree.setModel(new PToDoTreeModel(ToDoTreeNode.createToDoTreeNode(core.getToDoManager().getRoot())));
         
-        if (toDoTree.getModel().getRoot() instanceof ToDoTreeNode) {
-            ((DefaultTreeModel) toDoTree.getModel()).nodeStructureChanged((ToDoTreeNode) toDoTree.getModel().getRoot());
+        if (toDoTree.getModel().getRoot() instanceof ToDoTreeNode toDoTreeNode) {
+            ((DefaultTreeModel) toDoTree.getModel()).nodeStructureChanged(toDoTreeNode);
         }
 
         SwingUtilities.invokeLater(() -> {
@@ -2534,8 +2537,15 @@ public final class ScrMainMenu extends PFrame {
     }//GEN-LAST:event_btnZompistWordGeneratorActionPerformed
 
     private void mnuChatGptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuChatGptActionPerformed
-        // TODO: Make less shitty
-        new ScrChatGptTranslator(core).setVisible(true);
+        try {
+            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            new ScrChatGptTranslator(core).setVisible(true);
+        } catch (MalformedURLException e) {
+            DesktopInfoBox.error("Malformed URL", "An internal error has occurred: " + e.getLocalizedMessage(), this);
+            DesktopIOHandler.getInstance().writeErrorLog(e);
+        } finally {
+            setCursor(Cursor.getDefaultCursor());
+        }
     }//GEN-LAST:event_mnuChatGptActionPerformed
 
     private void mnuWebServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuWebServerActionPerformed

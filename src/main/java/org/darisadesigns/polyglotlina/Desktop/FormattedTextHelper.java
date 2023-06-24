@@ -19,8 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.Desktop;
 
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PGrammarPane;
-import org.darisadesigns.polyglotlina.Nodes.ImageNode;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
@@ -35,7 +33,9 @@ import javax.swing.text.Element;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PGrammarPane;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.Nodes.ImageNode;
 
 /**
  * This is a helper class, which deals with formatted text in Java
@@ -90,7 +90,7 @@ public final class FormattedTextHelper extends org.darisadesigns.polyglotlina.Fo
             } else if (nextNode.startsWith("<img src=")) {
                 String idString = nextNode.replace("<img src=\"", "").replace("\">", "");
                 Integer id = Integer.valueOf(idString);
-                ImageNode imageNode = (ImageNode)core.getImageCollection().getNodeById(id);
+                ImageNode imageNode = core.getImageCollection().getNodeById(id);
                 ((PGrammarPane)pane).addImage(imageNode);      
             } else {
                 Document doc = pane.getDocument();
@@ -171,7 +171,7 @@ public final class FormattedTextHelper extends org.darisadesigns.polyglotlina.Fo
         }
         
         String strip = targetNode.substring(pos);
-        pos = strip.indexOf("\"");
+        pos = strip.indexOf('"');
         strip = strip.substring(0, pos);
         
         switch (strip) {
@@ -216,7 +216,7 @@ public final class FormattedTextHelper extends org.darisadesigns.polyglotlina.Fo
         }
         
         String strip = targetNode.substring(pos);
-        pos = strip.indexOf("\"");
+        pos = strip.indexOf('"');
         ret = strip.substring(0, pos);
         
         return ret;
@@ -237,7 +237,7 @@ public final class FormattedTextHelper extends org.darisadesigns.polyglotlina.Fo
         }
         
         String strip = targetNode.substring(pos);
-        pos = strip.indexOf("\"");
+        pos = strip.indexOf('"');
         ret = Integer.parseInt(strip.substring(0, pos));
         
         return ret;

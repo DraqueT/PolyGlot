@@ -170,6 +170,8 @@ public class PGTUtil {
     public static final String PRO_GUIDE_SYLLABLES_LIST = "proFGFuideSyllableList";
     public static final String PRO_GUIDE_SYLLABLE = "proGuideSyllable";
     public static final String PRO_GUIDE_COMPOSITION_SYLLABLE = "proGuideSyllableComposition";
+    public static final String PRO_GUIDE_ILLEGAL_CLUSTER_COLLECTION = "proIllegalClusterCollection";
+    public static final String PRO_GUIDE_ILLEGAL_CLUSTER = "proIllegalCluster";
 
     // romanization properties
     public static final String ROM_GUIDE_XID = "romGuide";
@@ -229,6 +231,7 @@ public class PGTUtil {
     public static final String GRAMMAR_SECTION_NAME_XID = "grammarSectionName";
     public static final String GRAMMAR_SECTION_RECORDING_XID = "grammarSectionRecordingXID";
     public static final String GRAMMAR_SECTION_TEXT_XID = "grammarSectionText";
+    public static final String GRAMMAR_SECTION_IS_GPT_SELECTED = "gptSelected";
 
     // properties for word classes
     public static final String CLASSES_NODE_XID = "wordGrammarClassCollection";
@@ -292,6 +295,8 @@ public class PGTUtil {
     public static final String OPTIONS_UI_WEB_SERVICE_MASTER_TOKEN_REFILL = "WebServiceMasterTokenRefill";
     public static final String OPTIONS_UI_WEB_SERVICE_INDIVIDUAL_TOKEN_CAPACITY = "WebServiceIndividualTokenCapacity";
     public static final String OPTIONS_UI_WEB_SERVICE_INDIVIDUAL_TOKEN_REFILL = "WebServiceIndividualTokenRefill";
+    public static final String OPTIONS_GPT_API_KEY = "GptApiKey_encrypted";
+    public static final String OPTIONS_GPT_API_KEY_SECURE = "JpJAHMiw6LQOov45jfScnixHROHZqa5G";
     
 
     // Java 8 bridge constants
@@ -749,8 +754,9 @@ public class PGTUtil {
             if (test.charAt(i) != ' ' ||
                 test.charAt(i) != '\t' ||
                 test.charAt(i) != '\n' ||
-                test.charAt(i) != '\r')
+                test.charAt(i) != '\r') {
                 return false;
+            }
         }
         return true;
     }

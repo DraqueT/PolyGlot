@@ -19,9 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.Desktop.FormattedTextHelper;
-import org.darisadesigns.polyglotlina.Desktop.DesktopPFontHandler;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -64,17 +61,20 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.HighlightCaret;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PComboBox;
-import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PGDocument;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PGrammarPane;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTree;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPFontHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.FormattedTextHelper;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammarManager;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.Desktop.SoundRecorder;
+import org.darisadesigns.polyglotlina.DictCore;
 
 /**
  * This form displays and allows editing of a chapter/section style grammar text

@@ -19,8 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.Desktop.CustomControls;
 
-import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -41,7 +39,8 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableCellEditor;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
+import org.darisadesigns.polyglotlina.DictCore;
 
 /**
  *
@@ -71,13 +70,13 @@ public final class PCellEditor extends AbstractCellEditor implements TableCellEd
     
     public void setUseConFont(boolean _useConFont) {
         useConFont = _useConFont;
-        double preSize = core.getPropertiesManager().getFontSize();
+        double preSize = core.getPropertiesManager().getConFontSize();
         
         Font defFont = useConFont ? ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon()
                 : ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
         double fontSize = useConFont ? 
                 preSize :
-                PGTUtil.DEFAULT_FONT_SIZE;
+                (double)PGTUtil.DEFAULT_FONT_SIZE;
 
         myFont = PGTUtil.addFontAttribute(TextAttribute.SIZE, (float)fontSize, defFont);
         component.setFont(myFont);

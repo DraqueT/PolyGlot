@@ -19,7 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.Desktop.CustomControls;
 
-import org.darisadesigns.polyglotlina.PGTUtil;
 import java.util.Enumeration;
 import java.util.Objects;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -27,6 +26,7 @@ import javax.swing.tree.MutableTreeNode;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammarManager;
+import org.darisadesigns.polyglotlina.PGTUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

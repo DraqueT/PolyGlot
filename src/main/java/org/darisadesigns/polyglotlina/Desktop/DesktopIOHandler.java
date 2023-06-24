@@ -75,6 +75,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.darisadesigns.polyglotlina.CryptographyHandler;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopGrammarChapNode;
@@ -129,7 +130,7 @@ public final class DesktopIOHandler implements IOHandler {
     public File createTmpFileWithContents(String contents, String extension) throws IOException {
         File ret = File.createTempFile("POLYGLOT", extension);
 
-        try ( Writer out = new BufferedWriter(new OutputStreamWriter(
+        try (Writer out = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(ret), StandardCharsets.UTF_8))) {
             out.append(contents);
             out.flush();
@@ -161,7 +162,7 @@ public final class DesktopIOHandler implements IOHandler {
             throw new IOException("Unable to create: " + path);
         }
 
-        try ( Writer out = new BufferedWriter(new OutputStreamWriter(
+        try (Writer out = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(ret), StandardCharsets.UTF_8))) {
             out.write(contents);
             out.flush();
@@ -172,7 +173,7 @@ public final class DesktopIOHandler implements IOHandler {
 
     @Override
     public byte[] getByteArrayFromFile(File file) throws IOException {
-        try ( InputStream inputStream = new FileInputStream(file)) {
+        try (InputStream inputStream = new FileInputStream(file)) {
             return streamToByteArray(inputStream);
         }
     }
@@ -186,7 +187,7 @@ public final class DesktopIOHandler implements IOHandler {
      */
     @Override
     public byte[] streamToByteArray(InputStream is) throws IOException {
-        try ( ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+        try (ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
             int nRead;
             byte[] data = new byte[16384];
 
@@ -210,7 +211,7 @@ public final class DesktopIOHandler implements IOHandler {
         byte[] ret;
         final File toByteArrayFile = new File(filePath);
 
-        try ( InputStream inputStream = new FileInputStream(toByteArrayFile)) {
+        try (InputStream inputStream = new FileInputStream(toByteArrayFile)) {
             ret = streamToByteArray(inputStream);
         }
 
@@ -238,21 +239,23 @@ public final class DesktopIOHandler implements IOHandler {
         var fileName = "";
         String fileContents;
 
-        try ( InputStream inputStream = zipFile.getInputStream(entry)) {
+        try (InputStream inputStream = zipFile.getInputStream(entry)) {
             fileName = entry.getName();
             int nRead;
             byte[] data = new byte[1024];
             while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
                 buffer.write(data, 0, nRead);
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             fileComplete = false;
         }
 
         try {
             buffer.flush();
             fileBytes = buffer.toByteArray();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             // Eat exception. This is a last ditch recovery. It works or it returns an empty array.
             return fileBytes;
         }
@@ -319,7 +322,8 @@ public final class DesktopIOHandler implements IOHandler {
 
         try {
             f.delete();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             // can't write to folder, so don't bother trying to write log file...
             // IOHandler.writeErrorLog(e);
             new DesktopInfoBox().error("Permissions Error", "PolyGlot lacks permissions to write to its native folder.\n"
@@ -345,9 +349,9 @@ public final class DesktopIOHandler implements IOHandler {
         }
 
         int test;
-        try ( FileInputStream fileStream = new FileInputStream(file)) {
-            try ( BufferedInputStream buffer = new BufferedInputStream(fileStream)) {
-                try ( DataInputStream in = new DataInputStream(buffer)) {
+        try (FileInputStream fileStream = new FileInputStream(file)) {
+            try (BufferedInputStream buffer = new BufferedInputStream(fileStream)) {
+                try (DataInputStream in = new DataInputStream(buffer)) {
                     test = in.readInt();
                 }
             }
@@ -370,7 +374,7 @@ public final class DesktopIOHandler implements IOHandler {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
 
-        try ( StringWriter writer = new StringWriter()) {
+        try (StringWriter writer = new StringWriter()) {
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
 
             byte[] xmlData = String.valueOf(writer.getBuffer()).getBytes(StandardCharsets.UTF_8);
@@ -424,8 +428,8 @@ public final class DesktopIOHandler implements IOHandler {
     private String writeRawFileOutput(File tmpSaveLocation, byte[] xmlData, DictCore core) throws IOException {
         String writeLog;
 
-        try ( FileOutputStream fileOutputStream = new FileOutputStream(tmpSaveLocation)) {
-            try ( ZipOutputStream out = new ZipOutputStream(fileOutputStream, StandardCharsets.UTF_8)) {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(tmpSaveLocation)) {
+            try (ZipOutputStream out = new ZipOutputStream(fileOutputStream, StandardCharsets.UTF_8)) {
                 ZipEntry e = new ZipEntry(PGTUtil.LANG_FILE_NAME);
                 out.putNextEntry(e);
 
@@ -700,7 +704,7 @@ public final class DesktopIOHandler implements IOHandler {
                 continue;
             }
 
-            try ( InputStream imageStream = zipFile.getInputStream(imgEntry)) {
+            try (InputStream imageStream = zipFile.getInputStream(imgEntry)) {
                 var img = ImageIO.read(imageStream);
                 curNode.setLogoBytes(loadImageBytesFromImage(img));
             }
@@ -748,7 +752,8 @@ public final class DesktopIOHandler implements IOHandler {
         try {
             reversion = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
             reversionManager.addVersionToEnd(streamToByteArray(zipFile.getInputStream(reversion)));
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             // If the XML file is unreadable, it is handled in its own section. Ignore here and recover elsewhere.
         }
 
@@ -775,7 +780,7 @@ public final class DesktopIOHandler implements IOHandler {
     }
 
     public void exportFont(String exportPath, String dictionaryPath, String exportFontFilename) throws IOException {
-        try ( ZipFile zipFile = new ZipFile(dictionaryPath)) {
+        try (ZipFile zipFile = new ZipFile(dictionaryPath)) {
             // ensure export file has the proper extension
             if (!exportPath.toLowerCase().endsWith(".ttf")) {
                 exportPath += ".ttf";
@@ -785,7 +790,7 @@ public final class DesktopIOHandler implements IOHandler {
 
             if (fontEntry != null) {
                 Path path = Paths.get(exportPath);
-                try ( InputStream copyStream = zipFile.getInputStream(fontEntry)) {
+                try (InputStream copyStream = zipFile.getInputStream(fontEntry)) {
                     Files.copy(copyStream, path, StandardCopyOption.REPLACE_EXISTING);
                 }
             } else {
@@ -802,11 +807,11 @@ public final class DesktopIOHandler implements IOHandler {
      */
     @Override
     public void exportCharisFont(String exportPath) throws IOException {
-        try ( InputStream fontStream = IOHandler.class.getResourceAsStream(PGTUtil.UNICODE_FONT_LOCATION)) {
+        try (InputStream fontStream = IOHandler.class.getResourceAsStream(PGTUtil.UNICODE_FONT_LOCATION)) {
             byte[] buffer = new byte[fontStream.available()];
             fontStream.read(buffer);
 
-            try ( OutputStream oStream = new FileOutputStream(exportPath)) {
+            try (OutputStream oStream = new FileOutputStream(exportPath)) {
                 oStream.write(buffer);
             }
         }
@@ -836,7 +841,7 @@ public final class DesktopIOHandler implements IOHandler {
                         PGTUtil.GRAMMAR_SOUNDS_SAVE_PATH + curNode.getRecordingId() + ".raw"
                 );
 
-                try ( InputStream soundStream = zipFile.getInputStream(soundEntry)) {
+                try (InputStream soundStream = zipFile.getInputStream(soundEntry)) {
                     grammarManager.addChangeRecording(
                             curNode.getRecordingId(),
                             streamToByteArray(soundStream)
@@ -872,7 +877,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @throws IOException on failure or lack of permission to write
      */
     public void writeOptionsIni(String workingDirectory, DesktopOptionsManager opMan) throws IOException {
-        try ( Writer f0 = new BufferedWriter(new OutputStreamWriter(
+        try (Writer f0 = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(workingDirectory
                         + File.separator + PGTUtil.POLYGLOT_INI), StandardCharsets.UTF_8))) {
             String newLine = System.getProperty("line.separator");
@@ -970,6 +975,17 @@ public final class DesktopIOHandler implements IOHandler {
 
             nextLine = PGTUtil.OPTIONS_UI_WEB_SERVICE_INDIVIDUAL_TOKEN_REFILL + "=" + opMan.getWebServiceIndividualTokenRefil();
             f0.write(nextLine + newLine);
+
+            try {
+                nextLine = PGTUtil.OPTIONS_GPT_API_KEY + "=" + CryptographyHandler.encrypt(
+                        opMan.getGptApiKey(),
+                        PGTUtil.OPTIONS_GPT_API_KEY_SECURE
+                );
+                f0.write(nextLine + newLine);
+            }
+            catch (CryptographyHandler.PCryptographyException e) {
+                throw new IOException(e);
+            }
         }
     }
 
@@ -987,7 +1003,7 @@ public final class DesktopIOHandler implements IOHandler {
             return;
         }
 
-        try ( BufferedReader br = new BufferedReader(new FileReader(
+        try (BufferedReader br = new BufferedReader(new FileReader(
                 workingDirectory + File.separator + org.darisadesigns.polyglotlina.Desktop.PGTUtil.POLYGLOT_INI, StandardCharsets.UTF_8))) {
             String loadProblems = "";
 
@@ -1090,6 +1106,11 @@ public final class DesktopIOHandler implements IOHandler {
                             opMan.setWebServiceIndividualTokenCapacity(Integer.parseInt(bothVal[1]));
                         case PGTUtil.OPTIONS_UI_WEB_SERVICE_INDIVIDUAL_TOKEN_REFILL ->
                             opMan.setWebServiceIndividualTokenRefil(Integer.parseInt(bothVal[1]));
+                        case PGTUtil.OPTIONS_GPT_API_KEY ->
+                            opMan.setGptApiKey(CryptographyHandler.decrypt(
+                                    bothVal[1],
+                                    PGTUtil.OPTIONS_GPT_API_KEY_SECURE)
+                            );
                         default -> {
                             // ignore unknown config settings
                         }
@@ -1218,7 +1239,7 @@ public final class DesktopIOHandler implements IOHandler {
 
         try {
             if (errorLog.exists()) {
-                try ( Scanner logScanner = new Scanner(errorLog).useDelimiter("\\Z")) {
+                try (Scanner logScanner = new Scanner(errorLog).useDelimiter("\\Z")) {
                     curContents = logScanner.hasNext() ? logScanner.next() : "";
 
                     // wipe old system info if it still exists
@@ -1237,7 +1258,7 @@ public final class DesktopIOHandler implements IOHandler {
                 }
             }
 
-            try ( BufferedWriter writer = new BufferedWriter(new FileWriter(errorLog))) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(errorLog))) {
                 String output = getSystemInformation() + PGTUtil.ERROR_LOG_SPEARATOR
                         + curContents + errorMessage + "\n";
                 writer.write(output);
@@ -1316,14 +1337,14 @@ public final class DesktopIOHandler implements IOHandler {
             throw new IOException("Unagle to read file at: " + internalPath);
         }
 
-        try ( ZipInputStream zin = new ZipInputStream(fin)) {
+        try (ZipInputStream zin = new ZipInputStream(fin)) {
             unZipStreamToLocation(zin, target);
         }
     }
 
     public void unzipFileToDir(String archivePath, Path target) throws IOException {
         var fin = new FileInputStream(archivePath);
-        try ( var zin = new ZipInputStream(fin)) {
+        try (var zin = new ZipInputStream(fin)) {
             File targetDir = new File(target.toString());
             if (!targetDir.exists()) {
                 targetDir.mkdir();
@@ -1348,7 +1369,7 @@ public final class DesktopIOHandler implements IOHandler {
                 extractTo.mkdir();
             } else {
                 extractTo.createNewFile();
-                try ( FileOutputStream out = new FileOutputStream(extractTo)) {
+                try (FileOutputStream out = new FileOutputStream(extractTo)) {
                     int nRead;
                     byte[] data = new byte[16384];
 
@@ -1370,7 +1391,7 @@ public final class DesktopIOHandler implements IOHandler {
      * @throws java.io.IOException
      */
     public static void packDirectoryToZip(String directoryPath, String targetPath, boolean packingPgdFile) throws Exception {
-        try ( FileOutputStream fos = new FileOutputStream(targetPath);  ZipOutputStream zipOut = new ZipOutputStream(fos)) {
+        try (FileOutputStream fos = new FileOutputStream(targetPath); ZipOutputStream zipOut = new ZipOutputStream(fos)) {
             var fileToZip = new File(directoryPath);
             zipFile(fileToZip, fileToZip.getName(), zipOut, !packingPgdFile);
         }
@@ -1418,7 +1439,7 @@ public final class DesktopIOHandler implements IOHandler {
                     }
                 }
             } else {
-                try ( FileInputStream fis = new FileInputStream(fileToZip)) { // handles normal files
+                try (FileInputStream fis = new FileInputStream(fileToZip)) { // handles normal files
                     ZipEntry zipEntry = new ZipEntry(fileName);
                     zipOut.putNextEntry(zipEntry);
                     byte[] bytes = new byte[1024];
@@ -1478,7 +1499,7 @@ public final class DesktopIOHandler implements IOHandler {
             Process p = Runtime.getRuntime().exec(arguments);
 
             // get general output
-            try ( BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));  BufferedReader errorReader = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream())); BufferedReader errorReader = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     output += line;
@@ -1560,7 +1581,7 @@ public final class DesktopIOHandler implements IOHandler {
             throw new IOException("File " + filePath + " is not a valid PolyGlot archive.");
         }
 
-        try ( ZipFile zipFile = new ZipFile(filePath)) {
+        try (ZipFile zipFile = new ZipFile(filePath)) {
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
             while (entries.hasMoreElements()) {
@@ -1572,28 +1593,32 @@ public final class DesktopIOHandler implements IOHandler {
 
             try {
                 loadGrammarSounds(zipFile, core.getGrammarManager());
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 writeErrorLog(e);
                 warningsAndErrors[1] += e.getLocalizedMessage() + "\n";
             }
 
             try {
                 core.getLogoCollection().loadRadicalRelations();
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 writeErrorLog(e);
                 warningsAndErrors[0] += e.getLocalizedMessage() + "\n";
             }
 
             try {
                 loadLogographs(core.getLogoCollection(), zipFile);
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 writeErrorLog(e);
                 warningsAndErrors[0] += e.getLocalizedMessage() + "\n";
             }
 
             try {
                 loadReversionStates(core.getReversionManager(), zipFile);
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 writeErrorLog(e);
                 warningsAndErrors[0] += e.getLocalizedMessage() + "\n";
             }
@@ -1609,6 +1634,7 @@ public final class DesktopIOHandler implements IOHandler {
 
     /**
      * Loads XML from archive, attempts recovery if damage detected
+     *
      * @param overrideXML
      * @param zipFile
      * @param core
@@ -1621,46 +1647,49 @@ public final class DesktopIOHandler implements IOHandler {
         String[] warningAndErrors = {"", ""};
 
         if (rawXml == null) {
-                var entry = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
+            var entry = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
 
-                try ( InputStream ioStream = zipFile.getInputStream(entry)) {
-                    rawXml = ioStream.readAllBytes();
-                } catch (IOException e) {
-                    // attempt recovery read of XML
-                    rawXml = recoverFileBytesFromArchive(zipFile, PGTUtil.LANG_FILE_NAME);
-                    warningAndErrors[1] = "Encountered corrupted XML file. Recovery-read attempted.\n";
-                }
+            try (InputStream ioStream = zipFile.getInputStream(entry)) {
+                rawXml = ioStream.readAllBytes();
             }
-
-            var parser = new PDomParser(core);
-
-            parser.readXml(new ByteArrayInputStream(rawXml));
-            Exception parseException = parser.getError();
-
-            if (parseException instanceof SAXException) {
-                // attempt to repair malformed XML on IOException
-                parser = new PDomParser(core);
-                var recovery = new XMLRecoveryTool(new String(rawXml, StandardCharsets.UTF_8));
-                var recoveredXml = recovery.recoverXml();
-                parser.readXml(new ByteArrayInputStream(recoveredXml.getBytes()));
-
-                // if not possible to recover, bubble error
-                if (parser.getError() != null) {
-                    throw new IOException(parser.getError());
-                }
-            } else if (parseException != null) {
-                warningAndErrors[1] += "Unrecoverable error encountered while reading file: "
-                        + parseException.getLocalizedMessage() + "\n";
+            catch (IOException e) {
+                // attempt recovery read of XML
+                rawXml = recoverFileBytesFromArchive(zipFile, PGTUtil.LANG_FILE_NAME);
+                warningAndErrors[1] = "Encountered corrupted XML file. Recovery-read attempted.\n";
             }
+        }
 
-            for (String issue : parser.getIssues()) {
-                warningAndErrors[0] += issue + "\n";
+        var parser = new PDomParser(core);
+
+        parser.readXml(new ByteArrayInputStream(rawXml));
+        Exception parseException = parser.getError();
+
+        if (parseException instanceof SAXException) {
+            // attempt to repair malformed XML on IOException
+            parser = new PDomParser(core);
+            var recovery = new XMLRecoveryTool(new String(rawXml, StandardCharsets.UTF_8));
+            var recoveredXml = recovery.recoverXml();
+            parser.readXml(new ByteArrayInputStream(recoveredXml.getBytes()));
+
+            // if not possible to recover, bubble error
+            if (parser.getError() != null) {
+                throw new IOException(parser.getError());
             }
+        } else if (parseException != null) {
+            warningAndErrors[1] += "Unrecoverable error encountered while reading file: "
+                    + parseException.getLocalizedMessage() + "\n";
+        }
+
+        for (String issue : parser.getIssues()) {
+            warningAndErrors[0] += issue + "\n";
+        }
         return warningAndErrors;
     }
 
     /**
-     * Processes/loads PolyGlot archive element (ultimately reads non-logograph images and fonts)
+     * Processes/loads PolyGlot archive element (ultimately reads non-logograph
+     * images and fonts)
+     *
      * @param zipFile
      * @param entry
      * @param core
@@ -1677,25 +1706,28 @@ public final class DesktopIOHandler implements IOHandler {
             // Some elements loaded elsewhere (or ignored as directories)
             return "";
         } else if (entryName.startsWith(PGTUtil.IMAGES_SAVE_PATH)) {
-            try ( InputStream imageStream = zipFile.getInputStream(entry)) {
+            try (InputStream imageStream = zipFile.getInputStream(entry)) {
                 String idString = entryName
                         .replace(".png", "")
                         .replace(PGTUtil.IMAGES_SAVE_PATH, "");
                 int imageId = Integer.parseInt(idString);
                 loadImageAssetWithId(imageStream, imageId, core);
-            } catch (Exception e) {
-                 return "\nProblem loading image: " + entryName;
+            }
+            catch (Exception e) {
+                return "\nProblem loading image: " + entryName;
             }
         } else if (entryName.equals(PGTUtil.CON_FONT_FILE_NAME)) {
             try {
                 DesktopPFontHandler.setFontFromIstream(zipFile.getInputStream(entry), true, core);
-            } catch (FontFormatException ex) {
+            }
+            catch (FontFormatException ex) {
                 return "\nUnable to load conlang font.";
             }
         } else if (entryName.equals(PGTUtil.LOCAL_FONT_FILE_NAME)) {
             try {
                 DesktopPFontHandler.setFontFromIstream(zipFile.getInputStream(entry), false, core);
-            } catch (FontFormatException ex) {
+            }
+            catch (FontFormatException ex) {
                 return "\nUnable to load local lang font.";
             }
         }

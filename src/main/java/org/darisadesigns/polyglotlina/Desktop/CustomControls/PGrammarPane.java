@@ -20,12 +20,6 @@
 package org.darisadesigns.polyglotlina.Desktop.CustomControls;
 
 import java.awt.Color;
-import org.darisadesigns.polyglotlina.Desktop.ClipboardHandler;
-import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
-import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.ExternalCode.GlyphVectorEditorKit;
-import org.darisadesigns.polyglotlina.Nodes.ImageNode;
-import org.darisadesigns.polyglotlina.PGTUtil;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Window;
@@ -49,6 +43,12 @@ import javax.swing.text.Document;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+import org.darisadesigns.polyglotlina.Desktop.ClipboardHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
+import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.ExternalCode.GlyphVectorEditorKit;
+import org.darisadesigns.polyglotlina.Nodes.ImageNode;
+import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
  * Similar to the PTextPane, but compatible with the HTML stylings performed in
@@ -108,7 +108,7 @@ public class PGrammarPane extends JTextPane {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (e.isPopupTrigger() && parentPane.isEnabled()) {
+                if (e.isPopupTrigger() && parentPane.isEnabled() && parentPane.isEditable()) {
                     insertImage.setEnabled(true);
                     cut.setEnabled(true);
                     copy.setEnabled(true);

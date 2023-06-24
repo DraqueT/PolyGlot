@@ -21,13 +21,12 @@ package org.darisadesigns.polyglotlina.Desktop.CustomControls;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
-import org.darisadesigns.polyglotlina.PGTUtil;
 import javax.swing.tree.DefaultMutableTreeNode;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammarManager;
-import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.WebInterface;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -37,10 +36,12 @@ import org.w3c.dom.Element;
  * @author draque
  */
 public class DesktopGrammarSectionNode extends DefaultMutableTreeNode implements GrammarSectionNode {
+
     private final DesktopGrammarManager manager;
     private String name;
     private String sectionText;
     private int recordingId;
+    private boolean gptSelected;
     
     private static final String LOCAL_PACK = "LLOOCCAALL__PPAACCKK";
     private static final String CON_PACK = "CCOONN__PPAACCKK";
@@ -157,6 +158,16 @@ public class DesktopGrammarSectionNode extends DefaultMutableTreeNode implements
         return sb.toString();
     }
     
+    @Override
+    public boolean isGptSelected() {
+        return gptSelected;
+    }
+
+    @Override
+    public void setGptSelected(boolean gptSelected) {
+        this.gptSelected = gptSelected;
+    }
+    
     public void writeXML(Document doc, Element rootElement) {
         Element secNode = doc.createElement(PGTUtil.GRAMMAR_SECTION_NODE_XID);
                 
@@ -170,6 +181,10 @@ public class DesktopGrammarSectionNode extends DefaultMutableTreeNode implements
 
         secElement = doc.createElement(PGTUtil.GRAMMAR_SECTION_TEXT_XID);
         secElement.appendChild(doc.createTextNode(unpackSectionText(this.sectionText)));
+        secNode.appendChild(secElement);
+        
+        secElement = doc.createElement(PGTUtil.GRAMMAR_SECTION_IS_GPT_SELECTED);
+        secElement.appendChild(doc.createTextNode(gptSelected ? PGTUtil.TRUE : PGTUtil.FALSE));
         secNode.appendChild(secElement);
 
         rootElement.appendChild(secNode);
@@ -186,6 +201,7 @@ public class DesktopGrammarSectionNode extends DefaultMutableTreeNode implements
             ret = WebInterface.archiveHTML(sectionText, core).equals(WebInterface.archiveHTML(compSec.sectionText, core));
             ret = ret && name.trim().equals(compSec.name.trim());
             ret = ret && recordingId == compSec.recordingId;
+            ret = ret && gptSelected == compSec.gptSelected;
         }
         
         return ret;

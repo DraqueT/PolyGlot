@@ -19,16 +19,16 @@
  */
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
-import org.darisadesigns.polyglotlina.CustomControls.PAlphaMap;
-import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.PGTUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import org.darisadesigns.polyglotlina.CustomControls.PAlphaMap;
+import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
+import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.WebInterface;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -218,8 +218,12 @@ public abstract class PropertiesManager {
     /**
      * @return the fontSize
      */
-    public double getFontSize() {
+    public double getConFontSize() {
         return conFontSize;
+    }
+    
+    public double getLocalFontSize() {
+        return localFontSize;
     }
 
     /**

@@ -19,7 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.Desktop.ManagersCollections;
 
-import org.darisadesigns.polyglotlina.DictCore;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.io.File;
@@ -28,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
+import org.darisadesigns.polyglotlina.DictCore;
 
 /**
  * This contains, loads and saves the options for PolyGlot (NOT for individual languages)
@@ -35,7 +35,7 @@ import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
  * @author draque
  */
 public class DesktopOptionsManager {
-
+    
     private boolean animateWindows = false;
     private boolean nightMode = false;
     private final List<String> lastFiles = new ArrayList<>();
@@ -55,6 +55,7 @@ public class DesktopOptionsManager {
     private int webServiceindividualTokenRefil = 3;
     private DictCore core;
     private final javafx.scene.text.Font menuFontFX;
+    private String gptApiKey = "";
     
     public DesktopOptionsManager() {
         msBetweenSaves = PGTUtil.DEFAULT_MS_BETWEEN_AUTO_SAVES;
@@ -86,6 +87,7 @@ public class DesktopOptionsManager {
         screensUp.clear();
         toDoBarPosition = -1;
         uiScale = 2;
+        gptApiKey = "";
         setWebServicePort(8080);
         setWebServiceTargetFolder(PGTUtil.getDefaultDirectory() + File.separator + "WebService");
         
@@ -359,5 +361,19 @@ public class DesktopOptionsManager {
             uiScale = 0.5;
         }
         this.uiScale = uiScale;
+    }
+
+    /**
+     * @return the gptApiKey
+     */
+    public String getGptApiKey() {
+        return gptApiKey;
+    }
+
+    /**
+     * @param gptApiKey the gptApiKey to set
+     */
+    public void setGptApiKey(String gptApiKey) {
+        this.gptApiKey = gptApiKey;
     }
 }
