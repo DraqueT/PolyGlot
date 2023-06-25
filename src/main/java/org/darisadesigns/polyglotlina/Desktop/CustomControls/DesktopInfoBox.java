@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-20223, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -32,9 +32,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.DEFAULT_OPTION;
 import javax.swing.UIManager;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.InfoBox;
-import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 
 public class DesktopInfoBox extends JFrame implements InfoBox {
 
@@ -165,6 +165,10 @@ public class DesktopInfoBox extends JFrame implements InfoBox {
         this.doInfo(title, message);
     }
 
+    public static void error(String title, String message, Window parent) {
+        new DesktopInfoBox(parent).error(title, message);
+    }
+    
     @Override
     public void error(String title, String message) {
         if (PGTUtil.isUITestingMode() || PGTUtil.isInJUnitTest()) {

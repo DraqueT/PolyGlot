@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2021, Draque Thompson
+ * Copyright (c) 2015-2023, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -97,6 +97,10 @@ public class FormattedTextHelper {
             this.fontInfo = value;
             return old;
         }
+    }
+    
+    public static int fontSizePtToRem(double ptSize) {
+        return (int)(ptSize*4)/3;
     }
 
     protected FormattedTextHelper() {

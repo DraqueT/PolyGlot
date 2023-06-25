@@ -421,7 +421,7 @@ public class ScrLangProps extends PFrame {
         chkOverrideRegexFont.setSelected(propMan.isOverrideRegexFont());
         chkExpandedLexList.setSelected(propMan.isExpandedLexListDisplay());
         chkUseLocalWordLex.setSelected(propMan.isUseLocalWordLex());
-        txtConSize.setText(Double.toString(propMan.getFontSize()));
+        txtConSize.setText(Double.toString(propMan.getConFontSize()));
         txtLocalSize.setText(Double.toString(propMan.getLocalFontSize()));
         
         populateAlphaTable();

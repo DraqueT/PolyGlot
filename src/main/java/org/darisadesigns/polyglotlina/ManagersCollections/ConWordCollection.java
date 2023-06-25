@@ -24,15 +24,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import org.darisadesigns.polyglotlina.Nodes.ConWord;
-import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.FormattedTextHelper;
-import org.darisadesigns.polyglotlina.Nodes.ConjugationNode;
-import org.darisadesigns.polyglotlina.Nodes.ConjugationPair;
-import org.darisadesigns.polyglotlina.Nodes.EtyExternalParent;
-import org.darisadesigns.polyglotlina.PGTUtil;
-import org.darisadesigns.polyglotlina.Nodes.TypeNode;
-import org.darisadesigns.polyglotlina.RankedObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -42,8 +33,17 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Random;
+import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.FormattedTextHelper;
+import org.darisadesigns.polyglotlina.Nodes.ConWord;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationNode;
+import org.darisadesigns.polyglotlina.Nodes.ConjugationPair;
+import org.darisadesigns.polyglotlina.Nodes.EtyExternalParent;
 import org.darisadesigns.polyglotlina.Nodes.EvolutionPair;
 import org.darisadesigns.polyglotlina.Nodes.EvolutionPair.EvolutionType;
+import org.darisadesigns.polyglotlina.Nodes.TypeNode;
+import org.darisadesigns.polyglotlina.PGTUtil;
+import org.darisadesigns.polyglotlina.RankedObject;
 import org.darisadesigns.polyglotlina.RegexTools;
 import org.darisadesigns.polyglotlina.RegexTools.ReplaceOptions;
 import org.w3c.dom.Document;
@@ -234,6 +234,12 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         if (!core.getOSHandler().getPFontHandler().canStringBeRendered(word.getValue(), true, core)) {
             ret.setValue(ret.getValue() + "\nWord: \"" + word.getValue() + "\" with local value: \"" + word.getLocalWord() 
                     + "\" cannot be rendered properly using font: " + core.getPropertiesManager().getFontConFamily());
+        }
+        
+        // test for illegal clusters
+        String[] illegalClustersFound = core.getPronunciationMgr().testContainsIllegalClusters(word.getValue());
+        if (illegalClustersFound.length > 0) {
+            ret.setValue(ret.getValue() + "\nContains the following illegal cluster(s): " + String.join(", ", illegalClustersFound));
         }
 
         return ret;
@@ -709,7 +715,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
 
     @Override
     public ConWord getNodeById(Integer _id) {
-        return (ConWord) super.getNodeById(_id);
+        return super.getNodeById(_id);
     }
 
     /**

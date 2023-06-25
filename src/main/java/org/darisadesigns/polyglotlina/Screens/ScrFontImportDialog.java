@@ -38,10 +38,10 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextFieldFilter;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
-import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPFontHandler;
-import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
+import org.darisadesigns.polyglotlina.DictCore;
 
 /**
  *
@@ -62,7 +62,7 @@ public final class ScrFontImportDialog extends PDialog {
     }
     
     private void setupListeners() {
-        txtFontSize.setText(Double.toString(core.getPropertiesManager().getFontSize()));
+        txtFontSize.setText(Double.toString(core.getPropertiesManager().getConFontSize()));
         ((PlainDocument) txtFontSize.getDocument())
                 .setDocumentFilter(new PTextFieldFilter());
         txtFontSize.getDocument().addDocumentListener(new DocumentListener() {

@@ -59,6 +59,9 @@ public class GrammarSectionParser extends BaseParser {
             case PGTUtil.GRAMMAR_SECTION_TEXT_XID -> {
                 section.setSectionText(node.getTextContent());
             }
+            case PGTUtil.GRAMMAR_SECTION_IS_GPT_SELECTED -> {
+                section.setGptSelected(node.getTextContent().equals(PGTUtil.TRUE));
+            }
             default ->
                 throw new PDomException("Unexpected node in " + this.getClass().getName() + " : " + node.getNodeName());
         }
