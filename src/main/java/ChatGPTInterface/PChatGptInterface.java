@@ -131,7 +131,7 @@ public class PChatGptInterface {
 
     /**
      * This adds both a user message and an assistant reply to the message
-     * list.This changes the state of the messages, as both will remain in its
+     * list. This changes the state of the messages, as both will remain in its
      * history.
      *
      * @param messageString
@@ -149,7 +149,7 @@ public class PChatGptInterface {
     }
 
     /**
-     * Gets response but does not leave request on message stack.The list of
+     * Gets response but does not leave request on the message stack. The list of
      * messages is the same after the call is made.
      *
      * @param messageString
@@ -168,7 +168,7 @@ public class PChatGptInterface {
 
     /**
      * This fetches a response to the current chain of messages (non
-     * deterministic)
+     * deterministic).
      *
      * @return
      * @throws IOException
@@ -204,7 +204,7 @@ public class PChatGptInterface {
     }
 
     /**
-     * This will throw an appropriate error if the response is a failure
+     * This will throw an appropriate error if the response is a failure.
      *
      * @param response
      */
@@ -367,7 +367,7 @@ public class PChatGptInterface {
     }
 
     /**
-     * Searches for potential words that may be related to a given word
+     * Searches for potential words that may be related to a given word.
      *
      * @param target
      * @return
@@ -458,7 +458,7 @@ public class PChatGptInterface {
     }
 
     /**
-     * Counts occurrences of one string in another
+     * Counts occurrences of one string in another.
      *
      * @param str
      * @param searchStr
