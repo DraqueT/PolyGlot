@@ -19,14 +19,10 @@
  */
 package org.darisadesigns.polyglotlina.Desktop.CustomControls;
 
-import org.darisadesigns.polyglotlina.Desktop.ClipboardHandler;
-import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
-import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
-import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.VisualStyleManager;
-import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -40,7 +36,13 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.text.JTextComponent;
 import org.darisadesigns.polyglotlina.CustomControls.CoreUpdateSubscriptionInterface;
+import org.darisadesigns.polyglotlina.Desktop.ClipboardHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.VisualStyleManager;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
+import org.darisadesigns.polyglotlina.DictCore;
 
 /**
  *
@@ -188,9 +190,12 @@ public final class PTextField extends JTextField implements CoreUpdateSubscripti
     }
     
     @Override
-    public void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g1) {
+        Graphics2D g2 = (Graphics2D) g1;
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        
         try {
-            super.paintComponent(g); 
+            super.paintComponent(g2); 
         } catch (Exception e) {
             // Almost certainly unneccessary, to catch a rare javax.swing.text.GlyphPainter1.sync() bug in Java
         }
@@ -201,12 +206,12 @@ public final class PTextField extends JTextField implements CoreUpdateSubscripti
         
         // display default text if blank and is either not focused, or is not editable
         if (getText().isEmpty() && (!isFocusOwner() || !isEditable())) {
-            var fontMetrics = g.getFontMetrics();
+            var fontMetrics = g2.getFontMetrics();
             var displayDefText = "-- " + defText + " --";
-            g.setColor(PGTUtil.COLOR_DEFAULT_TEXT);
-            g.setFont(PGTUtil.MENU_FONT);
+            g2.setColor(PGTUtil.COLOR_DEFAULT_TEXT);
+            g2.setFont(PGTUtil.MENU_FONT);
             var xPosition = (getWidth()/2) - (fontMetrics.stringWidth(displayDefText)/2);
-            g.drawString(displayDefText, xPosition, fontMetrics.getHeight());
+            g2.drawString(displayDefText, xPosition, fontMetrics.getHeight());
         }
     }
 

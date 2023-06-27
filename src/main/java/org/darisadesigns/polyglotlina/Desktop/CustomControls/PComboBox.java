@@ -309,27 +309,27 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
     }
     
     @Override
-    public void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g1) {
         final int buttonWidth = 20;
         boolean enabled = this.isEnabled();
         
         // turn on anti-alias mode
-        Graphics2D antiAlias = (Graphics2D) g;
-        antiAlias.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        populateFontMetrics(antiAlias);
+        Graphics2D g2 = (Graphics2D) g1;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        populateFontMetrics(g2);
                 
         if (enabled) {
-            antiAlias.setColor(getBackground());
+            g2.setColor(getBackground());
         } else {
-            antiAlias.setColor(PGTUtil.COLOR_COMBOBOX_DISABLED_BG);
+            g2.setColor(PGTUtil.COLOR_COMBOBOX_DISABLED_BG);
         }
-        antiAlias.fillRoundRect(1, 1, getWidth(), getHeight() - 2, 5, 5);
+        g2.fillRoundRect(1, 1, getWidth(), getHeight() - 2, 5, 5);
         
         // draw text
         if (enabled) {
-            antiAlias.setColor(PGTUtil.COLOR_TEXT); 
+            g2.setColor(PGTUtil.COLOR_TEXT); 
         } else {
-            antiAlias.setColor(PGTUtil.COLOR_COMBOBOX_DISABLED_TEXT);
+            g2.setColor(PGTUtil.COLOR_COMBOBOX_DISABLED_TEXT);
         } 
         Object selectedItem = getSelectedItem();
         String text = selectedItem == null ? "" : selectedItem.toString();
@@ -341,31 +341,31 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
         // display default text if appropriate
         if ((text.isBlank() && this.getSelectedIndex() == 0) || text.equals(defaultText)) {
             text = getDefaultText();
-            antiAlias.setColor(PGTUtil.COLOR_TEXT_DISABLED);
+            g2.setColor(PGTUtil.COLOR_TEXT_DISABLED);
             defaultMenuFont = PGTUtil.MENU_FONT;
             fm = menuFontMetrics;
         }
         
         if (!text.isEmpty()) { // 0 length text makes bounding box explode
-            antiAlias.setFont(defaultMenuFont);
-            Rectangle2D rec = fm.getStringBounds(text, antiAlias);
+            g2.setFont(defaultMenuFont);
+            Rectangle2D rec = fm.getStringBounds(text, g2);
             int stringW = (int) Math.round(rec.getWidth());
             int stringH = (int) Math.round(rec.getHeight());
-            antiAlias.drawChars(text.toCharArray(), 0, text.length(), ((getWidth() - buttonWidth)/2) 
+            g2.drawChars(text.toCharArray(), 0, text.length(), ((getWidth() - buttonWidth)/2) 
                     - (stringW/2), (getHeight() - 9)/2 + stringH/2);
         }
         
-        antiAlias.setFont(tmpFont);
+        g2.setFont(tmpFont);
         this.setFont(tmpFont);
         
         // draw outline
         if ((mouseOver || this.hasFocus()) && enabled) {
-            antiAlias.setColor(PGTUtil.COLOR_COMBOBOX_OUTLINE);
+            g2.setColor(PGTUtil.COLOR_COMBOBOX_OUTLINE);
         } else 
         {
-            antiAlias.setColor(PGTUtil.COLOR_COMBOBOX_DISABLED_OUTLINE);
+            g2.setColor(PGTUtil.COLOR_COMBOBOX_DISABLED_OUTLINE);
         }
-        antiAlias.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, 5, 5);
+        g2.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, 5, 5);
         
         // draw local word if appropriate
         if (!filterActive && core.getPropertiesManager().isExpandedLexListDisplay()
@@ -374,13 +374,13 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
             var printValue = word.getLocalWord();
             var drawPosition = (conFontMetrics.stringWidth(word.getValue()) / 2) 
                     + (getWidth()/2);
-            g.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
+            g2.setFont(((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
             
             if (!printValue.isBlank()) {
-                g.setColor(PGTUtil.COLOR_COMBOBOX_LOCAL_TEXT_LINE);
-                g.drawLine(drawPosition + 10, 5, drawPosition + 10, conFontMetrics.getHeight());
-                g.setColor(PGTUtil.COLOR_COMBOBOX_LOCAL_TEXT);
-                g.drawString(printValue, drawPosition + 15, localFontMetrics.getHeight());
+                g2.setColor(PGTUtil.COLOR_COMBOBOX_LOCAL_TEXT_LINE);
+                g2.drawLine(drawPosition + 10, 5, drawPosition + 10, conFontMetrics.getHeight());
+                g2.setColor(PGTUtil.COLOR_COMBOBOX_LOCAL_TEXT);
+                g2.drawString(printValue, drawPosition + 15, localFontMetrics.getHeight());
             }
         }
         
@@ -390,10 +390,10 @@ public class PComboBox<E> extends JComboBox<E> implements MouseListener {
                     - menuFontMetrics.stringWidth(defaultText)
                     - 10;
             
-            g.setFont(PGTUtil.MENU_FONT);
-            g.setColor(PGTUtil.COLOR_DEFAULT_TEXT);
+            g2.setFont(PGTUtil.MENU_FONT);
+            g2.setColor(PGTUtil.COLOR_DEFAULT_TEXT);
             
-            g.drawString(defaultText, drawPosition - 10, localFontMetrics.getHeight());
+            g2.drawString(defaultText, drawPosition - 10, localFontMetrics.getHeight());
         }
     }
     
