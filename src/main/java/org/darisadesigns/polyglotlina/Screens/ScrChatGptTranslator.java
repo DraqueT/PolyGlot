@@ -22,8 +22,6 @@ package org.darisadesigns.polyglotlina.Screens;
 
 import ChatGPTInterface.GPTException;
 import ChatGPTInterface.PChatGptInterface;
-import jakarta.json.JsonValue;
-import jakarta.json.JsonValue.ValueType;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.io.IOException;
@@ -79,18 +77,16 @@ public class ScrChatGptTranslator extends PFrame {
 
     private void populateModelSelection() {
         try {
-            var models = gpt.getGptModels().getOrDefault("data", JsonValue.FALSE);
-            
-            if (models == JsonValue.FALSE || models.getValueType() != ValueType.ARRAY) {
+            var modelsData = gpt.getGptModels();
+
+            if (!modelsData.has("data")) {
                 throw new GPTException("Unexpected reply from server.");
             }
             
-            for (var model : models.asJsonArray()) {
-                if (model.getValueType() != ValueType.OBJECT || model.asJsonObject().getOrDefault("id", JsonValue.FALSE) == JsonValue.FALSE) {
-                    throw new GPTException("Unexpected reply from server.");
-                }
-                
-                var modelId = model.asJsonObject().getString("id");
+            var models = modelsData.get("data");
+
+            for (int i = 0; i < models.size(); i++) {
+                var modelId = models.get(i).get("id").textValue();
                 
                 if (gpt.isModelSupported(modelId)) {
                     cmbModelSelection.addItem(modelId);
@@ -98,8 +94,11 @@ public class ScrChatGptTranslator extends PFrame {
             }
         } catch (GPTException e) {
             DesktopInfoBox.error("GPT Initilization Problem", "Unable to fetch GPT models: " + e.getLocalizedMessage(), this);
+            // TODO: Make this actually dispose itself
+            this.dispose();
         } catch (UnknownHostException e) {
             DesktopInfoBox.error("Connection Error", "Unable connect to GPT servers. Please check internet connection.", this);
+            // TODO: Make this actually dispose itself
             this.dispose();
         }
         

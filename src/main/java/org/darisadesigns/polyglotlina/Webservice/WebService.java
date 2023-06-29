@@ -19,9 +19,9 @@
  */
 package org.darisadesigns.polyglotlina.Webservice;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
-import jakarta.json.Json;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -287,21 +287,20 @@ public class WebService {
     
     private void getAvailableFiles(HttpExchange exchange) throws PWebServerException, IOException {
         var params = parseQueryParams(exchange.getRequestURI());
+        var objectMapper = new ObjectMapper();
+        var files = objectMapper.createObjectNode();
         
         if (!params.isEmpty()) {
             throw new PWebServerException("Bad Request");
         }
         
-        var jsonObject = Json.createObjectBuilder();
-        
         log("File list requested from: " 
                 + exchange.getRemoteAddress().getAddress().getHostAddress());
         
         for (var file : pgdFiles.keySet()) {
-            jsonObject.add(file, pgdFiles.get(file).getPropertiesManager().getLangName());
+            files.put(file, pgdFiles.get(file).getPropertiesManager().getLangName());
         }
         
-        var files = jsonObject.build();
         var response = files.toString().getBytes();
 
         exchange.getResponseHeaders().set(CONTENT_TYPE, getContentType("json"));
@@ -335,14 +334,14 @@ public class WebService {
             soundIds.add(sound.toString());
         }
 
-        var jsonObject = Json.createObjectBuilder()
-                .add("Language", propMan.getLangName())
-                .add("Copyright", WebInterface.getTextFromHtml(propMan.getCopyrightAuthorInfo()))
-                .add("Conlang Font", propMan.getFontCon().getFamily())
-                .add("Local Font", propMan.getFontLocal().getFamily())
-                .add("Image IDs", String.join(", ", imageIds))
-                .add("Sound IDs", String.join(", ", soundIds))
-                .build();
+        var objectMapper = new ObjectMapper();
+        var jsonObject = objectMapper.createObjectNode();
+        jsonObject.put("Language", propMan.getLangName());
+        jsonObject.put("Copyright", WebInterface.getTextFromHtml(propMan.getCopyrightAuthorInfo()));
+        jsonObject.put("Conlang Font", propMan.getFontCon().getFamily());
+        jsonObject.put("Local Font", propMan.getFontLocal().getFamily());
+        jsonObject.put("Image IDs", String.join(", ", imageIds));
+        jsonObject.put("Sound IDs", String.join(", ", soundIds));
         
         var response = jsonObject.toString().getBytes();
         exchange.getResponseHeaders().set(CONTENT_TYPE, getContentType("json"));
