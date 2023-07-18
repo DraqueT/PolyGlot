@@ -740,7 +740,7 @@ public final class ScrPhonology extends PFrame {
     
     private void testIllegalClusters() {
         var testVal = txtIllegalClustersTest.getText();
-        var result = procMan.testContainsIllegalClusters(testVal);
+        var result = procMan.containsIllegalClusters(testVal);
         var displayMessage = "No illegal clusters in test value: " + testVal;
         
         if (result.length > 0) {

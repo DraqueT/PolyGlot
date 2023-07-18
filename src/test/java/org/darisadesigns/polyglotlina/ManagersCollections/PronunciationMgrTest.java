@@ -405,4 +405,107 @@ public class PronunciationMgrTest {
             fail(e);
         }
     }
+    
+    @Test
+    public void testContainsIllegalClusters_legal() {
+        System.out.println("PronunciationMgtTest.testContainsIllegalClusters_legal");
+        
+        try {
+            DictCore core = DummyCore.newCore();
+            PronunciationMgr procMan = core.getPronunciationMgr();
+            
+            procMan.addIllegalCluster("aa");
+            procMan.addIllegalCluster("bb");
+            procMan.addIllegalCluster("cc");
+            procMan.addIllegalCluster("dd");
+            
+            assertEquals(0, procMan.containsIllegalClusters("ee").length);
+        } catch (Exception e) {
+            fail (e);
+        }
+    }
+    
+    @Test
+    public void testContainsIllegalClusters_illegal() {
+        try {
+            DictCore core = DummyCore.newCore();
+            PronunciationMgr procMan = core.getPronunciationMgr();
+            
+            procMan.addIllegalCluster("aa");
+            procMan.addIllegalCluster("bb");
+            procMan.addIllegalCluster("cc");
+            procMan.addIllegalCluster("dd");
+            
+            String[] result = procMan.containsIllegalClusters("aa");
+            
+            assertEquals(1, result.length);
+            assertEquals("aa", result[0]);
+        } catch (Exception e) {
+            fail (e);
+        }
+    }
+    
+    @Test
+    public void testContainsIllegalClusters_regexIllegal() {
+        System.out.println("PronunciationMgtTest.testContainsIllegalClusters_regexIllegal");
+        
+        try {
+            DictCore core = DummyCore.newCore();
+            PronunciationMgr procMan = core.getPronunciationMgr();
+            
+            procMan.addIllegalCluster("a.");
+            procMan.addIllegalCluster("bb");
+            procMan.addIllegalCluster("cc");
+            procMan.addIllegalCluster("dd");
+            
+            String[] result = procMan.containsIllegalClusters("aa");
+            
+            assertEquals(1, result.length);
+            assertEquals("aa", result[0]);
+        } catch (Exception e) {
+            fail (e);
+        }
+    }
+    
+    @Test
+    public void testContainsIllegalClusters_multipleIllegal() {
+        System.out.println("PronunciationMgtTest.testContainsIllegalClusters_multipleIllegal");
+        
+        try {
+            DictCore core = DummyCore.newCore();
+            PronunciationMgr procMan = core.getPronunciationMgr();
+            
+            procMan.addIllegalCluster("aa");
+            procMan.addIllegalCluster("bb");
+            procMan.addIllegalCluster("cc");
+            procMan.addIllegalCluster("dd");
+            
+            String[] result = procMan.containsIllegalClusters("aadd");
+            
+            assertEquals(2, result.length);
+            assertEquals("aa", result[0]);
+            assertEquals("dd", result[1]);
+        } catch (Exception e) {
+            fail (e);
+        }
+    }
+    
+    @Test
+    public void testDuplicateIllegalClustersAdded() {
+        System.out.println("PronunciationMgtTest.testDuplicateIllegalClustersAdded");
+        
+        try {
+            DictCore core = DummyCore.newCore();
+            PronunciationMgr procMan = core.getPronunciationMgr();
+            
+            procMan.addIllegalCluster("aa");
+            procMan.addIllegalCluster("aa");
+            procMan.addIllegalCluster("aa");
+            procMan.addIllegalCluster("aa");
+            
+            assertEquals(1, procMan.getIllegalClusters().length);
+        } catch (Exception e) {
+            fail (e);
+        }
+    }
 }

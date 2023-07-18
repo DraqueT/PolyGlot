@@ -237,7 +237,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         }
         
         // test for illegal clusters
-        String[] illegalClustersFound = core.getPronunciationMgr().testContainsIllegalClusters(word.getValue());
+        String[] illegalClustersFound = core.getPronunciationMgr().containsIllegalClusters(word.getValue());
         if (illegalClustersFound.length > 0) {
             ret.setValue(ret.getValue() + "\nContains the following illegal cluster(s): " + String.join(", ", illegalClustersFound));
         }

@@ -633,7 +633,7 @@ public class PronunciationMgr {
         illegalClusters.clear();
     }
     
-    public String[] testContainsIllegalClusters(String test) {
+    public String[] containsIllegalClusters(String test) {
         List<String> illegalClustersFound = new ArrayList<>();
         
         if (!illegalClusters.isEmpty()) {
