@@ -359,7 +359,7 @@ public class WebService {
             throw new PWebServerException("Bad Request");
         }
         
-        log("Con font requested for: " + fileName + " from: " 
+        log((conFont ? "Con" : "Local") + " font requested for: " + fileName + " from: "
                 + exchange.getRemoteAddress().getAddress().getHostAddress());
         
         DictCore core = pgdFiles.get(fileName);
