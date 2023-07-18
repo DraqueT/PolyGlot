@@ -17,31 +17,20 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package org.darisadesigns.polyglotlina.DomParser;
+package org.darisadesigns.polyglotlina.Desktop.CustomControls;
 
-import java.util.List;
-import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.PGTUtil;
-import org.w3c.dom.Node;
+import javax.swing.JTextPane;
+import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 
 /**
  *
  * @author draquethompson
  */
-public class PronunciationSyllableParser extends BaseParser {
-    
-    public PronunciationSyllableParser(List<String> _parseIssues) {
-        super(_parseIssues);
-    }
-
-    @Override
-    public void consumeChild(Node node, DictCore core) throws Exception {
-        switch(node.getNodeName()) {
-            case PGTUtil.PRO_GUIDE_SYLLABLE -> {
-                core.getPronunciationMgr().addSyllable(node.getTextContent());
-            }
-            default ->
-                throw new PDomException("Unexpected node in " + this.getClass().getName() + " : " + node.getNodeName());
-        }
+public class PTextPaneDisplay extends JTextPane {
+    public PTextPaneDisplay() {
+        super();
+        
+        setFont(PGTUtil.MENU_FONT);
+        setEditable(false);
     }
 }

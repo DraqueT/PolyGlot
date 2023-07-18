@@ -86,7 +86,7 @@ public class ScrWebService extends PFrame {
                                 pnlLog.getVerticalScrollBar().setValue(vScroll.getMaximum());
                             }
                         } catch (Exception e) {
-                            System.out.println("ZOT");
+                            DesktopIOHandler.getInstance().writeErrorLog(e);
                         }
                     });
                 }

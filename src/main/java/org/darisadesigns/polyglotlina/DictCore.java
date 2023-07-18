@@ -19,7 +19,6 @@
  */
 package org.darisadesigns.polyglotlina;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -37,7 +36,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.darisadesigns.polyglotlina.CustomControls.CoreUpdateSubscriptionInterface;
 import org.darisadesigns.polyglotlina.CustomControls.PAlphaMap;
-import org.darisadesigns.polyglotlina.DomParser.PDomParser;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.EtymologyManager;
@@ -623,6 +621,10 @@ public class DictCore {
      */
     public void setLastSaveTime(Instant _lastSaveTime) {
         lastSaveTime = _lastSaveTime;
+    }
+    
+    public Instant getLastSaveTime() {
+        return lastSaveTime;
     }
 
     public File getWorkingDirectory() {

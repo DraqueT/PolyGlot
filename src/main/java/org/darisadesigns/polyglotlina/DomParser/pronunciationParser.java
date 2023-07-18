@@ -28,9 +28,9 @@ import org.w3c.dom.Node;
  *
  * @author draquethompson
  */
-public class pronunciationParser extends BaseParser {
+public class PronunciationParser extends BaseParser {
 
-    public pronunciationParser(List<String> _parseIssues) {
+    public PronunciationParser(List<String> _parseIssues) {
         super(_parseIssues);
     }
 
@@ -38,7 +38,7 @@ public class pronunciationParser extends BaseParser {
     public void consumeChild(Node node, DictCore core) throws Exception {
         switch(node.getNodeName()) {
             case PGTUtil.PRO_GUIDE_SYLLABLES_LIST -> {
-                new pronunciationSyllableParser(parseIssues).parse(node, core);
+                new PronunciationSyllableParser(parseIssues).parse(node, core);
             }
             case PGTUtil.PRO_GUIDE_COMPOSITION_SYLLABLE -> {
                 core.getPronunciationMgr().setSyllableCompositionEnabled(node.getTextContent().equals(PGTUtil.TRUE));
@@ -48,6 +48,9 @@ public class pronunciationParser extends BaseParser {
             }
             case PGTUtil.PRO_GUIDE_XID -> {
                 new ProninciationGuideParser(parseIssues).parse(node, core);
+            }
+            case PGTUtil.PRO_GUIDE_ILLEGAL_CLUSTER_COLLECTION -> {
+                new IllegalClustersParser(parseIssues).parse(node, core);
             }
             default ->
                 throw new PDomException("Unexpected node in " + this.getClass().getName() + " : " + node.getNodeName());

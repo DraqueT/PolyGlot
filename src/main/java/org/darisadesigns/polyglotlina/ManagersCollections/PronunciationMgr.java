@@ -19,9 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
-import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.PGTUtil;
-import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -33,7 +30,10 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
+import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IPAHandler;
+import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
+import org.darisadesigns.polyglotlina.PGTUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -48,6 +48,7 @@ public class PronunciationMgr {
     private List<PronunciationNode> pronunciations = new ArrayList<>();
     private final Set<String> syllables = new HashSet<>();
     private boolean syllableCompositionEnabled = false;
+    private final List<String> illegalClusters = new ArrayList<>();
     
     public PronunciationMgr(DictCore _core) {
         core = _core;
@@ -242,7 +243,7 @@ public class PronunciationMgr {
      */
     public PronunciationNode[] getPronunciationElements(String base) throws Exception {
         // -base.length() fed as initial depth to ensure that longer words cannot be artificially labeled as breaking max depth
-        return getPronunciationElements(base, -base.length(), true).toArray(new PronunciationNode[0]);
+        return getPronunciationElements(base, -base.length(), true).toArray(PronunciationNode[]::new);
     }
     
     /**
@@ -358,7 +359,7 @@ public class PronunciationMgr {
         return ret;
     }
     
-    private List<PronunciationNode> getPronunciationElementsNoRegex(String base, int depth) throws Exception {
+    private List<PronunciationNode> getPronunciationElementsNoRegex(String base, int depth) {
         List<PronunciationNode> ret = new ArrayList<>();
         
         for (PronunciationNode curNode : pronunciations) {
@@ -442,6 +443,14 @@ public class PronunciationMgr {
         pronunciations.forEach((proc)->{
             proc.writeXML(doc, collection);
         });
+        
+        Element illegalClustersCollectionElement = doc.createElement(PGTUtil.PRO_GUIDE_ILLEGAL_CLUSTER_COLLECTION);
+        collection.appendChild(illegalClustersCollectionElement);
+        for (String illegalCluster : illegalClusters) {
+            Element illegalClusterElement = doc.createElement(PGTUtil.PRO_GUIDE_ILLEGAL_CLUSTER);
+            illegalClusterElement.appendChild(doc.createTextNode(illegalCluster));
+            illegalClustersCollectionElement.appendChild(illegalClusterElement);
+        }
     }
 
     /**
@@ -477,8 +486,9 @@ public class PronunciationMgr {
         } else if (comp instanceof PronunciationMgr) {
             PronunciationMgr compProp = (PronunciationMgr)comp;
             
-            ret = recurse == compProp.recurse
-                    && pronunciations.equals(compProp.pronunciations);
+            ret = recurse == compProp.recurse;
+            ret = ret &&  pronunciations.equals(compProp.pronunciations);
+            ret = ret && illegalClusters.equals(compProp.illegalClusters);
         }
         
         return ret;
@@ -532,7 +542,7 @@ public class PronunciationMgr {
     public Map<String, String[]> getIpaSoundsPerCharacter() {
         Map<String, String[]> ret = new HashMap<>();
         String[] allIpaChars = IPAHandler.getAllIpaChars();
-        String[] alphaValues = core.getPropertiesManager().getAlphaOrder().keySet().toArray(new String[0]);
+        String[] alphaValues = core.getPropertiesManager().getAlphaOrder().keySet().toArray(String[]::new);
         Map<String, List<PronunciationNode>> alphaAssociations = new HashMap<>();
         
         // Test if the VALUE for each pronunciation pair (containing the match pattern) includes any given
@@ -570,7 +580,7 @@ public class PronunciationMgr {
                 }
             }
             
-            ret.put(alphaChar, retValues.toArray(new String[0]));
+            ret.put(alphaChar, retValues.toArray(String[]::new));
         }
         
         return ret;
@@ -595,7 +605,7 @@ public class PronunciationMgr {
                         curVals.add(key);
                     }
                     
-                    ret.replace(value, curVals.toArray(new String[0]));
+                    ret.replace(value, curVals.toArray(String[]::new));
                 } else {
                     ret.put(value, new String[]{key});
                 }
@@ -603,5 +613,39 @@ public class PronunciationMgr {
         }
         
         return ret;
+    }
+    
+    public void addIllegalCluster(String illegalCluster) {
+        if (!illegalClusters.contains(illegalCluster) && !illegalCluster.isBlank()) {
+            illegalClusters.add(illegalCluster);
+        }
+    }
+    
+    public String[] getIllegalClusters() {
+        return illegalClusters.toArray(String[]::new);
+    }
+    
+    public void deleteIllegalCluster(String cluster) {
+        illegalClusters.remove(cluster);
+    }
+    
+    public void clearIllegalClusters() {
+        illegalClusters.clear();
+    }
+    
+    public String[] testContainsIllegalClusters(String test) {
+        List<String> illegalClustersFound = new ArrayList<>();
+        
+        if (!illegalClusters.isEmpty()) {
+            String matchPattern = "(" + String.join(")|(", illegalClusters) + ")";
+            Pattern combinedPattern = Pattern.compile(matchPattern);
+            Matcher matcher = combinedPattern.matcher(test);
+
+            while (matcher.find()) {
+                illegalClustersFound.add(matcher.group());
+            }
+        }
+        
+        return illegalClustersFound.toArray(String[]::new);
     }
 }

@@ -28,20 +28,19 @@ import org.w3c.dom.Node;
  *
  * @author draquethompson
  */
-public class PronunciationSyllableParser extends BaseParser {
-    
-    public PronunciationSyllableParser(List<String> _parseIssues) {
+public class IllegalClustersParser extends BaseParser {
+
+    public IllegalClustersParser(List<String> _parseIssues) {
         super(_parseIssues);
     }
-
+    
     @Override
     public void consumeChild(Node node, DictCore core) throws Exception {
-        switch(node.getNodeName()) {
-            case PGTUtil.PRO_GUIDE_SYLLABLE -> {
-                core.getPronunciationMgr().addSyllable(node.getTextContent());
-            }
-            default ->
-                throw new PDomException("Unexpected node in " + this.getClass().getName() + " : " + node.getNodeName());
+        if (node.getNodeName().equals(PGTUtil.PRO_GUIDE_ILLEGAL_CLUSTER)) {
+            core.getPronunciationMgr().addIllegalCluster(node.getTextContent());
+        } else {
+            throw new PDomException("Unexpected node in " + this.getClass().getName() + " : " + node.getNodeName());
         }
     }
+    
 }
