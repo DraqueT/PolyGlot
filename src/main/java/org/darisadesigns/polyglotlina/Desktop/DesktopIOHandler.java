@@ -366,21 +366,21 @@ public final class DesktopIOHandler implements IOHandler {
             DictCore core,
             File workingDirectory,
             Instant saveTime,
-            boolean writeToReversionMgr
+            boolean writeToReversionMgr,
+            boolean forceClean
     )
             throws IOException, TransformerException {
         File finalFile = new File(_fileName);
         String writeLog;
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
+        final File tmpSaveLocation = makeTempSaveFile(workingDirectory);
+        boolean success = false;
 
         try (StringWriter writer = new StringWriter()) {
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
 
             byte[] xmlData = String.valueOf(writer.getBuffer()).getBytes(StandardCharsets.UTF_8);
-
-            final File tmpSaveLocation = makeTempSaveFile(workingDirectory);
-
             writeLog = writeRawFileOutput(tmpSaveLocation, xmlData, core);
 
             // copy tmp file to final location folder
@@ -410,10 +410,15 @@ public final class DesktopIOHandler implements IOHandler {
             }
 
             tmpSaveFinalLocation.renameTo(finalFile);
+            success = true;
             tmpSaveLocation.delete(); // wipe temp file if successful
 
             if (writeToReversionMgr) {
                 core.getReversionManager().addVersion(xmlData, saveTime);
+            }
+        } finally {
+            if ((success || forceClean) && tmpSaveLocation.exists()) {
+                tmpSaveLocation.delete();
             }
         }
 

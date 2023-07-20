@@ -431,11 +431,12 @@ public class DictCore {
      *
      * @param _fileName filename to write to
      * @param writeToReversionMgr
+     * @param forceClean force cleaning of the temp file, regardless of success
      * @throws javax.xml.parsers.ParserConfigurationException
      * @throws javax.xml.transform.TransformerException
      * @throws java.io.FileNotFoundException
      */
-    public void writeFile(String _fileName, boolean writeToReversionMgr)
+    public void writeFile(String _fileName, boolean writeToReversionMgr, boolean forceClean)
             throws ParserConfigurationException, TransformerException, IOException {
         PGTUtil.waitForWritePermission();
 
@@ -451,7 +452,8 @@ public class DictCore {
                     this,
                     this.getWorkingDirectory(),
                     newSaveTime,
-                    writeToReversionMgr
+                    writeToReversionMgr,
+                    forceClean
             );
 
             lastSaveTime = newSaveTime;

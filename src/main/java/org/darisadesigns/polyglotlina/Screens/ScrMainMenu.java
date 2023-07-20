@@ -55,8 +55,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
@@ -575,7 +573,7 @@ public final class ScrMainMenu extends PFrame {
         pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
         try {
-            core.writeFile(_fileName, true);
+            core.writeFile(_fileName, true, false);
         } catch (IOException | ParserConfigurationException
                 | TransformerException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);

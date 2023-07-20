@@ -655,7 +655,7 @@ public final class PolyGlot {
             public void run() {
                 if (core != null && !rootWindow.isDisposed() && !PGTUtil.isInJUnitTest()) {
                     try {
-                        core.writeFile(autoSaveFile.getAbsolutePath(), false);
+                        core.writeFile(autoSaveFile.getAbsolutePath(), false, true);
                     }
                     catch (IOException e) {
                         // Fail silently

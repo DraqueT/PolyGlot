@@ -27,7 +27,6 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -152,7 +151,7 @@ public final class NonModularBridge {
         
         String warningString = "";
         
-        for (String warning : warnings.toArray(new String[0])) {
+        for (String warning : warnings.toArray(String[]::new)) {
             warningString += warning + "\n";
         }
         
@@ -257,7 +256,7 @@ public final class NonModularBridge {
         File ret = File.createTempFile("PolyGlot", "LangFile");
         
         try {
-            core.writeFile(ret.getAbsolutePath(), false);
+            core.writeFile(ret.getAbsolutePath(), false, true);
         } catch (IOException | ParserConfigurationException | TransformerException e) {
             throw new IOException("Unable to save temp file to export from.", e);
         }
