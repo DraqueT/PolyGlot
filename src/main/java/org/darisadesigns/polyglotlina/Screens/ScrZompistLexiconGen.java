@@ -85,6 +85,12 @@ public class ScrZompistLexiconGen extends PFrame {
         setupMenus();
     }
     
+    @Override
+    public void dispose() {
+        super.dispose();
+        PolyGlot.getPolyGlot().getOptionsManager().setZompistUseConlangFont(chkUseConlangFont.isSelected());
+    }
+    
     private void setupMenus() {
         var localFont = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
         var conFont =  ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon();
@@ -106,6 +112,20 @@ public class ScrZompistLexiconGen extends PFrame {
         ((PlainDocument) txtGenerationNum.getDocument())
                 .setDocumentFilter(new PTextFieldFilter());
         checkFormatting();
+        chkUseConlangFont.setSelected(PolyGlot.getPolyGlot().getOptionsManager().isZompistUseConlangFont());
+        setupTextBoxFonts();
+    }
+    
+    private void setupTextBoxFonts() {
+        var propMan = (DesktopPropertiesManager)core.getPropertiesManager();
+        var font = chkUseConlangFont.isSelected() ?
+                propMan.getFontCon() :
+                propMan.getFontLocal();
+        
+        txtCategories.setFont(font);
+        txtIllegalClusters.setFont(font);
+        txtRewriteRules.setFont(font);
+        txtSyllableTypes.setFont(font);
     }
     
     private void loadValues() {
@@ -449,6 +469,9 @@ public class ScrZompistLexiconGen extends PFrame {
                 core.getPropertiesManager().setZompistSyllableTypes(txtSyllableTypes.getText());
                 checkFormatting();
             }
+        });
+        chkUseConlangFont.addActionListener((event) -> {
+            setupTextBoxFonts();
         });
     }
     
@@ -934,6 +957,8 @@ public class ScrZompistLexiconGen extends PFrame {
         jScrollPane5 = new javax.swing.JScrollPane();
         txtIllegalClusters = new javax.swing.JTextArea();
         jLabel4 = new PLabel();
+        chkUseConlangFont = new PCheckBox();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Lexical Generator");
@@ -1328,29 +1353,38 @@ public class ScrZompistLexiconGen extends PFrame {
 
         jLabel4.setText("Illegal Clusters");
 
+        chkUseConlangFont.setText("Use ConFont in Setup");
+        chkUseConlangFont.setToolTipText("Toggles whether the conlang's font is used in the zompist text fields (does not affect outcome)");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(chkUseConlangFont)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane3))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -1364,11 +1398,14 @@ public class ScrZompistLexiconGen extends PFrame {
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                    .addComponent(jScrollPane5)
                     .addComponent(jScrollPane2)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addContainerGap())
+                    .addComponent(jScrollPane1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkUseConlangFont))
         );
 
         javax.swing.GroupLayout pnlTopLayout = new javax.swing.GroupLayout(pnlTop);
@@ -1484,6 +1521,7 @@ public class ScrZompistLexiconGen extends PFrame {
     private javax.swing.JButton btnSampleText;
     private javax.swing.JCheckBox chkShowSyllables;
     private javax.swing.JCheckBox chkSlowSyllableDropoff;
+    private javax.swing.JCheckBox chkUseConlangFont;
     private javax.swing.JComboBox<SwadeshObject> cmbSwadesh;
     private javax.swing.ButtonGroup grpValueChoice;
     private javax.swing.JLabel jLabel1;
@@ -1505,6 +1543,7 @@ public class ScrZompistLexiconGen extends PFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblDropoff;
     private javax.swing.JLabel lblMonoSyllables;
     private javax.swing.JList<ConWordDisplay> lstImport;

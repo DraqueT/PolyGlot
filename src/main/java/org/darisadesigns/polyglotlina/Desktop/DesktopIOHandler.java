@@ -981,6 +981,9 @@ public final class DesktopIOHandler implements IOHandler {
             nextLine = PGTUtil.OPTIONS_UI_WEB_SERVICE_INDIVIDUAL_TOKEN_REFILL + "=" + opMan.getWebServiceIndividualTokenRefil();
             f0.write(nextLine + newLine);
 
+            nextLine = PGTUtil.OPTIONS_ZOMPIST_USE_CONFONT + "=" + (opMan.isZompistUseConlangFont() ? PGTUtil.TRUE : PGTUtil.FALSE);
+            f0.write(nextLine + newLine);
+            
             try {
                 nextLine = PGTUtil.OPTIONS_GPT_API_KEY + "=" + CryptographyHandler.encrypt(
                         opMan.getGptApiKey(),
@@ -1027,17 +1030,17 @@ public final class DesktopIOHandler implements IOHandler {
                     }
 
                     switch (bothVal[0]) {
-                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_LAST_FILES -> {
+                        case PGTUtil.OPTIONS_LAST_FILES -> {
                             for (String last : bothVal[1].split(",")) {
                                 opMan.pushRecentFile(last);
                             }
                         }
-                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_SCREENS_OPEN -> {
+                        case PGTUtil.OPTIONS_SCREENS_OPEN -> {
                             for (String screen : bothVal[1].split(",")) {
                                 opMan.addScreenUp(screen);
                             }
                         }
-                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_SCREEN_POS -> {
+                        case PGTUtil.OPTIONS_SCREEN_POS -> {
                             for (String curPosSet : bothVal[1].split(",")) {
                                 if (curPosSet.isEmpty()) {
                                     continue;
@@ -1053,7 +1056,7 @@ public final class DesktopIOHandler implements IOHandler {
                                 opMan.setScreenPosition(splitSet[0], p);
                             }
                         }
-                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_SCREENS_SIZE -> {
+                        case PGTUtil.OPTIONS_SCREENS_SIZE -> {
                             for (String curSizeSet : bothVal[1].split(",")) {
                                 if (curSizeSet.isEmpty()) {
                                     continue;
@@ -1069,7 +1072,7 @@ public final class DesktopIOHandler implements IOHandler {
                                 opMan.setScreenSize(splitSet[0], d);
                             }
                         }
-                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_DIVIDER_POSITION -> {
+                        case PGTUtil.OPTIONS_DIVIDER_POSITION -> {
                             for (String curPosition : bothVal[1].split(",")) {
                                 if (curPosition.isEmpty()) {
                                     continue;
@@ -1088,11 +1091,11 @@ public final class DesktopIOHandler implements IOHandler {
                         case PGTUtil.OPTIONS_MSBETWEENSAVES ->
                             opMan.setMsBetweenSaves(Integer.parseInt(bothVal[1]));
                         case PGTUtil.OPTIONS_AUTO_RESIZE ->
-                            opMan.setAnimateWindows(bothVal[1].equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.TRUE));
+                            opMan.setAnimateWindows(bothVal[1].equals(PGTUtil.TRUE));
                         case PGTUtil.OPTIONS_MAXIMIZED ->
-                            opMan.setMaximized(bothVal[1].equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.TRUE));
+                            opMan.setMaximized(bothVal[1].equals(PGTUtil.TRUE));
                         case PGTUtil.OPTIONS_NIGHT_MODE ->
-                            opMan.setNightMode(bothVal[1].equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.TRUE));
+                            opMan.setNightMode(bothVal[1].equals(PGTUtil.TRUE));
                         case PGTUtil.OPTIONS_REVERSIONS_COUNT ->
                             opMan.setMaxReversionCount(Integer.parseInt(bothVal[1]));
                         case PGTUtil.OPTIONS_TODO_DIV_LOCATION ->
@@ -1116,6 +1119,8 @@ public final class DesktopIOHandler implements IOHandler {
                                     bothVal[1],
                                     PGTUtil.OPTIONS_GPT_API_KEY_SECURE)
                             );
+                        case PGTUtil.OPTIONS_ZOMPIST_USE_CONFONT ->
+                            opMan.setZompistUseConlangFont(bothVal[1].equals(PGTUtil.TRUE));
                         default -> {
                             // ignore unknown config settings
                         }

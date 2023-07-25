@@ -35,7 +35,7 @@ import org.darisadesigns.polyglotlina.DictCore;
  * @author draque
  */
 public class DesktopOptionsManager {
-    
+
     private boolean animateWindows = false;
     private boolean nightMode = false;
     private final List<String> lastFiles = new ArrayList<>();
@@ -53,6 +53,7 @@ public class DesktopOptionsManager {
     private int webServiceMasterTokenRefill = 15;
     private int webServiceindividualTokenCapacity = 10;
     private int webServiceindividualTokenRefil = 3;
+    private boolean zompistUseConlangFont = false;
     private DictCore core;
     private final javafx.scene.text.Font menuFontFX;
     private String gptApiKey = "";
@@ -375,5 +376,13 @@ public class DesktopOptionsManager {
      */
     public void setGptApiKey(String gptApiKey) {
         this.gptApiKey = gptApiKey;
+    }
+    
+    public boolean isZompistUseConlangFont() {
+        return zompistUseConlangFont;
+    }
+
+    public void setZompistUseConlangFont(boolean zompistUseConlangFont) {
+        this.zompistUseConlangFont = zompistUseConlangFont;
     }
 }

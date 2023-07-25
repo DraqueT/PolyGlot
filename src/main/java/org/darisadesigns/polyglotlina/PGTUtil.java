@@ -297,6 +297,7 @@ public class PGTUtil {
     public static final String OPTIONS_UI_WEB_SERVICE_INDIVIDUAL_TOKEN_REFILL = "WebServiceIndividualTokenRefill";
     public static final String OPTIONS_GPT_API_KEY = "GptApiKey_encrypted";
     public static final String OPTIONS_GPT_API_KEY_SECURE = "JpJAHMiw6LQOov45jfScnixHROHZqa5G";
+    public static final String OPTIONS_ZOMPIST_USE_CONFONT = "ZompistUseConfont";
     
 
     // Java 8 bridge constants
