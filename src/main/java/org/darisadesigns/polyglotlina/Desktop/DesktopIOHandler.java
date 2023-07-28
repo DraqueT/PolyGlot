@@ -53,6 +53,7 @@ import java.nio.file.StandardCopyOption;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -984,6 +985,38 @@ public final class DesktopIOHandler implements IOHandler {
             nextLine = PGTUtil.OPTIONS_ZOMPIST_USE_CONFONT + "=" + (opMan.isZompistUseConlangFont() ? PGTUtil.TRUE : PGTUtil.FALSE);
             f0.write(nextLine + newLine);
             
+            nextLine = PGTUtil.OPTIONS_PDF_PRINT_ORTH + "=" + (opMan.isPdfPrintOrth() ? PGTUtil.TRUE : PGTUtil.FALSE);
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_PDF_PRINT_GLOSSKEY + "=" + (opMan.isPdfPrintGloss() ? PGTUtil.TRUE : PGTUtil.FALSE);
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_PDF_PRINT_LOCAL + "=" + (opMan.isPdfPrintLocalLang() ? PGTUtil.TRUE : PGTUtil.FALSE);
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_PDF_PRINT_CON + "=" + (opMan.isPdfPrintConlang() ? PGTUtil.TRUE : PGTUtil.FALSE);
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_PDF_PRINT_PHRASES + "=" + (opMan.isPdfPrintPhrases() ? PGTUtil.TRUE : PGTUtil.FALSE);
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_PDF_PRINT_GRAMMAR + "=" + (opMan.isPdfPrintGrammar() ? PGTUtil.TRUE : PGTUtil.FALSE);
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_PDF_PRINT_ETYMOLOGY + "=" + (opMan.isPdfPrintEtymology() ? PGTUtil.TRUE : PGTUtil.FALSE);
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_PDF_PRINT_PAGENUM + "=" + (opMan.isPdfPrintPage() ? PGTUtil.TRUE : PGTUtil.FALSE);
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_PDF_PRINT_CONJ + "=" + (opMan.isPdfPrintConj() ? PGTUtil.TRUE : PGTUtil.FALSE);
+            f0.write(nextLine + newLine);
+            
+            var chapOrder = String.join(",", opMan.getPdfPrintChapOrder().stream().map(Object::toString).toArray(String[]::new));
+            
+            nextLine = PGTUtil.OPTIONS_PDF_CHAP_ORDER + "=" + chapOrder;
+            f0.write(nextLine + newLine);
+            
             try {
                 nextLine = PGTUtil.OPTIONS_GPT_API_KEY + "=" + CryptographyHandler.encrypt(
                         opMan.getGptApiKey(),
@@ -1121,6 +1154,31 @@ public final class DesktopIOHandler implements IOHandler {
                             );
                         case PGTUtil.OPTIONS_ZOMPIST_USE_CONFONT ->
                             opMan.setZompistUseConlangFont(bothVal[1].equals(PGTUtil.TRUE));
+                        
+                        case PGTUtil.OPTIONS_PDF_PRINT_ORTH ->
+                            opMan.setPdfPrintOrth(bothVal[1].equals(PGTUtil.TRUE));
+                        case PGTUtil.OPTIONS_PDF_PRINT_GLOSSKEY ->
+                            opMan.setPdfPrintGloss(bothVal[1].equals(PGTUtil.TRUE));
+                        case PGTUtil.OPTIONS_PDF_PRINT_LOCAL ->
+                            opMan.setPdfPrintLocalLang(bothVal[1].equals(PGTUtil.TRUE));
+                        case PGTUtil.OPTIONS_PDF_PRINT_CON ->
+                            opMan.setPdfPrintConlang(bothVal[1].equals(PGTUtil.TRUE));
+                        case PGTUtil.OPTIONS_PDF_PRINT_PHRASES ->
+                            opMan.setPdfPrintPhrases(bothVal[1].equals(PGTUtil.TRUE));
+                        case PGTUtil.OPTIONS_PDF_PRINT_GRAMMAR ->
+                            opMan.setPdfPrintGrammar(bothVal[1].equals(PGTUtil.TRUE));
+                        case PGTUtil.OPTIONS_PDF_PRINT_ETYMOLOGY ->
+                            opMan.setPdfPrintEtymology(bothVal[1].equals(PGTUtil.TRUE));
+                        case PGTUtil.OPTIONS_PDF_PRINT_PAGENUM ->
+                            opMan.setPdfPrintPage(bothVal[1].equals(PGTUtil.TRUE));
+                        case PGTUtil.OPTIONS_PDF_PRINT_CONJ ->
+                            opMan.setPdfPrintConj(bothVal[1].equals(PGTUtil.TRUE));
+                        case PGTUtil.OPTIONS_PDF_CHAP_ORDER -> {
+                            opMan.clearPdfPrintChapOrder();
+                            for (var chap : bothVal[1].split(",")) {
+                                opMan.addPdfPrintChapOrder(Integer.parseInt(chap, 10));
+                            }
+                        }
                         default -> {
                             // ignore unknown config settings
                         }

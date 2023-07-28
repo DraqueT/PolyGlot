@@ -23,6 +23,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +59,18 @@ public class DesktopOptionsManager {
     private final javafx.scene.text.Font menuFontFX;
     private String gptApiKey = "";
     
+    // PDF Printing options
+    private boolean pdfPrintOrth = true;
+    private boolean pdfPrintGloss = true;
+    private boolean pdfPrintLocalLang = true;
+    private boolean pdfPrintConlang = true;
+    private boolean pdfPrintPhrases = true;
+    private boolean pdfPrintGrammar = true;
+    private boolean pdfPrintPage = true;
+    private boolean pdfPrintConj = false;
+    private boolean pdfPrintEtymology = true;
+    private List<Integer> pdfPrintChapOrder = new ArrayList<>(PGTUtil.MAP_PDF_CHAP_TO_LABEL.keySet());
+    
     public DesktopOptionsManager() {
         msBetweenSaves = PGTUtil.DEFAULT_MS_BETWEEN_AUTO_SAVES;
         java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(PGTUtil.MENU_FONT);
@@ -91,6 +104,16 @@ public class DesktopOptionsManager {
         gptApiKey = "";
         setWebServicePort(8080);
         setWebServiceTargetFolder(PGTUtil.getDefaultDirectory() + File.separator + "WebService");
+        pdfPrintOrth = true;
+        pdfPrintGloss = true;
+        pdfPrintLocalLang = true;
+        pdfPrintConlang = true;
+        pdfPrintPhrases = true;
+        pdfPrintGrammar = true;
+        pdfPrintPage = true;
+        pdfPrintConj = false;
+        pdfPrintEtymology = true;
+        pdfPrintChapOrder = new ArrayList<>(PGTUtil.MAP_PDF_CHAP_TO_LABEL.keySet());
         
         if (core != null) {
             core.getReversionManager().setMaxReversionCount(PGTUtil.DEFAULT_MAX_ROLLBACK_NUM);
@@ -384,5 +407,89 @@ public class DesktopOptionsManager {
 
     public void setZompistUseConlangFont(boolean zompistUseConlangFont) {
         this.zompistUseConlangFont = zompistUseConlangFont;
+    }
+    
+    public boolean isPdfPrintOrth() {
+        return pdfPrintOrth;
+    }
+
+    public void setPdfPrintOrth(boolean pdfPrintOrth) {
+        this.pdfPrintOrth = pdfPrintOrth;
+    }
+
+    public boolean isPdfPrintGloss() {
+        return pdfPrintGloss;
+    }
+
+    public void setPdfPrintGloss(boolean pdfPrintGloss) {
+        this.pdfPrintGloss = pdfPrintGloss;
+    }
+
+    public boolean isPdfPrintLocalLang() {
+        return pdfPrintLocalLang;
+    }
+
+    public void setPdfPrintLocalLang(boolean pdfPrintLocalLang) {
+        this.pdfPrintLocalLang = pdfPrintLocalLang;
+    }
+
+    public boolean isPdfPrintConlang() {
+        return pdfPrintConlang;
+    }
+
+    public void setPdfPrintConlang(boolean pdfPrintConlang) {
+        this.pdfPrintConlang = pdfPrintConlang;
+    }
+
+    public boolean isPdfPrintPhrases() {
+        return pdfPrintPhrases;
+    }
+
+    public void setPdfPrintPhrases(boolean pdfPrintPhrases) {
+        this.pdfPrintPhrases = pdfPrintPhrases;
+    }
+
+    public boolean isPdfPrintGrammar() {
+        return pdfPrintGrammar;
+    }
+
+    public void setPdfPrintGrammar(boolean pdfPrintGrammar) {
+        this.pdfPrintGrammar = pdfPrintGrammar;
+    }
+
+    public boolean isPdfPrintPage() {
+        return pdfPrintPage;
+    }
+
+    public void setPdfPrintPage(boolean pdfPrintPage) {
+        this.pdfPrintPage = pdfPrintPage;
+    }
+
+    public boolean isPdfPrintConj() {
+        return pdfPrintConj;
+    }
+
+    public void setPdfPrintConj(boolean pdfPrintConj) {
+        this.pdfPrintConj = pdfPrintConj;
+    }
+
+    public boolean isPdfPrintEtymology() {
+        return pdfPrintEtymology;
+    }
+
+    public void setPdfPrintEtymology(boolean pdfPrintEtymology) {
+        this.pdfPrintEtymology = pdfPrintEtymology;
+    }
+
+    public List<Integer> getPdfPrintChapOrder() {
+        return pdfPrintChapOrder;
+    }
+
+    public void addPdfPrintChapOrder(int pdfPrintSection) {
+        this.pdfPrintChapOrder.add(pdfPrintSection);
+    }
+    
+    public void clearPdfPrintChapOrder() {
+        this.pdfPrintChapOrder.clear();
     }
 }
