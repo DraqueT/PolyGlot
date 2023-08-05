@@ -21,6 +21,7 @@ package org.darisadesigns.polyglotlina;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -111,7 +112,7 @@ public class XMLRecoveryTool {
         }
         
         try {
-            builder.parse(new ByteArrayInputStream(test.getBytes()));
+            builder.parse(new ByteArrayInputStream(test.getBytes(StandardCharsets.UTF_8)));
         } catch (IOException | SAXException e) {
             return false;
         }

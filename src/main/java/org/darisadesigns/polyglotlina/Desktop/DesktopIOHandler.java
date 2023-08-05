@@ -265,7 +265,7 @@ public final class DesktopIOHandler implements IOHandler {
         if (!fileComplete && fileName.equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.LANG_FILE_NAME)) {
             fileContents = new String(fileBytes, StandardCharsets.UTF_8);
             var fixedContents = new XMLRecoveryTool(fileContents).recoverXml();
-            fileBytes = fixedContents.getBytes();
+            fileBytes = fixedContents.getBytes(StandardCharsets.UTF_8);
         }
 
         return fileBytes;
@@ -1747,7 +1747,7 @@ public final class DesktopIOHandler implements IOHandler {
             parser = new PDomParser(core);
             var recovery = new XMLRecoveryTool(new String(rawXml, StandardCharsets.UTF_8));
             var recoveredXml = recovery.recoverXml();
-            parser.readXml(new ByteArrayInputStream(recoveredXml.getBytes()));
+            parser.readXml(new ByteArrayInputStream(recoveredXml.getBytes(StandardCharsets.UTF_8)));
 
             // if not possible to recover, bubble error
             if (parser.getError() != null) {

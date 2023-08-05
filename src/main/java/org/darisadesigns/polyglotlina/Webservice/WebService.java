@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -301,7 +302,7 @@ public class WebService {
             files.put(file, pgdFiles.get(file).getPropertiesManager().getLangName());
         }
         
-        var response = files.toString().getBytes();
+        var response = files.toString().getBytes(StandardCharsets.UTF_8);
 
         exchange.getResponseHeaders().set(CONTENT_TYPE, getContentType("json"));
         exchange.sendResponseHeaders(200, response.length);
@@ -343,7 +344,7 @@ public class WebService {
         jsonObject.put("Image IDs", String.join(", ", imageIds));
         jsonObject.put("Sound IDs", String.join(", ", soundIds));
         
-        var response = jsonObject.toString().getBytes();
+        var response = jsonObject.toString().getBytes(StandardCharsets.UTF_8);
         exchange.getResponseHeaders().set(CONTENT_TYPE, getContentType("json"));
         exchange.sendResponseHeaders(200, response.length);
         try (OutputStream os = exchange.getResponseBody()) {
@@ -417,7 +418,7 @@ public class WebService {
                 + exchange.getRemoteAddress().getAddress().getHostAddress());
 
         try {
-            var xmlBytes = pgdFiles.get(fileName).getRawXml().getBytes();
+            var xmlBytes = pgdFiles.get(fileName).getRawXml().getBytes(StandardCharsets.UTF_8);
 
             exchange.getResponseHeaders().set(CONTENT_TYPE, getContentType(".txt"));
             exchange.sendResponseHeaders(200, xmlBytes.length);
@@ -432,7 +433,7 @@ public class WebService {
 
     private void reject(HttpExchange exchange, String reason) throws IOException {
         log("Rejected request from: " + exchange.getRemoteAddress().getAddress().getHostAddress() + " due to: " + reason);
-        var page = buildDocument("Bad Request", reason).getBytes();
+        var page = buildDocument("Bad Request", reason).getBytes(StandardCharsets.UTF_8);
         
         exchange.getResponseHeaders().set(CONTENT_TYPE, getContentType(".html"));
         exchange.sendResponseHeaders(400, page.length);
@@ -444,7 +445,7 @@ public class WebService {
     private void error(HttpExchange exchange, String reason) {
         log("Errored request from: " + exchange.getRemoteAddress().getAddress().getHostAddress() + " due to: " + reason);
         
-        var page = buildDocument("Internal Error", reason).getBytes();
+        var page = buildDocument("Internal Error", reason).getBytes(StandardCharsets.UTF_8);
         
         exchange.getResponseHeaders().set(CONTENT_TYPE, getContentType(".html"));
         try (OutputStream os = exchange.getResponseBody()) {
@@ -458,7 +459,7 @@ public class WebService {
     private void rateLimitExceeded(HttpExchange exchange) throws IOException {
         log("Rate limit exceeded from: " + exchange.getRemoteAddress().getAddress().getHostAddress());
         
-        var page = buildDocument("Rate Limit Exceeded", "Too many requests. Please try again later.").getBytes();
+        var page = buildDocument("Rate Limit Exceeded", "Too many requests. Please try again later.").getBytes(StandardCharsets.UTF_8);
         
         exchange.getResponseHeaders().set(CONTENT_TYPE, getContentType(".html"));
         exchange.sendResponseHeaders(429, page.length);
@@ -539,7 +540,7 @@ public class WebService {
     }
     
     private void index(HttpExchange exchange) throws IOException {
-        var page = new Index(pgdFiles).buildPage().getBytes();
+        var page = new Index(pgdFiles).buildPage().getBytes(StandardCharsets.UTF_8);
         
         exchange.getResponseHeaders().set(CONTENT_TYPE, getContentType("html"));
         exchange.sendResponseHeaders(200, page.length);
@@ -550,7 +551,7 @@ public class WebService {
 
     private void process404(HttpExchange exchange) throws IOException {
         var bodyContents = "<h1>Requested content at location: " + exchange.getRequestURI().getPath() + " not found.</h1>";
-        var page = buildDocument("404 - not found", bodyContents).getBytes();
+        var page = buildDocument("404 - not found", bodyContents).getBytes(StandardCharsets.UTF_8);
         
         exchange.getResponseHeaders().set(CONTENT_TYPE, getContentType("html"));
         exchange.sendResponseHeaders(404, page.length);

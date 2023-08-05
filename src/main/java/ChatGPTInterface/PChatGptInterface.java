@@ -32,6 +32,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -122,8 +123,8 @@ public class PChatGptInterface {
         }
 
         jsonObject.set("messages", jsonMessages);
-        
-        return jsonObject.toString();
+        String ret = jsonObject.toString();
+        return ret;
     }
 
     /**
@@ -178,7 +179,7 @@ public class PChatGptInterface {
     private String pullResponse(List<GptMessage> targetMessages, String gptModel) throws IOException, GPTException {
         setupConnection(gptModel);
         try (OutputStream os = con.getOutputStream()) {
-            os.write(buildRequestData(targetMessages, gptModel).getBytes());
+            os.write(buildRequestData(targetMessages, gptModel).getBytes(StandardCharsets.UTF_8));
             os.flush();
 
             String responseMessage = con.getResponseMessage();

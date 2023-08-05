@@ -175,7 +175,7 @@ public class IOHandlerTest {
         System.out.println("IOHandlerTest.testInputStreamToByteArray");
         
         try {
-            byte[] expectedResult = "!@)*\ntest\n".getBytes();
+            byte[] expectedResult = "!@)*\ntest\n".getBytes(StandardCharsets.UTF_8);
             InputStream is = new FileInputStream(PGTUtil.TESTRESOURCES + "inputTest.txt");
             byte[] result = DesktopIOHandler.getInstance().clearCarrigeReturns(DesktopIOHandler.getInstance().streamToByteArray(is));
             assertTrue(java.util.Arrays.equals(expectedResult, result));
@@ -321,7 +321,7 @@ public class IOHandlerTest {
         try {
             String testFileContents = "THIS IS A TEST OF FILE ARCHIVAL";
             File workingDirectory = new File(PGTUtil.TESTRESOURCES);
-            Path archiveFilePath = Files.write(Paths.get(PGTUtil.TESTRESOURCES + "testArchive.txt"), testFileContents.getBytes());
+            Path archiveFilePath = Files.write(Paths.get(PGTUtil.TESTRESOURCES + "testArchive.txt"), testFileContents.getBytes(StandardCharsets.UTF_8));
             File archiveFile = archiveFilePath.toFile();
             File resultFile = DesktopIOHandler.getInstance().archiveFile(archiveFile, workingDirectory);
             
