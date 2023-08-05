@@ -402,7 +402,7 @@ public final class ScrMainMenu extends PFrame {
             catch (IOException e) {
                 // save error likely due to inability to write to disk, disable logging
                 // IOHandler.writeErrorLog(e);
-                core.getOSHandler().getInfoBox().warning("INI Save Error", e.getLocalizedMessage());
+                new DesktopInfoBox(this).warning("INI Save Error", e.getLocalizedMessage());
             }
 
             PolyGlot.getPolyGlot().exitCleanup();
@@ -484,18 +484,13 @@ public final class ScrMainMenu extends PFrame {
                 cacheLexicon.updateAllValues(core);
                 changeScreen(cacheLexicon, cacheLexicon.getWindow(), null);
             }
-        } catch (IOException e) {
+        } catch ( IOException | IllegalStateException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            core = PolyGlot.getPolyGlot().getNewCore(); // don't allow partial loads
-            core.getOSHandler().getInfoBox().error("File Read Error", "Could not read file: " + fileName
-                    + "\n\n " + e.getMessage());
-        } catch (IllegalStateException e) {
-            DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getOSHandler().getInfoBox().warning("File Read Warning", "Problems reading file:\n"
+            new DesktopInfoBox(this).error("File Read Warning", "Problems reading file:\n"
                     + e.getLocalizedMessage());
         } catch (ParserConfigurationException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getOSHandler().getInfoBox().error("File Read Error", "Faile to initialize file parser: " + fileName
+            new DesktopInfoBox(this).error("File Read Error", "Faile to initialize file parser: " + fileName
                     + "\n\n " + e.getMessage());
         }
 
@@ -513,7 +508,7 @@ public final class ScrMainMenu extends PFrame {
         boolean ret = true;
 
         if (core != null && core.hasChanged()) {
-            int saveFirst = core.getOSHandler().getInfoBox().yesNoCancel("Save First?",
+            int saveFirst = new DesktopInfoBox(this).yesNoCancel("Save First?",
                     "Save current language before performing action?");
 
             if (saveFirst == JOptionPane.YES_OPTION) {
@@ -573,11 +568,11 @@ public final class ScrMainMenu extends PFrame {
         pnlToDoSplit.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
         try {
-            core.writeFile(_fileName, true, false);
+            core.writeFile(_fileName, true, true);
         } catch (IOException | ParserConfigurationException
                 | TransformerException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getOSHandler().getInfoBox().error("Save Error", "Unable to save to file: "
+            new DesktopInfoBox(this).error("Save Error", "Unable to save to file: "
                     + curFileName + "\n\n" + e.getMessage());
             
             return false;
@@ -627,7 +622,7 @@ public final class ScrMainMenu extends PFrame {
             }
 
             if (DesktopIOHandler.getInstance().fileExists(fileName)) {
-                int overWrite = core.getOSHandler().getInfoBox().yesNoCancel("Overwrite Dialog",
+                int overWrite = new DesktopInfoBox(this).yesNoCancel("Overwrite Dialog",
                         "Overwrite existing file? " + fileName);
 
                 if (overWrite == JOptionPane.NO_OPTION) {
@@ -781,7 +776,7 @@ public final class ScrMainMenu extends PFrame {
                         "File with this name and location already exists. Continue/Overwrite?")) {
             try {
                 NonModularBridge.exportExcelDict(fileName, core,
-                        core.getOSHandler().getInfoBox().actionConfirmation("Excel Export",
+                        new DesktopInfoBox(this).actionConfirmation("Excel Export",
                                 "Export all declensions? (Separates parts of speech into individual tabs)"));
 
                 // only prompt user to open if Desktop supported
@@ -790,12 +785,12 @@ public final class ScrMainMenu extends PFrame {
                         Desktop.getDesktop().open(new File(fileName));
                     }
                 } else {
-                    core.getOSHandler().getInfoBox().info("Export Status", "Language exported to " + fileName + ".");
+                    new DesktopInfoBox(this).info("Export Status", "Language exported to " + fileName + ".");
                 }
             }
             catch (IOException e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
-                core.getOSHandler().getInfoBox().info("Export Problem", e.getLocalizedMessage());
+                new DesktopInfoBox(this).info("Export Problem", e.getLocalizedMessage());
             }
         }
     }
@@ -838,11 +833,11 @@ public final class ScrMainMenu extends PFrame {
             } else {
                 DesktopIOHandler.getInstance().exportConFont(fileName, core.getCurFileName());
             }
-            core.getOSHandler().getInfoBox().info("Export Success", "Font exported to: " + fileName);
+            new DesktopInfoBox(this).info("Export Success", "Font exported to: " + fileName);
         }
         catch (IOException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getOSHandler().getInfoBox().error("Export Error", "Unable to export font: " + e.getMessage());
+            new DesktopInfoBox(this).error("Export Error", "Unable to export font: " + e.getMessage());
         }
     }
 
@@ -876,7 +871,7 @@ public final class ScrMainMenu extends PFrame {
         if (curWindow instanceof ScrLexicon scrLexicon) {
             scrLexicon.setWordSelectedById(id);
         } else {
-            core.getOSHandler().getInfoBox().warning("Open Lexicon",
+            new DesktopInfoBox(this).warning("Open Lexicon",
                     "Please open the Lexicon and select a word to use this feature.");
         }
     }
@@ -894,7 +889,7 @@ public final class ScrMainMenu extends PFrame {
             scrLexicon.saveAllValues();
             ret = scrLexicon.getCurrentWord();
         } else {
-            core.getOSHandler().getInfoBox().warning("Open Lexicon",
+            new DesktopInfoBox(this).warning("Open Lexicon",
                     "Please open the Lexicon and select a word to use this feature.");
         }
 
@@ -1442,7 +1437,7 @@ public final class ScrMainMenu extends PFrame {
             }
 
             if (DesktopIOHandler.getInstance().fileExists(fileName)) {
-                int overWrite = core.getOSHandler().getInfoBox().yesNoCancel("Overwrite Dialog",
+                int overWrite = new DesktopInfoBox(this).yesNoCancel("Overwrite Dialog",
                         "Overwrite existing file? " + fileName);
 
                 if (overWrite != JOptionPane.YES_OPTION) {
@@ -1468,7 +1463,7 @@ public final class ScrMainMenu extends PFrame {
             DesktopOSHandler.browseToLocation(PGTUtil.TROUBLE_TICKET_URL);
         }
         catch (IOException e) {
-            core.getOSHandler().getInfoBox().info("Location Unreachable", "Unable to open ticket site. Please check web connection.");
+            new DesktopInfoBox(this).info("Location Unreachable", "Unable to open ticket site. Please check web connection.");
         }
     }
 
@@ -2279,7 +2274,7 @@ public final class ScrMainMenu extends PFrame {
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         
         try {
-            if (core.getOSHandler().getInfoBox().yesNoCancel("Continue Operation?", "The statistics report can"
+            if (new DesktopInfoBox(this).yesNoCancel("Continue Operation?", "The statistics report can"
                     + " take a long time to complete, depending on the complexity\n"
                     + "of your conlang. Continue?") == JOptionPane.YES_OPTION) {
 
@@ -2300,7 +2295,7 @@ public final class ScrMainMenu extends PFrame {
                 }
                 catch (InterruptedException e) {
                     core.getOSHandler().getIOHandler().writeErrorLog(e);
-                    core.getOSHandler().getInfoBox().error("Language Stat Error", "Unable to generate language statistics: " + e.getLocalizedMessage());
+                    new DesktopInfoBox(this).error("Language Stat Error", "Unable to generate language statistics: " + e.getLocalizedMessage());
                 }
 
                 // test whether con-font family is installed on computer

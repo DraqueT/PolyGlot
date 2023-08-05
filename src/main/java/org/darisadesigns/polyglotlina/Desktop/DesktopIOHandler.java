@@ -357,7 +357,7 @@ public final class DesktopIOHandler implements IOHandler {
                 }
             }
         }
-        return test == 0x504b0304;
+        return test == 0x504b0304; // TODO: Put this into PGTUtil with a useful name
     }
 
     @Override
@@ -388,6 +388,11 @@ public final class DesktopIOHandler implements IOHandler {
             var tmpSaveFinalLocation = new File(finalFile.getParent() + File.separator + tmpSaveLocation.getName());
             copyFile(tmpSaveLocation.toPath(), tmpSaveFinalLocation.toPath(), true);
 
+            // TODO: Following steps
+            // - if equality test passes: save as normal
+            // - else if no file exists in final location: Warn user of inconsistency while saving as normal
+            // - else: ask user permission to overwrite file, while giving relevant warning - explain that otherwise it will be saved to "<ORIGINAL-NAME>-WARN.pgd"
+
             // attempt to open file in dummy core. On success, copy file to end
             // destination, on fail, delete file and inform user by bubbling error
             try {
@@ -401,8 +406,7 @@ public final class DesktopIOHandler implements IOHandler {
                 if (!core.equals(test)) {
                     throw new Exception("Written file does not match file in memory.");
                 }
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 throw new IOException(ex);
             }
 
@@ -682,6 +686,11 @@ public final class DesktopIOHandler implements IOHandler {
     @Override
     public void loadImageAssetWithId(InputStream imageStream, int imageId, DictCore core) throws Exception {
         var img = ImageIO.read(imageStream);
+        
+        if (img == null) {
+            throw new IOException("Image with id: " + imageId + " unreadable.");
+        }
+        
         var imageCollection = core.getImageCollection();
 
         ImageNode imageNode = new ImageNode(core);
@@ -744,13 +753,14 @@ public final class DesktopIOHandler implements IOHandler {
         while (reversion != null && i < reversionManager.getMaxReversionsCount()) {
             try {
                 reversionManager.addVersionToEnd(streamToByteArray(zipFile.getInputStream(reversion)));
-                i++;
                 reversion = zipFile.getEntry(
                         PGTUtil.REVERSION_SAVE_PATH + PGTUtil.REVERSION_BASE_FILE_NAME + i
                 );
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
+                // TODO: Capture nature of problem from error string
                 errors = true;
+            } finally {
+                i++;
             }
         }
 
@@ -852,10 +862,10 @@ public final class DesktopIOHandler implements IOHandler {
                             curNode.getRecordingId(),
                             streamToByteArray(soundStream)
                     );
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
+                    curNode.setRecordingId(-1);
                     writeErrorLog(e);
-                    loadLog += "\nUnable to load sound: " + e.getLocalizedMessage();
+                    loadLog += "\nUnable to load sound for grammar node: " + curNode.getName() + ": " + e.getLocalizedMessage();
                 }
             }
         }
@@ -1664,7 +1674,7 @@ public final class DesktopIOHandler implements IOHandler {
             }
             catch (Exception e) {
                 writeErrorLog(e);
-                warningsAndErrors[1] += e.getLocalizedMessage() + "\n";
+                warningsAndErrors[0] += e.getLocalizedMessage() + "\n";
             }
 
             try {
@@ -1780,22 +1790,19 @@ public final class DesktopIOHandler implements IOHandler {
                         .replace(PGTUtil.IMAGES_SAVE_PATH, "");
                 int imageId = Integer.parseInt(idString);
                 loadImageAssetWithId(imageStream, imageId, core);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 return "\nProblem loading image: " + entryName;
             }
         } else if (entryName.equals(PGTUtil.CON_FONT_FILE_NAME)) {
             try {
                 DesktopPFontHandler.setFontFromIstream(zipFile.getInputStream(entry), true, core);
-            }
-            catch (FontFormatException ex) {
+            } catch (FontFormatException ex) {
                 return "\nUnable to load conlang font.";
             }
         } else if (entryName.equals(PGTUtil.LOCAL_FONT_FILE_NAME)) {
             try {
                 DesktopPFontHandler.setFontFromIstream(zipFile.getInputStream(entry), false, core);
-            }
-            catch (FontFormatException ex) {
+            } catch (FontFormatException ex) {
                 return "\nUnable to load local lang font.";
             }
         }
