@@ -23,7 +23,6 @@ import TestResources.DummyCore;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
-import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import static org.junit.jupiter.api.Assertions.*;
@@ -58,13 +57,13 @@ public class ConWordCollectionTest {
             int resultLexSize = words.getWordCount();
             int resultFoundSize = foundWords.length;
 
-            assertEquals(resultLexSize, expectedSize);
-            assertEquals(resultFoundSize, expectedFoundWords);
+            assertEquals(expectedSize, resultLexSize);
+            assertEquals(expectedFoundWords, resultFoundSize);
 
             String resultWordVal = foundWords[0].getValue();
             assertEquals(resultWordVal, expectedValue);
         } catch (Exception e) {
-            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
+            // DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
     }
@@ -87,6 +86,38 @@ public class ConWordCollectionTest {
         String resultMessage = t.getLocalizedMessage();
         
         assertEquals(expectedMessage, resultMessage);
+    }
+    
+    @Test
+    public void loadSwadeshSkipExistingWords() {
+        System.out.println("ConWordCollectionTest.loadSwadeshSkipExistingWords");
+        
+        String searchValue = "#"; // All inserted words will contain a hash mark
+        int expectedSize = 96; // 100 - four words to be skipped below
+        
+        DictCore core = DummyCore.newCore();
+        ConWordCollection words = core.getWordCollection();
+        
+        try {
+        // words added here should be skipped
+            words.addWord(new ConWord("blah", "fire")); // normal
+            words.addWord(new ConWord("blah", "tHis")); // partial capitalization
+            words.addWord(new ConWord("blah", "       many      ")); // padded with whitespace
+            words.addWord(new ConWord("blah", "big, enormous")); // part of a comma delimited list
+
+            BufferedInputStream bs = new BufferedInputStream(
+                    ConWordCollection.class.getResourceAsStream(PGTUtil.SWADESH_LOCATION + PGTUtil.SWADESH_LISTS[0]));
+        
+            words.loadSwadesh(bs, false);
+            ConWord filterWord = new ConWord();
+            filterWord.setValue(searchValue);
+            ConWord[] foundWords = words.filteredList(filterWord);
+
+            assertEquals(expectedSize, foundWords.length);
+        } catch (Exception e) {
+            // DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
     }
     
     @Test

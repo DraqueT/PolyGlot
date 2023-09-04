@@ -108,7 +108,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         }
 
         this.safeSort(retList);
-        return retList.toArray(new ConWord[0]);
+        return retList.toArray(ConWord[]::new);
     }
     
     /**
@@ -123,25 +123,49 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         
         try (BufferedReader r = new BufferedReader(new InputStreamReader(bs, StandardCharsets.UTF_8))) {
             if (!showPrompt || core.getOSHandler().getInfoBox().actionConfirmation("Import Swadesh List?", 
-                    "This will import all the words defined within this Swadesh list into your lexicon. Continue?")) {
+                    "This will import all the words defined within this Swadesh list into your lexicon. Continue?")) { // TODO: Move this into the UI layer...
+                var wordCount = 1; // counted separately for cases where words are skipped.
                 for (int i = 0; (line = r.readLine()) != null; i++) {
-                    if (line.startsWith("#")) {
+                    if (line.startsWith("#") || localWordExists(line)) {
                         continue;
                     }
 
                     // even out the lines so they appear in proper order. if a list is over 1k entries... that is too many. I'll fix it if people complain. X|
-                    String swadeshNum = Integer.toString(i);
+                    String swadeshNum = Integer.toString(wordCount);
                     while (swadeshNum.length() < 3) {
                         swadeshNum = "0" + swadeshNum;
                     }
-
+                    
                     ConWord newWord = new ConWord();
                     newWord.setValue("#" + swadeshNum + ": " + line.toUpperCase());
                     newWord.setLocalWord(line);
                     this.addWord(newWord);
+                    wordCount++;
                 }
             }
         }
+    }
+    
+    /**
+     * Tests whether a given string exists as a local word
+     * Accounts for comma delimited lists
+     * Disregards capitalization
+     * Disregards properties within parenthetical notation
+     * @param test
+     * @return 
+     */
+    public boolean localWordExists(String test) {
+        test = test.replaceAll("\\(.*\\)", "");
+        
+        for (ConWord word : this.nodeMap.values()) {
+            for (String local : word.getLocalWord().split(",")) {
+                if (local.trim().toLowerCase().equals(test.trim().toLowerCase())) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
     }
 
     /**
@@ -466,7 +490,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
             }
         }
 
-        return ret.toArray(new ConWord[0]);
+        return ret.toArray(ConWord[]::new);
     }
     
     /**
@@ -528,7 +552,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
             }
         }
         
-        return ret.toArray(new EvolutionPair[0]);
+        return ret.toArray(EvolutionPair[]::new);
     }
 
     /**
@@ -745,7 +769,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
      * @return
      */
     public ConWord[] getWordNodes() {
-        return this.getWordNodesList().toArray(new ConWord[0]);
+        return this.getWordNodesList().toArray(ConWord[]::new);
     }
 
     /**
@@ -796,7 +820,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         this.safeSort(retList);
         orderByLocal = false;
 
-        return retList.toArray(new ConWord[0]);
+        return retList.toArray(ConWord[]::new);
     }
 
     /**
@@ -962,11 +986,11 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
             this.safeSortDisplay(ret);
         }
         
-        return ret.toArray(new ConWordDisplay[0]);
+        return ret.toArray(ConWordDisplay[]::new);
     }
     
     /**
-     * Safely sorts a list of the collection display. Workaround for tyical safesort on super
+     * Safely sorts a list of the collection display. Workaround for typical safe-sort on super
      * (Accounts for possible failure due to incomplete/incoherent alphabet written by user)
      * @param sort 
      */

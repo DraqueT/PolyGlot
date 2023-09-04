@@ -19,10 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.Nodes;
 
-import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
-import org.darisadesigns.polyglotlina.PGTUtil;
-import org.darisadesigns.polyglotlina.WebInterface;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -30,10 +26,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.DictionaryCollection;
+import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.RegexTools;
 import org.darisadesigns.polyglotlina.RegexTools.ReplaceOptions;
+import org.darisadesigns.polyglotlina.WebInterface;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -68,6 +68,18 @@ public class ConWord extends DictNode {
         autoConjugationOverride = false;
         rulesOverride = false;
         etymNotes = "";
+    }
+    
+    /**
+     * Primarily used for convenience in testing
+     * @param value
+     * @param local 
+     */
+    public ConWord(String value, String local) {
+        this();
+        
+        this.value = value;
+        this.localWord = local;
     }
 
     /**

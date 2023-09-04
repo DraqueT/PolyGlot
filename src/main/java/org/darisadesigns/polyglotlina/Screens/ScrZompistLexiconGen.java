@@ -490,8 +490,8 @@ public class ScrZompistLexiconGen extends PFrame {
             
             for (var line = r.readLine(); line != null; line = r.readLine()) {
                 line = line.trim();
-                if (line.startsWith("#")) {
-                    // ignore comments
+                if (line.startsWith("#") || core.getWordCollection().localWordExists(line)) {
+                    // ignore comments and words already defined
                     continue;
                 }
                 String[] column = {line};
