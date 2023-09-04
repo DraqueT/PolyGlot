@@ -67,6 +67,17 @@ public final class ScrOptions extends PDialog {
             lblUiScaling.setText("UI Scaling: " + (sldUiScaling.getValue() / 10.0));
         });
     }
+    
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        
+        var dimensions = this.getMinimumSize();
+        
+        if (this.getWidth() < dimensions.width || this.getHeight() < dimensions.getHeight()) {
+            this.setSize(dimensions);
+        }
+    }
 
     @Override
     public void dispose() {
@@ -137,7 +148,7 @@ public final class ScrOptions extends PDialog {
 
         setTitle("PolyGlot Options");
         setBackground(new java.awt.Color(255, 255, 255));
-        setMinimumSize(new java.awt.Dimension(319, 309));
+        setMinimumSize(new java.awt.Dimension(319, 330));
         setModal(true);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));

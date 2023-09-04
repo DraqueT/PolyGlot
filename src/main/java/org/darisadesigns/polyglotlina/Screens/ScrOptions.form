@@ -7,7 +7,7 @@
       <Color blue="ff" green="ff" red="ff" type="rgb"/>
     </Property>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[319, 309]"/>
+      <Dimension value="[319, 330]"/>
     </Property>
     <Property name="modal" type="boolean" value="true"/>
   </Properties>
