@@ -101,13 +101,26 @@ public interface IOHandler {
      */
     boolean isFileZipArchive(String _fileName) throws IOException;
 
+    /**
+     *
+     * @param _fileName
+     * @param doc
+     * @param core
+     * @param workingDirectory home directory
+     * @param saveTime time of save initiation
+     * @param writeToReversionMgr Whether to add this version to the reversion manager
+     * @param forceClean Forces the cleaning of the temp file even on failure
+     * @throws IOException
+     * @throws TransformerException
+     */
     void writeFile(
             String _fileName,
             Document doc,
             DictCore core,
             File workingDirectory,
             Instant saveTime,
-            boolean writeToReversionMgr
+            boolean writeToReversionMgr,
+            boolean forceClean
     )
             throws IOException, TransformerException;
 

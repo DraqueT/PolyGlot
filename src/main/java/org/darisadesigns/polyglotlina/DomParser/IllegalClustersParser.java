@@ -28,29 +28,18 @@ import org.w3c.dom.Node;
  *
  * @author draquethompson
  */
-public class pronunciationParser extends BaseParser {
+public class IllegalClustersParser extends BaseParser {
 
-    public pronunciationParser(List<String> _parseIssues) {
+    public IllegalClustersParser(List<String> _parseIssues) {
         super(_parseIssues);
     }
-
+    
     @Override
     public void consumeChild(Node node, DictCore core) throws Exception {
-        switch(node.getNodeName()) {
-            case PGTUtil.PRO_GUIDE_SYLLABLES_LIST -> {
-                new pronunciationSyllableParser(parseIssues).parse(node, core);
-            }
-            case PGTUtil.PRO_GUIDE_COMPOSITION_SYLLABLE -> {
-                core.getPronunciationMgr().setSyllableCompositionEnabled(node.getTextContent().equals(PGTUtil.TRUE));
-            }
-            case PGTUtil.PRO_GUIDE_RECURSIVE_XID -> {
-                core.getPronunciationMgr().setRecurse(node.getTextContent().equals(PGTUtil.TRUE));
-            }
-            case PGTUtil.PRO_GUIDE_XID -> {
-                new ProninciationGuideParser(parseIssues).parse(node, core);
-            }
-            default ->
-                throw new PDomException("Unexpected node in " + this.getClass().getName() + " : " + node.getNodeName());
+        if (node.getNodeName().equals(PGTUtil.PRO_GUIDE_ILLEGAL_CLUSTER)) {
+            core.getPronunciationMgr().addIllegalCluster(node.getTextContent());
+        } else {
+            throw new PDomException("Unexpected node in " + this.getClass().getName() + " : " + node.getNodeName());
         }
     }
     

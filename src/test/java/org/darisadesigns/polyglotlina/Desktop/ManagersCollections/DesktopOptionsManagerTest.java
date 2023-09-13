@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2022-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT License
@@ -26,14 +26,13 @@ import java.io.File;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.ManagersCollections.OptionsManagerTest;
 import org.darisadesigns.polyglotlina.PGTUtil;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -74,6 +73,8 @@ public class DesktopOptionsManagerTest {
             Dimension expectedScreenDimension = new Dimension(69, 420);
             int toDoBarPositionExpected = 666;
             int autoSavMs = 12345678;
+            String gptKey = "bleeblebloop";
+            boolean useConFontZompist = false;
 
             // create test core to set values in...
             DictCore core = DummyCore.newCore();
@@ -88,6 +89,8 @@ public class DesktopOptionsManagerTest {
             opt.setMaximized(true);
             opt.setDividerPosition(testScreenName, toDoBarPositionExpected);
             opt.setMsBetweenSaves(autoSavMs);
+            opt.setGptApiKey(gptKey);
+            opt.setZompistUseConlangFont(useConFontZompist);
 
             // save values to disk...
             DesktopIOHandler.getInstance().writeOptionsIni(core.getWorkingDirectory().getAbsolutePath(), opt);
@@ -108,6 +111,8 @@ public class DesktopOptionsManagerTest {
             assertEquals(toDoBarPositionExpected, opt.getDividerPosition(testScreenName));
             assertTrue(opt.isMaximized());
             assertEquals(autoSavMs, opt.getMsBetweenSaves());
+            assertEquals(gptKey, opt.getGptApiKey());
+            assertEquals(useConFontZompist, opt.isZompistUseConlangFont());
         } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e);
             fail(e);

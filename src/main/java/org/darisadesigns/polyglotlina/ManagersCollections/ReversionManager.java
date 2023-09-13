@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019, Draque Thompson
+ * Copyright (c) 2018-2023, Draque Thompson
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -19,12 +19,12 @@
  */
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
-import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.Nodes.ReversionNode;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.Nodes.ReversionNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 
 /**
@@ -65,7 +65,7 @@ public class ReversionManager {
 
     public ReversionNode[] getReversionList() {
         Collections.sort(reversionList);
-        return reversionList.toArray(new ReversionNode[0]);
+        return reversionList.toArray(ReversionNode[]::new);
     }
     
     public int getMaxReversionsCount() {
@@ -78,7 +78,9 @@ public class ReversionManager {
     
     public void setMaxReversionCount(int maxRollbackVersions, boolean trimRevisions) {
         this.maxReversionCount = maxRollbackVersions;
-        if(trimRevisions) trimReversions();
+        if(trimRevisions) {
+            trimReversions();
+        }
     }
     
     /**

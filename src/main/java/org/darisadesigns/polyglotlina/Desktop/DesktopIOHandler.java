@@ -53,6 +53,7 @@ import java.nio.file.StandardCopyOption;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -264,7 +265,7 @@ public final class DesktopIOHandler implements IOHandler {
         if (!fileComplete && fileName.equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.LANG_FILE_NAME)) {
             fileContents = new String(fileBytes, StandardCharsets.UTF_8);
             var fixedContents = new XMLRecoveryTool(fileContents).recoverXml();
-            fileBytes = fixedContents.getBytes();
+            fileBytes = fixedContents.getBytes(StandardCharsets.UTF_8);
         }
 
         return fileBytes;
@@ -356,7 +357,7 @@ public final class DesktopIOHandler implements IOHandler {
                 }
             }
         }
-        return test == 0x504b0304;
+        return test == 0x504b0304; // TODO: Put this into PGTUtil with a useful name
     }
 
     @Override
@@ -366,26 +367,31 @@ public final class DesktopIOHandler implements IOHandler {
             DictCore core,
             File workingDirectory,
             Instant saveTime,
-            boolean writeToReversionMgr
+            boolean writeToReversionMgr,
+            boolean forceClean
     )
             throws IOException, TransformerException {
         File finalFile = new File(_fileName);
         String writeLog;
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
+        final File tmpSaveLocation = makeTempSaveFile(workingDirectory);
+        boolean success = false;
 
         try (StringWriter writer = new StringWriter()) {
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
 
             byte[] xmlData = String.valueOf(writer.getBuffer()).getBytes(StandardCharsets.UTF_8);
-
-            final File tmpSaveLocation = makeTempSaveFile(workingDirectory);
-
             writeLog = writeRawFileOutput(tmpSaveLocation, xmlData, core);
 
             // copy tmp file to final location folder
             var tmpSaveFinalLocation = new File(finalFile.getParent() + File.separator + tmpSaveLocation.getName());
             copyFile(tmpSaveLocation.toPath(), tmpSaveFinalLocation.toPath(), true);
+
+            // TODO: Following steps
+            // - if equality test passes: save as normal
+            // - else if no file exists in final location: Warn user of inconsistency while saving as normal
+            // - else: ask user permission to overwrite file, while giving relevant warning - explain that otherwise it will be saved to "<ORIGINAL-NAME>-WARN.pgd"
 
             // attempt to open file in dummy core. On success, copy file to end
             // destination, on fail, delete file and inform user by bubbling error
@@ -400,8 +406,7 @@ public final class DesktopIOHandler implements IOHandler {
                 if (!core.equals(test)) {
                     throw new Exception("Written file does not match file in memory.");
                 }
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 throw new IOException(ex);
             }
 
@@ -410,10 +415,15 @@ public final class DesktopIOHandler implements IOHandler {
             }
 
             tmpSaveFinalLocation.renameTo(finalFile);
+            success = true;
             tmpSaveLocation.delete(); // wipe temp file if successful
 
             if (writeToReversionMgr) {
                 core.getReversionManager().addVersion(xmlData, saveTime);
+            }
+        } finally {
+            if ((success || forceClean) && tmpSaveLocation.exists()) {
+                tmpSaveLocation.delete();
             }
         }
 
@@ -676,6 +686,11 @@ public final class DesktopIOHandler implements IOHandler {
     @Override
     public void loadImageAssetWithId(InputStream imageStream, int imageId, DictCore core) throws Exception {
         var img = ImageIO.read(imageStream);
+        
+        if (img == null) {
+            throw new IOException("Image with id: " + imageId + " unreadable.");
+        }
+        
         var imageCollection = core.getImageCollection();
 
         ImageNode imageNode = new ImageNode(core);
@@ -738,13 +753,14 @@ public final class DesktopIOHandler implements IOHandler {
         while (reversion != null && i < reversionManager.getMaxReversionsCount()) {
             try {
                 reversionManager.addVersionToEnd(streamToByteArray(zipFile.getInputStream(reversion)));
-                i++;
                 reversion = zipFile.getEntry(
                         PGTUtil.REVERSION_SAVE_PATH + PGTUtil.REVERSION_BASE_FILE_NAME + i
                 );
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
+                // TODO: Capture nature of problem from error string
                 errors = true;
+            } finally {
+                i++;
             }
         }
 
@@ -846,10 +862,10 @@ public final class DesktopIOHandler implements IOHandler {
                             curNode.getRecordingId(),
                             streamToByteArray(soundStream)
                     );
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
+                    curNode.setRecordingId(-1);
                     writeErrorLog(e);
-                    loadLog += "\nUnable to load sound: " + e.getLocalizedMessage();
+                    loadLog += "\nUnable to load sound for grammar node: " + curNode.getName() + ": " + e.getLocalizedMessage();
                 }
             }
         }
@@ -976,6 +992,41 @@ public final class DesktopIOHandler implements IOHandler {
             nextLine = PGTUtil.OPTIONS_UI_WEB_SERVICE_INDIVIDUAL_TOKEN_REFILL + "=" + opMan.getWebServiceIndividualTokenRefil();
             f0.write(nextLine + newLine);
 
+            nextLine = PGTUtil.OPTIONS_ZOMPIST_USE_CONFONT + "=" + (opMan.isZompistUseConlangFont() ? PGTUtil.TRUE : PGTUtil.FALSE);
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_PDF_PRINT_ORTH + "=" + (opMan.isPdfPrintOrth() ? PGTUtil.TRUE : PGTUtil.FALSE);
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_PDF_PRINT_GLOSSKEY + "=" + (opMan.isPdfPrintGloss() ? PGTUtil.TRUE : PGTUtil.FALSE);
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_PDF_PRINT_LOCAL + "=" + (opMan.isPdfPrintLocalLang() ? PGTUtil.TRUE : PGTUtil.FALSE);
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_PDF_PRINT_CON + "=" + (opMan.isPdfPrintConlang() ? PGTUtil.TRUE : PGTUtil.FALSE);
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_PDF_PRINT_PHRASES + "=" + (opMan.isPdfPrintPhrases() ? PGTUtil.TRUE : PGTUtil.FALSE);
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_PDF_PRINT_GRAMMAR + "=" + (opMan.isPdfPrintGrammar() ? PGTUtil.TRUE : PGTUtil.FALSE);
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_PDF_PRINT_ETYMOLOGY + "=" + (opMan.isPdfPrintEtymology() ? PGTUtil.TRUE : PGTUtil.FALSE);
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_PDF_PRINT_PAGENUM + "=" + (opMan.isPdfPrintPage() ? PGTUtil.TRUE : PGTUtil.FALSE);
+            f0.write(nextLine + newLine);
+            
+            nextLine = PGTUtil.OPTIONS_PDF_PRINT_CONJ + "=" + (opMan.isPdfPrintConj() ? PGTUtil.TRUE : PGTUtil.FALSE);
+            f0.write(nextLine + newLine);
+            
+            var chapOrder = String.join(",", opMan.getPdfPrintChapOrder().stream().map(Object::toString).toArray(String[]::new));
+            
+            nextLine = PGTUtil.OPTIONS_PDF_CHAP_ORDER + "=" + chapOrder;
+            f0.write(nextLine + newLine);
+            
             try {
                 nextLine = PGTUtil.OPTIONS_GPT_API_KEY + "=" + CryptographyHandler.encrypt(
                         opMan.getGptApiKey(),
@@ -1022,17 +1073,17 @@ public final class DesktopIOHandler implements IOHandler {
                     }
 
                     switch (bothVal[0]) {
-                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_LAST_FILES -> {
+                        case PGTUtil.OPTIONS_LAST_FILES -> {
                             for (String last : bothVal[1].split(",")) {
                                 opMan.pushRecentFile(last);
                             }
                         }
-                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_SCREENS_OPEN -> {
+                        case PGTUtil.OPTIONS_SCREENS_OPEN -> {
                             for (String screen : bothVal[1].split(",")) {
                                 opMan.addScreenUp(screen);
                             }
                         }
-                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_SCREEN_POS -> {
+                        case PGTUtil.OPTIONS_SCREEN_POS -> {
                             for (String curPosSet : bothVal[1].split(",")) {
                                 if (curPosSet.isEmpty()) {
                                     continue;
@@ -1048,7 +1099,7 @@ public final class DesktopIOHandler implements IOHandler {
                                 opMan.setScreenPosition(splitSet[0], p);
                             }
                         }
-                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_SCREENS_SIZE -> {
+                        case PGTUtil.OPTIONS_SCREENS_SIZE -> {
                             for (String curSizeSet : bothVal[1].split(",")) {
                                 if (curSizeSet.isEmpty()) {
                                     continue;
@@ -1064,7 +1115,7 @@ public final class DesktopIOHandler implements IOHandler {
                                 opMan.setScreenSize(splitSet[0], d);
                             }
                         }
-                        case org.darisadesigns.polyglotlina.Desktop.PGTUtil.OPTIONS_DIVIDER_POSITION -> {
+                        case PGTUtil.OPTIONS_DIVIDER_POSITION -> {
                             for (String curPosition : bothVal[1].split(",")) {
                                 if (curPosition.isEmpty()) {
                                     continue;
@@ -1083,11 +1134,11 @@ public final class DesktopIOHandler implements IOHandler {
                         case PGTUtil.OPTIONS_MSBETWEENSAVES ->
                             opMan.setMsBetweenSaves(Integer.parseInt(bothVal[1]));
                         case PGTUtil.OPTIONS_AUTO_RESIZE ->
-                            opMan.setAnimateWindows(bothVal[1].equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.TRUE));
+                            opMan.setAnimateWindows(bothVal[1].equals(PGTUtil.TRUE));
                         case PGTUtil.OPTIONS_MAXIMIZED ->
-                            opMan.setMaximized(bothVal[1].equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.TRUE));
+                            opMan.setMaximized(bothVal[1].equals(PGTUtil.TRUE));
                         case PGTUtil.OPTIONS_NIGHT_MODE ->
-                            opMan.setNightMode(bothVal[1].equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.TRUE));
+                            opMan.setNightMode(bothVal[1].equals(PGTUtil.TRUE));
                         case PGTUtil.OPTIONS_REVERSIONS_COUNT ->
                             opMan.setMaxReversionCount(Integer.parseInt(bothVal[1]));
                         case PGTUtil.OPTIONS_TODO_DIV_LOCATION ->
@@ -1111,6 +1162,33 @@ public final class DesktopIOHandler implements IOHandler {
                                     bothVal[1],
                                     PGTUtil.OPTIONS_GPT_API_KEY_SECURE)
                             );
+                        case PGTUtil.OPTIONS_ZOMPIST_USE_CONFONT ->
+                            opMan.setZompistUseConlangFont(bothVal[1].equals(PGTUtil.TRUE));
+                        
+                        case PGTUtil.OPTIONS_PDF_PRINT_ORTH ->
+                            opMan.setPdfPrintOrth(bothVal[1].equals(PGTUtil.TRUE));
+                        case PGTUtil.OPTIONS_PDF_PRINT_GLOSSKEY ->
+                            opMan.setPdfPrintGloss(bothVal[1].equals(PGTUtil.TRUE));
+                        case PGTUtil.OPTIONS_PDF_PRINT_LOCAL ->
+                            opMan.setPdfPrintLocalLang(bothVal[1].equals(PGTUtil.TRUE));
+                        case PGTUtil.OPTIONS_PDF_PRINT_CON ->
+                            opMan.setPdfPrintConlang(bothVal[1].equals(PGTUtil.TRUE));
+                        case PGTUtil.OPTIONS_PDF_PRINT_PHRASES ->
+                            opMan.setPdfPrintPhrases(bothVal[1].equals(PGTUtil.TRUE));
+                        case PGTUtil.OPTIONS_PDF_PRINT_GRAMMAR ->
+                            opMan.setPdfPrintGrammar(bothVal[1].equals(PGTUtil.TRUE));
+                        case PGTUtil.OPTIONS_PDF_PRINT_ETYMOLOGY ->
+                            opMan.setPdfPrintEtymology(bothVal[1].equals(PGTUtil.TRUE));
+                        case PGTUtil.OPTIONS_PDF_PRINT_PAGENUM ->
+                            opMan.setPdfPrintPage(bothVal[1].equals(PGTUtil.TRUE));
+                        case PGTUtil.OPTIONS_PDF_PRINT_CONJ ->
+                            opMan.setPdfPrintConj(bothVal[1].equals(PGTUtil.TRUE));
+                        case PGTUtil.OPTIONS_PDF_CHAP_ORDER -> {
+                            opMan.clearPdfPrintChapOrder();
+                            for (var chap : bothVal[1].split(",")) {
+                                opMan.addPdfPrintChapOrder(Integer.parseInt(chap, 10));
+                            }
+                        }
                         default -> {
                             // ignore unknown config settings
                         }
@@ -1596,7 +1674,7 @@ public final class DesktopIOHandler implements IOHandler {
             }
             catch (Exception e) {
                 writeErrorLog(e);
-                warningsAndErrors[1] += e.getLocalizedMessage() + "\n";
+                warningsAndErrors[0] += e.getLocalizedMessage() + "\n";
             }
 
             try {
@@ -1669,7 +1747,7 @@ public final class DesktopIOHandler implements IOHandler {
             parser = new PDomParser(core);
             var recovery = new XMLRecoveryTool(new String(rawXml, StandardCharsets.UTF_8));
             var recoveredXml = recovery.recoverXml();
-            parser.readXml(new ByteArrayInputStream(recoveredXml.getBytes()));
+            parser.readXml(new ByteArrayInputStream(recoveredXml.getBytes(StandardCharsets.UTF_8)));
 
             // if not possible to recover, bubble error
             if (parser.getError() != null) {
@@ -1712,22 +1790,19 @@ public final class DesktopIOHandler implements IOHandler {
                         .replace(PGTUtil.IMAGES_SAVE_PATH, "");
                 int imageId = Integer.parseInt(idString);
                 loadImageAssetWithId(imageStream, imageId, core);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 return "\nProblem loading image: " + entryName;
             }
         } else if (entryName.equals(PGTUtil.CON_FONT_FILE_NAME)) {
             try {
                 DesktopPFontHandler.setFontFromIstream(zipFile.getInputStream(entry), true, core);
-            }
-            catch (FontFormatException ex) {
+            } catch (FontFormatException ex) {
                 return "\nUnable to load conlang font.";
             }
         } else if (entryName.equals(PGTUtil.LOCAL_FONT_FILE_NAME)) {
             try {
                 DesktopPFontHandler.setFontFromIstream(zipFile.getInputStream(entry), false, core);
-            }
-            catch (FontFormatException ex) {
+            } catch (FontFormatException ex) {
                 return "\nUnable to load local lang font.";
             }
         }

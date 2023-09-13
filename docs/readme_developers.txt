@@ -29,21 +29,25 @@ This will show you how to package PolyGlot for OSX, Windows, and Linux.
 3) ONLY IF YOUR MAVEN USES A CUSTOM DEPENDENCY DIRECTORY - Change the value of JAVAFX_LOCATION_<OS> to wherever jfx got dumped (you can get this by looking at the properties of any of the jfx dependencies)
         - the end of the location should read "openjfx." Do NOT copy the full path of one of the dependencies, or it will not work.
         - there are separate variables for each OS, as I presume the directory structures of the environments you build on will differ.
-5) In a terminal, navigate to the PolyGlot project folder.
-5.5) (Windows only) Download and install WiX Toolset: https://wixtoolset.org/releases/
+5) If your system does not have python, install it. Windows and some versions of Linux may not. (type "python" and hit enter at the terminal)
+    - Remember to add the python directory to your path
+5.5 (MacOS Only) install python3 (MacOS comes default with 2.7)
+6) In a terminal, navigate to the PolyGlot project folder.
+6.5) (Windows only) Download and install WiX Toolset: https://wixtoolset.org/releases/
     - If you get a .Net error installing WiX:
         - go to Windows Settings
         - go to Turn Windows Features on or off
         - check the selection for .Net Framework 3.5 and hit OK/allow Windows to download files
         - the WiX install should work correctly now
-5.5) (MacOS Only) install dmgbuild (at terminal: "pip install dmgbuild")
-5.5) (Linux only) your system might not have the program fakeroot. Install it ("sudo apt install fakeroot")
-6) If your system does not have python, install it. Windows and some versions of Linux may not. (type "python" and hit enter at the terminal)
-    - Remember to add the python directory to your path
-6.5 (MacOS Only) install python3 (MacOS comes default with 2.7)
+6.5) (MacOS Only) install dmgbuild (at terminal: "pip install dmgbuild")
+    - if pip isn't installed:
+        - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+        - python3 get-pip.py
+6.5) (Linux only) your system might not have the program fakeroot. Install it ("sudo apt install fakeroot")
 7) In a terminal, enter "python build_image.py" in PolyGlot's base directory without the quotes
 	- If you open the script file, you'll see that it's segmented so that you can give arguments and just execute one section them at a time for convenience.
         - You MUST build it first with this script. PolyGlot will fail to run if you try to run it from Netbeans before this. (necessary files are built in the Python file)
+8) (Mac only) Download binaries for modules with Intel/M1 specific builds and drop them into their own folder under the .m2 repo folder/match paths to what is in the build python script
 
 PolyGlot will now build itself into a platform specific application for you! This can be run on machines regardless of whether they have Java installed, as it builds a Java runtime into the distribution.
 

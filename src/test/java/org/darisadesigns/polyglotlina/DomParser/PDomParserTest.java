@@ -65,7 +65,7 @@ public class PDomParserTest {
 
             try {
                 dom.readFile(curFile.getAbsolutePath());
-                dom.writeFile(TEMP_FILE, true);
+                dom.writeFile(TEMP_FILE, true, false);
                 reload.readFile(TEMP_FILE);
                 assertEquals(reload, dom);
             } catch (IOException | IllegalStateException | ParserConfigurationException | TransformerException e) {

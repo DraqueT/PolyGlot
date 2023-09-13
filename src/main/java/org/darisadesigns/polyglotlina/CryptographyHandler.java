@@ -20,6 +20,7 @@
 package org.darisadesigns.polyglotlina;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
@@ -35,17 +36,17 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class CryptographyHandler {
     public static String encrypt(String strToEncrypt, String secret) throws PCryptographyException {
-        if (secret.getBytes().length < 16) {
+        if (secret.getBytes(StandardCharsets.UTF_8).length < 16) {
             throw new PCryptographyException("Your secret key must have at least 16 bytes.");
         }
         
         try {
-            SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(), "AES");
+            SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "AES");
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE, secretKey);
             
-            return Base64.getEncoder().encodeToString(cipher.doFinal(strToEncrypt.getBytes("UTF-8")));
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | UnsupportedEncodingException e) {
+            return Base64.getEncoder().encodeToString(cipher.doFinal(strToEncrypt.getBytes(StandardCharsets.UTF_8)));
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             throw new PCryptographyException("There is a serious problem with PolyGlot's internal cryptography setup.", e);
         } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
             throw new PCryptographyException("There has been a problem encrypting a data string.", e);
@@ -53,12 +54,12 @@ public class CryptographyHandler {
     }
 
     public static String decrypt(String strToDecrypt, String secret) throws PCryptographyException {
-        if (secret.getBytes().length < 16) {
+        if (secret.getBytes(StandardCharsets.UTF_8).length < 16) {
             throw new PCryptographyException("Your secret key must have at least 16 bytes.");
         }
         
         try {
-            SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(), "AES");
+            SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "AES");
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, secretKey);
             return new String(cipher.doFinal(Base64.getDecoder().decode(strToDecrypt)));

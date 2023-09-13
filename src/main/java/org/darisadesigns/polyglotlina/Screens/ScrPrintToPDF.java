@@ -19,86 +19,144 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
-import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
-import org.darisadesigns.polyglotlina.DictCore;
 import java.awt.Cursor;
 import java.awt.Desktop;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PDialog;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PList;
-import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
+import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import org.darisadesigns.polyglotlina.Desktop.NonModularBridge;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
+import org.darisadesigns.polyglotlina.DictCore;
 
 /**
  *
  * @author draque.thompson
  */
 public class ScrPrintToPDF extends PDialog {
+    private final DesktopOptionsManager opMan;
+    
     /**
      * Creates new form ScrPrintToPDF
      * @param _core Dictionary core
      */
     public ScrPrintToPDF(DictCore _core) {
         super(_core);
+        initComponents();
         
-        initComponents();        
+        opMan = PolyGlot.getPolyGlot().getOptionsManager();
         
         chkConLocal.setText("Print " + core.conLabel() + " -> " + core.localLabel() + " Dictionary");
         chkLocalCon.setText("Print " + core.localLabel() + " -> " + core.conLabel() + " Dictionary");
         
-        txtForeword.setText(""); // default test fails to load here... forcing update
-        
+        setupSelectedChapters();
         setupOrderList();
         setupListeners();
-        setupMenuFonts();
+        lstChapOrder.setFont(PGTUtil.MENU_FONT);
         setModal(true);
     }
 
-    private void setupMenuFonts() {
-        Font local = ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal();
+    @Override
+    public void dispose() {
+        super.dispose();
         
-        chkConLocal.setFont(local);
-        chkEtymology.setFont(local);
-        chkGloss.setFont(local);
-        chkGrammar.setFont(local);
-        chkLocalCon.setFont(local);
-        chkLogographs.setFont(local);
-        chkOrtho.setFont(local);
-        chkPageNum.setFont(local);
-        chkPrintConjugations.setFont(local);
-        chkPrintPhrases.setFont(local);
-        lstChapOrder.setFont(local);
+        // record options selected
+        var model = (DefaultListModel)lstChapOrder.getModel();
+        opMan.clearPdfPrintChapOrder();
+        for (int i = 0; i < model.getSize(); i++) {
+            var item = (PrintOrderNode)model.get(i);
+            opMan.addPdfPrintChapOrder(item.index);
+        }
+        
+        opMan.setPdfPrintConj(chkPrintConjugations.isSelected());
+        opMan.setPdfPrintConlang(chkConLocal.isSelected());
+        opMan.setPdfPrintEtymology(chkEtymology.isSelected());
+        opMan.setPdfPrintGloss(chkGloss.isSelected());
+        opMan.setPdfPrintGrammar(chkGrammar.isSelected());
+        opMan.setPdfPrintLocalLang(chkLocalCon.isSelected());
+        opMan.setPdfPrintOrth(chkOrtho.isSelected());
+        opMan.setPdfPrintPage(chkPageNum.isSelected());
+        opMan.setPdfPrintPhrases(chkPrintPhrases.isSelected());
+    }
+
+    private void setupSelectedChapters() {
+        chkPrintConjugations.setSelected(opMan.isPdfPrintConj());
+        chkConLocal.setSelected(opMan.isPdfPrintConlang());
+        chkEtymology.setSelected(opMan.isPdfPrintEtymology());
+        chkGloss.setSelected(opMan.isPdfPrintGloss());
+        chkGrammar.setSelected(opMan.isPdfPrintGrammar());
+        chkLocalCon.setSelected(opMan.isPdfPrintLocalLang());
+        chkOrtho.setSelected(opMan.isPdfPrintOrth());
+        chkPageNum.setSelected(opMan.isPdfPrintPage());
+        chkPrintPhrases.setSelected(opMan.isPdfPrintPhrases());
     }
     
     private void setupOrderList() {
         DefaultListModel model = new DefaultListModel();
+        var toAdd = new ArrayList<Integer>(PGTUtil.MAP_PDF_CHAP_TO_LABEL.keySet());
+
+        for (var chap : opMan.getPdfPrintChapOrder()) {
+            toAdd.remove(chap);
+            addChapToModel(model, chap);
+         }
         
-        model.addElement(new PrintOrderNode("Orthography", PGTUtil.CHAP_ORTHOGRAPHY, chkOrtho));
-        model.addElement(new PrintOrderNode("Gloss Key", PGTUtil.CHAP_GLOSSKEY, chkGloss));
-        model.addElement(new PrintOrderNode(core.conLabel() + " -> " + core.localLabel() + " Dictionary", PGTUtil.CHAP_CONTOLOCAL, chkConLocal));
-        model.addElement(new PrintOrderNode(core.localLabel() + " -> " + core.conLabel() + " Dictionary", PGTUtil.CHAP_LOCALTOCON, chkLocalCon));
-        model.addElement(new PrintOrderNode("Phrasebook", PGTUtil.CHAP_PHRASEBOOK, chkPrintPhrases));
-        model.addElement(new PrintOrderNode("Grammar", PGTUtil.CHAP_GRAMMAR, chkGrammar));
+        // any chapters checked which somehow escaped ordering save
+        for (var chap : toAdd) {
+            addChapToModel(model, chap);
+        }
         
         lstChapOrder.setModel(model);
+    }
+    
+    private void addChapToModel(DefaultListModel model, int chap) {
+        var prefix = "";
+        JCheckBox checkBox;
+
+        switch(chap) {
+            case PGTUtil.CHAP_ORTHOGRAPHY -> {
+                checkBox = chkOrtho;
+            }
+            case PGTUtil.CHAP_GLOSSKEY -> {
+                checkBox = chkGloss;
+            }
+            case PGTUtil.CHAP_CONTOLOCAL -> {
+                prefix = core.localLabel();
+                checkBox = chkConLocal;
+            }
+            case PGTUtil.CHAP_LOCALTOCON -> {
+                prefix = core.conLabel();
+                checkBox = chkLocalCon;
+            }
+            case PGTUtil.CHAP_PHRASEBOOK -> {
+                checkBox = chkPrintPhrases;
+            }
+            case PGTUtil.CHAP_GRAMMAR -> {
+                checkBox = chkGrammar;
+            }
+            default -> {
+                // simply ignore unhandled chapters (corrupt ini which will be re-saved on close)
+                return;
+            }
+        }
+
+        model.addElement(new PrintOrderNode(prefix + PGTUtil.MAP_PDF_CHAP_TO_LABEL.get(chap), chap, checkBox));
     }
     
     private void moveOrederUp() {
@@ -132,7 +190,7 @@ public class ScrPrintToPDF extends PDialog {
     }
     
     private void setupListeners() {
-        var chkListener = (ActionListener) (ActionEvent e) -> {
+        var chkListener = (ActionListener) (e) -> {
             lstChapOrder.repaint();
         };
         

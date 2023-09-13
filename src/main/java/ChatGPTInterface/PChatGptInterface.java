@@ -20,13 +20,11 @@
 package ChatGPTInterface;
 
 import ChatGPTInterface.GptMessage.Role;
-import jakarta.json.Json;
-import jakarta.json.JsonArrayBuilder;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonObjectBuilder;
-import jakarta.json.JsonReader;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -114,18 +112,18 @@ public class PChatGptInterface {
     }
 
     private static String buildRequestData(List<GptMessage> messages, String gptModel) {
-        JsonObjectBuilder jsonObject = Json.createObjectBuilder();
-
-        jsonObject.add("model", gptModel);
-
-        JsonArrayBuilder jsonMessages = Json.createArrayBuilder();
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode jsonObject = objectMapper.createObjectNode();
+        ArrayNode jsonMessages = objectMapper.createArrayNode();
+        
+        jsonObject.put("model", gptModel);
 
         for (GptMessage message : messages) {
             jsonMessages.add(message.jsonMessage());
         }
 
-        jsonObject.add("messages", jsonMessages);
-        String ret = jsonObject.build().toString();
+        jsonObject.set("messages", jsonMessages);
+        String ret = jsonObject.toString();
         return ret;
     }
 
@@ -181,7 +179,7 @@ public class PChatGptInterface {
     private String pullResponse(List<GptMessage> targetMessages, String gptModel) throws IOException, GPTException {
         setupConnection(gptModel);
         try (OutputStream os = con.getOutputStream()) {
-            os.write(buildRequestData(targetMessages, gptModel).getBytes());
+            os.write(buildRequestData(targetMessages, gptModel).getBytes(StandardCharsets.UTF_8));
             os.flush();
 
             String responseMessage = con.getResponseMessage();
@@ -422,7 +420,8 @@ public class PChatGptInterface {
     }
 
     
-    public JsonObject getGptModels() throws GPTException, UnknownHostException {
+    public JsonNode getGptModels() throws GPTException, UnknownHostException {
+        ObjectMapper objectMapper = new ObjectMapper();
         HttpURLConnection modelCon = null;
 
         try {
@@ -442,10 +441,7 @@ public class PChatGptInterface {
                 }
             }
 
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(response.toString().getBytes(StandardCharsets.UTF_8));
-            try (JsonReader reader = Json.createReaderFactory(null).createReader(inputStream)) {
-                return reader.readObject();
-            }
+            return objectMapper.readTree(response.toString());
         } catch (UnknownHostException e) {
             throw e;
         } catch (IOException e) {

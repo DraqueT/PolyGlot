@@ -19,8 +19,9 @@
  */
 package ChatGPTInterface;
 
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  *
@@ -40,12 +41,13 @@ public class GptMessage {
         return jsonMessage().toString();
     }
     
-    public JsonObject jsonMessage() {
-        var jsonObject = Json.createObjectBuilder();
-        jsonObject.add("role", role.toString());
-        jsonObject.add("content", content);
+    public JsonNode jsonMessage() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode jsonObject = objectMapper.createObjectNode();
+        jsonObject.put("role", role.toString());
+        jsonObject.put("content", content);
 
-        return jsonObject.build();
+        return jsonObject;
     }
     
     public enum Role {

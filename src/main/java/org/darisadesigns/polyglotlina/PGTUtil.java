@@ -297,6 +297,18 @@ public class PGTUtil {
     public static final String OPTIONS_UI_WEB_SERVICE_INDIVIDUAL_TOKEN_REFILL = "WebServiceIndividualTokenRefill";
     public static final String OPTIONS_GPT_API_KEY = "GptApiKey_encrypted";
     public static final String OPTIONS_GPT_API_KEY_SECURE = "JpJAHMiw6LQOov45jfScnixHROHZqa5G";
+    public static final String OPTIONS_ZOMPIST_USE_CONFONT = "ZompistUseConfont";
+    public static final String OPTIONS_PDF_PRINT_ORTH = "pdfPrintOrthography";
+    public static final String OPTIONS_PDF_PRINT_GLOSSKEY = "pdfPrintGlosskey";
+    public static final String OPTIONS_PDF_PRINT_LOCAL = "pdfPrintLocalLang";
+    public static final String OPTIONS_PDF_PRINT_CON = "pdfPrintConlang";
+    public static final String OPTIONS_PDF_PRINT_PHRASES = "pdfPrintPhrases";
+    public static final String OPTIONS_PDF_PRINT_GRAMMAR = "pdfPrintGrammar";
+    public static final String OPTIONS_PDF_PRINT_ETYMOLOGY = "pdfPrintEtymology";
+    public static final String OPTIONS_PDF_PRINT_PAGENUM = "pdfPrintPageNum";
+    public static final String OPTIONS_PDF_PRINT_CONJ = "pdfPrintConj";
+    public static final String OPTIONS_PDF_CHAP_ORDER = "pdfSectionOrder";
+    public static final Map<Integer, String> MAP_PDF_CHAP_TO_LABEL;
     
 
     // Java 8 bridge constants
@@ -444,6 +456,14 @@ public class PGTUtil {
         } else {
             READ_PERMISSION_DELAY_MS = 1200;
         }
+        
+        MAP_PDF_CHAP_TO_LABEL = new HashMap<>();
+        MAP_PDF_CHAP_TO_LABEL.put(0, "Orthography");
+        MAP_PDF_CHAP_TO_LABEL.put(1, "Gloss Key");
+        MAP_PDF_CHAP_TO_LABEL.put(2, " Dictionary");
+        MAP_PDF_CHAP_TO_LABEL.put(3, " Dictionary");
+        MAP_PDF_CHAP_TO_LABEL.put(4, "Phrasebook");
+        MAP_PDF_CHAP_TO_LABEL.put(5, "Grammar");
         
         // populate version hierarchy
         VERSION_HIERARCHY = new HashMap<>();

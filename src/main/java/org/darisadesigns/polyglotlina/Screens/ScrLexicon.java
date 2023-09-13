@@ -125,6 +125,7 @@ public final class ScrLexicon extends PFrame {
     private boolean curPopulating = false;
     private boolean namePopulating = false;
     private boolean forceUpdate = false;
+    private boolean doNotSave = false;
     private Thread filterThread = null;
     private final ScrMainMenu menuParent;
     private final PTextField txtRom;
@@ -1522,7 +1523,7 @@ public final class ScrLexicon extends PFrame {
      * @param saveWord word to save current values to
      */
     private void saveValuesTo(ConWord saveWord) {
-        if (saveWord == null) {
+        if (saveWord == null || doNotSave) {
             return;
         }
 
@@ -1564,36 +1565,49 @@ public final class ScrLexicon extends PFrame {
      * Always run with scheduling due to UI updates
      */
     private void deleteWord() {
-        boolean localPopulating = curPopulating;
+        var localPopulating = curPopulating;
+        var filterBlank = isFilterBlank();
+        var curSelection = lstLexicon.getSelectedIndex();
+        
         curPopulating = true;
-        boolean filterBlank = isFilterBlank();
-        int curSelection = lstLexicon.getSelectedIndex();
-        ConWord curWord = getCurrentWord();
-
-        if (curSelection == -1 || curWord == null) {
-            return;
-        }
-
+        
         try {
-            core.getWordCollection().deleteNodeById(curWord.getId());
-        } catch (Exception e) {
-            DesktopIOHandler.getInstance().writeErrorLog(e);
-            core.getOSHandler().getInfoBox().error("Deletion Error", "Unable to delete word: "
-                    + e.getLocalizedMessage());
-        }
+            var curWord = getCurrentWord();
 
-        gridTitlePane.setExpanded(false);
-        populateLexicon();
-        
-        populateProperties();
-        setWordLegality();
-        curPopulating = localPopulating;
-        
-        if (!filterBlank) {
-            filterLexicon();
+            if (curSelection == -1 || curWord == null) {
+                return;
+            }
+
+            try {
+                core.getWordCollection().deleteNodeById(curWord.getId());
+            } catch (Exception e) {
+                DesktopIOHandler.getInstance().writeErrorLog(e);
+                core.getOSHandler().getInfoBox().error("Deletion Error", "Unable to delete word: "
+                        + e.getLocalizedMessage());
+            }
+
+            gridTitlePane.setExpanded(false);
+            populateLexicon();
+
+            populateProperties();
+            setWordLegality();
+        } finally {
+            curPopulating = localPopulating;
         }
         
-        lstLexicon.setSelectedIndex(curSelection == 0 ? 0 : curSelection - 1);
+        // A very specific situation is created here where the values are blanked and should not be saved.
+        var localDoNotSave = doNotSave;
+        try {            
+            doNotSave = true;
+            
+            if (!filterBlank) {    
+                filterLexicon();
+            }
+
+            lstLexicon.setSelectedIndex(curSelection == 0 ? 0 : curSelection - 1);
+        } finally {
+            doNotSave = localDoNotSave;
+        }
     }
 
     private void addWord() {

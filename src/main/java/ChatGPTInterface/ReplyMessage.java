@@ -19,12 +19,9 @@
  */
 package ChatGPTInterface;
 
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonReader;
-import jakarta.json.JsonValue;
-import jakarta.json.JsonValue.ValueType;
-import java.io.StringReader;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 
 /**
  *
@@ -33,11 +30,32 @@ import java.io.StringReader;
 public class ReplyMessage {
     private final String content;
     
-    public ReplyMessage(String rawJson) {
-        try (JsonReader jsonReader = Json.createReader(new StringReader(rawJson))) {
-            JsonObject jsonObject = jsonReader.readObject();
+    public ReplyMessage(String rawJson) throws GPTException {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonObject = objectMapper.readTree(rawJson); // TODO: This throws IOException - catch and wrap
 
-            // TODO: Expand what is done with this reply data
+            if (!jsonObject.has("choices")) {
+                throw new GPTException("Unexpected server response");
+            }
+
+            JsonNode choices = jsonObject.get("choices");
+            JsonNode choice;
+
+            if (null == choices.getNodeType()) {
+                throw new GPTException("Unexpected response from server");
+            } else switch (choices.getNodeType()) {
+                case ARRAY -> choice = choices.get(0);
+                case OBJECT -> choice = choices;
+                default -> throw new GPTException("Unexpected response from server");
+            }
+
+            content = choice.get("message").get("content").textValue();
+        } catch (IOException e) {
+            throw new GPTException(e);
+        }
+        
+        // TODO: Expand what is done with this reply data
             /*
             Example reply
             {
@@ -62,18 +80,6 @@ public class ReplyMessage {
                 ]
               }
              */
-            JsonValue choices = jsonObject.get("choices");
-            
-            JsonObject choice;
-            
-            if (choices.getValueType() == ValueType.ARRAY) {
-                choice = choices.asJsonArray().getJsonObject(0);
-            } else {
-                choice = choices.asJsonObject();
-            }
-            
-            content = choice.getJsonObject("message").getString("content");
-        }
     }
     
     public String getContent() {

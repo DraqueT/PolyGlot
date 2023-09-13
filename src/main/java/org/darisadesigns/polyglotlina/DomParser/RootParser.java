@@ -86,7 +86,7 @@ public class RootParser extends BaseParser {
             }
             case PGTUtil.PRONUNCIATION_COLLECTION_XID, 
                     PGTUtil.PRONUNCIATION_COLLECTION_XID_LEGACY -> {
-                new pronunciationParser(parseIssues).parse(node, core);
+                new PronunciationParser(parseIssues).parse(node, core);
             }
             case PGTUtil.DECLENSION_COLLECTION_XID -> {
                 new DeclensionsCollectionParser(parseIssues).parse(node, core);

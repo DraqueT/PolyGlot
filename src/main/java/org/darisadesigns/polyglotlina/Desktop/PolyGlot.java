@@ -387,20 +387,20 @@ public final class PolyGlot {
                             s.setFile(copyTo.getAbsolutePath());
                             s.openLexicon(true);
                             DesktopIOHandler.getInstance().archiveFile(recovery, core.getWorkingDirectory());
-                            osHandler.getInfoBox().info("Success!", "Language successfully recovered!");
+                            new DesktopInfoBox(s).info("Success!", "Language successfully recovered!");
                         } else {
                             throw new IOException("File not copied.");
                         }
                     }
                     catch (IOException e) {
-                        osHandler.getInfoBox().error("Recovery Problem", "Unable to recover file due to: "
+                        new DesktopInfoBox(s).error("Recovery Problem", "Unable to recover file due to: "
                                 + e.getLocalizedMessage()
                                 + ". Recovery file exists at location: "
                                 + recovery.toPath()
                                 + ". To attempt manual recovery, add .pgd suffix to file name and open with PolyGlot by hand.");
                     }
                 } else {
-                    osHandler.getInfoBox().info("Recovery Cancelled", "Recovery Cancelled. Restart PolyGlot to be prompted again.");
+                    new DesktopInfoBox(s).info("Recovery Cancelled", "Recovery Cancelled. Restart PolyGlot to be prompted again.");
                 }
             } else {
                 if (polyGlot.getOSHandler().getInfoBox().yesNoCancel("Archive Recovery File", "Archive the recovery file, then? (stops this dialog from appearing)") == JOptionPane.YES_OPTION) {
@@ -655,7 +655,7 @@ public final class PolyGlot {
             public void run() {
                 if (core != null && !rootWindow.isDisposed() && !PGTUtil.isInJUnitTest()) {
                     try {
-                        core.writeFile(autoSaveFile.getAbsolutePath(), false);
+                        core.writeFile(autoSaveFile.getAbsolutePath(), false, true);
                     }
                     catch (IOException e) {
                         // Fail silently

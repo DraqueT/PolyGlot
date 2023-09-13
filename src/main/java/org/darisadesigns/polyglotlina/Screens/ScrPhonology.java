@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2022, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2017-2023, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -19,14 +19,6 @@
  */
 package org.darisadesigns.polyglotlina.Screens;
 
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellEditor;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellRenderer;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
-import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
-import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
-import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -47,9 +39,19 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopInfoBox;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PAddRemoveButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PButton;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellEditor;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCellRenderer;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PCheckBox;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PFrame;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PLabel;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
+import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPaneDisplay;
+import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
+import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.ManagersCollections.PronunciationMgr;
+import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
 
 /**
  *
@@ -101,19 +103,10 @@ public final class ScrPhonology extends PFrame {
     
     @Override
     public void saveAllValues() {
-        if (tblRep.getCellEditor() != null) {
-            tblRep.getCellEditor().stopCellEditing();
-        }
-        if (tblProcs.getCellEditor() != null) {
-            tblProcs.getCellEditor().stopCellEditing();
-        }
-        if (tblRom.getCellEditor() != null) {
-            tblRom.getCellEditor().stopCellEditing();
-        }
-        
         saveProcGuide();
         saveRepTable();
         saveRomGuide();
+        saveIllegalClusters();
     }
 
     private void setupButtons() {
@@ -175,9 +168,6 @@ public final class ScrPhonology extends PFrame {
         boolean localPopulating = curPopulating;
         curPopulating = true;
 
-        if (tblRep.getCellEditor() != null && tblRep.getSelectedRow() != -1 && tblRep.getRowCount() > 0) {
-            tblRep.getCellEditor().stopCellEditing();
-        }
         saveRepTable();
         
         core.getPropertiesManager().AddEmptyRep();
@@ -229,6 +219,14 @@ public final class ScrPhonology extends PFrame {
         });
     }
     
+    private void populateIllegalClusters() {
+        setupIllegalClustersTable();
+        
+        for (var cluster : procMan.getIllegalClusters()) {
+            addIllegalCluster(cluster);
+        }
+    }
+    
     private void populateSyllables() {
         chkCompositionalSyllables.setSelected(procMan.isSyllableCompositionEnabled());
         
@@ -270,7 +268,20 @@ public final class ScrPhonology extends PFrame {
         }
     }
 
-    //private void addRep(Entry<String, String> entry) {
+    private void addIllegalCluster(String cluster) {
+        var populatingLocal = curPopulating;
+        curPopulating = true;
+        
+        try {
+            var model = (DefaultTableModel) tblIllegalClusters.getModel();
+            model.addRow(new Object[]{cluster});
+            tblIllegalClusters.requestFocus();
+            tblIllegalClusters.editCellAt(model.getRowCount() - 1, 0);
+        } finally {
+            curPopulating = populatingLocal;
+        }
+    }
+    
     private void addRep(String key, String value) {
         boolean populatingLocal = curPopulating;
         curPopulating = true;
@@ -351,6 +362,21 @@ public final class ScrPhonology extends PFrame {
         procInput.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, InputEvent.SHIFT_DOWN_MASK), "none");
         procInput.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "none");
         procInput.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.SHIFT_DOWN_MASK), "none");
+    }
+    
+    private void setupIllegalClustersTable() {
+        DefaultTableModel tableModel = new DefaultTableModel();
+        
+        tableModel.addColumn("Illegal Cluster");
+        tblIllegalClusters.setModel(tableModel);
+        
+        boolean useConFont = !core.getPropertiesManager().isOverrideRegexFont();
+        var column = tblIllegalClusters.getColumnModel().getColumn(0);
+        column.setCellEditor(new PCellEditor(useConFont, core));
+        column.setCellRenderer(new PCellRenderer(useConFont, core));
+        tblIllegalClusters.setFont(useConFont ?
+                ((DesktopPropertiesManager)core.getPropertiesManager()).getFontCon() :
+                ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal());
     }
 
     private void setupRepTable() {
@@ -452,6 +478,10 @@ public final class ScrPhonology extends PFrame {
      * Saves pronunciation guide to core
      */
     private void saveProcGuide() {
+        if (tblProcs.getCellEditor() != null && tblProcs.getSelectedRow() != -1 && tblProcs.getRowCount() > 0) {
+            tblProcs.getCellEditor().stopCellEditing();
+        }
+        
         if (curPopulating) {
             return;
         }
@@ -517,7 +547,7 @@ public final class ScrPhonology extends PFrame {
         boolean localPopulating = curPopulating;
         curPopulating = true;
 
-        if (tblRom.getCellEditor() != null) {
+        if (tblRom.getCellEditor() != null && tblRom.getSelectedRow() != -1 && tblRom.getRowCount() > 0) {
             tblRom.getCellEditor().stopCellEditing();
         }
 
@@ -535,7 +565,49 @@ public final class ScrPhonology extends PFrame {
         core.getRomManager().setPronunciations(newRom);
         curPopulating = localPopulating;
     }
+    
+    private void saveIllegalClusters() {
+        if (tblIllegalClusters.getCellEditor() != null 
+                && tblIllegalClusters.getSelectedRow() != -1 
+                && tblIllegalClusters.getRowCount() > 0) {
+            tblIllegalClusters.getCellEditor().stopCellEditing();
+        }
+        
+        procMan.clearIllegalClusters();
+        
+        var model = (DefaultTableModel)tblIllegalClusters.getModel();
+        
+        for (var i = 0; i < model.getRowCount(); i++) {
+            procMan.addIllegalCluster((String)model.getValueAt(i, 0));
+        }
+    }
 
+    private void deleteIllegalCluster() {
+        var populatingLocal = curPopulating;
+        curPopulating = true;
+        
+        try {
+            var model = (DefaultTableModel) tblIllegalClusters.getModel();
+            var curRow = tblIllegalClusters.getSelectedRow();
+
+            if (curRow == -1
+                    || !core.getOSHandler().getInfoBox().deletionConfirmation()) {
+                return;
+            }
+
+            model.removeRow(curRow);
+            saveAllValues();
+            populateIllegalClusters();
+
+            if (curRow > 0) {
+                tblIllegalClusters.requestFocus();
+                tblIllegalClusters.editCellAt(curRow - 1, 0);
+            }
+        } finally {
+            curPopulating = populatingLocal;
+        }
+    }
+    
     /**
      * delete currently selected pronunciation (with confirmation)
      */
@@ -665,6 +737,22 @@ public final class ScrPhonology extends PFrame {
             tblRom.setRowSelectionInterval(curRow + 1, curRow + 1);
         }
     }
+    
+    private void testIllegalClusters() {
+        var testVal = txtIllegalClustersTest.getText();
+        var result = procMan.containsIllegalClusters(testVal);
+        var displayMessage = "No illegal clusters in test value: " + testVal;
+        
+        if (result.length > 0) {
+            displayMessage = "The following illegal clusters were found in \"" + testVal + "\":";
+            
+            for (var cluster : result) {
+                displayMessage += "\n" + cluster;
+            }
+        }
+        
+        txtTestResult.setText(displayMessage);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -701,6 +789,18 @@ public final class ScrPhonology extends PFrame {
         tblRep = new javax.swing.JTable();
         btnAddCharRep = new PAddRemoveButton("+");
         btnDelCharRep = new PAddRemoveButton("-");
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jTextPane1 = new PTextPaneDisplay();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tblIllegalClusters = new javax.swing.JTable();
+        btnAddIllegalCluster = new PAddRemoveButton("+");
+        btnDeleteIllegalCluster = new PAddRemoveButton("-");
+        jPanel2 = new javax.swing.JPanel();
+        txtIllegalClustersTest = new PTextField(core, false, "Test Value");
+        btnTestIllegalClusters = new PButton();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        txtTestResult = new javax.swing.JTextArea();
         pnlCompositionTab = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         lstSyllables = new javax.swing.JList<>();
@@ -710,6 +810,8 @@ public final class ScrPhonology extends PFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Phonology & Text");
         setBackground(new java.awt.Color(255, 255, 255));
+
+        jTabbedPane1.setToolTipText("Character clusters which may not appear in words");
 
         pnlRomanization.setBackground(new java.awt.Color(255, 255, 255));
         pnlRomanization.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -935,7 +1037,7 @@ public final class ScrPhonology extends PFrame {
                         .addComponent(btnUpProc)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnDownProc))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkPhonRecurse)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1031,6 +1133,123 @@ public final class ScrPhonology extends PFrame {
 
         jTabbedPane1.addTab("Basic", pnlBasicTab);
 
+        jTextPane1.setText("Here, you can define character clusters which are illegal. Words containing them will be flagged as breaking an illegal cluster rule in the lexicon and when performing a language check (under the Tools menu). Regex compatible.");
+        jTextPane1.setMinimumSize(new java.awt.Dimension(75, 44));
+        jScrollPane5.setViewportView(jTextPane1);
+
+        tblIllegalClusters.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null}
+            },
+            new String [] {
+                "cluster"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        tblIllegalClusters.setToolTipText("Table of illegal clusters");
+        tblIllegalClusters.setRowHeight(30);
+        jScrollPane6.setViewportView(tblIllegalClusters);
+
+        btnAddIllegalCluster.setToolTipText("Add Illegal Cluster Value");
+        btnAddIllegalCluster.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddIllegalClusterActionPerformed(evt);
+            }
+        });
+
+        btnDeleteIllegalCluster.setToolTipText("Delete Illegal Cluster Value");
+        btnDeleteIllegalCluster.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteIllegalClusterActionPerformed(evt);
+            }
+        });
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel2.setToolTipText("Diplays legality of test strings.");
+
+        txtIllegalClustersTest.setToolTipText("Test strings of characters for legality here");
+
+        btnTestIllegalClusters.setText("Test Pattern");
+        btnTestIllegalClusters.setToolTipText("Test behavior on a given set of characters");
+        btnTestIllegalClusters.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTestIllegalClustersActionPerformed(evt);
+            }
+        });
+
+        txtTestResult.setColumns(20);
+        txtTestResult.setRows(5);
+        jScrollPane7.setViewportView(txtTestResult);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtIllegalClustersTest)
+                    .addComponent(btnTestIllegalClusters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane7)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane7)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(txtIllegalClustersTest, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnTestIllegalClusters)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 701, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnAddIllegalCluster, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnDeleteIllegalCluster, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnAddIllegalCluster)
+                            .addComponent(btnDeleteIllegalCluster)))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Illegal Clusters", jPanel1);
+
         lstSyllables.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
@@ -1055,7 +1274,7 @@ public final class ScrPhonology extends PFrame {
                     .addComponent(jScrollPane4)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
                     .addComponent(chkCompositionalSyllables, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 556, Short.MAX_VALUE))
+                .addGap(0, 529, Short.MAX_VALUE))
         );
         pnlCompositionTabLayout.setVerticalGroup(
             pnlCompositionTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1064,7 +1283,7 @@ public final class ScrPhonology extends PFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkCompositionalSyllables)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Composition", pnlCompositionTab);
@@ -1151,15 +1370,30 @@ public final class ScrPhonology extends PFrame {
         core.getRomManager().setRecurse(chkRomRecurse.isSelected());
     }//GEN-LAST:event_chkRomRecurseActionPerformed
 
+    private void btnDeleteIllegalClusterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteIllegalClusterActionPerformed
+        deleteIllegalCluster();
+    }//GEN-LAST:event_btnDeleteIllegalClusterActionPerformed
+
+    private void btnAddIllegalClusterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddIllegalClusterActionPerformed
+        addIllegalCluster("");
+    }//GEN-LAST:event_btnAddIllegalClusterActionPerformed
+
+    private void btnTestIllegalClustersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTestIllegalClustersActionPerformed
+        testIllegalClusters();
+    }//GEN-LAST:event_btnTestIllegalClustersActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddCharRep;
+    private javax.swing.JButton btnAddIllegalCluster;
     private javax.swing.JButton btnAddProc;
     private javax.swing.JButton btnAddRom;
     private javax.swing.JButton btnDelCharRep;
     private javax.swing.JButton btnDelProc;
     private javax.swing.JButton btnDelRom;
+    private javax.swing.JButton btnDeleteIllegalCluster;
     private javax.swing.JButton btnDownProc;
     private javax.swing.JButton btnDownRom;
+    private javax.swing.JButton btnTestIllegalClusters;
     private javax.swing.JButton btnUpProc;
     private javax.swing.JButton btnUpRom;
     private javax.swing.JCheckBox chkCompositionalSyllables;
@@ -1170,20 +1404,29 @@ public final class ScrPhonology extends PFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextPane jTextPane1;
     private javax.swing.JList<String> lstSyllables;
     private javax.swing.JPanel pnlBasicTab;
     private javax.swing.JPanel pnlCharacterReplacement;
     private javax.swing.JPanel pnlCompositionTab;
     private javax.swing.JPanel pnlOrthography;
     private javax.swing.JPanel pnlRomanization;
+    private javax.swing.JTable tblIllegalClusters;
     private javax.swing.JTable tblProcs;
     private javax.swing.JTable tblRep;
     private javax.swing.JTable tblRom;
+    private javax.swing.JTextField txtIllegalClustersTest;
+    private javax.swing.JTextArea txtTestResult;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -1198,6 +1441,7 @@ public final class ScrPhonology extends PFrame {
         populateProcs();
         populateRoms();
         populateReps();
+        populateIllegalClusters();
         populateSyllables();
         chkEnableRom.setSelected(core.getRomManager().isEnabled());
         enableRomanization(chkEnableRom.isSelected());

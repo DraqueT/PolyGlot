@@ -21,7 +21,6 @@ package org.darisadesigns.polyglotlina.DomParser;
 
 import java.util.List;
 import org.darisadesigns.polyglotlina.DictCore;
-import org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.w3c.dom.Node;
 
@@ -29,9 +28,9 @@ import org.w3c.dom.Node;
  *
  * @author draquethompson
  */
-public class pronunciationSyllableParser extends BaseParser {
+public class PronunciationSyllableParser extends BaseParser {
     
-    public pronunciationSyllableParser(List<String> _parseIssues) {
+    public PronunciationSyllableParser(List<String> _parseIssues) {
         super(_parseIssues);
     }
 

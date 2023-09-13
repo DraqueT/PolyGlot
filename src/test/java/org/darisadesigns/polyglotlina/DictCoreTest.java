@@ -107,7 +107,7 @@ public class DictCoreTest {
             Path targetPath = Files.createTempFile("POLYGLOT", "pgt");
             
             origin.readFile(PGTUtil.TESTRESOURCES + "test_equality.pgd");
-            origin.writeFile(targetPath.toString(), false);
+            origin.writeFile(targetPath.toString(), false, false);
             target.readFile(targetPath.toString());
             
             assertEquals(origin, target, "DictCoreTest.testIsLanguageEmptyNoPOS:F");
@@ -128,7 +128,7 @@ public class DictCoreTest {
             Path targetPath = Files.createTempFile("POLYGLOT", "pgt");
             
             origin.readFile(PGTUtil.TESTRESOURCES + "test_equality.pgd");
-            origin.writeFile(targetPath.toString(), false);
+            origin.writeFile(targetPath.toString(), false, false);
             target.readFile(targetPath.toString());
             
             assertEquals(origin, target, "DictCoreTest.testIsLanguageEmptyNoPOS:F");

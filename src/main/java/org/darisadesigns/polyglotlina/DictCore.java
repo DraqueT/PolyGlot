@@ -19,7 +19,6 @@
  */
 package org.darisadesigns.polyglotlina;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -37,7 +36,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.darisadesigns.polyglotlina.CustomControls.CoreUpdateSubscriptionInterface;
 import org.darisadesigns.polyglotlina.CustomControls.PAlphaMap;
-import org.darisadesigns.polyglotlina.DomParser.PDomParser;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.EtymologyManager;
@@ -433,11 +431,12 @@ public class DictCore {
      *
      * @param _fileName filename to write to
      * @param writeToReversionMgr
+     * @param forceClean force cleaning of the temp file, regardless of success
      * @throws javax.xml.parsers.ParserConfigurationException
      * @throws javax.xml.transform.TransformerException
      * @throws java.io.FileNotFoundException
      */
-    public void writeFile(String _fileName, boolean writeToReversionMgr)
+    public void writeFile(String _fileName, boolean writeToReversionMgr, boolean forceClean)
             throws ParserConfigurationException, TransformerException, IOException {
         PGTUtil.waitForWritePermission();
 
@@ -453,7 +452,8 @@ public class DictCore {
                     this,
                     this.getWorkingDirectory(),
                     newSaveTime,
-                    writeToReversionMgr
+                    writeToReversionMgr,
+                    forceClean
             );
 
             lastSaveTime = newSaveTime;
@@ -623,6 +623,10 @@ public class DictCore {
      */
     public void setLastSaveTime(Instant _lastSaveTime) {
         lastSaveTime = _lastSaveTime;
+    }
+    
+    public Instant getLastSaveTime() {
+        return lastSaveTime;
     }
 
     public File getWorkingDirectory() {
