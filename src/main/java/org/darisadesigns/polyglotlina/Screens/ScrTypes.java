@@ -446,7 +446,7 @@ public final class ScrTypes extends PFrame {
         txtTypePattern.setToolTipText("Regex pattern which words of this part of speech must conform to");
 
         btnSetup.setText("Conjugations/Declensions Setup");
-        btnSetup.setToolTipText("Create declension and conjugation dimensins here.");
+        btnSetup.setToolTipText("Create declension and conjugation dimensions here.");
         btnSetup.setEnabled(false);
         btnSetup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

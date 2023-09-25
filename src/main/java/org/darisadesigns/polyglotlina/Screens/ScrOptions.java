@@ -74,7 +74,7 @@ public final class ScrOptions extends PDialog {
         
         var dimensions = this.getMinimumSize();
         
-        if (this.getWidth() < dimensions.width || this.getHeight() < dimensions.getHeight()) {
+        if (this.getWidth() < dimensions.getWidth() || this.getHeight() < dimensions.getHeight()) {
             this.setSize(dimensions);
         }
     }
