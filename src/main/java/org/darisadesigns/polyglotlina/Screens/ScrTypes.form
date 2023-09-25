@@ -125,7 +125,7 @@
             <Component class="javax.swing.JButton" name="btnSetup">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Conjugations/Declensions Setup"/>
-                <Property name="toolTipText" type="java.lang.String" value="Create declension and conjugation dimensins here."/>
+                <Property name="toolTipText" type="java.lang.String" value="Create declension and conjugation dimensions here."/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
