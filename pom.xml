@@ -122,14 +122,14 @@
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <scope>test</scope>
-            <version>4.3.0</version>
+            <version>4.4.0</version>
         </dependency>
         
         <dependency>
-            <groupId>com.opera</groupId>
-            <artifactId>operadriver</artifactId>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-opera-driver</artifactId>
             <scope>test</scope>
-            <version>1.5</version>
+            <version>4.4.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.seleniumhq.selenium</groupId>
