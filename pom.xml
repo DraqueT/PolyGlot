@@ -56,14 +56,7 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.15.4</version>
-        </dependency>
-        
-        <!--only needed for jsoup-->
-        <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-            <version>3.0.2</version>
+            <version>1.18.1</version>
         </dependency>
         
         <dependency>
