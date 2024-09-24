@@ -78,6 +78,7 @@ def main(args):
     global JAR_WO_DEP
     global JAVAFX_VER
     global JACKSON_VER
+    global JSOUP_VER
     global failFile
     global copyDestination
     global separatorCharacter
@@ -173,6 +174,7 @@ def main(args):
     JAR_WO_DEP = 'PolyGlotLinA-' + POLYGLOT_VERSION + '.jar'
     JAVAFX_VER = getDependencyVersionByGroupId('org.openjfx')
     JACKSON_VER = getDependencyVersionByGroupId('com.fasterxml.jackson.core')
+    JSOUP_VER = getDependencyVersionByGroupId('org.jsoup')
 
     if osString == winString:
         os.system('echo off')
@@ -281,6 +283,7 @@ def imageLinux():
                repo_location + '/com/fasterxml/jackson/core/jackson-core/' + JACKSON_VER + '/:' +
                repo_location + '/com/fasterxml/jackson/core/jackson-databind/' + JACKSON_VER + '/:' +
                repo_location + '/com/fasterxml/jackson/core/jackson-annotations/' + JACKSON_VER + '/:' +
+               repo_location + '/org/jsoup/jsoup/' + JSOUP_VER + '/:' +
                JAVA_HOME + '/jmods" ' +
                '--add-modules "org.darisadesigns.polyglotlina.polyglot","jdk.crypto.ec" ' +
                '--output "build/image/" ' +
@@ -348,6 +351,7 @@ def imageOsx():
                repo_location + '/com/fasterxml/jackson/core/jackson-core/' + JACKSON_VER + '/:' +
                repo_location + '/com/fasterxml/jackson/core/jackson-databind/' + JACKSON_VER + '/:' +
                repo_location + '/com/fasterxml/jackson/core/jackson-annotations/' + JACKSON_VER + '/:' +
+               repo_location + '/org/jsoup/jsoup/' + JSOUP_VER + '/:' +
                getJfxTargetModsOsx() +
                '--add-modules "org.darisadesigns.polyglotlina.polyglot","jdk.crypto.ec" ' +
                '--output "build/image/" ' +
@@ -496,6 +500,7 @@ def imageWin():
                repo_location + '\\com\\fasterxml\\jackson\\core\\jackson-core\\' + JACKSON_VER + ';' +
                repo_location + '\\com\\fasterxml\\jackson\\core\\jackson-databind\\' + JACKSON_VER + ';' +
                repo_location + '\\com\\fasterxml\\jackson\\core\\jackson-annotations\\' + JACKSON_VER + ';' +
+               repo_location + '\\org\\jsoup\\jsoup\\' + JSOUP_VER + ';' +
                '%JAVA_HOME%\\jmods" ' +
                '--add-modules "org.darisadesigns.polyglotlina.polyglot","jdk.crypto.ec" ' +
                '--output "build\\image" ' +

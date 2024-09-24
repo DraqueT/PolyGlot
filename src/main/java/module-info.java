@@ -12,7 +12,7 @@ module org.darisadesigns.polyglotlina.polyglot {
     requires jdk.httpserver;
     requires org.apache.commons.lang3; //AUT - fixed with module injector
     requires org.apache.commons.csv; //AUT - fixed with module injector
-    requires org.jsoup; //AUT - fixed with module injector
+    requires org.jsoup;
     
     exports org.darisadesigns.polyglotlina;
     exports org.darisadesigns.polyglotlina.CustomControls;
