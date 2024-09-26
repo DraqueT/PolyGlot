@@ -10,7 +10,7 @@ module org.darisadesigns.polyglotlina.polyglot {
     requires java.xml;
     requires jdk.charsets;
     requires jdk.httpserver;
-    requires org.apache.commons.lang3; //AUT - fixed with module injector
+    requires org.apache.commons.lang3;
     requires org.apache.commons.csv; //AUT - fixed with module injector
     requires org.jsoup;
     
