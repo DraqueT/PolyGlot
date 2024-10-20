@@ -78,6 +78,8 @@ def main(args):
     global JAR_WO_DEP
     global JAVAFX_VER
     global JACKSON_VER
+    global JSOUP_VER
+    global LANG3_VER
     global failFile
     global copyDestination
     global separatorCharacter
@@ -173,6 +175,8 @@ def main(args):
     JAR_WO_DEP = 'PolyGlotLinA-' + POLYGLOT_VERSION + '.jar'
     JAVAFX_VER = getDependencyVersionByGroupId('org.openjfx')
     JACKSON_VER = getDependencyVersionByGroupId('com.fasterxml.jackson.core')
+    JSOUP_VER = getDependencyVersionByGroupId('org.jsoup')
+    LANG3_VER = getDependencyVersionByGroupIdAndName('org.apache.commons', 'commons-lang3')
 
     if osString == winString:
         os.system('echo off')
@@ -281,6 +285,8 @@ def imageLinux():
                repo_location + '/com/fasterxml/jackson/core/jackson-core/' + JACKSON_VER + '/:' +
                repo_location + '/com/fasterxml/jackson/core/jackson-databind/' + JACKSON_VER + '/:' +
                repo_location + '/com/fasterxml/jackson/core/jackson-annotations/' + JACKSON_VER + '/:' +
+               repo_location + '/org/jsoup/jsoup/' + JSOUP_VER + '/:' +
+               repo_location + '/org/apache/commons/commons-lang3/' + LANG3_VER + '/:' +
                JAVA_HOME + '/jmods" ' +
                '--add-modules "org.darisadesigns.polyglotlina.polyglot","jdk.crypto.ec" ' +
                '--output "build/image/" ' +
@@ -348,6 +354,8 @@ def imageOsx():
                repo_location + '/com/fasterxml/jackson/core/jackson-core/' + JACKSON_VER + '/:' +
                repo_location + '/com/fasterxml/jackson/core/jackson-databind/' + JACKSON_VER + '/:' +
                repo_location + '/com/fasterxml/jackson/core/jackson-annotations/' + JACKSON_VER + '/:' +
+               repo_location + '/org/jsoup/jsoup/' + JSOUP_VER + '/:' +
+               repo_location + '/org/apache/commons/commons-lang3/' + LANG3_VER + '/:' +
                getJfxTargetModsOsx() +
                '--add-modules "org.darisadesigns.polyglotlina.polyglot","jdk.crypto.ec" ' +
                '--output "build/image/" ' +
@@ -496,6 +504,8 @@ def imageWin():
                repo_location + '\\com\\fasterxml\\jackson\\core\\jackson-core\\' + JACKSON_VER + ';' +
                repo_location + '\\com\\fasterxml\\jackson\\core\\jackson-databind\\' + JACKSON_VER + ';' +
                repo_location + '\\com\\fasterxml\\jackson\\core\\jackson-annotations\\' + JACKSON_VER + ';' +
+               repo_location + '\\org\\jsoup\\jsoup\\' + JSOUP_VER + ';' +
+               repo_location + '\\org\\apache\\commons\\commons-lang3\\' + LANG3_VER + ';' +
                '%JAVA_HOME%\\jmods" ' +
                '--add-modules "org.darisadesigns.polyglotlina.polyglot","jdk.crypto.ec" ' +
                '--output "build\\image" ' +
@@ -583,6 +593,18 @@ def getDependencyVersionByGroupId(group_id):
             break
     return ret
 
+def getDependencyVersionByGroupIdAndName(group_id, artifact_id):
+    ret = ''
+    doc = minidom.parse('pom.xml')
+    dependencies = doc.getElementsByTagName('dependency')
+
+    for dependency in dependencies:
+        group = dependency.getElementsByTagName('groupId')
+        artifact = dependency.getElementsByTagName('artifactId')
+        if group[0].childNodes[0].nodeValue == group_id and artifact[0].childNodes[0].nodeValue == artifact_id:
+            ret = dependency.getElementsByTagName('version')[0].childNodes[0].nodeValue
+            break
+    return ret
 
 # fetches version of PolyGlot from pom file
 def getVersion():
