@@ -606,7 +606,7 @@ public final class ScrMainMenu extends PFrame {
         chooser.setFileFilter(filter);
         chooser.setApproveButtonText("Save");
         if (curFileName.isEmpty()) {
-            chooser.setCurrentDirectory(core.getWorkingDirectory());
+            chooser.setCurrentDirectory(core.getStateDirectory().toFile());
         } else {
             chooser.setCurrentDirectory(DesktopIOHandler.getInstance().getDirectoryFromPath(curFileName));
             chooser.setSelectedFile(DesktopIOHandler.getInstance().getFileFromPath(curFileName));
@@ -691,7 +691,7 @@ public final class ScrMainMenu extends PFrame {
         chooser.setFileFilter(filter);
         String fileName;
         if (curFileName.isEmpty()) {
-            chooser.setCurrentDirectory(core.getWorkingDirectory());
+            chooser.setCurrentDirectory(core.getStateDirectory().toFile());
         } else {
             chooser.setCurrentDirectory(DesktopIOHandler.getInstance().getDirectoryFromPath(curFileName));
         }
@@ -756,7 +756,7 @@ public final class ScrMainMenu extends PFrame {
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xls");
         chooser.setFileFilter(filter);
         chooser.setApproveButtonText("Save");
-        chooser.setCurrentDirectory(core.getWorkingDirectory());
+        chooser.setCurrentDirectory(core.getStateDirectory().toFile());
 
         String fileName = core.getCurFileName().replaceAll("\\.pgd", ".xls");
         chooser.setSelectedFile(new File(fileName));
@@ -808,7 +808,7 @@ public final class ScrMainMenu extends PFrame {
 
         chooser.setDialogTitle("Export Font");
         chooser.setFileFilter(filter);
-        chooser.setCurrentDirectory(core.getWorkingDirectory());
+        chooser.setCurrentDirectory(core.getStateDirectory().toFile());
         chooser.setApproveButtonText("Save");
         chooser.setSelectedFile(new File(fileName));
 
@@ -1420,7 +1420,7 @@ public final class ScrMainMenu extends PFrame {
         chooser.setFileFilter(filter);
         chooser.setApproveButtonText("Save");
         if (curFileName.isEmpty() || !curFileName.contains(".pgd")) {
-            chooser.setCurrentDirectory(core.getWorkingDirectory());
+            chooser.setCurrentDirectory(core.getStateDirectory().toFile());
         } else {
             String suggestedDicFile = curFileName.replaceAll("\\.pgd", ".dic");
             chooser.setCurrentDirectory(DesktopIOHandler.getInstance().getDirectoryFromPath(curFileName));
@@ -1475,7 +1475,7 @@ public final class ScrMainMenu extends PFrame {
         chooser.setFileFilter(filter);
 
         if (curFileName.isEmpty()) {
-            chooser.setCurrentDirectory(core.getWorkingDirectory());
+            chooser.setCurrentDirectory(core.getStateDirectory().toFile());
         } else {
             chooser.setCurrentDirectory(DesktopIOHandler.getInstance().getDirectoryFromPath(curFileName));
         }
@@ -1507,7 +1507,7 @@ public final class ScrMainMenu extends PFrame {
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         if (curFileName.isEmpty()) {
-            chooser.setCurrentDirectory(core.getWorkingDirectory());
+            chooser.setCurrentDirectory(core.getStateDirectory().toFile());
         } else {
             chooser.setCurrentDirectory(DesktopIOHandler.getInstance().getDirectoryFromPath(curFileName));
         }

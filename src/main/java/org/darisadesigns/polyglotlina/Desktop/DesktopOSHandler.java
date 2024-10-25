@@ -20,8 +20,11 @@
 package org.darisadesigns.polyglotlina.Desktop;
 
 import java.awt.Desktop;
+import java.awt.geom.Path2D;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -51,12 +54,19 @@ public class DesktopOSHandler extends OSHandler {
     }
     
     @Override
-    public File getWorkingDirectory() {
+    public Path getConfigDirectory() {
         if (overrideProgramPath != null && !overrideProgramPath.trim().isEmpty()) {
-            return new File(overrideProgramPath);
+            return Paths.get(overrideProgramPath);
         }
-        
-        return PGTUtil.getDefaultDirectory();
+        return PGTUtil.getConfigDirectory();
+    }
+
+    @Override
+    public Path getStateDirectory() {
+        if (overrideProgramPath != null && !overrideProgramPath.trim().isEmpty()) {
+            return Paths.get(overrideProgramPath);
+        }
+        return PGTUtil.getStateDirectory();
     }
     
     @Override

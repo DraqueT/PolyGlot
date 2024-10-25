@@ -90,7 +90,7 @@ public interface IOHandler {
      *
      * @param workingDirectory
      */
-    void deleteIni(String workingDirectory);
+    void deleteIni(Path workingDirectory);
 
     /**
      * Tests whether or not a file is a zip archive
@@ -253,7 +253,7 @@ public interface IOHandler {
      */
     void writeErrorLog(Throwable exception, String comment);
 
-    File getErrorLogFile();
+    File getErrorLogFile() throws IOException;
 
     String getErrorLog() throws IOException;
 

@@ -78,7 +78,7 @@ public class PGrammarPane extends JTextPane {
         insertImage.addActionListener((ActionEvent ae) -> {
             try {
                 ImageNode image = DesktopIOHandler.getInstance()
-                        .openNewImage((Window) parentPane.getTopLevelAncestor(), core.getWorkingDirectory(), core);
+                        .openNewImage((Window) parentPane.getTopLevelAncestor(), core.getStateDirectory().toFile(), core);
                 if (image != null) {
                     // null node means user cancelled process
                     addImage(image);

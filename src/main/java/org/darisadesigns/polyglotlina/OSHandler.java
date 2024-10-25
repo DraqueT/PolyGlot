@@ -19,7 +19,7 @@
  */
 package org.darisadesigns.polyglotlina;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 import org.darisadesigns.polyglotlina.Nodes.LexiconProblemNode;
 
@@ -45,8 +45,10 @@ public abstract class OSHandler {
         helpHandler =_helpHandler;
         fontHandler = _fontHandler;
     }
-    
-    public abstract File getWorkingDirectory();
+
+    public abstract Path getConfigDirectory();
+
+    public abstract Path getStateDirectory();
     
     public abstract void openLanguageProblemDisplay(List<LexiconProblemNode> problems, DictCore _core);
     

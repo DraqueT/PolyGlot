@@ -129,7 +129,8 @@ public final class DesktopIOHandler implements IOHandler {
      */
     @Override
     public File createTmpFileWithContents(String contents, String extension) throws IOException {
-        File ret = File.createTempFile("POLYGLOT", extension);
+        File ret = File.createTempFile("POLYGLOT", extension,
+            PGTUtil.getTempDirectory().toFile());
 
         try (Writer out = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(ret), StandardCharsets.UTF_8))) {
@@ -144,13 +145,12 @@ public final class DesktopIOHandler implements IOHandler {
 
     @Override
     public File createTmpFileFromImageBytes(byte[] imageBytes, String fileName) throws IOException {
-        File tmpFile = File.createTempFile(fileName, ".png");
+        File tmpFile = File.createTempFile(fileName, ".png",
+            PGTUtil.getTempDirectory().toFile());
         ByteArrayInputStream stream = new ByteArrayInputStream(imageBytes);
         BufferedImage img = ImageIO.read(stream);
-        ImageIO.write(
-                img,
-                "PNG",
-                new FileOutputStream(tmpFile)
+        ImageIO.write(img, "PNG",
+            new FileOutputStream(tmpFile)
         );
         return tmpFile;
     }
@@ -315,8 +315,8 @@ public final class DesktopIOHandler implements IOHandler {
      * @param workingDirectory
      */
     @Override
-    public void deleteIni(String workingDirectory) {
-        File f = new File(workingDirectory + File.separator + PGTUtil.POLYGLOT_INI);
+    public void deleteIni(Path workingDirectory) {
+        File f = workingDirectory.resolve(PGTUtil.POLYGLOT_INI).toFile();
         if (!f.exists()) {
             return;
         }
@@ -881,8 +881,8 @@ public final class DesktopIOHandler implements IOHandler {
      * @param path
      * @return
      */
-    private boolean testCanWrite(String path) {
-        return new File(path).canWrite();
+    private boolean testCanWrite(Path path) {
+        return path.toFile().canWrite();
     }
 
     /**
@@ -892,14 +892,14 @@ public final class DesktopIOHandler implements IOHandler {
      * @param opMan
      * @throws IOException on failure or lack of permission to write
      */
-    public void writeOptionsIni(String workingDirectory, DesktopOptionsManager opMan) throws IOException {
+    public void writeOptionsIni(Path workingDirectory, DesktopOptionsManager opMan) throws IOException {
         try (Writer f0 = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(workingDirectory
-                        + File.separator + PGTUtil.POLYGLOT_INI), StandardCharsets.UTF_8))) {
+                new FileOutputStream(workingDirectory.resolve(PGTUtil.POLYGLOT_INI).toString()),
+                    StandardCharsets.UTF_8))) {
             String newLine = System.getProperty("line.separator");
             String nextLine;
 
-            if (!testCanWrite(workingDirectory + File.separator + PGTUtil.POLYGLOT_INI)) {
+            if (!testCanWrite(workingDirectory.resolve(PGTUtil.POLYGLOT_INI))) {
                 throw new IOException("Unable to save settings. Polyglot does not have permission to write to folder: "
                         + workingDirectory
                         + ". This is most common when running from Program Files in Windows.");
@@ -977,7 +977,7 @@ public final class DesktopIOHandler implements IOHandler {
             nextLine = PGTUtil.OPTIONS_UI_WEB_SERVICE_PORT + "=" + opMan.getWebServicePort();
             f0.write(nextLine + newLine);
 
-            nextLine = PGTUtil.OPTIONS_UI_WEB_SERVICE_TARGET_FOLDER + "=" + opMan.getWebServiceTargetFolder();
+            nextLine = PGTUtil.OPTIONS_UI_WEB_SERVICE_TARGET_FOLDER + "=" + opMan.getWebServiceTargetFolder().toString();
             f0.write(nextLine + newLine);
 
             nextLine = PGTUtil.OPTIONS_UI_WEB_SERVICE_MASTER_TOKEN_CAPACITY + "=" + opMan.getWebServiceMasterTokenCapacity();
@@ -1048,14 +1048,14 @@ public final class DesktopIOHandler implements IOHandler {
      * @param opMan
      * @throws java.lang.Exception
      */
-    public void loadOptionsIni(String workingDirectory, DesktopOptionsManager opMan) throws Exception {
-        File f = new File(workingDirectory + File.separator + org.darisadesigns.polyglotlina.Desktop.PGTUtil.POLYGLOT_INI);
+    public void loadOptionsIni(Path workingDirectory, DesktopOptionsManager opMan) throws Exception {
+        File f = workingDirectory.resolve(PGTUtil.POLYGLOT_INI).toFile();
         if (!f.exists() || f.isDirectory()) {
             return;
         }
 
         try (BufferedReader br = new BufferedReader(new FileReader(
-                workingDirectory + File.separator + org.darisadesigns.polyglotlina.Desktop.PGTUtil.POLYGLOT_INI, StandardCharsets.UTF_8))) {
+                workingDirectory.resolve(PGTUtil.POLYGLOT_INI).toString(), StandardCharsets.UTF_8))) {
             String loadProblems = "";
 
             for (String line; (line = br.readLine()) != null;) {
@@ -1148,7 +1148,7 @@ public final class DesktopIOHandler implements IOHandler {
                         case PGTUtil.OPTIONS_UI_WEB_SERVICE_PORT ->
                             opMan.setWebServicePort(Integer.parseInt(bothVal[1]));
                         case PGTUtil.OPTIONS_UI_WEB_SERVICE_TARGET_FOLDER ->
-                            opMan.setWebServiceTargetFolder(bothVal[1]);
+                            opMan.setWebServiceTargetFolder(Paths.get(bothVal[1]));
                         case PGTUtil.OPTIONS_UI_WEB_SERVICE_MASTER_TOKEN_CAPACITY ->
                             opMan.setWebServiceMasterTokenCapacity(Integer.parseInt(bothVal[1]));
                         case PGTUtil.OPTIONS_UI_WEB_SERVICE_MASTER_TOKEN_REFILL ->
@@ -1313,9 +1313,8 @@ public final class DesktopIOHandler implements IOHandler {
             errorMessage = comment + ":\n" + errorMessage;
         }
 
-        File errorLog = getErrorLogFile();
-
         try {
+            File errorLog = getErrorLogFile();
             if (errorLog.exists()) {
                 try (Scanner logScanner = new Scanner(errorLog).useDelimiter("\\Z")) {
                     curContents = logScanner.hasNext() ? logScanner.next() : "";
@@ -1351,9 +1350,9 @@ public final class DesktopIOHandler implements IOHandler {
     }
 
     @Override
-    public File getErrorLogFile() {
-        return new File(PGTUtil.getErrorDirectory().getAbsolutePath()
-                + File.separator + PGTUtil.ERROR_LOG_FILE);
+    public File getErrorLogFile() throws IOException {
+        Files.createDirectories(PGTUtil.getErrorDirectory());
+        return PGTUtil.getErrorDirectory().resolve(PGTUtil.ERROR_LOG_FILE).toFile();
     }
 
     @Override
@@ -1396,13 +1395,13 @@ public final class DesktopIOHandler implements IOHandler {
 
     @Override
     public File unzipResourceToTempLocation(String resourceLocation) throws IOException {
-        Path tmpPath = Files.createTempDirectory(PGTUtil.DISPLAY_NAME);
-        unzipResourceToDir(resourceLocation, tmpPath);
-        return tmpPath.toFile();
+        Path statePath = PGTUtil.getTempDirectory();
+        unzipResourceToDir(resourceLocation, statePath);
+        return statePath.toFile();
     }
 
     /**
-     * Unzips an internal resource to a targeted path. Does not check header.
+     * Unzips an internal resource to a targeted path.
      *
      * @param internalPath Path to internal zipped resource
      * @param target destination to unzip to
@@ -1414,6 +1413,8 @@ public final class DesktopIOHandler implements IOHandler {
         if (fin == null) {
             throw new IOException("Unable to read file at: " + internalPath);
         }
+
+        Files.createDirectories(target);
 
         try (ZipInputStream zin = new ZipInputStream(fin)) {
             unZipStreamToLocation(zin, target);
@@ -1442,7 +1443,7 @@ public final class DesktopIOHandler implements IOHandler {
     private static void unZipStreamToLocation(ZipInputStream zin, Path target) throws IOException {
         ZipEntry ze;
         while ((ze = zin.getNextEntry()) != null) {
-            File extractTo = new File(target + File.separator + ze.getName());
+            File extractTo = target.resolve(ze.getName()).toFile();
             if (ze.isDirectory()) {
                 extractTo.mkdir();
             } else {

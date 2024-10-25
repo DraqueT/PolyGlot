@@ -124,7 +124,7 @@ public class ScrWebService extends PFrame {
             txtITokenCapacity.setText("" + optMan.getWebServiceIndividualTokenCapacity());
             txtITokenRefil.setText("" + optMan.getWebServiceIndividualTokenRefil());
             chkActivateWebservice.setSelected(PolyGlot.isWebServiceRunning());
-            txtServedFolder.setText(optMan.getWebServiceTargetFolder());
+            txtServedFolder.setText(optMan.getWebServiceTargetFolder().toString());
         });
     }
     

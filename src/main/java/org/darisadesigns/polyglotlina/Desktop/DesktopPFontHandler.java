@@ -47,7 +47,8 @@ import org.darisadesigns.polyglotlina.DictCore;
 public class DesktopPFontHandler extends org.darisadesigns.polyglotlina.PFontHandler {
 
     public static void setFontFromIstream(InputStream is, boolean isConFont, DictCore core) throws IOException, FontFormatException {
-        var tempFile = File.createTempFile("stream2file", ".tmp");
+        var tempFile = File.createTempFile("stream2file", ".tmp",
+            PGTUtil.getTempDirectory().toFile());
         tempFile.deleteOnExit();
         
         // Java only respects ligatures when loading fonts SPECIFICALLY from files, hence the tmp file

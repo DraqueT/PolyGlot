@@ -23,6 +23,7 @@ import TestResources.DummyCore;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.io.File;
+import java.nio.file.Paths;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.DictCore;
@@ -93,14 +94,14 @@ public class DesktopOptionsManagerTest {
             opt.setZompistUseConlangFont(useConFontZompist);
 
             // save values to disk...
-            DesktopIOHandler.getInstance().writeOptionsIni(core.getWorkingDirectory().getAbsolutePath(), opt);
+            DesktopIOHandler.getInstance().writeOptionsIni(core.getConfigDirectory(), opt);
 
             // create new core to load saved values into...
             core = DummyCore.newCore();
             opt = PolyGlot.getPolyGlot().getOptionsManager();
             
-            // relaod saved values...
-            DesktopIOHandler.getInstance().loadOptionsIni(core.getWorkingDirectory().getAbsolutePath(), opt);
+            // reload saved values...
+            DesktopIOHandler.getInstance().loadOptionsIni(core.getConfigDirectory(), opt);
             
             assertEquals(animatedExpected, opt.isAnimateWindows());
             assertEquals(reversionCountExpected, opt.getMaxReversionCount());
@@ -143,7 +144,7 @@ public class DesktopOptionsManagerTest {
             DesktopOptionsManager opt = PolyGlot.getPolyGlot().getOptionsManager();
             
             try {
-                DesktopIOHandler.getInstance().loadOptionsIni(core.getWorkingDirectory().getAbsolutePath() + File.separator + "iniCorrupted", opt);
+                DesktopIOHandler.getInstance().loadOptionsIni(core.getConfigDirectory().resolve("iniCorrupted"), opt);
             } catch (DesktopOptionsManagerException e) {
                 expectedException = true;
             }

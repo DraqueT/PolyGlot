@@ -58,8 +58,7 @@ public class IOHandlerTest {
         System.out.println("IOHandlerTest.testWriteErrorLogBasic");
         
         DesktopIOHandler.getInstance().writeErrorLog(new Exception("This is a test."));
-        File myLog = new File(PGTUtil.getErrorDirectory().getAbsolutePath() 
-                + File.separator + PGTUtil.ERROR_LOG_FILE);
+        File myLog = PGTUtil.getErrorDirectory().resolve(PGTUtil.ERROR_LOG_FILE).toFile();
         
         assertTrue(myLog.exists());
         

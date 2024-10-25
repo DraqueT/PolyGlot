@@ -35,6 +35,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import javax.swing.InputMap;
 import javax.swing.JFileChooser;
@@ -111,14 +112,33 @@ public final class PolyGlot {
         var osHandler = new DesktopOSHandler(ioHandler, cInfoBox, helpHandler, fontHandler);
 
         try {
-            var workingDirectory = org.darisadesigns.polyglotlina.PGTUtil.getDefaultDirectory().getAbsolutePath();
-            ioHandler.loadOptionsIni(workingDirectory, opMan);
+            var confDirectory = PGTUtil.getConfigDirectory();
+            Files.createDirectories(confDirectory);
+            ioHandler.loadOptionsIni(confDirectory, opMan);
         }
         catch (Exception e) {
             ioHandler.writeErrorLog(e, "Startup config file failure.");
             cInfoBox.warning("Config Load Failure", "Unable to load options file or file corrupted:\n"
                     + e.getLocalizedMessage());
-            DesktopIOHandler.getInstance().deleteIni(polyGlot.getWorkingDirectory().getAbsolutePath());
+            DesktopIOHandler.getInstance().deleteIni(PGTUtil.getConfigDirectory());
+        }
+
+        try {
+            var stateDirectory = PGTUtil.getStateDirectory();
+            Files.createDirectories(stateDirectory);
+        } catch (Exception e) {
+            ioHandler.writeErrorLog(e, "State directoy setup failure");
+            cInfoBox.warning("Startup Failure", "Unable to create directory to store logs\n"
+                + e.getLocalizedMessage());
+        }
+
+        try {
+            var tempDirectory = PGTUtil.getTempDirectory();
+            Files.createDirectories(tempDirectory);
+        } catch (Exception e) {
+            ioHandler.writeErrorLog(e, "Temp directoy setup failure");
+            cInfoBox.warning("Startup Failure", "Unable to create directory to store temp files\n"
+                + e.getLocalizedMessage());
         }
 
         try {
@@ -178,7 +198,7 @@ public final class PolyGlot {
                 }
 
                 // if a recovery file exists, query user for action
-                boolean recoveredFile = polyGlot.handleFileRecoveries(s, core.getWorkingDirectory());
+                boolean recoveredFile = polyGlot.handleFileRecoveries(s, core.getStateDirectory().toFile());
 
                 // open file if one is provided via arguments (but only if no recovery file- that takes precedence)
                 if (args.length > 0 && !recoveredFile) {
@@ -292,8 +312,7 @@ public final class PolyGlot {
     }
 
     private static void setupScaling() {
-        Path p = Path.of(org.darisadesigns.polyglotlina.Desktop.PGTUtil.getDefaultDirectory()
-                + File.separator + org.darisadesigns.polyglotlina.Desktop.PGTUtil.POLYGLOT_INI);
+        Path p = PGTUtil.getConfigDirectory().resolve(PGTUtil.POLYGLOT_INI);
         if (!p.toFile().exists() || p.toFile().isDirectory()) {
             return;
         }
@@ -386,7 +405,7 @@ public final class PolyGlot {
                         if (copyTo.exists()) {
                             s.setFile(copyTo.getAbsolutePath());
                             s.openLexicon(true);
-                            DesktopIOHandler.getInstance().archiveFile(recovery, core.getWorkingDirectory());
+                            DesktopIOHandler.getInstance().archiveFile(recovery, core.getStateDirectory().toFile());
                             new DesktopInfoBox(s).info("Success!", "Language successfully recovered!");
                         } else {
                             throw new IOException("File not copied.");
@@ -404,7 +423,7 @@ public final class PolyGlot {
                 }
             } else {
                 if (polyGlot.getOSHandler().getInfoBox().yesNoCancel("Archive Recovery File", "Archive the recovery file, then? (stops this dialog from appearing)") == JOptionPane.YES_OPTION) {
-                    DesktopIOHandler.getInstance().archiveFile(recovery, core.getWorkingDirectory());
+                    DesktopIOHandler.getInstance().archiveFile(recovery, core.getStateDirectory().toFile());
                 }
 
                 recovery = null;
@@ -511,15 +530,6 @@ public final class PolyGlot {
         });
     }
 
-    /**
-     * Retrieves working directory of PolyGlot
-     *
-     * @return current working directory
-     */
-    public File getWorkingDirectory() {
-        return core.getOSHandler().getWorkingDirectory();
-    }
-
     public static PolyGlot getPolyGlot() {
         return PolyGlot.polyGlot;
     }
@@ -529,7 +539,8 @@ public final class PolyGlot {
     }
 
     public void saveOptionsIni() throws IOException {
-        DesktopIOHandler.getInstance().writeOptionsIni(getWorkingDirectory().getAbsolutePath(), optionsManager);
+        DesktopIOHandler.getInstance().writeOptionsIni(PGTUtil.getConfigDirectory(),
+            optionsManager);
     }
 
     /**
@@ -677,11 +688,8 @@ public final class PolyGlot {
      * @return
      */
     public File getNewAutoSaveFile() {
-        String path = getWorkingDirectory().getAbsolutePath()
-                + File.separator
-                + PGTUtil.AUTO_SAVE_FILE_NAME;
-
-        return new File(path);
+        Path path = PGTUtil.getStateDirectory().resolve(PGTUtil.AUTO_SAVE_FILE_NAME);
+        return new File(path.toString());
     }
 
     /**

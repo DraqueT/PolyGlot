@@ -104,7 +104,8 @@ public class DictCoreTest {
         try {
             DictCore origin = DummyCore.newCore();
             DictCore target = DummyCore.newCore();
-            Path targetPath = Files.createTempFile("POLYGLOT", "pgt");
+            Path targetPath = Files.createTempFile(PGTUtil.getTempDirectory(),
+                "POLYGLOT", "pgt");
             
             origin.readFile(PGTUtil.TESTRESOURCES + "test_equality.pgd");
             origin.writeFile(targetPath.toString(), false, false);
@@ -125,7 +126,8 @@ public class DictCoreTest {
         try {
             DictCore origin = DummyCore.newCore();
             DictCore target = DummyCore.newCore();
-            Path targetPath = Files.createTempFile("POLYGLOT", "pgt");
+            Path targetPath = Files.createTempFile(PGTUtil.getTempDirectory(),
+                "POLYGLOT", "pgt");
             
             origin.readFile(PGTUtil.TESTRESOURCES + "test_equality.pgd");
             origin.writeFile(targetPath.toString(), false, false);

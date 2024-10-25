@@ -81,8 +81,10 @@ public final class NonModularBridge {
         
         File bridge = NonModularBridge.getNonModularBridgeLocation();
         File tmpLangFile = createTmpLangFile(core);
-        File tmpConFontFile = File.createTempFile("PolyGlotConFont", ".ttf", core.getWorkingDirectory());
-        File tmpLocalFontFile = File.createTempFile("PolyGlotLocalFont", ".ttf", core.getWorkingDirectory());
+        File tmpConFontFile = File.createTempFile("PolyGlotConFont", ".ttf",
+            PGTUtil.getTempDirectory().toFile());
+        File tmpLocalFontFile = File.createTempFile("PolyGlotLocalFont", ".ttf",
+            PGTUtil.getTempDirectory().toFile());
         tmpConFontFile.deleteOnExit();
         tmpLocalFontFile.deleteOnExit();
         
@@ -179,7 +181,8 @@ public final class NonModularBridge {
             throws IOException {
         
         File bridge = NonModularBridge.getNonModularBridgeLocation();
-        File tmpTarget = File.createTempFile("PolyGlotTmp", ".csv");
+        File tmpTarget = File.createTempFile("PolyGlotTmp", ".csv",
+            PGTUtil.getTempDirectory().toFile());
         
         String[] command = {
             getJavaExecutablePath(),
@@ -253,7 +256,8 @@ public final class NonModularBridge {
     }
     
     private static File createTmpLangFile(DictCore core) throws IOException {
-        File ret = File.createTempFile("PolyGlot", "LangFile");
+        File ret = File.createTempFile("PolyGlot", "LangFile",
+            PGTUtil.getTempDirectory().toFile());
         
         try {
             core.writeFile(ret.getAbsolutePath(), false, true);

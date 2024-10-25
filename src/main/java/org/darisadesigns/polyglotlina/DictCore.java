@@ -20,6 +20,7 @@
 package org.darisadesigns.polyglotlina;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.time.Instant;
@@ -450,7 +451,7 @@ public class DictCore {
                     _fileName,
                     doc,
                     this,
-                    this.getWorkingDirectory(),
+                    this.getConfigDirectory().toFile(),
                     newSaveTime,
                     writeToReversionMgr,
                     forceClean
@@ -629,8 +630,12 @@ public class DictCore {
         return lastSaveTime;
     }
 
-    public File getWorkingDirectory() {
-        return this.osHandler.getWorkingDirectory();
+    public Path getConfigDirectory() {
+        return this.osHandler.getConfigDirectory();
+    }
+
+    public Path getStateDirectory() {
+        return this.osHandler.getStateDirectory();
     }
 
     public void setCurFileName(String _curFileName) {
