@@ -297,7 +297,7 @@ def imageLinux():
 
 
 def distLinux():
-    print('Creating distribution deb...')
+    print('creating linux distribution...')
     os.system('rm -rf installer')
     os.system('mkdir installer')
     command = (JAVA_HOME + '/bin/jpackage ' +
@@ -312,10 +312,25 @@ def distLinux():
                '--name "PolyGlot" ' +
                '--license-file LICENSE.TXT ' +
                '--runtime-image build/image')
+    if os.system('command -v rpm &> /dev/null') == 0:
+        print('detected rpm')
+        command = command + ' --linux-rpm-license-type MIT '
     os.system(command)
 
+    # search for the generated system package
+    # (jpackage is inconsistent with how it chooses to name packages
+    # on different architectures)
+    installer_file = ''
+    for item in os.listdir():
+        if os.path.isfile(item) and item.startswith('polyglot-linear-a') and POLYGLOT_BUILD in item:
+            installer_file = item
+            print('generated: ' + installer_file)
+            break
+    if installer_file == '':
+        print('failed to locate jpackage output')
+
     if copyDestination != "":
-        copyInstaller('polyglot-linear-a_' + POLYGLOT_BUILD + '-1_amd64.deb')
+        copyInstaller(installer_file)
 
 
 ######################################
