@@ -312,7 +312,7 @@ def distLinux():
                '--name "PolyGlot" ' +
                '--license-file LICENSE.TXT ' +
                '--runtime-image build/image')
-    if os.system('command -v rpm &> /dev/null') == 0:
+    if os.system('command -v rpm') == 0:
         print('detected rpm')
         command = command + ' --linux-rpm-license-type MIT '
     os.system(command)
