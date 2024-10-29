@@ -1401,6 +1401,22 @@ public final class DesktopIOHandler implements IOHandler {
     }
 
     /**
+     * This exists so that the help readme is put in a path
+     * that doesn't contain hidden files/folders.
+     * 
+     * Snap applications (e.g. firefox) are not allowed to
+     * access files in these locations. (๑•̀ᗝ•́)૭
+     * @param resourceLocation
+     * @return
+     * @throws IOException
+     */
+    public File unzipResourceToSystemTempLocation(String resourceLocation) throws IOException {
+        Path systemTmp = Files.createTempDirectory(PGTUtil.DISPLAY_NAME);
+        unzipResourceToDir(resourceLocation, systemTmp);
+        return systemTmp.toFile();
+    }
+
+    /**
      * Unzips an internal resource to a targeted path.
      *
      * @param internalPath Path to internal zipped resource
