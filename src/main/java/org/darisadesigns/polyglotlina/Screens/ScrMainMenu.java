@@ -286,7 +286,13 @@ public final class ScrMainMenu extends PFrame {
 
             if (files != null) {
                 for (File exampleLang : files) {
-                    final String title = exampleLang.getName().replace("_", " ").replace(".pgd", "");
+                    // check that the file extension is pgd
+                    String fileName = exampleLang.getName();
+                    if (!fileName.endsWith("pgd")) {
+                        continue;
+                    }
+
+                    final String title = fileName.replace("_", " ").replace(".pgd", "");
                     final String location = exampleLang.getAbsolutePath();
 
                     JMenuItem mnuExample = new JMenuItem(title);
@@ -2136,7 +2142,7 @@ public final class ScrMainMenu extends PFrame {
         mnuHelp.add(mnuChkUpdate);
 
         mnuExLex.setText("Example Languages");
-        mnuExLex.setToolTipText("Languages with exmples to copy from");
+        mnuExLex.setToolTipText("Languages with examples to copy from");
         mnuHelp.add(mnuExLex);
 
         jMenuItem4.setText("Create Bug Report");
