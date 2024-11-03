@@ -605,9 +605,7 @@ public final class ScrMainMenu extends PFrame {
         chooser.setDialogTitle("Save Language");
         chooser.setFileFilter(filter);
         chooser.setApproveButtonText("Save");
-        if (curFileName.isEmpty()) {
-            chooser.setCurrentDirectory(core.getStateDirectory().toFile());
-        } else {
+        if (!curFileName.isEmpty()) {
             chooser.setCurrentDirectory(DesktopIOHandler.getInstance().getDirectoryFromPath(curFileName));
             chooser.setSelectedFile(DesktopIOHandler.getInstance().getFileFromPath(curFileName));
         }
@@ -690,9 +688,7 @@ public final class ScrMainMenu extends PFrame {
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Languages", "pgd");
         chooser.setFileFilter(filter);
         String fileName;
-        if (curFileName.isEmpty()) {
-            chooser.setCurrentDirectory(core.getStateDirectory().toFile());
-        } else {
+        if (!curFileName.isEmpty()) {
             chooser.setCurrentDirectory(DesktopIOHandler.getInstance().getDirectoryFromPath(curFileName));
         }
 
@@ -756,7 +752,6 @@ public final class ScrMainMenu extends PFrame {
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xls");
         chooser.setFileFilter(filter);
         chooser.setApproveButtonText("Save");
-        chooser.setCurrentDirectory(core.getStateDirectory().toFile());
 
         String fileName = core.getCurFileName().replaceAll("\\.pgd", ".xls");
         chooser.setSelectedFile(new File(fileName));
@@ -808,7 +803,6 @@ public final class ScrMainMenu extends PFrame {
 
         chooser.setDialogTitle("Export Font");
         chooser.setFileFilter(filter);
-        chooser.setCurrentDirectory(core.getStateDirectory().toFile());
         chooser.setApproveButtonText("Save");
         chooser.setSelectedFile(new File(fileName));
 
@@ -1419,9 +1413,7 @@ public final class ScrMainMenu extends PFrame {
         chooser.setDialogTitle("Export Custom Dictionary File");
         chooser.setFileFilter(filter);
         chooser.setApproveButtonText("Save");
-        if (curFileName.isEmpty() || !curFileName.contains(".pgd")) {
-            chooser.setCurrentDirectory(core.getStateDirectory().toFile());
-        } else {
+        if (!curFileName.isEmpty() && curFileName.contains(".pgd")) {
             String suggestedDicFile = curFileName.replaceAll("\\.pgd", ".dic");
             chooser.setCurrentDirectory(DesktopIOHandler.getInstance().getDirectoryFromPath(curFileName));
             chooser.setSelectedFile(DesktopIOHandler.getInstance().getFileFromPath(suggestedDicFile));
@@ -1474,9 +1466,7 @@ public final class ScrMainMenu extends PFrame {
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Languages", "pgd");
         chooser.setFileFilter(filter);
 
-        if (curFileName.isEmpty()) {
-            chooser.setCurrentDirectory(core.getStateDirectory().toFile());
-        } else {
+        if (!curFileName.isEmpty()) {
             chooser.setCurrentDirectory(DesktopIOHandler.getInstance().getDirectoryFromPath(curFileName));
         }
 
@@ -1506,9 +1496,7 @@ public final class ScrMainMenu extends PFrame {
         chooser.setDialogTitle("Pack Language Dirctory to PGD File");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-        if (curFileName.isEmpty()) {
-            chooser.setCurrentDirectory(core.getStateDirectory().toFile());
-        } else {
+        if (!curFileName.isEmpty()) {
             chooser.setCurrentDirectory(DesktopIOHandler.getInstance().getDirectoryFromPath(curFileName));
         }
 

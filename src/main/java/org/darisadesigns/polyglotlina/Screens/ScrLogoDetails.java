@@ -906,7 +906,6 @@ public class ScrLogoDetails extends PFrame {
                 "BMP", "bmp", "jpeg", "wbmp", "gif", "GIF", "png", "JPG", "jpg", "WBMP", "JPEG", "PNG");
         chooser.setFileFilter(filter);
         String fileName;
-        chooser.setCurrentDirectory(core.getStateDirectory().toFile());
 
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             fileName = chooser.getSelectedFile().getAbsolutePath();

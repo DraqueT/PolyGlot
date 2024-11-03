@@ -87,7 +87,6 @@ public class ScrExcelImport extends PDialog {
 
     private void browseFile() {
         JFileChooser chooser = new JFileChooser();
-        chooser.setCurrentDirectory(core.getStateDirectory().toFile());
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel/CSV Documents", "xls", "xlsx", "xlsm", "csv", "txt", "tsv");
         chooser.setFileFilter(filter);
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {

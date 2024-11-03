@@ -510,7 +510,6 @@ public class ScrPrintToPDF extends PDialog {
         String fileName = core.getCurFileName().replaceAll(".pgd", ".pdf");
         chooser.setFileFilter(filter);
         chooser.setApproveButtonText("Save");
-        chooser.setCurrentDirectory(core.getStateDirectory().toFile());
         chooser.setSelectedFile(new File(fileName));
 
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -594,7 +593,6 @@ public class ScrPrintToPDF extends PDialog {
                 "BMP", "bmp", "jpeg", "wbmp", "gif", "GIF", "png", "JPG", "jpg", "WBMP", "JPEG", "PNG");
         chooser.setFileFilter(filter);
         String fileName;
-        chooser.setCurrentDirectory(core.getStateDirectory().toFile());
 
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             fileName = chooser.getSelectedFile().getAbsolutePath();
