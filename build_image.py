@@ -1,14 +1,14 @@
-##############################################################################
-#
-#   PolyGlot build script Copyright 2019-2023 Draque Thompson
-#
-#   This script builds PolyGlot into a distributable package on Linux,
-#   OSX, and Windows. Windows does not come with Python installed by default.
-#   This runs on both Python 2.7 and 3.x. 
-#
-#   From: https://github.com/DraqueT/PolyGlot/
-#
-##############################################################################
+#!/usr/bin/python3
+"""
+This script builds PolyGlot into a distributable package on Linux,
+OSX, and Windows.
+"""
+
+__author__      = "Draque Thompson"
+__copyright__   = "2019-2024"
+__license__     = "MIT"
+__maintainer__  = "draquemail@gmail.com"
+__status__      = "Production"
 
 import datetime
 from datetime import date
