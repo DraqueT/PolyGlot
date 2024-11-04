@@ -131,6 +131,7 @@ public final class DesktopIOHandler implements IOHandler {
     public File createTmpFileWithContents(String contents, String extension) throws IOException {
         File ret = File.createTempFile("POLYGLOT", extension,
             PGTUtil.getTempDirectory().toFile());
+        ret.deleteOnExit();
 
         try (Writer out = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(ret), StandardCharsets.UTF_8))) {
@@ -147,6 +148,7 @@ public final class DesktopIOHandler implements IOHandler {
     public File createTmpFileFromImageBytes(byte[] imageBytes, String fileName) throws IOException {
         File tmpFile = File.createTempFile(fileName, ".png",
             PGTUtil.getTempDirectory().toFile());
+        tmpFile.deleteOnExit();
         ByteArrayInputStream stream = new ByteArrayInputStream(imageBytes);
         BufferedImage img = ImageIO.read(stream);
         ImageIO.write(img, "PNG",

@@ -104,12 +104,13 @@ public class DictCoreTest {
         try {
             DictCore origin = DummyCore.newCore();
             DictCore target = DummyCore.newCore();
-            Path targetPath = Files.createTempFile(PGTUtil.getTempDirectory(),
-                "POLYGLOT", "pgt");
+            File targetFile = File.createTempFile("POLYGLOT", "pgt",
+                PGTUtil.getTempDirectory().toFile());
+            targetFile.deleteOnExit();
             
             origin.readFile(PGTUtil.TESTRESOURCES + "test_equality.pgd");
-            origin.writeFile(targetPath.toString(), false, false);
-            target.readFile(targetPath.toString());
+            origin.writeFile(targetFile.toString(), false, false);
+            target.readFile(targetFile.toString());
             
             assertEquals(origin, target, "DictCoreTest.testIsLanguageEmptyNoPOS:F");
         } catch (IOException | IllegalStateException | ParserConfigurationException | TransformerException e) {
@@ -126,12 +127,13 @@ public class DictCoreTest {
         try {
             DictCore origin = DummyCore.newCore();
             DictCore target = DummyCore.newCore();
-            Path targetPath = Files.createTempFile(PGTUtil.getTempDirectory(),
-                "POLYGLOT", "pgt");
+            File targetFile = File.createTempFile("POLYGLOT", "pgt",
+                PGTUtil.getTempDirectory().toFile());
+            targetFile.deleteOnExit();
             
             origin.readFile(PGTUtil.TESTRESOURCES + "test_equality.pgd");
-            origin.writeFile(targetPath.toString(), false, false);
-            target.readFile(targetPath.toString());
+            origin.writeFile(targetFile.toString(), false, false);
+            target.readFile(targetFile.toString());
             
             assertEquals(origin, target, "DictCoreTest.testIsLanguageEmptyNoPOS:F");
         } catch (IOException | IllegalStateException | ParserConfigurationException | TransformerException e) {

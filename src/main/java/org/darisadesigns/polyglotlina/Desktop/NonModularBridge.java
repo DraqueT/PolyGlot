@@ -183,6 +183,7 @@ public final class NonModularBridge {
         File bridge = NonModularBridge.getNonModularBridgeLocation();
         File tmpTarget = File.createTempFile("PolyGlotTmp", ".csv",
             PGTUtil.getTempDirectory().toFile());
+        tmpTarget.deleteOnExit();
         
         String[] command = {
             getJavaExecutablePath(),
@@ -258,6 +259,7 @@ public final class NonModularBridge {
     private static File createTmpLangFile(DictCore core) throws IOException {
         File ret = File.createTempFile("PolyGlot", "LangFile",
             PGTUtil.getTempDirectory().toFile());
+        ret.deleteOnExit();
         
         try {
             core.writeFile(ret.getAbsolutePath(), false, true);
