@@ -30,7 +30,6 @@ linString = 'Linux'
 osxString = 'Darwin'
 winString = 'Windows'
 
-separatorCharacter = '/'
 macIntelBuild = False
 skipTests = False
 
@@ -82,7 +81,6 @@ def main(args):
     global LANG3_VER
     global failFile
     global copyDestination
-    global separatorCharacter
     global macIntelBuild
     global skipTests
 
@@ -91,9 +89,6 @@ def main(args):
         return
 
     skip_steps = []
-
-    if osString == winString:
-        separatorCharacter = '\\'
 
     if '-skipTests' in args or '-skiptests' in args:
         skipTests = True
@@ -156,7 +151,7 @@ def main(args):
         copyDestination = args[command_index + 1]
 
         # failure message file created here, deleted at end of process conditionally upon success
-        failFile = copyDestination + separatorCharacter + osString + "_BUILD_FAILED"
+        failFile = os.path.join(copyDestination, osString + "_BUILD_FAILED")
         open(failFile, 'a').close()
 
         # remove args after consuming
@@ -560,10 +555,7 @@ def distWin():
 # injects current time into file which lives in PolyGlot resources
 def injectBuildDate():
     build_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
-    file_path = 'assets/assets/org/DarisaDesigns/buildDate'
-
-    if osString == winString:
-        file_path = file_path.replace('/', '\\')
+    file_path = os.path.join('assets', 'assets', 'org', 'DarisaDesigns', 'buildDate')
 
     f = open(file_path, 'w')
     f.write(build_time)
@@ -578,23 +570,16 @@ def injectBuildDate():
 def getJfxLocation():
     ret = os.path.expanduser('~')
 
-    if osString == winString:
-        ret += '\\.m2\\repository\\org\\openjfx'
-    elif osString == osxString and macIntelBuild:
-        ret += '/.m2/repository/org/openjfx_intel'
-    elif osString == osxString or osString == linString:
-        ret += '/.m2/repository/org/openjfx'
+    if osString == osxString and macIntelBuild:
+        ret = os.path.join(ret, '.m2', 'repository', 'org', 'openjfx_intel')
+    else:
+        ret = os.path.join(ret, '.m2', 'repository', 'org', 'openjfx')
 
     return ret
 
 
 def getRepositoryLocation():
-    ret = os.path.expanduser('~')
-    if osString == winString:
-        ret += '\\.m2\\repository'
-    elif osString == osxString or osString == linString:
-        ret += '/.m2/repository'
-    return ret
+    return os.path.join(os.path.expanduser('~'), '.m2', 'repository')
 
 
 def getDependencyVersionByGroupId(group_id):
@@ -651,13 +636,10 @@ def getBuildNum():
     return ret
 
 
-def updateVersionResource(version_string):
+def updateVersionResource(version_string : str):
     global IS_RELEASE
 
-    if osString == winString:
-        location = 'assets\\assets\\org\\DarisaDesigns\\version'
-    else:
-        location = 'assets/assets/org/DarisaDesigns/version'
+    location = os.path.join('assets', 'assets', 'org', 'DarisaDesigns', 'version')
 
     if path.exists(location):
         os.remove(location)
@@ -675,10 +657,7 @@ def injectDocs():
 
     # readme and resources...
     extension = '.zip'
-    if osString == winString:
-        readme_location = 'assets\\assets\\org\\DarisaDesigns\\readme'
-    else:
-        readme_location = 'assets/assets/org/DarisaDesigns/readme'
+    readme_location = os.path.join('assets', 'assets', 'org', 'DarisaDesigns', 'readme')
 
     if path.exists(readme_location + extension):
         os.remove(readme_location + extension)
@@ -686,12 +665,8 @@ def injectDocs():
     shutil.make_archive(readme_location, 'zip', 'docs')
 
     # example dictionaries
-    if osString == winString:
-        source_location = 'packaging_files\\example_lexicons'
-        dict_location = 'assets\\assets\\org\\DarisaDesigns\\exlex'
-    else:
-        source_location = 'packaging_files/example_lexicons'
-        dict_location = 'assets/assets/org/DarisaDesigns/exlex'
+    source_location = os.path.join('packaging_files', 'example_lexicons')
+    dict_location = os.path.join('assets', 'assets', 'org', 'DarisaDesigns', 'exlex')
 
     if path.exists(source_location + extension):
         os.remove(readme_location + extension)
@@ -718,9 +693,9 @@ def copyInstaller(source):
 
         # release candidates copied to their own location
         if IS_RELEASE:
-            copyDestination = copyDestination + separatorCharacter + 'Release'
+            copyDestination = os.path.join(copyDestination, 'Release')
 
-        destination = copyDestination + separatorCharacter + ins_file
+        destination = os.path.join(destination, ins_file)
         print('Copying installer to ' + destination)
         shutil.copy(source, destination)
 
