@@ -185,7 +185,7 @@ def main(args):
     if (full_build and 'docs' not in skip_steps) or 'docs' in args:
         injectDocs()
     if (full_build and 'build' not in skip_steps) or 'build' in args:
-        build()
+        build(skipTests)
     if (full_build and 'clean' not in skip_steps) or 'clean' in args or 'image' in args:
         clean()
     if (full_build and 'image' not in skip_steps) or 'image' in args:
@@ -196,15 +196,15 @@ def main(args):
     print('Done!')
 
 
-def build():
+def build(skipTests : bool):
     print('Injecting build date/time...')
     injectBuildDate()
     if osString == linString:
-        buildLinux()
+        buildLinux(skipTests)
     elif osString == osxString:
-        buildOsx()
+        buildOsx(skipTests)
     elif osString == winString:
-        buildWin()
+        buildWin(skipTests)
 
 
 def clean():
@@ -240,8 +240,7 @@ def dist():
 #       LINUX FUNCTIONALITY
 ######################################
 
-def buildLinux():
-    global skipTests
+def buildLinux(skipTests : bool):
     print('cleaning/testing/compiling...')
     command = 'mvn clean package'
 
@@ -325,15 +324,14 @@ def distLinux():
         print('failed to locate jpackage output')
 
     if copyDestination != "":
-        copyInstaller(installer_file)
+        copyInstaller(copyDestination, installer_file)
 
 
 ######################################
 #       Mac OS FUNCTIONALITY
 ######################################
 
-def buildOsx():
-    global skipTests
+def buildOsx(skipTests : bool):
     print('cleaning/testing/compiling...')
     command = 'mvn clean package'
 
@@ -458,7 +456,7 @@ def distOsx():
             print('No distribution signing identity specified, dmg installer will not be signed for distribution')
 
         if copyDestination != "":
-            copyInstaller('PolyGlot-' + POLYGLOT_VERSION + '.dmg')
+            copyInstaller(copyDestination, 'PolyGlot-' + POLYGLOT_VERSION + '.dmg')
 
     except Exception as e:
         print('Exception: ' + str(e))
@@ -474,8 +472,7 @@ def distOsx():
 #       WINDOWS FUNCTIONALITY
 ######################################
 
-def buildWin():
-    global skipTests
+def buildWin(skipTests : bool):
     print('cleaning/testing/compiling...')
     command = 'mvn clean package'
 
@@ -549,7 +546,7 @@ def distWin():
     os.system(command)
 
     if copyDestination != "":
-        copyInstaller(package_location)
+        copyInstaller(copyDestination, package_location)
 
 
 # injects current time into file which lives in PolyGlot resources
@@ -675,8 +672,7 @@ def injectDocs():
 
 
 # Copies installer file to final destination and removes error indicator file
-def copyInstaller(source):
-    global copyDestination
+def copyInstaller(copyDestination : str, source : str):
     global macIntelBuild
 
     if path.exists(source):
