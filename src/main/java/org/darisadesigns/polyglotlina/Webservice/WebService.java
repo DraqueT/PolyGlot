@@ -84,7 +84,7 @@ public class WebService {
     public WebService(PolyGlot _polyGlot) throws Exception {
         rateLimiterPerAddress = new ConcurrentHashMap<>();
         polyGlot = _polyGlot;
-        logFile = new File(polyGlot.getWorkingDirectory() + File.separator + PGTUtil.WEB_SERVICE_LOG_FILE);
+        logFile = PGTUtil.getStateDirectory().resolve(PGTUtil.WEB_SERVICE_LOG_FILE).toFile();
         
         // master rate limiter gives some basic DDOS protection
         masterRateLimiter = new TokenBucketRateLimiter(
@@ -262,7 +262,7 @@ public class WebService {
      * PWebServerException
      */
     private File getLanguageFile(String fileName) throws PWebServerException {
-        var file = new File(polyGlot.getOptionsManager().getWebServiceTargetFolder() + File.separator + fileName);
+        var file = polyGlot.getOptionsManager().getWebServiceTargetFolder().resolve(fileName).toFile();
 
         if (file.exists()) {
             return file;
@@ -584,7 +584,7 @@ public class WebService {
     }
 
     private void populateServedFiles() throws Exception {
-        File servedDirectory = new File(polyGlot.getOptionsManager().getWebServiceTargetFolder());
+        File servedDirectory = polyGlot.getOptionsManager().getWebServiceTargetFolder().toFile();
         pgdFiles = new HashMap<>();
 
         if (!servedDirectory.exists()) {

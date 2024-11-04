@@ -44,16 +44,16 @@ import org.junit.jupiter.api.Test;
  * @author draque
  */
 public class OpenScreensTest {
-    private final File errors;
+    private File errors;
     private final DictCore core;
     private final boolean headless = GraphicsEnvironment.isHeadless(); // testing this in a headless environment makes no sense
     
     public OpenScreensTest() {
         PGTUtil.enterUITestingMode();
         core = DummyCore.newCore();
-        errors = DesktopIOHandler.getInstance().getErrorLogFile();
         
         try {
+            errors = DesktopIOHandler.getInstance().getErrorLogFile();
             core.readFile(PGTUtil.TESTRESOURCES + "basic_lang.pgd");
 
             if (errors.exists()) {

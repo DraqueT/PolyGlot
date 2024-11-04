@@ -286,7 +286,13 @@ public final class ScrMainMenu extends PFrame {
 
             if (files != null) {
                 for (File exampleLang : files) {
-                    final String title = exampleLang.getName().replace("_", " ").replace(".pgd", "");
+                    // check that the file extension is pgd
+                    String fileName = exampleLang.getName();
+                    if (!fileName.endsWith("pgd")) {
+                        continue;
+                    }
+
+                    final String title = fileName.replace("_", " ").replace(".pgd", "");
                     final String location = exampleLang.getAbsolutePath();
 
                     JMenuItem mnuExample = new JMenuItem(title);
@@ -605,9 +611,7 @@ public final class ScrMainMenu extends PFrame {
         chooser.setDialogTitle("Save Language");
         chooser.setFileFilter(filter);
         chooser.setApproveButtonText("Save");
-        if (curFileName.isEmpty()) {
-            chooser.setCurrentDirectory(core.getWorkingDirectory());
-        } else {
+        if (!curFileName.isEmpty()) {
             chooser.setCurrentDirectory(DesktopIOHandler.getInstance().getDirectoryFromPath(curFileName));
             chooser.setSelectedFile(DesktopIOHandler.getInstance().getFileFromPath(curFileName));
         }
@@ -690,9 +694,7 @@ public final class ScrMainMenu extends PFrame {
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Languages", "pgd");
         chooser.setFileFilter(filter);
         String fileName;
-        if (curFileName.isEmpty()) {
-            chooser.setCurrentDirectory(core.getWorkingDirectory());
-        } else {
+        if (!curFileName.isEmpty()) {
             chooser.setCurrentDirectory(DesktopIOHandler.getInstance().getDirectoryFromPath(curFileName));
         }
 
@@ -756,7 +758,6 @@ public final class ScrMainMenu extends PFrame {
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel Files", "xls");
         chooser.setFileFilter(filter);
         chooser.setApproveButtonText("Save");
-        chooser.setCurrentDirectory(core.getWorkingDirectory());
 
         String fileName = core.getCurFileName().replaceAll("\\.pgd", ".xls");
         chooser.setSelectedFile(new File(fileName));
@@ -808,7 +809,6 @@ public final class ScrMainMenu extends PFrame {
 
         chooser.setDialogTitle("Export Font");
         chooser.setFileFilter(filter);
-        chooser.setCurrentDirectory(core.getWorkingDirectory());
         chooser.setApproveButtonText("Save");
         chooser.setSelectedFile(new File(fileName));
 
@@ -848,7 +848,7 @@ public final class ScrMainMenu extends PFrame {
     }
 
     private void openHelp() throws IOException {
-        File readmeDir = DesktopIOHandler.getInstance().unzipResourceToTempLocation(PGTUtil.HELP_FILE_ARCHIVE_LOCATION);
+        File readmeDir = DesktopIOHandler.getInstance().unzipResourceToSystemTempLocation(PGTUtil.HELP_FILE_ARCHIVE_LOCATION);
         File readmeFile = new File(readmeDir.getAbsolutePath() + File.separator + PGTUtil.HELP_FILE_NAME);
 
         if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
@@ -1419,9 +1419,7 @@ public final class ScrMainMenu extends PFrame {
         chooser.setDialogTitle("Export Custom Dictionary File");
         chooser.setFileFilter(filter);
         chooser.setApproveButtonText("Save");
-        if (curFileName.isEmpty() || !curFileName.contains(".pgd")) {
-            chooser.setCurrentDirectory(core.getWorkingDirectory());
-        } else {
+        if (!curFileName.isEmpty() && curFileName.contains(".pgd")) {
             String suggestedDicFile = curFileName.replaceAll("\\.pgd", ".dic");
             chooser.setCurrentDirectory(DesktopIOHandler.getInstance().getDirectoryFromPath(curFileName));
             chooser.setSelectedFile(DesktopIOHandler.getInstance().getFileFromPath(suggestedDicFile));
@@ -1474,9 +1472,7 @@ public final class ScrMainMenu extends PFrame {
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PolyGlot Languages", "pgd");
         chooser.setFileFilter(filter);
 
-        if (curFileName.isEmpty()) {
-            chooser.setCurrentDirectory(core.getWorkingDirectory());
-        } else {
+        if (!curFileName.isEmpty()) {
             chooser.setCurrentDirectory(DesktopIOHandler.getInstance().getDirectoryFromPath(curFileName));
         }
 
@@ -1506,9 +1502,7 @@ public final class ScrMainMenu extends PFrame {
         chooser.setDialogTitle("Pack Language Dirctory to PGD File");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-        if (curFileName.isEmpty()) {
-            chooser.setCurrentDirectory(core.getWorkingDirectory());
-        } else {
+        if (!curFileName.isEmpty()) {
             chooser.setCurrentDirectory(DesktopIOHandler.getInstance().getDirectoryFromPath(curFileName));
         }
 
@@ -2148,7 +2142,7 @@ public final class ScrMainMenu extends PFrame {
         mnuHelp.add(mnuChkUpdate);
 
         mnuExLex.setText("Example Languages");
-        mnuExLex.setToolTipText("Languages with exmples to copy from");
+        mnuExLex.setToolTipText("Languages with examples to copy from");
         mnuHelp.add(mnuExLex);
 
         jMenuItem4.setText("Create Bug Report");

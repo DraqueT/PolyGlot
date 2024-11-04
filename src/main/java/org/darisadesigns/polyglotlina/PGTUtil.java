@@ -26,6 +26,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -553,7 +556,7 @@ public class PGTUtil {
     }
     
     // ENVIRONMENT VARIABLES
-    private static File errorDirectory = null;
+    private static Path errorDirectory = null;
     private static boolean forceSuppressDialogs = false;
     private static boolean uiTestingMode = false;
     private static StackTraceElement writeLock = null;
@@ -658,25 +661,91 @@ public class PGTUtil {
     }
 
     /**
-     * Default directory based on OS value for user dir
+     * Application config directory on a per OS basis.
+     * Directory existence is not checked for. E.g.:
+     * - ini files
      *
-     * @return
+     * @return Config file directory path
      */
-    public static File getDefaultDirectory() {
-        String defaultDirectoryPath = System.getProperty("user.home") + File.separator + POLYGLOT_WORKINGDIRECTORY;
-        
+    public static Path getConfigDirectory() {
+        String appFolder = "PolyGlot";
         // for my own sanity, this keeps test stuff from overwriting options and whatnot
         if (PGTUtil.isInJUnitTest()) {
-            defaultDirectoryPath += "_TEST";
-        }
-        
-        File ret = new File(defaultDirectoryPath);
-
-        if (!ret.exists()) {
-            ret.mkdir();
+            appFolder += "_TEST";
         }
 
-        return ret;
+        if (IS_WINDOWS) {
+            return Paths.get(System.getenv("LOCALAPPDATA"), appFolder);
+        } else if (IS_OSX) {
+            return Paths.get(System.getProperty("user.home"),
+                "Library/Preferences", appFolder);
+        } else { // linux, or everything else we can't identify
+            String xdg_config = System.getenv("XDG_CONFIG_HOME");
+            if (xdg_config != null) {
+                return Paths.get(xdg_config, appFolder);
+            }
+            return Paths.get(System.getProperty("user.home"), ".config", appFolder);
+        }
+    }
+
+    /**
+     * Application state directory on a per OS basis.
+     * Directory existence is not checked for. E.g.:
+     * - log files
+     * - files downloaded from the internet
+     *
+     * @return State file directory path
+     */
+    public static Path getStateDirectory() {
+        String appFolder = "PolyGlot";
+        // for my own sanity, this keeps test stuff from overwriting options and whatnot
+        if (PGTUtil.isInJUnitTest()) {
+            appFolder += "_TEST";
+        }
+
+        if (IS_WINDOWS) {
+            return Paths.get(System.getenv("LOCALAPPDATA"), appFolder);
+        } else if (IS_OSX) {
+            return Paths.get(System.getProperty("user.home"),
+                "Library/Application Support", appFolder);
+        } else { // linux, or everything else we can't identify
+            String xdg_cache = System.getenv("XDG_STATE_HOME");
+            if (xdg_cache != null) {
+                return Paths.get(xdg_cache, appFolder);
+            }
+            return Paths.get(System.getProperty("user.home"),
+                ".local", "state", appFolder);
+        }
+    }
+
+    /**
+     * Application temporary data on a per OS basis.
+     * Directory existence is not checked for. E.g.:
+     * - unzipped readme that exists for the duration of the application
+     * - temporary csv files exported from excel
+     * 
+     * @return Temp file directory path
+     */
+    public static Path getTempDirectory() {
+        String appFolder = "PolyGlot";
+        // for my own sanity, this keeps test stuff from overwriting options and whatnot
+        if (PGTUtil.isInJUnitTest()) {
+            appFolder += "_TEST";
+        }
+
+        if (IS_WINDOWS) {
+            return Paths.get(System.getenv("TEMP"), appFolder);
+        } else if (IS_OSX) {
+            return Paths.get(System.getProperty("user.home"),
+                "Library/Caches", appFolder);
+        } else { // linux, or everything else we can't identify
+            String xdg_cache = System.getenv("XDG_CACHE_HOME");
+            if (xdg_cache != null) {
+                return Paths.get(xdg_cache, appFolder);
+            }
+            return Paths.get(System.getProperty("user.home"),
+                ".local", "cache", appFolder);
+        }
     }
 
     /**
@@ -684,9 +753,9 @@ public class PGTUtil {
      *
      * @return
      */
-    public static File getErrorDirectory() {
-        if (errorDirectory == null || !errorDirectory.exists()) {
-            errorDirectory = getDefaultDirectory();
+    public static Path getErrorDirectory() {
+        if (errorDirectory == null || !Files.exists(errorDirectory)) {
+            errorDirectory = getStateDirectory();
         }
 
         return errorDirectory;

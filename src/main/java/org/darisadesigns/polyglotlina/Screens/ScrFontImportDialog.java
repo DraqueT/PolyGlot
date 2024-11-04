@@ -116,7 +116,6 @@ public final class ScrFontImportDialog extends PDialog {
 
         chooser.setDialogTitle("Select Font File");
         chooser.setFileFilter(filter);
-        chooser.setCurrentDirectory(core.getWorkingDirectory());
         chooser.setApproveButtonText("Open");
 
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {

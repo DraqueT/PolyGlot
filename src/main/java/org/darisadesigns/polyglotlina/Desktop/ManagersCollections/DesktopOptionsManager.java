@@ -22,6 +22,7 @@ package org.darisadesigns.polyglotlina.Desktop.ManagersCollections;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -49,7 +50,7 @@ public class DesktopOptionsManager {
     private int msBetweenSaves;
     private double uiScale = 2.0;
     private int webServicePort = 8080;
-    private String webServiceTargetFolder;
+    private Path webServiceTargetFolder;
     private int webServiceMasterTokenCapacity = 100;
     private int webServiceMasterTokenRefill = 15;
     private int webServiceindividualTokenCapacity = 10;
@@ -75,7 +76,7 @@ public class DesktopOptionsManager {
         msBetweenSaves = PGTUtil.DEFAULT_MS_BETWEEN_AUTO_SAVES;
         java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(PGTUtil.MENU_FONT);
         menuFontFX = javafx.scene.text.Font.font(PGTUtil.MENU_FONT.getFamily(), PGTUtil.DEFAULT_FONT_SIZE);
-        webServiceTargetFolder = PGTUtil.getDefaultDirectory() + File.separator + "WebService";
+        webServiceTargetFolder = PGTUtil.getStateDirectory().resolve("WebService");
     }
     
     public DesktopOptionsManager(DictCore _core) {
@@ -103,7 +104,7 @@ public class DesktopOptionsManager {
         uiScale = 2;
         gptApiKey = "";
         setWebServicePort(8080);
-        setWebServiceTargetFolder(PGTUtil.getDefaultDirectory() + File.separator + "WebService");
+        setWebServiceTargetFolder(PGTUtil.getStateDirectory().resolve("WebService"));
         pdfPrintOrth = true;
         pdfPrintGloss = true;
         pdfPrintLocalLang = true;
@@ -124,7 +125,7 @@ public class DesktopOptionsManager {
         return webServicePort;
     }
     
-    public String getWebServiceTargetFolder() {
+    public Path getWebServiceTargetFolder() {
         return webServiceTargetFolder;
     }
     
@@ -132,7 +133,7 @@ public class DesktopOptionsManager {
         this.webServicePort = webServicePort;
     }
 
-    public void setWebServiceTargetFolder(String webServiceTargetFolder) {
+    public void setWebServiceTargetFolder(Path webServiceTargetFolder) {
         this.webServiceTargetFolder = webServiceTargetFolder;
     }
 

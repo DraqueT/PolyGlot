@@ -44,12 +44,15 @@ public class ScrAbout extends PDialog {
         super.getRootPane().getContentPane().setBackground(Color.white);
 
         txtAbout.setText("PolyGlot ver. " + PGTUtil.getDisplayVersion() + "\n\nPolyGlot is "
-                + "copyright Draque Thompson 2014-" + Calendar.getInstance().get(Calendar.YEAR)
-                + ". It is licensed under the MIT Licence, so it is free "
-                + "to distribute. Please don't sell this or call it your own, but feel free to "
-                + "use and modify the code found on the open source repository for PolyGlot.\n\n"
-                + "HomePage: http://draquet.github.io/PolyGlot/\nGitHub Repository: "
-                + "https://github.com/DraqueT/PolyGlot\n\nBuild Date: " + PGTUtil.BUILD_DATE_TIME);
+            + "copyright Draque Thompson 2014-" + Calendar.getInstance().get(Calendar.YEAR)
+            + ". It is licensed under the MIT Licence, so it is free "
+            + "to distribute. Please don't sell this or call it your own, but feel free to "
+            + "use and modify the code found on the open source repository for PolyGlot.\n\n"
+            + "HomePage: http://draquet.github.io/PolyGlot/\nGitHub Repository: "
+            + "https://github.com/DraqueT/PolyGlot\n\nBuild Date: " + PGTUtil.BUILD_DATE_TIME
+            + "\n\nConfig Directory: " + PGTUtil.getConfigDirectory().toString()
+            + "\nTemp Directory: " + PGTUtil.getTempDirectory().toString()
+            + "\nData Directory: " + PGTUtil.getStateDirectory().toString());
     }
     
     @Override
