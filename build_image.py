@@ -177,32 +177,35 @@ def main() -> int:
 def build(skipTests : bool):
     print('Injecting build date/time...')
     injectBuildDate()
-    if osString == linString:
-        buildLinux(skipTests)
-    elif osString == osxString:
-        buildOsx(skipTests)
-    elif osString == winString:
-        buildWin(skipTests)
+
+    print('cleaning/testing/compiling...')
+    command = 'mvn clean package'
+
+    if skipTests:
+        command += ' -DskipTests'
+
+    os.system(command)
 
 
 def clean():
-    if osString == linString:
-        cleanLinux()
-    elif osString == osxString:
-        cleanOsx()
-    elif osString == winString:
-        cleanWin()
-
+    print('cleaning build paths...')
+    folders = [os.path.join('target', 'mods'), 'build']
+    for folder in folders:
+        if os.path.exists(folder):
+            shutil.rmtree(folder)
 
 def image():
-    global macIntelBuild
+    os.makedirs(os.path.join('target', 'mods'))
+
+    javafx_location = getJfxLocation()
+    repo_location = getRepositoryLocation()
 
     if osString == linString:
-        imageLinux()
+        imageLinux(javafx_location, repo_location)
     elif osString == osxString:
-        imageOsx()
+        imageOsx(javafx_location, repo_location)
     elif osString == winString:
-        imageWin()
+        imageWin(javafx_location, repo_location)
 
 
 def dist(is_release : bool):
@@ -218,32 +221,12 @@ def dist(is_release : bool):
 #       LINUX FUNCTIONALITY
 ######################################
 
-def buildLinux(skipTests : bool):
-    print('cleaning/testing/compiling...')
-    command = 'mvn clean package'
-
-    if skipTests:
-        command += ' -DskipTests'
-
-    os.system(command)
-
-
-def cleanLinux():
-    print('cleaning build paths...')
-    os.system('rm -rf target/mods')
-    os.system('rm -rf build')
-
-
-def imageLinux():
+def imageLinux(javafx_location : str, repo_location : str):
     print('POLYGLOT_VERSION: ' + POLYGLOT_VERSION)
     print('creating jmod based on jar built without dependencies...')
-    os.system('mkdir target/mods')
     os.system(JAVA_HOME + '/bin/jmod create ' +
               '--class-path target/' + JAR_WO_DEP + ' ' +
               '--main-class org.darisadesigns.polyglotlina.Desktop.PolyGlot target/mods/PolyGlot.jmod')
-
-    javafx_location = getJfxLocation()
-    repo_location = getRepositoryLocation()
 
     print('creating runnable image...')
     command = (JAVA_HOME + '/bin/jlink ' +
@@ -309,31 +292,13 @@ def distLinux(IS_RELEASE : bool):
 #       Mac OS FUNCTIONALITY
 ######################################
 
-def buildOsx(skipTests : bool):
-    print('cleaning/testing/compiling...')
-    command = 'mvn clean package'
-
-    if skipTests:
-        command += ' -DskipTests'
-
-    os.system(command)
-
-
-def cleanOsx():
-    print('cleaning build paths...')
-    os.system('rm -rf target/mods')
-    os.system('rm -rf build')
-
-
-def imageOsx():
+def imageOsx(javafx_location : str, repo_location : str):
     print('creating jmod based on jar built without dependencies...')
-    os.system('mkdir target/mods')
     os.system(JAVA_HOME + '/bin/jmod create ' +
               '--class-path target/' + JAR_WO_DEP + ' ' +
               '--main-class org.darisadesigns.polyglotlina.Desktop.PolyGlot target/mods/PolyGlot.jmod')
 
     print('creating runnable image...')
-    repo_location = getRepositoryLocation()
     command = (JAVA_HOME + '/bin/jlink ' +
                '--module-path "module_injected_jars/:' +
                'target/mods:' +
@@ -342,25 +307,18 @@ def imageOsx():
                repo_location + '/com/fasterxml/jackson/core/jackson-annotations/' + JACKSON_VER + '/:' +
                repo_location + '/org/jsoup/jsoup/' + JSOUP_VER + '/:' +
                repo_location + '/org/apache/commons/commons-lang3/' + LANG3_VER + '/:' +
-               getJfxTargetModsOsx() +
+               javafx_location + '/javafx-graphics/' + JAVAFX_VER + '/:' +
+               javafx_location + '/javafx-base/' + JAVAFX_VER + '/:' +
+               javafx_location + '/javafx-media/' + JAVAFX_VER + '/:' +
+               javafx_location + '/javafx-swing/' + JAVAFX_VER + '/:' +
+               javafx_location + '/javafx-controls/' + JAVAFX_VER + '/:' +
+               javafx_location + '/jmods" ' +
                '--add-modules "org.darisadesigns.polyglotlina.polyglot","jdk.crypto.ec" ' +
                '--output "build/image/" ' +
                '--compress=2 ' +
                '--launcher PolyGlot=org.darisadesigns.polyglotlina.polyglot')
 
     os.system(command)
-
-
-def getJfxTargetModsOsx():
-    javafx_location = getJfxLocation()
-    return (
-            javafx_location + '/javafx-graphics/' + JAVAFX_VER + '/:' +
-            javafx_location + '/javafx-base/' + JAVAFX_VER + '/:' +
-            javafx_location + '/javafx-media/' + JAVAFX_VER + '/:' +
-            javafx_location + '/javafx-swing/' + JAVAFX_VER + '/:' +
-            javafx_location + '/javafx-controls/' + JAVAFX_VER + '/:' +
-            javafx_location + '/jmods" '
-    )
 
 
 def distOsx(IS_RELEASE : bool):
@@ -450,32 +408,12 @@ def distOsx(IS_RELEASE : bool):
 #       WINDOWS FUNCTIONALITY
 ######################################
 
-def buildWin(skipTests : bool):
-    print('cleaning/testing/compiling...')
-    command = 'mvn clean package'
-
-    if skipTests:
-        command += ' -DskipTests'
-
-    os.system(command)
-
-
-def cleanWin():
-    print('cleaning build paths...')
-    os.system('rmdir target\\mods /s /q')
-    os.system('rmdir build /s /q')
-
-
-def imageWin():
+def imageWin(javafx_location : str, repo_location : str):
     print('creating jmod based on jar built without dependencies...')
-    os.system('mkdir target\\mods')
     os.system('jmod create ' +
               '--class-path target\\' + JAR_WO_DEP +
               ' --main-class org.darisadesigns.polyglotlina.Desktop.PolyGlot ' +
               'target\\mods\\PolyGlot.jmod')
-
-    javafx_location = getJfxLocation()
-    repo_location = getRepositoryLocation()
 
     print('creating runnable image...')
     command = ('jlink ' +
