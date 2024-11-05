@@ -10,6 +10,7 @@ __license__     = "MIT"
 __maintainer__  = "draquemail@gmail.com"
 __status__      = "Production"
 
+import argparse
 import datetime
 from datetime import date
 import os
@@ -31,7 +32,6 @@ osxString = 'Darwin'
 winString = 'Windows'
 
 macIntelBuild = False
-skipTests = False
 
 ###############################
 # LINUX BUILD CONSTANTS
@@ -66,7 +66,7 @@ CUR_YEAR = str(date.today().year)
 #   PLATFORM AGNOSTIC FUNCTIONALITY
 ######################################
 
-def main(args):
+def main() -> int:
     global POLYGLOT_VERSION
     global POLYGLOT_BUILD
     global JAVA_HOME
@@ -82,85 +82,68 @@ def main(args):
     global failFile
     global copyDestination
     global macIntelBuild
-    global skipTests
 
-    if 'help' in args or '-help' in args or '--help' in args:
-        printHelp()
-        return
-
-    skip_steps = []
-
-    if '-skipTests' in args or '-skiptests' in args:
-        skipTests = True
-        command_index = args.index('-skipTests') if '-skipTests' in args else args.index('-skiptests')
-        del args[command_index]
-
-    # gather list of steps marked to be skipped
-    while '-skip' in args:
-        command_index = args.index('-skip')
-        skip_steps.append(args[command_index + 1])
-
-        print("Skipping: " + args[command_index + 1] + " step.")
-
-        # remove args after consuming
-        del args[command_index + 1]
-        del args[command_index]
+    parser = argparse.ArgumentParser(prog='PolyGlot Build Script',
+        description = ('Handles builds of PolyGlot on all supported platforms. Examples:\n'
+            '\tLinux:   ./build_image.py --step image --java_home_0 /usr/lib/jvm/jdk-14\n'
+            '\tWindows: python3 build_image.py --skipTests\n'
+            '\tOSX:     python3 build_image.py --intelBuild'),
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('--step', default = [], nargs='?', action='append',
+        choices=['docs', 'build', 'clean', 'image', 'dist'],
+        help='Run a specific step. Leave empty to run all steps')
+    parser.add_argument('--release', action='store_true',
+        help='marks build as release build. Otherwise will be build as beta')
+    parser.add_argument('--copyDestination', type=str,
+        help='sets location for the final created installer file to be copied to (ignored if distribution not built)')
+    parser.add_argument('--skipTests', default=False, action='store_true',
+        help='skips test step in Maven')
+    parser.add_argument('--java_home_o', type=str,
+        help='Overrides JAVA_HOME. Useful for stubborn VMs that will not normally recognize environment variables')
+    
+    # MacOS specific
+    parser.add_argument('--mac_sign_identity', type=str,
+        help='Sign the Mac app image with the specified code signing identity')
+    parser.add_argument('--mac_distrib_cert', type=str,
+        help='Specify the certificate to use for signing the MacOS app image')
+    parser.add_argument('--intelBuild', default=False, action='store_true',
+        help='MacOS only, indicates to use intel libraries rather than Arch64 when building')
+    
+    args = parser.parse_args()
 
     # allows specifying code signing identity for mac builds
-    if '-mac-sign-identity' in args:
-        command_index = args.index('-mac-sign-identity')
-        SIGN_IDENTITY = args[command_index + 1]
-
-        # remove args after consuming
-        del args[command_index + 1]
-        del args[command_index]
+    if args.mac_sign_identity is not None:
+        SIGN_IDENTITY = args.mac_sign_identity
 
     # allows specifying code signing for mac distribution
-    if '-mac-distrib-cert' in args:
-        command_index = args.index('-mac-distrib-cert')
-        DISTRIB_IDENTITY = args[command_index + 1]
-
-        # remove args after consuming
-        del args[command_index + 1]
-        del args[command_index]
+    if args.mac_distrib_cert is not None:
+        DISTRIB_IDENTITY = args.mac_distrib_cert
 
     # allows for override of java home (virtual environments make this necessary at times)
-    if '-java-home-o' in args:
-        command_index = args.index('-java-home-o')
-        print('JAVA_HOME overriden to: ' + args[command_index + 1])
-        JAVA_HOME = args[command_index + 1]
-
-        # remove args after consuming
-        del args[command_index + 1]
-        del args[command_index]
+    if args.java_home_o is not None:
+        print(f'JAVA_HOME overriden to: {args.java_home_o}')
+        JAVA_HOME = args.java_home_o
     else:
         JAVA_HOME = os.getenv('JAVA_HOME')
 
     # detects if marked for release
-    if '-release' in args:
-        command_index = args.index('-release')
+    if args.release is not None:
         print('RELEASE BUILD')
         IS_RELEASE = True
-        del args[command_index]
     else:
-        print('BETA BUILD')
+        print('BETA_BUILD')
 
-    if '-copyDestination' in args:
-        command_index = args.index('-copyDestination')
-        print('Destination for final install file set to: ' + args[command_index + 1])
-        copyDestination = args[command_index + 1]
+    if args.copyDestination is not None:
+        print(f'Destination for final install file set to: {args.copyDestination}')
+        copyDestination = args.copyDestination
 
         # failure message file created here, deleted at end of process conditionally upon success
         failFile = os.path.join(copyDestination, osString + "_BUILD_FAILED")
         open(failFile, 'a').close()
 
-        # remove args after consuming
-        del args[command_index + 1]
-        del args[command_index]
-
     if JAVA_HOME is None:
         print('JAVA_HOME must be set. If necessary, use -java-home-o command to override')
-        return
+        return 1
 
     POLYGLOT_VERSION = getVersion()
     POLYGLOT_BUILD = getBuildNum()
@@ -175,26 +158,24 @@ def main(args):
 
     if osString == winString:
         os.system('echo off')
-    elif osString == osxString and '-intelBuild' in args:
+    elif osString == osxString and args.intelBuild:
         macIntelBuild = True
-        command_index = args.index('-intelBuild')
-        del args[command_index]
 
-    full_build = (len(args) == 1)  # length of 1 means no arguments (full build)
+    full_build = len(args.step) == 0
 
-    if (full_build and 'docs' not in skip_steps) or 'docs' in args:
+    if full_build or 'docs' in args.step:
         injectDocs()
-    if (full_build and 'build' not in skip_steps) or 'build' in args:
-        build(skipTests)
-    if (full_build and 'clean' not in skip_steps) or 'clean' in args or 'image' in args:
+    if full_build or 'build' in args.step:
+        build(args.skipTests)
+    if full_build or 'clean' in args.step:
         clean()
-    if (full_build and 'image' not in skip_steps) or 'image' in args:
+    if full_build or 'image' in args.step:
         image()
-    if (full_build and 'dist' not in skip_steps) or 'dist' in args:
+    if full_build or 'dist' in args.step:
         dist()
 
     print('Done!')
-
+    return 0
 
 def build(skipTests : bool):
     print('Injecting build date/time...')
@@ -702,43 +683,5 @@ def copyInstaller(copyDestination : str, source : str):
         print('FAILURE: Built installer missing: ' + source)
 
 
-def printHelp():
-    print("""
-#################################################
-#       PolyGlot Build Script
-#################################################
-
-To use this utility, simply execute this script with no arguments to run the entire application construction sequence. To target particular steps, use any combination of the following arguments:
-
-    docs : Zips and injects documentation into the application assets.
-
-    build : Performs a maven build. creates both the jar with and the jar without dependencies included. Produced files stored in the target folder.
-    
-    clean : Wipes the product of build.
-
-    image : From the built jar files (which must exist), creates a runnable image. This image is platform dependent. Produced files stored in the build folder.
-    
-    dist : Creates distribution files for the application. This is platform dependent. Produced files stored in the installer folder.
-
-    -java-home-o <jdk-path> : Overrides JAVA_HOME. Useful for stubborn VMs that will not normally recognize environment variables.
-    
-    -mac-sign-identity <identity> : Sign the Mac app image with the specified code signing identity.
-
-    -copyDestination <destination-path> : sets location for the final created installer file to be copied to (ignored if distribution not built)
-    
-    -skip <step> : skips the given step (can be used multiple times)
-    
-    -release : marks build as release build. Otherwise will be build as beta
-
-    -skipTests : skips test step in Maven
-
-    -intelBuild : MacOS only, indicates to use intel libraries rather than Arch64 when building
-
-Example: python build_image.py image pack -java-home-o /usr/lib/jvm/jdk-14
-
-The above will presume that the maven build has already taken place. It will use the produced jar files to create a runnable image, then from that image, create a packed application for the platform you are currently running. The JAVA_HOME path is overridden to point to /usr/lib/jvm/jdk-14.
-""")
-
-
 if __name__ == "__main__":
-    main(sys.argv)
+    sys.exit(main())
