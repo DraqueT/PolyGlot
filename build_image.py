@@ -58,7 +58,6 @@ JACKSON_VER = ''  # set in main for timing reasons
 POLYGLOT_VERSION = ''  # set in main for timing reasons
 POLYGLOT_BUILD = ''  # set in main for timing reasons
 JAVA_HOME = ''  # set in main for timing reasons
-IS_RELEASE = False
 CUR_YEAR = str(date.today().year)
 
 
@@ -72,7 +71,6 @@ def main() -> int:
     global JAVA_HOME
     global SIGN_IDENTITY
     global DISTRIB_IDENTITY
-    global IS_RELEASE
     global JAR_W_DEP
     global JAR_WO_DEP
     global JAVAFX_VER
@@ -127,9 +125,8 @@ def main() -> int:
         JAVA_HOME = os.getenv('JAVA_HOME')
 
     # detects if marked for release
-    if args.release is not None:
+    if args.release:
         print('RELEASE BUILD')
-        IS_RELEASE = True
     else:
         print('BETA_BUILD')
 
@@ -146,9 +143,9 @@ def main() -> int:
         return 1
 
     POLYGLOT_VERSION = getVersion()
-    POLYGLOT_BUILD = getBuildNum()
+    POLYGLOT_BUILD = getBuildNum(args.release)
     print('Building Version: ' + POLYGLOT_VERSION)
-    updateVersionResource(POLYGLOT_VERSION)
+    updateVersionResource(args.release, POLYGLOT_VERSION)
     JAR_W_DEP = 'PolyGlotLinA-' + POLYGLOT_VERSION + '-jar-with-dependencies.jar'
     JAR_WO_DEP = 'PolyGlotLinA-' + POLYGLOT_VERSION + '.jar'
     JAVAFX_VER = getDependencyVersionByGroupId('org.openjfx')
@@ -172,7 +169,7 @@ def main() -> int:
     if full_build or 'image' in args.step:
         image()
     if full_build or 'dist' in args.step:
-        dist()
+        dist(args.release)
 
     print('Done!')
     return 0
@@ -208,13 +205,13 @@ def image():
         imageWin()
 
 
-def dist():
+def dist(is_release : bool):
     if osString == linString:
-        distLinux()
+        distLinux(is_release)
     elif osString == osxString:
-        distOsx()
+        distOsx(is_release)
     elif osString == winString:
-        distWin()
+        distWin(is_release)
 
 
 ######################################
@@ -271,7 +268,7 @@ def imageLinux():
     os.system(command)
 
 
-def distLinux():
+def distLinux(IS_RELEASE : bool):
     print('creating linux distribution...')
     os.system('rm -rf installer')
     os.system('mkdir installer')
@@ -305,7 +302,7 @@ def distLinux():
         print('failed to locate jpackage output')
 
     if copyDestination != "":
-        copyInstaller(copyDestination, installer_file)
+        copyInstaller(copyDestination, installer_file, IS_RELEASE)
 
 
 ######################################
@@ -366,7 +363,7 @@ def getJfxTargetModsOsx():
     )
 
 
-def distOsx():
+def distOsx(IS_RELEASE : bool):
     print('Creating app image...')
 
     command = (JAVA_HOME + '/bin/jpackage ' +
@@ -437,7 +434,7 @@ def distOsx():
             print('No distribution signing identity specified, dmg installer will not be signed for distribution')
 
         if copyDestination != "":
-            copyInstaller(copyDestination, 'PolyGlot-' + POLYGLOT_VERSION + '.dmg')
+            copyInstaller(copyDestination, 'PolyGlot-' + POLYGLOT_VERSION + '.dmg', IS_RELEASE)
 
     except Exception as e:
         print('Exception: ' + str(e))
@@ -502,7 +499,7 @@ def imageWin():
     os.system(command)
 
 
-def distWin():
+def distWin(IS_RELEASE : bool):
     package_location = 'PolyGlot-' + POLYGLOT_BUILD + '.exe'
     print('Creating distribution package...')
     os.system('rmdir /s /q installer')
@@ -527,7 +524,7 @@ def distWin():
     os.system(command)
 
     if copyDestination != "":
-        copyInstaller(copyDestination, package_location)
+        copyInstaller(copyDestination, package_location, IS_RELEASE)
 
 
 # injects current time into file which lives in PolyGlot resources
@@ -594,7 +591,7 @@ def getVersion():
 
 # for releases, this will match the version. For beta builds, a UTC timestamp is appended (OS registration reasons on
 # installation)
-def getBuildNum():
+def getBuildNum(IS_RELEASE : bool):
     ret = getVersion()
 
     if not IS_RELEASE and osString == winString:
@@ -614,9 +611,7 @@ def getBuildNum():
     return ret
 
 
-def updateVersionResource(version_string : str):
-    global IS_RELEASE
-
+def updateVersionResource(IS_RELEASE : bool, version_string : str):
     location = os.path.join('assets', 'assets', 'org', 'DarisaDesigns', 'version')
 
     if path.exists(location):
@@ -653,7 +648,7 @@ def injectDocs():
 
 
 # Copies installer file to final destination and removes error indicator file
-def copyInstaller(copyDestination : str, source : str):
+def copyInstaller(copyDestination : str, source : str, IS_RELEASE : bool):
     global macIntelBuild
 
     if path.exists(source):
