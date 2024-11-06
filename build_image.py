@@ -1,21 +1,23 @@
-##############################################################################
-#
-#   PolyGlot build script Copyright 2019-2023 Draque Thompson
-#
-#   This script builds PolyGlot into a distributable package on Linux,
-#   OSX, and Windows. Windows does not come with Python installed by default.
-#   This runs on both Python 2.7 and 3.x. 
-#
-#   From: https://github.com/DraqueT/PolyGlot/
-#
-##############################################################################
+#!/usr/bin/python3
+"""
+This script builds PolyGlot into a distributable package on Linux,
+OSX, and Windows.
+"""
 
+__author__      = "Draque Thompson"
+__copyright__   = "2019-2024"
+__license__     = "MIT"
+__maintainer__  = "draquemail@gmail.com"
+__status__      = "Production"
+
+import argparse
 import datetime
 from datetime import date
 import os
 from os import path
 import platform
 import shutil
+import subprocess
 import sys
 import time
 import uuid
@@ -30,9 +32,7 @@ linString = 'Linux'
 osxString = 'Darwin'
 winString = 'Windows'
 
-separatorCharacter = '/'
 macIntelBuild = False
-skipTests = False
 
 ###############################
 # LINUX BUILD CONSTANTS
@@ -54,12 +54,9 @@ WIN_INS_NAME = 'PolyGlot-Ins-Win.exe'
 # You will not need to change these
 JAR_W_DEP = ''  # set in main for timing reasons
 JAR_WO_DEP = ''  # set in main for timing reasons
-JAVAFX_VER = ''  # set in main for timing reasons
-JACKSON_VER = ''  # set in main for timing reasons
 POLYGLOT_VERSION = ''  # set in main for timing reasons
 POLYGLOT_BUILD = ''  # set in main for timing reasons
 JAVA_HOME = ''  # set in main for timing reasons
-IS_RELEASE = False
 CUR_YEAR = str(date.today().year)
 
 
@@ -67,186 +64,111 @@ CUR_YEAR = str(date.today().year)
 #   PLATFORM AGNOSTIC FUNCTIONALITY
 ######################################
 
-def main(args):
+def main() -> int:
     global POLYGLOT_VERSION
     global POLYGLOT_BUILD
     global JAVA_HOME
     global SIGN_IDENTITY
     global DISTRIB_IDENTITY
-    global IS_RELEASE
     global JAR_W_DEP
     global JAR_WO_DEP
-    global JAVAFX_VER
-    global JACKSON_VER
-    global JSOUP_VER
-    global LANG3_VER
     global failFile
     global copyDestination
-    global separatorCharacter
     global macIntelBuild
-    global skipTests
 
-    if 'help' in args or '-help' in args or '--help' in args:
-        printHelp()
-        return
-
-    skip_steps = []
-
-    if osString == winString:
-        separatorCharacter = '\\'
-
-    if '-skipTests' in args or '-skiptests' in args:
-        skipTests = True
-        command_index = args.index('-skipTests') if '-skipTests' in args else args.index('-skiptests')
-        del args[command_index]
-
-    # gather list of steps marked to be skipped
-    while '-skip' in args:
-        command_index = args.index('-skip')
-        skip_steps.append(args[command_index + 1])
-
-        print("Skipping: " + args[command_index + 1] + " step.")
-
-        # remove args after consuming
-        del args[command_index + 1]
-        del args[command_index]
+    parser = argparse.ArgumentParser(prog='PolyGlot Build Script',
+        description = ('Handles builds of PolyGlot on all supported platforms. Examples:\n'
+            '\tLinux:   ./build_image.py --step image --java_home_0 /usr/lib/jvm/jdk-14\n'
+            '\tWindows: python3 build_image.py --skipTests\n'
+            '\tOSX:     python3 build_image.py --intelBuild'),
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('--step', default = [], nargs='?', action='append',
+        choices=['docs', 'build', 'clean', 'image', 'dist'],
+        help='Run a specific step. Leave empty to run all steps')
+    parser.add_argument('--release', action='store_true',
+        help='marks build as release build. Otherwise will be build as beta')
+    parser.add_argument('--copyDestination', type=str,
+        help='sets location for the final created installer file to be copied to (ignored if distribution not built)')
+    parser.add_argument('--skipTests', default=False, action='store_true',
+        help='skips test step in Maven')
+    parser.add_argument('--java_home_o', type=str,
+        help='Overrides JAVA_HOME. Useful for stubborn VMs that will not normally recognize environment variables')
+    
+    # MacOS specific
+    parser.add_argument('--mac_sign_identity', type=str,
+        help='Sign the Mac app image with the specified code signing identity')
+    parser.add_argument('--mac_distrib_cert', type=str,
+        help='Specify the certificate to use for signing the MacOS app image')
+    parser.add_argument('--intelBuild', default=False, action='store_true',
+        help='MacOS only, indicates to use intel libraries rather than Arch64 when building')
+    
+    args = parser.parse_args()
 
     # allows specifying code signing identity for mac builds
-    if '-mac-sign-identity' in args:
-        command_index = args.index('-mac-sign-identity')
-        SIGN_IDENTITY = args[command_index + 1]
-
-        # remove args after consuming
-        del args[command_index + 1]
-        del args[command_index]
+    if args.mac_sign_identity is not None:
+        SIGN_IDENTITY = args.mac_sign_identity
 
     # allows specifying code signing for mac distribution
-    if '-mac-distrib-cert' in args:
-        command_index = args.index('-mac-distrib-cert')
-        DISTRIB_IDENTITY = args[command_index + 1]
-
-        # remove args after consuming
-        del args[command_index + 1]
-        del args[command_index]
+    if args.mac_distrib_cert is not None:
+        DISTRIB_IDENTITY = args.mac_distrib_cert
 
     # allows for override of java home (virtual environments make this necessary at times)
-    if '-java-home-o' in args:
-        command_index = args.index('-java-home-o')
-        print('JAVA_HOME overriden to: ' + args[command_index + 1])
-        JAVA_HOME = args[command_index + 1]
-
-        # remove args after consuming
-        del args[command_index + 1]
-        del args[command_index]
+    if args.java_home_o is not None:
+        print(f'JAVA_HOME overriden to: {args.java_home_o}')
+        JAVA_HOME = args.java_home_o
     else:
         JAVA_HOME = os.getenv('JAVA_HOME')
 
     # detects if marked for release
-    if '-release' in args:
-        command_index = args.index('-release')
+    if args.release:
         print('RELEASE BUILD')
-        IS_RELEASE = True
-        del args[command_index]
     else:
-        print('BETA BUILD')
+        print('BETA_BUILD')
 
-    if '-copyDestination' in args:
-        command_index = args.index('-copyDestination')
-        print('Destination for final install file set to: ' + args[command_index + 1])
-        copyDestination = args[command_index + 1]
+    if args.copyDestination is not None:
+        print(f'Destination for final install file set to: {args.copyDestination}')
+        copyDestination = args.copyDestination
 
         # failure message file created here, deleted at end of process conditionally upon success
-        failFile = copyDestination + separatorCharacter + osString + "_BUILD_FAILED"
+        failFile = os.path.join(copyDestination, osString + "_BUILD_FAILED")
         open(failFile, 'a').close()
-
-        # remove args after consuming
-        del args[command_index + 1]
-        del args[command_index]
 
     if JAVA_HOME is None:
         print('JAVA_HOME must be set. If necessary, use -java-home-o command to override')
-        return
+        return 1
 
     POLYGLOT_VERSION = getVersion()
-    POLYGLOT_BUILD = getBuildNum()
+    POLYGLOT_BUILD = getBuildNum(args.release)
     print('Building Version: ' + POLYGLOT_VERSION)
-    updateVersionResource(POLYGLOT_VERSION)
+    updateVersionResource(args.release, POLYGLOT_VERSION)
     JAR_W_DEP = 'PolyGlotLinA-' + POLYGLOT_VERSION + '-jar-with-dependencies.jar'
     JAR_WO_DEP = 'PolyGlotLinA-' + POLYGLOT_VERSION + '.jar'
-    JAVAFX_VER = getDependencyVersionByGroupId('org.openjfx')
-    JACKSON_VER = getDependencyVersionByGroupId('com.fasterxml.jackson.core')
-    JSOUP_VER = getDependencyVersionByGroupId('org.jsoup')
-    LANG3_VER = getDependencyVersionByGroupIdAndName('org.apache.commons', 'commons-lang3')
 
     if osString == winString:
         os.system('echo off')
-    elif osString == osxString and '-intelBuild' in args:
+    elif osString == osxString and args.intelBuild:
         macIntelBuild = True
-        command_index = args.index('-intelBuild')
-        del args[command_index]
 
-    full_build = (len(args) == 1)  # length of 1 means no arguments (full build)
+    full_build = len(args.step) == 0
 
-    if (full_build and 'docs' not in skip_steps) or 'docs' in args:
+    if full_build or 'docs' in args.step:
         injectDocs()
-    if (full_build and 'build' not in skip_steps) or 'build' in args:
-        build()
-    if (full_build and 'clean' not in skip_steps) or 'clean' in args or 'image' in args:
+    if full_build or 'build' in args.step:
+        build(args.skipTests)
+    if full_build or 'clean' in args.step:
         clean()
-    if (full_build and 'image' not in skip_steps) or 'image' in args:
+    if full_build or 'image' in args.step:
         image()
-    if (full_build and 'dist' not in skip_steps) or 'dist' in args:
-        dist()
+    if full_build or 'dist' in args.step:
+        dist(args.release)
 
     print('Done!')
+    return 0
 
-
-def build():
+def build(skipTests : bool):
     print('Injecting build date/time...')
     injectBuildDate()
-    if osString == linString:
-        buildLinux()
-    elif osString == osxString:
-        buildOsx()
-    elif osString == winString:
-        buildWin()
 
-
-def clean():
-    if osString == linString:
-        cleanLinux()
-    elif osString == osxString:
-        cleanOsx()
-    elif osString == winString:
-        cleanWin()
-
-
-def image():
-    global macIntelBuild
-
-    if osString == linString:
-        imageLinux()
-    elif osString == osxString:
-        imageOsx()
-    elif osString == winString:
-        imageWin()
-
-
-def dist():
-    if osString == linString:
-        distLinux()
-    elif osString == osxString:
-        distOsx()
-    elif osString == winString:
-        distWin()
-
-
-######################################
-#       LINUX FUNCTIONALITY
-######################################
-
-def buildLinux():
-    global skipTests
     print('cleaning/testing/compiling...')
     command = 'mvn clean package'
 
@@ -256,47 +178,72 @@ def buildLinux():
     os.system(command)
 
 
-def cleanLinux():
+def clean():
     print('cleaning build paths...')
-    os.system('rm -rf target/mods')
-    os.system('rm -rf build')
+    folders = [os.path.join('target', 'mods'), 'build']
+    for folder in folders:
+        if os.path.exists(folder):
+            shutil.rmtree(folder)
 
-
-def imageLinux():
-    print('POLYGLOT_VERSION: ' + POLYGLOT_VERSION)
-    print('creating jmod based on jar built without dependencies...')
-    os.system('mkdir target/mods')
-    os.system(JAVA_HOME + '/bin/jmod create ' +
-              '--class-path target/' + JAR_WO_DEP + ' ' +
-              '--main-class org.darisadesigns.polyglotlina.Desktop.PolyGlot target/mods/PolyGlot.jmod')
+def image():
+    os.makedirs(os.path.join('target', 'mods'))
 
     javafx_location = getJfxLocation()
     repo_location = getRepositoryLocation()
+    JACKSON_VER = getDependencyVersionByGroupId('com.fasterxml.jackson.core')
+    JAVAFX_VER = getDependencyVersionByGroupId('org.openjfx')
+    JSOUP_VER = getDependencyVersionByGroupId('org.jsoup')
+    LANG3_VER = getDependencyVersionByGroupIdAndName('org.apache.commons', 'commons-lang3')
+
+    print('creating jmod based on jar built without dependencies...')
+    stat = subprocess.run([os.path.join(JAVA_HOME, "bin", "jmod"),
+        "create",
+        "--class-path", os.path.join("target", JAR_WO_DEP),
+        "--main-class", "org.darisadesigns.polyglotlina.Desktop.PolyGlot", os.path.join("target", "mods", "PolyGlot.jmod")])
+    if stat.returncode != 0:
+        print(stat.args)
+        sys.exit(1)
 
     print('creating runnable image...')
-    command = (JAVA_HOME + '/bin/jlink ' +
-               '--module-path "module_injected_jars/:' +
-               'target/mods:' +
-               javafx_location + '/javafx-graphics/' + JAVAFX_VER + '/:' +
-               javafx_location + '/javafx-base/' + JAVAFX_VER + '/:' +
-               javafx_location + '/javafx-media/' + JAVAFX_VER + '/:' +
-               javafx_location + '/javafx-swing/' + JAVAFX_VER + '/:' +
-               javafx_location + '/javafx-controls/' + JAVAFX_VER + '/:' +
-               repo_location + '/com/fasterxml/jackson/core/jackson-core/' + JACKSON_VER + '/:' +
-               repo_location + '/com/fasterxml/jackson/core/jackson-databind/' + JACKSON_VER + '/:' +
-               repo_location + '/com/fasterxml/jackson/core/jackson-annotations/' + JACKSON_VER + '/:' +
-               repo_location + '/org/jsoup/jsoup/' + JSOUP_VER + '/:' +
-               repo_location + '/org/apache/commons/commons-lang3/' + LANG3_VER + '/:' +
-               JAVA_HOME + '/jmods" ' +
-               '--add-modules "org.darisadesigns.polyglotlina.polyglot","jdk.crypto.ec" ' +
-               '--output "build/image/" ' +
-               '--compress=2 ' +
-               '--launcher PolyGlot=org.darisadesigns.polyglotlina.polyglot')
+    stat = subprocess.run([os.path.join(JAVA_HOME, "bin", "jlink"),
+        '--module-path',
+        os.pathsep.join([
+            "module_injected_jars",
+            os.path.join("target", "mods"),
+            os.path.join(repo_location, "com", "fasterxml", "jackson", "core", "jackson-core", JACKSON_VER) + os.sep,
+            os.path.join(repo_location, "com", "fasterxml", "jackson", "core", "jackson-databind", JACKSON_VER) + os.sep,
+            os.path.join(repo_location, "com", "fasterxml", "jackson", "core", "jackson-annotations", JACKSON_VER) + os.sep,
+            os.path.join(repo_location, 'org', 'jsoup', 'jsoup', JSOUP_VER) + os.sep,
+            os.path.join(repo_location, "org", "apache", "commons", "commons-lang3", LANG3_VER) + os.sep,
+            os.path.join(javafx_location, "javafx-graphics", JAVAFX_VER) + os.sep,
+            os.path.join(javafx_location, "javafx-base", JAVAFX_VER) + os.sep,
+            os.path.join(javafx_location, "javafx-media", JAVAFX_VER) + os.sep,
+            os.path.join(javafx_location, "javafx-swing", JAVAFX_VER) + os.sep,
+            os.path.join(javafx_location, "javafx-controls", JAVAFX_VER) + os.sep,
+            os.path.join(javafx_location, "jmods")
+        ]),
+        '--add-modules', 'org.darisadesigns.polyglotlina.polyglot,jdk.crypto.ec',
+        '--output', os.path.join("build", "image"),
+        '--compress=2',
+        '--launcher', 'PolyGlot=org.darisadesigns.polyglotlina.polyglot'])
+    if stat.returncode != 0:
+        print(stat.args)
+        sys.exit(1)
 
-    os.system(command)
+def dist(is_release : bool):
+    if osString == linString:
+        distLinux(is_release)
+    elif osString == osxString:
+        distOsx(is_release)
+    elif osString == winString:
+        distWin(is_release)
 
 
-def distLinux():
+######################################
+#       LINUX FUNCTIONALITY
+######################################
+
+def distLinux(IS_RELEASE : bool):
     print('creating linux distribution...')
     os.system('rm -rf installer')
     os.system('mkdir installer')
@@ -330,69 +277,14 @@ def distLinux():
         print('failed to locate jpackage output')
 
     if copyDestination != "":
-        copyInstaller(installer_file)
+        copyInstaller(copyDestination, installer_file, IS_RELEASE)
 
 
 ######################################
 #       Mac OS FUNCTIONALITY
 ######################################
 
-def buildOsx():
-    global skipTests
-    print('cleaning/testing/compiling...')
-    command = 'mvn clean package'
-
-    if skipTests:
-        command += ' -DskipTests'
-
-    os.system(command)
-
-
-def cleanOsx():
-    print('cleaning build paths...')
-    os.system('rm -rf target/mods')
-    os.system('rm -rf build')
-
-
-def imageOsx():
-    print('creating jmod based on jar built without dependencies...')
-    os.system('mkdir target/mods')
-    os.system(JAVA_HOME + '/bin/jmod create ' +
-              '--class-path target/' + JAR_WO_DEP + ' ' +
-              '--main-class org.darisadesigns.polyglotlina.Desktop.PolyGlot target/mods/PolyGlot.jmod')
-
-    print('creating runnable image...')
-    repo_location = getRepositoryLocation()
-    command = (JAVA_HOME + '/bin/jlink ' +
-               '--module-path "module_injected_jars/:' +
-               'target/mods:' +
-               repo_location + '/com/fasterxml/jackson/core/jackson-core/' + JACKSON_VER + '/:' +
-               repo_location + '/com/fasterxml/jackson/core/jackson-databind/' + JACKSON_VER + '/:' +
-               repo_location + '/com/fasterxml/jackson/core/jackson-annotations/' + JACKSON_VER + '/:' +
-               repo_location + '/org/jsoup/jsoup/' + JSOUP_VER + '/:' +
-               repo_location + '/org/apache/commons/commons-lang3/' + LANG3_VER + '/:' +
-               getJfxTargetModsOsx() +
-               '--add-modules "org.darisadesigns.polyglotlina.polyglot","jdk.crypto.ec" ' +
-               '--output "build/image/" ' +
-               '--compress=2 ' +
-               '--launcher PolyGlot=org.darisadesigns.polyglotlina.polyglot')
-
-    os.system(command)
-
-
-def getJfxTargetModsOsx():
-    javafx_location = getJfxLocation()
-    return (
-            javafx_location + '/javafx-graphics/' + JAVAFX_VER + '/:' +
-            javafx_location + '/javafx-base/' + JAVAFX_VER + '/:' +
-            javafx_location + '/javafx-media/' + JAVAFX_VER + '/:' +
-            javafx_location + '/javafx-swing/' + JAVAFX_VER + '/:' +
-            javafx_location + '/javafx-controls/' + JAVAFX_VER + '/:' +
-            javafx_location + '/jmods" '
-    )
-
-
-def distOsx():
+def distOsx(IS_RELEASE : bool):
     print('Creating app image...')
 
     command = (JAVA_HOME + '/bin/jpackage ' +
@@ -463,7 +355,7 @@ def distOsx():
             print('No distribution signing identity specified, dmg installer will not be signed for distribution')
 
         if copyDestination != "":
-            copyInstaller('PolyGlot-' + POLYGLOT_VERSION + '.dmg')
+            copyInstaller(copyDestination, 'PolyGlot-' + POLYGLOT_VERSION + '.dmg', IS_RELEASE)
 
     except Exception as e:
         print('Exception: ' + str(e))
@@ -479,57 +371,8 @@ def distOsx():
 #       WINDOWS FUNCTIONALITY
 ######################################
 
-def buildWin():
-    global skipTests
-    print('cleaning/testing/compiling...')
-    command = 'mvn clean package'
 
-    if skipTests:
-        command += ' -DskipTests'
-
-    os.system(command)
-
-
-def cleanWin():
-    print('cleaning build paths...')
-    os.system('rmdir target\\mods /s /q')
-    os.system('rmdir build /s /q')
-
-
-def imageWin():
-    print('creating jmod based on jar built without dependencies...')
-    os.system('mkdir target\\mods')
-    os.system('jmod create ' +
-              '--class-path target\\' + JAR_WO_DEP +
-              ' --main-class org.darisadesigns.polyglotlina.Desktop.PolyGlot ' +
-              'target\\mods\\PolyGlot.jmod')
-
-    javafx_location = getJfxLocation()
-    repo_location = getRepositoryLocation()
-
-    print('creating runnable image...')
-    command = ('jlink ' +
-               '--module-path "module_injected_jars;' +
-               'target\\mods;' +
-               javafx_location + '\\javafx-graphics\\' + JAVAFX_VER + ';' +
-               javafx_location + '\\javafx-base\\' + JAVAFX_VER + ';' +
-               javafx_location + '\\javafx-media\\' + JAVAFX_VER + ';' +
-               javafx_location + '\\javafx-swing\\' + JAVAFX_VER + ';' +
-               javafx_location + '\\javafx-controls\\' + JAVAFX_VER + ';' +
-               repo_location + '\\com\\fasterxml\\jackson\\core\\jackson-core\\' + JACKSON_VER + ';' +
-               repo_location + '\\com\\fasterxml\\jackson\\core\\jackson-databind\\' + JACKSON_VER + ';' +
-               repo_location + '\\com\\fasterxml\\jackson\\core\\jackson-annotations\\' + JACKSON_VER + ';' +
-               repo_location + '\\org\\jsoup\\jsoup\\' + JSOUP_VER + ';' +
-               repo_location + '\\org\\apache\\commons\\commons-lang3\\' + LANG3_VER + ';' +
-               '%JAVA_HOME%\\jmods" ' +
-               '--add-modules "org.darisadesigns.polyglotlina.polyglot","jdk.crypto.ec" ' +
-               '--output "build\\image" ' +
-               '--compress=2 ' +
-               '--launcher PolyGlot=org.darisadesigns.polyglotlina.polyglot')
-    os.system(command)
-
-
-def distWin():
+def distWin(IS_RELEASE : bool):
     package_location = 'PolyGlot-' + POLYGLOT_BUILD + '.exe'
     print('Creating distribution package...')
     os.system('rmdir /s /q installer')
@@ -554,16 +397,13 @@ def distWin():
     os.system(command)
 
     if copyDestination != "":
-        copyInstaller(package_location)
+        copyInstaller(copyDestination, package_location, IS_RELEASE)
 
 
 # injects current time into file which lives in PolyGlot resources
 def injectBuildDate():
     build_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
-    file_path = 'assets/assets/org/DarisaDesigns/buildDate'
-
-    if osString == winString:
-        file_path = file_path.replace('/', '\\')
+    file_path = os.path.join('assets', 'assets', 'org', 'DarisaDesigns', 'buildDate')
 
     f = open(file_path, 'w')
     f.write(build_time)
@@ -578,23 +418,16 @@ def injectBuildDate():
 def getJfxLocation():
     ret = os.path.expanduser('~')
 
-    if osString == winString:
-        ret += '\\.m2\\repository\\org\\openjfx'
-    elif osString == osxString and macIntelBuild:
-        ret += '/.m2/repository/org/openjfx_intel'
-    elif osString == osxString or osString == linString:
-        ret += '/.m2/repository/org/openjfx'
+    if osString == osxString and macIntelBuild:
+        ret = os.path.join(ret, '.m2', 'repository', 'org', 'openjfx_intel')
+    else:
+        ret = os.path.join(ret, '.m2', 'repository', 'org', 'openjfx')
 
     return ret
 
 
 def getRepositoryLocation():
-    ret = os.path.expanduser('~')
-    if osString == winString:
-        ret += '\\.m2\\repository'
-    elif osString == osxString or osString == linString:
-        ret += '/.m2/repository'
-    return ret
+    return os.path.join(os.path.expanduser('~'), '.m2', 'repository')
 
 
 def getDependencyVersionByGroupId(group_id):
@@ -631,7 +464,7 @@ def getVersion():
 
 # for releases, this will match the version. For beta builds, a UTC timestamp is appended (OS registration reasons on
 # installation)
-def getBuildNum():
+def getBuildNum(IS_RELEASE : bool):
     ret = getVersion()
 
     if not IS_RELEASE and osString == winString:
@@ -651,13 +484,8 @@ def getBuildNum():
     return ret
 
 
-def updateVersionResource(version_string):
-    global IS_RELEASE
-
-    if osString == winString:
-        location = 'assets\\assets\\org\\DarisaDesigns\\version'
-    else:
-        location = 'assets/assets/org/DarisaDesigns/version'
+def updateVersionResource(IS_RELEASE : bool, version_string : str):
+    location = os.path.join('assets', 'assets', 'org', 'DarisaDesigns', 'version')
 
     if path.exists(location):
         os.remove(location)
@@ -675,10 +503,7 @@ def injectDocs():
 
     # readme and resources...
     extension = '.zip'
-    if osString == winString:
-        readme_location = 'assets\\assets\\org\\DarisaDesigns\\readme'
-    else:
-        readme_location = 'assets/assets/org/DarisaDesigns/readme'
+    readme_location = os.path.join('assets', 'assets', 'org', 'DarisaDesigns', 'readme')
 
     if path.exists(readme_location + extension):
         os.remove(readme_location + extension)
@@ -686,12 +511,8 @@ def injectDocs():
     shutil.make_archive(readme_location, 'zip', 'docs')
 
     # example dictionaries
-    if osString == winString:
-        source_location = 'packaging_files\\example_lexicons'
-        dict_location = 'assets\\assets\\org\\DarisaDesigns\\exlex'
-    else:
-        source_location = 'packaging_files/example_lexicons'
-        dict_location = 'assets/assets/org/DarisaDesigns/exlex'
+    source_location = os.path.join('packaging_files', 'example_lexicons')
+    dict_location = os.path.join('assets', 'assets', 'org', 'DarisaDesigns', 'exlex')
 
     if path.exists(source_location + extension):
         os.remove(readme_location + extension)
@@ -700,8 +521,7 @@ def injectDocs():
 
 
 # Copies installer file to final destination and removes error indicator file
-def copyInstaller(source):
-    global copyDestination
+def copyInstaller(copyDestination : str, source : str, IS_RELEASE : bool):
     global macIntelBuild
 
     if path.exists(source):
@@ -718,9 +538,9 @@ def copyInstaller(source):
 
         # release candidates copied to their own location
         if IS_RELEASE:
-            copyDestination = copyDestination + separatorCharacter + 'Release'
+            copyDestination = os.path.join(copyDestination, 'Release')
 
-        destination = copyDestination + separatorCharacter + ins_file
+        destination = os.path.join(destination, ins_file)
         print('Copying installer to ' + destination)
         shutil.copy(source, destination)
 
@@ -731,43 +551,5 @@ def copyInstaller(source):
         print('FAILURE: Built installer missing: ' + source)
 
 
-def printHelp():
-    print("""
-#################################################
-#       PolyGlot Build Script
-#################################################
-
-To use this utility, simply execute this script with no arguments to run the entire application construction sequence. To target particular steps, use any combination of the following arguments:
-
-    docs : Zips and injects documentation into the application assets.
-
-    build : Performs a maven build. creates both the jar with and the jar without dependencies included. Produced files stored in the target folder.
-    
-    clean : Wipes the product of build.
-
-    image : From the built jar files (which must exist), creates a runnable image. This image is platform dependent. Produced files stored in the build folder.
-    
-    dist : Creates distribution files for the application. This is platform dependent. Produced files stored in the installer folder.
-
-    -java-home-o <jdk-path> : Overrides JAVA_HOME. Useful for stubborn VMs that will not normally recognize environment variables.
-    
-    -mac-sign-identity <identity> : Sign the Mac app image with the specified code signing identity.
-
-    -copyDestination <destination-path> : sets location for the final created installer file to be copied to (ignored if distribution not built)
-    
-    -skip <step> : skips the given step (can be used multiple times)
-    
-    -release : marks build as release build. Otherwise will be build as beta
-
-    -skipTests : skips test step in Maven
-
-    -intelBuild : MacOS only, indicates to use intel libraries rather than Arch64 when building
-
-Example: python build_image.py image pack -java-home-o /usr/lib/jvm/jdk-14
-
-The above will presume that the maven build has already taken place. It will use the produced jar files to create a runnable image, then from that image, create a packed application for the platform you are currently running. The JAVA_HOME path is overridden to point to /usr/lib/jvm/jdk-14.
-""")
-
-
 if __name__ == "__main__":
-    main(sys.argv)
+    sys.exit(main())
