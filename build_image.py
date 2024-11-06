@@ -17,6 +17,7 @@ import os
 from os import path
 import platform
 import shutil
+import subprocess
 import sys
 import time
 import uuid
@@ -53,8 +54,6 @@ WIN_INS_NAME = 'PolyGlot-Ins-Win.exe'
 # You will not need to change these
 JAR_W_DEP = ''  # set in main for timing reasons
 JAR_WO_DEP = ''  # set in main for timing reasons
-JAVAFX_VER = ''  # set in main for timing reasons
-JACKSON_VER = ''  # set in main for timing reasons
 POLYGLOT_VERSION = ''  # set in main for timing reasons
 POLYGLOT_BUILD = ''  # set in main for timing reasons
 JAVA_HOME = ''  # set in main for timing reasons
@@ -73,10 +72,6 @@ def main() -> int:
     global DISTRIB_IDENTITY
     global JAR_W_DEP
     global JAR_WO_DEP
-    global JAVAFX_VER
-    global JACKSON_VER
-    global JSOUP_VER
-    global LANG3_VER
     global failFile
     global copyDestination
     global macIntelBuild
@@ -148,10 +143,6 @@ def main() -> int:
     updateVersionResource(args.release, POLYGLOT_VERSION)
     JAR_W_DEP = 'PolyGlotLinA-' + POLYGLOT_VERSION + '-jar-with-dependencies.jar'
     JAR_WO_DEP = 'PolyGlotLinA-' + POLYGLOT_VERSION + '.jar'
-    JAVAFX_VER = getDependencyVersionByGroupId('org.openjfx')
-    JACKSON_VER = getDependencyVersionByGroupId('com.fasterxml.jackson.core')
-    JSOUP_VER = getDependencyVersionByGroupId('org.jsoup')
-    LANG3_VER = getDependencyVersionByGroupIdAndName('org.apache.commons', 'commons-lang3')
 
     if osString == winString:
         os.system('echo off')
@@ -199,14 +190,45 @@ def image():
 
     javafx_location = getJfxLocation()
     repo_location = getRepositoryLocation()
+    JACKSON_VER = getDependencyVersionByGroupId('com.fasterxml.jackson.core')
+    JAVAFX_VER = getDependencyVersionByGroupId('org.openjfx')
+    JSOUP_VER = getDependencyVersionByGroupId('org.jsoup')
+    LANG3_VER = getDependencyVersionByGroupIdAndName('org.apache.commons', 'commons-lang3')
 
-    if osString == linString:
-        imageLinux(javafx_location, repo_location)
-    elif osString == osxString:
-        imageOsx(javafx_location, repo_location)
-    elif osString == winString:
-        imageWin(javafx_location, repo_location)
+    print('creating jmod based on jar built without dependencies...')
+    stat = subprocess.run([os.path.join(JAVA_HOME, "bin", "jmod"),
+        "create",
+        "--class-path", os.path.join("target", JAR_WO_DEP),
+        "--main-class", "org.darisadesigns.polyglotlina.Desktop.PolyGlot", os.path.join("target", "mods", "PolyGlot.jmod")])
+    if stat.returncode != 0:
+        print(stat.args)
+        sys.exit(1)
 
+    print('creating runnable image...')
+    stat = subprocess.run([os.path.join(JAVA_HOME, "bin", "jlink"),
+        '--module-path',
+        os.pathsep.join([
+            "module_injected_jars",
+            os.path.join("target", "mods"),
+            os.path.join(repo_location, "com", "fasterxml", "jackson", "core", "jackson-core", JACKSON_VER) + os.sep,
+            os.path.join(repo_location, "com", "fasterxml", "jackson", "core", "jackson-databind", JACKSON_VER) + os.sep,
+            os.path.join(repo_location, "com", "fasterxml", "jackson", "core", "jackson-annotations", JACKSON_VER) + os.sep,
+            os.path.join(repo_location, 'org', 'jsoup', 'jsoup', JSOUP_VER) + os.sep,
+            os.path.join(repo_location, "org", "apache", "commons", "commons-lang3", LANG3_VER) + os.sep,
+            os.path.join(javafx_location, "javafx-graphics", JAVAFX_VER) + os.sep,
+            os.path.join(javafx_location, "javafx-base", JAVAFX_VER) + os.sep,
+            os.path.join(javafx_location, "javafx-media", JAVAFX_VER) + os.sep,
+            os.path.join(javafx_location, "javafx-swing", JAVAFX_VER) + os.sep,
+            os.path.join(javafx_location, "javafx-controls", JAVAFX_VER) + os.sep,
+            os.path.join(javafx_location, "jmods")
+        ]),
+        '--add-modules', 'org.darisadesigns.polyglotlina.polyglot,jdk.crypto.ec',
+        '--output', os.path.join("build", "image"),
+        '--compress=2',
+        '--launcher', 'PolyGlot=org.darisadesigns.polyglotlina.polyglot'])
+    if stat.returncode != 0:
+        print(stat.args)
+        sys.exit(1)
 
 def dist(is_release : bool):
     if osString == linString:
@@ -220,36 +242,6 @@ def dist(is_release : bool):
 ######################################
 #       LINUX FUNCTIONALITY
 ######################################
-
-def imageLinux(javafx_location : str, repo_location : str):
-    print('POLYGLOT_VERSION: ' + POLYGLOT_VERSION)
-    print('creating jmod based on jar built without dependencies...')
-    os.system(JAVA_HOME + '/bin/jmod create ' +
-              '--class-path target/' + JAR_WO_DEP + ' ' +
-              '--main-class org.darisadesigns.polyglotlina.Desktop.PolyGlot target/mods/PolyGlot.jmod')
-
-    print('creating runnable image...')
-    command = (JAVA_HOME + '/bin/jlink ' +
-               '--module-path "module_injected_jars/:' +
-               'target/mods:' +
-               javafx_location + '/javafx-graphics/' + JAVAFX_VER + '/:' +
-               javafx_location + '/javafx-base/' + JAVAFX_VER + '/:' +
-               javafx_location + '/javafx-media/' + JAVAFX_VER + '/:' +
-               javafx_location + '/javafx-swing/' + JAVAFX_VER + '/:' +
-               javafx_location + '/javafx-controls/' + JAVAFX_VER + '/:' +
-               repo_location + '/com/fasterxml/jackson/core/jackson-core/' + JACKSON_VER + '/:' +
-               repo_location + '/com/fasterxml/jackson/core/jackson-databind/' + JACKSON_VER + '/:' +
-               repo_location + '/com/fasterxml/jackson/core/jackson-annotations/' + JACKSON_VER + '/:' +
-               repo_location + '/org/jsoup/jsoup/' + JSOUP_VER + '/:' +
-               repo_location + '/org/apache/commons/commons-lang3/' + LANG3_VER + '/:' +
-               JAVA_HOME + '/jmods" ' +
-               '--add-modules "org.darisadesigns.polyglotlina.polyglot","jdk.crypto.ec" ' +
-               '--output "build/image/" ' +
-               '--compress=2 ' +
-               '--launcher PolyGlot=org.darisadesigns.polyglotlina.polyglot')
-
-    os.system(command)
-
 
 def distLinux(IS_RELEASE : bool):
     print('creating linux distribution...')
@@ -291,35 +283,6 @@ def distLinux(IS_RELEASE : bool):
 ######################################
 #       Mac OS FUNCTIONALITY
 ######################################
-
-def imageOsx(javafx_location : str, repo_location : str):
-    print('creating jmod based on jar built without dependencies...')
-    os.system(JAVA_HOME + '/bin/jmod create ' +
-              '--class-path target/' + JAR_WO_DEP + ' ' +
-              '--main-class org.darisadesigns.polyglotlina.Desktop.PolyGlot target/mods/PolyGlot.jmod')
-
-    print('creating runnable image...')
-    command = (JAVA_HOME + '/bin/jlink ' +
-               '--module-path "module_injected_jars/:' +
-               'target/mods:' +
-               repo_location + '/com/fasterxml/jackson/core/jackson-core/' + JACKSON_VER + '/:' +
-               repo_location + '/com/fasterxml/jackson/core/jackson-databind/' + JACKSON_VER + '/:' +
-               repo_location + '/com/fasterxml/jackson/core/jackson-annotations/' + JACKSON_VER + '/:' +
-               repo_location + '/org/jsoup/jsoup/' + JSOUP_VER + '/:' +
-               repo_location + '/org/apache/commons/commons-lang3/' + LANG3_VER + '/:' +
-               javafx_location + '/javafx-graphics/' + JAVAFX_VER + '/:' +
-               javafx_location + '/javafx-base/' + JAVAFX_VER + '/:' +
-               javafx_location + '/javafx-media/' + JAVAFX_VER + '/:' +
-               javafx_location + '/javafx-swing/' + JAVAFX_VER + '/:' +
-               javafx_location + '/javafx-controls/' + JAVAFX_VER + '/:' +
-               javafx_location + '/jmods" ' +
-               '--add-modules "org.darisadesigns.polyglotlina.polyglot","jdk.crypto.ec" ' +
-               '--output "build/image/" ' +
-               '--compress=2 ' +
-               '--launcher PolyGlot=org.darisadesigns.polyglotlina.polyglot')
-
-    os.system(command)
-
 
 def distOsx(IS_RELEASE : bool):
     print('Creating app image...')
@@ -407,34 +370,6 @@ def distOsx(IS_RELEASE : bool):
 ######################################
 #       WINDOWS FUNCTIONALITY
 ######################################
-
-def imageWin(javafx_location : str, repo_location : str):
-    print('creating jmod based on jar built without dependencies...')
-    os.system('jmod create ' +
-              '--class-path target\\' + JAR_WO_DEP +
-              ' --main-class org.darisadesigns.polyglotlina.Desktop.PolyGlot ' +
-              'target\\mods\\PolyGlot.jmod')
-
-    print('creating runnable image...')
-    command = ('jlink ' +
-               '--module-path "module_injected_jars;' +
-               'target\\mods;' +
-               javafx_location + '\\javafx-graphics\\' + JAVAFX_VER + ';' +
-               javafx_location + '\\javafx-base\\' + JAVAFX_VER + ';' +
-               javafx_location + '\\javafx-media\\' + JAVAFX_VER + ';' +
-               javafx_location + '\\javafx-swing\\' + JAVAFX_VER + ';' +
-               javafx_location + '\\javafx-controls\\' + JAVAFX_VER + ';' +
-               repo_location + '\\com\\fasterxml\\jackson\\core\\jackson-core\\' + JACKSON_VER + ';' +
-               repo_location + '\\com\\fasterxml\\jackson\\core\\jackson-databind\\' + JACKSON_VER + ';' +
-               repo_location + '\\com\\fasterxml\\jackson\\core\\jackson-annotations\\' + JACKSON_VER + ';' +
-               repo_location + '\\org\\jsoup\\jsoup\\' + JSOUP_VER + ';' +
-               repo_location + '\\org\\apache\\commons\\commons-lang3\\' + LANG3_VER + ';' +
-               '%JAVA_HOME%\\jmods" ' +
-               '--add-modules "org.darisadesigns.polyglotlina.polyglot","jdk.crypto.ec" ' +
-               '--output "build\\image" ' +
-               '--compress=2 ' +
-               '--launcher PolyGlot=org.darisadesigns.polyglotlina.polyglot')
-    os.system(command)
 
 
 def distWin(IS_RELEASE : bool):
