@@ -516,14 +516,16 @@ def copyInstaller(copyDestination : str, source : str, IS_RELEASE : bool):
     if not path.exists(source):
         print('FAILURE: Built installer missing: ' + source)
 
-    # release candidates copied to their own location
     if IS_RELEASE:
         copyDestination = os.path.join(copyDestination, 'Release')
+        destination = os.path.join(copyDestination, source)
     else:
         copyDestination = os.path.join(copyDestination, 'Beta')
-    os.makedirs(copyDestination)
+        destination = os.path.join(copyDestination, '_BETA_' + source)
 
-    destination = os.path.join(copyDestination, source)
+    if not path.exists(copyDestination):
+        os.makedirs(copyDestination)
+
     print('Copying installer to ' + destination)
     shutil.copy(source, destination)
 
