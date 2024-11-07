@@ -34,20 +34,9 @@ winString = 'Windows'
 
 macIntelBuild = False
 
-###############################
-# LINUX BUILD CONSTANTS
-LIN_INS_NAME = 'PolyGlot-Ins-Lin.deb'
-
-###############################
 # OSX BUILD CONSTANTS
-OSX_INS_NAME = 'PolyGlot-Ins-Osx.dmg'
-OSX_INTEL_INS_NAME = 'PolyGlot-Ins-Osx-intel.dmg'
 SIGN_IDENTITY = ''  # set in main for timing reasons
 DISTRIB_IDENTITY = ''  # set in main for timing reasons
-
-###############################
-# WINDOWS BUILD CONSTANTS
-WIN_INS_NAME = 'PolyGlot-Ins-Win.exe'
 
 ###############################
 # UNIVERSAL BUILD CONSTANTS
@@ -524,32 +513,23 @@ def injectDocs():
 def copyInstaller(copyDestination : str, source : str, IS_RELEASE : bool):
     global macIntelBuild
 
-    if path.exists(source):
-        ins_file = ""
-
-        if osString == winString:
-            ins_file = WIN_INS_NAME
-        elif osString == linString:
-            ins_file = LIN_INS_NAME
-        elif osString == osxString and macIntelBuild:
-            ins_file = OSX_INTEL_INS_NAME
-        elif osString == osxString:
-            ins_file = OSX_INS_NAME
-
-        # release candidates copied to their own location
-        if IS_RELEASE:
-            copyDestination = os.path.join(copyDestination, 'Release')
-
-        destination = os.path.join(destination, ins_file)
-        print('Copying installer to ' + destination)
-        shutil.copy(source, destination)
-
-        # only remove failure signal once process is successful
-        os.remove(failFile)
-        os.remove(source)
-    else:
+    if not path.exists(source):
         print('FAILURE: Built installer missing: ' + source)
 
+    # release candidates copied to their own location
+    if IS_RELEASE:
+        copyDestination = os.path.join(copyDestination, 'Release')
+    else:
+        copyDestination = os.path.join(copyDestination, 'Beta')
+    os.makedirs(copyDestination)
+
+    destination = os.path.join(copyDestination, source)
+    print('Copying installer to ' + destination)
+    shutil.copy(source, destination)
+
+    # only remove failure signal once process is successful
+    os.remove(failFile)
+    os.remove(source)
 
 if __name__ == "__main__":
     sys.exit(main())
