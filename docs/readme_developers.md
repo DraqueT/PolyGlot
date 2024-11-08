@@ -47,7 +47,7 @@ Windows Setup
 >     - the WiX install should work correctly now
 
 MacOS Setup
->- MacOS comes default with python 2.7 
+>- install python (e.g. with homebrew)
 >- install dmgbuild (at terminal: `pip install dmgbuild`)
 >   - if pip isn't installed:
 >     - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py

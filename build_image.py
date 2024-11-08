@@ -20,6 +20,7 @@ import shutil
 import subprocess
 import sys
 import time
+from typing import Union
 import uuid
 from xml.dom import minidom
 
@@ -34,20 +35,9 @@ winString = 'Windows'
 
 macIntelBuild = False
 
-###############################
-# LINUX BUILD CONSTANTS
-LIN_INS_NAME = 'PolyGlot-Ins-Lin.deb'
-
-###############################
 # OSX BUILD CONSTANTS
-OSX_INS_NAME = 'PolyGlot-Ins-Osx.dmg'
-OSX_INTEL_INS_NAME = 'PolyGlot-Ins-Osx-intel.dmg'
 SIGN_IDENTITY = ''  # set in main for timing reasons
 DISTRIB_IDENTITY = ''  # set in main for timing reasons
-
-###############################
-# WINDOWS BUILD CONSTANTS
-WIN_INS_NAME = 'PolyGlot-Ins-Win.exe'
 
 ###############################
 # UNIVERSAL BUILD CONSTANTS
@@ -93,6 +83,9 @@ def main() -> int:
         help='skips test step in Maven')
     parser.add_argument('--java_home_o', type=str,
         help='Overrides JAVA_HOME. Useful for stubborn VMs that will not normally recognize environment variables')
+    parser.add_argument('--type_o', type=str,
+        choices=['app-image', 'exe', 'msi', 'rpm', 'deb', 'pkg', 'dmg'],
+        help='Overrides default jpackage target')
     
     # MacOS specific
     parser.add_argument('--mac_sign_identity', type=str,
@@ -160,7 +153,7 @@ def main() -> int:
     if full_build or 'image' in args.step:
         image()
     if full_build or 'dist' in args.step:
-        dist(args.release)
+        dist(args.release, args.type_o)
 
     print('Done!')
     return 0
@@ -230,20 +223,19 @@ def image():
         print(stat.args)
         sys.exit(1)
 
-def dist(is_release : bool):
+def dist(is_release : bool, target_type : Union[str, None]):
     if osString == linString:
-        distLinux(is_release)
+        distLinux(is_release, target_type)
     elif osString == osxString:
-        distOsx(is_release)
+        distOsx(is_release, target_type)
     elif osString == winString:
-        distWin(is_release)
+        distWin(is_release, target_type)
 
 
 ######################################
 #       LINUX FUNCTIONALITY
 ######################################
-
-def distLinux(IS_RELEASE : bool):
+def distLinux(IS_RELEASE : bool, target_type : Union[str, None]):
     print('creating linux distribution...')
     os.system('rm -rf installer')
     os.system('mkdir installer')
@@ -259,9 +251,17 @@ def distLinux(IS_RELEASE : bool):
                '--name "PolyGlot" ' +
                '--license-file LICENSE.TXT ' +
                '--runtime-image build/image')
-    if os.system('command -v rpm') == 0:
-        print('detected rpm')
-        command = command + ' --linux-rpm-license-type MIT '
+    if target_type is None:
+        os_info = subprocess.check_output(('cat', '/etc/os-release')).decode("utf-8")
+        if "debian" in os_info:
+            target_type = "deb"
+        elif "fedora" in os_info:
+            target_type = "rpm"
+        else:
+            raise Exception("Check on /etc/os-release failed to identify linux packaging format")
+    command += f' --type {target_type}'
+    if target_type == 'rpm':
+        command += ' --linux-rpm-license-type MIT '
     os.system(command)
 
     # search for the generated system package
@@ -269,12 +269,14 @@ def distLinux(IS_RELEASE : bool):
     # on different architectures)
     installer_file = ''
     for item in os.listdir():
-        if os.path.isfile(item) and item.startswith('polyglot-linear-a') and POLYGLOT_BUILD in item:
+        if os.path.isfile(item) and item.startswith('polyglot-linear-a') \
+                and POLYGLOT_BUILD in item \
+                and item.endswith(target_type):
             installer_file = item
             print('generated: ' + installer_file)
             break
     if installer_file == '':
-        print('failed to locate jpackage output')
+        raise Exception('failed to locate jpackage output')
 
     if copyDestination != "":
         copyInstaller(copyDestination, installer_file, IS_RELEASE)
@@ -283,8 +285,7 @@ def distLinux(IS_RELEASE : bool):
 ######################################
 #       Mac OS FUNCTIONALITY
 ######################################
-
-def distOsx(IS_RELEASE : bool):
+def distOsx(IS_RELEASE : bool, target_type : Union[str, None]):
     print('Creating app image...')
 
     command = (JAVA_HOME + '/bin/jpackage ' +
@@ -299,6 +300,8 @@ def distOsx(IS_RELEASE : bool):
                '--file-associations packaging_files/mac/file_types_mac.prop ' +
                '--icon packaging_files/mac/PolyGlot.icns ' +
                '--app-version "' + POLYGLOT_VERSION + '"')
+    if target_type is not None:
+        command += f' --type {target_type}'
 
     os.system(command)
 
@@ -370,9 +373,7 @@ def distOsx(IS_RELEASE : bool):
 ######################################
 #       WINDOWS FUNCTIONALITY
 ######################################
-
-
-def distWin(IS_RELEASE : bool):
+def distWin(IS_RELEASE : bool, target_type : Union[str, None]):
     package_location = 'PolyGlot-' + POLYGLOT_BUILD + '.exe'
     print('Creating distribution package...')
     os.system('rmdir /s /q installer')
@@ -393,6 +394,8 @@ def distWin(IS_RELEASE : bool):
                '--win-upgrade-uuid  ' + str(
                 uuid.uuid4()) + ' ' +  # Unique identifier to keep versioned installers from erroring in Windows
                '--icon packaging_files/win/PolyGlot0.ico')
+    if target_type is not None:
+        command += f' --type {target_type}'
 
     os.system(command)
 
@@ -524,32 +527,27 @@ def injectDocs():
 def copyInstaller(copyDestination : str, source : str, IS_RELEASE : bool):
     global macIntelBuild
 
-    if path.exists(source):
-        ins_file = ""
-
-        if osString == winString:
-            ins_file = WIN_INS_NAME
-        elif osString == linString:
-            ins_file = LIN_INS_NAME
-        elif osString == osxString and macIntelBuild:
-            ins_file = OSX_INTEL_INS_NAME
-        elif osString == osxString:
-            ins_file = OSX_INS_NAME
-
-        # release candidates copied to their own location
-        if IS_RELEASE:
-            copyDestination = os.path.join(copyDestination, 'Release')
-
-        destination = os.path.join(destination, ins_file)
-        print('Copying installer to ' + destination)
-        shutil.copy(source, destination)
-
-        # only remove failure signal once process is successful
-        os.remove(failFile)
-        os.remove(source)
-    else:
+    if not path.exists(source):
         print('FAILURE: Built installer missing: ' + source)
 
+    # release candidates copied to their own location
+    if IS_RELEASE:
+        copyDestination = os.path.join(copyDestination, 'Release')
+        destination = os.path.join(copyDestination, source)
+    else:
+        copyDestination = os.path.join(copyDestination, 'Beta')
+        destination = os.path.join(copyDestination,
+            f'_BETA_{datetime.datetime.now().strftime('%Y-%m-%d-%H-%M')}_{source}')
+
+    if not path.exists(copyDestination):
+        os.makedirs(copyDestination)
+
+    print('Copying installer to ' + destination)
+    shutil.copy(source, destination)
+
+    # only remove failure signal once process is successful
+    os.remove(failFile)
+    os.remove(source)
 
 if __name__ == "__main__":
     sys.exit(main())
