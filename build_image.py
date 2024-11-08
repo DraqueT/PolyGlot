@@ -536,12 +536,12 @@ def copyInstaller(copyDestination : str, source : str, IS_RELEASE : bool):
         destination = os.path.join(copyDestination, source)
     else:
         copyDestination = os.path.join(copyDestination, 'Beta')
-        destination = os.path.join(copyDestination, '_BETA_' + source)
+        destination = os.path.join(copyDestination,
+            f'_BETA_{datetime.datetime.now().strftime('%Y-%m-%d-%H-%M')}_{source}')
 
     if not path.exists(copyDestination):
         os.makedirs(copyDestination)
 
-    destination = os.path.join(copyDestination, source)
     print('Copying installer to ' + destination)
     shutil.copy(source, destination)
 
