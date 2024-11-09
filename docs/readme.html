@@ -49,7 +49,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-10 col-lg-offset-1 centered"> <img src="assets/PolyGlot%20Logo.png" alt="PolyGlot">
-                        <h1>Version 3.5.1</h1>
+                        <h1>Version 3.6</h1>
                         <!-- POLYGLOT STUFF START -->
 
                         <table style="width:100%">
@@ -108,21 +108,16 @@
                             post them on <a href="https://github.com/DraqueT/PolyGlot/issues">PolyGlot's issues page</a>!</div>
 
                         <h1><a name="-----_ii_-----"></a>WHAT’S NEW</h1>
-                        <div align ="left"><br>Minor release here that cleans up a few things from the last big release and adds a few 
-                            features I had wanted to include with 3.5 in the first place.<br><br>
-
+                        <div align ="left"><br>Minor release with a variety of bug-fixes and incremental changes.<br><br>
                             Enjoy, everyone!
-                            <br><br>
 
                         </div>
                         NEW FEATURES:
                         <div align ="left"><ul>
-                                <li>Java 8 no longer needed for Excel features and PDF generation</li>
-                                <li>Revised invalid entry display in some menus</li>
-                                <li>Added ability to scale UI in Windows and Linux</li>
-                                <li>Word generator now compatible with comma delimited lists to allow for multi symbol characters</li>
-                                <li>Word generator now has visual feedback to help with input formatting</li>
-                                <li>Word generator now saves settings rather than discarding on close of window</li>
+                                <li>The location of the PolyGlot.ini file has changed on a per-OS basis.</li>
+                                <li>Windows: %LOCALAPPDATA%\PolyGlot</li>
+                                <li>MacOS: ~/Library/Preferences/PolyGlot</li>
+                                <li>Linux: $XDG_CONFIG_HOME or ~/.config/PolyGlot</li>
                                 <!––Secret Codes:
                                 what did you see last tuesday
                                 Who is Draque
@@ -136,30 +131,27 @@
                         BUGS FIXED:
                         <div align="left">
                             <ul>
-                                <li>Tooltips were severely broken on Windows/Linux, not functioning at all</li>
-                                <li>Under certain circumstances, add part of speech button could become temporarily disabled</li>
-                                <li>UI scaling in HD environments was broken</li>
-                                <li>Part of Speech mandatory can no longer be set if none are defined</li>
-                                <li>Import menu was not static</li>
-                                <li>Error message occasionally/popped on startup for null ConWord value</li>
+                                <li>Word conjugation rows & columns bug</li>
+                                <li>XML corruption recovery fixes</li>
+                                <li>Various typos</li>
+                                <li>Use https instead of http in links</li>
                             </ul>
                         </div>
 
 
                         <a name="INSTALLATION"></a>
                         <h1>INSTALLATION</h1><br>
-                        <div align ="left">As of version 3.0, the installation of PolyGlot has become mostly automated. Simply 
-                            download the appropriate installer for your operating system (Windows: exe, Linux: deb, macOS:dmg) and open 
+                        <div align ="left">Download the appropriate installer for your operating system (Windows: exe, Linux: rpm/deb, macOS:dmg) and open 
                             to install!<br><br>
                             
-                            <i>Windows Note</i>: Windows will complain bitterly about PolyGlot not being properly registered with Microsoft. 
+                            <i>Windows Notes</i>: Windows will complain bitterly about PolyGlot not being properly registered with Microsoft. 
                             It is safe to install, but registration costs money and PolyGlot is free.<br><br>
                         
-                            <i>MacOS Note</i>: On the initial run, you will have to right click the Application from Finder, select "open" and grant it permission to run. It is safe to run, but registration costs money and PolyGlot is free.<br><br>
+                            <i>MacOS Notes</i>: On the initial run, you will have to right click the Application from Finder, select "open" and grant it permission to run. It is safe to run, but registration costs money and PolyGlot is free.<br><br>
                             
-                            <i>Linux Notes:</i>: 
+                            <i>Linux Notes</i>:
                             <br> - Depending on screen resolution, you may have to tweak the UI scaling setting under options for the display to render at an appropriate size.
-                            <br> - If you are using a version of Linux that does not support .deb installations, try the utility <a href="https://appimage.github.io/deb2appimage/"> deb2appimage</a>
+                            <br> - If you are using a version of Linux that does not support .deb or .rpm installations, try the utility <a href="https://appimage.github.io/deb2appimage/"> deb2appimage</a>
                         </div>
                         <br><br>
 
