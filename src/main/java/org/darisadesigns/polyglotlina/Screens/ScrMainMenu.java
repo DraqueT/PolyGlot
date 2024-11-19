@@ -1612,6 +1612,7 @@ public final class ScrMainMenu extends PFrame {
         mnuReversion = new javax.swing.JMenuItem();
         mnuHelp = new javax.swing.JMenu();
         mnuAbout = new javax.swing.JMenuItem();
+        mnuAboutLocal = new javax.swing.JMenuItem();
         mnuChkUpdate = new javax.swing.JMenuItem();
         mnuExLex = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
@@ -1889,8 +1890,6 @@ public final class ScrMainMenu extends PFrame {
 
         pnlToDoSplit.setLeftComponent(jPanel3);
 
-        jMenuBar1.setOpaque(false);
-
         mnuFile.setText("File");
 
         mnuNewLocal.setText("New");
@@ -2132,6 +2131,14 @@ public final class ScrMainMenu extends PFrame {
         });
         mnuHelp.add(mnuAbout);
 
+        mnuAboutLocal.setText("Help (Local)");
+        mnuAboutLocal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuAboutLocalActionPerformed(evt);
+            }
+        });
+        mnuHelp.add(mnuAboutLocal);
+
         mnuChkUpdate.setText("About");
         mnuChkUpdate.setToolTipText("About PolyGlot");
         mnuChkUpdate.addActionListener(new java.awt.event.ActionListener() {
@@ -2142,7 +2149,7 @@ public final class ScrMainMenu extends PFrame {
         mnuHelp.add(mnuChkUpdate);
 
         mnuExLex.setText("Example Languages");
-        mnuExLex.setToolTipText("Languages with examples to copy from");
+        mnuExLex.setToolTipText("Languages with exmples to copy from");
         mnuHelp.add(mnuExLex);
 
         jMenuItem4.setText("Create Bug Report");
@@ -2544,6 +2551,17 @@ public final class ScrMainMenu extends PFrame {
         }        
     }//GEN-LAST:event_mnuWebServerActionPerformed
 
+    private void mnuAboutLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAboutLocalActionPerformed
+        try {
+            File readmeDir = DesktopIOHandler.getInstance().unzipResourceToSystemTempLocation(PGTUtil.HELP_FILE_ARCHIVE_LOCATION);
+            File readmeFile = new File(readmeDir.getAbsolutePath() + File.separator + PGTUtil.HELP_FILE_NAME);
+            ScrWebView webView = new ScrWebView(core, readmeFile, "Help");
+            webView.setVisible(true);
+        } catch (IOException e) {
+            new DesktopInfoBox(this).error("Help Error", "Unable to open help file: " + e.getLocalizedMessage());
+        }
+    }//GEN-LAST:event_mnuAboutLocalActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClasses;
     private javax.swing.JButton btnGrammar;
@@ -2577,6 +2595,7 @@ public final class ScrMainMenu extends PFrame {
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JList<RecentFile> lstRecentOpened;
     private javax.swing.JMenuItem mnuAbout;
+    private javax.swing.JMenuItem mnuAboutLocal;
     private javax.swing.JMenu mnuAdvanced;
     private javax.swing.JMenuItem mnuChatGpt;
     private javax.swing.JMenuItem mnuCheckLanguage;
