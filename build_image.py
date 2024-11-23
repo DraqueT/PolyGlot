@@ -213,6 +213,7 @@ def image():
             os.path.join(javafx_location, "javafx-media", JAVAFX_VER) + os.sep,
             os.path.join(javafx_location, "javafx-swing", JAVAFX_VER) + os.sep,
             os.path.join(javafx_location, "javafx-controls", JAVAFX_VER) + os.sep,
+            os.path.join(javafx_location, "javafx-web", JAVAFX_VER) + os.sep,
             os.path.join(javafx_location, "jmods")
         ]),
         '--add-modules', 'org.darisadesigns.polyglotlina.polyglot,jdk.crypto.ec',

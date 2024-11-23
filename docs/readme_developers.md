@@ -1,6 +1,8 @@
 # README for Developers
 If you're looking to work on PolyGlot independently or to contribute, here's how you set it up to work with.
 
+Note: GUI elements were built with the NetBeans GUI Builder.
+
 ## BASIC DEVELOPMENT SETUP
 1) Download/install Open JDK 17 (or higher)
   - Copy to appropriate directory if downloaded
