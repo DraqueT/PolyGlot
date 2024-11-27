@@ -1,20 +1,28 @@
 # README for Developers
-If you're looking to work on PolyGlot independently or to contribute, here's how you set it up to work with.
+If you're looking to work on PolyGlot independently or to contribute, here's how you set it up to work with it.
 
 Note: GUI elements were built with the NetBeans GUI Builder.
 
-## BASIC DEVELOPMENT SETUP
-1) Download/install Open JDK 17 (or higher)
-  - Copy to appropriate directory if downloaded
-  - set the JAVA_HOME environment variable
-2) Install Maven (3.8.1 or higher)
-  - Copy to appropriate directory
-    - add environment variable (MAVEN_HOME)
-  - Add line specifying JDK 17 as java to use for maven
-3) Download/install an editor. Netbeans 12 or newer, or Visual Studio Code with java/maven plugins
-  - (Netbeans) remember to set the jdk path as appropriate on install if asked (might not auto-populate)
-4) Install git (not strictly necessary, but command line git is more powerful than the UI based stuff you can do in Netbeans)
-5) Clone PolyGlot from the git repo (https://github.com/DraqueT/PolyGlot.git)
+## Dependencies
+- Java 17 or higher
+- Maven 3.8.1 or higher
+- Python 3
+- An IDE of your choice:
+  - Netbeans 12 or newer
+  - Visual Studio Code with java/maven plugins
+  - Eclipse
+
+
+## Development Setup
+1) Install dependencies.
+  - Set the JAVA_HOME environment variable.
+  - Make sure `java` and `mvn` are in your path (try `java -version` and `mvn -v` in a terminal).
+  - If using Netbeans as an IDE, remember to set the jdk path as appropriate on install if asked (might not auto-populate).
+2) (Optional) Fork the repo on GitHub.
+3) Clone the repository.
+4) Perform the steps below corresponding to your IDE.
+
+Afterwards, you will be ready to begin work! Building this will result in a runnable jar file (PolyGlotLinA-<VER>-jar-with-dependencies.jar) being created in the target folder. Be aware that this jar is NOT cross platform compatible. In J8, PolyGlot was distributed as a single file for all OSes (but the great module wars of J9 changed all that. 'S how I got this eyepatch and lost my leg).
 
 ### NetBeans
 1) Open the PolyGlot project
@@ -27,10 +35,13 @@ Note: GUI elements were built with the NetBeans GUI Builder.
 2) Open the PolyGlot project. You can set up the maven extension to automatically download dependencies
 3) Open a terminal in the root directory and execute `python3 build_image.py`.
 
+### Eclipse
+1) Click on File > Import
+2) Select Maven > Existing Maven Projects and click Next.
+3) Under Root Directory, browse to wherever you've cloned the repo to.
+4) Make sure the checkbox under `/pom.xml` is selected and click Finish. This will create the project for you to work on.
+5) Open a terminal and run `python build_image.py`. Some tests may fail, everything else should be fine. You will be able to run the project from Eclipse afterwards.
 
-You are now ready to begin work! Building this will result in a runnable jar file (PolyGlotLinA-<VER>-jar-with-dependencies.jar) being created in the target folder. Be aware that this jar is NOT cross platform compatible. In J8, PolyGlot was distributed as a single file for all OSes (but the great module wars of J9 changed all that. 'S how I got this eyepatch and lost my leg).
-
-	
 ## OPTIONAL STEPS TO BUILDING DISTRIBUTABLE APPLICATION IMAGES
 This will show you how to package PolyGlot for OSX, Windows, and Linux. If your system does not have python, install it.
 
@@ -82,3 +93,5 @@ So. Some parts of PolyGlot rely on libraries that are pretty fundamentally roote
 5) Copy the newly created "java_8_bridge.zip" file into the assets/assets/org/DarisaDesigns folder inside of the primary PolyGlot application's project folder.
 
 This will replace the non modular dependencies that run these select functions in PolyGlot.
+
+<!-- Vim: set et ts=2 : -->
