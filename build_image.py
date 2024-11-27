@@ -538,7 +538,7 @@ def copyInstaller(copyDestination : str, source : str, IS_RELEASE : bool):
     else:
         copyDestination = os.path.join(copyDestination, 'Beta')
         destination = os.path.join(copyDestination,
-            f'_BETA_{datetime.datetime.now().strftime('%Y-%m-%d-%H-%M')}_{source}')
+            f'_BETA_{datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")}_{source}')
 
     if not path.exists(copyDestination):
         os.makedirs(copyDestination)
