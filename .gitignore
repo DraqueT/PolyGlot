@@ -21,3 +21,13 @@ docs/beta_builds/
 *.deb
 *.dmg
 *.exe
+
+# Eclipse metadata
+.project
+.classpath
+.settings
+
+# Vim metadata
+.*.un~
+.*.swp
+tags
