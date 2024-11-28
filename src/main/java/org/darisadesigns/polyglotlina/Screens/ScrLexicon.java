@@ -42,6 +42,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -520,6 +521,10 @@ public final class ScrLexicon extends PFrame {
                 Dimension dim = menuParent.getSize();
                 menuParent.setSize(dim.width, dim.height + 1);
                 menuParent.setSize(dim.width, dim.height);
+
+                // Restore maximization if needed, since the above mess broke it
+                if(PolyGlot.getPolyGlot().getOptionsManager().isMaximized())
+                    menuParent.setExtendedState(getExtendedState() | Frame.MAXIMIZED_BOTH);
             }
         }
 
