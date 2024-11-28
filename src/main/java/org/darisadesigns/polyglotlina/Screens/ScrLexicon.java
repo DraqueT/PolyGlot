@@ -515,17 +515,6 @@ public final class ScrLexicon extends PFrame {
                 pnlClasses.add(classBox, gbc);
                 classPropMap.put(curProp.getId(), classBox); // combobox mapped to related class ID.
             }
-
-            if (menuParent != null) {
-                // messy, but gets a full rebuild of screen since this is happening post-initial visibility-pop
-                Dimension dim = menuParent.getSize();
-                menuParent.setSize(dim.width, dim.height + 1);
-                menuParent.setSize(dim.width, dim.height);
-
-                // Restore maximization if needed, since the above mess broke it
-                if(PolyGlot.getPolyGlot().getOptionsManager().isMaximized())
-                    menuParent.setExtendedState(getExtendedState() | Frame.MAXIMIZED_BOTH);
-            }
         }
 
         if (propList.length == 0) {
