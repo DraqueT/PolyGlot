@@ -225,6 +225,9 @@ def image():
         sys.exit(1)
 
 def dist(is_release : bool, target_type : Union[str, None]):
+    if os.path.exists('installer'):
+        shutil.rmtree('installer')
+
     if osString == linString:
         distLinux(is_release, target_type)
     elif osString == osxString:
@@ -238,8 +241,6 @@ def dist(is_release : bool, target_type : Union[str, None]):
 ######################################
 def distLinux(IS_RELEASE : bool, target_type : Union[str, None]):
     print('creating linux distribution...')
-    os.system('rm -rf installer')
-    os.system('mkdir installer')
     command = (JAVA_HOME + '/bin/jpackage ' +
                '--app-version ' + POLYGLOT_BUILD + ' ' +
                '--copyright "2014-' + CUR_YEAR + ' Draque Thompson" ' +
@@ -377,7 +378,6 @@ def distOsx(IS_RELEASE : bool, target_type : Union[str, None]):
 def distWin(IS_RELEASE : bool, target_type : Union[str, None]):
     package_location = 'PolyGlot-' + POLYGLOT_BUILD + '.exe'
     print('Creating distribution package...')
-    os.system('rmdir /s /q installer')
 
     # If missing, install WiX Toolset: https://wixtoolset.org/releases/
     command = ('jpackage ' +
