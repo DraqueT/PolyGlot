@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2025 Kelly G. Schultz -->
+<component type="desktop-application">
+    <id>io.github.DraqueT.PolyGlot</id>
+    <name>PolyGlot</name>
+    <summary>conlang construction toolkit</summary>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>MIT</project_license>
+    <content_rating type="oars-1.1"/>
+    <developer id="org.darisadesigns">
+        <name>Draque Thompson</name>
+    </developer>
+    <url type="homepage">https://github.com/DraqueT/PolyGlot</url>
+    <url type="bugtracker">https://github.com/DraqueT/PolyGlot/issues</url>
+    <description>
+        <p>PolyGlot is a cross-platform conlang construction toolkit</p>
+        <ul>
+            <li>Conlang storage</li>
+            <li>Auto-generation of conjugations/declensions</li>
+            <li>Automated checking of lexicon with defined rules</li>
+            <li>Zompist Word Generator</li>
+            <li>Quiz Generation</li>
+            <li>Import/Export</li>
+            <li>Statistics Report</li>
+            <li>IPA Conversion Tool</li>
+        </ul>
+    </description>
+    <launchable type="desktop-id">io.github.DraqueT.PolyGlot.desktop</launchable>
+    <icon>io.github.DraqueT.PolyGlot.png</icon>
+    <releases>
+        <release version="3.6.1" date="2025-01-14">
+            <url type="details">https://github.com/DraqueT/PolyGlot/releases/tag/v3.6.1</url>
+            <description>
+                <p>Release Description</p>
+                <ul>
+                    <li>Disabled file integrity check upon save</li>
+                </ul>
+            </description>
+        </release>
+    </releases>
+    <screenshots>
+        <screenshot type="default">
+            <image>https://github.com/DraqueT/PolyGlot/blob/423198f72f6fe884acfbb86906c04669245b0e18/docs/assets/Lex_flatpak.png</image>
+            <caption>Main window with example language loaded</caption>
+        </screenshot>
+        <screenshot>
+            <image>https://github.com/DraqueT/PolyGlot/blob/423198f72f6fe884acfbb86906c04669245b0e18/docs/assets/word_generator_flatpak.png</image>
+            <caption>Word Generator with example language loaded</caption>
+        </screenshot>
+    </screenshots>
+    <requires>
+        <control>keyboard</control>
+        <control>pointing</control>
+    </requires>
+</component>
