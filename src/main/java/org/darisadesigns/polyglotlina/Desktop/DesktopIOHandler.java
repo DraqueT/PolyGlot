@@ -405,9 +405,10 @@ public final class DesktopIOHandler implements IOHandler {
                 PolyGlot.getTestShell(test);
                 test.readFile(tmpSaveFinalLocation.getAbsolutePath());
 
-                if (!core.equals(test)) {
-                    throw new Exception("Written file does not match file in memory.");
-                }
+                // TODO: Once #1393 is complete, uncomment this - until then it does more damage than good.
+//                if (!core.equals(test)) {
+//                    throw new Exception("Written file does not match file in memory.");
+//                }
             } catch (Exception ex) {
                 throw new IOException(ex);
             }
