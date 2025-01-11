@@ -1590,27 +1590,29 @@ public final class ScrLexicon extends PFrame {
                         + e.getLocalizedMessage());
             }
 
-            gridTitlePane.setExpanded(false);
-            populateLexicon();
+            SwingUtilities.invokeLater(() -> {
+                gridTitlePane.setExpanded(false);
+                populateLexicon();
 
-            populateProperties();
-            setWordLegality();
+                populateProperties();
+                setWordLegality();
+
+                // A very specific situation is created here where the values are blanked and should not be saved.
+                var localDoNotSave = doNotSave;
+                try {            
+                    doNotSave = true;
+
+                    if (!filterBlank) {    
+                        filterLexicon();
+                    }
+
+                    lstLexicon.setSelectedIndex(curSelection == 0 ? 0 : curSelection - 1);
+                } finally {
+                    doNotSave = localDoNotSave;
+                }
+            });
         } finally {
             curPopulating = localPopulating;
-        }
-        
-        // A very specific situation is created here where the values are blanked and should not be saved.
-        var localDoNotSave = doNotSave;
-        try {            
-            doNotSave = true;
-            
-            if (!filterBlank) {    
-                filterLexicon();
-            }
-
-            lstLexicon.setSelectedIndex(curSelection == 0 ? 0 : curSelection - 1);
-        } finally {
-            doNotSave = localDoNotSave;
         }
     }
 
