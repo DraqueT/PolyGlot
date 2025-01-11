@@ -126,6 +126,7 @@ public final class ScrLexicon extends PFrame {
     private boolean namePopulating = false;
     private boolean forceUpdate = false;
     private boolean doNotSave = false;
+    private boolean quickEntry = false;
     private Thread filterThread = null;
     private final ScrMainMenu menuParent;
     private final PTextField txtRom;
@@ -223,11 +224,14 @@ public final class ScrLexicon extends PFrame {
      * @param wordId id of newly word to select (-1 if no selection)
      */
     public void refreshWordList(int wordId) {
+        boolean localQuickEntry = quickEntry;
+        quickEntry = true;
         populateLexicon();
         if (wordId != -1) {
             lstLexicon.setSelectedValue(
                     core.getWordCollection().getNodeById(wordId), true);
         }
+        quickEntry = localQuickEntry;
     }
 
     @Override
@@ -2062,7 +2066,7 @@ public final class ScrLexicon extends PFrame {
             return;
         }
 
-        if (!curPopulating
+        if (!curPopulating && !quickEntry
                 && evt.getFirstIndex() != evt.getLastIndex()) {
             JList list = (JList) evt.getSource();
             int selected = list.getSelectedIndex();
