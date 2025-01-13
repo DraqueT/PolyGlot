@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <PolyGlotUpdate>
-<Version>3.6</Version>
+<Version>3.6.1</Version>
 <VersionText>
-Version 3.6
+Version 3.6.1
 &lt;br&gt;&lt;br&gt;
-Minor release with a variety of bug-fixes and incremental changes.
+Bug-fix release for disabling file integrity checks.
 &lt;br&gt;&lt;br&gt;
 Enjoy, everyone!
 
 &lt;br&gt;&lt;br&gt;
 &lt;br&gt;&lt;br&gt;
 ENHANCEMENTS:&lt;br&gt;
-- Location of PolyGlot.ini has changed on a per-OS basis&lt;br&gt;
-- Addition of fallback window for viewing the manual&lt;br&gt;
+- None&lt;br&gt;
 &lt;br&gt;&lt;br&gt;
 BUGS FIXED:&lt;br&gt;
-- Word conjugation rows and columns bug
-- XML corruption recovery fixes
-- Various typos
-- Use https instead of http in links
+- Disabled file integrity check that occurs on saving a file.
   
 &lt;br&gt;
 Homepage: http://draquet.github.io/PolyGlot/
