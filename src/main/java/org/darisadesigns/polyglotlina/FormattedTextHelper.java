@@ -53,8 +53,12 @@ public class FormattedTextHelper {
             body = body.substring(0, pos);
         }
         
+        preFix = preFix.replace("\n", "");
+        postFix = postFix.replace("\n", "");
+        
         body = body.trim();
-        body = body.replace("<br>\n", "<br>"); // prevents doubling of <br> statements due to formatting
+        body = body.replaceAll("\s*</?p.*?>\n?",""); // remove paragraph tags added by quick add
+        body = body.replaceAll("\s*<br>\n", "<br>"); // prevents doubling of <br> statements due to formatting
         body = body.replace("\n", "<br>");
         
         return preFix + body + postFix;
