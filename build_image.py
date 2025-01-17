@@ -310,8 +310,25 @@ def distOsx(IS_RELEASE : bool, target_type : Union[str, None]):
     # Remove the extra copy of libjli.dylib which causes notarization to fail
     if path.exists('PolyGlot.app/Contents/runtime/Contents/MacOS/libjli.dylib'):
         os.remove('PolyGlot.app/Contents/runtime/Contents/MacOS/libjli.dylib')
+    
+    ### all "code" must be signed, otherwise notarization throws a fit
+    base_command = 'codesign --force --timestamp --options runtime --entitlements packaging_files/mac/entitlements.plist ' + \
+        '--sign "' + SIGN_IDENTITY + '" '
+    base_path = 'PolyGlot.app/Contents/runtime/Contents/Home/'
+    notarize_files = [ \
+        os.path.join(base_path, 'bin', 'java'),
+        os.path.join(base_path, 'bin', 'keytool'),
+        os.path.join(base_path, 'lib', 'jspawnhelper')]
+    for dirpath, _, filenames in os.walk(os.path.join(base_path, 'lib')):
+        for file in filenames:
+            split_tup = os.path.splitext(file)
+            if split_tup[1] == '.dylib':
+                notarize_files.append(os.path.join(dirpath, file))
+    for file in notarize_files:
+        print(f'Notarizing {file}')
+        os.system(base_command + file)
 
-    if SIGN_IDENTITY and not DISTRIB_IDENTITY:  # only sign with dev identity
+    if SIGN_IDENTITY:  # only sign with application certificate
         print('Code signing app image with developer certificate...')
         command = ('codesign ' +
                    '--force ' +  # Overwrite existing signature
@@ -322,22 +339,8 @@ def distOsx(IS_RELEASE : bool, target_type : Union[str, None]):
                    'PolyGlot.app')
 
         os.system(command)
-    elif not DISTRIB_IDENTITY:
-        print('No code signing identity specified, app image will not be signed as developer')
-
-    if DISTRIB_IDENTITY:
-        print('Code signing app image with distribution certificate...')
-        command = ('codesign ' +
-                   '--force ' +  # Overwrite existing signature
-                   '--timestamp ' +  # Embed secure timestamps
-                   '--options runtime ' +  # Enable hardened runtime
-                   '--entitlements packaging_files/mac/entitlements.plist ' +  # Add entitlements
-                   '--sign "' + DISTRIB_IDENTITY + '" ' +
-                   'PolyGlot.app')
-
-        os.system(command)
     else:
-        print('No distribution signing identity specified, app image will not be signed for distribution')
+        print('No code signing identity specified, app image will not be signed as developer')
 
     polyglot_dmg = 'PolyGlot-' + POLYGLOT_VERSION + '.dmg'
 
@@ -348,12 +351,12 @@ def distOsx(IS_RELEASE : bool, target_type : Union[str, None]):
 
         os.system(command)
 
-        if DISTRIB_IDENTITY:
+        if SIGN_IDENTITY:
             print('Code signing dmg installer image with distribution certificate...')
             command = ('codesign ' +
                        '--timestamp ' +  # Embed secure timestamps
                        '--entitlements packaging_files/mac/entitlements.plist ' +  # Add entitlements
-                       '--sign "' + DISTRIB_IDENTITY + '" ' + polyglot_dmg)
+                       '--sign "' + SIGN_IDENTITY + '" ' + polyglot_dmg)
 
             os.system(command)
         else:
