@@ -37,7 +37,6 @@ macIntelBuild = False
 
 # OSX BUILD CONSTANTS
 SIGN_IDENTITY = ''  # set in main for timing reasons
-DISTRIB_IDENTITY = ''  # set in main for timing reasons
 
 ###############################
 # UNIVERSAL BUILD CONSTANTS
@@ -59,7 +58,6 @@ def main() -> int:
     global POLYGLOT_BUILD
     global JAVA_HOME
     global SIGN_IDENTITY
-    global DISTRIB_IDENTITY
     global JAR_W_DEP
     global JAR_WO_DEP
     global failFile
@@ -90,20 +88,14 @@ def main() -> int:
     # MacOS specific
     parser.add_argument('--mac_sign_identity', type=str,
         help='Sign the Mac app image with the specified code signing identity')
-    parser.add_argument('--mac_distrib_cert', type=str,
-        help='Specify the certificate to use for signing the MacOS app image')
     parser.add_argument('--intelBuild', default=False, action='store_true',
         help='MacOS only, indicates to use intel libraries rather than Arch64 when building')
     
     args = parser.parse_args()
 
-    # allows specifying code signing identity for mac builds
+    # specifying code signing identity for mac builds
     if args.mac_sign_identity is not None:
         SIGN_IDENTITY = args.mac_sign_identity
-
-    # allows specifying code signing for mac distribution
-    if args.mac_distrib_cert is not None:
-        DISTRIB_IDENTITY = args.mac_distrib_cert
 
     # allows for override of java home (virtual environments make this necessary at times)
     if args.java_home_o is not None:
