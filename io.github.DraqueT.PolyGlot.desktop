@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=PolyGlot
+Type=Application
+Exec=PolyGlot
+Terminal=false
+Categories=Development;Education;Science;
+Icon=io.github.DraqueT.PolyGlot
