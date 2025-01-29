@@ -35,11 +35,11 @@ modules:
     sources:
       - type: archive
         url: https://github.com/DraqueT/PolyGlot/releases/download/v3.6.1/image_x86_64.tar.gz
-        sha256: '2d8af3610d4495b36324f7141233238d33de74c92093cf573c3e5ead3244eae0'
+        sha256: '2d7f0ad963ff52efb54f82ca41c3b88ddc8ec5961f6e6aa7adc88c83aace3afd'
         only-arches:
           - x86_64
       - type: archive
         url: https://github.com/DraqueT/PolyGlot/releases/download/v3.6.1/image_aarch64.tar.gz
-        sha256: 'd55d2d28fc460f150f21166edccaedf0728b6c738782526bbff9382fb838d66f'
+        sha256: 'b114deacbd343e009d64cb2ea52c388fb079d5b1b7f6c771e78fda69f91852af'
         only-arches:
           - aarch64

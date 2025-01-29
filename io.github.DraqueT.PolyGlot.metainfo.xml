@@ -52,4 +52,9 @@
         <control>keyboard</control>
         <control>pointing</control>
     </requires>
+    <categories>
+        <category>Development</category>
+        <category>Education</category>
+        <category>Science</category>
+    </categories>
 </component>
