@@ -40,11 +40,11 @@
     </releases>
     <screenshots>
         <screenshot type="default">
-            <image>https://github.com/DraqueT/PolyGlot/blob/423198f72f6fe884acfbb86906c04669245b0e18/docs/assets/Lex_flatpak.png</image>
+            <image>https://raw.githubusercontent.com/DraqueT/PolyGlot/423198f72f6fe884acfbb86906c04669245b0e18/docs/assets/Lex_flatpak.png</image>
             <caption>Main window with example language loaded</caption>
         </screenshot>
         <screenshot>
-            <image>https://github.com/DraqueT/PolyGlot/blob/423198f72f6fe884acfbb86906c04669245b0e18/docs/assets/word_generator_flatpak.png</image>
+            <image>https://raw.githubusercontent.com/DraqueT/PolyGlot/423198f72f6fe884acfbb86906c04669245b0e18/docs/assets/word_generator_flatpak.png</image>
             <caption>Word Generator with example language loaded</caption>
         </screenshot>
     </screenshots>
