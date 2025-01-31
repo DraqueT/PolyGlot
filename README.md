@@ -24,6 +24,8 @@ PolyGlot is a cross-platform [conlang](https://en.wikipedia.org/wiki/Constructed
 For full user documentation, see: http://draquet.github.io/PolyGlot/readme.html or the readme file included in the docs section of this project.
 
 ## Installation
+<a href="https://flathub.org/apps/details/io.github.DraqueT.PolyGlot"><img src="https://flathub.org/assets/badges/flathub-badge-en.png" width="300"/></a>
+
 The latest release is tested on the following platforms:
 - Windows 11 x86
 - MacOS Apple Silicon
