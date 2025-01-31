@@ -1,0 +1,45 @@
+id: io.github.DraqueT.PolyGlot
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
+command: PolyGlot
+finish-args:
+  - --device=dri # enable gpu acceleration
+  - --share=ipc
+  - --socket=x11 # java swing req
+  - --socket=pulseaudio # java swing req
+  - --filesystem=home
+
+modules:
+  # taken from the lutris manifest
+  # - I think Java8 is depending on this outdated library
+  - name: libjpeg # with libjpeg.so.8
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_SKIP_RPATH:BOOL=YES
+      - -DENABLE_STATIC:BOOL=NO
+      - -DWITH_JPEG8:BOOL=YES
+    sources: &libjpeg_sources
+      - type: archive
+        url: https://github.com/libjpeg-turbo/libjpeg-turbo/archive/refs/tags/2.1.3.tar.gz
+        sha256: dbda0c685942aa3ea908496592491e5ec8160d2cf1ec9d5fd5470e50768e7859
+  - name: PolyGlot
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/bin
+      - install -Dm755 bin/* /app/bin
+      - cp -ra lib include conf legal man ${FLATPAK_DEST}
+      - install -Dm644 ${FLATPAK_ID}.metainfo.xml ${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml
+      - install -Dm644 PolyGlot0.png ${FLATPAK_DEST}/share/icons/hicolor/256x256/apps/${FLATPAK_ID}.png
+      - install -Dm644 ${FLATPAK_ID}.desktop ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop
+    sources:
+      - type: archive
+        url: https://github.com/DraqueT/PolyGlot/releases/download/v3.6.1/image_x86_64.tar.gz
+        sha256: '2d7f0ad963ff52efb54f82ca41c3b88ddc8ec5961f6e6aa7adc88c83aace3afd'
+        only-arches:
+          - x86_64
+      - type: archive
+        url: https://github.com/DraqueT/PolyGlot/releases/download/v3.6.1/image_aarch64.tar.gz
+        sha256: 'b114deacbd343e009d64cb2ea52c388fb079d5b1b7f6c771e78fda69f91852af'
+        only-arches:
+          - aarch64
