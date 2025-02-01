@@ -126,6 +126,7 @@ public final class ScrLexicon extends PFrame {
     private boolean namePopulating = false;
     private boolean forceUpdate = false;
     private boolean doNotSave = false;
+    private boolean quickEntry = false;
     private Thread filterThread = null;
     private final ScrMainMenu menuParent;
     private final PTextField txtRom;
@@ -223,11 +224,14 @@ public final class ScrLexicon extends PFrame {
      * @param wordId id of newly word to select (-1 if no selection)
      */
     public void refreshWordList(int wordId) {
+        boolean localQuickEntry = quickEntry;
+        quickEntry = true;
         populateLexicon();
         if (wordId != -1) {
             lstLexicon.setSelectedValue(
                     core.getWordCollection().getNodeById(wordId), true);
         }
+        quickEntry = localQuickEntry;
     }
 
     @Override
@@ -1586,27 +1590,29 @@ public final class ScrLexicon extends PFrame {
                         + e.getLocalizedMessage());
             }
 
-            gridTitlePane.setExpanded(false);
-            populateLexicon();
+            SwingUtilities.invokeLater(() -> {
+                gridTitlePane.setExpanded(false);
+                populateLexicon();
 
-            populateProperties();
-            setWordLegality();
+                populateProperties();
+                setWordLegality();
+
+                // A very specific situation is created here where the values are blanked and should not be saved.
+                var localDoNotSave = doNotSave;
+                try {            
+                    doNotSave = true;
+
+                    if (!filterBlank) {    
+                        filterLexicon();
+                    }
+
+                    lstLexicon.setSelectedIndex(curSelection == 0 ? 0 : curSelection - 1);
+                } finally {
+                    doNotSave = localDoNotSave;
+                }
+            });
         } finally {
             curPopulating = localPopulating;
-        }
-        
-        // A very specific situation is created here where the values are blanked and should not be saved.
-        var localDoNotSave = doNotSave;
-        try {            
-            doNotSave = true;
-            
-            if (!filterBlank) {    
-                filterLexicon();
-            }
-
-            lstLexicon.setSelectedIndex(curSelection == 0 ? 0 : curSelection - 1);
-        } finally {
-            doNotSave = localDoNotSave;
         }
     }
 
@@ -2062,7 +2068,7 @@ public final class ScrLexicon extends PFrame {
             return;
         }
 
-        if (!curPopulating
+        if (!curPopulating && !quickEntry
                 && evt.getFirstIndex() != evt.getLastIndex()) {
             JList list = (JList) evt.getSource();
             int selected = list.getSelectedIndex();
