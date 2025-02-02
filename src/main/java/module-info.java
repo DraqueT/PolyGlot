@@ -15,6 +15,7 @@ module org.darisadesigns.polyglotlina.polyglot {
     requires org.apache.commons.csv; //AUT - fixed with module injector
     requires org.apache.poi.poi;
     requires org.apache.poi.ooxml;
+    requires org.apache.pdfbox;
     requires org.jsoup;
     
     exports org.darisadesigns.polyglotlina;

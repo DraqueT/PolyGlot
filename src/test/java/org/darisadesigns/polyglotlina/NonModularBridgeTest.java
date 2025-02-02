@@ -26,6 +26,7 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import javax.xml.parsers.ParserConfigurationException;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
+import org.darisadesigns.polyglotlina.Desktop.ExportFileHelper;
 import org.darisadesigns.polyglotlina.Desktop.NonModularBridge;
 import org.darisadesigns.polyglotlina.Desktop.ImportFileHelper;
 import org.junit.jupiter.api.AfterEach;
@@ -38,7 +39,7 @@ import org.junit.jupiter.api.Test;
  */
 public class NonModularBridgeTest {
     private DictCore core;
-    private static final String OUTPUT = "testFile.xls";
+    private static final String OUTPUT = "pdf-test.pdf";
     
     public NonModularBridgeTest() {
         core = DummyCore.newCore();
@@ -71,14 +72,38 @@ public class NonModularBridgeTest {
         boolean printConLocal = false;
         boolean printLocalCon = false;
         boolean printOrtho = false;
-        String subTitleText = "bloop";
-        String titleText = "bleep";
+        String subTitleText = "sub-title text here";
+        String titleText = "Test Language";
         boolean printPageNumber = false;
         boolean printGlossKey = false;
         boolean printGrammar = false;
         boolean printWordEtymologies = false;
         boolean printAllConjugations = false;
         boolean printPhrases = false;
+
+        try {
+            ExportFileHelper.exportPdf(
+                "test.pdf",
+                coverImage,
+                foreward,
+                printConLocal,
+                printLocalCon,
+                printOrtho,
+                subTitleText,
+                titleText,
+                printPageNumber,
+                printGlossKey,
+                printGrammar,
+                printWordEtymologies,
+                printAllConjugations,
+                printPhrases,
+                "0,1,2,3,4,5",
+                core
+            );
+        } catch (IOException e) {
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
         
         try {
             NonModularBridge.exportPdf(
@@ -107,7 +132,7 @@ public class NonModularBridgeTest {
     }
     
     private void cleanup() {
-        new File(OUTPUT).delete();
+        //new File(OUTPUT).delete();
         core = DummyCore.newCore();
     }
 }
