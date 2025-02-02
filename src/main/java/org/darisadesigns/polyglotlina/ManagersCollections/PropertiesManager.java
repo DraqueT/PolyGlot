@@ -19,6 +19,7 @@
  */
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -232,6 +233,12 @@ public abstract class PropertiesManager {
      * @param _fontSize the fontSize to set
      */
     public abstract void setFontSize(double _fontSize);
+
+    /**
+     * Get the language's font
+     * @return the fontCon
+     */
+    public abstract Font getFontCon();
     
     /**
      * 
