@@ -115,7 +115,7 @@ public final class ScrEvolveLang extends PDialog {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new PLabel("");
         txtConWordFilter = new PTextField(core, false, "ConWord Filter");
-        txtLocalWordFilter = new PTextField(core, true, core.getPropertiesManager().getLocalLangName() + " Filter");
+        txtLocalWordFilter = new PTextField(core, true, core.localLabel() + " Filter");
         cmbPoS = new PComboBox<TypeNode>( ((DesktopPropertiesManager)core.getPropertiesManager()).getFontLocal(), "Part of Speech", core);
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new PLabel("");

@@ -575,7 +575,7 @@ public abstract class PropertiesManager {
      * @return the localLangName
      */
     public String getLocalLangName() {
-        return localLangName.trim().isEmpty() ? "Local" : localLangName;
+        return localLangName;
     }
 
     /**
