@@ -20,10 +20,7 @@
 package org.darisadesigns.polyglotlina;
 
 import TestResources.DummyCore;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Arrays;
@@ -104,52 +101,6 @@ public class NonModularBridgeTest {
             );
             assertTrue(new File(OUTPUT).exists());
         } catch (IOException e) {
-            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
-            fail(e);
-        }
-    }
- 
-    @Test
-    public void testExportExcelDict() {
-        System.out.println("NonModularBridgeTest.exportExcelDict");
-        String os = System.getProperty("os.name").toLowerCase();
-        
-        try {
-            core.readFile(PGTUtil.TESTRESOURCES + "excel_exp_test.pgd");
-            boolean separateDeclensions = true;
-            NonModularBridge.exportExcelDict(OUTPUT, core, separateDeclensions);
-            File tmpExcel = new File(OUTPUT);
-
-            for (int i = 0 ; i < 6; i++) {
-                File expectedFile = new File(PGTUtil.TESTRESOURCES + "excel_export_check_" + i + ".csv");
-                File result = ImportFileHelper.convertExcelToCSV(tmpExcel.getAbsolutePath(), i);
-                
-                // On modification of bridge functionality, check output, then uncomment below to update test files if good
-//                expectedFile.delete();
-//                Files.copy(result.toPath(), expectedFile.toPath());
-
-                byte[] expBytes = Files.readAllBytes(expectedFile.toPath());
-                byte[] resBytes = Files.readAllBytes(result.toPath());
-
-                // windows expected file will be in crlf (due to git translation of file)... gotta sanitize.
-                int carRet = 13;
-                if (os.toLowerCase().contains("win")) {
-                    int index = 0; 
-                    for (int k = 0; k < expBytes.length; k++) {
-                       if (expBytes[k] != carRet) {
-                          expBytes[index++] = expBytes[k];
-                       }
-                    }
-
-                   expBytes = Arrays.copyOf(expBytes, index); 
-                }
-
-                assertTrue(Arrays.equals(expBytes, resBytes));
-            }
-        } catch (IOException | IllegalStateException | ParserConfigurationException e) {
-            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
-            fail(e);
-        } catch (Exception e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }

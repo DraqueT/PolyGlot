@@ -95,7 +95,7 @@ public class WebInterface {
                 = new org.jsoup.nodes.Document.OutputSettings();
         outputSettings.prettyPrint(false);
         
-        // jsoup is not great with preservartion of linebraks...
+        // jsoup is not great with preservartion of linebreaks...
         if (text.contains("<body>")) {
             text = text.substring(text.indexOf("<body>"), text.indexOf("</body>") + 7);
         }

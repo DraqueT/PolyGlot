@@ -170,42 +170,6 @@ public final class NonModularBridge {
         }
     }
 
-    /**
-     * Exports a dictionary to an excel file (externally facing)
-     *
-     * @param fileName Filename to export to
-     * @param core dictionary core
-     * @param separateDeclensions whether to separate parts of speech into
-     * separate pages for declension values
-     * @throws java.io.IOException
-     */
-    public static void exportExcelDict(String fileName, DictCore core,
-            boolean separateDeclensions) throws IOException {
-        
-        File bridge = NonModularBridge.getNonModularBridgeLocation();
-        File tmpLangFile = createTmpLangFile(core);
-        
-        String[] command = {
-            getJavaExecutablePath(),
-            PGTUtil.JAVA_JAR_ARG, // -jar
-            bridge.getAbsolutePath(), // path to bridge
-            PGTUtil.JAVA_EXPORTTOEXCELCOMMAND, // export command 
-            tmpLangFile.getAbsolutePath(), // language file
-            fileName, // target file
-            (separateDeclensions ? PGTUtil.TRUE : PGTUtil.FALSE) // separate declensions
-        };
-        
-        String[] result = DesktopIOHandler.getInstance().runAtConsole(command, false);
-        
-        if (!result[1].isEmpty()) {
-            throw new IOException("Unable to export to excel: " + result[1]);
-        } else if (result[0].toLowerCase().contains("error") || result[0].toLowerCase().contains("exception")) {
-            throw new IOException("Unable to export to excel: " + result[0]);
-        } else if (!new File(fileName).exists()) {
-            throw new IOException("Unable to export to excel: File not found post export.");
-        }
-    }
-
     public static class OutputInterceptor extends PrintStream {
         //private String intercepted = "";
 
