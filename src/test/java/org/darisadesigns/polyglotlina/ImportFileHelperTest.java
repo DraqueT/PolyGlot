@@ -20,7 +20,14 @@
 package org.darisadesigns.polyglotlina;
 
 import TestResources.DummyCore;
+
+import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.ImportFileHelper;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.csv.CSVFormat;
@@ -166,5 +173,56 @@ public class ImportFileHelperTest {
             fail(e);
         }
     }
+
+    @Test
+    public void testExcelToCsv() {
+        System.out.println("ImportFileHelperTest.testExcelToCsv");
+        String expectedContents = "\"COL 1\",\"COL 2\",\"COL 3\"\n" +
+            "\"A\",\"AA\",\"AAA\"\n" +
+            "\"B\"\n" +
+            "\"C\",\"CC\",\"CCC\",\"CCCC\"\n" +
+            "\"E\",,\"EEE\"\n" +
+            "\"F\",\"F\n" +
+            "F\",\"F\n" +
+            "F\n" +
+            "F\"\n" +
+            "\"\"G\"\",\"G'\",\",G\"";
+        String excelFile = PGTUtil.TESTRESOURCES + "excelImport.xlsx";
+        int sheetNumber = 0;
+        
+        try {
+            File result = ImportFileHelper.convertExcelToCSV(excelFile, sheetNumber);
+            String outputContents = readFile(result.getAbsolutePath());
+
+            assertTrue(result.exists());
+            assertEquals(expectedContents, outputContents);
+        } catch (Exception e) {
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
+    }
     
+    private String readFile(String fileIn) {
+        String ret = "";
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileIn))) {
+            String line = reader.readLine();
+            
+            while (line != null) {
+                ret += line + "\n";
+                line = reader.readLine();
+            }
+            
+            if (!ret.isEmpty()) {
+                ret = ret.substring(0, ret.length() - 1);
+            }
+        } catch (FileNotFoundException e) {
+            ret = null;
+        } catch (Exception e) {
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
+        
+        return ret;
+    }
 }

@@ -171,42 +171,6 @@ public final class NonModularBridge {
     }
 
     /**
-     * Creates temporary csv file from excel sheet
-     * @param excelFile path of excel file to convert to csv
-     * @param sheetNumber sheet number to convert
-     * @return csv file temp path to created csv file
-     * @throws IOException
-     */
-    public static File excelToCvs(String excelFile, int sheetNumber)
-            throws IOException {
-        
-        File bridge = NonModularBridge.getNonModularBridgeLocation();
-        File tmpTarget = File.createTempFile("PolyGlotTmp", ".csv",
-            PGTUtil.getTempDirectory().toFile());
-        tmpTarget.deleteOnExit();
-        
-        String[] command = {
-            getJavaExecutablePath(),
-            PGTUtil.JAVA_JAR_ARG,
-            bridge.getAbsolutePath(),
-            PGTUtil.JAVA_EXCELTOCVSCOMMAND,
-            excelFile,
-            tmpTarget.getAbsolutePath(),
-            Integer.toString(sheetNumber),
-        };
-        
-        String[] result = DesktopIOHandler.getInstance().runAtConsole(command, false);
-        
-        if (!result[1].isEmpty() || !tmpTarget.exists()) {
-            throw new IOException(result[1]);
-        } else if (result[0].toLowerCase().contains("error") || result[0].toLowerCase().contains("exception")) {
-            throw new IOException("Unable to import excel: " + result[0]);
-        }
-        
-        return tmpTarget;
-    }
-
-    /**
      * Exports a dictionary to an excel file (externally facing)
      *
      * @param fileName Filename to export to

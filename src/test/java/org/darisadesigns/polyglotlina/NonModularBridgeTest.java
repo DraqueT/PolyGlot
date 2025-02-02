@@ -30,6 +30,7 @@ import java.util.Arrays;
 import javax.xml.parsers.ParserConfigurationException;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.NonModularBridge;
+import org.darisadesigns.polyglotlina.Desktop.ImportFileHelper;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,7 @@ import org.junit.jupiter.api.Test;
  */
 public class NonModularBridgeTest {
     private DictCore core;
-    private static final String OUTPUT = "testFile";
+    private static final String OUTPUT = "testFile.xls";
     
     public NonModularBridgeTest() {
         core = DummyCore.newCore();
@@ -107,34 +108,6 @@ public class NonModularBridgeTest {
             fail(e);
         }
     }
-
-    @Test
-    public void testExcelToCvs() {
-        System.out.println("NonModularBridgeTest.excelToCvs");
-        String expectedContents = "\"COL 1\",\"COL 2\",\"COL 3\"\n" +
-            "\"A\",\"AA\",\"AAA\"\n" +
-            "\"B\"\n" +
-            "\"C\",\"CC\",\"CCC\",\"CCCC\"\n" +
-            "\"E\",,\"EEE\"\n" +
-            "\"F\",\"F\n" +
-            "F\",\"F\n" +
-            "F\n" +
-            "F\"\n" +
-            "\"\"\"G\"\"\",\"G'\",\",G\"";
-        String excelFile = PGTUtil.TESTRESOURCES + "excelImport.xlsx";
-        int sheetNumber = 0;
-        
-        try {
-            File result = NonModularBridge.excelToCvs(excelFile, sheetNumber);
-            String outputContents = readFile(result.getAbsolutePath());
-
-            assertTrue(result.exists());
-            assertEquals(outputContents, expectedContents);
-        } catch (IOException e) {
-            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
-            fail(e);
-        }
-    }
  
     @Test
     public void testExportExcelDict() {
@@ -149,7 +122,7 @@ public class NonModularBridgeTest {
 
             for (int i = 0 ; i < 6; i++) {
                 File expectedFile = new File(PGTUtil.TESTRESOURCES + "excel_export_check_" + i + ".csv");
-                File result = NonModularBridge.excelToCvs(tmpExcel.getAbsolutePath(), i);
+                File result = ImportFileHelper.convertExcelToCSV(tmpExcel.getAbsolutePath(), i);
                 
                 // On modification of bridge functionality, check output, then uncomment below to update test files if good
 //                expectedFile.delete();
@@ -176,35 +149,14 @@ public class NonModularBridgeTest {
         } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
+        } catch (Exception e) {
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
         }
     }
     
     private void cleanup() {
         new File(OUTPUT).delete();
         core = DummyCore.newCore();
-    }
-    
-    private String readFile(String fileIn) {
-        String ret = "";
-        
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileIn))) {
-            String line = reader.readLine();
-            
-            while (line != null) {
-                ret += line + "\n";
-                line = reader.readLine();
-            }
-            
-            if (!ret.isEmpty()) {
-                ret = ret.substring(0, ret.length() - 1);
-            }
-        } catch (FileNotFoundException e) {
-            ret = null;
-        } catch (Exception e) {
-            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
-            fail(e);
-        }
-        
-        return ret;
     }
 }
