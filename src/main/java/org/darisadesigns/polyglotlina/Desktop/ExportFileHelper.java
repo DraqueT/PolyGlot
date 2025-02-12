@@ -107,6 +107,7 @@ public class ExportFileHelper {
         for (int i = 0; i < chapOrderStr.length; i++) {
             chapOrder[i] = Integer.parseInt(chapOrderStr[i]);
         }
+        int pageNum = 1;
 
         // setup PDF
         PDDocument doc = new PDDocument();
@@ -158,6 +159,7 @@ public class ExportFileHelper {
         }
         stream.setLeading(14.5f);
         addCenteredText(stream, page, localFont, 36, 36f, title);
+        addPageNumber(titleText, pageNum, stream, page.getMediaBox(), localFont);
 
         if (subTitleText.length() != 0) {
             yStart -= 100;
@@ -199,6 +201,8 @@ public class ExportFileHelper {
             stream.setFont(localFont, 20);
             stream.showText(foreward);
 
+            pageNum += 1;
+            addPageNumber(titleText, pageNum + 1, stream, page.getMediaBox(), localFont);
             stream.endText();
             stream.close();
 
@@ -316,6 +320,10 @@ public class ExportFileHelper {
             page.getAnnotations().add(links.get(i));
         }
 
+        stream.beginText();
+        pageNum += 1;
+        addPageNumber(titleText, 2, stream, page.getMediaBox(), localFont);
+
         stream.close();
         // end table of contents
 
@@ -334,6 +342,8 @@ public class ExportFileHelper {
         addCenteredText(stream, page, localFont, 20, 20f,
             "PolyGlot Created by Draque Thompson");
 
+        pageNum += 1;
+        addPageNumber(titleText, pageNum, stream, page.getMediaBox(), localFont);
         stream.endText();
         stream.close();
         // end final page
@@ -379,6 +389,24 @@ public class ExportFileHelper {
             lines.add(currentLine.toString().trim()); // add the last line
         }
         return lines;
+    }
+
+    private static void addPageNumber(String name, int page, PDPageContentStream stream,
+        PDRectangle mediaBox, PDFont font) throws IOException
+    {
+        // reset state to make logic simple
+        stream.endText();
+        stream.beginText();
+        stream.setFont(font, 12);
+        
+        // language on the left side
+        stream.newLineAtOffset(20, 10);
+        stream.showText(name);
+        stream.endText();
+        stream.beginText();
+        stream.setFont(font, 12);
+        stream.newLineAtOffset(mediaBox.getWidth() - 50, 10);
+        stream.showText("Page " + page);
     }
 
     /**
