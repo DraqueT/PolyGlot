@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2020, Draque Thompson, draquemail@gmail.com
+ * Copyright (c) 2014-2025, Draque Thompson, draquemail@gmail.com
  * All rights reserved.
  *
  * Licensed under: MIT Licence
@@ -20,11 +20,14 @@
 package org.darisadesigns.polyglotlina.Desktop;
 
 import java.io.File;
+import java.io.FileInputStream;
+
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.Nodes.WordClassValue;
 import org.darisadesigns.polyglotlina.Nodes.WordClass;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.Charset;
@@ -33,6 +36,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.csv.CSVFormat;
@@ -40,6 +44,9 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.*;
 
 public class ImportFileHelper {
 
@@ -106,9 +113,90 @@ public class ImportFileHelper {
         }
     }
 
+    /**
+     * Converts an excel spreadsheet to a temporary CSV file
+     * @param inputFile Excel to convert
+     * @param sheetNum Sheet to convert
+     * @return File reference to temp file containing CSV data
+     * @throws Exception
+     */
+    public static File convertExcelToCSV(String inputFile, int sheetNum) throws Exception {
+        File csvFile = File.createTempFile("PolyGlotTmp", ".csv",
+            PGTUtil.getTempDirectory().toFile());
+        csvFile.deleteOnExit();
+
+        try {
+            FileInputStream fis = new FileInputStream(inputFile);
+            Workbook workbook = null;
+            StringBuffer data = new StringBuffer();
+            
+            if (inputFile.endsWith(".xlsx")) {
+                workbook = new XSSFWorkbook(fis);
+            } else if (inputFile.endsWith(".xls")) {
+                workbook = new HSSFWorkbook(fis);
+            } else {
+                fis.close();
+                throw new Exception("File not supported: " + inputFile);
+            }
+            Sheet sheet = workbook.getSheetAt(sheetNum);
+
+            // iterate over rows
+            Iterator<Row> rowIt = sheet.iterator();
+            while (rowIt.hasNext()) {
+                Row row = rowIt.next();
+                // iterate over columns
+                // don't use Iterator<Cell> as `.next()` skips over blank cells
+                int totalCells = row.getLastCellNum();
+                for (int i = 0; i < totalCells; i++) {
+                    Cell cell = row.getCell(i);
+
+                    if (cell != null) {
+                        switch (cell.getCellType()) {
+                        case BOOLEAN:
+                            data.append(cell.getBooleanCellValue());
+                            break;
+                        case NUMERIC:
+                            data.append(cell.getNumericCellValue());
+                            break;
+                        case STRING:
+                            data.append('"' + cell.getStringCellValue() + "\"");
+                            break;
+                        case BLANK:
+                            data.append("");
+                            break;
+                        case FORMULA:
+                            throw new Exception("Cannot import formulas");
+                        default:
+                            data.append(cell);
+                        }
+                    } else {
+                        data.append("");
+                    }
+                    if (i != totalCells - 1) {
+                        data.append(",");
+                    }
+                }
+                data.append('\n');
+            }
+
+            FileWriter writer = new FileWriter(csvFile.getAbsolutePath());
+            writer.write(data.toString());
+            writer.close();
+            workbook.close();
+        } catch (Exception e) {
+            throw(e);
+        }
+        return csvFile;
+    }
+
+    /**
+     * Imports lexicon from excel
+     * @param inputFile file to import
+     * @param sheetNum sheet number
+     * @throws Exception
+     */
     private void importExcel(String inputFile, int sheetNum) throws Exception {
-        File csvFile = NonModularBridge.excelToCvs(inputFile, sheetNum);
-        quoteChar = "\"";
+        File csvFile = convertExcelToCSV(inputFile, sheetNum);
         importCSV(csvFile.getAbsolutePath(), CSVFormat.EXCEL);
     }
 

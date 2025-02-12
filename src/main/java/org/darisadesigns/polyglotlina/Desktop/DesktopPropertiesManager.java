@@ -222,6 +222,7 @@ public class DesktopPropertiesManager extends PropertiesManager {
      *
      * @return the fontCon
      */
+    @Override
     public Font getFontCon() {
         // create copy so that initial font properties (such as kerning) is never lost
         Font retFont = conFont == null ? null : conFont.deriveFont((float)0.0);
