@@ -97,7 +97,7 @@ public class ConWordCollectionTest extends PTest {
     @Test
     public void testMissingLocalWordWithRequirement() {
         System.out.println("ConWordCollectionTest.testMissingLocalWordWithRequirement");
-        String expectedResult = "Local word set to mandatory.";
+        String expectedResult = "Local Lang word set to mandatory.";
         
         DictCore core = DummyCore.newCore();
         ConWord test = new ConWord();

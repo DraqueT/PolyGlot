@@ -78,7 +78,7 @@ public class CheckLanguageErrorsTest {
         
         curWord = problems[3];
         assertEquals("missing-local-noun", curWord.problemWord.getValue());
-        assertEquals("Local word set to mandatory.", curWord.description);
+        assertEquals("Local Lang word set to mandatory.", curWord.description);
     }
     
     @Test
