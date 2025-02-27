@@ -321,8 +321,6 @@ public class PGTUtil {
     public static final String JAVA_JAR = "PolyGlot_J8_Bridge.jar";
     public static final String JAVA_JAR_FOLDER = "dist";
     public static final String JAVA_PDFCOMMAND = "pdf-export";
-    public static final String JAVA_EXCELTOCVSCOMMAND = "excel-to-cvs";
-    public static final String JAVA_EXPORTTOEXCELCOMMAND = "export-to-excel";
     public static final int CHAP_ORTHOGRAPHY = 0;
     public static final int CHAP_GLOSSKEY = 1;
     public static final int CHAP_CONTOLOCAL = 2;

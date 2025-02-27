@@ -84,9 +84,9 @@ import org.darisadesigns.polyglotlina.Desktop.DesktopHelpHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopOSHandler;
 import org.darisadesigns.polyglotlina.Desktop.DesktopPropertiesManager;
+import org.darisadesigns.polyglotlina.Desktop.ExportFileHelper;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammarManager;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
-import org.darisadesigns.polyglotlina.Desktop.NonModularBridge;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
 import org.darisadesigns.polyglotlina.DictCore;
@@ -776,9 +776,9 @@ public final class ScrMainMenu extends PFrame {
                 || new DesktopInfoBox(this).actionConfirmation("Overwrite File?",
                         "File with this name and location already exists. Continue/Overwrite?")) {
             try {
-                NonModularBridge.exportExcelDict(fileName, core,
-                        new DesktopInfoBox(this).actionConfirmation("Excel Export",
-                                "Export all declensions? (Separates parts of speech into individual tabs)"));
+                ExportFileHelper.exportExcelToDict(fileName, core,
+                    new DesktopInfoBox(this).actionConfirmation("Excel Export",
+                        "Export all declensions? (Separates parts of speech into individual tabs)"));
 
                 // only prompt user to open if Desktop supported
                 if (Desktop.isDesktopSupported()) {
@@ -789,7 +789,7 @@ public final class ScrMainMenu extends PFrame {
                     new DesktopInfoBox(this).info("Export Status", "Language exported to " + fileName + ".");
                 }
             }
-            catch (IOException e) {
+            catch (Exception e) {
                 DesktopIOHandler.getInstance().writeErrorLog(e);
                 new DesktopInfoBox(this).info("Export Problem", e.getLocalizedMessage());
             }
