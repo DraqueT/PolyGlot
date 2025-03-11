@@ -4,6 +4,8 @@
 
 PolyGlot is a cross-platform [conlang](https://en.wikipedia.org/wiki/Constructed_language) construction toolkit. For details on installation, see the [Installation](#installation) section.
 
+Colaboration welcome, discussion in the official Discord: <a href="https://discord.gg/rYHHVzWkAn">https://discord.gg/rYHHVzWkAn</a>
+
 ## Features
 <p align="center">
     <img title="main-menu" src="docs/assets/Lex1.png">
