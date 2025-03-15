@@ -19,13 +19,18 @@
  */
 package org.darisadesigns.polyglotlina.Desktop;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -36,7 +41,9 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.darisadesigns.polyglotlina.WebInterface;
+import org.darisadesigns.polyglotlina.ManagersCollections.ConWordCollection;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.RomanizationManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationNode;
@@ -45,6 +52,10 @@ import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.Nodes.WordClass;
 import org.darisadesigns.polyglotlina.Nodes.WordClassValue;
+
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.data.MutableDataSet;
 
 public class ExportFileHelper {
     public ExportFileHelper() {
@@ -409,5 +420,277 @@ public class ExportFileHelper {
         ret.add(WebInterface.getTextFromHtml(conWord.getDefinition()));
 
         return ret.toArray();
+    }
+
+    // markdown -> pdf
+    public static void exportMarkdown(String target,
+        String coverImage,
+        String foreword,
+        boolean printConLocal,
+        boolean printLocalCon,
+        boolean printOrtho,
+        String subTitleText,
+        String titleText,
+        boolean printPageNumber,
+        boolean printGlossKey,
+        boolean printGrammar,
+        boolean printWordEtymologies,
+        boolean printAllConjugations,
+        boolean printPhrases,
+        String chapterOrder,
+        DictCore core) throws IOException
+    {
+        // setup
+        BufferedWriter writer = new BufferedWriter(new FileWriter(target));
+        Boolean buildForeword = foreword.length() != 0;
+        String conToLocalName = "Dictionary " + core.conLabel() +
+            " to " + core.localLabel();
+        String localToConName = "Dictionary " + core.localLabel() +
+            " to " + core.conLabel();
+        
+        // copy fonts from pgd file and re-save as local files
+        // that be loaded into html
+        // TODO change from regular file to temp file
+        DesktopIOHandler handler = DesktopIOHandler.getInstance();
+        File curFileName = new File(core.getCurFileName());
+        Boolean useConFont = false;
+        Boolean useLocalFont = false;
+        try (ZipFile zipFile = new ZipFile(curFileName)) {
+            ZipEntry fontEntry = zipFile.getEntry(PGTUtil.CON_FONT_FILE_NAME);
+            if (fontEntry != null) {
+                useConFont = true;
+                File cF = new File("conFont.ttf");
+                cF.createNewFile();
+                handler.exportConFont("conFont.ttf", core.getCurFileName());
+            }
+            fontEntry = zipFile.getEntry(PGTUtil.LOCAL_FONT_FILE_NAME);
+            if (fontEntry != null) {
+                useLocalFont = true;
+                File lF = new File("localFont.ttf");
+                lF.createNewFile();
+                handler.exportLocalFont("localFont.ttf", core.getCurFileName());
+            }
+        }
+
+        // styling
+        writer.write("<style>\n");
+        writer.write("@media print {\n");
+        writer.write("  .page=break {\n");
+        writer.write("    break-before: always;\n");
+        writer.write("  }\n");
+        writer.write("}\n");
+        if (useConFont) {
+            writer.write("@font-face {\n");
+            writer.write("  font-family: 'conFont';\n");
+            writer.write("  src: url('./conFont.ttf') format('truetype');\n");
+            writer.write("  font-weight: normal;\n");
+            writer.write("  font-style: normal;\n");
+            writer.write("}\n");
+            writer.write(".confont {\n");
+            writer.write("  font-family: 'conFont';\n");
+            writer.write("}\n");
+        } else {
+            writer.write(".confont {\n");
+            writer.write("  font-family: 'Times New Roman';\n");
+            writer.write("}\n");
+        }
+        if (useLocalFont) {
+            writer.write("@font-face {\n");
+            writer.write("  font-family: 'localFont';\n");
+            writer.write("  src: url('./localFont.ttf') format('truetype');\n");
+            writer.write("  font-weight: normal;\n");
+            writer.write("  font-style: normal;\n");
+            writer.write("}\n");
+            writer.write(".localfont {\n");
+            writer.write("  font-family: 'localFont';\n");
+            writer.write("}\n");
+        } else {
+            writer.write(".localfont {\n");
+            writer.write("  font-family: 'Times New Roman';\n");
+            writer.write("}\n");
+        }
+        writer.write("</style>\n");
+
+        String pagebreak = "<div class=\"page-break\"></div>\n\n"; // TODO does this work?
+
+        // front page
+        writer.write("<div style=\"text-align: center;\">\n");
+        writer.write("<p style=\"font-size: 36px;\">" + titleText + "</p>\n");
+        writer.write("<p style=\"font-size: 20px;\">" + subTitleText + "</p>\n");
+        String copyrightInfo = core.getPropertiesManager().getCopyrightAuthorInfo();
+        if (copyrightInfo.length() != 0) {
+            writer.write(copyrightInfo + "\n");
+        }
+        writer.write("</div>\n");
+        writer.write(pagebreak);
+
+        // table of contents
+        writer.write("## Table of Contents\n");
+        if (buildForeword) {
+            writer.write("- [Author Foreword](#author-foreword)\n");
+        }
+        if (printOrtho) {
+            writer.write("- [Orthography](#orthography)\n");
+        }
+        if (printGlossKey) {
+            writer.write("- [Gloss Key](#gloss-key)\n");
+        }
+        if (printConLocal) {
+            writer.write("- [" + conToLocalName + "](#" + 
+                conToLocalName.replace(' ', '-').toLowerCase() + ")\n");
+        }
+        if (printLocalCon) {
+            writer.write("- [" + localToConName + "](#" +
+                localToConName.replace(' ', '-').toLowerCase() + ")\n");
+        }
+        if (printPhrases) {
+            writer.write("- [Phrasebook](#phrasebook)\n");
+        }
+        if (printGrammar) {
+            writer.write("- [Grammar](#grammar)\n");
+        }
+        writer.write("\n" + pagebreak);
+
+        if (buildForeword) {
+            writer.write("## Author Foreword\n");
+            writer.write(foreword + "\n");
+            writer.write(pagebreak);
+        }
+
+        // orthography
+        if (printOrtho) {
+            writer.write("## Orthography\n");
+            writer.write("Symbols $ and ^ indicate that elements of orthography must appear at the beginning or the end of a word.\n\n");
+            // use html tables for finer grain formatting
+            writer.write("<table>\n");
+            writer.write("  <tr>\n");
+            writer.write("    <th>Character(s)</th>\n");
+            writer.write("    <th>Pronunciation</th>\n");
+            writer.write("  </tr>\n");
+            for (PronunciationNode curNode : core.getPronunciationMgr().getPronunciations()) {
+                // TODO handle '$' & '^'
+                writer.write("  <tr>\n");
+                writer.write("    <td class=\"confont\">" + curNode.getValue() + "</td>\n");
+                writer.write("    <td class=\"localfont\">" +
+                    curNode.getPronunciation() + "</td>\n");
+                writer.write("  </tr>\n");
+            }
+            writer.write("</table>\n");
+            writer.write(pagebreak);
+        }
+
+        // glossary keys
+        if (printGlossKey) {
+            writer.write("## Gloss Key\n\n");
+            // use html tables for more complicated formatting
+            writer.write("<table>\n");
+            writer.write("  <tr>\n");
+            writer.write("    <th>Part of Speech</th>\n");
+            writer.write("    <th>GLoss</th>\n");
+            writer.write("  <tr>\n");
+            for (TypeNode curType : core.getTypes().getNodes()) {
+                writer.write("  <tr>\n");
+                writer.write("    <td class=\"localfont\">" + curType.getValue() + "</td>\n");
+                writer.write("    <td class=\"localfont\">" + curType.getGloss() + "</td>\n");
+                writer.write("  </tr>\n");
+            }
+            writer.write("</table>\n");
+            writer.write(pagebreak);
+        }
+
+        // conlang to native
+        if (printConLocal) {
+            // build gloss key
+            Map<Integer, String> glossKey = new HashMap<>();
+            for (TypeNode curNode : core.getTypes().getNodes()) {
+                if (curNode.getGloss().length() == 0) {
+                    glossKey.put(curNode.getId(), curNode.getValue());
+                } else {
+                    glossKey.put(curNode.getId(), curNode.getGloss());
+                }
+            }
+
+            // do the writing stuff
+            writer.write("## " + conToLocalName + "\n");
+            String curLetter = "";
+            RomanizationManager romMgr = core.getRomManager();
+            Boolean romEnabled = romMgr.isEnabled();
+            for (ConWord curWord : core.getWordCollection().getWordNodes()) {
+                // generate header for alphabet sections
+                String firstLetter = curWord.getValue().substring(0, 1);
+                if (!curLetter.toLowerCase().equals(firstLetter)) {
+                    curLetter = firstLetter;
+                    writer.write("<h3><span class=\"confont\">" + curLetter + "</span> WORDS</h3>\n");
+                    writer.write("<span class=\"confont\">" + curWord.getLocalWord() + "</span>");
+                    writer.write("<span class=\"localfont\">");
+                    // add word type (if one exists)
+                    if (glossKey.containsKey(curWord.getWordTypeId())) {
+                        writer.write(" - " + glossKey.get(curWord.getWordTypeId()));
+                    }
+                    // add pronunciation
+                    try {
+                        String p = curWord.getPronunciation();
+                        if (p.length() != 0) {
+                            writer.write(" - " + p);
+                        }
+                    } catch(Exception e) {
+                        // why does this throw an exception???
+                    }
+                    writer.write("</span><br>\n");
+
+                    // write romanization value if active and exists
+                    if (romEnabled) {
+                        String romStr;
+                        try {
+                            romStr = romMgr.getPronunciation(curWord.getValue());
+                        } catch (Exception e) {
+                            romStr = "&lt;ERROR&gt;";
+                        }
+                        if (!romStr.isEmpty()) {
+                            writer.write("\nRoman: <i>" + romStr + "</i><br>\n");
+                        }
+                    }
+
+                    // TODO print word etymology tree if appropriate
+
+                    String txt = WebInterface.getTextFromHtml(curWord.getDefinition());
+                    if (!txt.isEmpty()) {
+                        writer.write("<p>" + txt + "</p><br>\n");
+                    }
+
+                    if (curWord.getLocalWord().length() != 0) {
+                        writer.write("Synonym(s): <span class=\"localfont\">" + curWord.getLocalWord() + "</span>\n");
+                    }
+                    writer.write("\n");
+                }
+            }
+            writer.write(pagebreak);
+        }
+
+        // native to conlang
+        if (printLocalCon) {
+            writer.write("## " + localToConName + "\n");
+            writer.write(pagebreak);
+        }
+
+        // phrasebook
+        if (printPhrases) {
+            writer.write("## Phrasebook\n");
+            writer.write(pagebreak);
+        }
+
+        // grammar
+        if (printGrammar) {
+            writer.write("## Grammar\n");
+            writer.write(pagebreak);
+        }
+        writer.close();
+    }
+
+    //
+    public static void exportPdf(String markdown, String target) {
+        MutableDataSet options = new MutableDataSet();
+        Parser parser = Parser.builder(options).build();
+        HtmlRenderer renderer = HtmlRenderer.builder(options).build();
     }
 }
