@@ -14,6 +14,10 @@ module org.darisadesigns.polyglotlina.polyglot {
     requires org.apache.poi.poi;
     requires org.apache.poi.ooxml;
     requires org.jsoup;
+    requires flexmark.util.data;
+    requires flexmark;
+    requires flexmark.util.ast;
+    requires flexmark.pdf.converter;
     
     exports org.darisadesigns.polyglotlina;
     exports org.darisadesigns.polyglotlina.CustomControls;

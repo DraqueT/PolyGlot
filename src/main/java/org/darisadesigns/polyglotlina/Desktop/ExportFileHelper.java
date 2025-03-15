@@ -19,13 +19,22 @@
  */
 package org.darisadesigns.polyglotlina.Desktop;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -36,7 +45,12 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.darisadesigns.polyglotlina.WebInterface;
+import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
+import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.EtymologyManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.PropertiesManager;
+import org.darisadesigns.polyglotlina.ManagersCollections.RomanizationManager;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.Nodes.ConjugationNode;
@@ -46,7 +60,15 @@ import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.Nodes.WordClass;
 import org.darisadesigns.polyglotlina.Nodes.WordClassValue;
 
+import com.vladsch.flexmark.util.ast.Node;
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.pdf.converter.PdfConverterExtension;
+import com.vladsch.flexmark.util.data.MutableDataSet;
+
 public class ExportFileHelper {
+    // HTML page breaks. TODO does this work?
+    private static final String pagebreak = "<div class=\"page-break\"></div>\n\n";
     public ExportFileHelper() {
         //
     }
@@ -408,5 +430,426 @@ public class ExportFileHelper {
         ret.add(WebInterface.getTextFromHtml(conWord.getDefinition()));
 
         return ret.toArray();
+    }
+
+    // Markdown/HTML generation helper functions
+    private static void writeConLocal(BufferedWriter writer, DictCore core, String conToLocalName) throws IOException
+    {
+        // build gloss key
+        Map<Integer, String> glossKey = new HashMap<>();
+        for (TypeNode curNode : core.getTypes().getNodes()) {
+            if (curNode.getGloss().length() == 0) {
+                glossKey.put(curNode.getId(), curNode.getValue());
+            } else {
+                glossKey.put(curNode.getId(), curNode.getGloss());
+            }
+        }
+
+        // do the writing stuff
+        writer.write("## " + conToLocalName + "\n");
+        String curLetter = "";
+        EtymologyManager etyMgr = core.getEtymologyManager();
+        RomanizationManager romMgr = core.getRomManager();
+        Boolean romEnabled = romMgr.isEnabled();
+        for (ConWord curWord : core.getWordCollection().getWordNodes()) {
+            // generate header for alphabet sections
+            String firstLetter = curWord.getValue().substring(0, 1);
+            if (!curLetter.toLowerCase().equals(firstLetter)) {
+                if (curLetter != "") {
+                    writer.write("</ul>\n");
+                }
+                curLetter = firstLetter;
+                writer.write("<h3><span class=\"confont\">" + curLetter + "</span> WORDS</h3><ul>\n");
+            }
+            writer.write("<li><span class=\"confont\">" + curWord.getLocalWord() + "</span>");
+            writer.write("<span class=\"confont\">");
+            // add word type (if one exists)
+            if (glossKey.containsKey(curWord.getWordTypeId())) {
+                writer.write(" - " + glossKey.get(curWord.getWordTypeId()));
+            }
+            // add pronunciation
+            try {
+                String p = curWord.getPronunciation();
+                if (p.length() != 0) {
+                    writer.write(" - " + p);
+                }
+            } catch(Exception e) {
+                // why does this throw an exception???
+            }
+            writer.write("</span><br>\n");
+
+            // write romanization value if active and exists
+            if (romEnabled) {
+                String romStr;
+                try {
+                    romStr = romMgr.getPronunciation(curWord.getValue());
+                } catch (Exception e) {
+                    romStr = "&lt;ERROR&gt;";
+                }
+                if (!romStr.isEmpty()) {
+                    writer.write("Roman: <i>" + romStr + "</i><br>\n");
+                }
+            }
+
+            // TODO print word etymology tree if appropriate
+            //if (printWordEtymologies && etyMgr.)
+
+            String txt = WebInterface.getTextFromHtml(curWord.getDefinition());
+            if (!txt.isEmpty()) {
+                writer.write("<p>" + txt + "</p><br>\n");
+            }
+
+            if (curWord.getLocalWord().length() != 0) {
+                writer.write("Synonym(s): <span class=\"localfont\">" + curWord.getLocalWord() + "</span>\n");
+            }
+            writer.write("</li>\n");
+        }
+        writer.write("</ul>\n");
+        writer.write(pagebreak);
+    }
+
+    private static void writePhrases(BufferedWriter writer, DictCore core) throws IOException {
+        writer.write("## Phrasebook\n");
+        writer.write(pagebreak);
+    }
+
+    private static void writeGrammar(BufferedWriter writer, DictCore core) throws IOException {
+        writer.write("## Grammar\n");
+        PropertiesManager pMgr = core.getPropertiesManager();
+        for (GrammarChapNode chap : core.getGrammarManager().getChapters()) {
+            for (int i = 0; i < chap.getChildCount(); ++i) {
+                GrammarSectionNode curSec = chap.getChild(i);
+                writer.write("### " + curSec.getName() + "\n\n");
+
+                for (Entry<String, PFontInfo> node : FormattedTextHelper.getSectionTextFontSpecific(curSec.getSectionText(), core)) {
+                    PFontInfo info = node.getValue();
+                    String text = node.getKey();
+                    if (info.awtFont.equals(pMgr.getFontCon())) {
+                        writer.write("<span class=\"confont\">" + text + "</span>");
+                    } else {
+                        writer.write("<span class=\"localfont\">"
+                            + text.replace("\n", "<br>") + "</span>");
+                    }
+                }
+                writer.write("\n\n");
+            }
+        }
+        writer.write(pagebreak);
+    }
+
+    /**
+     * 
+     * @param target
+     * @param coverImage
+     * @param foreword
+     * @param printConLocal
+     * @param printLocalCon
+     * @param printOrtho
+     * @param subTitleText
+     * @param titleText
+     * @param printPageNumber
+     * @param printGlossKey
+     * @param printGrammar
+     * @param printWordEtymologies
+     * @param printAllConjugations
+     * @param printPhrases
+     * @param chapterOrder
+     * @param core
+     * @return Path to the generated temp file
+     * @throws IOException
+     */
+    public static File exportMarkdown(String target,
+        String coverImage,
+        String foreword,
+        boolean printConLocal,
+        boolean printLocalCon,
+        boolean printOrtho,
+        String subTitleText,
+        String titleText,
+        boolean printPageNumber,
+        boolean printGlossKey,
+        boolean printGrammar,
+        boolean printWordEtymologies,
+        boolean printAllConjugations,
+        boolean printPhrases,
+        String chapterOrder,
+        DictCore core) throws IOException
+    {
+        // setup
+        File targetFile = File.createTempFile("lang", ".md",
+            PGTUtil.getTempDirectory().toFile());
+        targetFile.deleteOnExit();
+        BufferedWriter writer = new BufferedWriter(new FileWriter(targetFile));
+        Boolean buildForeword = foreword.length() != 0;
+        String conToLocalName = "Dictionary " + core.conLabel() +
+            " to " + core.localLabel();
+        String localToConName = "Dictionary " + core.localLabel() +
+            " to " + core.conLabel();
+        
+        // copy fonts from pgd file and re-save as local files
+        // that be loaded into html
+        // TODO change from regular file to temp file
+        DesktopIOHandler handler = DesktopIOHandler.getInstance();
+        File curFileName = new File(core.getCurFileName());
+        Boolean useConFont = false;
+        Boolean useLocalFont = false;
+        File cF = null;
+        File lF = null;
+        try (ZipFile zipFile = new ZipFile(curFileName)) {
+            ZipEntry fontEntry = zipFile.getEntry(PGTUtil.CON_FONT_FILE_NAME);
+            if (fontEntry != null) {
+                useConFont = true;
+                cF = File.createTempFile("conFont", ".ttf",
+                    PGTUtil.getTempDirectory().toFile());
+                cF.deleteOnExit();
+                handler.exportConFont(cF.getAbsolutePath(), core.getCurFileName());
+            }
+            fontEntry = zipFile.getEntry(PGTUtil.LOCAL_FONT_FILE_NAME);
+            if (fontEntry != null) {
+                useLocalFont = true;
+                lF = File.createTempFile("localFont", ".ttf",
+                    PGTUtil.getTempDirectory().toFile());
+                lF.deleteOnExit();
+                handler.exportLocalFont(lF.getAbsolutePath(), core.getCurFileName());
+            }
+        }
+
+        // styling
+        writer.write("<style>\n");
+        writer.write(".page-break-before {\n");
+        writer.write("  break-before: always;\n");
+        writer.write("}\n");
+        // the `file:///` protocol only allows for usage of `/`
+        // windows paths need to be modified to use that instead of the usual `\`
+        if (useConFont) {
+            writer.write("@font-face {\n");
+            writer.write("  font-family: 'conFont';\n");
+            writer.write("  src: url('file:///" + cF.toString().replace('\\', '/') + "') format('truetype');\n");
+            writer.write("  font-weight: normal;\n");
+            writer.write("  font-style: normal;\n");
+            writer.write("}\n");
+            writer.write(".confont {\n");
+            writer.write("  font-family: 'conFont';\n");
+            writer.write("  font-size: 20px;\n");
+            writer.write("}\n");
+        } else {
+            writer.write(".confont {\n");
+            writer.write("  font-family: 'Times New Roman';\n");
+            writer.write("  font-size: 20px;\n");
+            writer.write("}\n");
+        }
+        if (useLocalFont) {
+            writer.write("@font-face {\n");
+            writer.write("  font-family: 'localFont';\n");
+            writer.write("  src: url('file:///" + lF.toString().replace('\\', '/') + "') format('truetype');\n");
+            writer.write("  font-weight: normal;\n");
+            writer.write("  font-style: normal;\n");
+            writer.write("}\n");
+            writer.write(".localfont {\n");
+            writer.write("  font-family: 'localFont';\n");
+            writer.write("  font-size: 20px;\n");
+            writer.write("}\n");
+        } else {
+            writer.write(".localfont {\n");
+            writer.write("  font-family: 'Times New Roman';\n");
+            writer.write("  font-size: 20px;\n");
+            writer.write("}\n");
+        }
+        // CSS3 supports columns for unordered lists!
+        // using for dictionaries
+        writer.write("ul {\n");
+        writer.write("  columns: 2;\n");
+        writer.write("  -webkit-columns: 2;\n");
+        writer.write("  -moz-columns: 2;\n");
+        writer.write("}\n");
+        writer.write("</style>\n");
+
+        // front page
+        writer.write("<div style=\"text-align: center;\">\n");
+        writer.write("<p style=\"font-size: 36px;\">" + titleText + "</p>\n");
+        writer.write("<p style=\"font-size: 20px;\">" + subTitleText + "</p>\n");
+        String copyrightInfo = core.getPropertiesManager().getCopyrightAuthorInfo();
+        if (copyrightInfo.length() != 0) {
+            writer.write(copyrightInfo + "\n");
+        }
+        writer.write("</div>\n");
+        writer.write(pagebreak);
+
+        // table of contents
+        writer.write("## Table of Contents\n");
+        if (buildForeword) {
+            writer.write("- [Author Foreword](#author-foreword)\n");
+        }
+        if (printOrtho) {
+            writer.write("- [Orthography](#orthography)\n");
+        }
+        if (printGlossKey) {
+            writer.write("- [Gloss Key](#gloss-key)\n");
+        }
+        if (printConLocal) {
+            writer.write("- [" + conToLocalName + "](#" + 
+                conToLocalName.replace(' ', '-').toLowerCase() + ")\n");
+        }
+        if (printLocalCon) {
+            writer.write("- [" + localToConName + "](#" +
+                localToConName.replace(' ', '-').toLowerCase() + ")\n");
+        }
+        if (printPhrases) {
+            writer.write("- [Phrasebook](#phrasebook)\n");
+        }
+        if (printGrammar) {
+            writer.write("- [Grammar](#grammar)\n");
+        }
+        writer.write("\n" + pagebreak);
+
+        if (buildForeword) {
+            writer.write("## Author Foreword\n");
+            writer.write(foreword + "\n");
+            writer.write(pagebreak);
+        }
+
+        // orthography
+        if (printOrtho) {
+            writer.write("## Orthography\n");
+            writer.write("Symbols $ and ^ indicate that elements of orthography must appear at the beginning or the end of a word.\n\n");
+            // use html tables for finer grain formatting
+            writer.write("<table>\n");
+            writer.write("  <tr>\n");
+            writer.write("    <th>Character(s)</th>\n");
+            writer.write("    <th>Pronunciation</th>\n");
+            writer.write("  </tr>\n");
+            for (PronunciationNode curNode : core.getPronunciationMgr().getPronunciations()) {
+                // TODO handle '$' & '^'
+                writer.write("  <tr>\n");
+                writer.write("    <td class=\"confont\">" + curNode.getValue() + "</td>\n");
+                writer.write("    <td class=\"localfont\">" +
+                    curNode.getPronunciation() + "</td>\n");
+                writer.write("  </tr>\n");
+            }
+            writer.write("</table>\n");
+            writer.write(pagebreak);
+        }
+
+        // glossary keys
+        if (printGlossKey) {
+            writer.write("## Gloss Key\n\n");
+            // use html tables for more complicated formatting
+            writer.write("<table>\n");
+            writer.write("  <tr>\n");
+            writer.write("    <th>Part of Speech</th>\n");
+            writer.write("    <th>Gloss</th>\n");
+            writer.write("  <tr>\n");
+            for (TypeNode curType : core.getTypes().getNodes()) {
+                writer.write("  <tr>\n");
+                writer.write("    <td class=\"localfont\">" + curType.getValue() + "</td>\n");
+                writer.write("    <td class=\"localfont\">" + curType.getGloss() + "</td>\n");
+                writer.write("  </tr>\n");
+            }
+            writer.write("</table>\n");
+            writer.write(pagebreak);
+        }
+
+        // conlang to native
+        if (printConLocal) {
+            writeConLocal(writer, core, conToLocalName);
+        }
+
+        // native to conlang
+        if (printLocalCon) {
+            writer.write("## " + localToConName + "\n");
+            writer.write(pagebreak);
+        }
+
+        // phrasebook
+        if (printPhrases) {
+            writePhrases(writer, core);
+        }
+
+        // grammar
+        if (printGrammar) {
+            writeGrammar(writer, core);
+        }
+        writer.close();
+
+        return targetFile;
+    }
+
+    /**
+     * Returns target from file
+     * @param target - filepath of desired target
+     * @return stripped name
+     * /a/b.txt -> b
+     * cool.abba.file -> cool.abba
+     */
+    private static String getBaseTargetName(String target) {
+        if (target == null || target.isEmpty()) {
+            return "";
+        }
+        int dot = target.lastIndexOf('.');
+        int sep = Math.max(target.lastIndexOf('/'), target.lastIndexOf("\\"));
+
+        if (dot == -1) {
+            // no extension
+            if (sep == -1) {
+                // no separator
+                return target;
+            } else {
+                // has separator
+                return target.substring(sep + 1);
+            }
+        } else {
+            // has extension
+            if (sep == -1 || dot > sep) {
+                // extension is part of filename (no sep or dot after sep)
+                return target.substring(0, dot);
+            } else {
+                // extension after separator
+                return target.substring(sep + 1, dot);
+            }
+        }
+    }
+
+    //
+    public static void exportPdf(String target,
+        String coverImage,
+        String foreword,
+        boolean printConLocal,
+        boolean printLocalCon,
+        boolean printOrtho,
+        String subTitleText,
+        String titleText,
+        boolean printPageNumber,
+        boolean printGlossKey,
+        boolean printGrammar,
+        boolean printWordEtymologies,
+        boolean printAllConjugations,
+        boolean printPhrases,
+        String chapterOrder,
+        DictCore core) throws IOException
+    {
+        // target handling
+        File langFile = exportMarkdown(target, coverImage, foreword,
+            printConLocal, printLocalCon, printOrtho,
+            subTitleText, titleText, printPageNumber,
+            printGlossKey, printGrammar, printWordEtymologies,
+            printAllConjugations, printPhrases, chapterOrder,
+            core);
+        
+        // flexmark utilities
+        MutableDataSet options = new MutableDataSet();
+        options.set(HtmlRenderer.GENERATE_HEADER_ID, true); // enable links to sections
+        //options.set(PdfConverterExtension.DEFAULT_TEXT_DIRECTION,
+        //    PdfRendererBuilder.TextDirection.LEFT_TO_RIGHT);
+        Parser parser = Parser.builder(options).build();
+        HtmlRenderer renderer = HtmlRenderer.builder(options).build();
+
+        // generate html from markdown file
+        String content = Files.readString(langFile.toPath(), StandardCharsets.UTF_8);
+        Node document = parser.parse(content);
+        String html = renderer.render(document);
+
+        OutputStream oS = new FileOutputStream(target);
+        PdfConverterExtension.exportToPdf(oS,
+            html, "", options);
     }
 }
