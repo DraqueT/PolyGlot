@@ -40,6 +40,7 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.PList;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextPane;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
+import org.darisadesigns.polyglotlina.Desktop.ExportFileHelper;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopOptionsManager;
 import org.darisadesigns.polyglotlina.Desktop.NonModularBridge;
 import org.darisadesigns.polyglotlina.Desktop.PGTUtil;
@@ -506,7 +507,7 @@ public class ScrPrintToPDF extends PDialog {
     private void btnSelectSavePathActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectSavePathActionPerformed
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Save Language");
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("PDF Documents", "pdf");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("PDF, Markdown", "pdf", "md");
         String fileName = core.getCurFileName().replaceAll(".pgd", ".pdf");
         chooser.setFileFilter(filter);
         chooser.setApproveButtonText("Save");
@@ -514,9 +515,9 @@ public class ScrPrintToPDF extends PDialog {
 
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             fileName = chooser.getSelectedFile().getAbsolutePath();
-            if (!fileName.contains(".pdf")) {
-                fileName += ".pdf";
-            }            
+            if (!fileName.contains(".pdf") && !fileName.contains(".md")) {
+                fileName += ".pdf"; // default to pdf
+            }
             txtSavePath.setText(fileName);
         }
     }//GEN-LAST:event_btnSelectSavePathActionPerformed
@@ -547,22 +548,22 @@ public class ScrPrintToPDF extends PDialog {
                 new DesktopInfoBox(this).warning("Etymology Problem", message);
             }
             
-            NonModularBridge.exportPdf(txtSavePath.getText(), 
-                    txtImageLocation.getText(), 
-                    ((PTextPane)txtForeword).getNakedText(), 
-                    chkConLocal.isSelected(), 
-                    chkLocalCon.isSelected(), 
-                    chkOrtho.isSelected(), 
-                    txtSubtitle.getText(), 
-                    txtTitle.getText(), 
-                    chkPageNum.isSelected(), 
-                    chkGloss.isSelected(), 
-                    chkGrammar.isSelected(), 
-                    chkEtymology.isSelected(), 
-                    chkPrintConjugations.isSelected(),
-                    chkPrintPhrases.isSelected(),
-                    getChapterOrder(),
-                    core);
+            ExportFileHelper.exportMarkdown(txtSavePath.getText(),
+                txtImageLocation.getText(),
+                ((PTextPane)txtForeword).getNakedText(),
+                chkConLocal.isSelected(),
+                chkLocalCon.isSelected(),
+                chkOrtho.isSelected(),
+                txtSubtitle.getText(),
+                txtTitle.getText(),
+                chkPageNum.isSelected(),
+                chkGloss.isSelected(),
+                chkGrammar.isSelected(),
+                chkEtymology.isSelected(),
+                chkPrintConjugations.isSelected(),
+                chkPrintPhrases.isSelected(),
+                getChapterOrder(),
+                core);
 
             if (Desktop.isDesktopSupported()) {
                 if (new DesktopInfoBox(this).yesNoCancel("Print Success", "PDF successfully printed. Open file now?") 

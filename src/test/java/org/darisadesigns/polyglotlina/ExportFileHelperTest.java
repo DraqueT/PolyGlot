@@ -95,4 +95,32 @@ public class ExportFileHelperTest {
             fail(e);
         }
     }
+
+    @Test
+    public void testExportPdf() {
+        System.out.println("ExportFileHelperTest.testExportPdf");
+        core.getPropertiesManager().setCopyrightAuthorInfo("Copyright testing");
+        try {
+            ExportFileHelper.exportMarkdown(
+                "test.md", 
+                "", 
+                "this is a test", 
+                false, 
+                false, 
+                true,
+                "Example Sub-Title",
+                "Example Title", 
+                false, 
+                false, 
+                false, 
+                false, 
+                false, 
+                false,
+                "0,1,2,3,4,5",
+                core);
+        } catch (IOException e) {
+            DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
+            fail(e);
+        }
+    }
 }
