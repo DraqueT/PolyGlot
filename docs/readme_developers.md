@@ -102,6 +102,29 @@ Execute to run the flatpak version of PolyGlot.
 flatpak run io.github.DraqueT.PolyGlot
 ```
 
+## MacOS Signing Process
+If you know nothing about developing for MacOS:
+
+- Read the documentation
+- Make sure to grab a `Developer ID Application` certificate
+- Familiarize yourself with the `xcrun` command
+  - submit for notarization
+  - get error logs for when it fails
+  - check status of submissions
+
+### Build and Sign
+- `python build_image.py --release --copyDestination "." --mac_sign_identity "Developer ID Application: <YOUR NAME> (<HASH>)"`
+- `xcrun submit Release/PolyGlotX.Y.Z.dmg --keychain-profile "<YOUR PROFILE>" --wait`
+- `xcrun stapler staple Release/PolyGlotX.Y.Z.dmg`
+
+If all of the following steps succeeded, then the installer is ready for distribution. 
+   
+### Notes
+- We use `codesign` because we use the older DMG disk image format
+  - this is also why we reuse the same certificate when signing
+  - most of the documentation talks about `productsign` and `productbuild`, which is used for PKG installers. not for us
+- `syspolicy_check` is recommended over `spctl`, but the only true way to test the installer to install on a separate, clean install of MacOS
+
 ## OPTIONAL STEPS TO BUILDING THE NON MODULAR BRIDGE
 So. Some parts of PolyGlot rely on libraries that are pretty fundamentally rooted in Java 8. This was a bummer to deal with. Hopefully they will be modularized in the future and I can get rid of this hack, but for now, this is unfortunately how it is. Users WILL have to have some version of Java installed on their machine to use these features. The include: PDF Generation, Import from Excel, Export to Excel. If you want to modify this functionality, follow these steps.
 
