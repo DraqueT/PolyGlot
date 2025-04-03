@@ -120,6 +120,7 @@ public abstract class PFrame extends JFrame implements FocusListener {
         } else {
             frameState = -1;
         }
+        PolyGlot.getPolyGlot().getOptionsManager().setMaximized(frameState == Frame.MAXIMIZED_BOTH);
     }
 
     /**
