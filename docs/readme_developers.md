@@ -4,7 +4,7 @@ If you're looking to work on PolyGlot independently or to contribute, here's how
 Note: GUI elements were built with the NetBeans GUI Builder.
 
 ## Dependencies
-- Java 17 or higher
+- Java 21. Java 17 also works
 - Maven 3.8.1 or higher
 - Python 3
 - An IDE of your choice:
@@ -71,7 +71,7 @@ Linux Debian Setup
 
 Linux Fedora Setup
 >- your system might not have the java jmods package installed for your distro. Use `dnf search jmods` to search for the package name.
->   - e.g. `java-17-openjdk-jmods.aarch64`
+>   - e.g. `java-21-openjdk-jmods.aarch64`
 
 
 4) In a terminal, enter `python build_image.py` in PolyGlot's base directory
