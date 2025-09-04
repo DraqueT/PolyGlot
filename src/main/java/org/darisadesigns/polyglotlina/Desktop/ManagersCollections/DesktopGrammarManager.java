@@ -45,7 +45,6 @@ public class DesktopGrammarManager extends GrammarManager {
         buffer = new DesktopGrammarChapNode(this);
     }
     
-    @SuppressWarnings("deprecation")
     @Override
     public DesktopGrammarChapNode[] getChapters() {
         
