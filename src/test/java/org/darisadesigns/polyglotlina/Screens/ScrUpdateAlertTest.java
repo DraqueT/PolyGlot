@@ -22,6 +22,8 @@ package org.darisadesigns.polyglotlina.Screens;
 import TestResources.DummyCore;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import org.darisadesigns.polyglotlina.PGTUtil;
@@ -70,10 +72,13 @@ public class ScrUpdateAlertTest {
     
     private boolean netConnected() {
         try {
-            URL url = new URL("http://www.google.com");
+            URI google = new URI("http://www.google.com");
+            URL url = google.toURL();
             URLConnection connection = url.openConnection();
             connection.connect();
         } catch (IOException e) {
+            return false;
+        } catch (URISyntaxException e) {
             return false;
         }
         

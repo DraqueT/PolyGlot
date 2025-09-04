@@ -30,6 +30,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
@@ -497,12 +499,17 @@ public class PChatGptInterface {
         COMPLETION_ADDRESS_LOOKUP = new HashMap<>();
         
         try {
-            COMPLETION_ADDRESS_LOOKUP.put("gpt", new URL("https://api.openai.com/v1/chat/completions"));
-            COMPLETION_ADDRESS_LOOKUP.put("get_models", new URL("https://api.openai.com/v1/models"));
+            URI gpturi = new URI("https://api.openai.com/v1/chat/completions");
+            COMPLETION_ADDRESS_LOOKUP.put("gpt", gpturi.toURL());
+            URI gptmodelsuri = new URI("https://api.openai.com/v1/models");
+            COMPLETION_ADDRESS_LOOKUP.put("get_models", gptmodelsuri.toURL());
         }
         catch (MalformedURLException e) {
             PolyGlot.getPolyGlot().getOSHandler().getInfoBox().error("PolyGlot Error", "Malformed URL: Unable to initialize GPT window.");
             PolyGlot.getPolyGlot().getOSHandler().getIOHandler().writeErrorLog(e);
+        }
+        catch (URISyntaxException e) {
+            PolyGlot.getPolyGlot().getOSHandler().getInfoBox().error("PolyGlot Error", "Malformed URI: Unable to initialize GPT window.");
         }
     }
 }

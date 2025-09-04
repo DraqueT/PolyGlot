@@ -585,7 +585,7 @@ public class PGTUtil {
         }
         Thread thread = Thread.currentThread();
         StackTraceElement[] stackTrace = thread.getStackTrace();
-        writeLockThreadId = thread.getId();
+        writeLockThreadId = thread.threadId();
         writeLock = stackTrace[2]; // 0=getStackTrace, 1=self, 2=prior method
         
     }
@@ -606,10 +606,10 @@ public class PGTUtil {
         
         if (!currentCall.getClass().equals(writeLock.getClass()) 
                 || !currentCall.getMethodName().equals(writeLock.getMethodName())
-                || thread.getId() != writeLockThreadId) {
+                || thread.threadId() != writeLockThreadId) {
             throw new IOException("Writelock must be claimed and released from within the same method. "
                     + "Called from: " + writeLock.getClassName() + "." + writeLock.getMethodName() + " Thread: " + writeLockThreadId
-                    + " Released from: " + currentCall.getClassName() + "." + currentCall.getMethodName() + " Thread: " + thread.getId());
+                    + " Released from: " + currentCall.getClassName() + "." + currentCall.getMethodName() + " Thread: " + thread.threadId());
         }
         
         writeLock = null;
