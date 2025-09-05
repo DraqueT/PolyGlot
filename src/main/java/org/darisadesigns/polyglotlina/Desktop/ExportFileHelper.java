@@ -678,13 +678,13 @@ public class ExportFileHelper {
         // table of contents
         writer.write("## Table of Contents\n");
         if (buildForeword) {
-            writer.write("- [Author Foreword](#author-foreword)\n");
+            writer.write("- <a href=\"#foreword\">Author Foreword</a>\n");
         }
         if (printOrtho) {
-            writer.write("- [Orthography](#orthography)\n");
+            writer.write("- <a href=\"#orthography\">Orthography</a>\n");
         }
         if (printGlossKey) {
-            writer.write("- [Gloss Key](#gloss-key)\n");
+            writer.write("- <a href=\"#glosskey\">Gloss Key</a>\n");
         }
         if (printConLocal) {
             writer.write("- [" + conToLocalName + "](#" + 
@@ -703,14 +703,14 @@ public class ExportFileHelper {
         writer.write("\n" + pagebreak);
 
         if (buildForeword) {
-            writer.write("## Author Foreword\n");
+            writer.write("<h2 id=\"foreword\">Author Foreword</h1>\n");
             writer.write(foreword + "\n");
             writer.write(pagebreak);
         }
 
         // orthography
         if (printOrtho) {
-            writer.write("## Orthography\n");
+            writer.write("<h2 id=\"orthography\">Orthography</h1>\n");
             writer.write("Symbols $ and ^ indicate that elements of orthography must appear at the beginning or the end of a word.\n\n");
             // use html tables for finer grain formatting
             writer.write("<table>\n");
@@ -732,7 +732,7 @@ public class ExportFileHelper {
 
         // glossary keys
         if (printGlossKey) {
-            writer.write("## Gloss Key\n\n");
+            writer.write("<h2 id=\"glosskey\">Gloss Key</h2>\n\n");
             // use html tables for more complicated formatting
             writer.write("<table>\n");
             writer.write("  <tr>\n");
