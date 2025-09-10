@@ -101,8 +101,8 @@ public class ExportFileHelperTest {
         System.out.println("ExportFileHelperTest.testExportPdf");
         core.getPropertiesManager().setCopyrightAuthorInfo("Copyright testing");
         try {
-            ExportFileHelper.exportMarkdown(
-                "test.md", 
+            ExportFileHelper.exportHtml(
+                "test.html", 
                 "", 
                 "this is a test", 
                 false, 

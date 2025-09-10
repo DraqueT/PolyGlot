@@ -59,12 +59,7 @@ import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.Nodes.WordClass;
 import org.darisadesigns.polyglotlina.Nodes.WordClassValue;
-
-import com.vladsch.flexmark.util.ast.Node;
-import com.vladsch.flexmark.html.HtmlRenderer;
-import com.vladsch.flexmark.parser.Parser;
-import com.vladsch.flexmark.pdf.converter.PdfConverterExtension;
-import com.vladsch.flexmark.util.data.MutableDataSet;
+import org.openpdf.pdf.ITextRenderer;
 
 public class ExportFileHelper {
     // HTML page breaks. TODO does this work?
@@ -446,7 +441,7 @@ public class ExportFileHelper {
         }
 
         // do the writing stuff
-        writer.write("## " + conToLocalName + "\n");
+        writer.write("<h2 id=\"conToLocal\"" + conToLocalName + "</h2>\n");
         String curLetter = "";
         EtymologyManager etyMgr = core.getEtymologyManager();
         RomanizationManager romMgr = core.getRomManager();
@@ -509,12 +504,12 @@ public class ExportFileHelper {
     }
 
     private static void writePhrases(BufferedWriter writer, DictCore core) throws IOException {
-        writer.write("## Phrasebook\n");
+        writer.write("<h2 id=\"phrasebook\">Phrasebook</h2>\n");
         writer.write(pagebreak);
     }
 
     private static void writeGrammar(BufferedWriter writer, DictCore core) throws IOException {
-        writer.write("## Grammar\n");
+        writer.write("<h2 id=\"grammar\">Grammar</h2>\n");
         PropertiesManager pMgr = core.getPropertiesManager();
         for (GrammarChapNode chap : core.getGrammarManager().getChapters()) {
             for (int i = 0; i < chap.getChildCount(); ++i) {
@@ -558,7 +553,7 @@ public class ExportFileHelper {
      * @return Path to the generated temp file
      * @throws IOException
      */
-    public static File exportMarkdown(String target,
+    public static File exportHtml(String target,
         String coverImage,
         String foreword,
         boolean printConLocal,
@@ -576,7 +571,7 @@ public class ExportFileHelper {
         DictCore core) throws IOException
     {
         // setup
-        File targetFile = File.createTempFile("lang", ".md",
+        File targetFile = File.createTempFile("lang", ".html",
             PGTUtil.getTempDirectory().toFile());
         targetFile.deleteOnExit();
         BufferedWriter writer = new BufferedWriter(new FileWriter(targetFile));
@@ -676,29 +671,27 @@ public class ExportFileHelper {
         writer.write(pagebreak);
 
         // table of contents
-        writer.write("## Table of Contents\n");
+        writer.write("<h2>Table of Contents</h2>\n");
         if (buildForeword) {
-            writer.write("- <a href=\"#foreword\">Author Foreword</a>\n");
+            writer.write("<a href=\"#foreword\">Author Foreword</a><br>\n");
         }
         if (printOrtho) {
-            writer.write("- <a href=\"#orthography\">Orthography</a>\n");
+            writer.write("<a href=\"#orthography\">Orthography</a><br>\n");
         }
         if (printGlossKey) {
-            writer.write("- <a href=\"#glosskey\">Gloss Key</a>\n");
+            writer.write("<a href=\"#glosskey\">Gloss Key</a><br>\n");
         }
         if (printConLocal) {
-            writer.write("- [" + conToLocalName + "](#" + 
-                conToLocalName.replace(' ', '-').toLowerCase() + ")\n");
+            writer.write("<a href=\"#conToLocal\">" + conToLocalName + "</a><br>\n");
         }
         if (printLocalCon) {
-            writer.write("- [" + localToConName + "](#" +
-                localToConName.replace(' ', '-').toLowerCase() + ")\n");
+            writer.write("<a href=\"#localToCon\"" + localToConName + "</a><br>\n");
         }
         if (printPhrases) {
-            writer.write("- [Phrasebook](#phrasebook)\n");
+            writer.write("<a href=\"#phrasebook\">Phrasebook</a><br>\n");
         }
         if (printGrammar) {
-            writer.write("- [Grammar](#grammar)\n");
+            writer.write("<a href=\"#grammar\">Grammar</a><br>\n");
         }
         writer.write("\n" + pagebreak);
 
@@ -756,7 +749,7 @@ public class ExportFileHelper {
 
         // native to conlang
         if (printLocalCon) {
-            writer.write("## " + localToConName + "\n");
+            writer.write("<h2 id=\"localToCon\">" + localToConName + "</h2>\n");
             writer.write(pagebreak);
         }
 
@@ -828,28 +821,19 @@ public class ExportFileHelper {
         DictCore core) throws IOException
     {
         // target handling
-        File langFile = exportMarkdown(target, coverImage, foreword,
+        File langFile = exportHtml(target, coverImage, foreword,
             printConLocal, printLocalCon, printOrtho,
             subTitleText, titleText, printPageNumber,
             printGlossKey, printGrammar, printWordEtymologies,
             printAllConjugations, printPhrases, chapterOrder,
             core);
         
-        // flexmark utilities
-        MutableDataSet options = new MutableDataSet();
-        options.set(HtmlRenderer.GENERATE_HEADER_ID, true); // enable links to sections
-        //options.set(PdfConverterExtension.DEFAULT_TEXT_DIRECTION,
-        //    PdfRendererBuilder.TextDirection.LEFT_TO_RIGHT);
-        Parser parser = Parser.builder(options).build();
-        HtmlRenderer renderer = HtmlRenderer.builder(options).build();
-
-        // generate html from markdown file
-        String content = Files.readString(langFile.toPath(), StandardCharsets.UTF_8);
-        Node document = parser.parse(content);
-        String html = renderer.render(document);
-
+        // convert html to pdf with openpdf
         OutputStream oS = new FileOutputStream(target);
-        PdfConverterExtension.exportToPdf(oS,
-            html, "", options);
+        String content = Files.readString(langFile.toPath(), StandardCharsets.UTF_8);
+        ITextRenderer renderer = new ITextRenderer();
+        renderer.setDocumentFromString(content);
+        renderer.layout();
+        renderer.createPDF(oS);
     }
 }
