@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>21</maven.compiler.release>
+        <maven.compiler.release>25</maven.compiler.release>
     </properties>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.DarisaDesigns</groupId>
@@ -25,25 +25,25 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>21.0.8</version>
+            <version>24.0.1</version>
         </dependency>
         
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
-            <version>21.0.8</version>
+            <version>24.0.1</version>
         </dependency>
         
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-swing</artifactId>
-            <version>21.0.8</version>
+            <version>24.0.1</version>
         </dependency>
         
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-web</artifactId>
-            <version>21.0.8</version>
+            <version>24.0.1</version>
         </dependency>
         
         <dependency>
@@ -180,7 +180,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.14.0</version>
                 <configuration>
-                    <release>21</release>
+                    <release>25</release>
                     <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
@@ -213,4 +213,10 @@
             </plugin>
         </plugins>
     </reporting>
+    <repositories>
+        <repository>
+            <id>gluon-releases</id>
+            <url>https://repo.gluonhq.com/maven/releases/</url>
+        </repository>
+    </repositories>
 </project>
