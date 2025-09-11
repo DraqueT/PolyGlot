@@ -704,7 +704,7 @@ public class ScrLogoDetails extends PFrame {
             filterThread = new Thread(() -> {
                 filterLogographs();
             });
-
+            Platform.setImplicitExit(false);
             Platform.runLater(filterThread::start);
             gridTitlePane.setExpanded(false);
         }

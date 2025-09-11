@@ -659,7 +659,7 @@ public final class ScrLexicon extends PFrame {
             lstLexicon.ensureIndexIsVisible(0);
             populateProperties();
         });
-
+        Platform.setImplicitExit(false);
         Platform.runLater(filterThread);
         gridTitlePane.setExpanded(false);
     }
@@ -668,6 +668,7 @@ public final class ScrLexicon extends PFrame {
      * Closes and clears search panel on the top of the screen
      */
     public void closeAndClearSearchPanel() {
+        Platform.setImplicitExit(false);
         Platform.runLater(() -> {
             try {
                 clearFilter();
@@ -925,6 +926,7 @@ public final class ScrLexicon extends PFrame {
      * @param enable true for enable, false for disable
      */
     private void setFilterEnabled(final boolean enable) {
+        Platform.setImplicitExit(false);
         Platform.runLater(() -> {
             txtConSrc.setDisable(!enable);
             txtDefSrc.setDisable(!enable);
@@ -1698,6 +1700,7 @@ public final class ScrLexicon extends PFrame {
      */
     private void wrapPlatformRunnable(final Runnable r) {
         SwingUtilities.invokeLater(() -> {
+            Platform.setImplicitExit(false);
             Platform.runLater(r);
         });
     }
@@ -2090,6 +2093,7 @@ public final class ScrLexicon extends PFrame {
     }//GEN-LAST:event_lstLexiconValueChanged
 
     private void btnAddWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddWordActionPerformed
+        Platform.setImplicitExit(false);
         Platform.runLater(() -> {
             try {
                 clearFilter();
@@ -2105,6 +2109,7 @@ public final class ScrLexicon extends PFrame {
     }//GEN-LAST:event_btnAddWordActionPerformed
 
     private void btnDelWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelWordActionPerformed
+        Platform.setImplicitExit(false);
         Platform.runLater(()->{
             deleteWord();
         });

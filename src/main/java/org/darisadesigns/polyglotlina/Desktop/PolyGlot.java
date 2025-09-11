@@ -59,6 +59,8 @@ import org.darisadesigns.polyglotlina.Screens.ScrAbout;
 import org.darisadesigns.polyglotlina.Screens.ScrMainMenu;
 import org.darisadesigns.polyglotlina.Webservice.WebService;
 
+import javafx.application.Platform;
+
 /**
  * Starts up PolyGlot and does testing for OS/platform that would be
  * inappropriate elsewhere
@@ -173,6 +175,9 @@ public final class PolyGlot {
                         new PGTUtil(),
                         new DesktopGrammarManager()
                 );
+
+                // set this false before any windows are made
+                Platform.setImplicitExit(false);
 
                 PolyGlot.polyGlot = new PolyGlot(core, osHandler, opMan);
 
