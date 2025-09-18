@@ -103,28 +103,28 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.9.0</version>
+            <version>5.13.4</version>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.9.0</version>
+            <version>5.13.4</version>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
-            <version>5.9.0</version>
+            <version>5.13.4</version>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.9.0</version>
+            <version>5.13.4</version>
             <scope>test</scope>
         </dependency>
 
@@ -133,12 +133,6 @@
             <artifactId>selenium-java</artifactId>
             <scope>test</scope>
             <version>4.14.0</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-            <version>4.13.2</version>
         </dependency>
     </dependencies>
     
