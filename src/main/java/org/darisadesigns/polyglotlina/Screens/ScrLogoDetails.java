@@ -183,7 +183,6 @@ public class ScrLogoDetails extends PFrame {
         fxPanel.setBackground(Color.white);
         
         final CountDownLatch latch = new CountDownLatch(1);
-        Platform.setImplicitExit(false);
         Platform.runLater(() -> {
             fxPanel.setScene(createScene());
             latch.countDown();
@@ -704,7 +703,6 @@ public class ScrLogoDetails extends PFrame {
             filterThread = new Thread(() -> {
                 filterLogographs();
             });
-            Platform.setImplicitExit(false);
             Platform.runLater(filterThread::start);
             gridTitlePane.setExpanded(false);
         }

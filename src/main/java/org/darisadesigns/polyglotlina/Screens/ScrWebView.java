@@ -51,7 +51,6 @@ public class ScrWebView extends PFrame {
         initComponents();
         setTitle(title);
         
-        Platform.setImplicitExit(false);
         Platform.runLater(()->{
             webView = new WebView();
             WebEngine engine = webView.getEngine();
@@ -130,14 +129,12 @@ public class ScrWebView extends PFrame {
     }
     
     public void goBack() {
-        Platform.setImplicitExit(false);
         Platform.runLater(()->{
             webView.getEngine().executeScript("history.back()");
         });
     }
     
     public void goForward() {
-        Platform.setImplicitExit(false);
         Platform.runLater(()->{
             webView.getEngine().executeScript("history.forward()");
         });

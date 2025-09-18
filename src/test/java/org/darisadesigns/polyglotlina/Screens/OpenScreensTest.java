@@ -19,6 +19,8 @@
 package org.darisadesigns.polyglotlina.Screens;
 
 import TestResources.DummyCore;
+import javafx.application.Platform;
+
 import java.awt.Frame;
 import java.awt.GraphicsEnvironment;
 import java.awt.Window;
@@ -37,6 +39,8 @@ import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.QuizEngine.Quiz;
 import org.darisadesigns.polyglotlina.QuizEngine.QuizQuestion;
 import static org.junit.jupiter.api.Assertions.fail;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -63,6 +67,11 @@ public class OpenScreensTest {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);
         }
+    }
+
+    @BeforeEach
+    void setup() {
+        Platform.setImplicitExit(false);
     }
     
     @Test
