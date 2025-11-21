@@ -20,42 +20,94 @@
             <email>draquemail@gmail.com</email>
         </developer>
     </developers>
+
+    <profiles>
+        <profile>
+            <id>linux</id>
+            <properties>
+                <javafx.platform.classifier>linux</javafx.platform.classifier>
+            </properties>
+        </profile>
+        <profile>
+            <id>linux-aarch64</id>
+            <properties>
+                <javafx.platform.classifier>linux-aarch64</javafx.platform.classifier>
+            </properties>
+        </profile>
+        <profile>
+            <id>windows</id>
+            <properties>
+                <javafx.platform.classifier>win</javafx.platform.classifier>
+            </properties>
+        </profile>
+        <profile>
+            <id>mac-aarch64</id>
+            <properties>
+                <javafx.platform.classifier>mac-aarch64</javafx.platform.classifier>
+            </properties>
+        </profile>
+    </profiles>
     
     <dependencies>
         <dependency>
             <groupId>org.openjfx</groupId>
+            <artifactId>javafx-base</artifactId>
+            <version>25</version>
+            <classifier>${javafx.platform.classifier}</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>25</version>
+            <classifier>${javafx.platform.classifier}</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>25</version>
+            <classifier>${javafx.platform.classifier}</classifier>
         </dependency>
         
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
             <version>25</version>
+            <classifier>${javafx.platform.classifier}</classifier>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-media</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-swing</artifactId>
             <version>25</version>
+            <classifier>${javafx.platform.classifier}</classifier>
         </dependency>
         
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-web</artifactId>
             <version>25</version>
+            <classifier>${javafx.platform.classifier}</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>jdk-jsobject</artifactId>
+            <version>25</version>
+            <classifier>${javafx.platform.classifier}</classifier>
         </dependency>
         
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
             <version>1.12.0</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>net.java.dev.swing-layout</groupId>
-            <artifactId>swing-layout</artifactId>
-            <version>1.0.2</version>
         </dependency>
         
         <dependency>
@@ -196,6 +248,10 @@
                     <addModules>
                         <addModule>org.apache.commons.csv</addModule>
                     </addModules>-->
+                    <addModules>
+                        <addModule>commons-math3</addModule>
+                        <addModule>commons-collections4</addModule>
+                    </addModules>
                     <modules>
                         <module>jdk.crypto.ec</module>
                     </modules>
