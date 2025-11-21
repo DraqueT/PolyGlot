@@ -68,6 +68,8 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-csv</artifactId>
             <version>1.10.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/module_injected_jars/commons-csv-1.10.0.jar</systemPath>
         </dependency>
         
         <dependency>
@@ -176,6 +178,28 @@
                 <configuration>
                     <release>25</release>
                     <showDeprecation>true</showDeprecation>
+                </configuration>
+            </plugin>
+            <!-- jlink packaging plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jlink-plugin</artifactId>
+                <version>3.2.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <mainClass>org.darisadesigns.polyglotlina.Desktop.PolyGlot</mainClass>
+                    <mainModule>org.darisadesigns.polyglotlina.polyglot</mainModule>
+                    <outputDirectory>${project.basedir}/build/image</outputDirectory>
+                    <!--<modulePaths>
+                        <modulePath>${project.build.directory}/module_injected_jars</modulePath>
+                    </modulePaths>
+                    <addModules>
+                        <addModule>org.apache.commons.csv</addModule>
+                    </addModules>-->
+                    <modules>
+                        <module>jdk.crypto.ec</module>
+                    </modules>
+                    <compress>2</compress>
                 </configuration>
             </plugin>
             <plugin>
