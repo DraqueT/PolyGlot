@@ -12,7 +12,7 @@
     <version>3.6.1</version>
     <description>PolyGlot is a utility for creating and publishing spoken languages.</description>
     <url>https://draquet.github.io/PolyGlot/</url>
-    
+
     <developers>
         <developer>
             <id>draquet</id>
@@ -41,13 +41,19 @@
             </properties>
         </profile>
         <profile>
+            <id>mac</id>
+            <properties>
+                <javafx.platform.classifier>mac</javafx.platform.classifier>
+            </properties>
+        </profile>
+        <profile>
             <id>mac-aarch64</id>
             <properties>
                 <javafx.platform.classifier>mac-aarch64</javafx.platform.classifier>
             </properties>
         </profile>
     </profiles>
-    
+
     <dependencies>
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -61,6 +67,12 @@
             <artifactId>javafx-controls</artifactId>
             <version>25</version>
             <classifier>${javafx.platform.classifier}</classifier>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-graphics</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -68,8 +80,14 @@
             <artifactId>javafx-graphics</artifactId>
             <version>25</version>
             <classifier>${javafx.platform.classifier}</classifier>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-base</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
-        
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
@@ -78,23 +96,34 @@
             <exclusions>
                 <exclusion>
                     <groupId>org.openjfx</groupId>
-                    <artifactId>javafx-media</artifactId>
+                    <artifactId>javafx-graphics</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
-        
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-swing</artifactId>
             <version>25</version>
             <classifier>${javafx.platform.classifier}</classifier>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-graphics</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
-        
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-web</artifactId>
             <version>25</version>
             <classifier>${javafx.platform.classifier}</classifier>
+            <exclusions>
+                <exclusion><groupId>org.openjfx</groupId><artifactId>javafx-controls</artifactId></exclusion>
+                <exclusion><groupId>org.openjfx</groupId><artifactId>javafx-media</artifactId></exclusion>
+                <exclusion><groupId>org.openjfx</groupId><artifactId>jdk-jsobject</artifactId></exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -103,39 +132,55 @@
             <version>25</version>
             <classifier>${javafx.platform.classifier}</classifier>
         </dependency>
-        
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
             <version>1.12.0</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>1.18.1</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-csv</artifactId>
             <version>1.10.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/module_injected_jars/commons-csv-1.10.0.jar</systemPath>
         </dependency>
-        
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>3.6.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>4.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>SparseBitSet</artifactId>
+            <version>1.3</version>
+        </dependency>
+
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>2.6</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.14.0</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -160,21 +205,21 @@
             <version>5.13.4</version>
             <scope>test</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.13.4</version>
             <scope>test</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
             <version>5.13.4</version>
             <scope>test</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
@@ -232,6 +277,86 @@
                     <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.moditect</groupId>
+                <artifactId>moditect-maven-plugin</artifactId>
+                <version>1.3.0</version>
+                <executions>
+                    <execution>
+                        <id>add-module-info</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>add-module-info</goal>
+                        </goals>
+                        <configuration>
+                            <overwriteExistingFiles>true</overwriteExistingFiles>
+                            <outputDirectory>${project.build.directory}/module_injected_jars</outputDirectory>
+                            <modules>
+                                <module>
+                                    <artifact>
+                                        <groupId>commons-lang</groupId>
+                                        <artifactId>commons-lang</artifactId>
+                                        <version>2.6</version>
+                                    </artifact>
+                                    <moduleInfo>
+                                        <name>commons.lang</name>
+                                    </moduleInfo>
+                                </module>
+                                <module>
+                                    <artifact>
+                                        <groupId>com.github.virtuald</groupId>
+                                        <artifactId>curvesapi</artifactId>
+                                        <version>1.08</version>
+                                    </artifact>
+                                    <moduleInfo>
+                                        <name>com.github.virtuald.curvesapi</name>
+                                    </moduleInfo>
+                                </module>
+                                <module>
+                                    <artifact>
+                                        <groupId>org.apache.commons</groupId>
+                                        <artifactId>commons-csv</artifactId>
+                                        <version>1.10.0</version>
+                                    </artifact>
+                                    <moduleInfo>
+                                        <name>org.apache.commons.csv</name>
+                                    </moduleInfo>
+                                </module>
+                                <module>
+                                    <artifact>
+                                        <groupId>org.apache.commons</groupId>
+                                        <artifactId>commons-math3</artifactId>
+                                        <version>3.6.1</version>
+                                    </artifact>
+                                    <moduleInfo>
+                                        <name>commons.math3</name>
+                                    </moduleInfo>
+                                </module>
+                                <module>
+                                    <artifact>
+                                        <groupId>org.apache.commons</groupId>
+                                        <artifactId>commons-collections4</artifactId>
+                                        <version>4.4</version>
+                                    </artifact>
+                                    <moduleInfo>
+                                        <name>org.apache.commons.collections4</name>
+                                    </moduleInfo>
+                                </module>
+                                <module>
+                                    <artifact>
+                                        <groupId>com.zaxxer</groupId>
+                                        <artifactId>SparseBitSet</artifactId>
+                                        <version>1.3</version>
+                                    </artifact>
+                                    <moduleInfo>
+                                        <name>com.zaxxer.sparsebitset</name>
+                                    </moduleInfo>
+                                </module>
+                            </modules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- jlink packaging plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -241,28 +366,45 @@
                 <configuration>
                     <mainClass>org.darisadesigns.polyglotlina.Desktop.PolyGlot</mainClass>
                     <mainModule>org.darisadesigns.polyglotlina.polyglot</mainModule>
-                    <outputDirectory>${project.basedir}/build/image</outputDirectory>
-                    <!--<modulePaths>
+                    <modulePaths>
                         <modulePath>${project.build.directory}/module_injected_jars</modulePath>
                     </modulePaths>
-                    <addModules>
-                        <addModule>org.apache.commons.csv</addModule>
-                    </addModules>-->
-                    <addModules>
-                        <addModule>commons-math3</addModule>
-                        <addModule>commons-collections4</addModule>
-                    </addModules>
                     <modules>
+                        <module>org.darisadesigns.polyglotlina.polyglot</module>
+                        <module>org.apache.commons.csv</module>
+                        <module>commons.math3</module>
+                        <module>org.apache.commons.collections4</module>
+                        <module>com.zaxxer.sparsebitset</module>
                         <module>jdk.crypto.ec</module>
+                        <module>javafx.base</module>
+                        <module>javafx.controls</module>
+                        <module>javafx.graphics</module>
+                        <module>javafx.media</module>
+                        <module>javafx.swing</module>
+                        <module>javafx.web</module>
+                        <module>jdk.jsobject</module>
                     </modules>
                     <compress>2</compress>
+                    <attach>true</attach>
+                    <classifier>runtime-image</classifier>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>create-runtime-image</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jlink</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
-                <configuration/>
+                <configuration>
+                    <mainClass>org.darisadesigns.polyglotlina.Desktop.PolyGlot</mainClass>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -287,10 +429,4 @@
             </plugin>
         </plugins>
     </reporting>
-    <repositories>
-        <repository>
-            <id>gluon-releases</id>
-            <url>https://repo.gluonhq.com/maven/releases/</url>
-        </repository>
-    </repositories>
 </project>
