@@ -5,7 +5,7 @@ OSX, and Windows.
 """
 
 __author__      = "Draque Thompson"
-__copyright__   = "2019-2024"
+__copyright__   = "2019-2025"
 __license__     = "MIT"
 __maintainer__  = "draquemail@gmail.com"
 __status__      = "Production"
@@ -387,42 +387,6 @@ def injectBuildDate():
 ####################################
 #       UTIL FUNCTIONALITY
 ####################################
-
-# handled here for timing reasons...
-def getJfxLocation():
-    ret = os.path.expanduser('~')
-
-    if osString == osxString and macIntelBuild:
-        ret = os.path.join(ret, '.m2', 'repository', 'org', 'openjfx_intel')
-    else:
-        ret = os.path.join(ret, '.m2', 'repository', 'org', 'openjfx')
-
-    return ret
-
-
-def getDependencyVersionByGroupId(group_id):
-    ret = ''
-    doc = minidom.parse('pom.xml')
-    dependencies = doc.getElementsByTagName('dependency')
-
-    for dependency in dependencies:
-        if dependency.getElementsByTagName('groupId')[0].childNodes[0].nodeValue == group_id:
-            ret = dependency.getElementsByTagName('version')[0].childNodes[0].nodeValue
-            break
-    return ret
-
-def getDependencyVersionByGroupIdAndName(group_id, artifact_id):
-    ret = ''
-    doc = minidom.parse('pom.xml')
-    dependencies = doc.getElementsByTagName('dependency')
-
-    for dependency in dependencies:
-        group = dependency.getElementsByTagName('groupId')
-        artifact = dependency.getElementsByTagName('artifactId')
-        if group[0].childNodes[0].nodeValue == group_id and artifact[0].childNodes[0].nodeValue == artifact_id:
-            ret = dependency.getElementsByTagName('version')[0].childNodes[0].nodeValue
-            break
-    return ret
 
 # fetches version of PolyGlot from pom file
 def getVersion():
