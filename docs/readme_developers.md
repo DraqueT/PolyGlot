@@ -4,7 +4,7 @@ If you're looking to work on PolyGlot independently or to contribute, here's how
 Note: GUI elements were built with the NetBeans GUI Builder.
 
 ## Dependencies
-- Java 21. Java 17 also works
+- Java 25
 - Maven 3.8.1 or higher
 - Python 3
 - An IDE of your choice:
@@ -12,6 +12,22 @@ Note: GUI elements were built with the NetBeans GUI Builder.
   - Visual Studio Code with java/maven plugins
   - Eclipse
 
+## Supported Environments
+With recent updates to the maven build, you must select the profile of the system you are compiling on in order to build an installer
+
+| Profile | Architecture | Notes |
+| --- | --- | --- | --- |
+| linux | linux, x86 | |
+| linux-aarch64 | linux, ARM | |
+| windows | Windows 10/11 | |
+| mac-aarch64 | macos, ARM | Currently having issues with signing installer |
+| mac | macos, x86 | Untested, but build theoretically works |
+
+## Build System
+- Python is used as a high level trigger for calling into the regular java development tools
+- Maven is used as the build system
+  - `maven-jlink-plugin` is used for building the runtime image
+  - `jpackage` is used for building the installer
 
 ## Development Setup
 1) Install dependencies.
@@ -71,13 +87,14 @@ Linux Debian Setup
 
 Linux Fedora Setup
 >- your system might not have the java jmods package installed for your distro. Use `dnf search jmods` to search for the package name.
->   - e.g. `java-21-openjdk-jmods.aarch64`
+>   - e.g. `java-25-openjdk-jmods.aarch64`
 
 
-4) In a terminal, enter `python build_image.py` in PolyGlot's base directory
+4) In a terminal, enter `./build_image.py -P <profile>` in PolyGlot's base directory
+  - `<profile>` is the first column of the table at the top of this document, e.g. `mac-aarch64`
   - If you open the script file, you'll see that it's segmented so that you can give arguments and just execute one section them at a time for convenience.
   - You MUST build it first with this script. PolyGlot will fail to run if you try to run it from Netbeans before this. (necessary files are built in the Python file)
-5) (Mac) Download binaries for modules with Intel/M1 specific builds and drop them into their own folder under the .m2 repo folder/match paths to what is in the build python script
+5) (Mac x86) Download binaries for modules with Intel/M1 specific builds and drop them into their own folder under the .m2 repo folder/match paths to what is in the build python script
 
 PolyGlot will now build itself into a platform specific application for you! This can be run on machines regardless of whether they have Java installed, as it builds a Java runtime into the distribution.
 
