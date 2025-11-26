@@ -120,10 +120,16 @@ public class DesktopOSHandler extends OSHandler {
             }
         } else if (PGTUtil.IS_OSX) {
             Runtime runtime = Runtime.getRuntime();
-            runtime.exec("open " + url);
+            String[] cmds = new String[2];
+            cmds[0] = "open";
+            cmds[1] = url;
+            runtime.exec(cmds);
         } else if (PGTUtil.IS_LINUX) {
             Runtime runtime = Runtime.getRuntime();
-            runtime.exec("xdg-open " + url);
+            String[] cmds = new String[2];
+            cmds[0] = "xdg-open";
+            cmds[1] = url;
+            runtime.exec(cmds);
         } else {
             new DesktopInfoBox().warning("Menu Warning", "Unable to open browser. Please load manually at:\n"
                     + url + "\n(copied to your clipboard for convenience)");
