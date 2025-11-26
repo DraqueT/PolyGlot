@@ -125,7 +125,7 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
             if (!showPrompt || core.getOSHandler().getInfoBox().actionConfirmation("Import Swadesh List?", 
                     "This will import all the words defined within this Swadesh list into your lexicon. Continue?")) { // TODO: Move this into the UI layer...
                 var wordCount = 1; // counted separately for cases where words are skipped.
-                for (int i = 0; (line = r.readLine()) != null; i++) {
+                for (; (line = r.readLine()) != null;) {
                     if (line.startsWith("#") || localWordExists(line)) {
                         continue;
                     }
