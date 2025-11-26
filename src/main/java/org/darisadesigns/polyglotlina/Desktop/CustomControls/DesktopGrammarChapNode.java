@@ -23,6 +23,8 @@ import java.util.Enumeration;
 import java.util.Objects;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeNode;
+
 import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammarManager;
@@ -65,7 +67,7 @@ public class DesktopGrammarChapNode extends DefaultMutableTreeNode implements Gr
     }
 
     @Override
-    public Enumeration children(String _filter) {
+    public Enumeration<? extends TreeNode> children(String _filter) {
         return internalChildren(_filter);
     }
     
@@ -97,9 +99,8 @@ public class DesktopGrammarChapNode extends DefaultMutableTreeNode implements Gr
         }
     }
 
-    @SuppressWarnings("UseOfObsoleteCollectionType")
-    private Enumeration internalChildren(String filter) {
-        Enumeration ret;
+    private Enumeration<? extends TreeNode> internalChildren(String filter) {
+        Enumeration<? extends TreeNode> ret;
         if (filter.isEmpty() || children == null) {
             ret = super.children();
         } else if (children.elementAt(0) instanceof DesktopGrammarSectionNode) {
