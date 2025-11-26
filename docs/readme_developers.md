@@ -48,6 +48,7 @@ Afterwards, you will be ready to begin work! Building this will result in a runn
 
 ### Visual Studio Code
 1) Install the `Extension Pack for Java` extension. This should come with integration for Maven
+  - Navigate to your Java Project Settings. Under `Maven -> Active Maven Profiles`, add the name of the profile you are working with.
 2) Open the PolyGlot project. You can set up the maven extension to automatically download dependencies
 3) Open a terminal in the root directory and execute `python3 build_image.py`.
 
