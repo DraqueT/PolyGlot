@@ -261,7 +261,7 @@ def distOsx(IS_RELEASE : bool, target_type : Union[str, None]):
     print('Creating app image...')
 
     command = (JAVA_HOME + '/bin/jpackage ' +
-               '--runtime-image build/image ' +
+               '--runtime-image target/image ' +
                '--icon "PolyGlot.app" ' +
                '--name PolyGlot ' +
                '--module org.darisadesigns.polyglotlina.polyglot/org.darisadesigns.polyglotlina.PolyGlot ' +
