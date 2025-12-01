@@ -192,7 +192,11 @@ def dist(is_release : bool, target_type : Union[str, None]):
         shutil.rmtree('installer')
     
     print('Unzipping runtime image...')
-    stat = subprocess.run(f'unzip -q target/{JAR_WO_DEP.replace(".jar", "-runtime-image.zip")} -d target/image', shell=True)
+    if osString == winString:
+        stat = subprocess.run(["powershell.exe", "-Command", f'Expand-Archive target\{JAR_WO_DEP.replace(".jar", "-runtime-image.zip")} -DestinationPath target\image'],
+            capture_output=True, text=True, check=True)
+    else:
+        stat = subprocess.run(f'unzip -q target/{JAR_WO_DEP.replace(".jar", "-runtime-image.zip")} -d target/image', shell=True)
     if stat.returncode != 0:
         print(stat.args)
         sys.exit(1)
@@ -204,7 +208,6 @@ def dist(is_release : bool, target_type : Union[str, None]):
         distOsx(is_release, target_type)
     elif osString == winString:
         distWin(is_release, target_type)
-
 
 ######################################
 #       LINUX FUNCTIONALITY
@@ -351,7 +354,7 @@ def distWin(IS_RELEASE : bool, target_type : Union[str, None]):
 
     # If missing, install WiX Toolset: https://wixtoolset.org/releases/
     command = ('jpackage ' +
-               '--runtime-image build\\image ' +
+               '--runtime-image target\\image ' +
                '--win-shortcut ' +
                '--win-menu ' +
                '--win-dir-chooser ' +
