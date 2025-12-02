@@ -129,7 +129,7 @@ public final class PLabel extends JLabel {
         return ret;
     }
     
-    public interface ToolTipAction<MouseEvent> {
+    public interface ToolTipAction {
         String setupToolTip(MouseEvent e);
     }
     
