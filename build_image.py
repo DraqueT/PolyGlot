@@ -193,7 +193,7 @@ def dist(is_release : bool, target_type : Union[str, None]):
     
     print('Unzipping runtime image...')
     if osString == winString:
-        stat = subprocess.run(["powershell.exe", "-Command", f'Expand-Archive target\{JAR_WO_DEP.replace(".jar", "-runtime-image.zip")} -DestinationPath target\image'],
+        stat = subprocess.run(["powershell.exe", "-Command", f'Expand-Archive target\\{JAR_WO_DEP.replace(".jar", "-runtime-image.zip")} -DestinationPath target\\image'],
             capture_output=True, text=True, check=True)
     else:
         stat = subprocess.run(f'unzip -q target/{JAR_WO_DEP.replace(".jar", "-runtime-image.zip")} -d target/image', shell=True)
