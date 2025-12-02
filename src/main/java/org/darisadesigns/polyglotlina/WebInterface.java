@@ -26,6 +26,7 @@ import java.io.StringReader;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.Socket;
+import java.net.URI;
 import java.net.URL;
 import java.util.Scanner;
 import javax.xml.parsers.DocumentBuilder;
@@ -52,10 +53,10 @@ public class WebInterface {
     public static Document checkForUpdates() throws Exception {
         Document ret = null;
         String xmlText = "";
-        URL url;
 
         try {
-            url = new URL(PGTUtil.UPDATE_FILE_URL);
+            URI updateFile = new URI(PGTUtil.UPDATE_FILE_URL);
+            URL url = updateFile.toURL();
 
             try ( InputStream is = url.openStream();  Scanner s = new Scanner(is)) {
                 while (s.hasNext()) {
