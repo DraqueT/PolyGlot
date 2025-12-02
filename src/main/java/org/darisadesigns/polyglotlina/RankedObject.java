@@ -25,7 +25,7 @@ package org.darisadesigns.polyglotlina;
  * @author draque
  * @param <N>
  */
-public class RankedObject<N> implements Comparable<RankedObject>{
+public class RankedObject<N> implements Comparable<RankedObject<N>>{
     private final int rank;
     private int LOWER = -1;
     private int HIGHER = 1;
@@ -56,7 +56,7 @@ public class RankedObject<N> implements Comparable<RankedObject>{
     
     // does not handle equal values. Returning 0 would merge, and this is undesirable.
     @Override
-    public int compareTo(RankedObject _compare) {        
+    public int compareTo(RankedObject<N> _compare) {        
         if (_compare.rank > this.rank) {
             return LOWER;
         }

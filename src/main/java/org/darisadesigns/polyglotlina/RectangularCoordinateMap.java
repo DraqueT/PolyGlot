@@ -45,7 +45,7 @@ public class RectangularCoordinateMap<K> {
             throw new Exception("Right must be > than left; bottom must be > top.");
         }
         
-        for (Rectangle rect : rectList) {
+        for (Rectangle<K> rect : rectList) {
             if (rightEdge > rect.leftEdge
                      && leftEdge < rect.rightEdge
                      && topEdge > rect.bottomEdge
