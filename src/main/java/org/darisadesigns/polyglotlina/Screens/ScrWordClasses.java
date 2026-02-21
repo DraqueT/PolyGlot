@@ -376,7 +376,7 @@ public final class ScrWordClasses extends PFrame {
             core.getOSHandler().getInfoBox().error("Unable to Delete", 
                     "Unable to delete property: " + e.getLocalizedMessage());
         }
-        DefaultListModel listModel = (DefaultListModel) lstProperties.getModel();
+        DefaultListModel<WordClass> listModel = (DefaultListModel<WordClass>) lstProperties.getModel();
         listModel.removeElement(prop);
 
         if (position == 0) {

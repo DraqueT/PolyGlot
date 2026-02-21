@@ -45,7 +45,7 @@ public class ScrWinFontFolderSelector extends PDialog {
     private void populateFonts() {
         var fontFiles = DesktopPFontHandler.searchForFonts(new File(System.getenv("windir") + "/WinSxS"));
 
-        var model = new DefaultListModel();
+        var model = new DefaultListModel<FontFileWrapper>();
         for (File file : fontFiles) {
             model.addElement(new FontFileWrapper(file));
         }

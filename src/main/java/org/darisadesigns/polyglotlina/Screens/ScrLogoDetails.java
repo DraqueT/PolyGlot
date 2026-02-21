@@ -1525,7 +1525,7 @@ public class ScrLogoDetails extends PFrame {
             return;
         }
 
-        ((DefaultListModel) lstRadicals.getModel()).
+        ((DefaultListModel<Object>) lstRadicals.getModel()).
                 remove(lstRadicals.getSelectedIndex());
     }//GEN-LAST:event_btnDelRadActionPerformed
 

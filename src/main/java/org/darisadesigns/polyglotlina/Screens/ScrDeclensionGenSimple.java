@@ -132,7 +132,7 @@ public class ScrDeclensionGenSimple extends PDialog {
      */
     private void populateCombinedDecl() {
         ConjugationPair[] decs = core.getConjugationManager().getAllCombinedIds(typeId);
-        DefaultListModel decListModel = new DefaultListModel<>();
+        DefaultListModel<ConjugationPair> decListModel = new DefaultListModel<>();
         lstCombinedDec.setModel(decListModel);
 
         for (ConjugationPair curPair : decs) {
