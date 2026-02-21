@@ -128,7 +128,7 @@ public class ConWord extends DictNode {
     }
 
     @Override
-    public void setParent(DictionaryCollection _parent) {
+    public void setParent(DictionaryCollection<? extends DictNode> _parent) {
         super.setParent(_parent);
 
         if (_parent instanceof ConWordCollection) {
