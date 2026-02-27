@@ -20,7 +20,7 @@
 package org.darisadesigns.polyglotlina.Desktop.ManagersCollections;
 
 import java.util.Arrays;
-import java.util.Map.Entry;
+import java.util.Map;
 import java.util.Objects;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopGrammarChapNode;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopGrammarSectionNode;
@@ -69,15 +69,11 @@ public class DesktopGrammarManager extends GrammarManager {
             ret = chapters.equals(compMan.chapters);
             
             if (ret) {
-                for (Object o : soundMap.entrySet().toArray()) {
-                    Entry<Integer, byte[]> entry = (Entry<Integer, byte[]>)o;
-
+                for (Map.Entry<Integer, byte[]> entry : soundMap.entrySet()) {
                     int id = entry.getKey();
                     byte[] soundVal = entry.getValue();
 
-                    ret = compMan.soundMap.containsKey(id);
-
-                    if (ret) {
+                    if (compMan.soundMap.containsKey(id)) {
                         ret = Arrays.equals(soundVal, compMan.soundMap.get(id));
                     } else {
                         break;
