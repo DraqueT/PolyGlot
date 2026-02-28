@@ -303,7 +303,7 @@ public class DesktopPFontHandler extends org.darisadesigns.polyglotlina.PFontHan
                 || path.toLowerCase().endsWith(".dfont")) {
             try {
                 Font f = Font.createFont(Font.TRUETYPE_FONT, fontFile);
-                Map attributes = f.getAttributes();
+                Map<TextAttribute, Object> attributes = new HashMap<>(f.getAttributes());
                 attributes.put(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON);
                 f = f.deriveFont(attributes);
 
@@ -339,7 +339,7 @@ public class DesktopPFontHandler extends org.darisadesigns.polyglotlina.PFontHan
     public static Font getFontFromFile(String filePath) throws FontFormatException, IOException {
         File fontFile = new File(filePath);
         Font ret = Font.createFont(Font.TRUETYPE_FONT, fontFile);
-        Map attributes = ret.getAttributes();
+        Map<TextAttribute, Object> attributes = new HashMap<>(ret.getAttributes());
         attributes.put(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON);
         ret = ret.deriveFont(attributes);
 
