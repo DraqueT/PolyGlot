@@ -201,12 +201,14 @@ public class ImportFileHelper {
     }
 
     private void importCSV(String inputFile, CSVFormat _format) throws Exception {
+        CSVFormat.Builder builder = _format.builder();
         if (!quoteChar.isEmpty()) {
-            _format = _format.withQuote(quoteChar.charAt(0));
+            builder.setQuote(quoteChar.charAt(0));
         }
+        CSVFormat format = builder.build();
 
         Map<String, List<ConWord>> valueMap = core.getWordCollection().getValueMapping();
-        List<List<String>> rows = getRows(inputFile, _format);
+        List<List<String>> rows = getRows(inputFile, format);
         ConWordCollection wordCollection = core.getWordCollection();
 
         if (bFirstLineLabels) {
