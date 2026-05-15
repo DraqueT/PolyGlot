@@ -277,10 +277,24 @@ public class ConjugationGenRule implements Comparable<ConjugationGenRule> {
         if (classId != -1 && applyToClasses.containsKey(-1) && ! overrideDefault) {
             ret = true;
         } else if (applyToClasses.containsKey(classId)) {
-            ret = applyToClasses.get(classId).equals(valueId);
+            if (applyToClasses.get(classId) == -1) {
+                ret = true;
+            } else {
+                ret = applyToClasses.get(classId).equals(valueId);
+            }
         }
         
         return ret;
+    }
+
+    /**
+     * Returns true if this rule applies to all values of a given lexical class.
+     * @param classId the lexical class to test against
+     * @return true if the rule applies to all values of the given class.
+     */
+    public boolean isUniversalInclusion(int classId) {
+        final Integer value = applyToClasses.get(classId);
+        return value != null && value == -1;
     }
     
     /**
@@ -311,10 +325,13 @@ public class ConjugationGenRule implements Comparable<ConjugationGenRule> {
             for (Entry<Integer, Integer> curEntry : applyToClasses.entrySet()) {
                 int classId = curEntry.getKey();
                 
-                if (!word.wordHasClassValue(classId, curEntry.getValue())) {
-                    debugString += "    Word's class does not match filter values for rule. Rule will not be applied.\n";
-                    ret = false;
-                    break;
+                final boolean canApplySpecificValue = word.wordHasClassValue(classId, curEntry.getValue());
+                if (!canApplySpecificValue) {
+                    if (!word.wordHasAnyClassValue(classId) || curEntry.getValue() != -1) {
+                        debugString += "    Word's class does not match filter values for rule. Rule will not be applied.\n";
+                        ret = false;
+                        break;
+                    }
                 }
             }
         } else {
