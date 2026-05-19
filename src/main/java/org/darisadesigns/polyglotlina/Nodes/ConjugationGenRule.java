@@ -80,15 +80,8 @@ public class ConjugationGenRule implements Comparable<ConjugationGenRule> {
      * Gets all entry pairs for classes/class values this rule applies to
      * @return 
      */
-    public Entry<Integer, Integer>[] getApplicableClasses() {
-        Object[] classVals = applyToClasses.entrySet().toArray();
-        Entry<Integer, Integer>[] ret = new Entry[classVals.length];
-        
-        for (int i = 0; i < classVals.length; i++) {
-            ret[i] = (Entry<Integer, Integer>)classVals[i];
-        }
-        
-        return ret;
+    public List<Entry<Integer, Integer>> getApplicableClasses() {
+        return new ArrayList<>(applyToClasses.entrySet());
     }
     
     /**
