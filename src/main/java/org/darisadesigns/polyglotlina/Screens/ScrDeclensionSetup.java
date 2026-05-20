@@ -149,13 +149,14 @@ public final class ScrDeclensionSetup extends PDialog {
                     "Dimension", "ID"
                 }
         ) {
-            Class[] types =  {
-                java.lang.String.class, java.lang.Boolean.class, java.lang.Integer.class
-            };
+            private final Class<?>[] columntypes = { String.class, Boolean.class}; 
 
             @Override
-            public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex >= 0 && columnIndex < columntypes.length) {
+                    return columntypes[columnIndex];
+                }
+                return super.getColumnClass(columnIndex);
             }
         };
 
