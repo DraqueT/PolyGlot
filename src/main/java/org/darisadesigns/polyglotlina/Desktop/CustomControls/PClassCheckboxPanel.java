@@ -26,11 +26,16 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Label;
 import java.awt.LayoutManager;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box.Filler;
 import javax.swing.JPanel;
@@ -44,7 +49,7 @@ import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
  */
 public class PClassCheckboxPanel extends JPanel {
     private ConjugationGenRule rule = new ConjugationGenRule();
-    private final List<PCheckBox> applyClassesCheckboxes = new ArrayList<>();
+    private final HashMap<PCheckBox, List<PCheckBox>> applyClassesCheckboxes = new HashMap<>();
     private final TypeNode type;
     private GridBagConstraints gbc;
     private final PClassCheckboxPanel parent = this;
@@ -110,64 +115,100 @@ public class PClassCheckboxPanel extends JPanel {
     private void createCheckBoxes(DictCore core) {
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.NORTHWEST;
-        
-        if (includeAll) {
-            this.addCheckBox("All", 
-                    "Apply to all classes", 
-                    (ItemEvent e) -> {
-                            PCheckBox thisBox = (PCheckBox)e.getSource();
-                            if (thisBox.isSelected()) {
-                                rule.addClassToFilterList(-1, -1);
-                                uncheckDisableClassChecks();
-                            } else {
-                                rule.removeClassFromFilterList(-1, -1);
-                                setEnabledClassChecks(true);
-                            }
-                        },
-                    -1, -1);
-        } else {
-            // if not used, set to dummy value which is not in menu
-            allCheckBox = new PCheckBox(nightMode);
-        }
 
         for (WordClass wordClass : core.getWordClassCollection().getClassesForType(type.getId())) {
-            wordClass.getValues().forEach((classValue)->{
-                this.addCheckBox(classValue.getValue(), 
-                            "Apply to " + wordClass.getValue() + ":" + classValue.getValue(), 
-                            new ItemListener() {
-                                final int thisClassId = wordClass.getId();
-                                final int classValueId = classValue.getId();
+            this.addTitle(wordClass.getValue() + ":");
+            
+            final var subCheckBoxes = wordClass.getValues().stream().map((classValue)->{
 
-                                @Override
-                                public void itemStateChanged(ItemEvent e) {
-                                    PCheckBox thisBox = (PCheckBox)e.getSource();
-                                    if (thisBox.isSelected()) {
-                                        rule.addClassToFilterList(thisClassId, classValueId);
-                                        init(core);
-                                    } else {
-                                        rule.removeClassFromFilterList(thisClassId, classValueId);
-                                    }
+                final Map.Entry<Integer, PCheckBox> checkBox = this.createCheckBox(classValue.getValue(), 
+                        "Apply to " + wordClass.getValue() + ":" + classValue.getValue(), 
+                        new ItemListener() {
+                            final int thisClassId = wordClass.getId();
+                            final int classValueId = classValue.getId();
+
+                            @Override
+                            public void itemStateChanged(ItemEvent e) {
+                                PCheckBox thisBox = (PCheckBox)e.getSource();
+                                if (thisBox.isSelected()) {
+                                    rule.addClassToFilterList(thisClassId, classValueId);
+                                    init(core);
+                                } else {
+                                    rule.removeClassFromFilterList(thisClassId, classValueId);
                                 }
-                            },
-                        wordClass.getId(),
-                        classValue.getId());
+                            }
+                        },
+                    wordClass.getId(),
+                    classValue.getId());
+            
+                checkBox.getValue().setSelected(rule.doesRuleApplyToClassValue(wordClass.getId(), classValue.getId(), true));
+                return checkBox;
+            }).collect(Collectors.toList());
+                        
+            final PCheckBox classCheckBox = createClassCheckbox(wordClass, new ItemListener() {
+                @Override
+                public void itemStateChanged(ItemEvent e) {
+                    PCheckBox thisBox = (PCheckBox)e.getSource();
+                    if (thisBox.isSelected()) {
+                        rule.addClassToFilterList(wordClass.getId(), -1);
+                        uncheckDisableClassChecks(thisBox);
+                    } else {
+                        rule.removeClassFromFilterList(wordClass.getId(), -1);
+                    }
+
+                    for (final PCheckBox child : applyClassesCheckboxes.get(thisBox)) {
+                        child.setEnabled(!thisBox.isSelected());
+                    }
+                }
             });
-        }
-        
-        // if this is the default rule without any rule set, disable checkboxes
-        allCheckBox.setEnabled(rule.getTypeId() != -1);
-        
-        if (allCheckBox.isSelected()) {
-            uncheckDisableClassChecks();
-        } else {
-            setEnabledClassChecks(rule.getTypeId() != -1);
+
+            this.addClassCheckBox(classCheckBox);
+            for (final Map.Entry<Integer, PCheckBox> entry : subCheckBoxes) {
+                this.addCheckBox(classCheckBox, entry);
+            }
+
+            if (rule.isUniversalInclusion(wordClass.getId()) && !classCheckBox.isSelected()) {
+                classCheckBox.doClick();
+            }
         }
     }
-    
-    private void addCheckBox(String title, String toolTip, ItemListener listener, int classId, int valueId) {
+
+    private void addTitle(String title) {
         gbc.weightx = 1;
         gbc.gridx = 0;
-        
+
+        final Label label = new Label();
+        label.setText(title);
+        this.add(label, gbc);
+
+        gbc.weightx = 9999;
+        gbc.gridx = 1;
+        this.add(new Filler(new Dimension(0,0),new Dimension(9999,9999),new Dimension(9999,9999)), gbc);  
+        gbc.gridy++;
+    }
+
+    private PCheckBox createClassCheckbox(WordClass wordClass, ItemListener listener) {
+        final PCheckBox classCheck = new PCheckBox() {
+            public void repaint() {
+                this.setSize(parent.getWidth(), 20);
+                super.repaint();
+            }
+        };
+
+        classCheck.setFont(checkBoxFont);
+        classCheck.setText("Any");
+        classCheck.setSelected(false);
+        classCheck.addItemListener(listener);
+        classCheck.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        classCheck.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+
+        return classCheck;
+    }
+
+    /**
+     * @return entry of [classId, checkBox]
+     */
+    private Map.Entry<Integer, PCheckBox> createCheckBox(String title, String toolTip, ItemListener listener, int classId, int valueId) {
         final PCheckBox check = new PCheckBox(nightMode) {
             @Override
             public void repaint() {
@@ -175,20 +216,50 @@ public class PClassCheckboxPanel extends JPanel {
                 super.repaint();
             }
         };
+
         check.setFont(checkBoxFont);
         check.setText(title);
+        
         check.setSelected(rule.doesRuleApplyToClassValue(classId, valueId, true)); // st value before listener
         check.addItemListener(listener);
         check.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         check.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         check.setToolTipText(toolTip);
+
+        return Map.entry(classId, check);
+    }
+    
+    private void addClassCheckBox(PCheckBox classCheckBox) {
+        gbc.weightx = 1;
+        gbc.gridx = 0;
+    
+        this.add(classCheckBox, gbc);
+        applyClassesCheckboxes.put(classCheckBox, new ArrayList<>());
+        
+        gbc.weightx = 9999;
+        gbc.gridx = 1;
+        this.add(new Filler(new Dimension(0,0),new Dimension(9999,9999),new Dimension(9999,9999)), gbc);  
+        gbc.gridy++;
+    }
+
+    private void addCheckBox(PCheckBox parent, Map.Entry<Integer, PCheckBox> checkEntry) {
+        final int classId = checkEntry.getKey();
+        final PCheckBox check = checkEntry.getValue();
+        gbc.weightx = 1;
+        gbc.gridx = 0;
+    
         this.add(check, gbc);
         
         // do not add the "all" checkbox (with -1 ID) to the apply all list
         if (classId == -1) {
             allCheckBox = check;
         } else {
-            applyClassesCheckboxes.add(check);
+            final List<PCheckBox> oldChildren = applyClassesCheckboxes.get(parent);
+            if (oldChildren == null) {
+                applyClassesCheckboxes.put(parent, new ArrayList<>());
+            }
+
+            applyClassesCheckboxes.get(parent).add(check);
         }
         
         gbc.weightx = 9999;
@@ -202,16 +273,17 @@ public class PClassCheckboxPanel extends JPanel {
         // ignore. Set up internally only.
     }
 
-    private void uncheckDisableClassChecks() {
-        applyClassesCheckboxes.forEach((checkBox)->{
+    private void uncheckDisableClassChecks(PCheckBox parent) {
+        applyClassesCheckboxes.get(parent).forEach((checkBox)->{
             checkBox.setSelected(false);
         });
-        setEnabledClassChecks(false);
+
+        setEnabledClassChecks(parent, false);
     }
     
-    private void setEnabledClassChecks(boolean enable) {
-        applyClassesCheckboxes.forEach((checkBox)->{
-            checkBox.setEnabled(enable);
+    private void setEnabledClassChecks(PCheckBox parent, boolean enable) {
+        applyClassesCheckboxes.get(parent).forEach((checkBox)->{
+            checkBox.setSelected(enable);
         });
     }
     

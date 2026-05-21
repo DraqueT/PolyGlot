@@ -16,10 +16,10 @@ Note: GUI elements were built with the NetBeans GUI Builder.
 With recent updates to the maven build, you must select the profile of the system you are compiling on in order to build an installer
 
 | Profile | Architecture | Notes |
-| --- | --- | --- | --- |
-| linux | linux, x86 | |
-| linux-aarch64 | linux, ARM | |
-| windows | Windows 10/11 | |
+| --- | --- | --- |
+| linux | linux, x86 |
+| linux-aarch64 | linux, ARM | 
+| windows | Windows 10/11 |
 | mac-aarch64 | macos, ARM | Currently having issues with signing installer |
 | mac | macos, x86 | Untested, but build theoretically works |
 
