@@ -28,6 +28,7 @@ import org.darisadesigns.polyglotlina.Desktop.CustomControls.PTextField;
 import org.darisadesigns.polyglotlina.Desktop.DesktopIOHandler;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Desktop.PolyGlot;
+import org.darisadesigns.polyglotlina.Nodes.DictNode;
 import org.darisadesigns.polyglotlina.Nodes.TypeNode;
 import org.darisadesigns.polyglotlina.Nodes.WordClassValue;
 import org.darisadesigns.polyglotlina.Nodes.WordClass;
@@ -294,10 +295,10 @@ public final class ScrWordClasses extends PFrame {
             typeChecks.values().forEach((checkBox) -> {
                 checkBox.setSelected(false);
             });
-            PTableModel tableModel = new PTableModel(new Object[]{"Values"}, 0);
+            PTableModel tableModel = new PTableModel(new String[]{"Values"});
             tblValues.setModel(tableModel);
         } else {
-            PTableModel tableModel = new PTableModel(new Object[]{"Values"}, 0);
+            PTableModel tableModel = new PTableModel(new String[]{"Values"});
             enableValues(true);
 
             // set name
@@ -308,7 +309,7 @@ public final class ScrWordClasses extends PFrame {
 
             // add property values
             curProp.getValues().forEach((curValue) -> {
-                tableModel.addRow(new Object[]{curValue});
+                tableModel.addRow(new DictNode[]{curValue});
             });
             
             // set checkboxes for types this applies to
@@ -375,7 +376,7 @@ public final class ScrWordClasses extends PFrame {
             core.getOSHandler().getInfoBox().error("Unable to Delete", 
                     "Unable to delete property: " + e.getLocalizedMessage());
         }
-        DefaultListModel listModel = (DefaultListModel) lstProperties.getModel();
+        DefaultListModel<WordClass> listModel = (DefaultListModel<WordClass>) lstProperties.getModel();
         listModel.removeElement(prop);
 
         if (position == 0) {
@@ -404,7 +405,7 @@ public final class ScrWordClasses extends PFrame {
             return;
         }
 
-        tableModel.addRow(new Object[]{value});
+        tableModel.addRow(new DictNode[]{value});
         txtName.requestFocus();
     }
 

@@ -20,6 +20,7 @@
 package org.darisadesigns.polyglotlina.CustomControls;
 
 import java.util.Enumeration;
+import javax.swing.tree.TreeNode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -38,7 +39,7 @@ public interface GrammarChapNode {
     public String getName();
     public void setName(String _name);
     public int getChildCount();
-    public Enumeration children(String _filter);
+    public Enumeration<? extends TreeNode> children(String _filter);
     public void writeXML(Document doc, Element rootElement);
     public GrammarSectionNode getChild(int i);
 }

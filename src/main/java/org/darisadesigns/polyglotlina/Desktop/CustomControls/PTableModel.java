@@ -20,23 +20,73 @@
 package org.darisadesigns.polyglotlina.Desktop.CustomControls;
 
 import org.darisadesigns.polyglotlina.Nodes.DictNode;
-import javax.swing.table.DefaultTableModel;
+
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.AbstractTableModel;
 
 /**
- * Obsolete collection used because that's what underlying class API is built on...
  * @author draque.thompson
  */
-public class PTableModel extends DefaultTableModel {
-    public PTableModel(Object[] columnNames, int rowCount) {
-        super(convertToVector(columnNames), rowCount);
+public class PTableModel extends AbstractTableModel {
+    private List<DictNode[]> rows;
+    private final String columnNames[];
+
+    public PTableModel(String[] columnNames) {
+        this.columnNames = columnNames;
+        rows = new ArrayList<>();
     }
-    
+
     @Override
-    @SuppressWarnings("UseOfObsoleteCollectionType")
-    public void setValueAt(Object aValue, int row, int column) {
-        java.util.Vector rowVector = dataVector.elementAt(row);
-        DictNode node = (DictNode)rowVector.get(column);
-        node.setValue(aValue.toString());
-        fireTableCellUpdated(row, column);
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        if (columnIndex < 0 || columnIndex >= columnNames.length) {
+            return false;
+        }
+        if (rowIndex < 0 || rowIndex >= rows.size()) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int getColumnCount() {
+        return columnNames.length;
+    }
+
+    @Override
+    public String getColumnName(int column) {
+        return columnNames[column];
+    }
+
+    @Override
+    public int getRowCount() {
+        return rows.size();
+    }
+
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        return rows.get(rowIndex)[columnIndex];
+    }
+
+    @Override
+    public void setValueAt(Object value, int rowIndex, int columnIndex) {
+        rows.get(rowIndex)[columnIndex] = (DictNode) value;
+        fireTableCellUpdated(rowIndex, columnIndex);
+    }
+
+    public void addRow(DictNode[] row) {
+        if (row.length != columnNames.length) {
+            throw new IllegalArgumentException("Row length must match column count");
+        }
+        rows.add(row);
+        fireTableRowsInserted(rows.size() - 1, rows.size() - 1);
+    }
+
+    public void removeRow(int rowIndex) {
+        if (rowIndex < 0 || rowIndex >= rows.size()) {
+            throw new IndexOutOfBoundsException("Row index out of range");
+        }
+        rows.remove(rowIndex);
+        fireTableRowsDeleted(rowIndex, rowIndex);
     }
 }

@@ -745,7 +745,7 @@ public class ScrZompistLexiconGen extends PFrame {
         }
         
         var displayWord = new ConWordDisplay(word, core);
-        ((DefaultListModel)lstImport.getModel()).addElement(displayWord);
+        ((DefaultListModel<ConWordDisplay>)lstImport.getModel()).addElement(displayWord);
         lstImport.ensureIndexIsVisible(lstImport.getModel().getSize() - 1);
     }
     
@@ -756,7 +756,7 @@ public class ScrZompistLexiconGen extends PFrame {
             new DesktopInfoBox(this).warning("No Word Selected", "No word selected to move back to values/swadesh lists.");
             return;
         }
-        var word = (ConWordDisplay)((DefaultListModel)lstImport.getModel()).get(wordIndex);
+        var word = ((DefaultListModel<ConWordDisplay>)lstImport.getModel()).get(wordIndex);
         
         addWord(word.getConWord().getValue());
         
@@ -765,7 +765,7 @@ public class ScrZompistLexiconGen extends PFrame {
             addSwadesh(swadesh);
         }
         
-        ((DefaultListModel)lstImport.getModel()).remove(wordIndex);
+        ((DefaultListModel<ConWordDisplay>)lstImport.getModel()).remove(wordIndex);
         
         if (wordIndex > 0) {
             lstImport.setSelectedIndex(wordIndex - 1);
@@ -777,7 +777,7 @@ public class ScrZompistLexiconGen extends PFrame {
     private void setEnableWordImport(boolean enable) {
         if (!enable) {
             cmbSwadesh.setSelectedIndex(0);
-            ((DefaultListModel)lstImport.getModel()).clear();
+            ((DefaultListModel<ConWordDisplay>)lstImport.getModel()).clear();
         }
         
         cmbSwadesh.setEnabled(enable);
@@ -1462,7 +1462,7 @@ public class ScrZompistLexiconGen extends PFrame {
         tblGeneratedValues.setModel(new DefaultTableModel());
         tableValuesUpdated();
         cmbSwadesh.setSelectedIndex(0);
-        ((DefaultListModel)lstImport.getModel()).clear();
+        ((DefaultListModel<ConWordDisplay>)lstImport.getModel()).clear();
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnDelWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelWordActionPerformed

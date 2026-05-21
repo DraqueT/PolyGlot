@@ -422,7 +422,7 @@ public final class ScrLogoQuickView extends PFrame {
      * @param logoId
      */
     public void setSelectedLogo(int logoId) {
-        DefaultListModel logoList = (DefaultListModel) lstLogos.getModel();
+        DefaultListModel<LogoNode> logoList = (DefaultListModel<LogoNode>) lstLogos.getModel();
 
         for (int i = 0; i < logoList.getSize(); i++) {
             LogoNode curNode = (LogoNode) logoList.get(i);

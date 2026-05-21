@@ -33,6 +33,7 @@ import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -77,14 +78,13 @@ public class DesktopPFontHandler extends org.darisadesigns.polyglotlina.PFontHan
      * @return returns loaded font file on success, null otherwise
      */
     public static Font loadFontFromOSFileFolder(String fontFamily) {
-        Font ret = null;
         try {
             File fontFile = getFontFile(fontFamily);
             if (fontFile != null && fontFile.exists()) {
-                ret = Font.createFont(Font.TRUETYPE_FONT, fontFile);
-                Map attributes = ret.getAttributes();
+                Font font = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+                Map<TextAttribute, Object> attributes = new HashMap<>(font.getAttributes());
                 attributes.put(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON);
-                ret = ret.deriveFont(attributes);
+                return font.deriveFont(attributes);
             }
         }
         catch (Exception e) {
@@ -92,7 +92,7 @@ public class DesktopPFontHandler extends org.darisadesigns.polyglotlina.PFontHan
             // do nothing here. Failure means returning null
         }
 
-        return ret;
+        return null;
     }
 
     /**
@@ -303,7 +303,7 @@ public class DesktopPFontHandler extends org.darisadesigns.polyglotlina.PFontHan
                 || path.toLowerCase().endsWith(".dfont")) {
             try {
                 Font f = Font.createFont(Font.TRUETYPE_FONT, fontFile);
-                Map attributes = f.getAttributes();
+                Map<TextAttribute, Object> attributes = new HashMap<>(f.getAttributes());
                 attributes.put(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON);
                 f = f.deriveFont(attributes);
 
@@ -339,7 +339,7 @@ public class DesktopPFontHandler extends org.darisadesigns.polyglotlina.PFontHan
     public static Font getFontFromFile(String filePath) throws FontFormatException, IOException {
         File fontFile = new File(filePath);
         Font ret = Font.createFont(Font.TRUETYPE_FONT, fontFile);
-        Map attributes = ret.getAttributes();
+        Map<TextAttribute, Object> attributes = new HashMap<>(ret.getAttributes());
         attributes.put(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON);
         ret = ret.deriveFont(attributes);
 

@@ -56,23 +56,18 @@ public final class PEntry<K, V> implements Map.Entry<K, V> {
     
     @Override
     public boolean equals(Object comp) {
-        boolean ret = false;
-        
         if (this == comp) {
-            ret = true;
-        } else if (comp != null && getClass() == comp.getClass()) {
-            PEntry c = (PEntry)comp;
-            ret = this.key.equals(c.key) && this.value.equals(c.value);
+            return true;
         }
-        
-        return ret;
+        if (comp instanceof PEntry<?, ?> other) {
+            return Objects.equals(this.getKey(), other.getKey()) &&
+                Objects.equals(this.getValue(), other.getValue());
+        }
+        return false;
     }
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 17 * hash + Objects.hashCode(this.key);
-        hash = 17 * hash + Objects.hashCode(this.value);
-        return hash;
+        return Objects.hashCode(key) ^ Objects.hashCode(value);
     }
 }

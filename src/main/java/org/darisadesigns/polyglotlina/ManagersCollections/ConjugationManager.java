@@ -1054,7 +1054,7 @@ public class ConjugationManager {
      *
      * @param wordId ID of word to clear of all declensions
      */
-    private void clearAllConjugations(Integer wordId, Map list) {
+    private void clearAllConjugations(Integer wordId, Map<Integer, List<ConjugationNode>> list) {
         list.remove(wordId);
     }
 
