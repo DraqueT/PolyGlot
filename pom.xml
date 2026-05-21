@@ -58,14 +58,14 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-base</artifactId>
-            <version>25</version>
+            <version>26</version>
             <classifier>${javafx.platform.classifier}</classifier>
         </dependency>
 
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>25</version>
+            <version>26</version>
             <classifier>${javafx.platform.classifier}</classifier>
             <exclusions>
                 <exclusion>
@@ -78,7 +78,7 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
-            <version>25</version>
+            <version>26</version>
             <classifier>${javafx.platform.classifier}</classifier>
             <exclusions>
                 <exclusion>
@@ -91,7 +91,7 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
-            <version>25</version>
+            <version>26</version>
             <classifier>${javafx.platform.classifier}</classifier>
             <exclusions>
                 <exclusion>
@@ -104,7 +104,7 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-swing</artifactId>
-            <version>25</version>
+            <version>26</version>
             <classifier>${javafx.platform.classifier}</classifier>
             <exclusions>
                 <exclusion>
@@ -117,7 +117,7 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-web</artifactId>
-            <version>25</version>
+            <version>26</version>
             <classifier>${javafx.platform.classifier}</classifier>
             <exclusions>
                 <exclusion><groupId>org.openjfx</groupId><artifactId>javafx-controls</artifactId></exclusion>
@@ -129,7 +129,7 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>jdk-jsobject</artifactId>
-            <version>25</version>
+            <version>26</version>
             <classifier>${javafx.platform.classifier}</classifier>
         </dependency>
 
@@ -178,7 +178,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.14.0</version>
+            <version>3.18.0</version>
         </dependency>
 
         <dependency>
