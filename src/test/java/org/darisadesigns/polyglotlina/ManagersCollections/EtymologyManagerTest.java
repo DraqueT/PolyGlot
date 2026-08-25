@@ -47,7 +47,7 @@ public class EtymologyManagerTest {
         
         try {
             DictCore core  = DummyCore.newCore();
-            core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
             ConWord[] result = core.getEtymologyManager().checkAllForIllegalLoops();
             
             assertEquals(0, result.length);
@@ -133,7 +133,7 @@ public class EtymologyManagerTest {
         
         try {
             DictCore core = DummyCore.newCore();
-            core.readFile(PGTUtil.TESTRESOURCES + "etymology_parents_deletion.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "etymology_parents_deletion.pgd");
             core.getWordCollection().deleteNodeById(2);
         } catch (Exception e) {
             fail(e.getLocalizedMessage());
@@ -152,7 +152,7 @@ public class EtymologyManagerTest {
         
         try {
             DictCore core = DummyCore.newCore();
-            core.readFile(PGTUtil.TESTRESOURCES + "etymology_parents_deletion.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "etymology_parents_deletion.pgd");
             core.getWordCollection().deleteNodeById(3);
         } catch (Exception e) {
             fail(e.getLocalizedMessage());
@@ -171,7 +171,7 @@ public class EtymologyManagerTest {
         
         try {
             DictCore core = DummyCore.newCore();
-            core.readFile(PGTUtil.TESTRESOURCES + "etymology_parents_deletion.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "etymology_parents_deletion.pgd");
             core.getWordCollection().deleteNodeById(3);
             core.getWordCollection().deleteNodeById(4);
         } catch (Exception e) {
@@ -191,7 +191,7 @@ public class EtymologyManagerTest {
         
         try {
             DictCore core = DummyCore.newCore();
-            core.readFile(PGTUtil.TESTRESOURCES + "etymology_parents_deletion.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "etymology_parents_deletion.pgd");
             core.getWordCollection().deleteNodeById(6);
         } catch (Exception e) {
             fail(e.getLocalizedMessage());
@@ -210,7 +210,7 @@ public class EtymologyManagerTest {
         
         try {
             DictCore core = DummyCore.newCore();
-            core.readFile(PGTUtil.TESTRESOURCES + "etymology_parents_deletion.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "etymology_parents_deletion.pgd");
             core.getWordCollection().deleteNodeById(5);
         } catch (Exception e) {
             fail(e.getLocalizedMessage());

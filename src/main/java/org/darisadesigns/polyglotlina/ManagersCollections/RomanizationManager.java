@@ -22,6 +22,7 @@ package org.darisadesigns.polyglotlina.ManagersCollections;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -69,6 +70,20 @@ public class RomanizationManager extends PronunciationMgr {
             procNode.appendChild(doc.createTextNode(curNode.getPronunciation()));
             romNode.appendChild(procNode);
         }
+    }
+    
+    public JSONObject toJson()
+    {
+        var json = super.toJson();
+        json.put(PGTUtil.ROM_GUIDE_ENABLED_XID, enabled);
+        return json;
+    }
+    
+    @Override
+    public void fromJson(JSONObject json)
+    {
+        super.fromJson(json);
+        enabled = (boolean)json.get(PGTUtil.ROM_GUIDE_ENABLED_XID);
     }
 
     public boolean isEnabled() {

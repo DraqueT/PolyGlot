@@ -19,13 +19,17 @@
  */
 package org.darisadesigns.polyglotlina.ManagersCollections;
 
+import java.nio.charset.StandardCharsets;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -94,6 +98,22 @@ public abstract class GrammarManager {
         });
     }
     
+    public JSONObject toJson()
+    {
+        var json = new JSONObject();
+        var chapObj = new JSONArray();
+        for (var chapter : chapters)
+            chapObj.add(chapter.toJson());
+        json.put(PGTUtil.GRAMMAR_CHAPTER_NODE_XID, chapObj);
+        var soundMapObj = new JSONObject();
+        for (var soundId : soundMap.keySet())
+            soundMapObj.put(soundId, Base64.getEncoder().encodeToString(soundMap.get(soundId)));
+        json.put(PGTUtil.GRAMMAR_SECTION_BYTE_ARRAY, soundMapObj);
+        return json;
+    }
+    
+    public abstract void fromJson(JSONObject json);
+
     /**
      * Adds new chapter at particular index position
      * @param newChap chapter to add

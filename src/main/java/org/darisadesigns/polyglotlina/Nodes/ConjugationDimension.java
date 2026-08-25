@@ -21,6 +21,7 @@
 package org.darisadesigns.polyglotlina.Nodes;
 
 import org.darisadesigns.polyglotlina.PGTUtil;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -56,6 +57,20 @@ public class ConjugationDimension extends DictNode {
         wordValue.appendChild(dimNode);
 
         rootElement.appendChild(wordValue);
+    }
+    
+    public JSONObject toJson()
+    {
+        var json = new JSONObject();
+        json.put(PGTUtil.DIMENSION_ID_XID, getId());
+        json.put(PGTUtil.DIMENSION_NAME_XID, getValue());
+        return json;
+    }
+    
+    public void fromJson(JSONObject json)
+    {
+        id = Math.toIntExact((long)json.get(PGTUtil.DIMENSION_ID_XID));
+        setValue((String)json.get(PGTUtil.DIMENSION_NAME_XID));
     }
     
     @Override

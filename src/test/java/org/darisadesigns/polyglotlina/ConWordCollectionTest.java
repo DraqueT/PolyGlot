@@ -127,7 +127,7 @@ public class ConWordCollectionTest {
         
         try {
             DictCore core = DummyCore.newCore();
-            core.readFile(PGTUtil.TESTRESOURCES + "TestWordRules.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "TestWordRules.pgd");
 
             ConWord[] words = core.getWordCollection().illegalFilter();
             
@@ -277,7 +277,7 @@ public class ConWordCollectionTest {
         filter.setValue("w");
         
         try {
-            dictCore.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            dictCore.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
             
             var filteredList = dictCore.getWordCollection().filteredList(filter);
             
@@ -303,7 +303,7 @@ public class ConWordCollectionTest {
         filter.setLocalWord("w");
         
         try {
-            dictCore.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            dictCore.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
             
             var filteredList = dictCore.getWordCollection().filteredList(filter);
             
@@ -329,7 +329,7 @@ public class ConWordCollectionTest {
         filter.setLocalWord("b.d");
         
         try {
-            dictCore.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            dictCore.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
             
             var filteredList = dictCore.getWordCollection().filteredList(filter);
             
@@ -354,7 +354,7 @@ public class ConWordCollectionTest {
         filter.setWordTypeId(2);
         
         try {
-            dictCore.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            dictCore.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
             
             var filteredList = dictCore.getWordCollection().filteredList(filter);
             
@@ -375,7 +375,7 @@ public class ConWordCollectionTest {
         filter.setPronunciation("ʃsiːʃ↘kuː");
         
         try {
-            dictCore.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            dictCore.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
             
             var filteredList = dictCore.getWordCollection().filteredList(filter);
             
@@ -396,7 +396,7 @@ public class ConWordCollectionTest {
         filter.setDefinition("bed");
         
         try {
-            dictCore.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            dictCore.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
             
             var filteredList = dictCore.getWordCollection().filteredList(filter);
             
@@ -417,7 +417,7 @@ public class ConWordCollectionTest {
         ConWord filter = new ConWord();
         
         try {
-            dictCore.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            dictCore.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
             filter.setFilterEtyParent(dictCore.getWordCollection().getNodeById(398));
             
             var filteredList = dictCore.getWordCollection().filteredList(filter);

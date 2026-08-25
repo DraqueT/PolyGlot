@@ -34,6 +34,8 @@ import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.IPAHandler;
 import org.darisadesigns.polyglotlina.Nodes.PronunciationNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -451,6 +453,42 @@ public class PronunciationMgr {
             illegalClusterElement.appendChild(doc.createTextNode(illegalCluster));
             illegalClustersCollectionElement.appendChild(illegalClusterElement);
         }
+    }
+    
+    public JSONObject toJson() {
+        var json = new JSONObject();
+        var sylList = new JSONArray();
+        for (String syllable : syllables)
+            sylList.add(syllable);
+        json.put(PGTUtil.PRO_GUIDE_SYLLABLES_LIST, sylList);
+        json.put(PGTUtil.PRO_GUIDE_COMPOSITION_SYLLABLE, syllableCompositionEnabled);
+        json.put(PGTUtil.PRO_GUIDE_RECURSIVE_XID, recurse);
+        var procs = new JSONArray();
+        pronunciations.forEach((proc)->{
+            procs.add(proc.toJson());
+        });
+        json.put(PGTUtil.PRO_GUIDE_PRONUNCIATIONS_XID, procs);
+        var illegalClustJson = new JSONArray();
+        for (String illegalCluster : illegalClusters)
+            illegalClustJson.add(illegalCluster);
+        json.put(PGTUtil.PRO_GUIDE_ILLEGAL_CLUSTER_COLLECTION, illegalClustJson);
+        return json;
+    }
+    
+    public void fromJson(JSONObject json)
+    {
+        for (var sylObj : (JSONArray)json.get(PGTUtil.PRO_GUIDE_SYLLABLES_LIST))
+            syllables.add((String)sylObj);
+        syllableCompositionEnabled = (boolean) json.get(PGTUtil.PRO_GUIDE_COMPOSITION_SYLLABLE);
+        recurse = (boolean) json.get(PGTUtil.PRO_GUIDE_RECURSIVE_XID);
+        for (var proc : (JSONArray)json.get(PGTUtil.PRO_GUIDE_PRONUNCIATIONS_XID))
+        {
+            var procNode = new PronunciationNode();
+            procNode.fromJson((JSONObject)proc);
+            pronunciations.add(procNode);
+        }
+        for (var illigClus : (JSONArray)json.get(PGTUtil.PRO_GUIDE_ILLEGAL_CLUSTER_COLLECTION))
+            illegalClusters.add((String)illigClus);
     }
 
     /**

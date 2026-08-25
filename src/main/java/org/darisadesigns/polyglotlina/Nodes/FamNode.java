@@ -26,7 +26,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.WebInterface;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -38,6 +42,36 @@ public class FamNode extends DictNode {
     private final FamNode parentNode;
     private String notes = "";
     private final FamilyManager manager;
+    
+    public JSONObject toJson()
+    {
+        var json = new JSONObject();
+        json.put(PGTUtil.FAM_NAME_XID, value);
+        json.put(PGTUtil.FAM_NOTES_XID, notes);
+        var subNodesObj = new JSONArray();
+        for (var node : subNodes)
+            subNodesObj.add(node.toJson());
+        json.put(PGTUtil.FAM_NODE_XID, subNodesObj);
+        var wordsObj = new JSONArray();
+        for (var word : words)
+            wordsObj.add(word.getId());
+        json.put(PGTUtil.FAM_WORD_XID, wordsObj);
+        return json;
+    }
+    
+    public void fromJson(JSONObject json, DictCore core)
+    {
+        value = (String)json.get(PGTUtil.FAM_NAME_XID);
+        notes = (String)json.get(PGTUtil.FAM_NOTES_XID);
+        for (var nodeObj : (JSONArray)json.get(PGTUtil.FAM_NODE_XID))
+        {
+            var newNode = new FamNode(this, manager);
+            newNode.fromJson((JSONObject)nodeObj, core);
+            subNodes.add(newNode);
+        }
+        for (var wordId : (JSONArray)json.get(PGTUtil.FAM_WORD_XID))
+            words.add(core.getWordCollection().getNodeById(Math.toIntExact((long)wordId)));
+    }
     
     /**
      * sets notes

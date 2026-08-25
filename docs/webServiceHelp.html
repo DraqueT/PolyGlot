@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<!--
+   Copyright (c) 2023, Draque Thompson, draquemail@gmail.com
+   All rights reserved.
+   
+   Licensed under: MIT License
+   See LICENSE.TXT included with this code to read the full license agreement.
+   
+   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+   POSSIBILITY OF SUCH DAMAGE.
+-->
+<html>
+    <head>
+        <title>PolyGlot REST Webservice Readme</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                color: #333;
+            }
+
+            h1, h2, h3, h4, h5, h6 {
+                font-weight: bold;
+                margin-bottom: 1rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            h3 {
+                font-size: 1.25rem;
+            }
+
+            h4 {
+                font-size: 1.125rem;
+            }
+
+            pre {
+                background-color: #f4f4f4;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                padding: 1rem;
+                font-size: 0.875rem;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 2rem;
+            }
+
+            table th,
+            table td {
+                border: 1px solid #ddd;
+                padding: 0.75rem;
+                text-align: left;
+            }
+
+            table th {
+                font-weight: bold;
+                background-color: #f4f4f4;
+            }
+
+            code {
+                font-family: 'Courier New', Courier, monospace;
+                background-color: #f4f4f4;
+                padding: 0.125rem 0.25rem;
+                border-radius: 3px;
+            }
+
+            ul {
+                padding-left: 1.5rem;
+            }
+
+            a {
+                color: #1a0dab;
+                text-decoration: none;
+            }
+
+            a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- INDEX -->
+        <h2>--- Basic html index request ---</h2>
+        <h3>Endpoint</h3>
+        <p><strong>GET</strong> <code>/</code></p>
+        <p>Retrieves a basic html page giving functional examples of calls to the API</p>
+        <h3>Path Parameters</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td> - </td>
+                    <td> - </td>
+                    <td> - </td>
+                </tr>
+            </tbody>
+        </table>
+        <h3>Example Request</h3>
+        <pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>http</span></div><div class="p-4 overflow-y-auto"><code class="\!whitespace-pre hljs language-http">GET / HTTP/1.1
+Host: localhost:8080
+</code></div></div></pre>
+        <h3>Response</h3>
+        <h4>Success (200 OK)</h4>
+        <p>The response will return the user's details in JSON format.</p>
+        <h5>Response Body</h5>
+        <pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>html</span></div><div class="p-4 overflow-y-auto"><code class="\!whitespace-pre hljs language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&lt;PAGE HTML&gt;</span>
+<span class="hljs-punctuation">}</span>
+</code></div></div></pre>
+        <h3>Error Codes</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th>Solution</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>500</td>
+                    <td>Internal Server Error</td>
+                    <td>Contact the PolyGlot support</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- METADATA -->
+        <h2>--- Get File Metadata ---</h2>
+        <h3>Endpoint</h3>
+        <p><strong>GET</strong> <code>/metadata</code></p>
+        <p>Retrieves the details of a specific user by their user ID.</p>
+        <h3>Path Parameters</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>file</td>
+                    <td>string</td>
+                    <td>name of language file to retrieve metadata for (all available files queryable)</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3>Example Request</h3>
+        <pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>http</span></div><div class="p-4 overflow-y-auto"><code class="\!whitespace-pre hljs language-http">GET / HTTP/1.1
+Host: localhost:8080
+</code></div></div></pre>
+        <h3>Response</h3>
+        <h4>Success (200 OK)</h4>
+        <p>The response will return a page with all served PolyGlot files and some examples of how to request elements of them (or the whole file)</p>
+        <h5>Response Body</h5>
+        <pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>json</span></div><div class="p-4 overflow-y-auto"><code class="\!whitespace-pre hljs language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">"id"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">12345</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"username"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"johndoe"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"email"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"john.doe@example.com"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"first_name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"John"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"last_name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"Doe"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"created_at"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"2023-01-01T12:00:00Z"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"updated_at"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"2023-01-10T12:00:00Z"</span>
+<span class="hljs-punctuation">}</span>
+</code></div></div></pre>
+        <h4>Error (404 Not Found)</h4>
+        <p>The response will return an error message in JSON format if the user is not found.</p>
+        <h5>Response Body</h5>
+        <pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>json</span></div><div class="p-4 overflow-y-auto"><code class="\!whitespace-pre hljs language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">"error"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">"code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">404</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">"message"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"User not found"</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span>
+</code></div></div></pre>
+        <h3>Error Codes</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th>Solution</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>401</td>
+                    <td>Unauthorized</td>
+                    <td>Check your access token and ensure it's valid</td>
+                </tr>
+                <tr>
+                    <td>404</td>
+                    <td>User not found</td>
+                    <td>Verify the user ID and ensure it's the correct user ID</td>
+                </tr>
+                <tr>
+                    <td>500</td>
+                    <td>Internal Server Error</td>
+                    <td>Contact the API support team if the issue persists</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- FULL FILE -->
+        
+        <!-- IMAGE -->
+        
+        <!-- CON FONT -->
+        
+        <!-- LOCAL FONT -->
+        
+        <!-- SOUND -->
+        
+        <!-- XML -->
+        
+        <!-- REFRESH -->
+        
+        <!-- TEMPLATE -->
+        <h2>--- Get User Information ---</h2>
+        <h3>Endpoint</h3>
+        <p><strong>GET</strong> <code>/api/v1/users/{user_id}</code></p>
+        <p>Retrieves the details of a specific user by their user ID.</p>
+        <h3>Path Parameters</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>user_id</td>
+                    <td>Integer</td>
+                    <td>The unique identifier of the user</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3>Example Request</h3>
+        <pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>http</span></div><div class="p-4 overflow-y-auto"><code class="\!whitespace-pre hljs language-http">GET / HTTP/1.1
+Host: localhost:8080
+</code></div></div></pre>
+        <h3>Response</h3>
+        <h4>Success (200 OK)</h4>
+        <p>The response will return a page with all served PolyGlot files and some examples of how to request elements of them (or the whole file)</p>
+        <h5>Response Body</h5>
+        <pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>json</span></div><div class="p-4 overflow-y-auto"><code class="\!whitespace-pre hljs language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">"id"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">12345</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"username"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"johndoe"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"email"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"john.doe@example.com"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"first_name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"John"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"last_name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"Doe"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"created_at"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"2023-01-01T12:00:00Z"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"updated_at"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"2023-01-10T12:00:00Z"</span>
+<span class="hljs-punctuation">}</span>
+</code></div></div></pre>
+        <h4>Error (404 Not Found)</h4>
+        <p>The response will return an error message in JSON format if the user is not found.</p>
+        <h5>Response Body</h5>
+        <pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>json</span></div><div class="p-4 overflow-y-auto"><code class="\!whitespace-pre hljs language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">"error"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">"code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">404</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">"message"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"User not found"</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span>
+</code></div></div></pre>
+        <h3>Error Codes</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th>Solution</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>401</td>
+                    <td>Unauthorized</td>
+                    <td>Check your access token and ensure it's valid</td>
+                </tr>
+                <tr>
+                    <td>404</td>
+                    <td>User not found</td>
+                    <td>Verify the user ID and ensure it's the correct user ID</td>
+                </tr>
+                <tr>
+                    <td>500</td>
+                    <td>Internal Server Error</td>
+                    <td>Contact the API support team if the issue persists</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

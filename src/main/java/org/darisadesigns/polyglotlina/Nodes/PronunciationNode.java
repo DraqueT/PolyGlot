@@ -21,6 +21,7 @@
 package org.darisadesigns.polyglotlina.Nodes;
 
 import org.darisadesigns.polyglotlina.PGTUtil;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -79,6 +80,20 @@ public class PronunciationNode extends DictNode {
         wordNode.appendChild(wordValue);
         
         rootElement.appendChild(wordNode);
+    }
+    
+    public JSONObject toJson() {
+        // PGTUtil.PRO_GUIDE_XID prior node id
+        var json = new JSONObject();
+        json.put(PGTUtil.PRO_GUIDE_BASE_XID, this.getValue());
+        json.put(PGTUtil.PRO_GUIDE_PHON_XID, this.pronunciation);
+        return json;
+    }
+    
+    public void fromJson(JSONObject json)
+    {
+        setValue((String)json.get(PGTUtil.PRO_GUIDE_BASE_XID));
+        pronunciation = (String)json.get(PGTUtil.PRO_GUIDE_PHON_XID);
     }
     
     @Override

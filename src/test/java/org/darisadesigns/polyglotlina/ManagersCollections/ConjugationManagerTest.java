@@ -49,7 +49,7 @@ public class ConjugationManagerTest {
     public void testZeroDimNoExtra() {
         try {
             System.out.println("ConjugationManagerTest.testZeroDimNoExtra");
-            core.readFile(PGTUtil.TESTRESOURCES + "zero_dim_zero_extra_zero_dep.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "zero_dim_zero_extra_zero_dep.pgd");
             ConjugationManager decMan = core.getConjugationManager();
             ConWord word = core.getWordCollection().getWordNodes()[0];
 
@@ -69,7 +69,7 @@ public class ConjugationManagerTest {
     public void testOneDimNoExtra() {
         try {
             System.out.println("ConjugationManagerTest.testOneDimNoExtra");
-            core.readFile(PGTUtil.TESTRESOURCES + "one_dim_zero_extra_zero_dep.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "one_dim_zero_extra_zero_dep.pgd");
             ConjugationManager decMan = core.getConjugationManager();
             ConWord word = core.getWordCollection().getWordNodes()[0];
             String[] expectedForms = {"testa", "testb"};
@@ -89,7 +89,7 @@ public class ConjugationManagerTest {
     public void testOneDimNoExtraFourDep() {
         try{
             System.out.println("ConjugationManagerTest.testOneDimNoExtraFourDep");
-            core.readFile(PGTUtil.TESTRESOURCES + "one_dim_zero_extra_four_dep.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "one_dim_zero_extra_four_dep.pgd");
             ConjugationManager decMan = core.getConjugationManager();
             ConWord word = core.getWordCollection().getWordNodes()[0];
             String[] expectedForms = {"testa", "testb"};
@@ -111,7 +111,7 @@ public class ConjugationManagerTest {
     public void testOneDimNoExtraNoDep() {
         try {
             System.out.println("ConjugationManagerTest.testOneDimNoExtraNoDep");
-            core.readFile(PGTUtil.TESTRESOURCES + "one_dim_zero_extra_zero_dep.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "one_dim_zero_extra_zero_dep.pgd");
             ConjugationManager decMan = core.getConjugationManager();
             ConWord word = core.getWordCollection().getWordNodes()[0];
             String[] expectedForms = {"testa", "testb"};
@@ -131,7 +131,7 @@ public class ConjugationManagerTest {
     public void testTwoDimOneExtraNoDep() {
         try{ 
             System.out.println("ConjugationManagerTest.testTwoDimOneExtraNoDep");
-            core.readFile(PGTUtil.TESTRESOURCES + "two_dim_one_extra_zero_dep.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "two_dim_one_extra_zero_dep.pgd");
             ConjugationManager decMan = core.getConjugationManager();
             ConWord word = core.getWordCollection().getWordNodes()[0];
             String[] expectedForms = {"testac", "testad", "testbc", "testbd", "testEXTRA"};
@@ -153,7 +153,7 @@ public class ConjugationManagerTest {
     public void testTwoDimOneExtraNoDepOneDisabled() {
         try{
             System.out.println("ConjugationManagerTest.testTwoDimOneExtraNoDepOneDisabled");
-            core.readFile(PGTUtil.TESTRESOURCES + "two_dim_one_extra_zero_dep_one_disabled.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "two_dim_one_extra_zero_dep_one_disabled.pgd");
             ConjugationManager decMan = core.getConjugationManager();
             ConWord word = core.getWordCollection().getWordNodes()[0];
             String[] expectedForms = {"testac", "testad", "testbc", "testEXTRA"};
@@ -176,7 +176,7 @@ public class ConjugationManagerTest {
         try {
             System.out.println("ConjugationManagerTest.testTwoDimOneExtraNoDepOneDisabled");
             
-            core.readFile(PGTUtil.TESTRESOURCES + "two_dim_zero_extra_zero_dep.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "two_dim_zero_extra_zero_dep.pgd");
             ConjugationManager decMan = core.getConjugationManager();
             ConWord word = core.getWordCollection().getWordNodes()[0];
             String[] expectedForms = {"testac", "testad", "testbc", "testbd"};

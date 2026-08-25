@@ -23,6 +23,8 @@ import org.darisadesigns.polyglotlina.PGTUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -172,8 +174,33 @@ public class ToDoNode {
         children.forEach((child) -> {
             child.writeXML(doc, writeNode);
         });
-        
+
         rootElement.appendChild(writeNode);
+    }
+    
+    public JSONObject toJson() {
+        // TODO_NODE_XID prior node id
+        var json = new JSONObject();
+        json.put(PGTUtil.TODO_NODE_DONE_XID, this.isDone);
+        json.put(PGTUtil.TODO_NODE_LABEL_XID, value);
+        var childrenJson =  new JSONArray();
+        for (var child : children)
+            childrenJson.add(child.toJson());
+        json.put(PGTUtil.TODO_CHILDREN_XID, childrenJson);
+        return json;
+    }
+    
+    public void fromJson(JSONObject json)
+    {
+        isDone = (boolean)json.get(PGTUtil.TODO_NODE_DONE_XID);
+        value = (String)json.get(PGTUtil.TODO_NODE_LABEL_XID);
+        for (var childObj : (JSONArray)json.get(PGTUtil.TODO_CHILDREN_XID))
+        {
+            
+            var newToDo = new ToDoNode(this, null, isDone);
+            newToDo.fromJson((JSONObject)childObj);
+            addChild(newToDo);
+        }
     }
     
     public ToDoNode getParent() {

@@ -22,7 +22,10 @@ package org.darisadesigns.polyglotlina.Nodes;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Base64;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.darisadesigns.polyglotlina.PGTUtil;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -112,6 +115,22 @@ public class ImageNode extends DictNode {
         }
 
         return ret;
+    }
+    
+    public JSONObject toJson()
+    {
+        var json = new JSONObject();
+        json.put(PGTUtil.IMAGE_ID_ATTRIBUTE, id);
+        json.put(PGTUtil.IMAGE_VAL, value);
+        json.put(PGTUtil.IMAGE_BYTES, Base64.getEncoder().encodeToString(imageBytes == null ? new byte[0] : imageBytes));
+        return json;
+    }
+    
+    public void fromJson(JSONObject json)
+    {
+        id = Math.toIntExact((long)json.get(PGTUtil.IMAGE_ID_ATTRIBUTE));
+        value = (String)json.get(PGTUtil.IMAGE_VAL);
+        imageBytes = Base64.getDecoder().decode((String)json.get(PGTUtil.IMAGE_BYTES));
     }
 
     @Override

@@ -64,9 +64,9 @@ public class PDomParserTest {
             DictCore reload = DummyCore.newCore();
 
             try {
-                dom.readFile(curFile.getAbsolutePath());
+                dom.readFileDEPRECATED(curFile.getAbsolutePath());
                 dom.writeFile(TEMP_FILE, true, false);
-                reload.readFile(TEMP_FILE);
+                reload.readFileDEPRECATED(TEMP_FILE);
                 assertEquals(reload, dom);
             } catch (IOException | IllegalStateException | ParserConfigurationException | TransformerException e) {
                 System.out.println(e.getLocalizedMessage());

@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -54,6 +55,17 @@ public class FamilyManager {
         }
         
         return famRoot;
+    }
+    
+    public JSONObject toJson()
+    {
+        return famRoot.toJson();
+    }
+    
+    public void fromJson(JSONObject json)
+    {
+        famRoot = new FamNode(null, this);
+        famRoot.fromJson(json, core);
     }
     
     /**

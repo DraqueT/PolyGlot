@@ -21,6 +21,7 @@ package org.darisadesigns.polyglotlina.Nodes;
 
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.util.Objects;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -76,6 +77,20 @@ public final class ConjugationGenTransform {
         }
         
         return ret;
+    }
+    
+    public JSONObject toJson()
+    {
+        var json = new JSONObject();
+        json.put(PGTUtil.DEC_GEN_TRANS_REGEX_XID, regex);
+        json.put(PGTUtil.DEC_GEN_TRANS_REPLACE_XID, replaceText);
+        return json;
+    }
+    
+    public void fromJson(JSONObject json)
+    {
+        regex = (String)json.get(PGTUtil.DEC_GEN_TRANS_REGEX_XID);
+        replaceText = (String)json.get(PGTUtil.DEC_GEN_TRANS_REPLACE_XID);
     }
     
     public void writeXML(Document doc, Element rootElement) {

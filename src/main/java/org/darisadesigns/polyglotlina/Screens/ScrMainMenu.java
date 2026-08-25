@@ -465,7 +465,7 @@ public final class ScrMainMenu extends PFrame {
         core = PolyGlot.getPolyGlot().getNewCore();
 
         try {
-            core.readFile(fileName);
+            core.readFileDEPRECATED(fileName);
             
             // Tests are performed so quickly that this locks up file access
             if (!PGTUtil.isInJUnitTest() && !PGTUtil.isUITestingMode()) {
@@ -474,7 +474,7 @@ public final class ScrMainMenu extends PFrame {
                     public void run() {
                         try {
                             var loadState = new DictCore(new DesktopPropertiesManager(), core.getOSHandler(), new PGTUtil(), new DesktopGrammarManager());
-                            loadState.readFile(fileName, null, false);
+                            loadState.readFileDEPRECATED(fileName, null, false);
                             core.setLoadState(loadState);
                         } catch (ParserConfigurationException | IOException | IllegalStateException e) {
                             // user informed below

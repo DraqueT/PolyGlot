@@ -603,7 +603,7 @@ public class WebService {
                     var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), new DummyInfoBox(), helpHandler, fontHandler);
                     var core = new DictCore(new DesktopPropertiesManager(), osHandler, new PGTUtil(), new DesktopGrammarManager());
                     PolyGlot.getTestShell(core);
-                    core.readFile(file.getCanonicalPath());
+                    core.readFileDEPRECATED(file.getCanonicalPath());
                     pgdFiles.put(file.getName(), core);
                 }
             }

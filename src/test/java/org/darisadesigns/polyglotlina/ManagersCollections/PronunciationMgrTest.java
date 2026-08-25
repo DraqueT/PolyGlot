@@ -300,7 +300,7 @@ public class PronunciationMgrTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
             
             Map<String, String[]> result = core.getPronunciationMgr().getIpaSoundsPerCharacter();
             
@@ -322,7 +322,7 @@ public class PronunciationMgrTest {
         
         try {
             DictCore core = DummyCore.newCore();
-            core.readFile(PGTUtil.TESTRESOURCES + "testSyllableGen.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "testSyllableGen.pgd");
             
             String result = core.getPronunciationMgr().getPronunciation(testWord);
             assertEquals(expectedProc, result);
@@ -340,7 +340,7 @@ public class PronunciationMgrTest {
         
         try {
             DictCore core = DummyCore.newCore();
-            core.readFile(PGTUtil.TESTRESOURCES + "testSyllableGen.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "testSyllableGen.pgd");
             
             String result = core.getPronunciationMgr().getPronunciation(testWord);
             assertEquals(expectedProc, result);
@@ -358,7 +358,7 @@ public class PronunciationMgrTest {
         
         try {
             DictCore core = DummyCore.newCore();
-            core.readFile(PGTUtil.TESTRESOURCES + "testSyllableGen.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "testSyllableGen.pgd");
             core.getPropertiesManager().setDisableProcRegex(true);
             
             String result = core.getPronunciationMgr().getPronunciation(testWord);
@@ -377,7 +377,7 @@ public class PronunciationMgrTest {
         
         try {
             DictCore core = DummyCore.newCore();
-            core.readFile(PGTUtil.TESTRESOURCES + "testSyllableGen.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "testSyllableGen.pgd");
             core.getPropertiesManager().setDisableProcRegex(true);
             
             String result = core.getPronunciationMgr().getPronunciation(testWord);
@@ -396,7 +396,7 @@ public class PronunciationMgrTest {
         
         try {
             DictCore core = DummyCore.newCore();
-            core.readFile(PGTUtil.TESTRESOURCES + "testSyllableGen.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "testSyllableGen.pgd");
             core.getPronunciationMgr().setSyllableCompositionEnabled(false);
             
             String result = core.getPronunciationMgr().getPronunciation(testWord);

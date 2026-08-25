@@ -41,8 +41,8 @@ public class CheckLanguageErrorsTest {
         badRegexEntriesCore = DummyCore.newCore();
         
         try {
-            badLexEntriesCore.readFile(PGTUtil.TESTRESOURCES + "test_lex_problems.pgd");
-            badRegexEntriesCore.readFile(PGTUtil.TESTRESOURCES + "test_regex_problems.pgd");
+            badLexEntriesCore.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "test_lex_problems.pgd");
+            badRegexEntriesCore.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "test_regex_problems.pgd");
         } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
@@ -137,7 +137,7 @@ public class CheckLanguageErrorsTest {
         
         try {
             DictCore dictCore = DummyCore.newCore();
-            dictCore.readFile(PGTUtil.TESTRESOURCES + "test_check_lang_no_alphabet.pgd");
+            dictCore.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "test_check_lang_no_alphabet.pgd");
             LexiconProblemNode[] problems = CheckLanguageErrors.checkCore(dictCore, false);
             
             assertEquals(problems.length, 0);

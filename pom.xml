@@ -56,17 +56,21 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1</version>
+        </dependency>
+        
+        <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-base</artifactId>
             <version>25</version>
-            <classifier>${javafx.platform.classifier}</classifier>
         </dependency>
 
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>25</version>
-            <classifier>${javafx.platform.classifier}</classifier>
             <exclusions>
                 <exclusion>
                     <groupId>org.openjfx</groupId>
@@ -79,7 +83,6 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
             <version>25</version>
-            <classifier>${javafx.platform.classifier}</classifier>
             <exclusions>
                 <exclusion>
                     <groupId>org.openjfx</groupId>
@@ -92,7 +95,6 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
             <version>25</version>
-            <classifier>${javafx.platform.classifier}</classifier>
             <exclusions>
                 <exclusion>
                     <groupId>org.openjfx</groupId>
@@ -105,7 +107,6 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-swing</artifactId>
             <version>25</version>
-            <classifier>${javafx.platform.classifier}</classifier>
             <exclusions>
                 <exclusion>
                     <groupId>org.openjfx</groupId>
@@ -118,7 +119,6 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-web</artifactId>
             <version>25</version>
-            <classifier>${javafx.platform.classifier}</classifier>
             <exclusions>
                 <exclusion><groupId>org.openjfx</groupId><artifactId>javafx-controls</artifactId></exclusion>
                 <exclusion><groupId>org.openjfx</groupId><artifactId>javafx-media</artifactId></exclusion>
@@ -130,7 +130,6 @@
             <groupId>org.openjfx</groupId>
             <artifactId>jdk-jsobject</artifactId>
             <version>25</version>
-            <classifier>${javafx.platform.classifier}</classifier>
         </dependency>
 
         <dependency>

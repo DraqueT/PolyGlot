@@ -241,7 +241,7 @@ public class DesktopPropertiesManager extends PropertiesManager {
      * @param _fontStyle the fontStyle to set
      */
     @Override
-    public void setFontStyle(Integer _fontStyle) {
+    public void setFontStyle(int _fontStyle) {
         conFontStyle = _fontStyle;
         
         if (conFont != null) {
@@ -333,24 +333,6 @@ public class DesktopPropertiesManager extends PropertiesManager {
             core.getOSHandler().getIOHandler().writeErrorLog(e);
             throw new Exception("Unable to refresh fonts: " + e.getLocalizedMessage());
         }
-    }
-    
-    @Override
-    public boolean equals(Object comp) {
-        boolean ret = false;
-        
-        if (this == comp) {
-            ret = true;
-        } else if (comp instanceof DesktopPropertiesManager prop) {
-            ret = getFontCon().equals(prop.getFontCon());
-            ret = ret && conFontStyle.equals(prop.conFontStyle);
-            ret = ret && conFontSize == prop.conFontSize;
-            ret = ret && localFontSize == prop.localFontSize;
-            ret = ret && localFont.equals(prop.localFont);
-            ret = ret && super.equals(prop);
-        }
-        
-        return ret;
     }
 
     @Override

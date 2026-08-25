@@ -14,6 +14,7 @@ module org.darisadesigns.polyglotlina.polyglot {
     requires org.apache.poi.poi;
     requires org.apache.poi.ooxml;
     requires org.jsoup;
+    requires json.simple;
     
     exports org.darisadesigns.polyglotlina;
     exports org.darisadesigns.polyglotlina.CustomControls;

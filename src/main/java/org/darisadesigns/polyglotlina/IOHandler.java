@@ -30,6 +30,7 @@ import javax.xml.transform.TransformerException;
 import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
 import org.darisadesigns.polyglotlina.ManagersCollections.LogoCollection;
 import org.darisadesigns.polyglotlina.ManagersCollections.ReversionManager;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 
 /**
@@ -101,6 +102,8 @@ public interface IOHandler {
      */
     boolean isFileZipArchive(String _fileName) throws IOException;
 
+    void writeFile(String fileName, DictCore core) throws IOException;
+    
     /**
      *
      * @param _fileName
@@ -113,7 +116,7 @@ public interface IOHandler {
      * @throws IOException
      * @throws TransformerException
      */
-    void writeFile(
+    void writeFileDEPRECATED(
             String _fileName,
             Document doc,
             DictCore core,
@@ -265,6 +268,8 @@ public interface IOHandler {
      * @return system information
      */
     String getSystemInformation();
+    
+    JSONObject getSystemInformationJson();
 
     File unzipResourceToTempLocation(String resourceLocation) throws IOException;
 

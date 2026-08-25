@@ -29,6 +29,8 @@ import org.darisadesigns.polyglotlina.CustomControls.GrammarChapNode;
 import org.darisadesigns.polyglotlina.CustomControls.GrammarSectionNode;
 import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammarManager;
 import org.darisadesigns.polyglotlina.PGTUtil;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -168,20 +170,46 @@ public class DesktopGrammarChapNode extends DefaultMutableTreeNode implements Gr
     @Override
     public void writeXML(Document doc, Element rootElement) {
         Element chapNode = doc.createElement(PGTUtil.GRAMMAR_CHAPTER_NODE_XID);
-            rootElement.appendChild(chapNode);
+        rootElement.appendChild(chapNode);
 
-            Element chapElement = doc.createElement(PGTUtil.GRAMMAR_CHAPTER_NAME_XID);
-            chapElement.appendChild(doc.createTextNode(this.name));
-            chapNode.appendChild(chapElement);
-            
-            chapElement = doc.createElement(PGTUtil.GRAMMAR_SECTIONS_LIST_XID);
-            
-            for (int i = 0; i < this.getChildCount(); i++) {
-                DesktopGrammarSectionNode curSec = (DesktopGrammarSectionNode)this.getChildAt(i);                
-                curSec.writeXML(doc, chapElement);
-            }
-            
-            chapNode.appendChild(chapElement);
+        Element chapElement = doc.createElement(PGTUtil.GRAMMAR_CHAPTER_NAME_XID);
+        chapElement.appendChild(doc.createTextNode(this.name));
+        chapNode.appendChild(chapElement);
+
+        chapElement = doc.createElement(PGTUtil.GRAMMAR_SECTIONS_LIST_XID);
+
+        for (int i = 0; i < this.getChildCount(); i++) {
+            DesktopGrammarSectionNode curSec = (DesktopGrammarSectionNode)this.getChildAt(i);                
+            curSec.writeXML(doc, chapElement);
+        }
+
+        chapNode.appendChild(chapElement);
+    }
+    
+    @Override
+    public void fromJson(JSONObject json)
+    {
+        name = (String)json.get(PGTUtil.GRAMMAR_CHAPTER_NAME_XID);
+        for (var sectionObj : (JSONArray)json.get(PGTUtil.GRAMMAR_SECTIONS_LIST_XID))
+        {
+            var curSec = new DesktopGrammarSectionNode(parentManager);
+            curSec.fromJson((JSONObject)sectionObj);
+            add(curSec);
+        }
+    }
+    
+    @Override
+    public JSONObject toJson()
+    {
+        var json = new JSONObject();
+        json.put(PGTUtil.GRAMMAR_CHAPTER_NAME_XID, this.name);
+        var chapElements = new JSONArray();
+        for (int i = 0; i < this.getChildCount(); i++) {
+            var curSec = (DesktopGrammarSectionNode)this.getChildAt(i);                
+            chapElements.add(curSec.toJson());
+        }
+        json.put(PGTUtil.GRAMMAR_SECTIONS_LIST_XID, chapElements);
+        return json;
     }
     
     @Override

@@ -20,6 +20,7 @@
 package org.darisadesigns.polyglotlina.CustomControls;
 
 import java.util.Enumeration;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -41,4 +42,6 @@ public interface GrammarChapNode {
     public Enumeration children(String _filter);
     public void writeXML(Document doc, Element rootElement);
     public GrammarSectionNode getChild(int i);
+    public JSONObject toJson();
+    public void fromJson(JSONObject json);
 }

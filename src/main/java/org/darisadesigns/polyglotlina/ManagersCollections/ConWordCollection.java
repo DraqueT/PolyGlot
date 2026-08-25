@@ -46,6 +46,8 @@ import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.RankedObject;
 import org.darisadesigns.polyglotlina.RegexTools;
 import org.darisadesigns.polyglotlina.RegexTools.ReplaceOptions;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -894,6 +896,26 @@ public class ConWordCollection extends DictionaryCollection<ConWord> {
         }
         
         rootElement.appendChild(lexicon);
+    }
+    
+    public JSONArray toJson() {
+        var json = new JSONArray();
+        for (ConWord curWord : nodeMap.values())
+            json.add(curWord.toJson());
+        return json;
+    }
+    
+    public void fromJson(JSONArray json, DictCore core) throws Exception
+    {
+        for (var wordObj : json)
+        {
+            var newWord = new ConWord();
+            newWord.setCore(core);
+            newWord.fromJson((JSONObject)wordObj);
+            nodeMap.put(newWord.getId(), newWord);
+            if (newWord.getId() > highestNodeId)
+                highestNodeId = newWord.getId() + 1;
+        }
     }
 
     /**

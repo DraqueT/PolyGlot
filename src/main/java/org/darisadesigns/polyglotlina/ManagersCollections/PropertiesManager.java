@@ -31,6 +31,8 @@ import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.ConWord;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.WebInterface;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -214,7 +216,7 @@ public abstract class PropertiesManager {
     /**
      * @param _fontStyle the fontStyle to set
      */
-    public abstract void setFontStyle(Integer _fontStyle);
+    public abstract void setFontStyle(int _fontStyle);
 
     /**
      * @return the fontSize
@@ -571,6 +573,86 @@ public abstract class PropertiesManager {
         propContainer.appendChild(wordValue);
     }
 
+    public JSONObject toJson() {
+        var json = new JSONObject();
+        
+        // store font for Conlang words ONLY if no cached font
+        if (cachedConFont == null)
+            json.put(PGTUtil.FONT_CON_XID, getFontConFamily());
+
+        json.put(PGTUtil.LANG_PROP_FONT_STYLE_XID, conFontStyle);
+        json.put(PGTUtil.LANG_PROP_FONT_SIZE_XID, conFontSize);
+        json.put(PGTUtil.LANG_PROP_LOCAL_FONT_SIZE_XID, localFontSize);
+        json.put(PGTUtil.LANG_PROP_LANG_NAME_XID, langName);
+        json.put(PGTUtil.LANG_PROP_ALPHA_ORDER_XID, String.join(",", getOrderedAlphaList()));
+        json.put(PGTUtil.LANG_PROP_TYPE_MAND_XID, typesMandatory);
+        json.put(PGTUtil.LANG_PROP_LOCAL_MAND_XID, localMandatory);
+        json.put(PGTUtil.LANG_PROP_LOCAL_UNIQUE_XID, localUniqueness);
+        json.put(PGTUtil.LANG_PROP_WORD_UNIQUE_XID, wordUniqueness);
+        json.put(PGTUtil.LANG_PROP_IGNORE_CASE_XID, ignoreCase);
+        json.put(PGTUtil.LANG_PROP_DISABLE_PROC_REGEX, disableProcRegex);
+        json.put(PGTUtil.LANG_PROP_OVERRIDE_REGEX_FONT_XID, overrideRegexFont);
+        json.put(PGTUtil.LANG_PROP_USE_LOCAL_LEX_XID, useLocalWordLex);
+        json.put(PGTUtil.LANG_PROP_AUTH_COPYRIGHT_XID, copyrightAuthorInfo);
+        json.put(PGTUtil.LANG_PROP_LOCAL_NAME_XID, localLangName);
+        json.put(PGTUtil.LANG_PROP_USE_SIMPLIFIED_CONJ, useSimplifiedConjugations);
+        json.put(PGTUtil.LANG_PROP_EXPANDED_LEX_LIST_DISP, expandedLexListDisplay);
+        json.put(PGTUtil.LANG_PROP_ZOMPIST_CATEGORIES, zompistCategories);
+        json.put(PGTUtil.LANG_PROP_ZOMPIST_ILLEGAL_CLUSTERS, zompistIllegalClusters);
+        json.put(PGTUtil.LANG_PROP_ZOMPIST_REWRITE_RULES, zompistRewriteRules);
+        json.put(PGTUtil.LANG_PROP_ZOMPIST_SYLLABLES, zompistSyllableTypes);
+        json.put(PGTUtil.LANG_PROP_ZOMPIST_DROPOFF_RATE, zompistDropoffRate);
+        json.put(PGTUtil.LANG_PROP_ZOMPIST_MONOSYLLABLE_FREQUENCY, zompistMonosylableFrequency);
+        var langPropRepChar = new JSONArray();
+        for (Entry<String, String> pair : getAllCharReplacements()) {
+            // prior node header: PGTUtil.LANG_PROPCHAR_REP_NODE_XID
+            var repChar = new JSONObject();
+            repChar.put(PGTUtil.LANG_PROP_CHAR_REP_CHAR_XID, pair.getKey());
+            repChar.put(PGTUtil.LANG_PROP_CHAR_REP_VAL_XID, pair.getValue());
+            langPropRepChar.add(repChar);
+        }        
+        json.put(PGTUtil.LANG_PROP_CHAR_REP_CONTAINER_XID, langPropRepChar);
+        
+        return json;
+    }
+    
+    public void fromJson(JSONObject json) throws Exception
+    {
+        if (json.containsKey(PGTUtil.FONT_CON_XID))
+            setFontCon((String)json.get(PGTUtil.FONT_CON_XID));
+        setFontStyle(Math.toIntExact((long)json.get(PGTUtil.LANG_PROP_FONT_STYLE_XID)));
+        setFontSize((double)json.get(PGTUtil.LANG_PROP_FONT_SIZE_XID));
+        setLocalFontSize((double)json.get(PGTUtil.LANG_PROP_LOCAL_FONT_SIZE_XID));
+        langName = (String)json.get(PGTUtil.LANG_PROP_LANG_NAME_XID);
+        setAlphaOrder((String)json.get(PGTUtil.LANG_PROP_ALPHA_ORDER_XID));
+        typesMandatory = (boolean)json.get(PGTUtil.LANG_PROP_TYPE_MAND_XID);
+        localMandatory= (boolean) json.get(PGTUtil.LANG_PROP_LOCAL_MAND_XID);
+        localUniqueness = (boolean) json.get(PGTUtil.LANG_PROP_LOCAL_UNIQUE_XID);
+        wordUniqueness = (boolean) json.get(PGTUtil.LANG_PROP_WORD_UNIQUE_XID);
+        ignoreCase = (boolean) json.get(PGTUtil.LANG_PROP_IGNORE_CASE_XID);
+        disableProcRegex = (boolean) json.get(PGTUtil.LANG_PROP_DISABLE_PROC_REGEX);
+        overrideRegexFont = (boolean) json.get(PGTUtil.LANG_PROP_OVERRIDE_REGEX_FONT_XID);
+        useLocalWordLex = (boolean) json.get(PGTUtil.LANG_PROP_USE_LOCAL_LEX_XID);
+        copyrightAuthorInfo = (String) json.get(PGTUtil.LANG_PROP_AUTH_COPYRIGHT_XID);
+        localLangName = (String) json.get(PGTUtil.LANG_PROP_LOCAL_NAME_XID);
+        useSimplifiedConjugations = (boolean) json.get(PGTUtil.LANG_PROP_USE_SIMPLIFIED_CONJ);
+        expandedLexListDisplay = (boolean) json.get(PGTUtil.LANG_PROP_EXPANDED_LEX_LIST_DISP);
+        zompistCategories = (String) json.get(PGTUtil.LANG_PROP_ZOMPIST_CATEGORIES);
+        zompistIllegalClusters = (String) json.get(PGTUtil.LANG_PROP_ZOMPIST_ILLEGAL_CLUSTERS);
+        zompistRewriteRules = (String) json.get(PGTUtil.LANG_PROP_ZOMPIST_REWRITE_RULES);
+        zompistSyllableTypes = (String) json.get(PGTUtil.LANG_PROP_ZOMPIST_SYLLABLES);
+        zompistDropoffRate = Math.toIntExact((long)json.get(PGTUtil.LANG_PROP_ZOMPIST_DROPOFF_RATE));
+        zompistMonosylableFrequency = Math.toIntExact((long)json.get(PGTUtil.LANG_PROP_ZOMPIST_MONOSYLLABLE_FREQUENCY));
+        charRep.clear();
+        var langPropRepChar = (JSONArray) json.get(PGTUtil.LANG_PROP_CHAR_REP_CONTAINER_XID);
+        for (var entryObj : langPropRepChar) {
+            var entry = (JSONObject) entryObj;
+            charRep.put(
+                (String) entry.get(PGTUtil.LANG_PROP_CHAR_REP_CHAR_XID),
+                (String)entry.get(PGTUtil.LANG_PROP_CHAR_REP_VAL_XID));
+        }        
+    }
+    
     /**
      * @return the localLangName
      */
@@ -773,15 +855,14 @@ public abstract class PropertiesManager {
         
         if (this == comp) {
             ret = true;
-        } else if (comp instanceof PropertiesManager) {
-            PropertiesManager prop = (PropertiesManager) comp;
+        } else if (comp instanceof PropertiesManager prop) {
             ret = conFontStyle.equals(prop.conFontStyle);
             ret = ret && conFontSize == prop.conFontSize;
             ret = ret && localFontSize == prop.localFontSize;
             ret = ret && alphaOrder.equals(prop.alphaOrder);
             ret = ret && langName.trim().equals(prop.langName.trim());
             ret = ret && localLangName.trim().equals(prop.localLangName.trim());
-            ret = ret && WebInterface.getTextFromHtml(copyrightAuthorInfo).equals(WebInterface.getTextFromHtml(prop.copyrightAuthorInfo));
+            ret = ret && copyrightAuthorInfo.equals(prop.copyrightAuthorInfo);
             ret = ret && typesMandatory == prop.typesMandatory;
             ret = ret && localMandatory == prop.localMandatory;
             ret = ret && wordUniqueness == prop.wordUniqueness;

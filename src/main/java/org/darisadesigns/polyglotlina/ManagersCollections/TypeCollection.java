@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -182,6 +184,25 @@ public class TypeCollection extends DictionaryCollection<TypeNode> {
         }
         
         rootElement.appendChild(typeContainer);
+    }
+    
+    public JSONArray toJson() {
+        var json = new JSONArray();
+        for (TypeNode curNode : getNodes())
+            json.add(curNode.toJson());
+        return json;
+    }
+    
+    public void fromJson(JSONArray json) throws Exception
+    {
+        for (var typeObj : json)
+        {
+            var newType = new TypeNode();
+            newType.fromJson((JSONObject)typeObj);
+            nodeMap.put(newType.getId(), newType);
+            if (newType.getId() > highestNodeId)
+                highestNodeId = newType.getId() + 1;
+        }
     }
 
     @Override

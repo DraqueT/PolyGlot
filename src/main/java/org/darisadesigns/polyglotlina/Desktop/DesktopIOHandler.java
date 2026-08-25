@@ -93,6 +93,7 @@ import org.darisadesigns.polyglotlina.Nodes.ImageNode;
 import org.darisadesigns.polyglotlina.Nodes.LogoNode;
 import org.darisadesigns.polyglotlina.Nodes.ReversionNode;
 import org.darisadesigns.polyglotlina.XMLRecoveryTool;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -263,7 +264,7 @@ public final class DesktopIOHandler implements IOHandler {
         }
 
         // try to recover from incomplete XML documents
-        if (!fileComplete && fileName.equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.LANG_FILE_NAME)) {
+        if (!fileComplete && fileName.equals(org.darisadesigns.polyglotlina.Desktop.PGTUtil.LANG_FILE_NAME_OLD)) {
             fileContents = new String(fileBytes, StandardCharsets.UTF_8);
             var fixedContents = new XMLRecoveryTool(fileContents).recoverXml();
             fileBytes = fixedContents.getBytes(StandardCharsets.UTF_8);
@@ -360,9 +361,60 @@ public final class DesktopIOHandler implements IOHandler {
         }
         return test == 0x504b0304; // TODO: Put this into PGTUtil with a useful name
     }
+    
+    @Override
+    public void writeFile(String fileName, DictCore core)
+    {
+        var writeLog = "";
+        var finalFile = new File(fileName);
+        var tmpSaveLocation = new File(finalFile.getParent() + File.separator + PGTUtil.TEMP_FILE);
+        try {
+            try (
+                    FileOutputStream fileOutputStream = new FileOutputStream(tmpSaveLocation);
+                    ZipOutputStream out = new ZipOutputStream(fileOutputStream, StandardCharsets.UTF_8)
+            ) {
+                var zipEntry = new ZipEntry(PGTUtil.LANG_FILE_NAME_OLD);
+                out.putNextEntry(zipEntry);
+                var jsonBytes = core.toJson().toJSONString().getBytes(StandardCharsets.UTF_8);
+                out.write(jsonBytes, 0, jsonBytes.length);
+                out.closeEntry();
+                writeLog = DesktopPFontHandler.writeFont(out,
+                        ((DesktopPropertiesManager) core.getPropertiesManager()).getFontCon(),
+                        core.getPropertiesManager().getCachedFont(),
+                        core,
+                        true);
+                writeLog += DesktopPFontHandler.writeFont(out,
+                        ((DesktopPropertiesManager) core.getPropertiesManager()).getFontLocal(),
+                        core.getPropertiesManager().getCachedLocalFont(),
+                        core,
+                        false);
+                // TODO: Integrate with prior states/write them as prior version did
+                out.finish();
+            }
+            DesktopHelpHandler helpHandler = new DesktopHelpHandler();
+            DesktopPFontHandler fontHandler = new DesktopPFontHandler();
+            var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), new DummyInfoBox(), helpHandler, fontHandler);
+            DictCore test = new DictCore(new DesktopPropertiesManager(), osHandler, new PGTUtil(), new DesktopGrammarManager());
+            PolyGlot.getTestShell(test);
+            test.readFile(tmpSaveLocation.getAbsolutePath());
+
+//            if (!core.equals(test))
+//                throw new Exception("Written file does not match file in memory.");
+
+
+        // - read saved tmp file
+        // - if exact match, delete any existing file and rename temp file to final file name
+        // - if does not match
+        //     - and no original file: save, but warn user
+        //     - and original file exists: tell user of mismatch and ask them to save to a new location rather than overwriting
+        } catch (Exception e)
+        {
+            // display warnings here
+        }
+    }
 
     @Override
-    public void writeFile(
+    public void writeFileDEPRECATED(
             String _fileName,
             Document doc,
             DictCore core,
@@ -383,7 +435,7 @@ public final class DesktopIOHandler implements IOHandler {
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
 
             byte[] xmlData = String.valueOf(writer.getBuffer()).getBytes(StandardCharsets.UTF_8);
-            writeLog = writeRawFileOutput(tmpSaveLocation, xmlData, core);
+            writeLog = writeRawFileOutputDeprecated(tmpSaveLocation, xmlData, core);
 
             // copy tmp file to final location folder
             var tmpSaveFinalLocation = new File(finalFile.getParent() + File.separator + tmpSaveLocation.getName());
@@ -402,7 +454,7 @@ public final class DesktopIOHandler implements IOHandler {
                 var osHandler = new DesktopOSHandler(DesktopIOHandler.getInstance(), new DummyInfoBox(), helpHandler, fontHandler);
                 DictCore test = new DictCore(new DesktopPropertiesManager(), osHandler, new PGTUtil(), new DesktopGrammarManager());
                 PolyGlot.getTestShell(test);
-                test.readFile(tmpSaveFinalLocation.getAbsolutePath());
+                test.readFileDEPRECATED(tmpSaveFinalLocation.getAbsolutePath());
 
                 // TODO: Once #1393 is complete, uncomment this - until then it does more damage than good.
 //                if (!core.equals(test)) {
@@ -437,12 +489,12 @@ public final class DesktopIOHandler implements IOHandler {
     /**
      * Creates raw output file (processed for safety/security upstream)
      */
-    private String writeRawFileOutput(File tmpSaveLocation, byte[] xmlData, DictCore core) throws IOException {
+    private String writeRawFileOutputDeprecated(File tmpSaveLocation, byte[] xmlData, DictCore core) throws IOException {
         String writeLog;
 
         try (FileOutputStream fileOutputStream = new FileOutputStream(tmpSaveLocation)) {
             try (ZipOutputStream out = new ZipOutputStream(fileOutputStream, StandardCharsets.UTF_8)) {
-                ZipEntry e = new ZipEntry(PGTUtil.LANG_FILE_NAME);
+                ZipEntry e = new ZipEntry(PGTUtil.LANG_FILE_NAME_OLD);
                 out.putNextEntry(e);
 
                 out.write(xmlData, 0, xmlData.length);
@@ -768,7 +820,7 @@ public final class DesktopIOHandler implements IOHandler {
 
         // remember to load the latest state in addition to all prior ones
         try {
-            reversion = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
+            reversion = zipFile.getEntry(PGTUtil.LANG_FILE_NAME_OLD);
             reversionManager.addVersionToEnd(streamToByteArray(zipFile.getInputStream(reversion)));
         }
         catch (IOException e) {
@@ -1394,6 +1446,32 @@ public final class DesktopIOHandler implements IOHandler {
 
         return ret;
     }
+    
+    @Override
+    public JSONObject getSystemInformationJson() {
+        List<String> attributes = Arrays.asList("java.version",
+                "java.vendor",
+                "java.vendor.url",
+                "java.vm.specification.version",
+                "java.vm.specification.name",
+                "java.vm.version",
+                "java.vm.vendor",
+                "java.vm.name",
+                "java.specification.version",
+                "java.specification.vendor",
+                "java.specification.name",
+                "java.class.version",
+                "java.ext.dirs",
+                "os.name",
+                "os.arch",
+                "os.version");
+        var json = new JSONObject();
+
+        for (String attribute : attributes)
+            json.put(attribute, System.getProperty(attribute));
+
+        return json;
+    }
 
     @Override
     public File unzipResourceToTempLocation(String resourceLocation) throws IOException {
@@ -1501,7 +1579,7 @@ public final class DesktopIOHandler implements IOHandler {
             var test = new DictCore(new DesktopPropertiesManager(), osHandler, new PGTUtil(), new DesktopGrammarManager());
 
             PolyGlot.getTestShell(test);
-            test.readFile(targetPath);
+            test.readFileDEPRECATED(targetPath);
         }
     }
 
@@ -1686,6 +1764,7 @@ public final class DesktopIOHandler implements IOHandler {
                 warningsAndErrors[0] += readArchiveElement(zipFile, entry, core);
             }
 
+            // TODO: JSON UPGRADE
             xmlWarningsAndErrors = readArchivedXml(overrideXML, zipFile, core);
 
             try {
@@ -1744,14 +1823,14 @@ public final class DesktopIOHandler implements IOHandler {
         String[] warningAndErrors = {"", ""};
 
         if (rawXml == null) {
-            var entry = zipFile.getEntry(PGTUtil.LANG_FILE_NAME);
+            var entry = zipFile.getEntry(PGTUtil.LANG_FILE_NAME_OLD);
 
             try (InputStream ioStream = zipFile.getInputStream(entry)) {
                 rawXml = ioStream.readAllBytes();
             }
             catch (IOException e) {
                 // attempt recovery read of XML
-                rawXml = recoverFileBytesFromArchive(zipFile, PGTUtil.LANG_FILE_NAME);
+                rawXml = recoverFileBytesFromArchive(zipFile, PGTUtil.LANG_FILE_NAME_OLD);
                 warningAndErrors[1] = "Encountered corrupted XML file. Recovery-read attempted.\n";
             }
         }
@@ -1797,6 +1876,7 @@ public final class DesktopIOHandler implements IOHandler {
         var entryName = entry.getName();
 
         if (entryName.equals(PGTUtil.LANG_FILE_NAME)
+                || entryName.equals(PGTUtil.LANG_FILE_NAME_OLD)
                 || entryName.equals(PGTUtil.GRAMMAR_SOUNDS_SAVE_PATH)
                 || entryName.equals(PGTUtil.REVERSION_SAVE_PATH)
                 || entryName.equals(PGTUtil.IMAGES_SAVE_PATH)) {

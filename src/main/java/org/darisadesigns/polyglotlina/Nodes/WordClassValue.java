@@ -22,6 +22,7 @@ package org.darisadesigns.polyglotlina.Nodes;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.json.simple.JSONObject;
 
 /**
  * This represents a single value within a word property
@@ -51,6 +52,20 @@ public class WordClassValue extends DictNode {
         valueNode.appendChild(valueElement);
 
         rootElement.appendChild(valueNode);
+     }
+     
+     public JSONObject toJson() {
+        // PGTUtil.CLASS_VALUES_NODE_XID prior node id
+        var json = new JSONObject();
+        json.put(PGTUtil.CLASS_VALUE_ID_XID, this.getId());
+        json.put(PGTUtil.CLASS_VALUE_NAME_XID, this.getValue());
+        return json;
+     }
+     
+     public void fromJson(JSONObject json)
+     {
+         id = Math.toIntExact((long)json.get(PGTUtil.CLASS_VALUE_ID_XID));
+         setValue((String)json.get(PGTUtil.CLASS_VALUE_NAME_XID));
      }
      
      @Override

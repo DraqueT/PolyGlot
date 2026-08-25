@@ -56,7 +56,7 @@ public class ExportFileHelperTest {
         String os = System.getProperty("os.name").toLowerCase();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "excel_exp_test.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "excel_exp_test.pgd");
             boolean separateDeclensions = true;
             ExportFileHelper.exportExcelToDict(OUTPUT, core, separateDeclensions);
             File tmpExcel = new File(OUTPUT);

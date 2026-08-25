@@ -19,6 +19,8 @@
  */
 package org.darisadesigns.polyglotlina.Desktop.CustomControls;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Objects;
 import java.util.regex.Pattern;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -28,6 +30,7 @@ import org.darisadesigns.polyglotlina.Desktop.ManagersCollections.DesktopGrammar
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.WebInterface;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -41,6 +44,7 @@ public class DesktopGrammarSectionNode extends DefaultMutableTreeNode implements
     private String name;
     private String sectionText;
     private int recordingId;
+    private byte[] recordingBytes;
     private boolean gptSelected;
     
     private static final String LOCAL_PACK = "LLOOCCAALL__PPAACCKK";
@@ -85,17 +89,21 @@ public class DesktopGrammarSectionNode extends DefaultMutableTreeNode implements
     @Override
     public void setRecording(byte[] _recording) {
         recordingId = manager.addChangeRecording(recordingId, _recording);
+        recordingBytes = _recording;
     }
     
     @Override
     public byte[] getRecording() throws Exception {
-        return manager.getRecording(recordingId);
+        if (recordingBytes == null)
+            recordingBytes = manager.getRecording(recordingId);
+        return recordingBytes;
     }
     
     @Override
     public void clearRecording() {
         manager.deleteRecording(recordingId);
         recordingId = -1;
+        recordingBytes = null;
     }
     
     @Override
@@ -190,6 +198,34 @@ public class DesktopGrammarSectionNode extends DefaultMutableTreeNode implements
         rootElement.appendChild(secNode);
     }
     
+    public JSONObject toJson() {
+        // PGTUtil.GRAMMAR_SECTION_NODE_XID prior noid id
+        var json = new JSONObject();
+        json.put(PGTUtil.GRAMMAR_SECTION_NAME_XID, this.name);
+        json.put(PGTUtil.GRAMMAR_SECTION_RECORDING_XID, this.getRecordingId());
+        json.put(PGTUtil.GRAMMAR_SECTION_TEXT_XID, this.sectionText);
+        json.put(PGTUtil.GRAMMAR_SECTION_IS_GPT_SELECTED, gptSelected);
+        try {
+            var recordingBytesObj = getRecording();
+            recordingBytesObj = recordingBytesObj == null ? new byte[0] : recordingBytesObj;
+            json.put(PGTUtil.GRAMMAR_SECTION_BYTE_ARRAY, Base64.getEncoder().encodeToString(recordingBytesObj));
+        } catch (Exception e) { 
+            System.out.println("problem loading chapter recording: " + e.getMessage());
+            json.put(PGTUtil.GRAMMAR_SECTION_BYTE_ARRAY, Base64.getEncoder().encodeToString(new byte[0]));
+        }
+        
+        return json;
+    }
+    
+    public void fromJson(JSONObject json)
+    {
+        name = (String)json.get(PGTUtil.GRAMMAR_SECTION_NAME_XID);
+        setRecordingId(Math.toIntExact((long)json.get(PGTUtil.GRAMMAR_SECTION_RECORDING_XID)));
+        sectionText = (String)json.get(PGTUtil.GRAMMAR_SECTION_TEXT_XID);
+        gptSelected = (boolean)json.get(PGTUtil.GRAMMAR_SECTION_IS_GPT_SELECTED);
+        recordingBytes = Base64.getDecoder().decode((String)json.get(PGTUtil.GRAMMAR_SECTION_BYTE_ARRAY));
+    }
+    
     @Override
     public boolean equals(Object comp) {
         boolean ret = false;
@@ -197,8 +233,7 @@ public class DesktopGrammarSectionNode extends DefaultMutableTreeNode implements
         if (this == comp) {
             ret = true;
         } else if (comp instanceof DesktopGrammarSectionNode compSec) {
-            DictCore core = manager.getCore();
-            ret = WebInterface.archiveHTML(sectionText, core).equals(WebInterface.archiveHTML(compSec.sectionText, core));
+            ret = sectionText.equals(compSec.sectionText);
             ret = ret && name.trim().equals(compSec.name.trim());
             ret = ret && recordingId == compSec.recordingId;
             ret = ret && gptSelected == compSec.gptSelected;

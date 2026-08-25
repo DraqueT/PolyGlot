@@ -32,6 +32,8 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.HashSet;
 import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -410,6 +412,79 @@ public class EtymologyManager {
         rootElement.appendChild(collection);
     }
     
+    public JSONObject toJson() {
+        var json = new JSONObject();
+        ConWordCollection wordCollection = core.getWordCollection();
+        //Element collection = doc.createElement(PGTUtil.ETY_COLLECTION_XID);
+        var internal = new JSONArray();
+        // we only need to record the relationship one way, the bidirection will be regenerated
+        for (Entry<Integer, Set<Integer>> curEntry : parentToChild.entrySet()) {
+            // skip nonexistent words
+            if (!wordCollection.exists(curEntry.getKey()))
+                continue;
+            
+            var myNode = new JSONObject();
+            myNode.put(PGTUtil.ETY_INT_RELATION_NODE_XID, curEntry.getKey());
+            var myNodeRelations = new JSONArray();
+            for (Integer curChild : curEntry.getValue()) {
+                if (!wordCollection.exists(curChild))
+                    continue;
+                myNodeRelations.add(curChild);
+            }
+            myNode.put(PGTUtil.ETY_INT_CHILD_XID, myNodeRelations);
+            internal.add(myNode);
+        }
+        json.put(PGTUtil.ETY_COLLECTION_INTERNAL_XID, internal);
+        
+        var external = new JSONArray();
+        // adds a node for each word with at least one external parent
+        childToExtParent.entrySet().stream().map((curEntry) -> {
+            var childContainer = new JSONObject();
+            childContainer.put(PGTUtil.ETY_CHILD_EXTERNALS_XID, curEntry.getKey());
+            var extLinks = new JSONArray();
+            curEntry.getValue().values().forEach((parent) -> {
+                var extParent = new JSONObject();
+                extParent.put(PGTUtil.ETY_EXTERNAL_WORD_VALUE_XID, parent.getValue());
+                extParent.put(PGTUtil.ETY_EXTERNAL_WORD_ORIGIN_XID, parent.getExternalLanguage());
+                extParent.put(PGTUtil.ETY_EXTERNAL_WORD_DEFINITION_XID, parent.getDefinition());
+                extLinks.add(extParent);
+                
+            });
+            childContainer.put(PGTUtil.ETY_COLLECTION_EXTERNAL_XID, extLinks);
+            return childContainer;
+        }).forEachOrdered((childContainer) -> {
+            external.add(childContainer);
+        });
+        
+        json.put(PGTUtil.ETY_COLLECTION_EXTERNAL_XID, external);
+        return json;
+    }
+    
+    public void fromJson(JSONObject json) throws IllegalLoopException
+    {
+        for (var etyEntObj : (JSONArray) json.get(PGTUtil.ETY_COLLECTION_INTERNAL_XID))
+        {
+            var etyEnt = (JSONObject)etyEntObj;
+            var id = Math.toIntExact((long)etyEnt.get(PGTUtil.ETY_INT_RELATION_NODE_XID));
+            for (var childNodeObj : (JSONArray)etyEnt.get(PGTUtil.ETY_INT_CHILD_XID))
+                addRelation(id, Math.toIntExact((long)childNodeObj));
+        }
+        for (var extChildObj : (JSONArray)json.get(PGTUtil.ETY_COLLECTION_EXTERNAL_XID))
+        {
+            var extChild = (JSONObject)extChildObj;
+            var id = Math.toIntExact((long)extChild.get(PGTUtil.ETY_CHILD_EXTERNALS_XID));
+            for (var extParObj : (JSONArray)extChild.get(PGTUtil.ETY_COLLECTION_EXTERNAL_XID))
+            {
+                var extPar = (JSONObject)extParObj;
+                var extParent = new EtyExternalParent();
+                extParent.setValue((String)extPar.get(PGTUtil.ETY_EXTERNAL_WORD_VALUE_XID));
+                extParent.setExternalLanguage((String)extPar.get(PGTUtil.ETY_EXTERNAL_WORD_ORIGIN_XID));
+                extParent.setDefinition((String)extPar.get(PGTUtil.ETY_EXTERNAL_WORD_DEFINITION_XID));
+                addExternalRelation(extParent, id);
+            }
+        }
+    }
+    
     /**
      * Tests whether adding a parent-child relationship would create an illegal
      * looping scenario
@@ -582,9 +657,7 @@ public class EtymologyManager {
         
         if (this == comp) {
             ret = true;
-        } else if (comp instanceof EtymologyManager) {
-            EtymologyManager compEt = (EtymologyManager)comp;
-            
+        } else if (comp instanceof EtymologyManager compEt) {
             ret = parentToChild.equals(compEt.parentToChild);
             ret = ret && childToParent.equals(compEt.childToParent);
             ret = ret && extParentToChild.equals(compEt.extParentToChild);

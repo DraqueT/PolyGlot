@@ -22,6 +22,7 @@ package org.darisadesigns.polyglotlina.Nodes;
 import java.util.Objects;
 import org.darisadesigns.polyglotlina.ManagersCollections.PhraseManager;
 import org.darisadesigns.polyglotlina.PGTUtil;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -133,6 +134,32 @@ public class PhraseNode extends DictNode {
         phrase.appendChild(phraseValue);
         
         rootElement.appendChild(phrase);
+    }
+    
+    public JSONObject toJson() {
+        // PGTUtil.PHRASE_NODE_XID); priod node id
+        var json = new JSONObject();
+        json.put(PGTUtil.PHRASE_ID_XID, getId());
+        json.put(PGTUtil.PHRASE_GLOSS_XID, this.getValue());
+        json.put(PGTUtil.PHRASE_CONPHRASE_XID, conPhrase);
+        json.put(PGTUtil.PHRASE_LOCALPHRASE_XID, localPhrase);
+        json.put(PGTUtil.PHRASE_PRONUNCIATION_XID, pronunciation);
+        json.put(PGTUtil.PHRASE_PRONUNCIATION_OVERRIDE_XID, procOverride);
+        json.put(PGTUtil.PHRASE_NOTES_XID, notes);
+        json.put(PGTUtil.PHRASE_ORDER_XID, orderId);
+        return json;
+    }
+    
+    public void fromJson(JSONObject json)
+    {
+        id = Math.toIntExact((long)json.get(PGTUtil.PHRASE_ID_XID));
+        setValue((String)json.get(PGTUtil.PHRASE_GLOSS_XID));
+        conPhrase = (String)json.get(PGTUtil.PHRASE_CONPHRASE_XID);
+        localPhrase = (String)json.get(PGTUtil.PHRASE_LOCALPHRASE_XID);
+        pronunciation = (String)json.get(PGTUtil.PHRASE_PRONUNCIATION_XID);
+        procOverride = (boolean)json.get(PGTUtil.PHRASE_PRONUNCIATION_OVERRIDE_XID);
+        notes = (String)json.get(PGTUtil.PHRASE_NOTES_XID);
+        orderId = Math.toIntExact((long)json.get(PGTUtil.PHRASE_ORDER_XID));
     }
     
     @Override

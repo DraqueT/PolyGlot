@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Random;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -110,6 +112,28 @@ public class WordClassCollection extends DictionaryCollection<WordClass> {
         });
 
         rootElement.appendChild(wordClasses);
+    }
+    
+    public JSONArray toJson() {
+        var json = new JSONArray();
+        nodeMap.values().forEach((curClass) -> {
+            json.add(curClass.toJson());
+        });
+
+        return json;
+    }
+    
+    public void fromJson(JSONArray json) throws Exception
+    {
+        for (var value : json)
+        {
+            var newClass = new WordClass();
+            newClass.FromJson((JSONObject) value);
+            //addNode(newClass);
+            nodeMap.put(newClass.getId(), newClass);
+            if (highestNodeId <= newClass.getId())
+                highestNodeId = newClass.getId() + 1;
+        }
     }
 
     /**

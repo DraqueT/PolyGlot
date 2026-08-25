@@ -34,6 +34,8 @@ import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.RegexTools;
 import org.darisadesigns.polyglotlina.RegexTools.ReplaceOptions;
 import org.darisadesigns.polyglotlina.WebInterface;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -244,8 +246,8 @@ public class ConWord extends DictNode {
             ret = value.equals(c.value);
             ret = ret && localWord.replaceAll("\\s", "").equals(c.localWord.replaceAll("\\s", ""));
             ret = ret && typeId == c.typeId;
-            ret = ret && WebInterface.archiveHTML(definition, core).equals(WebInterface.archiveHTML(c.definition, core));
-            ret = ret && WebInterface.getTextFromHtml(etymNotes).equals(WebInterface.getTextFromHtml(c.etymNotes));
+            ret = ret && definition.equals(c.definition);
+            ret = ret && etymNotes.equals(c.etymNotes);
             ret = ret && procOverride == c.procOverride;
             ret = ret && autoConjugationOverride == c.autoConjugationOverride;
             ret = ret && rulesOverride == c.rulesOverride;
@@ -612,5 +614,67 @@ public class ConWord extends DictNode {
         wordNode.appendChild(wordValue);
 
         rootElement.appendChild(wordNode);
+    }
+    
+    public JSONObject toJson() {
+        var json = new JSONObject();
+        // PGTUtil.WORD_XID prior node id
+        json.put(PGTUtil.WORD_ID_XID, this.getId());
+        json.put(PGTUtil.LOCALWORD_XID, this.localWord);
+        json.put(PGTUtil.CONWORD_XID, this.getValue());
+        json.put(PGTUtil.WORD_POS_ID_XID, this.getWordTypeId());
+        try {
+            json.put(PGTUtil.WORD_PROC_XID, this.getPronunciation());
+        }
+        catch (Exception e) {
+            // Do nothing. Users are made aware of this issue elsewhere.
+            // IOHandler.writeErrorLog(e);
+        }
+        json.put(PGTUtil.WORD_DEF_XID, this.definition);
+        json.put(PGTUtil.WORD_PROCOVERRIDE_XID, this.procOverride);
+        json.put(PGTUtil.WORD_AUTODECLOVERRIDE_XID, this.autoConjugationOverride);
+        json.put(PGTUtil.WORD_RULEOVERRIDE_XID, this.rulesOverride);
+        var wordClassValues = new JSONArray();
+        for (Entry<Integer, Integer> entry : this.getClassValues()) {
+            var classVal = new JSONObject();
+            classVal.put(PGTUtil.WORD_CLASS_XID, entry.getKey());
+            classVal.put(PGTUtil.WORD_CLASS_ID_XID, entry.getValue());
+            wordClassValues.add(classVal);
+        }
+        json.put(PGTUtil.WORD_CLASSCOLLECTION_XID, wordClassValues);
+        var wordClassTextVals = new JSONArray();
+        for (Entry<Integer, String> entry : this.getClassTextValues()) {
+            var classVal = new JSONObject();
+            classVal.put(PGTUtil.WORD_CLASS_XID, entry.getKey());
+            classVal.put(PGTUtil.WORD_CLASS_ID_XID, entry.getValue());
+            wordClassTextVals.add(classVal);
+        }
+        json.put(PGTUtil.WORD_CLASS_TEXT_VAL_COLLECTION_XID, wordClassTextVals);
+        json.put(PGTUtil.WORD_ETY_NOTES_XID, this.etymNotes);
+        return json;
+    }
+    
+    public void fromJson(JSONObject json)
+    {
+        id = Math.toIntExact((long)json.get(PGTUtil.WORD_ID_XID));
+        localWord = (String)json.get(PGTUtil.LOCALWORD_XID);
+        setValue((String)json.get(PGTUtil.CONWORD_XID));
+        setWordTypeId(Math.toIntExact((long)json.get(PGTUtil.WORD_POS_ID_XID)));
+        setPronunciation((String)json.get(PGTUtil.WORD_PROC_XID));
+        definition = (String)json.get(PGTUtil.WORD_DEF_XID);
+        procOverride = (boolean)json.get(PGTUtil.WORD_PROCOVERRIDE_XID);
+        autoConjugationOverride = (boolean)json.get(PGTUtil.WORD_AUTODECLOVERRIDE_XID);
+        rulesOverride = (boolean)json.get(PGTUtil.WORD_RULEOVERRIDE_XID);
+        for (var classValObj : (JSONArray) json.get(PGTUtil.WORD_CLASSCOLLECTION_XID))
+        {
+            var classId = Math.toIntExact((long)((JSONObject)classValObj).get(PGTUtil.WORD_CLASS_XID));
+            var classValue = Math.toIntExact((long)((JSONObject)classValObj).get(PGTUtil.WORD_CLASS_ID_XID));
+            classValues.put(classId, classValue);
+        }
+        for (var classTextVal : (JSONArray)json.get(PGTUtil.WORD_CLASS_TEXT_VAL_COLLECTION_XID))
+            classTextValues.put(
+                    Math.toIntExact((long)((JSONObject)classTextVal).get(PGTUtil.WORD_CLASS_XID)), 
+                    (String)((JSONObject)classTextVal).get(PGTUtil.WORD_CLASS_ID_XID));
+        etymNotes = (String)json.get(PGTUtil.WORD_ETY_NOTES_XID);
     }
 }

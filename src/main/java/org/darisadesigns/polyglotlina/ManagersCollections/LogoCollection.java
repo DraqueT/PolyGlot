@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -297,6 +299,57 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
         }
     }
     
+    public JSONObject toJson() {
+        var json = new JSONObject();
+        var logoJson = new JSONArray();
+        for (LogoNode curNode : nodeMap.values())
+            logoJson.add(curNode.toJson());
+        json.put(PGTUtil.LOGOGRAPHS_COLLECTION_XID, logoJson);
+        var relationsJson = new JSONObject();
+        for (var key : logoToWord.keySet())
+        {
+            if (logoToWord.get(key).isEmpty())
+                continue;
+            var wordList = new JSONArray();
+            for (var target : logoToWord.get(key))
+                wordList.add(target);
+            relationsJson.put(key, wordList);
+        }
+        json.put(PGTUtil.LOGO_RELATION_COLLECTION_XID, relationsJson);
+        return json;
+    }
+    
+    public void fromJson(JSONObject json) throws Exception
+    {
+        for (var logoObj : (JSONArray)json.get(PGTUtil.LOGOGRAPHS_COLLECTION_XID))
+        {
+            var newNode = new LogoNode(core);
+            newNode.fromJson((JSONObject)logoObj);
+            insert(newNode.getId(), newNode);
+        }
+        var logRelObj = (JSONObject)json.get(PGTUtil.LOGO_RELATION_COLLECTION_XID);
+        for (var key : logRelObj.keySet())
+        {
+            var logoId = (int)Integer.parseInt((String)key);
+            var wordList = new ArrayList<Integer>();
+            for (var wordIdobj : (JSONArray)logRelObj.get(key))
+            {
+                var wordId = Math.toIntExact((long)wordIdobj);
+                wordList.add(wordId);
+                if (wordToLogo.containsKey(wordId))
+                    wordToLogo.get(wordId).add(logoId);
+                else
+                {
+                    var list = new ArrayList<Integer>();
+                    list.add(logoId);
+                    wordToLogo.put(wordId, list);
+                }
+            }
+            logoToWord.put(logoId, wordList);
+        }
+        loadRadicalRelations();
+    }
+    
     public LogoNode getBufferNode() {
         return bufferNode;
     }
@@ -401,9 +454,7 @@ public class LogoCollection extends DictionaryCollection<LogoNode> {
         
         if (comp == this) {
             ret = true;
-        } else if (comp instanceof LogoCollection) {
-            LogoCollection compLog = (LogoCollection) comp;
-            
+        } else if (comp instanceof LogoCollection compLog) {
             ret = logoToWord.equals(compLog.logoToWord) || (logoToWord.isEmpty() && compLog.logoToWord.isEmpty());
             ret = ret && wordToLogo.equals(compLog.wordToLogo) || (wordToLogo.isEmpty() && compLog.wordToLogo.isEmpty());
             ret = ret && super.equals(comp);

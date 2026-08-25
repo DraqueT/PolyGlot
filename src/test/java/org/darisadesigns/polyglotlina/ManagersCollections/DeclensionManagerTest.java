@@ -55,7 +55,7 @@ public class DeclensionManagerTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
         } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
@@ -71,7 +71,7 @@ public class DeclensionManagerTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
         } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
@@ -89,7 +89,7 @@ public class DeclensionManagerTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
         } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
@@ -107,7 +107,7 @@ public class DeclensionManagerTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
         } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
@@ -132,7 +132,7 @@ public class DeclensionManagerTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
         } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
@@ -158,7 +158,7 @@ public class DeclensionManagerTest {
         DictCore debugCore = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
         } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
@@ -183,7 +183,7 @@ public class DeclensionManagerTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
         } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
@@ -219,7 +219,7 @@ public class DeclensionManagerTest {
         DictCore subCore = DummyCore.newCore();
         
         try {
-            subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
+            subCore.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
             int expectedInitialSize = 8;
 
             ConjugationManager decManSub = subCore.getConjugationManager();
@@ -236,7 +236,7 @@ public class DeclensionManagerTest {
         DictCore subCore = DummyCore.newCore();
         
         try {
-            subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
+            subCore.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
             int expectedFinalSize = 6;
 
             ConjugationManager decManSub = subCore.getConjugationManager();
@@ -257,7 +257,7 @@ public class DeclensionManagerTest {
         DictCore subCore = DummyCore.newCore();
         
         try {
-            subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
+            subCore.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
             int expectedFinalSize = 6;
 
             ConjugationManager decManSub = subCore.getConjugationManager();
@@ -281,7 +281,7 @@ public class DeclensionManagerTest {
         DictCore subCore = DummyCore.newCore();
         
         try {
-            subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
+            subCore.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
             int expectedFinalSize = 5;
 
             ConjugationManager decManSub = subCore.getConjugationManager();
@@ -302,7 +302,7 @@ public class DeclensionManagerTest {
         DictCore subCore = DummyCore.newCore();
         
         try {
-            subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
+            subCore.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
             List<ConjugationGenRule> rulesToDelete = new ArrayList<>();
             int expectedFinalSize = 4;
 
@@ -323,7 +323,7 @@ public class DeclensionManagerTest {
         DictCore subCore = DummyCore.newCore();
         
         try {
-            subCore.readFile(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
+            subCore.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "testBulkDelete.pgd");
             int typeId = 2;
             String combinedDeclensionId = ",2,2,";
             int expectedResultSize = 5;
@@ -347,7 +347,7 @@ public class DeclensionManagerTest {
         String expectedMessage = "Words without populated dictionary cores cannot be tested.";
         
         try {
-            subCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
+            subCore.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
             noCoreWord.setValue("hi");
             noCoreWord.setWordTypeId(2);
 
@@ -370,7 +370,7 @@ public class DeclensionManagerTest {
         DictCore debugCore = DummyCore.newCore();
         
         try {
-            debugCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
+            debugCore.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
         } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
@@ -421,7 +421,7 @@ public class DeclensionManagerTest {
         DictCore debugCore = DummyCore.newCore();
         
         try {
-            debugCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
+            debugCore.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
         } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
@@ -478,7 +478,7 @@ public class DeclensionManagerTest {
         DictCore debugCore = DummyCore.newCore();
         
         try {
-            debugCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
+            debugCore.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
         } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
@@ -535,7 +535,7 @@ public class DeclensionManagerTest {
         DictCore debugCore = DummyCore.newCore();
         
         try {
-            debugCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
+            debugCore.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
         } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
@@ -588,7 +588,7 @@ public class DeclensionManagerTest {
         DictCore debugCore = DummyCore.newCore();
         
         try {
-            debugCore.readFile(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
+            debugCore.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "test_conj_debug.pgd");
         } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
@@ -646,7 +646,7 @@ public class DeclensionManagerTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
         } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
@@ -669,7 +669,7 @@ public class DeclensionManagerTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
         } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);
         }
@@ -742,7 +742,7 @@ public class DeclensionManagerTest {
         int[] expectedIndexOrder = {1, 2, 3, 4, 5, 6, 7, 8};
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
             ConjugationManager decMan = core.getConjugationManager();
             
             ConjugationGenRule[] allRules = decMan.getConjugationRulesForType(2);
@@ -768,7 +768,7 @@ public class DeclensionManagerTest {
         int[] expectedIndexOrder = {1, 2, 3, 4};
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
             ConjugationManager decMan = core.getConjugationManager();
             
             ConjugationGenRule[] allRules = decMan.getConjugationRulesForTypeAndCombId(2, ",2,2,");
@@ -794,7 +794,7 @@ public class DeclensionManagerTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
             ConjugationManager decMan = core.getConjugationManager();
             
             ConjugationGenRule[] rules = decMan.getConjugationRulesForTypeAndCombId(2, combId);
@@ -822,7 +822,7 @@ public class DeclensionManagerTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
             ConjugationManager decMan = core.getConjugationManager();
             
             ConjugationGenRule[] rules = decMan.getConjugationRulesForTypeAndCombId(2, combId);
@@ -850,7 +850,7 @@ public class DeclensionManagerTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
             ConjugationManager decMan = core.getConjugationManager();
             
             ConjugationGenRule[] rules = decMan.getConjugationRulesForTypeAndCombId(2, combId);
@@ -878,7 +878,7 @@ public class DeclensionManagerTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
             ConjugationManager decMan = core.getConjugationManager();
             
             ConjugationGenRule[] rules = decMan.getConjugationRulesForTypeAndCombId(2, combId);
@@ -906,7 +906,7 @@ public class DeclensionManagerTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
             ConjugationManager decMan = core.getConjugationManager();
             
             ConjugationGenRule[] rules = decMan.getConjugationRulesForTypeAndCombId(2, combId);
@@ -934,7 +934,7 @@ public class DeclensionManagerTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "testReorderRules.pgd");
             ConjugationManager decMan = core.getConjugationManager();
             
             ConjugationGenRule[] rules = decMan.getConjugationRulesForTypeAndCombId(2, combId);

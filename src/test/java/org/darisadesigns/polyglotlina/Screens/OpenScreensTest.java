@@ -58,7 +58,7 @@ public class OpenScreensTest {
         
         try {
             errors = DesktopIOHandler.getInstance().getErrorLogFile();
-            core.readFile(PGTUtil.TESTRESOURCES + "basic_lang.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "basic_lang.pgd");
 
             if (errors.exists()) {
                 errors.delete();

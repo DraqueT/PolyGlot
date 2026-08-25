@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.Map;
 import org.darisadesigns.polyglotlina.ManagersCollections.ConjugationManager;
 import org.darisadesigns.polyglotlina.RegexTools;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -257,6 +258,40 @@ public class ConjugationNode extends DictNode {
         wordNode.appendChild(wordValue);
     }
     
+    public JSONObject toJson() {
+        // PGTUtil.DECLENSION_XID prior node id
+        var json = new JSONObject();
+        json.put(PGTUtil.DECLENSION_ID_XID, this.getId());
+        json.put(PGTUtil.DECLENSION_HI_DIM_XID, highestDimension);
+        json.put(PGTUtil.DECLENSION_TEXT_XID, this.getValue());
+        json.put(PGTUtil.DECLENSION_IS_DIMENSIONLESS_XID, dimensionless);
+        json.put(PGTUtil.DECLENSION_NOTES_XID, this.notes);
+        json.put(PGTUtil.DECLENSION_COMB_DIM_XID, this.getCombinedDimId());
+        // private final Map<Integer, ConjugationDimension> dimensions = new HashMap<>();
+        var dimObject = new JSONObject();
+        for (var key : dimensions.keySet())
+            dimObject.put(key, dimensions.get(key).toJson());
+        json.put(PGTUtil.DIMENSION_ID_XID, dimObject);
+        return json;
+    }
+    
+    public void fromJson(JSONObject json)
+    {
+        id = Math.toIntExact((long)json.get(PGTUtil.DECLENSION_ID_XID));
+        highestDimension = Math.toIntExact((long)json.get(PGTUtil.DECLENSION_HI_DIM_XID));
+        setValue((String)json.get(PGTUtil.DECLENSION_TEXT_XID));
+        dimensionless = (boolean)json.get(PGTUtil.DECLENSION_IS_DIMENSIONLESS_XID);
+        notes = (String)json.get(PGTUtil.DECLENSION_NOTES_XID);
+        var dimObject = (JSONObject)json.get(PGTUtil.DIMENSION_ID_XID);
+        for (var key : dimObject.keySet())
+        {
+            var conjDim = new ConjugationDimension();
+            conjDim.fromJson((JSONObject)dimObject.get(key));
+            dimensions.put((int)Integer.parseInt((String)key), conjDim);
+        }
+        combinedDimId = (String)json.get(PGTUtil.DECLENSION_COMB_DIM_XID);
+    }
+    
     @Override
     public void setEqual(DictNode _node) throws ClassCastException {
         if (!(_node instanceof ConjugationNode)) {
@@ -287,7 +322,7 @@ public class ConjugationNode extends DictNode {
             ConjugationNode c = (ConjugationNode)comp;
             
             ret = value.trim().equals(c.value.trim());
-            ret = ret && WebInterface.getTextFromHtml(notes).equals(WebInterface.getTextFromHtml(c.notes));
+            ret = ret && notes.equals(c.notes);
             ret = ret && combinedDimId.equals(c.combinedDimId);
             ret = ret && dimensionless == c.dimensionless;
             ret = ret && highestDimension == c.highestDimension;

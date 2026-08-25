@@ -25,6 +25,8 @@ import java.util.List;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.Nodes.PhraseNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -123,6 +125,24 @@ public class PhraseManager extends DictionaryCollection<PhraseNode> {
         }
         
         rootElement.appendChild(phraseCollection);
+    }
+    
+    public JSONArray toJson()
+    {
+        var json = new JSONArray();
+        for (var curNode : this.getAllValues())
+            json.add(curNode.toJson());
+        return json;
+    }
+    
+    public void fromJson(JSONArray json) throws Exception
+    {
+        for (var phraseObj : json)
+        {
+            var curNode = new PhraseNode();
+            curNode.fromJson((JSONObject)phraseObj);
+            addNode(curNode);
+        }
     }
 
     @Override

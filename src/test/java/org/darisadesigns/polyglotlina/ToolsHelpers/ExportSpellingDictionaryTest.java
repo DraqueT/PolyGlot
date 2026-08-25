@@ -43,7 +43,7 @@ public class ExportSpellingDictionaryTest {
         export = new ExportSpellingDictionary(core);
 
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + TEST_FILE);
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + TEST_FILE);
         }
         catch (IOException | IllegalStateException | ParserConfigurationException e) {
             fail(e);

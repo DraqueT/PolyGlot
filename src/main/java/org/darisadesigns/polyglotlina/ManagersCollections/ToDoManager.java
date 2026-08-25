@@ -22,6 +22,7 @@ package org.darisadesigns.polyglotlina.ManagersCollections;
 import java.util.Objects;
 import org.darisadesigns.polyglotlina.Nodes.ToDoNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -52,6 +53,16 @@ public class ToDoManager {
         getRoot().writeXML(doc, toDos);
         
         rootElement.appendChild(toDos);
+    }
+    
+    public JSONObject toJson()
+    {
+        return getRoot().toJson();
+    }
+    
+    public void fromJson(JSONObject json)
+    {
+        getRoot().fromJson(json);
     }
     
     public ToDoNode getBuffer() {
@@ -89,15 +100,10 @@ public class ToDoManager {
     @Override
     public boolean equals(Object comp) {
         boolean ret = false;
-        
-        if (comp == this) {
+        if (comp == this)
             ret = true;
-        } else if (comp instanceof ToDoManager) {
-            ToDoManager compMan = (ToDoManager)comp;
-            
+        else if (comp instanceof ToDoManager compMan)
             ret = (root == null && compMan.root == null) || root.equals(compMan.root);
-        }
-        
         return ret;
     }
 

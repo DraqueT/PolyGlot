@@ -60,7 +60,7 @@ public class FormattedTextHelperTest {
         System.out.println("FormattedTextHelperTest.FormattedTextHelperTest");
         core = DummyCore.newCore();
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "Lodenkur_TEST.pgd");
         } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, "FORMATTEDTEXTHELPERTEST");
         }

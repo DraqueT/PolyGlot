@@ -82,6 +82,8 @@ public class PGTUtil {
     public static final String WORD_RULEOVERRIDE_XID = "wordRuleOverride";
     public static final String WORD_CLASSCOLLECTION_XID = "wordClassCollection";
     public static final String WORD_CLASS_AND_VALUE_XID = "wordClassification";
+    public static final String WORD_CLASS_XID = "wordClass";
+    public static final String WORD_CLASS_ID_XID = "wordClassId";
     public static final String WORD_CLASS_TEXT_VAL_COLLECTION_XID = "wordClassTextValueCollection";
     public static final String WORD_CLASS_TEXT_VAL_XID = "wordClassTextValue";
     public static final String WORD_ETY_NOTES_XID = "wordEtymologyNotes";
@@ -147,6 +149,7 @@ public class PGTUtil {
     // declension properties
     public static final String DECLENSION_COLLECTION_XID = "declensionCollection";
     public static final String DECLENSION_XID = "declensionNode";
+    public static final String DECLENSION_HI_DIM_XID = "declensionHIghestDimension";
     public static final String DECLENSION_ID_XID = "declensionId";
     public static final String DECLENSION_TEXT_XID = "declensionText";
     public static final String DECLENSION_COMB_DIM_XID = "combinedDimId";
@@ -169,6 +172,7 @@ public class PGTUtil {
     public static final String PRO_GUIDE_BASE_XID = "proGuideBase";
     public static final String PRO_GUIDE_PHON_XID = "proGuidePhon";
     public static final String PRO_GUIDE_RECURSIVE_XID = "proGuideRecurse";
+    public static final String PRO_GUIDE_PRONUNCIATIONS_XID = "proPronunciations";
     public static final String PRO_GUIDE_SYLLABLES_LIST = "proFGFuideSyllableList";
     public static final String PRO_GUIDE_SYLLABLE = "proGuideSyllable";
     public static final String PRO_GUIDE_COMPOSITION_SYLLABLE = "proGuideSyllableComposition";
@@ -190,6 +194,7 @@ public class PGTUtil {
     public static final String FAM_WORD_XID = "thesWord";
 
     // autodeclansion generation properties
+    public static final String DEC_GEN_TOPID_XID = "decGenTopId";
     public static final String DEC_GEN_RULE_XID = "decGenRule";
     public static final String DEC_GEN_RULE_TYPE_XID = "decGenRuleTypeId";
     public static final String DEC_GEN_RULE_COMB_XID = "decGenRuleComb";
@@ -199,6 +204,8 @@ public class PGTUtil {
     public static final String DEC_GEN_RULE_APPLY_TO_CLASSES_XID = "decGenRuleApplyToClasses";
     public static final String DEC_GEN_RULE_APPLY_TO_CLASS_VALUE_XID = "decGenRuleApplyToClassValue";
 
+    public static final String DEC_GEN_TEMPLATES_XID = "decGenTemplates";
+    
     // autodeclension transform properties
     public static final String DEC_GEN_TRANS_XID = "decGenTrans";
     public static final String DEC_GEN_TRANS_REGEX_XID = "decGenTransRegex";
@@ -212,6 +219,7 @@ public class PGTUtil {
 
     // properties for logographs
     public static final String LOGO_ROOT_NOTE_XID = "logoRootNode";
+    public static final String LOGO_BYTE_ARRAY = "logoByteArray";
     public static final String LOGOGRAPHS_COLLECTION_XID = "logoGraphsCollection";
     public static final String LOGO_STROKES_XID = "logoStrokes";
     public static final String LOGO_NOTES_XID = "logoNotes";
@@ -233,6 +241,7 @@ public class PGTUtil {
     public static final String GRAMMAR_SECTION_NAME_XID = "grammarSectionName";
     public static final String GRAMMAR_SECTION_RECORDING_XID = "grammarSectionRecordingXID";
     public static final String GRAMMAR_SECTION_TEXT_XID = "grammarSectionText";
+    public static final String GRAMMAR_SECTION_BYTE_ARRAY = "grammarSectionByteArray";
     public static final String GRAMMAR_SECTION_IS_GPT_SELECTED = "gptSelected";
 
     // properties for word classes
@@ -262,6 +271,8 @@ public class PGTUtil {
 
     // etymology constants
     public static final String ETY_COLLECTION_XID = "EtymologyCollection";
+    public static final String ETY_COLLECTION_INTERNAL_XID = "EtymologyCollectionInternal";
+    public static final String ETY_COLLECTION_EXTERNAL_XID = "EtymologyCollectionExternal";
     public static final String ETY_INT_RELATION_NODE_XID = "EtymologyInternalRelation";
     public static final String ETY_INT_CHILD_XID = "EtymologyInternalChild";
     public static final String ETY_CHILD_EXTERNALS_XID = "EtymologyChildToExternalsNode";
@@ -275,6 +286,7 @@ public class PGTUtil {
     public static final String TODO_NODE_XID = "ToDoNodeHead";
     public static final String TODO_NODE_DONE_XID = "ToDoNodeDone";
     public static final String TODO_NODE_LABEL_XID = "ToDoNodeLabel";
+    public static final String TODO_CHILDREN_XID = "ToDoNodeChildren";
 
     // constants for PolyGlot options found in PolyGlot.ini
     public static final int OPTIONS_NUM_LAST_FILES = 5;
@@ -328,7 +340,8 @@ public class PGTUtil {
     public static final int CHAP_GRAMMAR = 5;
 
     // string constants
-    public static final String LANG_FILE_NAME = "PGDictionary.xml";
+    public static final String LANG_FILE_NAME_OLD = "PGDictionary.xml";
+    public static final String LANG_FILE_NAME = "DictCore.json";
     public static final String CON_FONT_FILE_NAME = "conLangFont";
     public static final String LOCAL_FONT_FILE_NAME = "localLangFont";
     public static final String LCD_FONT_LOCATION = "/assets/org/DarisaDesigns/FontAssets/lcdFont.ttf";
@@ -380,6 +393,8 @@ public class PGTUtil {
     public static final String IPA_SOUNDS_LOCATION = "/assets/org/DarisaDesigns/SoundAssets/";
     
     public static final String IMAGE_ID_ATTRIBUTE = "imageIDAttribute";
+    public static final String IMAGE_VAL = "imageVal";
+    public static final String IMAGE_BYTES = "imageBytes";
     public static final String TRUE = "T";
     public static final String FALSE = "F";
     public static final String DISPLAY_NAME = "PolyGlot";

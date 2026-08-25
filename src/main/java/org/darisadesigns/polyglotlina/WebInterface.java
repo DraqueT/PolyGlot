@@ -118,6 +118,7 @@ public class WebInterface {
      */
     public static String unarchiveHTML(String html, DictCore core) throws Exception {
         // pattern for finding archived images
+        // throw new Exception("STOP USING THIS!");
         Pattern pattern = Pattern.compile("(<img src=\"[^>,_]+\">)");
         Matcher matcher = pattern.matcher(html);
 

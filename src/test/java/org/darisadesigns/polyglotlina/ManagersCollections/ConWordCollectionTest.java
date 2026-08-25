@@ -46,7 +46,7 @@ public class ConWordCollectionTest extends PTest {
         badLexEntriesCore = DummyCore.newCore();
         
         try {
-            badLexEntriesCore.readFile(PGTUtil.TESTRESOURCES + "test_lex_problems.pgd");
+            badLexEntriesCore.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "test_lex_problems.pgd");
         } catch (IOException | IllegalStateException | ParserConfigurationException e) {
             DesktopIOHandler.getInstance().writeErrorLog(e, e.getLocalizedMessage());
             fail(e);

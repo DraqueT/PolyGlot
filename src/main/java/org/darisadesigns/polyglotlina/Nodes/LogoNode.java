@@ -19,14 +19,17 @@
  */
 package org.darisadesigns.polyglotlina.Nodes;
 
+import java.nio.charset.StandardCharsets;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.WebInterface;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -42,7 +45,7 @@ public class LogoNode extends DictNode {
     private boolean isRadical = false;
     private String tmpRads = "";
     private String tmpReadingBuffer = "";
-    private DictCore core;
+    private final DictCore core;
     protected List<LogoNode> radicals = new ArrayList<>();
     protected List<String> readings = new ArrayList<>();
 
@@ -307,6 +310,36 @@ public class LogoNode extends DictNode {
 
         rootElement.appendChild(logoElement);
     }
+    
+    public JSONObject toJson() {
+        // PGTUtil.LOGOGRAPH_NODE_XID prior noid id
+        var json = new JSONObject();
+        json.put(PGTUtil.LOGOGRAPH_ID_XID, this.getId());
+        json.put(PGTUtil.LOGOGRAPH_VALUE_XID, this.getValue());
+        json.put(PGTUtil.LOGO_IS_RADICAL_XID, this.isRadical);
+        json.put(PGTUtil.LOGO_NOTES_XID, this.notes);
+        json.put(PGTUtil.LOGO_RADICAL_LIST_XID, this.getRadicalListString());
+        json.put(PGTUtil.LOGO_STROKES_XID, this.getStrokes());
+        json.put(PGTUtil.LOGO_BYTE_ARRAY, Base64.getEncoder().encodeToString(logoBytes));
+        var readingsJson = new JSONArray();
+        for (var reading : readings)
+            readingsJson.add(reading);
+        json.put(PGTUtil.LOGO_READING_LIST_XID, readingsJson);
+        return json;
+    }
+    
+    public void fromJson(JSONObject json)
+    {
+        id = Math.toIntExact((long)json.get(PGTUtil.LOGOGRAPH_ID_XID));
+        setValue((String)json.get(PGTUtil.LOGOGRAPH_VALUE_XID));
+        isRadical = (boolean) json.get(PGTUtil.LOGO_IS_RADICAL_XID);
+        notes = (String) json.get(PGTUtil.LOGO_NOTES_XID);
+        tmpRads = (String) json.get(PGTUtil.LOGO_RADICAL_LIST_XID); // allows rads to load late
+        strokes = Math.toIntExact((long)json.get(PGTUtil.LOGO_STROKES_XID));
+        logoBytes = Base64.getDecoder().decode((String)json.get(PGTUtil.LOGO_BYTE_ARRAY));
+        for (var readingObj : (JSONArray)json.get(PGTUtil.LOGO_READING_LIST_XID))
+            readings.add((String)readingObj);
+    }
 
     @Override
     public boolean equals(Object comp) {
@@ -314,12 +347,10 @@ public class LogoNode extends DictNode {
 
         if (this == comp) {
             ret = true;
-        } else if (comp instanceof LogoNode) {
-            LogoNode c = (LogoNode) comp;
-
+        } else if (comp instanceof LogoNode c) {
             ret = value.replaceAll("\\s", "").equals(c.value.replaceAll("\\s", ""));
-            ret = ret && WebInterface.getTextFromHtml(notes).equals(WebInterface.getTextFromHtml(c.notes));
-            ret = ret && Arrays.equals(logoBytes, c.logoBytes);
+            ret = ret && notes.equals(c.notes);
+            //ret = ret && Arrays.equals(logoBytes, c.logoBytes);
             ret = ret && isRadical == c.isRadical;
             ret = ret && radicals.equals(c.radicals);
             ret = ret && readings.equals(c.readings);

@@ -23,6 +23,7 @@ import java.util.Objects;
 import org.darisadesigns.polyglotlina.DictCore;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import org.darisadesigns.polyglotlina.WebInterface;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -72,7 +73,6 @@ public class TypeNode extends DictNode {
             ret = o instanceof TypeNode;
             if (ret) {
                 TypeNode comp = (TypeNode)o;
-                ret = comp.getId().equals(this.id);
                 ret = ret && comp.getGloss().equals(this.gloss);
                 ret = ret && WebInterface.getTextFromHtml(comp.getNotes()).equals(WebInterface.getTextFromHtml(this.notes));
                 ret = ret && comp.getPattern().equals(this.regexPattern);
@@ -167,5 +167,29 @@ public class TypeNode extends DictNode {
         wordNode.appendChild(wordValue);
         
         rootElement.appendChild(wordNode);
+    }
+    
+    public JSONObject toJson() {
+        // PGTUtil.POS_XID prior node id
+        var json = new JSONObject();
+        json.put(PGTUtil.POS_ID_XID, this.getId());
+        json.put(PGTUtil.POS_NAME_XID, this.getValue());
+        json.put(PGTUtil.POS_NOTES_XID, this.notes);
+        json.put(PGTUtil.POS_DEF_MAN_XID, this.defMandatory);
+        json.put(PGTUtil.POS_PROC_MAN_XID, this.procMandatory);
+        json.put(PGTUtil.POS_PATTERN_XID, this.regexPattern);
+        json.put(PGTUtil.POS_GLOSS_XID, this.gloss);
+        return json;
+    }
+    
+    public void fromJson(JSONObject json)
+    {
+        id = Math.toIntExact((long)json.get(PGTUtil.POS_ID_XID));
+        setValue((String)json.get(PGTUtil.POS_NAME_XID));
+        notes = (String)json.get(PGTUtil.POS_NOTES_XID);
+        defMandatory = (boolean)json.get(PGTUtil.POS_DEF_MAN_XID);
+        procMandatory = (boolean)json.get(PGTUtil.POS_PROC_MAN_XID);
+        regexPattern = (String)json.get(PGTUtil.POS_PATTERN_XID);
+        gloss = (String)json.get(PGTUtil.POS_GLOSS_XID);
     }
 }

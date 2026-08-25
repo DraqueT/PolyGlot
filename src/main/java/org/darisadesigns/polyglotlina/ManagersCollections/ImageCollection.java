@@ -23,6 +23,8 @@ import org.darisadesigns.polyglotlina.Nodes.ImageNode;
 import org.darisadesigns.polyglotlina.PGTUtil;
 import java.io.IOException;
 import org.darisadesigns.polyglotlina.DictCore;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -66,6 +68,26 @@ public class ImageCollection extends DictionaryCollection<ImageNode> {
     @Override
     public Integer insert(ImageNode _buffer) throws Exception {
         return super.insert(_buffer);
+    }
+    
+    public JSONObject toJson()
+    {
+        var json = new JSONObject();
+        for (var key : nodeMap.keySet())
+            json.put(key, nodeMap.get(key).toJson());
+        return json;
+    }
+    
+    public void fromJson(JSONObject json)
+    {
+        for (var key : json.keySet())
+        {
+            var image = new ImageNode(core);
+            image.fromJson((JSONObject)json.get(key));
+            nodeMap.put(image.getId(), image);
+            if (highestNodeId <= image.getId())
+                highestNodeId = image.getId() + 1;
+        }
     }
 
     @Override

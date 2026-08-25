@@ -25,6 +25,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -268,15 +270,50 @@ public class WordClass extends DictNode {
         rootElement.appendChild(classElement);
     }
     
+    public JSONObject toJson() {
+        // PGTUtil.CLASS_XID prior nodeID
+        var json = new JSONObject();
+
+        json.put(PGTUtil.CLASS_ID_XID, this.getId());
+        json.put(PGTUtil.CLASS_NAME_XID, this.getValue());
+        json.put(PGTUtil.CLASS_IS_FREETEXT_XID, this.freeText);
+        json.put(PGTUtil.CLASS_IS_ASSOCIATIVE_XID, this.associative);
+        var applyTypesJson = new JSONArray();
+        for (var type : applyTypes)
+            applyTypesJson.add(type);
+        json.put(PGTUtil.CLASS_APPLY_TYPES_XID, applyTypesJson);
+        var classValues = new JSONArray();
+        for (WordClassValue curValue : this.getValues())
+            classValues.add(curValue.toJson());
+        json.put(PGTUtil.CLASS_VALUES_COLLECTION_XID, classValues);
+        
+        return json;
+    }
+    
+    public void FromJson(JSONObject json)
+    {
+        id = Math.toIntExact((long)json.get(PGTUtil.CLASS_ID_XID));
+        setValue((String)json.get(PGTUtil.CLASS_NAME_XID));
+        freeText = (boolean)json.get(PGTUtil.CLASS_IS_FREETEXT_XID);
+        associative = (boolean)json.get(PGTUtil.CLASS_IS_ASSOCIATIVE_XID);
+        applyTypes.clear();
+        for (var typeObj : (JSONArray)json.get(PGTUtil.CLASS_APPLY_TYPES_XID))
+            applyTypes.add(Math.toIntExact((long)typeObj));
+        for (var classValObj : (JSONArray)json.get(PGTUtil.CLASS_VALUES_COLLECTION_XID))
+        {
+            var newClassVal = new WordClassValue();
+            newClassVal.fromJson((JSONObject)classValObj);
+            values.put(newClassVal.getId(), newClassVal);
+        }            
+    }
+    
     @Override
     public boolean equals(Object comp) {
         boolean ret = false;
         
         if (this == comp) {
             ret = true;
-        } else if (comp != null && getClass() == comp.getClass()) {
-            WordClass c = (WordClass) comp;
-            
+        } else if (comp instanceof WordClass c) {
             ret = value.replaceAll("\\s", "").equals(c.value.replaceAll("\\s", ""));
             ret = ret && values.equals(c.values);
             ret = ret && applyTypes.equals(c.applyTypes);

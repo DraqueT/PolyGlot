@@ -48,7 +48,7 @@ public class WordClassCollectionTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "WordClassTesto.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "WordClassTesto.pgd");
 
             ConWord excludeWord = new ConWord();
             excludeWord.setCore(core);

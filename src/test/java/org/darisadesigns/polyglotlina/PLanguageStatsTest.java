@@ -52,7 +52,7 @@ public class PLanguageStatsTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "LangStatTest.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "LangStatTest.pgd");
             int wordCount = core.getWordCollection().getWordCount();
             ScrProgressMenu progress = ScrProgressMenu.createScrProgressMenu("Generating Language Stats", wordCount + 5, true, true);
             progress.setVisible(true);
@@ -70,7 +70,7 @@ public class PLanguageStatsTest {
         DictCore core = DummyCore.newCore();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "LangStatTest.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "LangStatTest.pgd");
             core.getPropertiesManager().setAlphaOrder("qwertyuiop-asdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM");
             int wordCount = core.getWordCollection().getWordCount();
             ScrProgressMenu progress = ScrProgressMenu.createScrProgressMenu("Generating Language Stats", wordCount + 5, true, true);

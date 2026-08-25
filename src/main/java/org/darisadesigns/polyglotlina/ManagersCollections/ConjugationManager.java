@@ -41,6 +41,8 @@ import java.util.Set;
 import org.darisadesigns.polyglotlina.Nodes.EvolutionPair;
 import org.darisadesigns.polyglotlina.Nodes.EvolutionPair.EvolutionType;
 import org.darisadesigns.polyglotlina.RegexTools;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -1244,6 +1246,93 @@ public class ConjugationManager {
             combinedForms.appendChild(curCombForm);
         });
     }
+    
+    public JSONObject toJson() {
+        var json = new JSONObject();
+        json.put(PGTUtil.DEC_GEN_TOPID_XID, topId);
+        var genRulesObj = new JSONObject();
+        for (var mapId : generationRules.keySet())
+        {
+            var rulesList = new JSONArray();
+            for (var rule : generationRules.get(mapId))
+            {
+                rulesList.add(rule.toJson());
+            }
+            genRulesObj.put(mapId, rulesList);
+        }
+        json.put(PGTUtil.DEC_GEN_RULE_TYPE_XID, genRulesObj);
+        
+        var dListObj = new JSONObject();
+        for (int key : dList.keySet())
+        {
+            var valuesObj = new JSONArray();
+            for (var conj : dList.get(key))
+                valuesObj.add(conj.toJson());
+            dListObj.put(key, valuesObj);
+        }
+        json.put(PGTUtil.DEC_GEN_TRANS_XID, dListObj);
+        
+        var dTemplatesObj = new JSONObject();
+        for (int key : dTemplates.keySet())
+        {
+            var valuesObj = new JSONArray();
+            for (var conj : dTemplates.get(key))
+                valuesObj.add(conj.toJson());
+            dTemplatesObj.put(key, valuesObj);
+        }
+        json.put(PGTUtil.DEC_GEN_TEMPLATES_XID, dTemplatesObj);
+        
+        var combSettingsObj = new JSONObject();
+        for (String key : combSettings.keySet())
+            combSettingsObj.put(key, combSettings.get(key));
+        json.put(PGTUtil.DEC_COMBINED_ID_XID, combSettingsObj);
+        
+        return json;
+    }
+    
+    public void fromJson(JSONObject json)
+    {
+        topId = Math.toIntExact((long)json.get(PGTUtil.DEC_GEN_TOPID_XID));
+        var genRulesObj = (JSONObject)json.get(PGTUtil.DEC_GEN_RULE_TYPE_XID);
+        for (var key : genRulesObj.keySet())
+        {
+            var conjRules = new ArrayList<ConjugationGenRule>();
+            for (var conjRuleObj : (JSONArray)genRulesObj.get(key))
+            {
+                var conjRule = new ConjugationGenRule();
+                conjRule.fromJson((JSONObject)conjRuleObj);
+                conjRules.add(conjRule);
+            }
+            generationRules.put((int)Integer.parseInt((String)key), conjRules);
+        }
+        var dListObj = (JSONObject)json.get(PGTUtil.DEC_GEN_TRANS_XID);
+        for (var key : dListObj.keySet())
+        {
+            var conjNodes = new ArrayList<ConjugationNode>();
+            for (var conjNodeObj : (JSONArray)dListObj.get(key))
+            {
+                var conjNode = new ConjugationNode(0, this);
+                conjNode.fromJson((JSONObject)conjNodeObj);
+                conjNodes.add(conjNode);
+            }
+            dList.put((int)Integer.parseInt((String)key), conjNodes);
+        }
+        var dTemplatesObj = (JSONObject)json.get(PGTUtil.DEC_GEN_TEMPLATES_XID);
+        for (var key : dTemplatesObj.keySet())
+        {
+            var conjNodes = new ArrayList<ConjugationNode>();
+            for (var conjNodeObj : (JSONArray)dTemplatesObj.get(key))
+            {
+                var conjNode = new ConjugationNode(0, this);
+                conjNode.fromJson((JSONObject)conjNodeObj);
+                conjNodes.add(conjNode);
+            }
+            dTemplates.put((int)Integer.parseInt((String)key), conjNodes);
+        }
+        var combSettingsObj = (JSONObject)json.get(PGTUtil.DEC_COMBINED_ID_XID);
+        for (var key : combSettingsObj.keySet())
+            combSettings.put((String)key, (boolean)combSettingsObj.get(key));
+    }
 
     /**
      * This copies a list of rules to the bottom of the list of all declension
@@ -1431,10 +1520,10 @@ public class ConjugationManager {
         
         if (this == comp) {
             ret = true;
-        } else if (comp instanceof ConjugationManager) {
-            ConjugationManager compMan = (ConjugationManager)comp;
+        } else if (comp instanceof ConjugationManager compMan) {
             ret = (generationRules == null && compMan.generationRules == null) || generationRules.equals(compMan.generationRules);
             ret = ret && ((dList == null && compMan.dList == null) || dList.equals(compMan.dList));
+            ret = ret && ((dTemplates == null && compMan.dTemplates == null) || dTemplates.equals(compMan.dTemplates));
             ret = ret && combSettings.equals(compMan.combSettings);
         }
         

@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -58,6 +60,46 @@ public class ConjugationGenRule implements Comparable<ConjugationGenRule> {
     public ConjugationGenRule() {
         typeId = -1;
         combinationId = "";
+    }
+    
+    public JSONObject toJson()
+    {
+        var json = new JSONObject();
+        json.put(PGTUtil.DEC_GEN_RULE_TYPE_XID, typeId);
+        json.put(PGTUtil.DEC_GEN_RULE_INDEX_XID, index);
+        json.put(PGTUtil.DEC_GEN_RULE_COMB_XID, combinationId);
+        json.put(PGTUtil.DEC_GEN_RULE_REGEX_XID, regex);
+        json.put(PGTUtil.DEC_GEN_RULE_NAME_XID, name);
+        var transformsObj = new JSONArray();
+        for (var transform : transformations)
+            transformsObj.add(transform.toJson());
+        json.put(PGTUtil.DEC_GEN_TRANS_XID, transformsObj);
+        var applyToObj = new JSONObject();
+        for (int key : applyToClasses.keySet())
+            applyToObj.put(key, applyToClasses.get(key));
+        json.put(PGTUtil.DEC_GEN_RULE_APPLY_TO_CLASSES_XID, applyToObj);
+        return json;
+    }
+    
+    public void fromJson(JSONObject json)
+    {
+        typeId = Math.toIntExact((long)json.get(PGTUtil.DEC_GEN_RULE_TYPE_XID));
+        index = Math.toIntExact((long)json.get(PGTUtil.DEC_GEN_RULE_INDEX_XID));
+        combinationId = (String)json.get(PGTUtil.DEC_GEN_RULE_COMB_XID);
+        regex = (String)json.get(PGTUtil.DEC_GEN_RULE_REGEX_XID);
+        name = (String)json.get(PGTUtil.DEC_GEN_RULE_NAME_XID);
+        for (var transformObj : (JSONArray)json.get(PGTUtil.DEC_GEN_TRANS_XID))
+        {
+            var transform = new ConjugationGenTransform();
+            transform.fromJson((JSONObject)transformObj);
+            transformations.add(transform);
+        }   
+        
+        var applyToObj = (JSONObject)json.get(PGTUtil.DEC_GEN_RULE_APPLY_TO_CLASSES_XID);
+        for (var key : applyToObj.keySet())
+            applyToClasses.put(
+                    (int)Integer.parseInt((String)key),
+                    Math.toIntExact((long)applyToObj.get(key)));
     }
     
     /**
@@ -438,8 +480,7 @@ public class ConjugationGenRule implements Comparable<ConjugationGenRule> {
         
         if (comp == this) {
             ret = true;
-        } else if (comp instanceof ConjugationGenRule) {
-            ConjugationGenRule compRule = (ConjugationGenRule)comp;
+        } else if (comp instanceof ConjugationGenRule compRule) {
             ret = typeId == compRule.typeId;
             ret = ret && (combinationId == null && compRule.combinationId == null) 
                     || combinationId.equals(compRule.combinationId);

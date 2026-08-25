@@ -19,12 +19,17 @@
  */
 package org.darisadesigns.polyglotlina.Desktop.ManagersCollections;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Map.Entry;
 import java.util.Objects;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopGrammarChapNode;
 import org.darisadesigns.polyglotlina.Desktop.CustomControls.DesktopGrammarSectionNode;
 import org.darisadesigns.polyglotlina.ManagersCollections.GrammarManager;
+import org.darisadesigns.polyglotlina.PGTUtil;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * Grammar manager for PolyGlot organizes and stores all grammar data
@@ -87,6 +92,23 @@ public class DesktopGrammarManager extends GrammarManager {
         }
         
         return ret;
+    }
+    
+    @Override
+    public void fromJson(JSONObject json)
+    {
+        for (var chapObj : (JSONArray)json.get(PGTUtil.GRAMMAR_CHAPTER_NODE_XID))
+        {
+            var chap = new DesktopGrammarChapNode(this);
+            chap.fromJson((JSONObject) chapObj);
+            addChapter(chap);
+        }
+        var soundMapObj = (JSONObject)json.get(PGTUtil.GRAMMAR_SECTION_BYTE_ARRAY);
+        for (var key : soundMapObj.keySet())
+            soundMap.put(
+                    Integer.valueOf((String)key),
+                    Base64.getDecoder().decode((String)soundMapObj.get(key))
+            );
     }
 
     @Override

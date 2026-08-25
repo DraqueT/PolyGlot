@@ -42,7 +42,7 @@ public abstract class DictionaryCollection<N extends DictNode> {
     protected final Map<Integer, N> nodeMap = new HashMap<>();
     protected N bufferNode;
 
-    private int highestNodeId = 1;
+    protected int highestNodeId = 1;
 
     protected DictionaryCollection(N _bufferNode) {
         bufferNode = _bufferNode;
@@ -61,15 +61,16 @@ public abstract class DictionaryCollection<N extends DictNode> {
     public abstract N notFoundNode();
     
     public int addNode(N node) throws Exception {
-        int ret;
-        
         clear();
-        
         bufferNode.setEqual(node);
-
-        ret = this.insert(bufferNode);
-
-        return ret;
+        return this.insert(bufferNode);
+    }
+    
+    public void addNode(N node, int id) throws Exception
+    {
+        clear();
+        bufferNode.setEqual(node);
+        this.insert(id, bufferNode);
     }
 
     /**
@@ -247,9 +248,7 @@ public abstract class DictionaryCollection<N extends DictNode> {
     public boolean equals(Object comp) {
         boolean ret = false;
         
-        if (comp instanceof DictionaryCollection) {
-            DictionaryCollection<?> dictComp = (DictionaryCollection<?>) comp;
-            
+        if (comp instanceof DictionaryCollection dictComp) {
             ret = ((alphaOrder == null && dictComp.alphaOrder == null) || alphaOrder.equals(dictComp.alphaOrder));
             ret = ret && nodeMap.equals(dictComp.nodeMap);
         }

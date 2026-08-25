@@ -54,6 +54,8 @@ import org.darisadesigns.polyglotlina.ManagersCollections.WordClassCollection;
 import org.darisadesigns.polyglotlina.OSHandler.CoreUpdatedListener;
 import org.darisadesigns.polyglotlina.OSHandler.FileReadListener;
 import org.darisadesigns.polyglotlina.PLanguageStats.PLanguageStatsProgress;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -335,8 +337,30 @@ public class DictCore {
      * @throws IllegalStateException for recoverable errors
      * @throws javax.xml.parsers.ParserConfigurationException
      */
-    public void readFile(String _fileName) throws IOException, IllegalStateException, ParserConfigurationException {
-        readFile(_fileName, null);
+    public void readFileDEPRECATED(String _fileName) throws IOException, IllegalStateException, ParserConfigurationException {
+        DictCore.this.readFileDEPRECATED(_fileName, null);
+    }
+    
+    // TODO: Add support for reversion states
+    public void readFile(String fileName) throws IOException
+    {
+        readFile(fileName, null);
+    }
+    
+    public void readFile(String fileName, byte[] overrideJSON) throws IOException
+    {
+        curLoading = true;
+        try
+        {
+            readFile(fileName, overrideJSON, true);
+        } finally {
+            curLoading = false;
+        }
+    }
+    
+    public void readFile(String fileName, byte[] overrideJSON, boolean useFileListener) throws IOException
+    {
+        
     }
 
     /**
@@ -348,9 +372,9 @@ public class DictCore {
      * @throws IllegalStateException for recoverable errors
      * @throws javax.xml.parsers.ParserConfigurationException
      */
-    public void readFile(String _fileName, byte[] overrideXML) 
+    public void readFileDEPRECATED(String _fileName, byte[] overrideXML) 
             throws IOException, IllegalStateException, ParserConfigurationException {
-        readFile(_fileName, overrideXML, true);
+        readFileDEPRECATED(_fileName, overrideXML, true);
     }
 
     /**
@@ -363,7 +387,7 @@ public class DictCore {
      * @throws IllegalStateException for recoverable errors
      * @throws javax.xml.parsers.ParserConfigurationException
      */
-    public void readFile(String _fileName, byte[] overrideXML, boolean useFileReadListener) 
+    public void readFileDEPRECATED(String _fileName, byte[] overrideXML, boolean useFileReadListener) 
             throws IOException, IllegalStateException, ParserConfigurationException {
         curLoading = true;
         curFileName = _fileName;
@@ -419,7 +443,7 @@ public class DictCore {
      */
     public DictCore revertToState(byte[] revision, String fileName) throws IOException  , ParserConfigurationException {
         DictCore revDict = new DictCore(this.propertiesManager, this.osHandler, this.pgtUtil, this.grammarManager);
-        revDict.readFile(fileName, revision);
+        revDict.readFileDEPRECATED(fileName, revision);
 
         pushUpdateWithCore(revDict);
 
@@ -446,7 +470,7 @@ public class DictCore {
             Document doc = getXmlDoc();
 
             // have IOHandler write constructed document to file
-            this.osHandler.getIOHandler().writeFile(
+            this.osHandler.getIOHandler().writeFileDEPRECATED(
                     _fileName,
                     doc,
                     this,
@@ -483,6 +507,46 @@ public class DictCore {
             return String.valueOf(writer.getBuffer());
         }
     }
+    
+    public void fromJson(JSONObject json) throws Exception
+    {
+        propertiesManager.fromJson((JSONObject)json.get(PGTUtil.LANG_PROPERTIES_XID));
+        wordClassCollection.fromJson((JSONArray)json.get(PGTUtil.CLASSES_NODE_XID));
+        typeCollection.fromJson((JSONArray)json.get(PGTUtil.POS_COLLECTION_XID));
+        wordCollection.fromJson((JSONArray)json.get(PGTUtil.LEXICON_XID), this);
+        imageCollection.fromJson((JSONObject)json.get(PGTUtil.IMAGES_SAVE_PATH));
+        etymologyManager.fromJson((JSONObject)json.get(PGTUtil.ETY_COLLECTION_XID));
+        conjugationMgr.fromJson((JSONObject)json.get(PGTUtil.DECLENSION_COLLECTION_XID));
+        pronuncMgr.fromJson((JSONObject)json.get(PGTUtil.PRONUNCIATION_COLLECTION_XID));
+        romMgr.fromJson((JSONObject)json.get(PGTUtil.ROM_GUIDE_XID));
+        famManager.fromJson((JSONObject)json.get(PGTUtil.FAM_NODE_XID));
+        logoCollection.fromJson((JSONObject)json.get(PGTUtil.LOGO_ROOT_NOTE_XID));
+        grammarManager.fromJson((JSONObject)json.get(PGTUtil.GRAMMAR_SECTION_XID));
+        toDoManager.fromJson((JSONObject)json.get(PGTUtil.TODO_LOG_XID));
+        phraseManager.fromJson((JSONArray) json.get(PGTUtil.PHRASEBOOK_XID));
+    }
+    
+    public JSONObject toJson()
+    {
+        var json = new JSONObject();
+        json.put(PGTUtil.SYS_INFO_XID, osHandler.getIOHandler().getSystemInformationJson());
+        writeJSONHeader(json, lastSaveTime);
+        json.put(PGTUtil.LANG_PROPERTIES_XID, propertiesManager.toJson());
+        json.put(PGTUtil.CLASSES_NODE_XID, wordClassCollection.toJson());
+        json.put(PGTUtil.IMAGES_SAVE_PATH, imageCollection.toJson());
+        json.put(PGTUtil.POS_COLLECTION_XID, typeCollection.toJson());
+        json.put(PGTUtil.LEXICON_XID, wordCollection.toJson());
+        json.put(PGTUtil.ETY_COLLECTION_XID, etymologyManager.toJson());
+        json.put(PGTUtil.DECLENSION_COLLECTION_XID, conjugationMgr.toJson());
+        json.put(PGTUtil.PRONUNCIATION_COLLECTION_XID, pronuncMgr.toJson());
+        json.put(PGTUtil.ROM_GUIDE_XID, romMgr.toJson());
+        json.put(PGTUtil.FAM_NODE_XID, famManager.toJson());
+        json.put(PGTUtil.LOGO_ROOT_NOTE_XID, logoCollection.toJson());
+        json.put(PGTUtil.GRAMMAR_SECTION_XID, grammarManager.toJson());
+        json.put(PGTUtil.TODO_LOG_XID, toDoManager.toJson());
+        json.put(PGTUtil.PHRASEBOOK_XID, phraseManager.toJson());
+        return json;
+    }
 
     /**
      * Gets full XML document of language
@@ -502,23 +566,23 @@ public class DictCore {
 
         // store system info for troubleshooting
         Element sysInfo = doc.createElement(PGTUtil.SYS_INFO_XID);
-        sysInfo.appendChild(doc.createTextNode(osHandler.getIOHandler().getSystemInformation()));
+        sysInfo.appendChild(doc.createTextNode(osHandler.getIOHandler().getSystemInformation())); // -
         rootElement.appendChild(sysInfo);
 
         // collect XML representation of all dictionary elements
-        writeXMLHeader(doc, rootElement, newSaveTime);
-        propertiesManager.writeXML(doc, rootElement);
-        wordClassCollection.writeXML(doc, rootElement);
-        typeCollection.writeXML(doc, rootElement);
-        wordCollection.writeXML(doc, rootElement);
-        etymologyManager.writeXML(doc, rootElement);
-        conjugationMgr.writeXML(doc, rootElement);
-        pronuncMgr.writeXML(doc, rootElement);
-        romMgr.writeXML(doc, rootElement);
-        logoCollection.writeXML(doc, rootElement);
-        grammarManager.writeXML(doc, rootElement);
-        toDoManager.writeXML(doc, rootElement);
-        phraseManager.writeXML(doc, rootElement);
+        writeXMLHeader(doc, rootElement, newSaveTime); // -
+        propertiesManager.writeXML(doc, rootElement); // -
+        wordClassCollection.writeXML(doc, rootElement); // -
+        typeCollection.writeXML(doc, rootElement); // -
+        wordCollection.writeXML(doc, rootElement); // -
+        etymologyManager.writeXML(doc, rootElement); // -
+        conjugationMgr.writeXML(doc, rootElement); // -
+        pronuncMgr.writeXML(doc, rootElement); // -
+        romMgr.writeXML(doc, rootElement); // -
+        logoCollection.writeXML(doc, rootElement); // -
+        grammarManager.writeXML(doc, rootElement); // -
+        toDoManager.writeXML(doc, rootElement); // -
+        phraseManager.writeXML(doc, rootElement); //-
 
         // write family entries
         rootElement.appendChild(famManager.writeToSaveXML(doc));
@@ -534,6 +598,11 @@ public class DictCore {
         headerElement = doc.createElement(PGTUtil.DICTIONARY_SAVE_DATE);
         headerElement.appendChild(doc.createTextNode(saveTime.toString()));
         rootElement.appendChild(headerElement);
+    }
+    
+    private static void writeJSONHeader(JSONObject json, Instant saveTime) {
+        json.put(PGTUtil.PGVERSION_XID, PGTUtil.PGT_VERSION);
+        json.put(PGTUtil.DICTIONARY_SAVE_DATE, saveTime.toString());
     }
 
     /**
@@ -677,9 +746,7 @@ public class DictCore {
     public boolean equals(Object comp) {
         boolean ret = false;
 
-        if (comp instanceof DictCore) {
-            DictCore compCore = (DictCore) comp;
-
+        if (comp instanceof DictCore compCore) {
             ret = wordCollection.equals(compCore.wordCollection);
             ret = ret && typeCollection.equals(compCore.typeCollection);
             ret = ret && conjugationMgr.equals(compCore.conjugationMgr);

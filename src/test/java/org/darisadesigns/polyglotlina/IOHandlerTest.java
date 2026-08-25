@@ -361,11 +361,11 @@ public class IOHandlerTest {
             DictCore origin = DummyCore.newCore();
             DictCore target = DummyCore.newCore();
 
-            origin.readFile(originFilePath);
+            origin.readFileDEPRECATED(originFilePath);
             
             DesktopIOHandler.getInstance().unzipFileToDir(originFilePath, tmpDir.toPath());
             DesktopIOHandler.packDirectoryToZip(tmpDir.getPath(), tmpLangFile.getPath(), true);
-            target.readFile(tmpLangFile.getPath());
+            target.readFileDEPRECATED(tmpLangFile.getPath());
             
             assertEquals(origin, target);
         } catch (Exception e) {

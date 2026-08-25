@@ -49,7 +49,7 @@ public class ScrDeclensionsGridsTest {
         PGTUtil.enterUITestingMode();
         
         try {
-            core.readFile(PGTUtil.TESTRESOURCES + "conj_autopop_check_test.pgd");
+            core.readFileDEPRECATED(PGTUtil.TESTRESOURCES + "conj_autopop_check_test.pgd");
 
             ConWordCollection words = core.getWordCollection();
 
